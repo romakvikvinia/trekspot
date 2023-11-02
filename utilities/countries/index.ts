@@ -478,6 +478,6 @@ const countries = {
   BM,
 };
 
-export const getCountry = (code) => {
-  return countries[code] ?? null;
+export const getCountry = (code: any) => {
+  return (countries && countries[code]) ?? null;
 };
