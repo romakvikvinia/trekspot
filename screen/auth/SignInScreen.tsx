@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useContext } from "react";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useFormik } from "formik";
@@ -23,10 +24,11 @@ import {
 import { AuthContext } from "../../package/context/auth.context";
 import { SignInValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
+import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
 
-interface SignInProps {}
+type SignInProps = NativeStackScreenProps<AuthStackParamList>;
 
-export const SignInScreen: React.FC<SignInProps> = ({}) => {
+export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   //@ts-ignore
   const { signIn } = useContext(AuthContext);
 
@@ -151,8 +153,15 @@ export const SignInScreen: React.FC<SignInProps> = ({}) => {
               {formik.isSubmitting ? (
                 <ActivityIndicator size="large" color="#fff" />
               ) : (
-                <Text style={styles.btnText}>შესვლა</Text>
+                <Text style={styles.btnText}>Sign In</Text>
               )}
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.signUpContainer]}
+              onPress={() => navigation.navigate("SignUp")}
+            >
+              <Text style={styles.signUpText}>Sign up</Text>
             </TouchableOpacity>
           </Animated.View>
         </KeyboardAvoidingView>
@@ -206,5 +215,15 @@ const styles = StyleSheet.create({
   isValid: {
     borderColor: isInvalidColor,
     borderWidth: 2,
+  },
+  signUpContainer: {
+    marginVertical: 5,
+    width: "90%",
+
+    alignItems: "center",
+    paddingVertical: 5,
+  },
+  signUpText: {
+    color: "white",
   },
 });

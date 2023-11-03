@@ -8,7 +8,7 @@ import { SignUpScreen } from "../../screen/auth/SignUpScreen";
 
 interface AuthRouteProps {}
 
-type AuthStackParamList = {
+export type AuthStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
 };
@@ -19,7 +19,7 @@ export type AuthStackNavigationProp = StackNavigationProp<AuthStackParamList>;
 
 export const AuthRoute: React.FC<AuthRouteProps> = ({}) => {
   return (
-    <Stack.Navigator initialRouteName="SignUp">
+    <Stack.Navigator initialRouteName="SignIn">
       <Stack.Screen
         name="SignIn"
         component={SignInScreen}
