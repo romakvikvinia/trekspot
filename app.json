@@ -29,6 +29,21 @@
         "projectId": "0208e3d2-29fc-4d09-9a72-11fae25997f6"
       }
     },
-    "owner": "trekspot"
+    "owner": "trekspot",
+    "expo": {
+      "plugins": [
+        "react-native-fbsdk-next",
+        {
+          "appID": "714520072398-6nt61odp4p76fdfdcu8e7lhoom6qnkf0.apps.googleusercontent.com",
+          "clientToken": "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",
+          "displayName": "TrekSpot",
+          "scheme": "fb714520072398-6nt61odp4p76fdfdcu8e7lhoom6qnkf0.apps.googleusercontent.com",
+          "advertiserIDCollectionEnabled": false,
+          "autoLogAppEventsEnabled": false,
+          "isAutoInitEnabled": true,
+          "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
+        }
+      ]
+    }
   }
 }
