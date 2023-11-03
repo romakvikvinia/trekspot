@@ -29,7 +29,7 @@ import { useSignInMutation } from "../../api/api.trekspot";
 import { AuthResponseType } from "../../api/api.types";
 import { storeToken } from "../../helpers/secure.storage";
 
-type SignInProps = NativeStackScreenProps<AuthStackParamList>;
+type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 
 export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   const [fetchSignIn, { data, isLoading, error, isError, isSuccess }] =

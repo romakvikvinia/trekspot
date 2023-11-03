@@ -26,7 +26,7 @@ import { SignInValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
 
-type SignUpScreenProps = NativeStackScreenProps<AuthStackParamList>;
+type SignUpScreenProps = NativeStackScreenProps<AuthStackParamList, "SignUp">;
 
 export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
   //@ts-ignore
