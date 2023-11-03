@@ -6,6 +6,8 @@ import {
 import { SignInScreen } from "../../screen/auth/SignInScreen";
 import { SignUpScreen } from "../../screen/auth/SignUpScreen";
 
+interface AuthRouteProps {}
+
 export type AuthStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
@@ -15,7 +17,7 @@ const Stack = createStackNavigator<AuthStackParamList>();
 
 export type AuthStackNavigationProp = StackNavigationProp<AuthStackParamList>;
 
-export const AuthRoute: React.FC<AuthStackNavigationProp> = ({}) => {
+export const AuthRoute: React.FC<AuthRouteProps> = () => {
   return (
     <Stack.Navigator initialRouteName="SignIn">
       <Stack.Screen

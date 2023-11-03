@@ -1,14 +1,13 @@
-import React, { useState, useEffect, useCallback, useReducer } from "react";
+import React, { useCallback, useReducer } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 
-// import { deleteItemFromStorage, getFullToken } from "../helpers/storage";
-// import { setToken } from "../helpers/baseUrl";
 import { authReducer, defaultState } from "../package/reducers/auth.reducer";
 import { AuthContext } from "../package/context/auth.context";
-import { AppRoute } from "./AppRoute";
+
 import { AuthRoute } from "./auth/AuthRoutes";
 import { deleteItemFromStorage, getFullToken } from "../helpers/secure.storage";
+import { AppRoute } from "./AppRoute";
 
 //reselect
 
