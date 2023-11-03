@@ -34,11 +34,11 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
 
   const formik = useFormik({
     initialValues: {
-      phone: "",
+      email: "",
       password: "",
     },
     validationSchema: SignInValidationSchema,
-    onSubmit: async ({ phone: username, password }, methods) => {
+    onSubmit: async ({ email: username, password }, methods) => {
       methods.setSubmitting(true);
     },
   });
@@ -87,7 +87,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
             <View
               style={[
                 styles.item,
-                "phone" in formik.errors && "phone" in formik.touched
+                "email" in formik.errors && "email" in formik.touched
                   ? styles.isValid
                   : {},
               ]}
@@ -97,12 +97,12 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
               </View>
 
               <TInput
-                keyboardType="phone-pad"
+                keyboardType="email"
                 placeholder="მობილური"
                 returnKeyType="next"
-                value={formik.values.phone}
-                onChangeText={formik.handleChange("phone")}
-                onBlur={formik.handleBlur("phone")}
+                value={formik.values.email}
+                onChangeText={formik.handleChange("email")}
+                onBlur={formik.handleBlur("email")}
               />
             </View>
 
@@ -130,7 +130,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
                 onSubmitEditing={() => {
                   if (
                     !("password" in formik.errors) ||
-                    !("phone" in formik.errors) ||
+                    !("email" in formik.errors) ||
                     !formik.isSubmitting
                   ) {
                     formik.submitForm();
@@ -144,7 +144,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
               onPress={formik.submitForm}
               disabled={
                 "password" in formik.errors ||
-                "phone" in formik.errors ||
+                "email" in formik.errors ||
                 formik.isSubmitting
                 // || isLoading
               }

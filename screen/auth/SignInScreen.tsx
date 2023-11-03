@@ -25,21 +25,28 @@ import { AuthContext } from "../../package/context/auth.context";
 import { SignInValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
+import { useSignInMutation } from "../../api/api.trekspot";
+import { AuthResponseType } from "../../api/api.types";
+import { storeToken } from "../../helpers/secure.storage";
 
 type SignInProps = NativeStackScreenProps<AuthStackParamList>;
 
 export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
+  const [fetchSignIn, { data, isLoading, error, isError, isSuccess }] =
+    useSignInMutation();
   //@ts-ignore
   const { signIn } = useContext(AuthContext);
 
   const formik = useFormik({
     initialValues: {
-      phone: "",
+      email: "",
       password: "",
     },
     validationSchema: SignInValidationSchema,
-    onSubmit: async ({ phone: username, password }, methods) => {
+    onSubmit: async ({ email, password }, methods) => {
       methods.setSubmitting(true);
+
+      fetchSignIn({ email, password });
     },
   });
 
@@ -47,15 +54,20 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
     fadeValue: new Animated.Value(0),
   });
 
-  const handleSaveToken = useCallback(async (tokens: any) => {
-    // let t = { ...tokens };
-    // if (t && t.expires_in) {
-    //   t.expires_in += new Date().getTime();
-    // }
-    // await storeToken(t);
-    // setToken(t.access_token);
-    // signIn(t);
-  }, []);
+  const handleSaveToken = useCallback(
+    async (auth: AuthResponseType["data"]) => {
+      try {
+        let token = { ...auth.login };
+        token.expire = new Date().getTime() + token.expire;
+
+        await storeToken(token);
+        signIn(token);
+      } catch (error) {
+        // console.log(error)
+      }
+    },
+    []
+  );
   //animations
   useEffect(() => {
     Animated.timing(fadeValue, {
@@ -64,6 +76,13 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
       useNativeDriver: true,
     }).start();
   }, []);
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      //@ts-ignore
+      handleSaveToken(data);
+    }
+  }, [isSuccess, data]);
 
   return (
     <LinearGradient
@@ -88,7 +107,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
             <View
               style={[
                 styles.item,
-                "phone" in formik.errors && "phone" in formik.touched
+                "Email" in formik.errors && "Email" in formik.touched
                   ? styles.isValid
                   : {},
               ]}
@@ -98,12 +117,13 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
               </View>
 
               <TInput
-                keyboardType="phone-pad"
-                placeholder="მობილური"
+                keyboardType="default"
+                placeholder="Email"
+                autoCapitalize="none"
                 returnKeyType="next"
-                value={formik.values.phone}
-                onChangeText={formik.handleChange("phone")}
-                onBlur={formik.handleBlur("phone")}
+                // value={formik.values.email}
+                onChangeText={formik.handleChange("email")}
+                onBlur={formik.handleBlur("email")}
               />
             </View>
 
@@ -131,7 +151,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 onSubmitEditing={() => {
                   if (
                     !("password" in formik.errors) ||
-                    !("phone" in formik.errors) ||
+                    !("Email" in formik.errors) ||
                     !formik.isSubmitting
                   ) {
                     formik.submitForm();
@@ -145,7 +165,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
               onPress={formik.submitForm}
               disabled={
                 "password" in formik.errors ||
-                "phone" in formik.errors ||
+                "Email" in formik.errors ||
                 formik.isSubmitting
                 // || isLoading
               }

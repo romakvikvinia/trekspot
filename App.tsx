@@ -5,7 +5,7 @@ import { trekSpotApi } from "./api/api.trekspot";
 import { ApiProvider } from "@reduxjs/toolkit/dist/query/react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { Routes } from "./routes/Route";
+import { Routes } from "./routes/Routes";
 import "react-native-gesture-handler";
 
 // SplashScreen.preventAutoHideAsync();

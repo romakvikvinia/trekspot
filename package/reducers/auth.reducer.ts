@@ -4,7 +4,7 @@ export const SIGN_OUT = "SIGN_OUT";
 
 export type AuthStateType = {
   isLoading: boolean;
-  expires_in: string | null;
+  expire: string | null;
   token: string | null;
   refresh_token: string | null;
   isAuthenticated: boolean;
@@ -27,7 +27,7 @@ export type ActionType = SignInType | SignOutType | RestoreTokenType;
 
 export const defaultState = (): AuthStateType => ({
   isLoading: false,
-  expires_in: null,
+  expire: null,
   token: null,
   refresh_token: null,
   isAuthenticated: false,

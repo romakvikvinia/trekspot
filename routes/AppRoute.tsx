@@ -12,6 +12,7 @@ import { BottomRoutes } from "./bottom/BottomRoutes";
 
 import { AuthContext } from "../package/context/auth.context";
 import { PrimaryColor } from "../styles/colors";
+import { deleteItemFromStorage } from "../helpers/secure.storage";
 
 //actions
 
@@ -24,6 +25,7 @@ function CustomDrawerContent(props: any) {
   const { signOut } = useContext(AuthContext);
 
   const handelSignOut = useCallback(async () => {
+    await deleteItemFromStorage();
     signOut();
   }, []);
 
