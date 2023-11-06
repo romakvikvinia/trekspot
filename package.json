@@ -17,6 +17,7 @@
     "@reduxjs/toolkit": "^1.9.7",
     "@rtk-query/graphql-request-base-query": "^2.2.0",
     "expo": "~49.0.15",
+    "expo-dev-client": "~2.4.11",
     "expo-font": "~11.4.0",
     "expo-linear-gradient": "~12.3.0",
     "expo-secure-store": "~12.3.1",
