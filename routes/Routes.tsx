@@ -23,9 +23,10 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
     try {
       let token = await getFullToken();
 
-      if (token && new Date().getTime() >= token.expires_in) {
+      if (token && new Date().getTime() >= token.expire) {
         // unauthorize
         await deleteItemFromStorage();
+        dispatch({ type: "SIGN_OUT" });
       }
 
       // // setToken(tokens.access_token);
@@ -64,7 +65,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
   };
 
   return (
-    <NavigationContainer onReady={checkAuth}>
+    <NavigationContainer onReady={checkAuth} theme={theme}>
       <AuthContext.Provider value={authContext}>
         {!state.isAuthenticated ? <AuthRoute /> : <AppRoute />}
       </AuthContext.Provider>
