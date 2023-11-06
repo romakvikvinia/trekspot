@@ -1,5 +1,5 @@
 import React, { useCallback, useReducer } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 
 import { authReducer, defaultState } from "../package/reducers/auth.reducer";
@@ -54,6 +54,14 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
     }),
     []
   );
+
+  const theme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      border: "transparent",
+    },
+  };
 
   return (
     <NavigationContainer onReady={checkAuth}>

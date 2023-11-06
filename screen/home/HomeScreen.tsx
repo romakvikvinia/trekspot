@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import { MapSvg, Mark, Mark2, Share } from "../../utilities/SvgIcons.utility";
 
@@ -13,6 +14,7 @@ import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
 import { ReactNativeZoomableView } from "@openspacelabs/react-native-zoomable-view";
 import { CountriesList } from "../../utilities/countryList";
+import { Flags } from "../../utilities/flags";
 
 interface HomeProps {}
 
@@ -21,6 +23,35 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
   const onOpen = useCallback(() => {
     if (modalRef.current) modalRef.current.open();
   }, []);
+
+  const Country = ({ item }: any) => {
+    // Assuming that `item` contains the ISO2 country code
+    const countryCode = item.iso2 as string;
+
+    // Check if the image path exists in the mapping
+    // @ts-ignore
+    const imagePath = Flags[countryCode];
+
+    return (
+      <View style={styles.item}>
+        <ImageBackground
+          resizeMode="cover"
+          style={{
+            width: 30,
+            height: 20,
+            borderRadius: 2,
+            overflow: "hidden",
+            borderWidth: 1,
+            borderColor: "#fafafa",
+          }}
+          source={imagePath ? imagePath : null} // Set the image source
+        />
+        <Text style={styles.itemTitle}>
+          {item.name} {item.iso2.toLowerCase()}
+        </Text>
+      </View>
+    );
+  };
 
   return (
     <>
@@ -148,12 +179,12 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
             modalTopOffset={65}
             flatListProps={{
               data: CountriesList,
-              // renderItem: Country,
-              renderItem: ({ item }) => (
-                <View style={styles.item}>
-                  <Text style={styles.itemTitle}>{item.name}</Text>
-                </View>
-              ),
+              renderItem: Country,
+              // renderItem: ({ item }) => (
+              //   <View style={styles.item}>
+              //     <Text style={styles.itemTitle}>{item.name}</Text>
+              //   </View>
+              // ),
               keyExtractor: (item) => item.name,
               showsVerticalScrollIndicator: false,
             }}
