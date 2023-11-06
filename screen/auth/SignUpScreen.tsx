@@ -97,8 +97,8 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
               </View>
 
               <TInput
-                keyboardType="email"
-                placeholder="მობილური"
+                keyboardType="default"
+                placeholder="Email"
                 returnKeyType="next"
                 value={formik.values.email}
                 onChangeText={formik.handleChange("email")}

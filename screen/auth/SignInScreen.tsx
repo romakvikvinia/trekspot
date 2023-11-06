@@ -121,7 +121,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 placeholder="Email"
                 autoCapitalize="none"
                 returnKeyType="next"
-                // value={formik.values.email}
+                value={formik.values.email}
                 onChangeText={formik.handleChange("email")}
                 onBlur={formik.handleBlur("email")}
               />
