@@ -26,16 +26,16 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
         name="Trips"
         component={TripScreen}
         options={({ route, navigation }) => ({
-          headerLeft: () => (
-            <HeaderButtons HeaderButtonComponent={THeaderButton}>
-              <Item
-                title="UndoSignature"
-                iconName="md-menu"
-                color={PrimaryColor}
-                onPress={navigation.toggleDrawer}
-              />
-            </HeaderButtons>
-          ),
+          // headerLeft: () => (
+          //   <HeaderButtons HeaderButtonComponent={THeaderButton}>
+          //     <Item
+          //       title="UndoSignature"
+          //       iconName="md-menu"
+          //       color={PrimaryColor}
+          //       onPress={navigation.toggleDrawer}
+          //     />
+          //   </HeaderButtons>
+          // ),
         })}
       />
     </Stack.Navigator>

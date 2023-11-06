@@ -26,16 +26,16 @@ export const MyWorldRouteStack: React.FC<MyWorldRouteProps> = ({}) => {
         name="World"
         component={MyWorldScreen}
         options={({ route, navigation }) => ({
-          headerLeft: () => (
-            <HeaderButtons HeaderButtonComponent={THeaderButton}>
-              <Item
-                title="UndoSignature"
-                iconName="md-menu"
-                color={PrimaryColor}
-                onPress={navigation.toggleDrawer}
-              />
-            </HeaderButtons>
-          ),
+          // headerLeft: () => (
+          //   <HeaderButtons HeaderButtonComponent={THeaderButton}>
+          //     <Item
+          //       title="UndoSignature"
+          //       iconName="md-menu"
+          //       color={PrimaryColor}
+          //       onPress={navigation.toggleDrawer}
+          //     />
+          //   </HeaderButtons>
+          // ),
         })}
       />
     </Stack.Navigator>

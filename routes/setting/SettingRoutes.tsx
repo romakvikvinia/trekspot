@@ -38,16 +38,16 @@ export const SettingRouteStack: React.FC<SettingRouteProps> = ({}) => {
         name="Setting"
         component={SettingScreen}
         options={({ route, navigation }) => ({
-          headerLeft: () => (
-            <HeaderButtons HeaderButtonComponent={THeaderButton}>
-              <Item
-                title="UndoSignature"
-                iconName="md-menu"
-                color={PrimaryColor}
-                onPress={navigation.toggleDrawer}
-              />
-            </HeaderButtons>
-          ),
+          // headerLeft: () => (
+          //   <HeaderButtons HeaderButtonComponent={THeaderButton}>
+          //     <Item
+          //       title="UndoSignature"
+          //       iconName="md-menu"
+          //       color={PrimaryColor}
+          //       onPress={navigation.toggleDrawer}
+          //     />
+          //   </HeaderButtons>
+          // ),
         })}
       />
     </Stack.Navigator>
