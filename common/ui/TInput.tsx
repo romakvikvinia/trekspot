@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, TextInput } from "react-native";
 import { isInvalidColor } from "../../styles/colors";
+import { COLORS } from "../../styles/theme";
 
 interface TInputProps {
   isValid?: boolean;
@@ -13,18 +14,18 @@ interface TInputProps {
   onChangeText?: any;
   onBlur?: any;
   onSubmitEditing?: any;
+  invalid: boolean;
 }
 
 export const TInput: React.FC<TInputProps> = (props: any) => {
   return (
-    <View
-      style={[
-        styles.formControl,
-        props.style ? props.style : {},
-        props.isValid ? styles.isValid : {},
-      ]}
-    >
-      <TextInput {...props} style={[styles.input]} />
+    <View style={[styles.formControl]}>
+      <TextInput
+        keyboardType={props.keyboardType}
+        {...props}
+        style={[styles.input, props.invalid ? styles.invalid : {}]}
+        placeholderTextColor={COLORS.darkgray}
+      />
     </View>
   );
 };
@@ -45,8 +46,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingLeft: 10,
   },
-  isValid: {
-    borderBottomColor: isInvalidColor,
-    borderBottomWidth: 1,
+  invalid: {
+    borderColor: isInvalidColor,
   },
 });

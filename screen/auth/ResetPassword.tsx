@@ -16,12 +16,7 @@ import {
   Platform,
   SafeAreaView,
 } from "react-native";
-import {
-  IconColor,
-  PrimaryColor,
-  SecondaryColor,
-  isInvalidColor,
-} from "../../styles/colors";
+
 import { AuthContext } from "../../package/context/auth.context";
 import { SignInValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
@@ -40,7 +35,7 @@ import { globalStyles } from "../../styles/globalStyles";
 
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 
-export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
+export const ResetPasswordScreen: React.FC<SignInProps> = ({ navigation }) => {
   const [fetchSignIn, { data, isLoading, error, isError, isSuccess }] =
     useSignInMutation();
   //@ts-ignore
@@ -133,38 +128,6 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 />
               </View>
 
-              <View style={[styles.item]}>
-                <TInput
-                  invalid={
-                    "password" in formik.errors && "password" in formik.touched
-                  }
-                  placeholder="Password"
-                  secureTextEntry
-                  keyboardType="default"
-                  autoCapitalize="none"
-                  returnKeyType="go"
-                  value={formik.values.password}
-                  onChangeText={formik.handleChange("password")}
-                  onBlur={formik.handleBlur("password")}
-                  onSubmitEditing={() => {
-                    if (
-                      !("password" in formik.errors) ||
-                      !("Email" in formik.errors) ||
-                      !formik.isSubmitting
-                    ) {
-                      formik.submitForm();
-                    }
-                  }}
-                />
-              </View>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={styles.forgotPassword}
-                onPress={() => navigation.navigate("ResetPassword")}
-              >
-                <Text style={styles.forgotPasswordText}>Forgot password?</Text>
-              </TouchableOpacity>
-
               <TouchableOpacity
                 activeOpacity={0.7}
                 style={[
@@ -186,79 +149,21 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                   <ActivityIndicator size="small" color="#fff" />
                 ) : (
                   <Text style={globalStyles.buttonItemPrimaryText}>
-                    Sign In
+                    Reset password
                   </Text>
                 )}
               </TouchableOpacity>
 
-              <View style={styles.continueWithDivider}>
-                <View style={styles.borderRow}></View>
-                <Text style={styles.continueWithDividerText}>
-                  Or sign in with
-                </Text>
-              </View>
-
-              <View style={styles.continueWith}>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.continueWithButton}
-                >
-                  <GoogleIcon />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.continueWithButton}
-                >
-                  <AppleIcon />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.continueWithButton}
-                >
-                  <FacebookIcon />
-                </TouchableOpacity>
-              </View>
               <View style={styles.textWithButtonWrapper}>
-                <Text style={styles.textWithButtonLabel}>New user?</Text>
+                <Text style={styles.textWithButtonLabel}>Go to</Text>
                 <TouchableOpacity
                   activeOpacity={0.7}
                   style={styles.textWithButton}
-                  onPress={() => navigation.navigate("SignUp")}
+                  onPress={() => navigation.navigate("SignIn")}
                 >
-                  <Text style={styles.textWithButtonText}>Sign up</Text>
+                  <Text style={styles.textWithButtonText}>Sign in</Text>
                 </TouchableOpacity>
               </View>
-            </View>
-            <View style={[styles.textWithButtonWrapper]}>
-              <Text
-                style={[
-                  styles.textWithButtonLabel,
-                  {
-                    fontSize: SIZES.body5,
-                    color: COLORS.darkgray,
-                  },
-                ]}
-              >
-                By sign in / sign up you agree our
-              </Text>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={styles.textWithButton}
-              >
-                <Text
-                  style={[
-                    styles.textWithButtonText,
-                    {
-                      fontSize: SIZES.body5,
-                      fontWeight: "normal",
-                      color: COLORS.primaryDark,
-                      // textDecorationLine: "underline",
-                    },
-                  ]}
-                >
-                  privacy policy
-                </Text>
-              </TouchableOpacity>
             </View>
           </Animated.View>
         </ScrollView>
@@ -288,53 +193,6 @@ const styles = StyleSheet.create({
     fontSize: SIZES.body2,
     color: COLORS.secondary,
     fontWeight: "bold",
-  },
-  continueWithDivider: {
-    width: "100%",
-    position: "relative",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: SIZES.padding * 4,
-  },
-  borderRow: {
-    width: "100%",
-    height: 2,
-    backgroundColor: "#fafafa",
-  },
-  continueWithDividerText: {
-    position: "absolute",
-    top: -9,
-    backgroundColor: "#fff",
-    paddingHorizontal: SIZES.padding,
-    fontSize: SIZES.body4,
-    color: COLORS.darkgray,
-  },
-  continueWith: {
-    width: "100%",
-    marginTop: SIZES.padding * 3,
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  continueWithButton: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#fafafa",
-    paddingVertical: SIZES.padding * 1.5,
-    paddingHorizontal: SIZES.padding * 2,
-    marginHorizontal: SIZES.padding,
-    borderRadius: SIZES.radius * 5,
-  },
-  forgotPassword: {
-    display: "flex",
-    justifyContent: "flex-end",
-    flexDirection: "row",
-    width: "100%",
-  },
-  forgotPasswordText: {
-    fontSize: SIZES.font,
-    color: COLORS.primary,
   },
   container: {
     flex: 1,

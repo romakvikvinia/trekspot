@@ -28,7 +28,7 @@ export const COLORS = {
 
   lightGray: '#FCFBFC',
   gray: '#C1C3C5',
-  darkgray: '#C3C6C7',
+  darkgray: '#7d7d7d',
 
   background: '#f0f5ff',
 

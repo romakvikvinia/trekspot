@@ -14,6 +14,7 @@ import {
   ActivityIndicator,
   Animated,
   Platform,
+  SafeAreaView,
 } from "react-native";
 import {
   IconColor,
@@ -25,6 +26,9 @@ import { AuthContext } from "../../package/context/auth.context";
 import { SignInValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
+import { COLORS, SIZES } from "../../styles/theme";
+import { TrekspotLinear } from "../../utilities/SvgIcons.utility";
+import { globalStyles } from "../../styles/globalStyles";
 
 type SignUpScreenProps = NativeStackScreenProps<AuthStackParamList, "SignUp">;
 
@@ -65,111 +69,193 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
     }).start();
   }, []);
   return (
-    <LinearGradient
-      colors={[PrimaryColor, PrimaryColor, "transparent", PrimaryColor]}
-      style={styles.container}
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: "#ffffff",
+      }}
     >
-      <ScrollView contentContainerStyle={styles.container}>
-        <KeyboardAvoidingView
-          // behavior="padding"
-          behavior={Platform.OS == "ios" ? "padding" : "height"}
-          // keyboardVerticalOffset={10}
-          style={styles.screen}
-        >
+      <KeyboardAvoidingView
+        // behavior="padding"
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        // keyboardVerticalOffset={10}
+        style={styles.screen}
+      >
+        <ScrollView contentContainerStyle={styles.container}>
           <Animated.View style={{ ...styles.screen, opacity: fadeValue }}>
-            <View style={styles.logoContainer}>
-              <Image
-                source={require("../../assets/logo.png")}
-                style={{ width: 200, height: 200 }}
-              />
-            </View>
-
-            <View
-              style={[
-                styles.item,
-                "email" in formik.errors && "email" in formik.touched
-                  ? styles.isValid
-                  : {},
-              ]}
-            >
-              <View style={styles.itemIcon}>
-                <MaterialIcons name="email" size={24} color={IconColor} />
+            <View style={styles.topSide}>
+              <View style={styles.logoContainer}>
+                <TrekspotLinear />
+              </View>
+              <View style={styles.signTitle}>
+                <Text style={styles.signTitleText}>
+                  Your travel hub awaits: Sign up to begin!
+                </Text>
               </View>
 
-              <TInput
-                keyboardType="default"
-                placeholder="Email"
-                returnKeyType="next"
-                value={formik.values.email}
-                onChangeText={formik.handleChange("email")}
-                onBlur={formik.handleBlur("email")}
-              />
-            </View>
-
-            <View
-              style={[
-                styles.item,
-                "password" in formik.errors && "password" in formik.touched
-                  ? styles.isValid
-                  : {},
-              ]}
-            >
-              <View style={styles.itemIcon}>
-                <Ionicons name="ios-key" size={24} color={IconColor} />
-              </View>
-
-              <TInput
-                placeholder="**********"
-                secureTextEntry
-                keyboardType="default"
-                autoCapitalize="none"
-                returnKeyType="go"
-                value={formik.values.password}
-                onChangeText={formik.handleChange("password")}
-                onBlur={formik.handleBlur("password")}
-                onSubmitEditing={() => {
-                  if (
-                    !("password" in formik.errors) ||
-                    !("email" in formik.errors) ||
-                    !formik.isSubmitting
-                  ) {
-                    formik.submitForm();
+              <View style={[styles.item]}>
+                <TInput
+                  invalid={
+                    "Email" in formik.errors && "Email" in formik.touched
                   }
-                }}
-              />
+                  keyboardType="email-address"
+                  placeholder="Email"
+                  autoCapitalize="none"
+                  returnKeyType="next"
+                  value={formik.values.email}
+                  onChangeText={formik.handleChange("email")}
+                  onBlur={formik.handleBlur("email")}
+                />
+              </View>
+              <View style={[styles.item]}>
+                <TInput
+                  invalid={"Name" in formik.errors && "Name" in formik.touched}
+                  keyboardType="default"
+                  placeholder="Name"
+                  autoCapitalize="none"
+                  returnKeyType="next"
+                  value={formik.values.email}
+                  onChangeText={formik.handleChange("email")}
+                  onBlur={formik.handleBlur("email")}
+                />
+              </View>
+              <View style={[styles.item]}>
+                <TInput
+                  invalid={
+                    "LastName" in formik.errors && "LastName" in formik.touched
+                  }
+                  keyboardType="default"
+                  placeholder="Last name"
+                  autoCapitalize="none"
+                  returnKeyType="next"
+                  value={formik.values.email}
+                  onChangeText={formik.handleChange("email")}
+                  onBlur={formik.handleBlur("email")}
+                />
+              </View>
+
+              <View style={[styles.item]}>
+                <TInput
+                  invalid={
+                    "password" in formik.errors && "password" in formik.touched
+                  }
+                  placeholder="Password"
+                  secureTextEntry
+                  keyboardType="default"
+                  autoCapitalize="none"
+                  returnKeyType="go"
+                  value={formik.values.password}
+                  onChangeText={formik.handleChange("password")}
+                  onBlur={formik.handleBlur("password")}
+                  onSubmitEditing={() => {
+                    if (
+                      !("password" in formik.errors) ||
+                      !("Email" in formik.errors) ||
+                      !formik.isSubmitting
+                    ) {
+                      formik.submitForm();
+                    }
+                  }}
+                />
+              </View>
+
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={[
+                  globalStyles.buttonItemPrimary,
+                  "password" in formik.errors ||
+                  "Email" in formik.errors ||
+                  formik.isSubmitting
+                    ? globalStyles.buttonItemPrimaryDisabled
+                    : null,
+                ]}
+                onPress={formik.submitForm}
+                disabled={
+                  "password" in formik.errors ||
+                  "Email" in formik.errors ||
+                  formik.isSubmitting
+                }
+              >
+                {formik.isSubmitting ? (
+                  <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                  <Text style={globalStyles.buttonItemPrimaryText}>
+                    Sign Up
+                  </Text>
+                )}
+              </TouchableOpacity>
+
+              <View style={styles.textWithButtonWrapper}>
+                <Text style={styles.textWithButtonLabel}>Have an account?</Text>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  style={styles.textWithButton}
+                  onPress={() => navigation.navigate("SignIn")}
+                >
+                  <Text style={styles.textWithButtonText}>Sign In</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-
-            <TouchableOpacity
-              style={{ ...styles.item, ...styles.btn }}
-              onPress={formik.submitForm}
-              disabled={
-                "password" in formik.errors ||
-                "email" in formik.errors ||
-                formik.isSubmitting
-                // || isLoading
-              }
-            >
-              {formik.isSubmitting ? (
-                <ActivityIndicator size="large" color="#fff" />
-              ) : (
-                <Text style={styles.btnText}>Sign Up</Text>
-              )}
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.signUpContainer]}
-              onPress={() => navigation.navigate("SignIn")}
-            >
-              <Text style={styles.signUpText}>Sign In</Text>
-            </TouchableOpacity>
+            <View style={[styles.textWithButtonWrapper]}>
+              <Text
+                style={[
+                  styles.textWithButtonLabel,
+                  {
+                    fontSize: SIZES.body5,
+                    color: COLORS.darkgray,
+                  },
+                ]}
+              >
+                By sign in / sign up you agree our
+              </Text>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={styles.textWithButton}
+              >
+                <Text
+                  style={[
+                    styles.textWithButtonText,
+                    {
+                      fontSize: SIZES.body5,
+                      fontWeight: "normal",
+                      color: COLORS.primaryDark,
+                      // textDecorationLine: "underline",
+                    },
+                  ]}
+                >
+                  privacy policy
+                </Text>
+              </TouchableOpacity>
+            </View>
           </Animated.View>
-        </KeyboardAvoidingView>
-      </ScrollView>
-    </LinearGradient>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
-
 const styles = StyleSheet.create({
+  topSide: {
+    width: "100%",
+  },
+  textWithButtonWrapper: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: SIZES.padding * 4,
+  },
+  textWithButtonLabel: {
+    fontSize: SIZES.body2,
+    color: "#000",
+  },
+  textWithButton: {
+    marginLeft: 5,
+  },
+  textWithButtonText: {
+    fontSize: SIZES.body2,
+    color: COLORS.secondary,
+    fontWeight: "bold",
+  },
+
   container: {
     flex: 1,
     alignItems: "center",
@@ -177,52 +263,32 @@ const styles = StyleSheet.create({
   },
   screen: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    backgroundColor: "transparent",
+    paddingHorizontal: 15,
+    justifyContent: "space-between",
+  },
+  signTitle: {
+    marginTop: 15,
+    width: "100%",
+    marginBottom: 45,
+  },
+  signTitleText: {
+    fontSize: 17,
+    fontWeight: "bold",
   },
   item: {
-    width: "90%",
+    width: "100%",
     flexDirection: "row",
-    backgroundColor: "#fff",
     alignItems: "center",
     overflow: "hidden",
-    marginBottom: 10,
-    paddingHorizontal: 8,
-    borderRadius: 5,
+    marginBottom: 15,
   },
-  itemIcon: {
-    width: 25,
-  },
-  btn: {
-    marginTop: 50,
-    height: 50,
-    justifyContent: "center",
-    backgroundColor: "rgb(99 146 226)",
-  },
-  btnText: {
-    color: "#fff",
-    fontSize: 18,
-  },
+
   logoContainer: {
     marginVertical: 5,
     width: "100%",
-    alignItems: "center",
-    marginBottom: 50,
-  },
-  isValid: {
-    borderColor: isInvalidColor,
-    borderWidth: 2,
-  },
-  signUpContainer: {
-    marginVertical: 5,
-    width: "90%",
-
-    alignItems: "center",
-    paddingVertical: 5,
-  },
-  signUpText: {
-    color: "white",
+    alignItems: "flex-start",
+    marginBottom: 15,
   },
 });
