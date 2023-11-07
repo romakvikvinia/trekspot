@@ -2,10 +2,23 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { gql } from "graphql-request";
 import { graphqlRequestBaseQuery } from "@rtk-query/graphql-request-base-query";
 import { AuthLoginType, AuthResponseType, TokenType } from "./api.types";
+import { getFullToken } from "../helpers/secure.storage";
+
+const prepHeaders = async (headers: Headers) => {
+  let token = await getFullToken();
+
+  if (token && new Date().getTime() < token.expire) {
+    // set Token
+    headers.set("Authorization", `Bearer ${token.token}`);
+  }
+
+  return headers;
+};
 
 export const trekSpotApi = createApi({
   baseQuery: graphqlRequestBaseQuery({
     url: "http://localhost:8080/graphql",
+    prepareHeaders: prepHeaders,
   }),
   endpoints: (builder) => ({
     signIn: builder.mutation<AuthResponseType, AuthLoginType>({

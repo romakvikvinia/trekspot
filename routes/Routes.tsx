@@ -22,7 +22,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
   const checkAuth = useCallback(async () => {
     try {
       let token = await getFullToken();
-
+      console.log("token", token);
       if (token && new Date().getTime() >= token.expire) {
         // unauthorize
         await deleteItemFromStorage();
