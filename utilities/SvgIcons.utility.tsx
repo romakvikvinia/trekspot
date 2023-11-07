@@ -350,7 +350,7 @@ export const SettingsBold = () => {
   const SvgImage = () => <SvgXml xml={svgMarkup} width="22" height="22" />;
   return <SvgImage />;
 };
-export const TrekspotLinear = () => {
+export const TrekSpotLinear = () => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="251.457" height="237.669" viewBox="0 0 251.457 237.669">
   <defs>
     <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">

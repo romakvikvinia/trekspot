@@ -1,9 +1,13 @@
+import React from "react";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Text, TouchableOpacity, View } from "react-native";
 import Onboarding from "react-native-onboarding-swiper";
-import { useNavigation } from "@react-navigation/native";
 
-export const GetStartedScreen = () => {
-  const navigation = useNavigation();
+import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
+
+type GetStartedProps = NativeStackScreenProps<AuthStackParamList, "GetStarted">;
+
+export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
   return (
     <View style={{ flex: 1 }}>
       <Onboarding
@@ -14,7 +18,7 @@ export const GetStartedScreen = () => {
         pages={[
           {
             backgroundColor: "#7C2F9F",
-            image: "",
+            image: <></>,
             title: (
               <View style={{ paddingHorizontal: 15 }}>
                 <Text
@@ -32,7 +36,7 @@ export const GetStartedScreen = () => {
           },
           {
             backgroundColor: "#AC0056",
-            image: "",
+            image: <></>,
             title: (
               <View style={{ paddingHorizontal: 15 }}>
                 <Text
@@ -50,7 +54,7 @@ export const GetStartedScreen = () => {
           },
           {
             backgroundColor: "#00916C",
-            image: "",
+            image: <></>,
             title: (
               <View style={{ paddingHorizontal: 15 }}>
                 <Text
@@ -68,7 +72,7 @@ export const GetStartedScreen = () => {
           },
           {
             backgroundColor: "#3955A3",
-            image: "",
+            image: <></>,
             title: (
               <View style={{ paddingHorizontal: 15 }}>
                 <Text

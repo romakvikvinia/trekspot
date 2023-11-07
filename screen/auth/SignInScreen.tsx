@@ -1,14 +1,12 @@
 import { useState, useEffect, useCallback, useContext } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { LinearGradient } from "expo-linear-gradient";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+
 import { useFormik } from "formik";
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
-  Image,
   ScrollView,
   KeyboardAvoidingView,
   ActivityIndicator,
@@ -16,12 +14,7 @@ import {
   Platform,
   SafeAreaView,
 } from "react-native";
-import {
-  IconColor,
-  PrimaryColor,
-  SecondaryColor,
-  isInvalidColor,
-} from "../../styles/colors";
+import { isInvalidColor } from "../../styles/colors";
 import { AuthContext } from "../../package/context/auth.context";
 import { SignInValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
@@ -33,7 +26,7 @@ import {
   AppleIcon,
   FacebookIcon,
   GoogleIcon,
-  TrekspotLinear,
+  TrekSpotLinear,
 } from "../../utilities/SvgIcons.utility";
 import { COLORS, SIZES } from "../../styles/theme";
 
@@ -93,12 +86,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   }, [isSuccess, data]);
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: "#ffffff",
-      }}
-    >
+    <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView
         // behavior="padding"
         behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -107,9 +95,9 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
       >
         <ScrollView contentContainerStyle={styles.container}>
           <Animated.View style={{ ...styles.screen, opacity: fadeValue }}>
-            <View style={{ flex: 1, width: "100%" }}>
+            <View style={styles.animatedInnerWrapper}>
               <View style={styles.logoContainer}>
-                <TrekspotLinear />
+                <TrekSpotLinear />
               </View>
               <View style={styles.signTitle}>
                 <Text style={styles.signTitleText}>
@@ -233,17 +221,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 activeOpacity={0.7}
                 style={styles.textWithButton}
               >
-                <Text
-                  style={[
-                    styles.textWithButtonText,
-                    {
-                      fontSize: SIZES.body3,
-                      fontWeight: "normal",
-                      color: COLORS.primaryDark,
-                      textDecorationLine: "underline",
-                    },
-                  ]}
-                >
+                <Text style={[styles.textWithButtonText, styles.privacyPolicy]}>
                   privacy policy
                 </Text>
               </TouchableOpacity>
@@ -256,11 +234,25 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#ffffff",
+  },
+  animatedInnerWrapper: {
+    flex: 1,
+    width: "100%",
+  },
   textWithButtonWrapper: {
     width: "100%",
     flexDirection: "row",
     justifyContent: "center",
     marginTop: SIZES.padding * 4,
+  },
+  privacyPolicy: {
+    fontSize: SIZES.body3,
+    fontWeight: "normal",
+    color: COLORS.primaryDark,
+    textDecorationLine: "underline",
   },
   textWithButtonLabel: {
     fontSize: SIZES.body2,
