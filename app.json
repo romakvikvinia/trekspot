@@ -11,7 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.trekspot.app"
@@ -45,6 +47,12 @@
           "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
         }
       ]
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/0208e3d2-29fc-4d09-9a72-11fae25997f6"
     }
   }
 }

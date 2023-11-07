@@ -37,10 +37,13 @@ const styles = StyleSheet.create({
   input: {
     paddingHorizontal: 2,
     paddingVertical: 5,
-    padding: 8,
-    // borderBottomColor: '#ccc',
-    // borderBottomWidth: 1,
+    borderColor: "#e9e9e9",
+    borderWidth: 1,
     height: "100%",
+    backgroundColor: "#fdfdff",
+    fontSize: 14,
+    borderRadius: 8,
+    paddingLeft: 10,
   },
   isValid: {
     borderBottomColor: isInvalidColor,
