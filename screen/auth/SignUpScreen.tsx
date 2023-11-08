@@ -16,19 +16,14 @@ import {
   Platform,
   SafeAreaView,
 } from "react-native";
-import {
-  IconColor,
-  PrimaryColor,
-  SecondaryColor,
-  isInvalidColor,
-} from "../../styles/colors";
+
 import { AuthContext } from "../../package/context/auth.context";
 import { SignInValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
 import { COLORS, SIZES } from "../../styles/theme";
-import { TrekspotLinear } from "../../utilities/SvgIcons.utility";
 import { globalStyles } from "../../styles/globalStyles";
+import { TrekSpotLinear } from "../../utilities/SvgIcons.utility";
 
 type SignUpScreenProps = NativeStackScreenProps<AuthStackParamList, "SignUp">;
 
@@ -64,17 +59,12 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
   useEffect(() => {
     Animated.timing(fadeValue, {
       toValue: 1,
-      duration: 1500,
+      duration: 500,
       useNativeDriver: true,
     }).start();
   }, []);
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: "#ffffff",
-      }}
-    >
+    <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView
         // behavior="padding"
         behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -85,7 +75,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
           <Animated.View style={{ ...styles.screen, opacity: fadeValue }}>
             <View style={styles.topSide}>
               <View style={styles.logoContainer}>
-                <TrekspotLinear />
+                <TrekSpotLinear />
               </View>
               <View style={styles.signTitle}>
                 <Text style={styles.signTitleText}>
@@ -234,6 +224,10 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
   );
 };
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#ffffff",
+  },
   topSide: {
     width: "100%",
   },

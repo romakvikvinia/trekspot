@@ -24,12 +24,7 @@ import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
 import { useSignInMutation } from "../../api/api.trekspot";
 import { AuthResponseType } from "../../api/api.types";
 import { storeToken } from "../../helpers/secure.storage";
-import {
-  AppleIcon,
-  FacebookIcon,
-  GoogleIcon,
-  TrekspotLinear,
-} from "../../utilities/SvgIcons.utility";
+import { TrekSpotLinear } from "../../utilities/SvgIcons.utility";
 import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
 
@@ -89,12 +84,7 @@ export const ResetPasswordScreen: React.FC<SignInProps> = ({ navigation }) => {
   }, [isSuccess, data]);
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: "#ffffff",
-      }}
-    >
+    <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView
         // behavior="padding"
         behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -105,7 +95,7 @@ export const ResetPasswordScreen: React.FC<SignInProps> = ({ navigation }) => {
           <Animated.View style={{ ...styles.screen, opacity: fadeValue }}>
             <View style={styles.topSide}>
               <View style={styles.logoContainer}>
-                <TrekspotLinear />
+                <TrekSpotLinear />
               </View>
               <View style={styles.signTitle}>
                 <Text style={styles.signTitleText}>
@@ -173,6 +163,10 @@ export const ResetPasswordScreen: React.FC<SignInProps> = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#ffffff",
+  },
   topSide: {
     width: "100%",
   },

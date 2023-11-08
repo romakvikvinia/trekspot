@@ -22,11 +22,12 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
   const checkAuth = useCallback(async () => {
     try {
       let token = await getFullToken();
-
+      await deleteItemFromStorage();
       if (token && new Date().getTime() >= token.expire) {
         // unauthorize
         await deleteItemFromStorage();
         dispatch({ type: "SIGN_OUT" });
+        return;
       }
 
       // // setToken(tokens.access_token);
@@ -67,7 +68,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
   return (
     <NavigationContainer onReady={checkAuth} theme={theme}>
       <AuthContext.Provider value={authContext}>
-        {!state.isAuthenticated ? <AuthRoute /> : <AppRoute />}
+        {!state.isAuthenticated ? <AppRoute /> : <AuthRoute />}
       </AuthContext.Provider>
     </NavigationContainer>
   );

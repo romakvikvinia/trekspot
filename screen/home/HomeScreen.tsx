@@ -80,23 +80,18 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
                 <Text style={styles.txt}>Share</Text>
               </TouchableOpacity>
             </View>
-            <View
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => onOpen()}
               style={{
                 padding: 15,
                 display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              <ReactNativeZoomableView
-                maxZoom={4}
-                minZoom={0.5}
-                zoomStep={0.5}
-                initialZoom={1}
-                bindToBorders={true}
-                // onZoomAfter={this.logOutZoomState}
-              >
-                <MapSvg />
-              </ReactNativeZoomableView>
-            </View>
+              <MapSvg />
+            </TouchableOpacity>
             <View style={styles.row}>
               <View style={[styles.rowBox]}>
                 <View
@@ -109,41 +104,53 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
                     style={[
                       styles.lg,
                       {
-                        color: "#0094ff",
+                        color: "#500074",
                       },
                     ]}
                   >
-                    24%
+                    24
                   </Text>
                 </View>
 
-                <Text>World</Text>
+                <Text
+                  style={{ fontSize: 12, opacity: 0.5, fontWeight: "bold" }}
+                >
+                  World
+                </Text>
               </View>
               <View style={[styles.rowBox]}>
                 <Text
                   style={[
                     styles.lg,
                     {
-                      color: "#0094ff",
+                      color: "#500074",
                     },
                   ]}
                 >
                   34
                 </Text>
-                <Text>Countries</Text>
+                <Text
+                  style={{ fontSize: 12, opacity: 0.5, fontWeight: "bold" }}
+                >
+                  Countries
+                </Text>
               </View>
               <View style={[styles.rowBox]}>
                 <Text
                   style={[
                     styles.lg,
                     {
-                      color: "#0094ff",
+                      color: "#500074",
                     },
                   ]}
                 >
                   3
                 </Text>
-                <Text>Continents</Text>
+                <Text
+                  style={{ fontSize: 12, opacity: 0.5, fontWeight: "bold" }}
+                >
+                  Continents
+                </Text>
               </View>
             </View>
           </View>
@@ -268,7 +275,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: "#f8f8f8",
     borderColor: "#fff",
-    borderWidth: 0,
+    borderWidth: 2,
     borderStyle: "solid",
   },
   lg: {

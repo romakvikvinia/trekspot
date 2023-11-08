@@ -7,7 +7,6 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { HomeScreen } from "../../screen/home/HomeScreen";
 import { PrimaryColor } from "../../styles/colors";
 import { THeaderButton } from "../../common/ui/THeaderButton";
-import { Host } from "react-native-portalize";
 
 interface HomeRouteProps {}
 
@@ -22,27 +21,25 @@ export type HomeRouteStackNavigationProp =
 
 export const HomeRouteStack: React.FC<HomeRouteProps> = ({}) => {
   return (
-    <Host>
-      <Stack.Navigator
-        screenOptions={{
-          headerTitle: "Home",
-          headerTintColor: PrimaryColor,
-          headerTitleStyle: {
-            // fontFamily: "",
-          },
-          cardStyle: {
-            backgroundColor: "#f5f6f8",
-          },
-        }}
-      >
-        <Stack.Screen
-          name="Main"
-          component={HomeScreen}
-          options={() => ({
-            header: () => null,
-          })}
-        />
-      </Stack.Navigator>
-    </Host>
+    <Stack.Navigator
+      screenOptions={{
+        headerTitle: "Home",
+        headerTintColor: PrimaryColor,
+        headerTitleStyle: {
+          // fontFamily: "",
+        },
+        cardStyle: {
+          backgroundColor: "#f5f6f8",
+        },
+      }}
+    >
+      <Stack.Screen
+        name="Main"
+        component={HomeScreen}
+        options={() => ({
+          header: () => null,
+        })}
+      />
+    </Stack.Navigator>
   );
 };

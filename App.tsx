@@ -30,7 +30,6 @@ export default function App() {
         // onLayout={onLayoutRootView}
         style={styles.container}
       >
-        <StatusBar style="auto" />
         <Routes />
       </GestureHandlerRootView>
     </ApiProvider>
