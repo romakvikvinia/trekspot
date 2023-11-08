@@ -70,6 +70,11 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
     },
     []
   );
+
+  const handleRedirect = useCallback(() => {
+    formik.resetForm();
+    navigation.navigate("SignUp");
+  }, []);
   //animations
   useEffect(() => {
     Animated.timing(fadeValue, {
@@ -109,7 +114,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
               <View style={[styles.item]}>
                 <TInput
                   invalid={
-                    "Email" in formik.errors && "Email" in formik.touched
+                    "email" in formik.errors && "email" in formik.touched
                   }
                   keyboardType="email-address"
                   placeholder="Email"
@@ -158,7 +163,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 style={[
                   globalStyles.buttonItemPrimary,
                   "password" in formik.errors ||
-                  "Email" in formik.errors ||
+                  "email" in formik.errors ||
                   formik.isSubmitting
                     ? globalStyles.buttonItemPrimaryDisabled
                     : null,
@@ -166,7 +171,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 onPress={formik.submitForm}
                 disabled={
                   "password" in formik.errors ||
-                  "Email" in formik.errors ||
+                  "email" in formik.errors ||
                   formik.isSubmitting
                 }
               >
@@ -211,7 +216,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 <TouchableOpacity
                   activeOpacity={0.7}
                   style={styles.textWithButton}
-                  onPress={() => navigation.navigate("SignUp")}
+                  onPress={handleRedirect}
                 >
                   <Text style={styles.textWithButtonText}>Sign up</Text>
                 </TouchableOpacity>

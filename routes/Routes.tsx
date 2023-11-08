@@ -50,7 +50,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
         });
       },
       signOut: async () => {
-        // await deleteItemFromStorage();
+        await deleteItemFromStorage();
         dispatch({ type: "SIGN_OUT" });
       },
     }),
@@ -68,7 +68,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
   return (
     <NavigationContainer onReady={checkAuth} theme={theme}>
       <AuthContext.Provider value={authContext}>
-        {!state.isAuthenticated ? <AppRoute /> : <AuthRoute />}
+        {!state.isAuthenticated ? <AuthRoute /> : <AppRoute />}
       </AuthContext.Provider>
     </NavigationContainer>
   );

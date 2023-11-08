@@ -18,7 +18,7 @@ import {
 } from "react-native";
 
 import { AuthContext } from "../../package/context/auth.context";
-import { SignInValidationSchema } from "./validationScheme";
+import { SignUpValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
 import { COLORS, SIZES } from "../../styles/theme";
@@ -34,9 +34,11 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
   const formik = useFormik({
     initialValues: {
       email: "",
+      firstName: "",
+      lastName: "",
       password: "",
     },
-    validationSchema: SignInValidationSchema,
+    validationSchema: SignUpValidationSchema,
     onSubmit: async ({ email: username, password }, methods) => {
       methods.setSubmitting(true);
     },
@@ -63,12 +65,12 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
       useNativeDriver: true,
     }).start();
   }, []);
+  console.log(formik.errors);
+  console.log(formik.touched);
   return (
     <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView
-        // behavior="padding"
         behavior={Platform.OS == "ios" ? "padding" : "height"}
-        // keyboardVerticalOffset={10}
         style={styles.screen}
       >
         <ScrollView contentContainerStyle={styles.container}>
@@ -86,7 +88,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
               <View style={[styles.item]}>
                 <TInput
                   invalid={
-                    "Email" in formik.errors && "Email" in formik.touched
+                    "email" in formik.errors && "email" in formik.touched
                   }
                   keyboardType="email-address"
                   placeholder="Email"
@@ -99,28 +101,31 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
               </View>
               <View style={[styles.item]}>
                 <TInput
-                  invalid={"Name" in formik.errors && "Name" in formik.touched}
+                  invalid={
+                    "firstName" in formik.errors &&
+                    "firstName" in formik.touched
+                  }
                   keyboardType="default"
-                  placeholder="Name"
+                  placeholder="First Name"
                   autoCapitalize="none"
                   returnKeyType="next"
-                  value={formik.values.email}
-                  onChangeText={formik.handleChange("email")}
-                  onBlur={formik.handleBlur("email")}
+                  value={formik.values.firstName}
+                  onChangeText={formik.handleChange("firstName")}
+                  onBlur={formik.handleBlur("firstName")}
                 />
               </View>
               <View style={[styles.item]}>
                 <TInput
                   invalid={
-                    "LastName" in formik.errors && "LastName" in formik.touched
+                    "lastName" in formik.errors && "lastName" in formik.touched
                   }
                   keyboardType="default"
                   placeholder="Last name"
                   autoCapitalize="none"
                   returnKeyType="next"
-                  value={formik.values.email}
-                  onChangeText={formik.handleChange("email")}
-                  onBlur={formik.handleBlur("email")}
+                  value={formik.values.lastName}
+                  onChangeText={formik.handleChange("lastName")}
+                  onBlur={formik.handleBlur("lastName")}
                 />
               </View>
 
@@ -140,7 +145,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
                   onSubmitEditing={() => {
                     if (
                       !("password" in formik.errors) ||
-                      !("Email" in formik.errors) ||
+                      !("email" in formik.errors) ||
                       !formik.isSubmitting
                     ) {
                       formik.submitForm();
@@ -154,7 +159,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
                 style={[
                   globalStyles.buttonItemPrimary,
                   "password" in formik.errors ||
-                  "Email" in formik.errors ||
+                  "email" in formik.errors ||
                   formik.isSubmitting
                     ? globalStyles.buttonItemPrimaryDisabled
                     : null,
@@ -162,7 +167,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
                 onPress={formik.submitForm}
                 disabled={
                   "password" in formik.errors ||
-                  "Email" in formik.errors ||
+                  "email" in formik.errors ||
                   formik.isSubmitting
                 }
               >
