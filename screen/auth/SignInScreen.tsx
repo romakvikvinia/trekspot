@@ -31,11 +31,46 @@ import {
 } from "../../utilities/SvgIcons.utility";
 import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
+import * as Facebook from "expo-auth-session/providers/facebook";
+import * as WebBrowser from "expo-web-browser";
 
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
-
+WebBrowser.maybeCompleteAuthSession();
 export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   const dispatch = useDispatch();
+  const [state, setState] = useState({ user: null });
+  const [request, response, promptAsync] = Facebook.useAuthRequest({
+    clientId: "6152855191481990",
+    scopes: ["public_profile", "email"],
+  });
+
+  useEffect(() => {
+    if (response && response.type === "success" && response.authentication) {
+      (async () => {
+        const userInfoResponse = await fetch(
+          `https://graph.facebook.com/me?access_token=${response.authentication?.accessToken}&fields=id,name,picture.type(large)`
+        );
+        const user = await userInfoResponse.json();
+        setState((prevState) => ({ ...prevState, user }));
+        console.log(user);
+      })();
+    }
+    console.log(response);
+  }, [response]);
+
+  const handlePressAsync = useCallback(async () => {
+    try {
+      const result = await promptAsync();
+      if (result.type !== "success") {
+        Alert.alert("Error", "Failed");
+        return;
+      }
+    } catch (error) {
+      console.log(response);
+      Alert.alert("error", JSON.stringify(response));
+    }
+  }, [response]);
+
   const [fetchSignIn, { data, isLoading, error, isError, isSuccess }] =
     useSignInMutation();
 
@@ -76,6 +111,25 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   const handleRedirect = useCallback(() => {
     formik.resetForm();
     navigation.navigate("SignUp");
+  }, []);
+  const handleFaceBookLogin = useCallback(async () => {
+    // try {
+    //   const result = await LoginManager.logInWithPermissions(
+    //     ["public_profile"]
+    //     // "limited",
+    //     // "my_nonce"
+    //   );
+    //   console.log(result);
+    //   if (Platform.OS === "ios") {
+    //     const result = await AuthenticationToken.getAuthenticationTokenIOS();
+    //     console.log(result?.authenticationToken);
+    //   } else {
+    //     const result = await AccessToken.getCurrentAccessToken();
+    //     console.log(result?.accessToken);
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
   }, []);
   //animations
   useEffect(() => {
@@ -220,9 +274,14 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 <TouchableOpacity
                   activeOpacity={0.7}
                   style={styles.continueWithButton}
+                  // onPress={handleFaceBookLogin}
+                  onPress={handlePressAsync}
                 >
                   <FacebookIcon />
                 </TouchableOpacity>
+              </View>
+              <View style={styles.textWithButtonWrapper}>
+                {state.user && <Text> {JSON.stringify(state.user)}</Text>}
               </View>
               <View style={styles.textWithButtonWrapper}>
                 <Text style={styles.textWithButtonLabel}>New user?</Text>
