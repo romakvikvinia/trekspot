@@ -1,7 +1,12 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { gql } from "graphql-request";
 import { graphqlRequestBaseQuery } from "@rtk-query/graphql-request-base-query";
-import { AuthLoginType, AuthResponseType, TokenType } from "./api.types";
+import {
+  AuthLoginType,
+  AuthLoginResponseType,
+  AuthLogUpType,
+  AuthSignUpResponseType,
+} from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 
 const prepHeaders = async (headers: Headers) => {
@@ -16,12 +21,27 @@ const prepHeaders = async (headers: Headers) => {
 };
 
 export const trekSpotApi = createApi({
+  // refetchOnMountOrArgChange: true,
   baseQuery: graphqlRequestBaseQuery({
     url: "http://localhost:8080/graphql",
     prepareHeaders: prepHeaders,
+    customErrors: ({ name, response }) => {
+      return {
+        name,
+        stack: null,
+        //@ts-ignore
+        message: response?.errors[0]?.extensions?.originalError?.message,
+        // @ts-ignore
+        errorCode: response?.errors[0]?.extensions?.originalError?.statusCode,
+      };
+    },
   }),
+  tagTypes: ["signUp", "signIn"],
   endpoints: (builder) => ({
-    signIn: builder.mutation<AuthResponseType, AuthLoginType>({
+    /**
+     * Sign In
+     */
+    signIn: builder.mutation<AuthLoginResponseType, AuthLoginType>({
       query: ({ email, password }) => {
         return {
           variables: { email, password },
@@ -35,11 +55,47 @@ export const trekSpotApi = createApi({
           `,
         };
       },
-      transformResponse: (response: AuthResponseType) => {
+      transformResponse: (response: AuthLoginResponseType) => {
         return response;
       },
+      invalidatesTags: (result, error) => (error ? [] : ["signIn"]),
+    }),
+    /**
+     * Sign Up
+     */
+    signUp: builder.mutation<AuthSignUpResponseType, AuthLogUpType>({
+      query: ({ firstName, lastName, email, password }) => {
+        return {
+          variables: { firstName, lastName, email, password },
+          document: gql`
+            mutation (
+              $email: String!
+              $password: String!
+              $firstName: String!
+              $lastName: String!
+            ) {
+              signUp(
+                input: {
+                  firstName: $firstName
+                  lastName: $lastName
+                  email: $email
+                  password: $password
+                }
+              ) {
+                firstName
+                lastName
+                email
+              }
+            }
+          `,
+        };
+      },
+      transformResponse: (response: AuthSignUpResponseType) => {
+        return response;
+      },
+      invalidatesTags: (result, error) => (error ? [] : ["signUp"]),
     }),
   }),
 });
 
-export const { useSignInMutation } = trekSpotApi;
+export const { useSignInMutation, useSignUpMutation } = trekSpotApi;

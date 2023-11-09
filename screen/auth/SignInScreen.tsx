@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useContext } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-
+import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import {
   StyleSheet,
@@ -13,14 +13,15 @@ import {
   Animated,
   Platform,
   SafeAreaView,
+  Alert,
 } from "react-native";
-import { isInvalidColor } from "../../styles/colors";
+
 import { AuthContext } from "../../package/context/auth.context";
 import { SignInValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
-import { useSignInMutation } from "../../api/api.trekspot";
-import { AuthResponseType } from "../../api/api.types";
+import { trekSpotApi, useSignInMutation } from "../../api/api.trekspot";
+import { AuthLoginResponseType } from "../../api/api.types";
 import { storeToken } from "../../helpers/secure.storage";
 import {
   AppleIcon,
@@ -34,9 +35,10 @@ import { globalStyles } from "../../styles/globalStyles";
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 
 export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
+  const dispatch = useDispatch();
   const [fetchSignIn, { data, isLoading, error, isError, isSuccess }] =
     useSignInMutation();
-  //@ts-ignore
+
   const { signIn } = useContext(AuthContext);
 
   const formik = useFormik({
@@ -57,7 +59,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   });
 
   const handleSaveToken = useCallback(
-    async (auth: AuthResponseType["data"]) => {
+    async (auth: AuthLoginResponseType["data"]) => {
       try {
         let token = { ...auth.login };
         token.expire = new Date().getTime() + token.expire;
@@ -70,6 +72,11 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
     },
     []
   );
+
+  const handleRedirect = useCallback(() => {
+    formik.resetForm();
+    navigation.navigate("SignUp");
+  }, []);
   //animations
   useEffect(() => {
     Animated.timing(fadeValue, {
@@ -86,6 +93,16 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
     }
   }, [isSuccess, data]);
 
+  if (isError) {
+    Alert.alert("Error", "Invalid Credentials", [
+      {
+        onPress: () => {
+          dispatch(trekSpotApi.util.resetApiState());
+        },
+        text: "OK",
+      },
+    ]);
+  }
   return (
     <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView
@@ -109,7 +126,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
               <View style={[styles.item]}>
                 <TInput
                   invalid={
-                    "Email" in formik.errors && "Email" in formik.touched
+                    "email" in formik.errors && "email" in formik.touched
                   }
                   keyboardType="email-address"
                   placeholder="Email"
@@ -158,7 +175,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 style={[
                   globalStyles.buttonItemPrimary,
                   "password" in formik.errors ||
-                  "Email" in formik.errors ||
+                  "email" in formik.errors ||
                   formik.isSubmitting
                     ? globalStyles.buttonItemPrimaryDisabled
                     : null,
@@ -166,11 +183,12 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 onPress={formik.submitForm}
                 disabled={
                   "password" in formik.errors ||
-                  "Email" in formik.errors ||
-                  formik.isSubmitting
+                  "email" in formik.errors ||
+                  formik.isSubmitting ||
+                  isLoading
                 }
               >
-                {formik.isSubmitting ? (
+                {formik.isSubmitting || isLoading ? (
                   <ActivityIndicator size="small" color="#fff" />
                 ) : (
                   <Text style={globalStyles.buttonItemPrimaryText}>
@@ -211,7 +229,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 <TouchableOpacity
                   activeOpacity={0.7}
                   style={styles.textWithButton}
-                  onPress={() => navigation.navigate("SignUp")}
+                  onPress={handleRedirect}
                 >
                   <Text style={styles.textWithButtonText}>Sign up</Text>
                 </TouchableOpacity>

@@ -1,7 +1,6 @@
-import { useState, useEffect, useCallback, useContext } from "react";
+import { useState, useEffect } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { LinearGradient } from "expo-linear-gradient";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import {
   StyleSheet,
@@ -15,30 +14,34 @@ import {
   Animated,
   Platform,
   SafeAreaView,
+  Alert,
 } from "react-native";
 
-import { AuthContext } from "../../package/context/auth.context";
-import { SignInValidationSchema } from "./validationScheme";
+import { SignUpValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
 import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
 import { TrekSpotLinear } from "../../utilities/SvgIcons.utility";
+import { trekSpotApi, useSignUpMutation } from "../../api/api.trekspot";
 
 type SignUpScreenProps = NativeStackScreenProps<AuthStackParamList, "SignUp">;
 
 export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
-  //@ts-ignore
-  const { signIn } = useContext(AuthContext);
-
+  const dispatch = useDispatch();
+  const [fetchSignUp, { data, isSuccess, isLoading, error, isError }] =
+    useSignUpMutation();
   const formik = useFormik({
     initialValues: {
       email: "",
+      firstName: "",
+      lastName: "",
       password: "",
     },
-    validationSchema: SignInValidationSchema,
-    onSubmit: async ({ email: username, password }, methods) => {
+    validationSchema: SignUpValidationSchema,
+    onSubmit: async ({ firstName, lastName, email, password }, methods) => {
       methods.setSubmitting(true);
+      fetchSignUp({ firstName, lastName, email, password });
     },
   });
 
@@ -46,15 +49,6 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
     fadeValue: new Animated.Value(0),
   });
 
-  const handleSaveToken = useCallback(async (tokens: any) => {
-    // let t = { ...tokens };
-    // if (t && t.expires_in) {
-    //   t.expires_in += new Date().getTime();
-    // }
-    // await storeToken(t);
-    // setToken(t.access_token);
-    // signIn(t);
-  }, []);
   //animations
   useEffect(() => {
     Animated.timing(fadeValue, {
@@ -63,12 +57,41 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
       useNativeDriver: true,
     }).start();
   }, []);
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      Alert.alert("Success", "Account created successfully", [
+        {
+          onPress: () => {
+            dispatch(trekSpotApi.util.resetApiState());
+            formik.resetForm();
+          },
+          text: "OK",
+        },
+      ]);
+    }
+  }, [isSuccess, data]);
+
+  if (isError) {
+    Alert.alert(
+      "Error",
+      //@ts-ignore
+      (error && "message" in error && error.message) || "Something went wrong",
+      [
+        {
+          onPress: () => {
+            dispatch(trekSpotApi.util.resetApiState());
+          },
+          text: "OK",
+        },
+      ]
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView
-        // behavior="padding"
         behavior={Platform.OS == "ios" ? "padding" : "height"}
-        // keyboardVerticalOffset={10}
         style={styles.screen}
       >
         <ScrollView contentContainerStyle={styles.container}>
@@ -86,7 +109,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
               <View style={[styles.item]}>
                 <TInput
                   invalid={
-                    "Email" in formik.errors && "Email" in formik.touched
+                    "email" in formik.errors && "email" in formik.touched
                   }
                   keyboardType="email-address"
                   placeholder="Email"
@@ -99,28 +122,31 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
               </View>
               <View style={[styles.item]}>
                 <TInput
-                  invalid={"Name" in formik.errors && "Name" in formik.touched}
+                  invalid={
+                    "firstName" in formik.errors &&
+                    "firstName" in formik.touched
+                  }
                   keyboardType="default"
-                  placeholder="Name"
+                  placeholder="First Name"
                   autoCapitalize="none"
                   returnKeyType="next"
-                  value={formik.values.email}
-                  onChangeText={formik.handleChange("email")}
-                  onBlur={formik.handleBlur("email")}
+                  value={formik.values.firstName}
+                  onChangeText={formik.handleChange("firstName")}
+                  onBlur={formik.handleBlur("firstName")}
                 />
               </View>
               <View style={[styles.item]}>
                 <TInput
                   invalid={
-                    "LastName" in formik.errors && "LastName" in formik.touched
+                    "lastName" in formik.errors && "lastName" in formik.touched
                   }
                   keyboardType="default"
                   placeholder="Last name"
                   autoCapitalize="none"
                   returnKeyType="next"
-                  value={formik.values.email}
-                  onChangeText={formik.handleChange("email")}
-                  onBlur={formik.handleBlur("email")}
+                  value={formik.values.lastName}
+                  onChangeText={formik.handleChange("lastName")}
+                  onBlur={formik.handleBlur("lastName")}
                 />
               </View>
 
@@ -140,7 +166,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
                   onSubmitEditing={() => {
                     if (
                       !("password" in formik.errors) ||
-                      !("Email" in formik.errors) ||
+                      !("email" in formik.errors) ||
                       !formik.isSubmitting
                     ) {
                       formik.submitForm();
@@ -154,7 +180,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
                 style={[
                   globalStyles.buttonItemPrimary,
                   "password" in formik.errors ||
-                  "Email" in formik.errors ||
+                  "email" in formik.errors ||
                   formik.isSubmitting
                     ? globalStyles.buttonItemPrimaryDisabled
                     : null,
@@ -162,11 +188,12 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
                 onPress={formik.submitForm}
                 disabled={
                   "password" in formik.errors ||
-                  "Email" in formik.errors ||
-                  formik.isSubmitting
+                  "email" in formik.errors ||
+                  formik.isSubmitting ||
+                  isLoading
                 }
               >
-                {formik.isSubmitting ? (
+                {formik.isSubmitting || isLoading ? (
                   <ActivityIndicator size="small" color="#fff" />
                 ) : (
                   <Text style={globalStyles.buttonItemPrimaryText}>
