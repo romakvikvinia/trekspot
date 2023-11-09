@@ -315,7 +315,7 @@ export const CountriesList = [
     emergencyNumber: "112",
   },
   {
-    name: "Democratic Republic of the Congo (Congo-Kinshasa)",
+    name: "DR of the Congo",
     iso2: "CD",
     capital: "Kinshasa",
     phone: "+243",

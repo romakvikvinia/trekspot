@@ -389,3 +389,17 @@ export const AppleIcon = () => {
   const SvgImage = () => <SvgXml xml={svgMarkup} width="22" height="22" />;
   return <SvgImage />;
 };
+export const VisitedIcon = ({ active }) => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M14 7a2 2 0 1 1-2-2 2 2 0 0 1 2 2Zm2.958 5.184L13.9 15.215a2.669 2.669 0 0 1-3.79 0L7.054 12.2a7.262 7.262 0 0 1-.012-10.1 6.9 6.9 0 0 1 9.916 0 7.257 7.257 0 0 1 0 10.084ZM16 7a4 4 0 1 0-4 4 4 4 0 0 0 4-4Zm4.753 2.2a9.1 9.1 0 0 1-2.364 4.384l-3.078 3.053a4.667 4.667 0 0 1-3.3 1.371 4.665 4.665 0 0 1-3.3-1.366l-3.063-3.023a9.2 9.2 0 0 1-2.365-4.311 5.066 5.066 0 0 0-1.745 1.083A4.946 4.946 0 0 0 0 14v4.075a5.013 5.013 0 0 0 3.6 4.8l2.87.9A4.981 4.981 0 0 0 7.959 24a5.076 5.076 0 0 0 1.355-.186l5.78-1.71a2.976 2.976 0 0 1 1.573 0l2.387.8A4 4 0 0 0 24 19.021v-5.149A5.009 5.009 0 0 0 20.753 9.2Z" fill=${
+    active ? "#fff" : "#ddd"
+  } opacity="1" data-original="#000000" class=""></path></g></svg>`;
+  const SvgImage = () => <SvgXml xml={svgMarkup} width="18" height="18" />;
+  return <SvgImage />;
+};
+export const LivedIcon = ({ active }) => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M422.049 69.426c-91.066-91.918-239.404-92.609-331.322-1.542s-92.609 239.404-1.542 331.322c.71.716 1.424 1.428 2.143 2.135l83.98 77.548c44.886 43.938 116.602 44.127 161.719.426l85.023-78.57c91.488-91.492 91.488-239.826-.001-331.319zm-37.868 218.906c0 29.407-23.839 53.246-53.246 53.246H181.846c-29.407 0-53.246-23.839-53.246-53.246v-71.818a63.897 63.897 0 0 1 27.475-52.501l63.895-44.322c21.918-15.146 50.922-15.146 72.841 0l63.895 44.322a63.897 63.897 0 0 1 27.475 52.501v71.818zm-42.597-71.819v71.818c0 5.881-4.768 10.649-10.649 10.649h-31.948v-42.597c0-11.763-9.536-21.298-21.298-21.298h-42.597c-11.763 0-21.298 9.536-21.298 21.298v42.597h-31.948c-5.881 0-10.649-4.768-10.649-10.649v-71.818a21.301 21.301 0 0 1 9.158-17.507l63.895-44.322a21.427 21.427 0 0 1 24.28 0l63.895 44.322a21.3 21.3 0 0 1 9.159 17.507z" fill=${
+    active ? "#fff" : "#ddd"
+  } opacity="1" data-original="#000000" class=""></path></g></svg>`;
+  const SvgImage = () => <SvgXml xml={svgMarkup} width="18" height="18" />;
+  return <SvgImage />;
+};

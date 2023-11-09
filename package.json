@@ -17,6 +17,7 @@
     "@react-navigation/stack": "^6.3.20",
     "@reduxjs/toolkit": "^1.9.7",
     "@rtk-query/graphql-request-base-query": "^2.2.0",
+    "@shopify/flash-list": "^1.6.2",
     "eas-cli": "^5.6.0",
     "expo": "~49.0.15",
     "expo-dev-client": "~2.4.11",
