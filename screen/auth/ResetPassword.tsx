@@ -22,7 +22,7 @@ import { SignInValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
 import { useSignInMutation } from "../../api/api.trekspot";
-import { AuthResponseType } from "../../api/api.types";
+import { AuthLoginResponseType } from "../../api/api.types";
 import { storeToken } from "../../helpers/secure.storage";
 import { TrekSpotLinear } from "../../utilities/SvgIcons.utility";
 import { COLORS, SIZES } from "../../styles/theme";
@@ -54,7 +54,7 @@ export const ResetPasswordScreen: React.FC<SignInProps> = ({ navigation }) => {
   });
 
   const handleSaveToken = useCallback(
-    async (auth: AuthResponseType["data"]) => {
+    async (auth: AuthLoginResponseType["data"]) => {
       try {
         let token = { ...auth.login };
         token.expire = new Date().getTime() + token.expire;
