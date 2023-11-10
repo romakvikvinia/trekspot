@@ -11,7 +11,7 @@ import { THeaderButton } from "../../common/ui/THeaderButton";
 interface HomeRouteProps {}
 
 type HomeRouteStackParamList = {
-  Main: undefined;
+  Wishlist: undefined;
 };
 
 const Stack = createStackNavigator<HomeRouteStackParamList>();

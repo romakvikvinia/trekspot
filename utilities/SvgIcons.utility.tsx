@@ -403,3 +403,26 @@ export const LivedIcon = ({ active }) => {
   const SvgImage = () => <SvgXml xml={svgMarkup} width="18" height="18" />;
   return <SvgImage />;
 };
+
+export const BackIcon = () => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M19 11H9l3.29-3.29a1 1 0 0 0 0-1.42 1 1 0 0 0-1.41 0l-4.29 4.3A2 2 0 0 0 6 12a2 2 0 0 0 .59 1.4l4.29 4.3a1 1 0 1 0 1.41-1.42L9 13h10a1 1 0 0 0 0-2Z" fill="#000000" opacity="1" data-original="#000000" class=""></path></g></svg>`;
+  const SvgImage = () => <SvgXml xml={svgMarkup} width="18" height="18" />;
+  return <SvgImage />;
+};
+export const PlusIcon = () => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M17 11h-4V7a1 1 0 0 0-1-1 1 1 0 0 0-1 1v4H7a1 1 0 0 0-1 1 1 1 0 0 0 1 1h4v4a1 1 0 0 0 1 1 1 1 0 0 0 1-1v-4h4a1 1 0 0 0 1-1 1 1 0 0 0-1-1Z" fill="#fff" opacity="1" data-original="#000000"></path></g></svg>`;
+  const SvgImage = () => <SvgXml xml={svgMarkup} width="25" height="25" />;
+  return <SvgImage />;
+};
+export const DotsIcon = () => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" id="Isolation_Mode" data-name="Isolation Mode" viewBox="0 0 24 24" width="512" height="512"><circle cx="21.517" cy="12.066" r="2.5"/><circle cx="12" cy="12" r="2.5"/><circle cx="2.5" cy="12" r="2.5"/></svg>
+  `;
+  const SvgImage = () => <SvgXml xml={svgMarkup} width="25" height="25" />;
+  return <SvgImage />;
+};
+export const CheckIcon = () => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path d="m12,0C5.383,0,0,5.383,0,12s5.383,12,12,12,12-5.383,12-12S18.617,0,12,0Zm6.2,10.512l-4.426,4.345c-.783.768-1.791,1.151-2.8,1.151-.998,0-1.996-.376-2.776-1.129l-1.899-1.867c-.394-.387-.399-1.02-.012-1.414.386-.395,1.021-.4,1.414-.012l1.893,1.861c.776.75,2.001.746,2.781-.018l4.425-4.344c.393-.388,1.024-.381,1.414.013.387.394.381,1.027-.014,1.414Z"/></svg>
+  `;
+  const SvgImage = () => <SvgXml xml={svgMarkup} width="25" height="25" />;
+  return <SvgImage />;
+};
