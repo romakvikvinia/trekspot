@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useContext } from "react";
+import { Logs } from "expo";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
@@ -32,42 +33,80 @@ import {
 import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
 import * as Facebook from "expo-auth-session/providers/facebook";
+import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
-
+Logs.enableExpoCliLogging();
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 WebBrowser.maybeCompleteAuthSession();
 export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   const dispatch = useDispatch();
   const [state, setState] = useState({ user: null });
-  const [request, response, promptAsync] = Facebook.useAuthRequest({
-    clientId: "6152855191481990",
-    scopes: ["public_profile", "email"],
+
+  // const [request, response, promptAsync] = Facebook.useAuthRequest({
+  //   clientId: "6152855191481990",
+  //   scopes: ["public_profile", "email"],
+  // });
+
+  // useEffect(() => {
+  //   if (response && response.type === "success" && response.authentication) {
+  //     (async () => {
+  //       const userInfoResponse = await fetch(
+  //         `https://graph.facebook.com/me?access_token=${response.authentication?.accessToken}&fields=id,name,picture.type(large)`
+  //       );
+  //       const user = await userInfoResponse.json();
+  //       setState((prevState) => ({ ...prevState, user }));
+  //       console.log(user);
+  //     })();
+  //   }
+  //   console.log(response);
+  // }, [response]);
+
+  // const handlePressAsync = useCallback(async () => {
+  //   try {
+  //     const result = await promptAsync();
+  //     if (result.type !== "success") {
+  //       Alert.alert("Error", "Failed");
+  //       return;
+  //     }
+  //   } catch (error) {
+  //     console.log(response);
+  //     Alert.alert("error", JSON.stringify(response));
+  //   }
+  // }, [response]);
+
+  /**
+   * GOOGLE
+   *  */
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId:
+      "714520072398-e14212odgjc7d7vq12rbog8fbtmit8ei.apps.googleusercontent.com",
+    iosClientId:
+      "714520072398-tnhiqksspq65qq0atcq5mei8l8mefrbu.apps.googleusercontent.com",
+    webClientId: "",
   });
+
+  const getUserInfo = useCallback(async (token: string) => {
+    if (!token) return;
+    try {
+      const response = await fetch(
+        `https://www.googleapis.com/userinfo/v2/me`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const user = await response.json();
+      setState((prevState) => ({ ...prevState, user }));
+    } catch (error) {
+      Alert.alert("error2", JSON.stringify(response));
+    }
+  }, []);
 
   useEffect(() => {
     if (response && response.type === "success" && response.authentication) {
-      (async () => {
-        const userInfoResponse = await fetch(
-          `https://graph.facebook.com/me?access_token=${response.authentication?.accessToken}&fields=id,name,picture.type(large)`
-        );
-        const user = await userInfoResponse.json();
-        setState((prevState) => ({ ...prevState, user }));
-        console.log(user);
-      })();
-    }
-    console.log(response);
-  }, [response]);
-
-  const handlePressAsync = useCallback(async () => {
-    try {
-      const result = await promptAsync();
-      if (result.type !== "success") {
-        Alert.alert("Error", "Failed");
-        return;
-      }
-    } catch (error) {
-      console.log(response);
-      Alert.alert("error", JSON.stringify(response));
+      getUserInfo(response.authentication.accessToken);
     }
   }, [response]);
 
@@ -262,6 +301,8 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 <TouchableOpacity
                   activeOpacity={0.7}
                   style={styles.continueWithButton}
+                  // onPress={handlePressAsync}
+                  onPress={() => promptAsync()}
                 >
                   <GoogleIcon />
                 </TouchableOpacity>
@@ -275,7 +316,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                   activeOpacity={0.7}
                   style={styles.continueWithButton}
                   // onPress={handleFaceBookLogin}
-                  onPress={handlePressAsync}
+                  // onPress={handlePressAsync}
                 >
                   <FacebookIcon />
                 </TouchableOpacity>
