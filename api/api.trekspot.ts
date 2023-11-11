@@ -6,6 +6,8 @@ import {
   AuthLoginResponseType,
   AuthLogUpType,
   AuthSignUpResponseType,
+  AuthSocialLogInResponseType,
+  AuthSocialLogInInput,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 
@@ -26,6 +28,7 @@ export const trekSpotApi = createApi({
     url: "http://localhost:8080/graphql",
     prepareHeaders: prepHeaders,
     customErrors: ({ name, response }) => {
+      console.log(name);
       return {
         name,
         stack: null,
@@ -95,7 +98,35 @@ export const trekSpotApi = createApi({
       },
       invalidatesTags: (result, error) => (error ? [] : ["signUp"]),
     }),
+
+    /**
+     * Social Auth with provider
+     */
+
+    authBySocialNetwork: builder.mutation<
+      AuthSocialLogInResponseType,
+      AuthSocialLogInInput
+    >({
+      query: ({ token, provider }) => ({
+        variables: { token, provider },
+        document: gql`
+          mutation ($token: String!, $provider: Provider!) {
+            socialLogin(input: { token: $token, provider: $provider }) {
+              token
+              expire
+            }
+          }
+        `,
+      }),
+      transformResponse: (response: AuthSocialLogInResponseType) => {
+        return response;
+      },
+    }),
   }),
 });
 
-export const { useSignInMutation, useSignUpMutation } = trekSpotApi;
+export const {
+  useSignInMutation,
+  useSignUpMutation,
+  useAuthBySocialNetworkMutation,
+} = trekSpotApi;

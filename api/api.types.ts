@@ -1,3 +1,11 @@
+/**
+ * configs
+ */
+export enum SocialProvidersEnum {
+  Facebook = "Facebook",
+  Google = "Google",
+}
+
 export type TokenType = {
   token: string;
   expire: number;
@@ -22,5 +30,14 @@ export type AuthLogUpType = AuthLoginType & {
 export type AuthSignUpResponseType = {
   data: {
     signUp: Omit<AuthLogUpType, "password">;
+  };
+};
+
+export type AuthSocialLogInInput = Pick<TokenType, "token"> & {
+  provider: SocialProvidersEnum;
+};
+export type AuthSocialLogInResponseType = {
+  data: {
+    socialLogin: TokenType;
   };
 };

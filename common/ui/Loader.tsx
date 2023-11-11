@@ -2,12 +2,20 @@ import React from "react";
 import { ActivityIndicator } from "react-native";
 import { Center } from "./Center";
 
-interface LoaderProps {}
+interface LoaderProps {
+  isLoading: boolean;
+}
 
-export const Loader: React.FC<LoaderProps> = ({}) => {
+export const Loader: React.FC<LoaderProps> = ({ isLoading }) => {
   return (
-    <Center>
-      <ActivityIndicator size="large" color="#0861a4" />
-    </Center>
+    isLoading && (
+      <Center>
+        <ActivityIndicator size="large" color="#0861a4" />
+      </Center>
+    )
   );
+};
+
+Loader.defaultProps = {
+  isLoading: false,
 };

@@ -21,8 +21,15 @@ import { AuthContext } from "../../package/context/auth.context";
 import { SignInValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
-import { trekSpotApi, useSignInMutation } from "../../api/api.trekspot";
-import { AuthLoginResponseType } from "../../api/api.types";
+import {
+  trekSpotApi,
+  useAuthBySocialNetworkMutation,
+  useSignInMutation,
+} from "../../api/api.trekspot";
+import {
+  AuthLoginResponseType,
+  SocialProvidersEnum,
+} from "../../api/api.types";
 import { storeToken } from "../../helpers/secure.storage";
 import {
   AppleIcon,
@@ -35,80 +42,92 @@ import { globalStyles } from "../../styles/globalStyles";
 import * as Facebook from "expo-auth-session/providers/facebook";
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
+import {
+  FACEBOOK_CLIENT_ID,
+  GOOGLE_ANDROID_CLIENT_ID,
+  GOOGLE_IOS_CLIENT_ID,
+  GOOGLE_WEB_CLIENT_ID,
+} from "../../config";
+import { Loader } from "../../common/ui/Loader";
 Logs.enableExpoCliLogging();
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 WebBrowser.maybeCompleteAuthSession();
 export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   const dispatch = useDispatch();
-  const [state, setState] = useState({ user: null });
+  const [state, setState] = useState({ isLoading: false, user: null });
 
-  // const [request, response, promptAsync] = Facebook.useAuthRequest({
-  //   clientId: "6152855191481990",
-  //   scopes: ["public_profile", "email"],
-  // });
+  const [
+    signInWithSocial,
+    {
+      isSuccess: isSuccessWithSocial,
+      isLoading: isLoadingSocialAuth,
+      data: socialAuthData,
+      isError: isErrorSocialAuth,
+      error: errorSocialAuth,
+    },
+  ] = useAuthBySocialNetworkMutation();
 
-  // useEffect(() => {
-  //   if (response && response.type === "success" && response.authentication) {
-  //     (async () => {
-  //       const userInfoResponse = await fetch(
-  //         `https://graph.facebook.com/me?access_token=${response.authentication?.accessToken}&fields=id,name,picture.type(large)`
-  //       );
-  //       const user = await userInfoResponse.json();
-  //       setState((prevState) => ({ ...prevState, user }));
-  //       console.log(user);
-  //     })();
-  //   }
-  //   console.log(response);
-  // }, [response]);
+  /**
+   *
+   * Social Network related auth staff
+   */
 
-  // const handlePressAsync = useCallback(async () => {
-  //   try {
-  //     const result = await promptAsync();
-  //     if (result.type !== "success") {
-  //       Alert.alert("Error", "Failed");
-  //       return;
-  //     }
-  //   } catch (error) {
-  //     console.log(response);
-  //     Alert.alert("error", JSON.stringify(response));
-  //   }
-  // }, [response]);
+  const [, fResponse, fPromptAsync] = Facebook.useAuthRequest({
+    clientId: FACEBOOK_CLIENT_ID,
+    scopes: ["public_profile", "email"],
+  });
+
+  useEffect(() => {
+    if (fResponse && fResponse.type === "success" && fResponse.authentication) {
+      signInWithSocial({
+        token: fResponse.authentication.accessToken,
+        provider: SocialProvidersEnum.Facebook,
+      });
+    }
+  }, [fResponse]);
 
   /**
    * GOOGLE
+   * Social Auth flow
    *  */
 
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId:
-      "714520072398-e14212odgjc7d7vq12rbog8fbtmit8ei.apps.googleusercontent.com",
-    iosClientId:
-      "714520072398-tnhiqksspq65qq0atcq5mei8l8mefrbu.apps.googleusercontent.com",
-    webClientId: "",
+  const [, gResponse, gPromptAsync] = Google.useAuthRequest({
+    androidClientId: GOOGLE_ANDROID_CLIENT_ID,
+    iosClientId: GOOGLE_IOS_CLIENT_ID,
+    webClientId: GOOGLE_WEB_CLIENT_ID,
   });
 
-  const getUserInfo = useCallback(async (token: string) => {
-    if (!token) return;
-    try {
-      const response = await fetch(
-        `https://www.googleapis.com/userinfo/v2/me`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const user = await response.json();
-      setState((prevState) => ({ ...prevState, user }));
-    } catch (error) {
-      Alert.alert("error2", JSON.stringify(response));
+  useEffect(() => {
+    if (gResponse && gResponse.type === "success" && gResponse.authentication) {
+      signInWithSocial({
+        token: gResponse.authentication.accessToken,
+        provider: SocialProvidersEnum.Google,
+      });
     }
-  }, []);
+  }, [gResponse]);
 
   useEffect(() => {
-    if (response && response.type === "success" && response.authentication) {
-      getUserInfo(response.authentication.accessToken);
+    if (
+      isSuccessWithSocial &&
+      socialAuthData &&
+      "socialLogin" in socialAuthData
+    ) {
+      // @ts-ignore
+      handleSaveToken(socialAuthData.socialLogin);
     }
-  }, [response]);
+  }, [isSuccessWithSocial]);
+
+  // useEffect(() => {
+  //   if (isErrorSocialAuth && errorSocialAuth) {
+  //     Alert.alert("Google", JSON.stringify(errorSocialAuth));
+  //   }
+  // }, [isErrorSocialAuth]);
+
+  /**
+   * Auth social related part end
+   */
+
+  // Screen related staff
 
   const [fetchSignIn, { data, isLoading, error, isError, isSuccess }] =
     useSignInMutation();
@@ -133,9 +152,9 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   });
 
   const handleSaveToken = useCallback(
-    async (auth: AuthLoginResponseType["data"]) => {
+    async (auth: AuthLoginResponseType["data"]["login"]) => {
       try {
-        let token = { ...auth.login };
+        let token = { ...auth };
         token.expire = new Date().getTime() + token.expire;
 
         await storeToken(token);
@@ -151,25 +170,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
     formik.resetForm();
     navigation.navigate("SignUp");
   }, []);
-  const handleFaceBookLogin = useCallback(async () => {
-    // try {
-    //   const result = await LoginManager.logInWithPermissions(
-    //     ["public_profile"]
-    //     // "limited",
-    //     // "my_nonce"
-    //   );
-    //   console.log(result);
-    //   if (Platform.OS === "ios") {
-    //     const result = await AuthenticationToken.getAuthenticationTokenIOS();
-    //     console.log(result?.authenticationToken);
-    //   } else {
-    //     const result = await AccessToken.getCurrentAccessToken();
-    //     console.log(result?.accessToken);
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
-  }, []);
+
   //animations
   useEffect(() => {
     Animated.timing(fadeValue, {
@@ -180,9 +181,9 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    if (isSuccess && data) {
+    if (isSuccess && data && "login" in data) {
       //@ts-ignore
-      handleSaveToken(data);
+      handleSaveToken(data.login);
     }
   }, [isSuccess, data]);
 
@@ -196,6 +197,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
       },
     ]);
   }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView
@@ -269,7 +271,9 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                   globalStyles.buttonItemPrimary,
                   "password" in formik.errors ||
                   "email" in formik.errors ||
-                  formik.isSubmitting
+                  formik.isSubmitting ||
+                  isLoadingSocialAuth ||
+                  isLoading
                     ? globalStyles.buttonItemPrimaryDisabled
                     : null,
                 ]}
@@ -278,7 +282,8 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                   "password" in formik.errors ||
                   "email" in formik.errors ||
                   formik.isSubmitting ||
-                  isLoading
+                  isLoading ||
+                  isLoadingSocialAuth
                 }
               >
                 {formik.isSubmitting || isLoading ? (
@@ -296,27 +301,28 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                   Or sign in with
                 </Text>
               </View>
-
+              <Loader isLoading={isLoadingSocialAuth} />
               <View style={styles.continueWith}>
                 <TouchableOpacity
                   activeOpacity={0.7}
                   style={styles.continueWithButton}
-                  // onPress={handlePressAsync}
-                  onPress={() => promptAsync()}
+                  onPress={() => gPromptAsync()}
+                  disabled={isLoadingSocialAuth}
                 >
                   <GoogleIcon />
                 </TouchableOpacity>
                 <TouchableOpacity
                   activeOpacity={0.7}
                   style={styles.continueWithButton}
+                  disabled={isLoadingSocialAuth}
                 >
                   <AppleIcon />
                 </TouchableOpacity>
                 <TouchableOpacity
                   activeOpacity={0.7}
                   style={styles.continueWithButton}
-                  // onPress={handleFaceBookLogin}
-                  // onPress={handlePressAsync}
+                  onPress={() => fPromptAsync()}
+                  disabled={isLoadingSocialAuth}
                 >
                   <FacebookIcon />
                 </TouchableOpacity>
