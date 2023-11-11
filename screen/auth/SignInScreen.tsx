@@ -187,7 +187,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
     }
   }, [isSuccess, data]);
 
-  if (isError) {
+  if (isError || isErrorSocialAuth) {
     Alert.alert("Error", "Invalid Credentials", [
       {
         onPress: () => {
