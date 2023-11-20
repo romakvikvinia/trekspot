@@ -7,6 +7,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { HomeScreen } from "../../screen/home/HomeScreen";
 import { PrimaryColor } from "../../styles/colors";
 import { THeaderButton } from "../../common/ui/THeaderButton";
+import BucketList from "../../screen/BucketList";
 
 interface HomeRouteProps {}
 
@@ -36,6 +37,13 @@ export const HomeRouteStack: React.FC<HomeRouteProps> = ({}) => {
       <Stack.Screen
         name="Main"
         component={HomeScreen}
+        options={() => ({
+          header: () => null,
+        })}
+      />
+      <Stack.Screen
+        name="BucketList"
+        component={BucketList}
         options={() => ({
           header: () => null,
         })}

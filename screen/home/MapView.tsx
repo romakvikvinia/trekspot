@@ -104,11 +104,11 @@ export const MapView = () => {
               <Text style={styles.txt}>Add visit</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => setWishlistVisible(true)}
+              onPress={() => navigation.navigate("BucketList")}
               style={styles.btn}
             >
               <Mark2 />
-              <Text style={styles.txt}>Wishlist</Text>
+              <Text style={styles.txt}>Bucketlist</Text>
             </TouchableOpacity>
           </View>
           <TouchableOpacity style={styles.btn}>
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     color: COLORS.darkgray,
   },
   searchInput: {
-    height: 50,
+    height: 40,
     backgroundColor: "#ececec",
     borderRadius: SIZES.radius * 5,
     paddingLeft: 20,

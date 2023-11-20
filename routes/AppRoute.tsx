@@ -1,17 +1,13 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Host } from "react-native-portalize";
 
-import { PrimaryColor } from "../styles/colors";
-
 import {
   HomeBold,
-  HomeLine,
   MyWorldBold,
-  MyWorldLine,
   SettingsBold,
   SettingsLine,
+  TopSights,
   TripBold,
-  TripLine,
 } from "../utilities/SvgIcons.utility";
 import { HomeRouteStack } from "./home/HomeRoutes";
 import { SettingRouteStack } from "./setting/SettingRoutes";
@@ -27,35 +23,45 @@ export const AppRoute: React.FC<AppRouteProps> = ({}) => {
     <Host>
       <Tab.Navigator
         screenOptions={({ route }) => ({
-          tabBarActiveTintColor: PrimaryColor,
+          tabBarActiveTintColor: "#000",
           tabBarLabelStyle: {
-            //   fontFamily: "",
+            fontSize: 10,
           },
           tabBarIcon: ({ focused }) => {
             switch (route.name) {
               case "Home": {
-                return focused ? <HomeBold /> : <HomeLine />;
+                return <HomeBold color={focused ? "#000" : "#8e8e8e"} />;
               }
-              case "MyWorld": {
-                return focused ? <MyWorldBold /> : <MyWorldLine />;
+              case "My world": {
+                return <MyWorldBold color={focused ? "#000" : "#8e8e8e"} />;
               }
-              case "Trip": {
-                return focused ? <TripBold /> : <TripLine />;
+              case "Trips": {
+                return <TripBold color={focused ? "#000" : "#8e8e8e"} />;
+              }
+              case "Top sights": {
+                return <TopSights color={focused ? "#000" : "#8e8e8e"} />;
               }
               case "Settings": {
-                return focused ? <SettingsBold /> : <SettingsLine />;
+                return <SettingsBold color={focused ? "#000" : "#8e8e8e"} />;
               }
             }
             // You can return any component that you like here!
           },
           // tabBarShowLabel: false,
           headerShown: false,
+          tabBarStyle: {
+            borderTopColor: "#f6f6f6",
+            borderTopWidth: 1,
+            paddingTop: 5,
+            backgroundColor: "#fff",
+          },
         })}
         initialRouteName="Home"
       >
         <Tab.Screen name="Home" component={HomeRouteStack} />
-        <Tab.Screen name="MyWorld" component={MyWorldRouteStack} />
-        <Tab.Screen name="Trip" component={TripRouteStack} />
+        <Tab.Screen name="My world" component={MyWorldRouteStack} />
+        <Tab.Screen name="Trips" component={TripRouteStack} />
+        <Tab.Screen name="Top sights" component={TripRouteStack} />
         <Tab.Screen name="Settings" component={SettingRouteStack} />
       </Tab.Navigator>
     </Host>
