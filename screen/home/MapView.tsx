@@ -22,7 +22,6 @@ import { CountriesList } from "../../utilities/countryList";
 import { COLORS, SIZES } from "../../styles/theme";
 import { Flags } from "../../utilities/flags";
 import { useNavigation } from "@react-navigation/native";
-import { Wishlist } from "./Wishlist";
 
 export const MapView = () => {
   const navigation = useNavigation();
@@ -33,7 +32,6 @@ export const MapView = () => {
   }, []);
   const [visitedCountry, setVisitedCountry] = useState(null);
   const [livedCountry, setLivedCountry] = useState(null);
-  const [wishlistVisible, setWishlistVisible] = useState(false);
 
   const Country = ({ item }: any) => {
     // Assuming that `item` contains the ISO2 country code
@@ -208,11 +206,6 @@ export const MapView = () => {
           </View>
         </Modalize>
       </Portal>
-
-      <Wishlist
-        wishlistVisible={wishlistVisible}
-        setWishlistVisible={setWishlistVisible}
-      />
     </>
   );
 };

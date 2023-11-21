@@ -1,21 +1,42 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import MapView, { Geojson, PROVIDER_GOOGLE } from "react-native-maps";
+import { COLORS, SIZES } from "../../styles/theme";
 
 import {
+  Alert,
   Image,
+  ImageBackground,
   KeyboardAvoidingView,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
 import * as Location from "expo-location";
 import { getCountry } from "../../utilities/countries";
+import {
+  BackIcon,
+  BookmarkIcon,
+  PlusIcon,
+  TrashIcon,
+} from "../../utilities/SvgIcons.utility";
+import { Portal } from "react-native-portalize";
+import { Modalize } from "react-native-modalize";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 const BucketList = () => {
+  const navigation = useNavigation();
   const [location, setLocation] = useState();
+  const [listSheetVisible, setListSheetVisible] = useState(false);
+  const [searchFocus, setSearchFocus] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+
+  const modalRef = useRef<Modalize>(null);
 
   const handleMapPress = async (event) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
@@ -187,186 +208,537 @@ const BucketList = () => {
   }, []);
 
   // const c = Countries?.features?.find((item) => item?.id === "RUS");
+  const GOOGLE_PLACES_API_KEY = "YOUR_GOOGLE_API_KEY";
 
   return (
-    <View style={styles.container}>
-      <MapView
-        // provider={PROVIDER_GOOGLE}
-        style={styles.map}
-        // region={
-        //   {
-        //     latitude: location?.coords?.latitude,
-        //     longitude: location?.coords?.longitude,
-        //     latitudeDelta: 0.015,
-        //     longitudeDelta: 0.0121,
-        //   }
-        // }
-        // showsUserLocation
-        // showsCompass
-        // showsScale
-        onPress={handleMapPress}
-        zoomEnabled
-        zoomControlEnabled
-        pitchEnabled
-        // customMapStyle={[
-        //   {
-        //     featureType: "road",
-        //     elementType: "geometry",
-        //     stylers: [
-        //       {
-        //         visibility: "off",
-        //       },
-        //     ],
-        //   },
-        //   {
-        //     featureType: "poi",
-        //     elementType: "geometry",
-        //     stylers: [
-        //       {
-        //         visibility: "off",
-        //       },
-        //     ],
-        //   },
-        //   {
-        //     featureType: "landscape",
-        //     elementType: "geometry",
-        //     stylers: [
-        //       {
-        //         color: "#fffffa",
-        //       },
-        //     ],
-        //   },
-        //   {
-        //     featureType: "water",
-        //     stylers: [
-        //       {
-        //         lightness: 50,
-        //       },
-        //     ],
-        //   },
-        //   {
-        //     featureType: "road",
-        //     elementType: "labels",
-        //     stylers: [
-        //       {
-        //         visibility: "off",
-        //       },
-        //     ],
-        //   },
-        //   {
-        //     featureType: "transit",
-        //     stylers: [
-        //       {
-        //         visibility: "off",
-        //       },
-        //     ],
-        //   },
-        //   {
-        //     featureType: "administrative",
-        //     elementType: "geometry",
-        //     stylers: [
-        //       {
-        //         lightness: 40,
-        //       },
-        //     ],
-        //   },
-        // ]}
-      >
-        <Geojson
-          geojson={location || myPlace} // geojson of the countries you want to highlight
-          strokeColor="#ccc"
-          fillColor="#fafafa"
-          strokeWidth={2}
-        />
-      </MapView>
-    </View>
+    <>
+      <View style={styles.container}>
+        <View style={styles.mapHeader}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            activeOpacity={0.7}
+            style={styles.backButton}
+          >
+            <BackIcon />
+          </TouchableOpacity>
+        </View>
+        <MapView
+          // provider={PROVIDER_GOOGLE}
+          style={styles.map}
+          // region={
+          //   {
+          //     latitude: location?.coords?.latitude,
+          //     longitude: location?.coords?.longitude,
+          //     latitudeDelta: 0.015,
+          //     longitudeDelta: 0.0121,
+          //   }
+          // }
+          // showsUserLocation
+          // showsCompass
+          // showsScale
+          onPress={handleMapPress}
+          zoomEnabled
+          zoomControlEnabled
+          pitchEnabled
+          // customMapStyle={[
+          //   {
+          //     featureType: "road",
+          //     elementType: "geometry",
+          //     stylers: [
+          //       {
+          //         visibility: "off",
+          //       },
+          //     ],
+          //   },
+          //   {
+          //     featureType: "poi",
+          //     elementType: "geometry",
+          //     stylers: [
+          //       {
+          //         visibility: "off",
+          //       },
+          //     ],
+          //   },
+          //   {
+          //     featureType: "landscape",
+          //     elementType: "geometry",
+          //     stylers: [
+          //       {
+          //         color: "#fffffa",
+          //       },
+          //     ],
+          //   },
+          //   {
+          //     featureType: "water",
+          //     stylers: [
+          //       {
+          //         lightness: 50,
+          //       },
+          //     ],
+          //   },
+          //   {
+          //     featureType: "road",
+          //     elementType: "labels",
+          //     stylers: [
+          //       {
+          //         visibility: "off",
+          //       },
+          //     ],
+          //   },
+          //   {
+          //     featureType: "transit",
+          //     stylers: [
+          //       {
+          //         visibility: "off",
+          //       },
+          //     ],
+          //   },
+          //   {
+          //     featureType: "administrative",
+          //     elementType: "geometry",
+          //     stylers: [
+          //       {
+          //         lightness: 40,
+          //       },
+          //     ],
+          //   },
+          // ]}
+        >
+          <Geojson
+            geojson={location || myPlace} // geojson of the countries you want to highlight
+            strokeColor="#ccc"
+            fillColor="#fafafa"
+            strokeWidth={2}
+          />
+        </MapView>
+      </View>
+      <Portal>
+        <Modalize
+          ref={modalRef}
+          modalTopOffset={65}
+          alwaysOpen={100}
+          onClose={() => setListSheetVisible(false)}
+          HeaderComponent={
+            <View style={styles.modalHeader}>
+              {/* {wishlist?.length ? (
+                <TouchableOpacity
+                  onPress={() =>
+                    Alert.prompt(
+                      "Enter title",
+                      "Enter anything what you want to do in the future",
+                      [
+                        {
+                          text: "Cancel",
+                          onPress: () => console.log("Cancel Pressed"),
+                          style: "cancel",
+                        },
+                        {
+                          text: "OK",
+                          onPress: (text) => addItem(text),
+                        },
+                      ],
+                      "plain-text"
+                    )
+                  }
+                  style={styles.plusButton}
+                >
+                  <PlusIcon />
+                </TouchableOpacity>
+              ) : null} */}
+            </View>
+          }
+        >
+          <View style={styles.modalContent}>
+            <GooglePlacesAutocomplete
+              query={{
+                key: GOOGLE_PLACES_API_KEY,
+                language: "en", // language of the results
+              }}
+              onPress={(data, details) => console.log(data, details)}
+              textInputProps={{
+                InputComp: () => (
+                  <TextInput
+                    placeholder="Search..."
+                    style={styles.searchStyle}
+                    // onFocus={() => console.log("focused")}
+                    placeholderTextColor="#8E8D8E"
+                  />
+                ),
+                leftIcon: { type: "font-awesome", name: "chevron-left" },
+                errorStyle: { color: "red" },
+              }}
+            />
+
+            <View style={styles.searchResult}>
+              <Text style={styles.sectionTitleLarge}>Restaurants</Text>
+              <View style={styles.searchResultItem}>
+                <View style={styles.leftSide}>
+                  <ImageBackground
+                    resizeMode="contain"
+                    style={styles.locationTypeIcon}
+                    source={{
+                      uri: "https://cdn-icons-png.flaticon.com/512/10313/10313052.png",
+                    }}
+                  ></ImageBackground>
+                  <View style={styles.locationInfo}>
+                    <Text style={styles.locationInfoTitle}>
+                      Paris em restaurant
+                    </Text>
+                    <Text style={styles.locationInfoSub}>Paris, France</Text>
+                  </View>
+                </View>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  style={styles.savePlaceButton}
+                >
+                  <TrashIcon />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.searchResultItem}>
+                <View style={styles.leftSide}>
+                  <ImageBackground
+                    resizeMode="contain"
+                    style={styles.locationTypeIcon}
+                    source={{
+                      uri: "https://cdn-icons-png.flaticon.com/512/10313/10313052.png",
+                    }}
+                  ></ImageBackground>
+                  <View style={styles.locationInfo}>
+                    <Text style={styles.locationInfoTitle}>
+                      Paris em restaurant
+                    </Text>
+                    <Text style={styles.locationInfoSub}>Paris, France</Text>
+                  </View>
+                </View>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  style={styles.savePlaceButton}
+                >
+                  <TrashIcon />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.searchResultItem}>
+                <View style={styles.leftSide}>
+                  <ImageBackground
+                    resizeMode="contain"
+                    style={styles.locationTypeIcon}
+                    source={{
+                      uri: "https://cdn-icons-png.flaticon.com/512/10313/10313052.png",
+                    }}
+                  ></ImageBackground>
+                  <View style={styles.locationInfo}>
+                    <Text style={styles.locationInfoTitle}>
+                      Paris em restaurant
+                    </Text>
+                    <Text style={styles.locationInfoSub}>Paris, France</Text>
+                  </View>
+                </View>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  style={styles.savePlaceButton}
+                >
+                  <TrashIcon />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={styles.searchResult}>
+              <View style={styles.searchResultItem}>
+                <View style={styles.leftSide}>
+                  <ImageBackground
+                    resizeMode="contain"
+                    style={styles.locationTypeIcon}
+                    source={{
+                      uri: "https://cdn-icons-png.flaticon.com/512/10313/10313052.png",
+                    }}
+                  ></ImageBackground>
+                  <View style={styles.locationInfo}>
+                    <Text style={styles.locationInfoTitle}>
+                      Paris em restaurant
+                    </Text>
+                    <Text style={styles.locationInfoSub}>Paris, France</Text>
+                  </View>
+                </View>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  style={styles.savePlaceButton}
+                >
+                  <BookmarkIcon />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.searchResultItem}>
+                <View style={styles.leftSide}>
+                  <ImageBackground
+                    resizeMode="contain"
+                    style={styles.locationTypeIcon}
+                    source={{
+                      uri: "https://cdn-icons-png.flaticon.com/512/10313/10313052.png",
+                    }}
+                  ></ImageBackground>
+                  <View style={styles.locationInfo}>
+                    <Text style={styles.locationInfoTitle}>
+                      Paris em restaurant
+                    </Text>
+                    <Text style={styles.locationInfoSub}>Paris, France</Text>
+                  </View>
+                </View>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  style={styles.savePlaceButton}
+                >
+                  <BookmarkIcon />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.searchResultItem}>
+                <View style={styles.leftSide}>
+                  <ImageBackground
+                    resizeMode="contain"
+                    style={styles.locationTypeIcon}
+                    source={{
+                      uri: "https://cdn-icons-png.flaticon.com/512/10313/10313052.png",
+                    }}
+                  ></ImageBackground>
+                  <View style={styles.locationInfo}>
+                    <Text style={styles.locationInfoTitle}>
+                      Paris em restaurant
+                    </Text>
+                    <Text style={styles.locationInfoSub}>Paris, France</Text>
+                  </View>
+                </View>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  style={styles.savePlaceButton}
+                >
+                  <BookmarkIcon />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={styles.listWrapper}>
+              <Text style={styles.sectionTitle}>My Bucketlist</Text>
+              <View style={styles.listItems}>
+                <TouchableOpacity activeOpacity={0.7} style={styles.listItem}>
+                  <Text style={styles.listItemTitle}>Restaurants</Text>
+                  <Text style={styles.listItemPlacesText}>5 Place</Text>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.7} style={styles.listItem}>
+                  <Text style={styles.listItemTitle}>Lakes</Text>
+                  <Text style={styles.listItemPlacesText}>54 Place</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    Alert.prompt(
+                      "Enter List Title",
+                      "",
+                      [
+                        {
+                          text: "Cancel",
+                          onPress: () => console.log("Cancel Pressed"),
+                          style: "cancel",
+                        },
+                        {
+                          text: "OK",
+                          onPress: (text) => addItem(text),
+                        },
+                      ],
+                      "plain-text"
+                    )
+                  }
+                  style={styles.addNewList}
+                  activeOpacity={0.7}
+                >
+                  <PlusIcon color={COLORS.primaryDark} />
+                  <Text style={styles.addNewListText}>Create New List</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+
+          {/* <View
+          style={{
+            flex: 1,
+            height: SIZES.height - 200,
+            marginTop: 15,
+            paddingHorizontal: 15,
+          }}
+        >
+          {wishlist?.length ? (
+            <FlashList
+              data={wishlist}
+              renderItem={({ item }) => <ListItem item={item} />}
+              estimatedItemSize={10}
+            />
+          ) : (
+            <View style={styles.emptyWishlistWrapper}>
+              <View style={styles.wishlistGetStarted}>
+                <Image
+                  width={100}
+                  height={100}
+                  source={{
+                    url: "https://cdn-icons-png.flaticon.com/512/1950/1950589.png",
+                  }}
+                />
+                <Text style={styles.wishlistGetStartedText}>
+                  Your wishlist is empty. Add your favorite items to get
+                  started!
+                </Text>
+                <TouchableOpacity
+                  style={styles.addButton}
+                  activeOpacity={0.7}
+                  onPress={() =>
+                    Alert.prompt(
+                      "Enter title",
+                      "Enter anything what you want to do in the future",
+                      [
+                        {
+                          text: "Cancel",
+                          onPress: () => console.log("Cancel Pressed"),
+                          style: "cancel",
+                        },
+                        {
+                          text: "OK",
+                          onPress: (text) => addItem(text),
+                        },
+                      ],
+                      "plain-text"
+                    )
+                  }
+                >
+                  <Text style={styles.addButtonText}>Add item</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        </View> */}
+        </Modalize>
+      </Portal>
+    </>
   );
 };
 export default BucketList;
 
 const styles = StyleSheet.create({
-  rowItem: {
+  mapHeader: {
+    top: 55,
+    position: "absolute",
     width: "100%",
-    marginTop: 30,
+    zIndex: 1,
     paddingHorizontal: 15,
+  },
+  backButton: {
+    width: 50,
+    height: 50,
+    backgroundColor: "#fff",
+    borderRadius: 100,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  listWrapper: {
+    flex: 1,
+    marginTop: 15,
+  },
+  sectionTitle: {
+    fontSize: 12,
+    color: "#8E8D8E",
+    fontWeight: "bold",
+  },
+  sectionTitleLarge: {
+    fontSize: 16,
+    color: "#000",
+    fontWeight: "bold",
+    marginBottom: 15,
+  },
+  listItems: {
+    backgroundColor: "#fafafa",
+    marginTop: 8,
+    padding: 15,
+    borderRadius: 10,
+  },
+  listItem: {
+    width: "100%",
+    borderBottomWidth: 1,
+    borderBottomColor: "#fff",
+    paddingBottom: 15,
+    marginBottom: 15,
+  },
+  listItemTitle: {
+    fontWeight: "bold",
+    fontSize: 14,
+    color: "#000",
+  },
+  listItemPlacesText: {
+    fontSize: 12,
+    color: "#8E8D8E",
+    marginTop: 3,
+  },
+  addNewList: {
+    width: "100%",
+    padding: 15,
+    backgroundColor: "#fafafa",
+    textAlign: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  addNewListText: {
+    color: COLORS.primaryDark,
+    fontSize: 14,
+    fontWeight: "bold",
+  },
+  savePlaceButton: {
+    padding: 10,
   },
   map: {
     flex: 1,
   },
-  h2: {
-    fontSize: 22,
+  modalContent: {
+    padding: 15,
+  },
+  searchResult: {
+    flex: 1,
+    marginTop: 25,
+  },
+  searchResultItem: {
+    flexDirection: "row",
+    borderBottomColor: "#eee",
+    borderBottomWidth: 1,
+    paddingBottom: 15,
+    marginBottom: 15,
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  leftSide: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  locationTypeIcon: {
+    width: 30,
+    height: 30,
+  },
+  locationInfo: {
+    marginLeft: 10,
+  },
+  locationInfoTitle: {
+    fontSize: 16,
     color: "#000",
-    fontWeight: "bold",
+  },
+  locationInfoSub: {
+    color: "#333",
+    fontSize: 10,
+    marginTop: 3,
+  },
+  searchStyle: {
+    width: "100%",
+    height: 45,
+    backgroundColor: "#eeeeee",
+    paddingLeft: 10,
+    borderRadius: 10,
+    color: "#000",
   },
   container: {
     flex: 1,
     backgroundColor: "#fff",
-  },
-  mapContainer: {
-    backgroundColor: "#f8fafb",
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-  },
-  contentBox: {
-    width: "100%",
-    marginTop: 15,
-  },
-  box: {
-    width: 200,
-    height: 100,
-    backgroundColor: "#fafafa",
-    borderRadius: 15,
-    marginRight: 15,
-  },
-  topActions: {
-    width: "100%",
-    flexDirection: "row",
-    display: "flex",
-    paddingHorizontal: 15,
-    justifyContent: "space-between",
-    paddingBottom: 15,
-  },
-  left: {
-    flexDirection: "row",
-    display: "flex",
-  },
-  row: {
-    flexDirection: "row",
-    display: "flex",
-    justifyContent: "space-between",
-    paddingHorizontal: 15,
-    marginTop: 0,
-    marginBottom: 8,
-  },
-  rowBox: {
-    width: "32%",
-    height: 90,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 15,
-    backgroundColor: "#f8fafb",
-    borderColor: "#fff",
-    borderWidth: 0,
-    borderStyle: "solid",
-  },
-  lg: {
-    fontSize: 24,
-    marginBottom: 8,
-    fontWeight: "bold",
-  },
-  btn: {
-    backgroundColor: "#fff",
-    height: 30,
-    paddingHorizontal: 15,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 15,
-    flexDirection: "row",
-  },
-  txt: {
-    fontSize: 14,
-    marginLeft: 5,
   },
 });

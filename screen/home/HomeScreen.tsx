@@ -33,11 +33,15 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
           style={styles.mapStats}
           showsVerticalScrollIndicator={false}
         >
+          <Text style={{ fontSize: 24, fontWeight: "bold", color: "#000" }}>
+            Continents
+          </Text>
           <View
             style={{
               flexDirection: "row",
               flexWrap: "wrap",
               justifyContent: "space-between",
+              marginTop: 25,
             }}
           >
             <View style={styles.mapStatRow}>

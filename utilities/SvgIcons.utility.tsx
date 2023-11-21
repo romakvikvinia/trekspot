@@ -409,17 +409,32 @@ export const LivedIcon = ({ active }) => {
   const SvgImage = () => <SvgXml xml={svgMarkup} width="15" height="15" />;
   return <SvgImage />;
 };
-
-export const BackIcon = () => {
-  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M19 11H9l3.29-3.29a1 1 0 0 0 0-1.42 1 1 0 0 0-1.41 0l-4.29 4.3A2 2 0 0 0 6 12a2 2 0 0 0 .59 1.4l4.29 4.3a1 1 0 1 0 1.41-1.42L9 13h10a1 1 0 0 0 0-2Z" fill="#000000" opacity="1" data-original="#000000" class=""></path></g></svg>`;
-  const SvgImage = () => <SvgXml xml={svgMarkup} width="18" height="18" />;
+export const BookmarkIcon = () => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><g data-name="Layer 2"><path d="m13.18 8.27-.65.65a.75.75 0 0 1-1.06 0l-.65-.65a1.55 1.55 0 0 0-2.16 0 1.91 1.91 0 0 0-.45 1.32 1.88 1.88 0 0 0 .45 1.31A17.85 17.85 0 0 0 12 14.16a17.5 17.5 0 0 0 3.3-3.22 1.9 1.9 0 0 0 .49-1.35 1.91 1.91 0 0 0-.45-1.32 1.56 1.56 0 0 0-2.16 0z" fill="#000000" opacity="1" data-original="#000000" class=""></path><path d="M19 1.25H5A1.76 1.76 0 0 0 3.25 3v17.56a1.75 1.75 0 0 0 2.36 1.64l6.3-2.37a.28.28 0 0 1 .18 0l6.3 2.37a1.78 1.78 0 0 0 .61.11 1.81 1.81 0 0 0 1-.31 1.76 1.76 0 0 0 .75-1.44V3A1.76 1.76 0 0 0 19 1.25zM16.4 12C15 13.63 13 15.67 12 15.67s-3-2-4.45-3.76a3.32 3.32 0 0 1-.84-2.32 3.35 3.35 0 0 1 .89-2.38 3.11 3.11 0 0 1 4.28 0l.12.12.12-.12a3.11 3.11 0 0 1 4.28 0 3.35 3.35 0 0 1 .89 2.38A3.34 3.34 0 0 1 16.4 12z" fill="#000000" opacity="1" data-original="#000000" class=""></path></g></g></svg>`;
+  const SvgImage = () => <SvgXml xml={svgMarkup} width="20" height="20" />;
   return <SvgImage />;
 };
-export const PlusIcon = () => {
-  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M17 11h-4V7a1 1 0 0 0-1-1 1 1 0 0 0-1 1v4H7a1 1 0 0 0-1 1 1 1 0 0 0 1 1h4v4a1 1 0 0 0 1 1 1 1 0 0 0 1-1v-4h4a1 1 0 0 0 1-1 1 1 0 0 0-1-1Z" fill="#fff" opacity="1" data-original="#000000"></path></g></svg>`;
+
+export const BackIcon = () => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512"><path d="M10.6,12.71a1,1,0,0,1,0-1.42l4.59-4.58a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0L9.19,9.88a3,3,0,0,0,0,4.24l4.59,4.59a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.42Z" fill="#000"/></svg>
+  `;
   const SvgImage = () => <SvgXml xml={svgMarkup} width="25" height="25" />;
   return <SvgImage />;
 };
+export const TrashIcon = () => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M448 85.333h-66.133C371.66 35.703 328.002.064 277.333 0h-42.667c-50.669.064-94.327 35.703-104.533 85.333H64c-11.782 0-21.333 9.551-21.333 21.333S52.218 128 64 128h21.333v277.333C85.404 464.214 133.119 511.93 192 512h128c58.881-.07 106.596-47.786 106.667-106.667V128H448c11.782 0 21.333-9.551 21.333-21.333S459.782 85.333 448 85.333zM234.667 362.667c0 11.782-9.551 21.333-21.333 21.333-11.783 0-21.334-9.551-21.334-21.333v-128c0-11.782 9.551-21.333 21.333-21.333 11.782 0 21.333 9.551 21.333 21.333v128zm85.333 0c0 11.782-9.551 21.333-21.333 21.333-11.782 0-21.333-9.551-21.333-21.333v-128c0-11.782 9.551-21.333 21.333-21.333 11.782 0 21.333 9.551 21.333 21.333v128zM174.315 85.333c9.074-25.551 33.238-42.634 60.352-42.667h42.667c27.114.033 51.278 17.116 60.352 42.667H174.315z" fill="red" opacity="1" data-original="#000000" class=""></path></g></svg>
+  `;
+  const SvgImage = () => <SvgXml xml={svgMarkup} width="20" height="20" />;
+  return <SvgImage />;
+};
+export const PlusIcon = ({ color }) => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M17 11h-4V7a1 1 0 0 0-1-1 1 1 0 0 0-1 1v4H7a1 1 0 0 0-1 1 1 1 0 0 0 1 1h4v4a1 1 0 0 0 1 1 1 1 0 0 0 1-1v-4h4a1 1 0 0 0 1-1 1 1 0 0 0-1-1Z" fill=${
+    color ? color : "#fff"
+  } opacity="1" data-original="#000000"></path></g></svg>`;
+  const SvgImage = () => <SvgXml xml={svgMarkup} width="25" height="25" />;
+  return <SvgImage />;
+};
+
 export const DotsIcon = () => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" id="Isolation_Mode" data-name="Isolation Mode" viewBox="0 0 24 24" width="512" height="512"><circle cx="21.517" cy="12.066" r="2.5"/><circle cx="12" cy="12" r="2.5"/><circle cx="2.5" cy="12" r="2.5"/></svg>
   `;
