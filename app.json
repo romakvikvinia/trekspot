@@ -14,7 +14,8 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.trekspot.app"
+      "bundleIdentifier": "com.trekspot.app",
+      "usesAppleSignIn": true
     },
     "android": {
       "adaptiveIcon": {
@@ -39,6 +40,7 @@
     },
     "updates": {
       "url": "https://u.expo.dev/0208e3d2-29fc-4d09-9a72-11fae25997f6"
-    }
+    },
+    "plugins": ["expo-apple-authentication"]
   }
 }

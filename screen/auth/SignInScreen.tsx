@@ -41,6 +41,7 @@ import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
 import * as Facebook from "expo-auth-session/providers/facebook";
 import * as Google from "expo-auth-session/providers/google";
+import * as AppleAuthentication from "expo-apple-authentication";
 import * as WebBrowser from "expo-web-browser";
 import {
   FACEBOOK_CLIENT_ID,
@@ -54,7 +55,11 @@ type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 WebBrowser.maybeCompleteAuthSession();
 export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   const dispatch = useDispatch();
-  const [state, setState] = useState({ isLoading: false, user: null });
+  const [state, setState] = useState({
+    isLoading: false,
+    user: null,
+    appleAuthAvailable: false,
+  });
 
   const [
     signInWithSocial,
@@ -187,6 +192,34 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
     }
   }, [isSuccess, data]);
 
+  /**
+   * Apple Sing in
+   */
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const appleAuthAvailable = await AppleAuthentication.isAvailableAsync();
+        // setState((prevState) => ({ ...prevState, appleAuthAvailable }));
+      } catch (error) {}
+    })();
+  }, []);
+
+  const handleAppleSignIn = useCallback(async () => {
+    try {
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+      console.log(JSON.stringify(credential));
+      Alert.alert(JSON.stringify(credential));
+    } catch (error) {
+      Alert.alert(JSON.stringify(error));
+    }
+  }, []);
+
   if (isError || isErrorSocialAuth) {
     Alert.alert("Error", "Invalid Credentials", [
       {
@@ -311,13 +344,18 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 >
                   <GoogleIcon />
                 </TouchableOpacity>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.continueWithButton}
-                  disabled={isLoadingSocialAuth}
-                >
-                  <AppleIcon />
-                </TouchableOpacity>
+
+                {state.appleAuthAvailable ? (
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.continueWithButton}
+                    disabled={isLoadingSocialAuth}
+                    onPress={handleAppleSignIn}
+                  >
+                    <AppleIcon />
+                  </TouchableOpacity>
+                ) : null}
+
                 <TouchableOpacity
                   activeOpacity={0.7}
                   style={styles.continueWithButton}
