@@ -8,11 +8,16 @@ import { HomeScreen } from "../../screen/home/HomeScreen";
 import { PrimaryColor } from "../../styles/colors";
 import { THeaderButton } from "../../common/ui/THeaderButton";
 import BucketList from "../../screen/BucketList";
+import Share from "../../screen/Share";
+import BucketListAllScreen from "../../screen/BucketList/BucketListAll";
 
 interface HomeRouteProps {}
 
 type HomeRouteStackParamList = {
-  Wishlist: undefined;
+  Main: undefined;
+  BucketList: undefined;
+  BucketListAll: undefined;
+  Share: undefined;
 };
 
 const Stack = createStackNavigator<HomeRouteStackParamList>();
@@ -44,6 +49,21 @@ export const HomeRouteStack: React.FC<HomeRouteProps> = ({}) => {
       <Stack.Screen
         name="BucketList"
         component={BucketList}
+        options={() => ({
+          header: () => null,
+        })}
+      />
+      <Stack.Screen
+        name="BucketListAll"
+        component={BucketListAllScreen}
+        options={() => ({
+          header: () => null,
+        })}
+      />
+
+      <Stack.Screen
+        name="Share"
+        component={Share}
         options={() => ({
           header: () => null,
         })}

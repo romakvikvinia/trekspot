@@ -61,7 +61,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
                 <Text style={styles.percentText}>%</Text>
               </View>
             </View>
-            <View style={[styles.mapStatRow, { backgroundColor: "#dbaf00" }]}>
+            <View style={[styles.mapStatRow, { backgroundColor: "#A88955" }]}>
               <View style={styles.leftSide}>
                 <AsiaIcon />
                 <View>
@@ -79,7 +79,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
                 <Text style={styles.percentText}>%</Text>
               </View>
             </View>
-            <View style={[styles.mapStatRow, { backgroundColor: "#d77000" }]}>
+            <View style={[styles.mapStatRow, { backgroundColor: "#C68A4A" }]}>
               <View style={styles.leftSide}>
                 <AfricaIcon />
                 <View>
@@ -96,7 +96,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
                 <Text style={styles.percentText}>%</Text>
               </View>
             </View>
-            <View style={[styles.mapStatRow, { backgroundColor: "#04953f" }]}>
+            <View style={[styles.mapStatRow, { backgroundColor: "#438E6A" }]}>
               <View style={styles.leftSide}>
                 <NAmerica />
                 <View>
@@ -113,7 +113,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
                 <Text style={styles.percentText}>%</Text>
               </View>
             </View>
-            <View style={[styles.mapStatRow, { backgroundColor: "#a70070" }]}>
+            <View style={[styles.mapStatRow, { backgroundColor: "#893B70" }]}>
               <View style={styles.leftSide}>
                 <SAmerica />
                 <View>
@@ -130,7 +130,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
                 <Text style={styles.percentText}>%</Text>
               </View>
             </View>
-            <View style={[styles.mapStatRow, { backgroundColor: "#c4000c" }]}>
+            <View style={[styles.mapStatRow, { backgroundColor: "#B13B42" }]}>
               <View style={styles.leftSide}>
                 <Australia />
                 <View>
@@ -147,7 +147,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
                 <Text style={styles.percentText}>%</Text>
               </View>
             </View>
-            <View style={[styles.mapStatRow, { backgroundColor: "#008ebe" }]}>
+            <View style={[styles.mapStatRow, { backgroundColor: "#4490AA" }]}>
               <View style={styles.leftSide}>
                 <Antarctica />
                 <View>
@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   mapStatRow: {
-    backgroundColor: "#001384",
+    backgroundColor: "#4D3893",
     borderRadius: SIZES.radius * 2,
     paddingVertical: 20,
     paddingLeft: 15,

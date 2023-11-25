@@ -99,17 +99,20 @@ export const MapView = () => {
               style={[styles.btn, { marginRight: 10 }]}
             >
               <Mark />
-              <Text style={styles.txt}>Add visit</Text>
+              <Text style={styles.txt}>Add Visit</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => navigation.navigate("BucketList")}
               style={styles.btn}
             >
               <Mark2 />
-              <Text style={styles.txt}>Bucketlist</Text>
+              <Text style={styles.txt}>Bucket List</Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.btn}>
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() => navigation.navigate("Share")}
+          >
             <Share />
             <Text style={styles.txt}>Share</Text>
           </TouchableOpacity>

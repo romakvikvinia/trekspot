@@ -1,219 +1,737 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import MapView, { Geojson, PROVIDER_GOOGLE } from "react-native-maps";
+import React, { useRef, useState } from "react";
 import { COLORS, SIZES } from "../../styles/theme";
 
 import {
-  Alert,
-  Image,
   ImageBackground,
-  KeyboardAvoidingView,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import * as Location from "expo-location";
-import { getCountry } from "../../utilities/countries";
 import {
   BackIcon,
-  BookmarkIcon,
-  PlusIcon,
-  TrashIcon,
+  LocationCircle,
+  Mark,
+  Mark2,
+  NoDestinationFoundIcon,
+  PassportIcon,
+  SearchIcon,
+  StarIcon,
 } from "../../utilities/SvgIcons.utility";
-import { Portal } from "react-native-portalize";
-import { Modalize } from "react-native-modalize";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { LinearGradient } from "expo-linear-gradient";
+import { SceneMap, TabBar, TabView } from "react-native-tab-view";
+import { CountrySelect } from "../../common/components/CountrySelect";
+import { CountrySearch } from "../../common/components/CountrySearch";
+import { DestinationDetail } from "../../common/components/DestinationDetail";
+
+const Popular = [
+  {
+    id: 0,
+    image:
+      "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=10&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    title: "France",
+    rating: 4.9,
+    visitors: "80m",
+  },
+  {
+    id: 0,
+    image:
+      "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=10&w=3383&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    title: "Italy",
+    rating: 4.5,
+    visitors: "75m",
+  },
+  {
+    id: 0,
+    image:
+      "https://images.unsplash.com/photo-1494949360228-4e9bde560065?q=10&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    title: "Thailand",
+    rating: 4.2,
+    visitors: "25m",
+  },
+];
+
+const Explore = () => {
+  const navigation = useNavigation();
+  const [destinationDetailVisible, setDestinationDetailVisible] =
+    useState(false);
+  return (
+    <>
+      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+        <View style={[styles.rowItem]}>
+          <View style={styles.rowItemHeader}>
+            <Text style={styles.h2}>Popular</Text>
+
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.seeAllButton}
+              onPress={() => navigation.navigate("BucketListAll")}
+            >
+              <Text style={styles.seeAllButtonTxt}>See all</Text>
+            </TouchableOpacity>
+          </View>
+          <ScrollView
+            horizontal
+            style={styles.contentBox}
+            showsHorizontalScrollIndicator={false}
+          >
+            {Popular?.map((item, ind) => (
+              <>
+                <ImageBackground
+                  style={[styles.box, styles.typeMd]}
+                  resizeMode="cover"
+                  source={{
+                    uri: item.image,
+                  }}
+                  key={ind}
+                >
+                  <TouchableOpacity
+                    style={[
+                      styles.addToBucketButton,
+                      {
+                        backgroundColor:
+                          ind == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)",
+                      },
+                    ]}
+                    activeOpacity={0.7}
+                  >
+                    <Mark2 color="#fff" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.gradientWrapper}
+                    activeOpacity={0.7}
+                    onPress={() => setDestinationDetailVisible(true)}
+                  >
+                    <LinearGradient
+                      style={styles.gradientWrapper}
+                      colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                    >
+                      <View style={styles.labelItem}>
+                        <Mark color="#fff" />
+                        <Text style={styles.labelItemText}>{item.title}</Text>
+                      </View>
+                      <View style={styles.ratingLabel}>
+                        <View
+                          style={{
+                            position: "relative",
+                            top: -1,
+                            opacity: 0.8,
+                          }}
+                        >
+                          <StarIcon color="#FFBC3E" />
+                        </View>
+                        <Text style={styles.ratingText}>{item.rating} /</Text>
+                        <Text style={styles.ratingText}>
+                          {item.visitors} visitors
+                        </Text>
+                      </View>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </ImageBackground>
+                {Popular.length === ind + 1 && (
+                  <View style={{ width: 20 }}></View>
+                )}
+              </>
+            ))}
+          </ScrollView>
+        </View>
+        <View style={[styles.rowItem]}>
+          <View style={styles.rowItemHeader}>
+            <Text style={styles.h2}>Visa free for you</Text>
+
+            <TouchableOpacity activeOpacity={0.7} style={styles.seeAllButton}>
+              <Text style={styles.seeAllButtonTxt}>See all</Text>
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView
+            horizontal
+            style={styles.contentBox}
+            showsHorizontalScrollIndicator={false}
+          >
+            {Popular?.map((item, ind) => (
+              <>
+                <ImageBackground
+                  style={styles.box}
+                  resizeMode="cover"
+                  source={{
+                    uri: item.image,
+                  }}
+                  key={ind}
+                >
+                  <TouchableOpacity
+                    style={styles.gradientWrapper}
+                    activeOpacity={0.7}
+                  >
+                    <LinearGradient
+                      style={styles.gradientWrapper}
+                      colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                    >
+                      <View style={styles.labelItem}>
+                        <Mark color="#fff" size="sm" />
+                        <Text style={[styles.labelItemText, styles.titleSm]}>
+                          {item.title}
+                        </Text>
+                      </View>
+                      <View style={styles.ratingLabel}>
+                        <View
+                          style={{
+                            position: "relative",
+                            top: -1,
+                            opacity: 0.8,
+                          }}
+                        >
+                          <StarIcon color="#FFBC3E" />
+                        </View>
+                        <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                          {item.rating} /
+                        </Text>
+                        <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                          {item.visitors} visitors
+                        </Text>
+                      </View>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </ImageBackground>
+                {Popular.length === ind + 1 && (
+                  <View style={{ width: 20 }}></View>
+                )}
+              </>
+            ))}
+          </ScrollView>
+        </View>
+        <View style={[styles.rowItem]}>
+          <View style={styles.rowItemHeader}>
+            <Text style={styles.h2}>Luxury</Text>
+
+            <TouchableOpacity activeOpacity={0.7} style={styles.seeAllButton}>
+              <Text style={styles.seeAllButtonTxt}>See all</Text>
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView
+            horizontal
+            style={styles.contentBox}
+            showsHorizontalScrollIndicator={false}
+          >
+            {Popular?.map((item, ind) => (
+              <>
+                <ImageBackground
+                  style={styles.box}
+                  resizeMode="cover"
+                  source={{
+                    uri: item.image,
+                  }}
+                  key={ind}
+                >
+                  <TouchableOpacity
+                    style={styles.gradientWrapper}
+                    activeOpacity={0.7}
+                  >
+                    <LinearGradient
+                      style={styles.gradientWrapper}
+                      colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                    >
+                      <View style={styles.labelItem}>
+                        <Mark color="#fff" size="sm" />
+                        <Text style={[styles.labelItemText, styles.titleSm]}>
+                          {item.title}
+                        </Text>
+                      </View>
+                      <View style={styles.ratingLabel}>
+                        <View
+                          style={{
+                            position: "relative",
+                            top: -1,
+                            opacity: 0.8,
+                          }}
+                        >
+                          <StarIcon color="#FFBC3E" />
+                        </View>
+                        <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                          {item.rating} /
+                        </Text>
+                        <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                          {item.visitors} visitors
+                        </Text>
+                      </View>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </ImageBackground>
+                {Popular.length === ind + 1 && (
+                  <View style={{ width: 20 }}></View>
+                )}
+              </>
+            ))}
+          </ScrollView>
+        </View>
+        <View style={[styles.rowItem]}>
+          <View style={styles.rowItemHeader}>
+            <Text style={styles.h2}>Budget friendly</Text>
+
+            <TouchableOpacity activeOpacity={0.7} style={styles.seeAllButton}>
+              <Text style={styles.seeAllButtonTxt}>See all</Text>
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView
+            horizontal
+            style={styles.contentBox}
+            showsHorizontalScrollIndicator={false}
+          >
+            {Popular?.map((item, ind) => (
+              <>
+                <ImageBackground
+                  style={styles.box}
+                  resizeMode="cover"
+                  source={{
+                    uri: item.image,
+                  }}
+                  key={ind}
+                >
+                  <TouchableOpacity
+                    style={styles.gradientWrapper}
+                    activeOpacity={0.7}
+                  >
+                    <LinearGradient
+                      style={styles.gradientWrapper}
+                      colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                    >
+                      <View style={styles.labelItem}>
+                        <Mark color="#fff" size="sm" />
+                        <Text style={[styles.labelItemText, styles.titleSm]}>
+                          {item.title}
+                        </Text>
+                      </View>
+                      <View style={styles.ratingLabel}>
+                        <View
+                          style={{
+                            position: "relative",
+                            top: -1,
+                            opacity: 0.8,
+                          }}
+                        >
+                          <StarIcon color="#FFBC3E" />
+                        </View>
+                        <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                          {item.rating} /
+                        </Text>
+                        <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                          {item.visitors} visitors
+                        </Text>
+                      </View>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </ImageBackground>
+                {Popular.length === ind + 1 && (
+                  <View style={{ width: 20 }}></View>
+                )}
+              </>
+            ))}
+          </ScrollView>
+        </View>
+        <View style={[styles.rowItem]}>
+          <View style={styles.rowItemHeader}>
+            <Text style={styles.h2}>For family</Text>
+
+            <TouchableOpacity activeOpacity={0.7} style={styles.seeAllButton}>
+              <Text style={styles.seeAllButtonTxt}>See all</Text>
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView
+            horizontal
+            style={styles.contentBox}
+            showsHorizontalScrollIndicator={false}
+          >
+            {Popular?.map((item, ind) => (
+              <>
+                <ImageBackground
+                  style={styles.box}
+                  resizeMode="cover"
+                  source={{
+                    uri: item.image,
+                  }}
+                  key={ind}
+                >
+                  <TouchableOpacity
+                    style={styles.gradientWrapper}
+                    activeOpacity={0.7}
+                  >
+                    <LinearGradient
+                      style={styles.gradientWrapper}
+                      colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                    >
+                      <View style={styles.labelItem}>
+                        <Mark color="#fff" size="sm" />
+                        <Text style={[styles.labelItemText, styles.titleSm]}>
+                          {item.title}
+                        </Text>
+                      </View>
+                      <View style={styles.ratingLabel}>
+                        <View
+                          style={{
+                            position: "relative",
+                            top: -1,
+                            opacity: 0.8,
+                          }}
+                        >
+                          <StarIcon color="#FFBC3E" />
+                        </View>
+                        <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                          {item.rating} /
+                        </Text>
+                        <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                          {item.visitors} visitors
+                        </Text>
+                      </View>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </ImageBackground>
+                {Popular.length === ind + 1 && (
+                  <View style={{ width: 20 }}></View>
+                )}
+              </>
+            ))}
+          </ScrollView>
+        </View>
+        <View style={[styles.rowItem]}>
+          <View style={styles.rowItemHeader}>
+            <Text style={styles.h2}>For couples</Text>
+
+            <TouchableOpacity activeOpacity={0.7} style={styles.seeAllButton}>
+              <Text style={styles.seeAllButtonTxt}>See all</Text>
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView
+            horizontal
+            style={styles.contentBox}
+            showsHorizontalScrollIndicator={false}
+          >
+            {Popular?.map((item, ind) => (
+              <>
+                <ImageBackground
+                  style={styles.box}
+                  resizeMode="cover"
+                  source={{
+                    uri: item.image,
+                  }}
+                  key={ind}
+                >
+                  <TouchableOpacity
+                    style={styles.gradientWrapper}
+                    activeOpacity={0.7}
+                  >
+                    <LinearGradient
+                      style={styles.gradientWrapper}
+                      colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                    >
+                      <View style={styles.labelItem}>
+                        <Mark color="#fff" size="sm" />
+                        <Text style={[styles.labelItemText, styles.titleSm]}>
+                          {item.title}
+                        </Text>
+                      </View>
+                      <View style={styles.ratingLabel}>
+                        <View
+                          style={{
+                            position: "relative",
+                            top: -1,
+                            opacity: 0.8,
+                          }}
+                        >
+                          <StarIcon color="#FFBC3E" />
+                        </View>
+                        <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                          {item.rating} /
+                        </Text>
+                        <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                          {item.visitors} visitors
+                        </Text>
+                      </View>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </ImageBackground>
+                {Popular.length === ind + 1 && (
+                  <View style={{ width: 20 }}></View>
+                )}
+              </>
+            ))}
+          </ScrollView>
+        </View>
+        <View style={[styles.rowItem]}>
+          <View style={styles.rowItemHeader}>
+            <Text style={styles.h2}>Best islands</Text>
+
+            <TouchableOpacity activeOpacity={0.7} style={styles.seeAllButton}>
+              <Text style={styles.seeAllButtonTxt}>See all</Text>
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView
+            horizontal
+            style={styles.contentBox}
+            showsHorizontalScrollIndicator={false}
+          >
+            {Popular?.map((item, ind) => (
+              <>
+                <ImageBackground
+                  style={styles.box}
+                  resizeMode="cover"
+                  source={{
+                    uri: item.image,
+                  }}
+                  key={ind}
+                >
+                  <TouchableOpacity
+                    style={styles.gradientWrapper}
+                    activeOpacity={0.7}
+                  >
+                    <LinearGradient
+                      style={styles.gradientWrapper}
+                      colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                    >
+                      <View style={styles.labelItem}>
+                        <Mark color="#fff" size="sm" />
+                        <Text style={[styles.labelItemText, styles.titleSm]}>
+                          {item.title}
+                        </Text>
+                      </View>
+                      <View style={styles.ratingLabel}>
+                        <View
+                          style={{
+                            position: "relative",
+                            top: -1,
+                            opacity: 0.8,
+                          }}
+                        >
+                          <StarIcon color="#FFBC3E" />
+                        </View>
+                        <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                          {item.rating} /
+                        </Text>
+                        <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                          {item.visitors} visitors
+                        </Text>
+                      </View>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </ImageBackground>
+                {Popular.length === ind + 1 && (
+                  <View style={{ width: 20 }}></View>
+                )}
+              </>
+            ))}
+          </ScrollView>
+        </View>
+        <View style={[styles.rowItem]}>
+          <View style={styles.rowItemHeader}>
+            <Text style={styles.h2}>Best beaches</Text>
+
+            <TouchableOpacity activeOpacity={0.7} style={styles.seeAllButton}>
+              <Text style={styles.seeAllButtonTxt}>See all</Text>
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView
+            horizontal
+            style={styles.contentBox}
+            showsHorizontalScrollIndicator={false}
+          >
+            {Popular?.map((item, ind) => (
+              <>
+                <ImageBackground
+                  style={styles.box}
+                  resizeMode="cover"
+                  source={{
+                    uri: item.image,
+                  }}
+                  key={ind}
+                >
+                  <TouchableOpacity
+                    style={styles.gradientWrapper}
+                    activeOpacity={0.7}
+                  >
+                    <LinearGradient
+                      style={styles.gradientWrapper}
+                      colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                    >
+                      <View style={styles.labelItem}>
+                        <Mark color="#fff" size="sm" />
+                        <Text style={[styles.labelItemText, styles.titleSm]}>
+                          {item.title}
+                        </Text>
+                      </View>
+                      <View style={styles.ratingLabel}>
+                        <View
+                          style={{
+                            position: "relative",
+                            top: -1,
+                            opacity: 0.8,
+                          }}
+                        >
+                          <StarIcon color="#FFBC3E" />
+                        </View>
+                        <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                          {item.rating} /
+                        </Text>
+                        <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                          {item.visitors} visitors
+                        </Text>
+                      </View>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </ImageBackground>
+                {Popular.length === ind + 1 && (
+                  <View style={{ width: 20 }}></View>
+                )}
+              </>
+            ))}
+          </ScrollView>
+        </View>
+      </ScrollView>
+      <DestinationDetail
+        destinationDetailVisible={destinationDetailVisible}
+        setDestinationDetailVisible={setDestinationDetailVisible}
+      />
+    </>
+  );
+};
+
+const Bucketlists = () => (
+  <ScrollView
+    style={{ flex: 1, backgroundColor: "#f8f8f8" }}
+    showsVerticalScrollIndicator={false}
+  >
+    <View style={[styles.rowItem, { flex: 1 }]}>
+      <View style={styles.rowItemHeader}>
+        <Text style={styles.h2}>My destinations</Text>
+      </View>
+      <ScrollView
+        style={[styles.contentBox, { paddingHorizontal: 15, flex: 1 }]}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.notFoundView}>
+          <NoDestinationFoundIcon />
+          <Text style={styles.notFoundViewText}>
+            Your bucket list is empty, go to Explore tab and add your next
+            destination
+          </Text>
+        </View>
+        {/* {Popular?.map((item, ind) => (
+          <>
+            <ImageBackground
+              style={[
+                styles.box,
+                { width: "100%", marginBottom: 15, height: 150 },
+              ]}
+              resizeMode="cover"
+              source={{
+                uri: item.image,
+              }}
+              key={ind}
+            >
+              <TouchableOpacity
+                style={[
+                  styles.addToBucketButton,
+                  {
+                    backgroundColor: true
+                      ? COLORS.primary
+                      : "rgba(0, 0, 0, 0.3)",
+                  },
+                ]}
+                activeOpacity={0.7}
+              >
+                <Mark2 color="#fff" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.gradientWrapper}
+                activeOpacity={0.7}
+              >
+                <LinearGradient
+                  style={styles.gradientWrapper}
+                  colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                >
+                  <View style={styles.labelItem}>
+                    <Mark color="#fff" />
+                    <Text style={styles.labelItemText}>{item.title}</Text>
+                  </View>
+                  <View style={styles.ratingLabel}>
+                    <View
+                      style={{ position: "relative", top: -1, opacity: 0.8 }}
+                    >
+                      <StarIcon color="#FFBC3E" />
+                    </View>
+                    <Text style={styles.ratingText}>{item.rating} /</Text>
+                    <Text style={styles.ratingText}>
+                      {item.visitors} visitors
+                    </Text>
+                  </View>
+                </LinearGradient>
+              </TouchableOpacity>
+            </ImageBackground>
+          </>
+        ))} */}
+      </ScrollView>
+    </View>
+  </ScrollView>
+);
+
+const renderScene = SceneMap({
+  explore: Explore,
+  bucketlists: Bucketlists,
+});
 
 const BucketList = () => {
   const navigation = useNavigation();
-  const [location, setLocation] = useState();
-  const [listSheetVisible, setListSheetVisible] = useState(false);
-  const [searchFocus, setSearchFocus] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
+  const layout = useWindowDimensions();
+  const [index, setIndex] = React.useState(0);
+  const [countrySelectVisible, setCountrySelectVisible] = useState(false);
+  const [countrySearchVisible, setCountrySearchVisible] = useState(false);
 
-  const modalRef = useRef<Modalize>(null);
-
-  const handleMapPress = async (event) => {
-    const { latitude, longitude } = event.nativeEvent.coordinate;
-    try {
-      let [currentCountry] = await Location.reverseGeocodeAsync({
-        latitude,
-        longitude,
-      });
-      console.log("currentCountry", currentCountry);
-      let result = getCountry(currentCountry.isoCountryCode);
-      if (currentCountry && result) {
-        setLocation({
-          type: "FeatureCollection",
-          features: [result],
-        });
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-  const myPlace = {
-    type: "FeatureCollection",
-    features: [
-      {
-        type: "Feature",
-        id: "ARG",
-        properties: { name: "Argentina" },
-        geometry: {
-          type: "MultiPolygon",
-          coordinates: [
-            [
-              [
-                [-65.5, -55.2],
-                [-66.45, -55.25],
-                [-66.95992, -54.89681],
-                [-67.56244, -54.87001],
-                [-68.63335, -54.8695],
-                [-68.63401, -52.63637],
-                [-68.25, -53.1],
-                [-67.75, -53.85],
-                [-66.45, -54.45],
-                [-65.05, -54.7],
-                [-65.5, -55.2],
-              ],
-            ],
-            [
-              [
-                [-64.964892, -22.075862],
-                [-64.377021, -22.798091],
-                [-63.986838, -21.993644],
-                [-62.846468, -22.034985],
-                [-62.685057, -22.249029],
-                [-60.846565, -23.880713],
-                [-60.028966, -24.032796],
-                [-58.807128, -24.771459],
-                [-57.777217, -25.16234],
-                [-57.63366, -25.603657],
-                [-58.618174, -27.123719],
-                [-57.60976, -27.395899],
-                [-56.486702, -27.548499],
-                [-55.695846, -27.387837],
-                [-54.788795, -26.621786],
-                [-54.625291, -25.739255],
-                [-54.13005, -25.547639],
-                [-53.628349, -26.124865],
-                [-53.648735, -26.923473],
-                [-54.490725, -27.474757],
-                [-55.162286, -27.881915],
-                [-56.2909, -28.852761],
-                [-57.625133, -30.216295],
-                [-57.874937, -31.016556],
-                [-58.14244, -32.044504],
-                [-58.132648, -33.040567],
-                [-58.349611, -33.263189],
-                [-58.427074, -33.909454],
-                [-58.495442, -34.43149],
-                [-57.22583, -35.288027],
-                [-57.362359, -35.97739],
-                [-56.737487, -36.413126],
-                [-56.788285, -36.901572],
-                [-57.749157, -38.183871],
-                [-59.231857, -38.72022],
-                [-61.237445, -38.928425],
-                [-62.335957, -38.827707],
-                [-62.125763, -39.424105],
-                [-62.330531, -40.172586],
-                [-62.145994, -40.676897],
-                [-62.745803, -41.028761],
-                [-63.770495, -41.166789],
-                [-64.73209, -40.802677],
-                [-65.118035, -41.064315],
-                [-64.978561, -42.058001],
-                [-64.303408, -42.359016],
-                [-63.755948, -42.043687],
-                [-63.458059, -42.563138],
-                [-64.378804, -42.873558],
-                [-65.181804, -43.495381],
-                [-65.328823, -44.501366],
-                [-65.565269, -45.036786],
-                [-66.509966, -45.039628],
-                [-67.293794, -45.551896],
-                [-67.580546, -46.301773],
-                [-66.597066, -47.033925],
-                [-65.641027, -47.236135],
-                [-65.985088, -48.133289],
-                [-67.166179, -48.697337],
-                [-67.816088, -49.869669],
-                [-68.728745, -50.264218],
-                [-69.138539, -50.73251],
-                [-68.815561, -51.771104],
-                [-68.149995, -52.349983],
-                [-68.571545, -52.299444],
-                [-69.498362, -52.142761],
-                [-71.914804, -52.009022],
-                [-72.329404, -51.425956],
-                [-72.309974, -50.67701],
-                [-72.975747, -50.74145],
-                [-73.328051, -50.378785],
-                [-73.415436, -49.318436],
-                [-72.648247, -48.878618],
-                [-72.331161, -48.244238],
-                [-72.447355, -47.738533],
-                [-71.917258, -46.884838],
-                [-71.552009, -45.560733],
-                [-71.659316, -44.973689],
-                [-71.222779, -44.784243],
-                [-71.329801, -44.407522],
-                [-71.793623, -44.207172],
-                [-71.464056, -43.787611],
-                [-71.915424, -43.408565],
-                [-72.148898, -42.254888],
-                [-71.746804, -42.051386],
-                [-71.915734, -40.832339],
-                [-71.680761, -39.808164],
-                [-71.413517, -38.916022],
-                [-70.814664, -38.552995],
-                [-71.118625, -37.576827],
-                [-71.121881, -36.658124],
-                [-70.364769, -36.005089],
-                [-70.388049, -35.169688],
-                [-69.817309, -34.193571],
-                [-69.814777, -33.273886],
-                [-70.074399, -33.09121],
-                [-70.535069, -31.36501],
-                [-69.919008, -30.336339],
-                [-70.01355, -29.367923],
-                [-69.65613, -28.459141],
-                [-69.001235, -27.521214],
-                [-68.295542, -26.89934],
-                [-68.5948, -26.506909],
-                [-68.386001, -26.185016],
-                [-68.417653, -24.518555],
-                [-67.328443, -24.025303],
-                [-66.985234, -22.986349],
-                [-67.106674, -22.735925],
-                [-66.273339, -21.83231],
-                [-64.964892, -22.075862],
-              ],
-            ],
-          ],
-        },
-      },
-    ],
-  };
-
-  useEffect(() => {
-    // console.log("countriesssss", countries);
-  }, []);
-
-  // const c = Countries?.features?.find((item) => item?.id === "RUS");
-  const GOOGLE_PLACES_API_KEY = "YOUR_GOOGLE_API_KEY";
+  const [routes] = React.useState([
+    { key: "explore", title: "Explore" },
+    { key: "bucketlists", title: "Bucketlist" },
+  ]);
+  const renderTabBar = (props) => (
+    <TabBar
+      // scrollEnabled={true}
+      {...props}
+      indicatorStyle={{ backgroundColor: COLORS.primaryDark }}
+      style={{ backgroundColor: "#fff", color: COLORS.gray }}
+      renderLabel={({ route, focused, color }) => (
+        <View style={{ flex: 1, position: "relative" }}>
+          <Text
+            style={{
+              color: focused ? COLORS.primaryDark : COLORS.gray,
+              textAlign: "center",
+              fontSize: 14,
+              fontWeight: "bold",
+            }}
+          >
+            {route.title}
+          </Text>
+          {route?.key === "bucketlists" ? (
+            <View style={[styles.bucketAmountWrapper]}>
+              <Text style={[styles.bucketAmountText]}>5</Text>
+            </View>
+          ) : null}
+        </View>
+      )}
+    />
+  );
 
   return (
     <>
-      <View style={styles.container}>
-        <View style={styles.mapHeader}>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.screenHeader}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             activeOpacity={0.7}
@@ -221,524 +739,251 @@ const BucketList = () => {
           >
             <BackIcon />
           </TouchableOpacity>
-        </View>
-        <MapView
-          // provider={PROVIDER_GOOGLE}
-          style={styles.map}
-          // region={
-          //   {
-          //     latitude: location?.coords?.latitude,
-          //     longitude: location?.coords?.longitude,
-          //     latitudeDelta: 0.015,
-          //     longitudeDelta: 0.0121,
-          //   }
-          // }
-          // showsUserLocation
-          // showsCompass
-          // showsScale
-          onPress={handleMapPress}
-          zoomEnabled
-          zoomControlEnabled
-          pitchEnabled
-          // customMapStyle={[
-          //   {
-          //     featureType: "road",
-          //     elementType: "geometry",
-          //     stylers: [
-          //       {
-          //         visibility: "off",
-          //       },
-          //     ],
-          //   },
-          //   {
-          //     featureType: "poi",
-          //     elementType: "geometry",
-          //     stylers: [
-          //       {
-          //         visibility: "off",
-          //       },
-          //     ],
-          //   },
-          //   {
-          //     featureType: "landscape",
-          //     elementType: "geometry",
-          //     stylers: [
-          //       {
-          //         color: "#fffffa",
-          //       },
-          //     ],
-          //   },
-          //   {
-          //     featureType: "water",
-          //     stylers: [
-          //       {
-          //         lightness: 50,
-          //       },
-          //     ],
-          //   },
-          //   {
-          //     featureType: "road",
-          //     elementType: "labels",
-          //     stylers: [
-          //       {
-          //         visibility: "off",
-          //       },
-          //     ],
-          //   },
-          //   {
-          //     featureType: "transit",
-          //     stylers: [
-          //       {
-          //         visibility: "off",
-          //       },
-          //     ],
-          //   },
-          //   {
-          //     featureType: "administrative",
-          //     elementType: "geometry",
-          //     stylers: [
-          //       {
-          //         lightness: 40,
-          //       },
-          //     ],
-          //   },
-          // ]}
-        >
-          <Geojson
-            geojson={location || myPlace} // geojson of the countries you want to highlight
-            strokeColor="#ccc"
-            fillColor="#fafafa"
-            strokeWidth={2}
-          />
-        </MapView>
-      </View>
-      <Portal>
-        <Modalize
-          ref={modalRef}
-          modalTopOffset={65}
-          alwaysOpen={100}
-          onClose={() => setListSheetVisible(false)}
-          HeaderComponent={
-            <View style={styles.modalHeader}>
-              {/* {wishlist?.length ? (
-                <TouchableOpacity
-                  onPress={() =>
-                    Alert.prompt(
-                      "Enter title",
-                      "Enter anything what you want to do in the future",
-                      [
-                        {
-                          text: "Cancel",
-                          onPress: () => console.log("Cancel Pressed"),
-                          style: "cancel",
-                        },
-                        {
-                          text: "OK",
-                          onPress: (text) => addItem(text),
-                        },
-                      ],
-                      "plain-text"
-                    )
-                  }
-                  style={styles.plusButton}
-                >
-                  <PlusIcon />
-                </TouchableOpacity>
-              ) : null} */}
-            </View>
-          }
-        >
-          <View style={styles.modalContent}>
-            <GooglePlacesAutocomplete
-              query={{
-                key: GOOGLE_PLACES_API_KEY,
-                language: "en", // language of the results
-              }}
-              onPress={(data, details) => console.log(data, details)}
-              textInputProps={{
-                InputComp: () => (
-                  <TextInput
-                    placeholder="Search..."
-                    style={styles.searchStyle}
-                    // onFocus={() => console.log("focused")}
-                    placeholderTextColor="#8E8D8E"
-                  />
-                ),
-                leftIcon: { type: "font-awesome", name: "chevron-left" },
-                errorStyle: { color: "red" },
-              }}
-            />
-
-            <View style={styles.searchResult}>
-              <Text style={styles.sectionTitleLarge}>Restaurants</Text>
-              <View style={styles.searchResultItem}>
-                <View style={styles.leftSide}>
-                  <ImageBackground
-                    resizeMode="contain"
-                    style={styles.locationTypeIcon}
-                    source={{
-                      uri: "https://cdn-icons-png.flaticon.com/512/10313/10313052.png",
-                    }}
-                  ></ImageBackground>
-                  <View style={styles.locationInfo}>
-                    <Text style={styles.locationInfoTitle}>
-                      Paris em restaurant
-                    </Text>
-                    <Text style={styles.locationInfoSub}>Paris, France</Text>
-                  </View>
-                </View>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.savePlaceButton}
-                >
-                  <TrashIcon />
-                </TouchableOpacity>
+          <View style={styles.right}>
+            <TouchableOpacity
+              style={styles.passportBox}
+              activeOpacity={0.7}
+              onPress={() => setCountrySelectVisible(true)}
+            >
+              <PassportIcon />
+              <View style={styles.passportTexts}>
+                <Text style={styles.passportLabel}>Passport</Text>
+                <Text style={styles.passportCountry}>Georgia</Text>
               </View>
-              <View style={styles.searchResultItem}>
-                <View style={styles.leftSide}>
-                  <ImageBackground
-                    resizeMode="contain"
-                    style={styles.locationTypeIcon}
-                    source={{
-                      uri: "https://cdn-icons-png.flaticon.com/512/10313/10313052.png",
-                    }}
-                  ></ImageBackground>
-                  <View style={styles.locationInfo}>
-                    <Text style={styles.locationInfoTitle}>
-                      Paris em restaurant
-                    </Text>
-                    <Text style={styles.locationInfoSub}>Paris, France</Text>
-                  </View>
-                </View>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.savePlaceButton}
-                >
-                  <TrashIcon />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.searchResultItem}>
-                <View style={styles.leftSide}>
-                  <ImageBackground
-                    resizeMode="contain"
-                    style={styles.locationTypeIcon}
-                    source={{
-                      uri: "https://cdn-icons-png.flaticon.com/512/10313/10313052.png",
-                    }}
-                  ></ImageBackground>
-                  <View style={styles.locationInfo}>
-                    <Text style={styles.locationInfoTitle}>
-                      Paris em restaurant
-                    </Text>
-                    <Text style={styles.locationInfoSub}>Paris, France</Text>
-                  </View>
-                </View>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.savePlaceButton}
-                >
-                  <TrashIcon />
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <View style={styles.searchResult}>
-              <View style={styles.searchResultItem}>
-                <View style={styles.leftSide}>
-                  <ImageBackground
-                    resizeMode="contain"
-                    style={styles.locationTypeIcon}
-                    source={{
-                      uri: "https://cdn-icons-png.flaticon.com/512/10313/10313052.png",
-                    }}
-                  ></ImageBackground>
-                  <View style={styles.locationInfo}>
-                    <Text style={styles.locationInfoTitle}>
-                      Paris em restaurant
-                    </Text>
-                    <Text style={styles.locationInfoSub}>Paris, France</Text>
-                  </View>
-                </View>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.savePlaceButton}
-                >
-                  <BookmarkIcon />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.searchResultItem}>
-                <View style={styles.leftSide}>
-                  <ImageBackground
-                    resizeMode="contain"
-                    style={styles.locationTypeIcon}
-                    source={{
-                      uri: "https://cdn-icons-png.flaticon.com/512/10313/10313052.png",
-                    }}
-                  ></ImageBackground>
-                  <View style={styles.locationInfo}>
-                    <Text style={styles.locationInfoTitle}>
-                      Paris em restaurant
-                    </Text>
-                    <Text style={styles.locationInfoSub}>Paris, France</Text>
-                  </View>
-                </View>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.savePlaceButton}
-                >
-                  <BookmarkIcon />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.searchResultItem}>
-                <View style={styles.leftSide}>
-                  <ImageBackground
-                    resizeMode="contain"
-                    style={styles.locationTypeIcon}
-                    source={{
-                      uri: "https://cdn-icons-png.flaticon.com/512/10313/10313052.png",
-                    }}
-                  ></ImageBackground>
-                  <View style={styles.locationInfo}>
-                    <Text style={styles.locationInfoTitle}>
-                      Paris em restaurant
-                    </Text>
-                    <Text style={styles.locationInfoSub}>Paris, France</Text>
-                  </View>
-                </View>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.savePlaceButton}
-                >
-                  <BookmarkIcon />
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <View style={styles.listWrapper}>
-              <Text style={styles.sectionTitle}>My Bucketlist</Text>
-              <View style={styles.listItems}>
-                <TouchableOpacity activeOpacity={0.7} style={styles.listItem}>
-                  <Text style={styles.listItemTitle}>Restaurants</Text>
-                  <Text style={styles.listItemPlacesText}>5 Place</Text>
-                </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.7} style={styles.listItem}>
-                  <Text style={styles.listItemTitle}>Lakes</Text>
-                  <Text style={styles.listItemPlacesText}>54 Place</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() =>
-                    Alert.prompt(
-                      "Enter List Title",
-                      "",
-                      [
-                        {
-                          text: "Cancel",
-                          onPress: () => console.log("Cancel Pressed"),
-                          style: "cancel",
-                        },
-                        {
-                          text: "OK",
-                          onPress: (text) => addItem(text),
-                        },
-                      ],
-                      "plain-text"
-                    )
-                  }
-                  style={styles.addNewList}
-                  activeOpacity={0.7}
-                >
-                  <PlusIcon color={COLORS.primaryDark} />
-                  <Text style={styles.addNewListText}>Create New List</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.searchButton}
+              activeOpacity={0.7}
+              onPress={() => setCountrySearchVisible(true)}
+            >
+              <SearchIcon />
+            </TouchableOpacity>
           </View>
-
-          {/* <View
+        </View>
+        <TabView
+          navigationState={{ index, routes }}
+          renderScene={renderScene}
+          onIndexChange={setIndex}
+          initialLayout={{ width: layout.width }}
           style={{
-            flex: 1,
-            height: SIZES.height - 200,
-            marginTop: 15,
-            paddingHorizontal: 15,
+            marginTop: 0,
           }}
-        >
-          {wishlist?.length ? (
-            <FlashList
-              data={wishlist}
-              renderItem={({ item }) => <ListItem item={item} />}
-              estimatedItemSize={10}
-            />
-          ) : (
-            <View style={styles.emptyWishlistWrapper}>
-              <View style={styles.wishlistGetStarted}>
-                <Image
-                  width={100}
-                  height={100}
-                  source={{
-                    url: "https://cdn-icons-png.flaticon.com/512/1950/1950589.png",
-                  }}
-                />
-                <Text style={styles.wishlistGetStartedText}>
-                  Your wishlist is empty. Add your favorite items to get
-                  started!
-                </Text>
-                <TouchableOpacity
-                  style={styles.addButton}
-                  activeOpacity={0.7}
-                  onPress={() =>
-                    Alert.prompt(
-                      "Enter title",
-                      "Enter anything what you want to do in the future",
-                      [
-                        {
-                          text: "Cancel",
-                          onPress: () => console.log("Cancel Pressed"),
-                          style: "cancel",
-                        },
-                        {
-                          text: "OK",
-                          onPress: (text) => addItem(text),
-                        },
-                      ],
-                      "plain-text"
-                    )
-                  }
-                >
-                  <Text style={styles.addButtonText}>Add item</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
-        </View> */}
-        </Modalize>
-      </Portal>
+          renderTabBar={renderTabBar}
+        />
+      </SafeAreaView>
+      <CountrySelect
+        countrySelectVisible={countrySelectVisible}
+        setCountrySelectVisible={setCountrySelectVisible}
+      />
+      <CountrySearch
+        countrySearchVisible={countrySearchVisible}
+        setCountrySearchVisible={setCountrySearchVisible}
+      />
     </>
   );
 };
 export default BucketList;
 
 const styles = StyleSheet.create({
-  mapHeader: {
-    top: 55,
-    position: "absolute",
-    width: "100%",
-    zIndex: 1,
-    paddingHorizontal: 15,
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  notFoundView: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 70,
+  },
+  notFoundViewText: {
+    fontSize: 16,
+    maxWidth: "80%",
+    textAlign: "center",
+    marginTop: 25,
+    color: COLORS.darkgray,
   },
   backButton: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     backgroundColor: "#fff",
     borderRadius: 100,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    ...COLORS.shadow,
   },
-  listWrapper: {
-    flex: 1,
-    marginTop: 15,
-  },
-  sectionTitle: {
-    fontSize: 12,
-    color: "#8E8D8E",
-    fontWeight: "bold",
-  },
-  sectionTitleLarge: {
-    fontSize: 16,
-    color: "#000",
-    fontWeight: "bold",
-    marginBottom: 15,
-  },
-  listItems: {
-    backgroundColor: "#fafafa",
-    marginTop: 8,
-    padding: 15,
-    borderRadius: 10,
-  },
-  listItem: {
-    width: "100%",
-    borderBottomWidth: 1,
-    borderBottomColor: "#fff",
-    paddingBottom: 15,
-    marginBottom: 15,
-  },
-  listItemTitle: {
-    fontWeight: "bold",
-    fontSize: 14,
-    color: "#000",
-  },
-  listItemPlacesText: {
-    fontSize: 12,
-    color: "#8E8D8E",
-    marginTop: 3,
-  },
-  addNewList: {
-    width: "100%",
-    padding: 15,
-    backgroundColor: "#fafafa",
-    textAlign: "center",
+  searchButton: {
+    width: 40,
+    height: 40,
+    backgroundColor: "#fff",
+    borderRadius: 100,
+    display: "flex",
     alignItems: "center",
-    borderRadius: 10,
-    flexDirection: "row",
     justifyContent: "center",
+    ...COLORS.shadow,
+    marginLeft: 15,
   },
-  addNewListText: {
-    color: COLORS.primaryDark,
-    fontSize: 14,
+  bucketAmountWrapper: {
+    position: "absolute",
+    minWidth: 15,
+    height: 15,
+    borderRadius: 50,
+    backgroundColor: COLORS.primary,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 4,
+    right: -18,
+    top: -4,
+  },
+  bucketAmountText: {
+    color: "#fff",
+    fontSize: 10,
+  },
+  gradientWrapper: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
+  titleSm: {
+    fontSize: 13,
+    marginLeft: 2,
+  },
+  labelItemText: {
+    color: "#fff",
+    fontSize: 22,
+    fontWeight: "bold",
+    marginLeft: 5,
+  },
+  labelItem: {
+    padding: 10,
+    paddingVertical: 0,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  right: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  screenHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 15,
+    paddingBottom: 15,
+  },
+  passportBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    paddingHorizontal: 8,
+    paddingVertical: 7,
+    borderRadius: 6,
+    ...COLORS.shadow,
+    marginLeft: 25,
+  },
+  passportTexts: {
+    marginLeft: 5,
+  },
+  passportLabel: {
+    fontSize: 8,
+    color: COLORS.gray,
+    marginBottom: 1,
+  },
+  passportCountry: {
+    fontSize: 10,
+    color: "#000",
     fontWeight: "bold",
   },
-  savePlaceButton: {
-    padding: 10,
-  },
-  map: {
-    flex: 1,
-  },
-  modalContent: {
-    padding: 15,
-  },
-  searchResult: {
-    flex: 1,
-    marginTop: 25,
-  },
-  searchResultItem: {
+  ratingLabel: {
     flexDirection: "row",
-    borderBottomColor: "#eee",
-    borderBottomWidth: 1,
-    paddingBottom: 15,
-    marginBottom: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    borderRadius: 30,
     alignItems: "center",
-    justifyContent: "space-between",
+    paddingBottom: 10,
   },
-  leftSide: {
-    flexDirection: "row",
-    alignItems: "center",
+  ratingText: {
+    color: "#fff",
+    marginLeft: 3,
+    fontSize: 12,
+    opacity: 0.7,
   },
-  locationTypeIcon: {
+  addToBucketButton: {
     width: 30,
     height: 30,
+    borderRadius: 50,
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    right: 10,
+    top: 10,
+    zIndex: 3,
   },
-  locationInfo: {
-    marginLeft: 10,
-  },
-  locationInfoTitle: {
-    fontSize: 16,
-    color: "#000",
-  },
-  locationInfoSub: {
-    color: "#333",
+  ratingTextXs: {
     fontSize: 10,
-    marginTop: 3,
   },
   searchStyle: {
     width: "100%",
-    height: 45,
+    height: 35,
     backgroundColor: "#eeeeee",
     paddingLeft: 10,
     borderRadius: 10,
     color: "#000",
   },
+  selectCountryBox: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  selectCountryText: {
+    marginLeft: 8,
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 12,
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  rowItem: {
+    width: "100%",
+    paddingTop: 25,
+    backgroundColor: "#f8f8f8",
+  },
+  rowItemHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: SIZES.padding,
+    paddingHorizontal: 15,
+  },
+  seeAllButtonTxt: {
+    color: COLORS.darkgray,
+    fontSize: SIZES.body4,
+  },
+  h2: {
+    fontSize: 22,
+    color: "#000",
+    fontWeight: "bold",
+  },
+  contentBox: {
+    marginTop: 5,
+    paddingLeft: 15,
+  },
+  box: {
+    width: 130,
+    height: 130,
+    backgroundColor: "#fafafa",
+    borderRadius: 15,
+    overflow: "hidden",
+    marginRight: 10,
+  },
+  halfBox: {
+    width: "49%",
+    flex: 1,
+  },
+  typeMd: {
+    width: 160,
+    height: 180,
+    borderRadius: 10,
+    overflow: "hidden",
   },
 });
