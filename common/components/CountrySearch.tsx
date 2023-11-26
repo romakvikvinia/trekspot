@@ -46,32 +46,21 @@ export const CountrySearch = ({
           source={{
             uri: "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=10&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
           }}
-        >
-          <TouchableOpacity style={styles.gradientWrapper} activeOpacity={0.7}>
-            <LinearGradient
-              style={styles.gradientWrapper}
-              colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
-            >
-              <View style={styles.labelItem}>
-                <Mark color="#fff" size="sm" />
-                <Text style={[styles.labelItemText, styles.titleSm]}>
-                  {item.name}
-                </Text>
-              </View>
-              <View style={styles.ratingLabel}>
-                <View style={{ position: "relative", top: -1, opacity: 0.8 }}>
-                  <StarIcon color="#FFBC3E" />
-                </View>
-                <Text style={[styles.ratingText, styles.ratingTextXs]}>
-                  {item.rating} /
-                </Text>
-                <Text style={[styles.ratingText, styles.ratingTextXs]}>
-                  {item.visitors} visitors
-                </Text>
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
-        </ImageBackground>
+        ></ImageBackground>
+        <TouchableOpacity style={styles.gradientWrapper} activeOpacity={0.7}>
+          <View style={styles.labelItem}>
+            <Text style={[styles.labelItemText]}>{item.name}</Text>
+          </View>
+          <View style={styles.ratingLabel}>
+            <View style={{ position: "relative", top: -1, opacity: 0.8 }}>
+              <StarIcon color="#FFBC3E" />
+            </View>
+            <Text style={[styles.ratingText, styles.ratingTextXs]}>4.5 /</Text>
+            <Text style={[styles.ratingText, styles.ratingTextXs]}>
+              33k visitors
+            </Text>
+          </View>
+        </TouchableOpacity>
       </TouchableOpacity>
     );
   };
@@ -108,7 +97,6 @@ export const CountrySearch = ({
           style={{
             flex: 1,
             height: SIZES.height - 125,
-            flexDirection: "row",
             justifyContent: "center",
             paddingHorizontal: 15,
           }}
@@ -118,7 +106,6 @@ export const CountrySearch = ({
             renderItem={({ item }) => <Country item={item} />}
             estimatedItemSize={200}
             horizontal={false}
-            numColumns={2}
             showsVerticalScrollIndicator={false}
           />
         </View>
@@ -145,10 +132,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   labelItemText: {
-    color: "#fff",
-    fontSize: 22,
+    color: "#000",
+    fontSize: 14,
     fontWeight: "bold",
-    marginLeft: 5,
+    marginLeft: 0,
+  },
+  ratingTextXs: {
+    color: "#000",
+    fontSize: 12,
   },
   ratingLabel: {
     flexDirection: "row",
@@ -156,13 +147,13 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: 30,
     alignItems: "center",
-    paddingBottom: 10,
   },
   labelItem: {
     padding: 10,
     paddingVertical: 0,
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: 2,
   },
   cancelButton: {
     marginLeft: 15,
@@ -172,10 +163,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
   },
-  titleSm: {
-    fontSize: 13,
-    marginLeft: 2,
-  },
   ratingText: {
     color: "#fff",
     marginLeft: 3,
@@ -183,11 +170,11 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   box: {
-    flex: 1,
-    height: 130,
+    height: 50,
     backgroundColor: "#fafafa",
     borderRadius: 15,
     overflow: "hidden",
+    width: 50,
   },
   countryItem: {
     paddingVertical: 5,
@@ -195,7 +182,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    width: "33%",
+    width: "100%",
     paddingHorizontal: 5,
     flex: 1,
   },
