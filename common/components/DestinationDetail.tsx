@@ -19,8 +19,10 @@ import Swiper from "react-native-swiper";
 
 import { useEffect, useRef, useState } from "react";
 import {
+  AmbulanceIcon,
   BackIcon,
   BusIcon,
+  CallIcon,
   CheckCircleIcon,
   CloseCircleIcon,
   CurrencyIcon,
@@ -29,12 +31,15 @@ import {
   DrivingSideLeft,
   DrivingSideRight,
   EmergencyIcon,
+  FireBrigadeIcon,
   InfoIcon,
   LanguageIcon,
   Mark,
   Mark2,
+  MarkerFillIcon,
   MetroIcon,
   PassportIcon,
+  PoliceIcon,
   StarIcon,
   TopThingsIcon,
   TramwayIcon,
@@ -44,6 +49,7 @@ import {
 import { SceneMap, TabBar, TabView } from "react-native-tab-view";
 import { CountrySelect } from "./CountrySelect";
 import { Topsights } from "../../utilities/Tops";
+import { MapEmbedView } from "./MapEmbedView";
 
 export const DestinationDetail = ({
   destinationDetailVisible,
@@ -53,6 +59,7 @@ export const DestinationDetail = ({
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [countrySelectVisible, setCountrySelectVisible] = useState(false);
+  const [mapEmbedViewVisible, setMapEmbedViewVisible] = useState("");
 
   const Overview = () => {
     return (
@@ -245,16 +252,27 @@ export const DestinationDetail = ({
       >
         <View style={styles.thingsTodo}>
           {Topsights?.map((item, ind) => (
-            <View style={styles.thingsTodoItem} key={ind}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.thingsTodoItem}
+              key={ind}
+              onPress={() => setMapEmbedViewVisible(item?.title)}
+            >
               <ImageBackground
                 style={styles.thingsTodoItemImage}
                 source={{
                   uri: item.thumbnail,
                 }}
-              ></ImageBackground>
+              >
+                <View style={styles.mapButton}>
+                  <MarkerFillIcon color="#fff" size="10" />
+                  <Text style={styles.mapButtonText}>Map</Text>
+                </View>
+              </ImageBackground>
 
               <View style={styles.thingsTodoItemDetails}>
                 <Text style={styles.thingsTodoItemTitle}>{item.title}</Text>
+
                 <View style={styles.thingsTodoItemiIn}>
                   <Text style={styles.thingsTodoItemiInprice}>
                     {item.price}
@@ -264,7 +282,7 @@ export const DestinationDetail = ({
                   </Text>
                 </View>
               </View>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
@@ -549,7 +567,40 @@ export const DestinationDetail = ({
         style={styles.tabWrapper}
         showsVerticalScrollIndicator={false}
       >
-        <Text>Emergency</Text>
+        <View style={styles.emergencyNumbers}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={[styles.emergencyButtonItem, { backgroundColor: "#af0101" }]}
+          >
+            <CallIcon />
+            <Text style={styles.emergencyButtonItemText}>
+              EU Emergency - 112
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={[styles.emergencyButtonItem, { backgroundColor: "#366dc2" }]}
+          >
+            <PoliceIcon />
+            <Text style={styles.emergencyButtonItemText}>Police - 112</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={[styles.emergencyButtonItem, { backgroundColor: "#f14e2f" }]}
+          >
+            <AmbulanceIcon />
+            <Text style={styles.emergencyButtonItemText}>Ambulance - 118</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={[styles.emergencyButtonItem, { backgroundColor: "#f10d00" }]}
+          >
+            <FireBrigadeIcon />
+            <Text style={styles.emergencyButtonItemText}>
+              Fire brigade - 115
+            </Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     );
   };
@@ -796,6 +847,10 @@ export const DestinationDetail = ({
         countrySelectVisible={countrySelectVisible}
         setCountrySelectVisible={setCountrySelectVisible}
       />
+      <MapEmbedView
+        mapEmbedViewVisible={mapEmbedViewVisible}
+        setMapEmbedViewVisible={setMapEmbedViewVisible}
+      />
     </>
   );
 };
@@ -803,6 +858,46 @@ export const DestinationDetail = ({
 const styles = StyleSheet.create({
   swiperWrapper: {
     height: 350,
+  },
+  emergencyNumbers: {
+    flex: 1,
+    marginTop: 25,
+  },
+  emergencyButtonItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fafafa",
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    paddingVertical: 15,
+    marginBottom: 15,
+  },
+  emergencyButtonItemText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginLeft: 10,
+    color: "#fff",
+  },
+  thingsTodoItemHead: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  mapButton: {
+    position: "absolute",
+    backgroundColor: "rgba(0,0,0, 0.3)",
+    padding: 5,
+    right: 5,
+    top: 5,
+    borderRadius: 5,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  mapButtonText: {
+    justifyContent: "center",
+    alignItems: "center",
+    color: "#fff",
+    fontSize: 12,
+    marginLeft: 3,
   },
   dictionaryWrapper: {
     marginTop: 25,
@@ -861,7 +956,9 @@ const styles = StyleSheet.create({
     borderTopEndRadius: 10,
     borderTopLeftRadius: 10,
     overflow: "hidden",
+    position: "relative",
   },
+
   thingsTodoItemiIn: {
     marginTop: 5,
   },
