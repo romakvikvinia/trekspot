@@ -15,8 +15,12 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.trekspot.app",
-      "usesAppleSignIn": true
+      "usesAppleSignIn": true,
+      "entitlements": {
+        "com.apple.developer.applesignin": ["Default"]
+      }
     },
+
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -34,7 +38,9 @@
       }
     },
     "owner": "trekspot",
-    "expo": {},
+    "expo": {
+      "plugins": ["expo-apple-authentication"]
+    },
     "runtimeVersion": {
       "policy": "sdkVersion"
     },

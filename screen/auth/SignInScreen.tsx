@@ -200,7 +200,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
     (async () => {
       try {
         const appleAuthAvailable = await AppleAuthentication.isAvailableAsync();
-        // setState((prevState) => ({ ...prevState, appleAuthAvailable }));
+        setState((prevState) => ({ ...prevState, appleAuthAvailable }));
       } catch (error) {}
     })();
   }, []);
