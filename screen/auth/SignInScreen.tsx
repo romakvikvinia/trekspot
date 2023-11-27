@@ -213,8 +213,25 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
           AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ],
       });
-      console.log(JSON.stringify(credential));
-      Alert.alert(JSON.stringify(credential));
+      if (credential.identityToken) {
+        console.log({
+          token: credential.identityToken,
+          provider: SocialProvidersEnum.Apple,
+        });
+        signInWithSocial({
+          token: credential.identityToken,
+          provider: SocialProvidersEnum.Apple,
+        });
+      } else {
+        Alert.alert("Error", "Something went wrong!", [
+          {
+            onPress: () => {
+              dispatch(trekSpotApi.util.resetApiState());
+            },
+            text: "OK",
+          },
+        ]);
+      }
     } catch (error) {
       Alert.alert(JSON.stringify(error));
     }

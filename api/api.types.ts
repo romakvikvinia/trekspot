@@ -4,6 +4,7 @@
 export enum SocialProvidersEnum {
   Facebook = "Facebook",
   Google = "Google",
+  Apple = "Apple",
 }
 
 export type TokenType = {

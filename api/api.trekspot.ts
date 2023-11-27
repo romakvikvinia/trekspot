@@ -25,10 +25,13 @@ const prepHeaders = async (headers: Headers) => {
 export const trekSpotApi = createApi({
   // refetchOnMountOrArgChange: true,
   baseQuery: graphqlRequestBaseQuery({
+    // url: "http://192.168.0.105:8080/graphql",
     url: "http://localhost:8080/graphql",
     prepareHeaders: prepHeaders,
-    customErrors: ({ name, response }) => {
-      console.log(name);
+    customErrors: ({ name, response, request }) => {
+      // console.log(response);
+      console.log("here");
+      console.log(request);
       return {
         name,
         stack: null,
@@ -39,7 +42,7 @@ export const trekSpotApi = createApi({
       };
     },
   }),
-  tagTypes: ["signUp", "signIn"],
+  tagTypes: ["signUp", "signIn", "authSocial"],
   endpoints: (builder) => ({
     /**
      * Sign In
@@ -121,6 +124,7 @@ export const trekSpotApi = createApi({
       transformResponse: (response: AuthSocialLogInResponseType) => {
         return response;
       },
+      invalidatesTags: (result, error) => (error ? [] : ["authSocial"]),
     }),
   }),
 });
