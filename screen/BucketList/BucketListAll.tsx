@@ -11,42 +11,55 @@ import {
 } from "react-native";
 import { COLORS } from "../../styles/theme";
 import { CountriesList } from "../../utilities/countryList";
-import { BackIcon, Mark, StarIcon } from "../../utilities/SvgIcons.utility";
+import {
+  BackIcon,
+  Mark,
+  Mark2,
+  StarIcon,
+} from "../../utilities/SvgIcons.utility";
 
 const BucketListAllScreen = () => {
   const navigation = useNavigation();
 
-  const Country = ({ item }: any) => {
+  const Country = ({ item }: any, ind) => {
     return (
       <TouchableOpacity style={styles.countryItem} activeOpacity={0.7}>
-        <ImageBackground
-          style={styles.box}
-          resizeMode="cover"
-          source={{
-            uri: "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=10&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          }}
-        >
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <ImageBackground
+            style={styles.box}
+            resizeMode="cover"
+            source={{
+              uri: "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=10&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            }}
+          ></ImageBackground>
           <TouchableOpacity style={styles.gradientWrapper} activeOpacity={0.7}>
-            <LinearGradient
-              style={styles.gradientWrapper}
-              colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
-            >
-              <View style={styles.labelItem}>
-                <Mark color="#fff" />
-                <Text style={[styles.labelItemText]}>{item.name}</Text>
+            <View style={styles.labelItem}>
+              <Text style={[styles.labelItemText]}>{item.name}</Text>
+            </View>
+            <View style={styles.ratingLabel}>
+              <View style={{ position: "relative", top: -1, opacity: 0.8 }}>
+                <StarIcon color="#FFBC3E" />
               </View>
-              <View style={styles.ratingLabel}>
-                <View style={{ position: "relative", top: -1, opacity: 0.8 }}>
-                  <StarIcon color="#FFBC3E" />
-                </View>
-                <Text style={[styles.ratingText]}>{item.rating} /</Text>
-                <Text style={[styles.ratingText]}>
-                  {item.visitors} visitors
-                </Text>
-              </View>
-            </LinearGradient>
+              <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                4.5 /
+              </Text>
+              <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                33k visitors
+              </Text>
+            </View>
           </TouchableOpacity>
-        </ImageBackground>
+        </View>
+        <TouchableOpacity
+          style={[
+            styles.addToBucketButton,
+            {
+              backgroundColor: ind == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)",
+            },
+          ]}
+          activeOpacity={0.7}
+        >
+          <Mark2 color="#fff" />
+        </TouchableOpacity>
       </TouchableOpacity>
     );
   };
@@ -68,7 +81,7 @@ const BucketListAllScreen = () => {
         style={{
           flex: 1,
           backgroundColor: "#f8f8f8",
-          paddingTop: 20,
+          paddingTop: 0,
           paddingHorizontal: 10,
         }}
       >
@@ -77,7 +90,7 @@ const BucketListAllScreen = () => {
           renderItem={({ item }) => <Country item={item} />}
           estimatedItemSize={200}
           horizontal={false}
-          numColumns={2}
+          numColumns={1}
           showsVerticalScrollIndicator={false}
         />
       </View>
@@ -90,6 +103,18 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  addToBucketButton: {
+    width: 30,
+    height: 30,
+    borderRadius: 50,
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    right: 0,
+    top: 28,
+    zIndex: 3,
   },
   backButton: {
     width: 40,
@@ -113,38 +138,15 @@ const styles = StyleSheet.create({
     color: "#000",
     fontWeight: "bold",
   },
-  countryItem: {
-    paddingVertical: 5,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: "33%",
-    paddingHorizontal: 5,
-    flex: 1,
-  },
-  box: {
-    flex: 1,
-    height: 130,
-    backgroundColor: "#fafafa",
-    borderRadius: 15,
-    overflow: "hidden",
-  },
-  gradientWrapper: {
-    flex: 1,
-    justifyContent: "flex-end",
-  },
-  labelItem: {
-    padding: 10,
-    paddingVertical: 0,
-    flexDirection: "row",
-    alignItems: "center",
-  },
   labelItemText: {
-    color: "#fff",
-    fontSize: 22,
+    color: "#000",
+    fontSize: 16,
     fontWeight: "bold",
-    marginLeft: 5,
+    marginLeft: 0,
+  },
+  ratingTextXs: {
+    color: "#000",
+    fontSize: 12,
   },
   ratingLabel: {
     flexDirection: "row",
@@ -152,12 +154,77 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: 30,
     alignItems: "center",
-    paddingBottom: 10,
+  },
+  labelItem: {
+    padding: 10,
+    paddingVertical: 0,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 2,
+  },
+  cancelButton: {
+    marginLeft: 15,
+  },
+  cancelButtonText: {
+    color: COLORS.gray,
+    fontSize: 14,
+    fontWeight: "bold",
   },
   ratingText: {
     color: "#fff",
     marginLeft: 3,
     fontSize: 12,
     opacity: 0.7,
+  },
+  box: {
+    height: 80,
+    backgroundColor: "#fafafa",
+    borderRadius: 15,
+    overflow: "hidden",
+    width: 80,
+  },
+  countryItem: {
+    marginTop: 15,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%",
+    paddingHorizontal: 5,
+    flex: 1,
+  },
+  countryItemActionButton: {
+    backgroundColor: "#fafafa",
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    marginLeft: 8,
+    borderRadius: 5,
+  },
+  countryItemLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  countryItemActions: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  gradientWrapper: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
+  itemTitle: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginLeft: 10,
+    color: "#000",
+  },
+  checkIcon: {
+    width: 20,
+    height: 20,
+    borderWidth: 1,
+    borderColor: COLORS.gray,
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

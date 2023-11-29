@@ -99,6 +99,7 @@ export const CountrySearch = ({
             height: SIZES.height - 125,
             justifyContent: "center",
             paddingHorizontal: 15,
+            paddingBottom: 25,
           }}
         >
           <FlashList

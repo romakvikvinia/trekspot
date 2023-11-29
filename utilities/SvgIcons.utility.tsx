@@ -477,12 +477,18 @@ export const DotsIcon = () => {
   const SvgImage = () => <SvgXml xml={svgMarkup} width="25" height="25" />;
   return <SvgImage />;
 };
-export const DownIcon = ({ color }) => {
+export const DownIcon = ({ color, size }) => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="m0 8.057 9.52 9.507a3.507 3.507 0 0 0 4.948 0L24 8.046l-2.121-2.117-9.531 9.517a.5.5 0 0 1-.707 0L2.121 5.94Z" fill=${
     color ? color : "#000000"
   } opacity="1" data-original="#000000"></path></g></svg>
   `;
-  const SvgImage = () => <SvgXml xml={svgMarkup} width="15" height="15" />;
+  const SvgImage = () => (
+    <SvgXml
+      xml={svgMarkup}
+      width={size ? size : "15"}
+      height={size ? size : "15"}
+    />
+  );
   return <SvgImage />;
 };
 
@@ -1835,6 +1841,13 @@ export const PoliceIcon = () => {
   const SvgImage = () => <SvgXml xml={svgMarkup} width="20" height="20" />;
   return <SvgImage />;
 };
+
+export const DownLongArrow = () => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M17.71 12.71a1 1 0 0 0-1.42 0L13 16V6a1 1 0 0 0-2 0v10l-3.29-3.29a1 1 0 0 0-1.42 0 1 1 0 0 0 0 1.41l4.3 4.29A2 2 0 0 0 12 19a2 2 0 0 0 1.4-.59l4.3-4.29a1 1 0 0 0 .01-1.41Z" fill="#000000" opacity="1" data-original="#000000"></path></g></svg>`;
+  const SvgImage = () => <SvgXml xml={svgMarkup} width="20" height="20" />;
+  return <SvgImage />;
+};
+
 export const AmbulanceIcon = () => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M22.761 11H16V4h1.05a4.007 4.007 0 0 1 3.656 2.375zM24 15.062V19H0V7a3 3 0 0 1 3-3h7l.757-3.03a1.281 1.281 0 0 1 2.486 0L14 4v9h9.627A5.952 5.952 0 0 1 24 15.062zM10 11H8V9H6v2H4v2h2v2h2v-2h2zM3.058 21a2.424 2.424 0 0 0-.058.5 2.5 2.5 0 0 0 5 0 2.424 2.424 0 0 0-.058-.5zm14 0a2.424 2.424 0 0 0-.058.5 2.5 2.5 0 0 0 5 0 2.424 2.424 0 0 0-.058-.5z" fill="#fff" opacity="1" data-original="#000000" class=""></path></g></svg>`;
   const SvgImage = () => <SvgXml xml={svgMarkup} width="20" height="20" />;

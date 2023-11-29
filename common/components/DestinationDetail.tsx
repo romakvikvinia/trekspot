@@ -9,6 +9,7 @@ import {
   ScrollView,
   useWindowDimensions,
   Image,
+  KeyboardAvoidingView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
@@ -28,6 +29,7 @@ import {
   CurrencyIcon,
   DiningIcon,
   DownIcon,
+  DownLongArrow,
   DrivingSideLeft,
   DrivingSideRight,
   EmergencyIcon,
@@ -50,6 +52,7 @@ import { SceneMap, TabBar, TabView } from "react-native-tab-view";
 import { CountrySelect } from "./CountrySelect";
 import { Topsights } from "../../utilities/Tops";
 import { MapEmbedView } from "./MapEmbedView";
+import { CurrencySelect } from "./CurrencySelect";
 
 export const DestinationDetail = ({
   destinationDetailVisible,
@@ -60,6 +63,7 @@ export const DestinationDetail = ({
   const [index, setIndex] = useState(0);
   const [countrySelectVisible, setCountrySelectVisible] = useState(false);
   const [mapEmbedViewVisible, setMapEmbedViewVisible] = useState("");
+  const [currencySelectVisible, setCurrencySelectVisible] = useState(false);
 
   const Overview = () => {
     return (
@@ -557,7 +561,27 @@ export const DestinationDetail = ({
         style={styles.tabWrapper}
         showsVerticalScrollIndicator={false}
       >
-        <Text>Currency</Text>
+        <View style={styles.currencyWrapper}>
+          <View style={styles.currencyConverter}>
+            <View style={styles.left}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={styles.currencySelectButton}
+                onPress={() => setCurrencySelectVisible(true)}
+              >
+                <Text style={styles.currencySelectedText}>USD</Text>
+                <DownIcon color={COLORS.primary} size="10" />
+              </TouchableOpacity>
+
+              <TextInput style={styles.currencyInput} placeholder="0" />
+            </View>
+            <Text style={styles.valueText}> = 1400 Euro</Text>
+          </View>
+        </View>
+        <View style={styles.keyValue}>
+          <Text style={styles.key}>Official currency:</Text>
+          <Text style={styles.value}>Euro</Text>
+        </View>
       </ScrollView>
     );
   };
@@ -648,7 +672,7 @@ export const DestinationDetail = ({
             marginHorizontal: 5,
             borderBottomColor: focused ? COLORS.primaryDark : "#fff",
             borderBottomWidth: 2,
-            marginRight: 15,
+            marginRight: 20,
           }}
         >
           {route?.key === "overview" && (
@@ -851,6 +875,10 @@ export const DestinationDetail = ({
         mapEmbedViewVisible={mapEmbedViewVisible}
         setMapEmbedViewVisible={setMapEmbedViewVisible}
       />
+      <CurrencySelect
+        currencySelectVisible={currencySelectVisible}
+        setCurrencySelectVisible={setCurrencySelectVisible}
+      />
     </>
   );
 };
@@ -858,6 +886,55 @@ export const DestinationDetail = ({
 const styles = StyleSheet.create({
   swiperWrapper: {
     height: 350,
+  },
+  currencyWrapper: {
+    marginTop: 25,
+    marginBottom: 15,
+  },
+  currencyConverter: {
+    backgroundColor: "#fafafa",
+    alignItems: "center",
+    overflow: "hidden",
+    borderRadius: 10,
+    flexDirection: "row",
+    padding: 20,
+  },
+  left: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f1f1f1",
+    overflow: "hidden",
+    borderRadius: 5,
+    marginRight: 15,
+  },
+  currencySelectButton: {
+    paddingLeft: 15,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  currencySelectedText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: COLORS.primary,
+    marginRight: 5,
+  },
+  currencyInput: {
+    height: 40,
+    backgroundColor: "#fff",
+    width: 100,
+    textAlign: "center",
+    marginTop: 0,
+    marginLeft: 10,
+    color: "#000",
+    borderWidth: 1,
+    borderColor: "#f1f1f1",
+    fontSize: 18,
+    fontWeight: "bold",
+    paddingHorizontal: 5,
+  },
+  valueText: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
   emergencyNumbers: {
     flex: 1,
