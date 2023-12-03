@@ -69,7 +69,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
                   <Text
                     style={[styles.mapStatsText, styles.countriesAmountText]}
                   >
-                    49 countries
+                    48 countries
                   </Text>
                 </View>
               </View>
@@ -104,7 +104,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
                   <Text
                     style={[styles.mapStatsText, styles.countriesAmountText]}
                   >
-                    23 countries
+                    2 countries
                   </Text>
                 </View>
               </View>
@@ -121,24 +121,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
                   <Text
                     style={[styles.mapStatsText, styles.countriesAmountText]}
                   >
-                    12 countries
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.statWrapp}>
-                <Text style={styles.mapStatsPercentText}>0</Text>
-                <Text style={styles.percentText}>%</Text>
-              </View>
-            </View>
-            <View style={[styles.mapStatRow, { backgroundColor: "#B13B42" }]}>
-              <View style={styles.leftSide}>
-                <Australia />
-                <View>
-                  <Text style={styles.mapStatsText}>Australia</Text>
-                  <Text
-                    style={[styles.mapStatsText, styles.countriesAmountText]}
-                  >
-                    6 countries
+                    33 countries
                   </Text>
                 </View>
               </View>
@@ -149,9 +132,14 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
             </View>
             <View style={[styles.mapStatRow, { backgroundColor: "#4490AA" }]}>
               <View style={styles.leftSide}>
-                <Antarctica />
+                <Australia />
                 <View>
-                  <Text style={styles.mapStatsText}>Antarctica</Text>
+                  <Text style={styles.mapStatsText}>Oceania</Text>
+                  <Text
+                    style={[styles.mapStatsText, styles.countriesAmountText]}
+                  >
+                    14 countries
+                  </Text>
                 </View>
               </View>
               <View style={styles.statWrapp}>
