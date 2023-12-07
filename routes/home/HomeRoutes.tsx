@@ -8,8 +8,8 @@ import { HomeScreen } from "../../screen/home/HomeScreen";
 import { PrimaryColor } from "../../styles/colors";
 import { THeaderButton } from "../../common/ui/THeaderButton";
 import BucketList from "../../screen/BucketList";
-import Share from "../../screen/Share";
 import BucketListAllScreen from "../../screen/BucketList/BucketListAll";
+import ShareStats from "../../screen/Share";
 
 interface HomeRouteProps {}
 
@@ -62,8 +62,8 @@ export const HomeRouteStack: React.FC<HomeRouteProps> = ({}) => {
       />
 
       <Stack.Screen
-        name="Share"
-        component={Share}
+        name="ShareStats"
+        component={ShareStats}
         options={() => ({
           header: () => null,
         })}

@@ -92,6 +92,7 @@ const BucketListAllScreen = () => {
           horizontal={false}
           numColumns={1}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 25 }}
         />
       </View>
     </SafeAreaView>
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    right: 0,
+    right: 5,
     top: 28,
     zIndex: 3,
   },
@@ -125,13 +126,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     ...COLORS.shadow,
+    position: "absolute",
+    left: 10,
+    top: 5,
   },
   screenHeader: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 15,
-    paddingBottom: 15,
+    paddingVertical: 15,
+    paddingBottom: 20,
+    position: "relative",
   },
   headerTitle: {
     fontSize: 20,

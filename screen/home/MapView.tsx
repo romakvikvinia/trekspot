@@ -22,16 +22,23 @@ import { CountriesList } from "../../utilities/countryList";
 import { COLORS, SIZES } from "../../styles/theme";
 import { Flags } from "../../utilities/flags";
 import { useNavigation } from "@react-navigation/native";
+import ShareModal from "../../common/components/ShareModal";
 
 export const MapView = () => {
   const navigation = useNavigation();
 
   const modalRef = useRef<Modalize>(null);
+  const shareModalRef = useRef<Modalize>(null);
+
   const onOpen = useCallback(() => {
     if (modalRef.current) modalRef.current.open();
   }, []);
+  const onShareModalOpen = useCallback(() => {
+    if (modalRef.current) shareModalRef.current.open();
+  }, []);
   const [visitedCountry, setVisitedCountry] = useState(null);
   const [livedCountry, setLivedCountry] = useState(null);
+  const [shareModalVisible, setShareModalVisible] = useState(false);
 
   const Country = ({ item }: any) => {
     // Assuming that `item` contains the ISO2 country code
@@ -89,6 +96,7 @@ export const MapView = () => {
       </View>
     );
   };
+
   return (
     <>
       <View style={styles.mapContainer}>
@@ -111,7 +119,7 @@ export const MapView = () => {
           </View>
           <TouchableOpacity
             style={styles.btn}
-            onPress={() => navigation.navigate("Share")}
+            onPress={() => onShareModalOpen()}
           >
             <Share />
             <Text style={styles.txt}>Share</Text>
@@ -164,10 +172,10 @@ export const MapView = () => {
               <Text style={styles.lg}>3</Text>
               <View style={styles.labelView}>
                 <Text style={styles.sublabel}>/</Text>
-                <Text style={[styles.sublabel, { marginTop: 2 }]}> 7</Text>
+                <Text style={[styles.sublabel, { marginTop: 2 }]}> 6</Text>
               </View>
             </View>
-            <Text style={styles.statLabel}>Continents</Text>
+            <Text style={styles.statLabel}>Territories</Text>
           </View>
         </View>
       </View>
@@ -207,6 +215,12 @@ export const MapView = () => {
               estimatedItemSize={200}
             />
           </View>
+        </Modalize>
+      </Portal>
+
+      <Portal>
+        <Modalize ref={shareModalRef} modalTopOffset={65} adjustToContentHeight>
+          <ShareModal />
         </Modalize>
       </Portal>
     </>

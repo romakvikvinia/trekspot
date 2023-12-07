@@ -127,14 +127,16 @@ export const DestinationDetail = ({
           </TouchableOpacity>
         </View>
         <View style={styles.visaTabContent}>
-          <View style={styles.textContentWrapper}>
-            {/* <CloseCircleIcon color="#D74E4E" /> */}
-            <CheckCircleIcon color="#54C78D" />
-            {/* <Text style={[styles.headingText, styles.danger]}>
-              Georgian passport holders need visa to travel to USA
-            </Text> */}
+          <View style={[styles.textContentWrapper, styles.successBg]}>
+            <CheckCircleIcon color="#1a806b" />
             <Text style={[styles.headingText, styles.success]}>
               Georgian passport holders don't need visa to travel to France
+            </Text>
+          </View>
+          <View style={[styles.textContentWrapper, styles.dangerBg]}>
+            <CloseCircleIcon color="#D74E4E" />
+            <Text style={[styles.headingText, styles.danger]}>
+              Georgian passport holders need visa to travel to USA
             </Text>
           </View>
           <Text style={styles.secondaryTitle}>Options</Text>
@@ -249,100 +251,200 @@ export const DestinationDetail = ({
     );
   };
   const ThingsTodo = () => {
+    const [selectedCity, setSelectedCity] = useState("Paris");
+
     return (
-      <ScrollView
-        style={styles.tabWrapper}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.thingsTodo}>
-          {Topsights?.map((item, ind) => (
-            <TouchableOpacity
-              activeOpacity={0.7}
-              style={styles.thingsTodoItem}
-              key={ind}
-              onPress={() => setMapEmbedViewVisible(item?.title)}
+      <>
+        <View style={styles.cityWrapper}>
+          <TouchableOpacity
+            style={[
+              styles.citySelectBtn,
+              selectedCity === "Paris" ? styles.selectedCityActive : null,
+            ]}
+            onPress={() => setSelectedCity("Paris")}
+            activeOpacity={0.7}
+          >
+            <Text
+              style={[
+                styles.citySelectBtnText,
+                selectedCity === "Paris" ? styles.selectedCity : null,
+              ]}
             >
-              <ImageBackground
-                style={styles.thingsTodoItemImage}
-                source={{
-                  uri: item.thumbnail,
-                }}
-              >
-                <View style={styles.mapButton}>
-                  <MarkerFillIcon color="#fff" size="10" />
-                  <Text style={styles.mapButtonText}>Map</Text>
-                </View>
-              </ImageBackground>
-
-              <View style={styles.thingsTodoItemDetails}>
-                <Text style={styles.thingsTodoItemTitle}>{item.title}</Text>
-
-                <View style={styles.thingsTodoItemiIn}>
-                  <Text style={styles.thingsTodoItemiInprice}>
-                    {item.price}
-                  </Text>
-                  <Text style={styles.thingsTodoItemiIntypeText}>
-                    {item.description}
-                  </Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          ))}
+              Paris
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={[
+              styles.citySelectBtn,
+              selectedCity === "Lyon" ? styles.selectedCityActive : null,
+            ]}
+            onPress={() => setSelectedCity("Lyon")}
+          >
+            <Text
+              style={[
+                styles.citySelectBtnText,
+                selectedCity === "Lyon" ? styles.selectedCity : null,
+              ]}
+            >
+              Lyon
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.7} style={styles.citySelectBtn}>
+            <Text style={styles.citySelectBtnText}>Strasburg</Text>
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.7} style={styles.citySelectBtn}>
+            <Text style={styles.citySelectBtnText}>Marcel</Text>
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.7} style={styles.citySelectBtn}>
+            <Text style={styles.citySelectBtnText}>Paris</Text>
+          </TouchableOpacity>
         </View>
-      </ScrollView>
+        <ScrollView
+          style={[styles.tabWrapper]}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.thingsTodo}>
+            {Topsights?.map((item, ind) => (
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={styles.thingsTodoItem}
+                key={ind}
+                onPress={() => setMapEmbedViewVisible(item?.title)}
+              >
+                <ImageBackground
+                  style={styles.thingsTodoItemImage}
+                  source={{
+                    uri: item.thumbnail,
+                  }}
+                >
+                  <View style={styles.mapButton}>
+                    <MarkerFillIcon color="#fff" size="10" />
+                    <Text style={styles.mapButtonText}>Map</Text>
+                  </View>
+                </ImageBackground>
+
+                <View style={styles.thingsTodoItemDetails}>
+                  <Text style={styles.thingsTodoItemTitle}>{item.title}</Text>
+
+                  <View style={styles.thingsTodoItemiIn}>
+                    <Text style={styles.thingsTodoItemiInprice}>
+                      {item.price}
+                    </Text>
+                    <Text style={styles.thingsTodoItemiIntypeText}>
+                      {item.description}
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
+      </>
     );
   };
   const Dining = () => {
-    return (
-      <ScrollView
-        style={styles.tabWrapper}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.thingsTodo}>
-          {Topsights?.map((item, ind) => (
-            <View style={styles.thingsTodoItem} key={ind}>
-              <ImageBackground
-                style={styles.thingsTodoItemImage}
-                source={{
-                  uri: "https://lh5.googleusercontent.com/p/AF1QipO0fB8WK5U2rUsithf01H27rkyl71ltCuVqUhYd=w260-h175-n-k-no",
-                }}
-              ></ImageBackground>
+    const [selectedCity, setSelectedCity] = useState("Paris");
 
-              <View style={styles.thingsTodoItemDetails}>
-                <Text style={styles.thingsTodoItemTitle}>Robert et Louise</Text>
-                <View style={styles.thingsTodoItemiIn}>
-                  <View
-                    style={[
-                      styles.ratingLabel,
-                      { paddingLeft: 0, paddingBottom: 0 },
-                    ]}
-                  >
+    return (
+      <>
+        <View style={styles.cityWrapper}>
+          <TouchableOpacity
+            style={[
+              styles.citySelectBtn,
+              selectedCity === "Paris" ? styles.selectedCityActive : null,
+            ]}
+            onPress={() => setSelectedCity("Paris")}
+            activeOpacity={0.7}
+          >
+            <Text
+              style={[
+                styles.citySelectBtnText,
+                selectedCity === "Paris" ? styles.selectedCity : null,
+              ]}
+            >
+              Paris
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={[
+              styles.citySelectBtn,
+              selectedCity === "Lyon" ? styles.selectedCityActive : null,
+            ]}
+            onPress={() => setSelectedCity("Lyon")}
+          >
+            <Text
+              style={[
+                styles.citySelectBtnText,
+                selectedCity === "Lyon" ? styles.selectedCity : null,
+              ]}
+            >
+              Lyon
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.7} style={styles.citySelectBtn}>
+            <Text style={styles.citySelectBtnText}>Strasburg</Text>
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.7} style={styles.citySelectBtn}>
+            <Text style={styles.citySelectBtnText}>Marcel</Text>
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.7} style={styles.citySelectBtn}>
+            <Text style={styles.citySelectBtnText}>Paris</Text>
+          </TouchableOpacity>
+        </View>
+        <ScrollView
+          style={styles.tabWrapper}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.thingsTodo}>
+            {Topsights?.map((item, ind) => (
+              <View style={styles.thingsTodoItem} key={ind}>
+                <ImageBackground
+                  style={styles.thingsTodoItemImage}
+                  source={{
+                    uri: "https://lh5.googleusercontent.com/p/AF1QipO0fB8WK5U2rUsithf01H27rkyl71ltCuVqUhYd=w260-h175-n-k-no",
+                  }}
+                ></ImageBackground>
+
+                <View style={styles.thingsTodoItemDetails}>
+                  <Text style={styles.thingsTodoItemTitle}>
+                    Robert et Louise
+                  </Text>
+                  <View style={styles.thingsTodoItemiIn}>
                     <View
-                      style={{ position: "relative", top: -1, opacity: 0.8 }}
-                    >
-                      <StarIcon color="#FFBC3E" />
-                    </View>
-                    <Text
                       style={[
-                        styles.ratingText,
-                        { color: "#000", marginLeft: 0 },
+                        styles.ratingLabel,
+                        { paddingLeft: 0, paddingBottom: 0 },
                       ]}
                     >
-                      4.5 /
-                    </Text>
-                    <Text style={[styles.ratingText, { color: "#000" }]}>
-                      2.3k
+                      <View
+                        style={{ position: "relative", top: -1, opacity: 0.8 }}
+                      >
+                        <StarIcon color="#FFBC3E" />
+                      </View>
+                      <Text
+                        style={[
+                          styles.ratingText,
+                          { color: "#000", marginLeft: 0 },
+                        ]}
+                      >
+                        4.5 /
+                      </Text>
+                      <Text style={[styles.ratingText, { color: "#000" }]}>
+                        2.3k
+                      </Text>
+                    </View>
+                    <Text style={styles.thingsTodoItemiIntypeText}>
+                      64 Rue Vieille-du-Temple
                     </Text>
                   </View>
-                  <Text style={styles.thingsTodoItemiIntypeText}>
-                    64 Rue Vieille-du-Temple
-                  </Text>
                 </View>
               </View>
-            </View>
-          ))}
-        </View>
-      </ScrollView>
+            ))}
+          </View>
+        </ScrollView>
+      </>
     );
   };
   const Language = () => {
@@ -628,7 +730,6 @@ export const DestinationDetail = ({
       </ScrollView>
     );
   };
-
   const renderScene = SceneMap({
     overview: Overview,
     visa: Visa,
@@ -639,7 +740,6 @@ export const DestinationDetail = ({
     currency: Currency,
     emergency: Emergency,
   });
-
   const [routes] = useState([
     { key: "overview", title: "Overview" },
     { key: "visa", title: "Visa" },
@@ -720,6 +820,7 @@ export const DestinationDetail = ({
               textAlign: "center",
               fontSize: 12,
               marginTop: 8,
+              fontWeight: "bold",
             }}
           >
             {route.title}
@@ -741,7 +842,7 @@ export const DestinationDetail = ({
         <Modalize
           ref={modalRef}
           modalTopOffset={0}
-          onClose={() => setDestinationDetailVisible(false)}
+          onClose={setDestinationDetailVisible(false)}
           withHandle={false}
           disableScrollIfPossible
           modalStyle={{
@@ -779,6 +880,7 @@ export const DestinationDetail = ({
                   position: "absolute",
                   justifyContent: "flex-end",
                   paddingRight: 15,
+                  bottom: 16,
                 }}
               >
                 <View style={styles.slide1}>
@@ -849,7 +951,7 @@ export const DestinationDetail = ({
           <View
             style={{
               flex: 1,
-              paddingTop: 20,
+              paddingTop: 15,
               height: "100%",
             }}
           >
@@ -860,7 +962,7 @@ export const DestinationDetail = ({
               initialLayout={{ width: layout.width }}
               style={{
                 flex: 1,
-                height: SIZES.height - 380,
+                height: SIZES.height - 330,
               }}
               renderTabBar={renderTabBar}
             />
@@ -885,7 +987,32 @@ export const DestinationDetail = ({
 
 const styles = StyleSheet.create({
   swiperWrapper: {
-    height: 350,
+    height: 300,
+  },
+  cityWrapper: {
+    paddingHorizontal: 15,
+    paddingTop: 15,
+    marginBottom: 10,
+    flexWrap: "wrap",
+    flexDirection: "row",
+  },
+  citySelectBtn: {
+    marginRight: 15,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    backgroundColor: "#fafafa",
+    borderRadius: 5,
+    marginVertical: 3,
+  },
+  citySelectBtnText: {
+    fontSize: 13,
+  },
+  selectedCity: {
+    color: COLORS.primaryDark,
+    fontWeight: "bold",
+  },
+  selectedCityActive: {
+    backgroundColor: "#fdecff",
   },
   currencyWrapper: {
     marginTop: 25,
@@ -1017,7 +1144,7 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   thingsTodo: {
-    marginTop: 25,
+    marginTop: 0,
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
@@ -1090,7 +1217,7 @@ const styles = StyleSheet.create({
   },
   transportText: {
     fontSize: 12,
-    fontWeight: "bold",
+    fontWeight: "normal",
     paddingHorizontal: 10,
   },
   textContentWrapper: {
@@ -1118,7 +1245,13 @@ const styles = StyleSheet.create({
     color: "#D74E4E",
   },
   success: {
-    color: "#54C78D",
+    color: "#1a806b",
+  },
+  successBg: {
+    backgroundColor: "#e8f1ef",
+  },
+  dangerBg: {
+    backgroundColor: "#ffe8e8",
   },
   visaTypes: {
     flex: 1,
@@ -1154,7 +1287,7 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   box: {
-    height: 350,
+    height: 300,
     borderTopEndRadius: 10,
     borderTopLeftRadius: 10,
     overflow: "hidden",
@@ -1210,7 +1343,7 @@ const styles = StyleSheet.create({
   overviewText: {
     fontSize: 12,
     color: COLORS.black,
-    fontWeight: "bold",
+    fontWeight: "normal",
     lineHeight: 18,
   },
   gradientWrapper: {
@@ -1239,7 +1372,7 @@ const styles = StyleSheet.create({
   },
   otherInfo: {
     position: "absolute",
-    bottom: 15,
+    bottom: 5,
     left: 5,
   },
   labelItem: {

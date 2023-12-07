@@ -70,7 +70,7 @@ export const CountrySearch = ({
       <Modalize
         ref={modalRef}
         modalTopOffset={0}
-        onClose={() => setCountrySearchVisible(false)}
+        onClose={setCountrySearchVisible(false)}
         withHandle={false}
         modalStyle={{
           minHeight: "100%",

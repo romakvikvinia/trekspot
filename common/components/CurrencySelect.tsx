@@ -47,7 +47,7 @@ export const CurrencySelect = ({
       <Modalize
         ref={modalRef}
         modalTopOffset={65}
-        onClose={() => setCurrencySelectVisible(false)}
+        onClose={setCurrencySelectVisible(false)}
         HeaderComponent={
           <View style={styles.modalHeader}>
             <TextInput

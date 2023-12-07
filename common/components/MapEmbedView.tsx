@@ -22,7 +22,7 @@ export const MapEmbedView = ({
       <Modalize
         ref={modalRef}
         modalTopOffset={65}
-        onClose={() => setMapEmbedViewVisible("")}
+        onClose={setMapEmbedViewVisible("")}
         adjustToContentHeight
       >
         <TouchableOpacity

@@ -63,7 +63,11 @@ const Explore = () => {
     useState(false);
   return (
     <>
-      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={{ flex: 1 }}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 25 }}
+      >
         <View style={[styles.rowItem]}>
           <View style={styles.rowItemHeader}>
             <Text style={styles.h2}>Popular</Text>

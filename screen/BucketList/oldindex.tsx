@@ -317,7 +317,7 @@ const BucketList = () => {
           ref={modalRef}
           modalTopOffset={65}
           alwaysOpen={100}
-          onClose={() => setListSheetVisible(false)}
+          onClose={setListSheetVisible(false)}
           HeaderComponent={
             <View style={styles.modalHeader}>
               {/* {wishlist?.length ? (

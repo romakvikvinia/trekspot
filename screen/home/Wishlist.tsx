@@ -53,7 +53,7 @@ export const Wishlist = ({ wishlistVisible, setWishlistVisible }) => {
       <Modalize
         ref={modalRef}
         modalTopOffset={65}
-        onClose={() => setWishlistVisible(false)}
+        onClose={setWishlistVisible(false)}
         HeaderComponent={
           <View style={styles.modalHeader}>
             <Text style={styles.title}>Wishlist</Text>

@@ -11,9 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.trekspot.app"
@@ -50,6 +48,18 @@
           "expo-location",
           {
             "locationAlwaysAndWhenInUsePermission": "Allow Trekspot to use your location."
+          }
+        ],
+        [
+          "expo-document-picker",
+          {
+            "iCloudContainerEnvironment": "Production"
+          }
+        ],
+        [
+          "expo-image-picker",
+          {
+            "photosPermission": "Allow Trekspot to access your photos."
           }
         ]
       ]

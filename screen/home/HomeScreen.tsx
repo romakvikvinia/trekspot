@@ -34,7 +34,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
           showsVerticalScrollIndicator={false}
         >
           <Text style={{ fontSize: 24, fontWeight: "bold", color: "#000" }}>
-            Continents
+            Territories
           </Text>
           <View
             style={{

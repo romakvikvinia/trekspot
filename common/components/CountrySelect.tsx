@@ -71,7 +71,7 @@ export const CountrySelect = ({
       <Modalize
         ref={modalRef}
         modalTopOffset={65}
-        onClose={() => setCountrySelectVisible(false)}
+        onClose={setCountrySelectVisible(false)}
         HeaderComponent={
           <View style={styles.modalHeader}>
             <TextInput
