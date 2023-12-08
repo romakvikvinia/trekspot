@@ -1,5 +1,4 @@
 import {
-  ImageBackground,
   StyleSheet,
   Text,
   TextInput,
@@ -16,13 +15,14 @@ import {
 } from "../../utilities/SvgIcons.utility";
 import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 import { FlashList } from "@shopify/flash-list";
 import { CountriesList } from "../../utilities/countryList";
 import { COLORS, SIZES } from "../../styles/theme";
-import { Flags } from "../../utilities/flags";
+
 import { useNavigation } from "@react-navigation/native";
 import ShareModal from "../../common/components/ShareModal";
+import { CountryItem } from "../../components/homde/CountryItem";
 
 export const MapView = () => {
   const navigation = useNavigation();
@@ -34,68 +34,8 @@ export const MapView = () => {
     if (modalRef.current) modalRef.current.open();
   }, []);
   const onShareModalOpen = useCallback(() => {
-    if (modalRef.current) shareModalRef.current.open();
+    if (shareModalRef.current) shareModalRef.current.open();
   }, []);
-  const [visitedCountry, setVisitedCountry] = useState(null);
-  const [livedCountry, setLivedCountry] = useState(null);
-  const [shareModalVisible, setShareModalVisible] = useState(false);
-
-  const Country = ({ item }: any) => {
-    // Assuming that `item` contains the ISO2 country code
-    const countryCode = item.iso2 as string;
-
-    // Check if the image path exists in the mapping
-    // @ts-ignore
-    const imagePath = Flags[countryCode];
-
-    return (
-      <View style={styles.countryItem}>
-        <View style={styles.countryItemLeft}>
-          <View
-            style={{
-              width: 31,
-              height: 21,
-              borderRadius: 3,
-              overflow: "hidden",
-              borderWidth: 1,
-              borderColor: "#fafafa",
-            }}
-          >
-            <ImageBackground
-              resizeMode="cover"
-              style={{
-                width: 30,
-                height: 20,
-                backgroundColor: "#ddd",
-              }}
-              source={imagePath ? imagePath : null} // Set the image source
-            />
-          </View>
-          <Text style={styles.itemTitle}>{item.name}</Text>
-        </View>
-        <View style={styles.countryItemActions}>
-          <TouchableOpacity
-            style={[
-              styles.countryItemActionButton,
-              visitedCountry === countryCode ? styles.countryActive : null,
-            ]}
-            onPress={() => setVisitedCountry(countryCode)}
-          >
-            <VisitedIcon active={visitedCountry === countryCode} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.countryItemActionButton,
-              livedCountry === countryCode ? styles.countryLived : null,
-            ]}
-            onPress={() => setLivedCountry(countryCode)}
-          >
-            <LivedIcon active={livedCountry === countryCode} />
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  };
 
   return (
     <>
@@ -211,7 +151,7 @@ export const MapView = () => {
           <View style={{ flex: 1, height: SIZES.height - 200 }}>
             <FlashList
               data={CountriesList}
-              renderItem={({ item }) => <Country item={item} />}
+              renderItem={({ item }) => <CountryItem {...item} />}
               estimatedItemSize={200}
             />
           </View>
@@ -226,6 +166,7 @@ export const MapView = () => {
     </>
   );
 };
+
 const styles = StyleSheet.create({
   modalHeader: {
     width: "100%",
@@ -271,12 +212,7 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
-  itemTitle: {
-    fontSize: 14,
-    fontWeight: "bold",
-    marginLeft: 10,
-    color: "#000",
-  },
+
   left: {
     flexDirection: "row",
     display: "flex",
@@ -291,35 +227,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     flexDirection: "row",
   },
-  countryItem: {
-    paddingHorizontal: 15,
-    marginBottom: 20,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  countryItemActionButton: {
-    backgroundColor: "#fafafa",
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    marginLeft: 8,
-    borderRadius: 5,
-  },
-  countryItemLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  countryItemActions: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  countryActive: {
-    backgroundColor: COLORS.primary,
-  },
-  countryLived: {
-    backgroundColor: "#00d52d",
-  },
+
   amountView: {
     flexDirection: "row",
     alignItems: "center",
