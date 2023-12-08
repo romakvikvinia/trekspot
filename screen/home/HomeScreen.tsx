@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
+  Platform,
 } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";

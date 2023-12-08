@@ -61,6 +61,14 @@
           {
             "photosPermission": "Allow Trekspot to access your photos."
           }
+        ],
+        [
+          "expo-media-library",
+          {
+            "photosPermission": "Allow Trekspot to access your photos.",
+            "savePhotosPermission": "Allow Trekspot to save photos.",
+            "isAccessMediaLocationEnabled": true
+          }
         ]
       ]
     },
