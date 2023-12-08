@@ -13,9 +13,11 @@ import { COLORS } from "../../styles/theme";
 import {
   BackIcon,
   CopyIcon,
+  ImessageIcon,
   InstagramIcon,
   MapSvg,
   MessageIcon,
+  MessengerIcon,
   ShareIcon,
   TrekspotWhite,
 } from "../../utilities/SvgIcons.utility";
@@ -57,20 +59,6 @@ const ShareModal = () => {
       racxa = uri;
     });
     console.log("racxa", racxa);
-  };
-
-  const shareToInstagram = async () => {
-    try {
-      const shareOptions = {
-        social: Share.Social.INSTAGRAM,
-        url: "file:///path/to/your/image.jpg", // Replace with the actual path to your image
-      };
-
-      const result = await Share.shareSingle(shareOptions);
-      console.log(result);
-    } catch (error) {
-      console.error(error.message);
-    }
   };
 
   return (
@@ -220,12 +208,12 @@ const ShareModal = () => {
           </View>
           <Text style={styles.shareButtonText}>Message</Text>
         </TouchableOpacity> */}
-        <TouchableOpacity activeOpacity={0.7} style={styles.shareButton}>
+        {/* <TouchableOpacity activeOpacity={0.7} style={styles.shareButton}>
           <View style={styles.icon}>
             <InstagramIcon />
           </View>
           <Text style={styles.shareButtonText}>Instagram</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         {/* <TouchableOpacity activeOpacity={0.7} style={styles.shareButton}>
           <View style={styles.icon}>
             <CopyIcon />
@@ -237,10 +225,18 @@ const ShareModal = () => {
           style={styles.shareButton}
           onPress={() => ShareItem()}
         >
-          <View style={styles.icon}>
-            <ShareIcon />
+          <View style={styles.shareTextWrapper}>
+            <Text style={styles.shareButtonText}>Share</Text>
           </View>
-          <Text style={styles.shareButtonText}>Share</Text>
+          <View style={styles.icon}>
+            <InstagramIcon />
+          </View>
+          <View style={styles.icon}>
+            <MessengerIcon />
+          </View>
+          <View style={styles.icon}>
+            <ImessageIcon />
+          </View>
         </TouchableOpacity>
       </View>
     </View>
@@ -253,6 +249,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     flex: 1,
     padding: 15,
+  },
+  shareTextWrapper: {
+    backgroundColor: "#40264d",
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    marginRight: 15,
   },
   middle: {
     marginTop: 25,
@@ -277,19 +279,23 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginBottom: 25,
-    paddingHorizontal: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
   },
   shareButton: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     marginHorizontal: 8,
-    backgroundColor: "#f1f1f1",
     flexDirection: "row",
-    paddingHorizontal: 15,
+    backgroundColor: "#9164a6",
     borderRadius: 30,
-    paddingVertical: 5,
-    flex: 1,
+    overflow: "hidden",
   },
   icon: {
     width: 30,
@@ -297,11 +303,13 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    marginRight: 10,
   },
   shareButtonText: {
     fontSize: 14,
-    color: COLORS.black,
+    color: COLORS.white,
     marginLeft: 8,
+    fontWeight: "bold",
   },
   row: {
     flexDirection: "row",
