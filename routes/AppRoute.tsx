@@ -4,11 +4,13 @@ import { Host } from "react-native-portalize";
 import {
   HomeBold,
   MyWorldBold,
+  SearchIcon,
   SettingsBold,
   SettingsLine,
   TopSights,
   TripBold,
 } from "../utilities/SvgIcons.utility";
+import { ExploreRoutesStack } from "./Explore/ExploreRoutes";
 import { HomeRouteStack } from "./home/HomeRoutes";
 import { SettingRouteStack } from "./setting/SettingRoutes";
 import { TripRouteStack } from "./trip/TripRoutes";
@@ -32,14 +34,14 @@ export const AppRoute: React.FC<AppRouteProps> = ({}) => {
               case "Home": {
                 return <HomeBold color={focused ? "#000" : "#8e8e8e"} />;
               }
-              case "My world": {
+              case "Been": {
                 return <MyWorldBold color={focused ? "#000" : "#8e8e8e"} />;
               }
               case "Trips": {
                 return <TripBold color={focused ? "#000" : "#8e8e8e"} />;
               }
-              case "Top sights": {
-                return <TopSights color={focused ? "#000" : "#8e8e8e"} />;
+              case "Explore": {
+                return <SearchIcon color={focused ? "#000" : "#8e8e8e"} />;
               }
               case "Settings": {
                 return <SettingsBold color={focused ? "#000" : "#8e8e8e"} />;
@@ -59,9 +61,9 @@ export const AppRoute: React.FC<AppRouteProps> = ({}) => {
         initialRouteName="Home"
       >
         <Tab.Screen name="Home" component={HomeRouteStack} />
-        <Tab.Screen name="My world" component={MyWorldRouteStack} />
+        <Tab.Screen name="Been" component={MyWorldRouteStack} />
+        <Tab.Screen name="Explore" component={ExploreRoutesStack} />
         <Tab.Screen name="Trips" component={TripRouteStack} />
-        <Tab.Screen name="Top sights" component={TripRouteStack} />
         <Tab.Screen name="Settings" component={SettingRouteStack} />
       </Tab.Navigator>
     </Host>

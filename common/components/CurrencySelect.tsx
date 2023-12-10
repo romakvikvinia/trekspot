@@ -16,18 +16,7 @@ import { Flags } from "../../utilities/flags";
 import { CheckCircleIcon } from "../../utilities/SvgIcons.utility";
 import { Currencies } from "../../utilities/Currencies";
 
-export const CurrencySelect = ({
-  setCurrencySelectVisible,
-  currencySelectVisible,
-}) => {
-  const modalRef = useRef<Modalize>(null);
-
-  useEffect(() => {
-    if (currencySelectVisible) {
-      if (modalRef.current) modalRef.current.open();
-    }
-  }, [currencySelectVisible]);
-
+export const CurrencySelect = () => {
   const Currency = ({ item }: any) => {
     return (
       <TouchableOpacity
@@ -43,30 +32,22 @@ export const CurrencySelect = ({
   };
 
   return (
-    <Portal>
-      <Modalize
-        ref={modalRef}
-        modalTopOffset={65}
-        onClose={setCurrencySelectVisible(false)}
-        HeaderComponent={
-          <View style={styles.modalHeader}>
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Search..."
-              placeholderTextColor={COLORS.darkgray}
-            />
-          </View>
-        }
-      >
-        <View style={{ flex: 1, height: SIZES.height - 155 }}>
-          <FlashList
-            data={Currencies}
-            renderItem={({ item }) => <Currency item={item} />}
-            estimatedItemSize={200}
-          />
-        </View>
-      </Modalize>
-    </Portal>
+    <>
+      <View style={styles.modalHeader}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search..."
+          placeholderTextColor={COLORS.darkgray}
+        />
+      </View>
+      <View style={{ flex: 1, height: SIZES.height - 155 }}>
+        <FlashList
+          data={Currencies}
+          renderItem={({ item }) => <Currency item={item} />}
+          estimatedItemSize={200}
+        />
+      </View>
+    </>
   );
 };
 

@@ -339,7 +339,7 @@ export const Share = () => {
   </g>
 </svg>
 `;
-  const SvgImage = () => <SvgXml xml={svgMarkup} width="12" height="12" />;
+  const SvgImage = () => <SvgXml xml={svgMarkup} width="15" height="14" />;
   return <SvgImage />;
 };
 
@@ -431,18 +431,31 @@ export const AppleIcon = () => {
   const SvgImage = () => <SvgXml xml={svgMarkup} width="22" height="22" />;
   return <SvgImage />;
 };
-export const VisitedIcon = ({ active }) => {
+export const VisitedIcon = ({ active, width, height }) => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M14 7a2 2 0 1 1-2-2 2 2 0 0 1 2 2Zm2.958 5.184L13.9 15.215a2.669 2.669 0 0 1-3.79 0L7.054 12.2a7.262 7.262 0 0 1-.012-10.1 6.9 6.9 0 0 1 9.916 0 7.257 7.257 0 0 1 0 10.084ZM16 7a4 4 0 1 0-4 4 4 4 0 0 0 4-4Zm4.753 2.2a9.1 9.1 0 0 1-2.364 4.384l-3.078 3.053a4.667 4.667 0 0 1-3.3 1.371 4.665 4.665 0 0 1-3.3-1.366l-3.063-3.023a9.2 9.2 0 0 1-2.365-4.311 5.066 5.066 0 0 0-1.745 1.083A4.946 4.946 0 0 0 0 14v4.075a5.013 5.013 0 0 0 3.6 4.8l2.87.9A4.981 4.981 0 0 0 7.959 24a5.076 5.076 0 0 0 1.355-.186l5.78-1.71a2.976 2.976 0 0 1 1.573 0l2.387.8A4 4 0 0 0 24 19.021v-5.149A5.009 5.009 0 0 0 20.753 9.2Z" fill=${
-    active ? "#fff" : "#ddd"
+    active ? "#fff" : "#898B93"
   } opacity="1" data-original="#000000" class=""></path></g></svg>`;
-  const SvgImage = () => <SvgXml xml={svgMarkup} width="15" height="15" />;
+  const SvgImage = () => (
+    <SvgXml
+      xml={svgMarkup}
+      width={width ? width : "15"}
+      height={height ? height : "15"}
+    />
+  );
   return <SvgImage />;
 };
-export const LivedIcon = ({ active }) => {
+export const LivedIcon = ({ active, width, height }) => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M422.049 69.426c-91.066-91.918-239.404-92.609-331.322-1.542s-92.609 239.404-1.542 331.322c.71.716 1.424 1.428 2.143 2.135l83.98 77.548c44.886 43.938 116.602 44.127 161.719.426l85.023-78.57c91.488-91.492 91.488-239.826-.001-331.319zm-37.868 218.906c0 29.407-23.839 53.246-53.246 53.246H181.846c-29.407 0-53.246-23.839-53.246-53.246v-71.818a63.897 63.897 0 0 1 27.475-52.501l63.895-44.322c21.918-15.146 50.922-15.146 72.841 0l63.895 44.322a63.897 63.897 0 0 1 27.475 52.501v71.818zm-42.597-71.819v71.818c0 5.881-4.768 10.649-10.649 10.649h-31.948v-42.597c0-11.763-9.536-21.298-21.298-21.298h-42.597c-11.763 0-21.298 9.536-21.298 21.298v42.597h-31.948c-5.881 0-10.649-4.768-10.649-10.649v-71.818a21.301 21.301 0 0 1 9.158-17.507l63.895-44.322a21.427 21.427 0 0 1 24.28 0l63.895 44.322a21.3 21.3 0 0 1 9.159 17.507z" fill=${
-    active ? "#fff" : "#ddd"
+    active ? "#fff" : "#898B93"
   } opacity="1" data-original="#000000" class=""></path></g></svg>`;
-  const SvgImage = () => <SvgXml xml={svgMarkup} width="15" height="15" />;
+  const SvgImage = () => (
+    <SvgXml
+      xml={svgMarkup}
+      xml={svgMarkup}
+      width={width ? width : "15"}
+      height={height ? height : "15"}
+    />
+  );
   return <SvgImage />;
 };
 export const BookmarkIcon = () => {
@@ -1532,9 +1545,13 @@ export const LocationCircle = () => {
   return <SvgImage />;
 };
 
-export const SearchIcon = () => {
-  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="m24 22.586-6.262-6.262a10.016 10.016 0 1 0-1.414 1.414L22.586 24ZM10 18a8 8 0 1 1 8-8 8.009 8.009 0 0 1-8 8Z" data-name="01 align center" fill="#000000" opacity="1" data-original="#000000"></path></g></svg>`;
-  const SvgImage = () => <SvgXml xml={svgMarkup} width="20" height="20" />;
+export const SearchIcon = ({ width, color }) => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="m24 22.586-6.262-6.262a10.016 10.016 0 1 0-1.414 1.414L22.586 24ZM10 18a8 8 0 1 1 8-8 8.009 8.009 0 0 1-8 8Z" data-name="01 align center" fill=${
+    color ? color : "#000000"
+  } opacity="1" data-original="#000000"></path></g></svg>`;
+  const SvgImage = () => (
+    <SvgXml xml={svgMarkup} width={width ? width : "20"} height="20" />
+  );
   return <SvgImage />;
 };
 
@@ -1914,5 +1931,22 @@ export const MessengerIcon = () => {
 export const ImessageIcon = () => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 511.096 511.096" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M74.414 480.548H38.2l25.607-25.607c13.807-13.807 22.429-31.765 24.747-51.246C29.427 364.893 0 308.681 0 249.751 0 141.032 99.923 30.548 256.414 30.548c165.785 0 254.682 101.666 254.682 209.678 0 108.724-89.836 210.322-254.682 210.322-28.877 0-59.01-3.855-85.913-10.928-25.467 26.121-59.973 40.928-96.087 40.928z" fill="#fff" opacity="1" data-original="#fff" class=""></path></g></svg>`;
   const SvgImage = () => <SvgXml xml={svgMarkup} width="22" height="22" />;
+  return <SvgImage />;
+};
+
+// export const SearchIcon = () => {
+//   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M18.9 16.776a10.539 10.539 0 1 0-2.124 2.124l5.1 5.1L24 21.88ZM10.5 18a7.5 7.5 0 1 1 7.5-7.5 7.507 7.507 0 0 1-7.5 7.5Z" fill="#000000" opacity="1" data-original="#000000" class=""></path></g></svg>`;
+//   const SvgImage = () => <SvgXml xml={svgMarkup} width="22" height="22" />;
+//   return <SvgImage />;
+// };
+export const ImagesIcon = ({ width, height, active }) => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M12.01 7.77a2.604 2.604 0 0 1 3.68 0l1.04 1.04c.23.23.62.23.85 0l5.95-5.95A5.006 5.006 0 0 0 19.01 0H10C7.24 0 5 2.24 5 5v6c0 1.07.34 2.06.91 2.87l6.1-6.1ZM9.5 3c.83 0 1.5.67 1.5 1.5S10.33 6 9.5 6 8 5.33 8 4.5 8.67 3 9.5 3Zm2.83 20.82-8.67-2.41a5.005 5.005 0 0 1-3.48-6.16l1.61-5.78c.23-.82.65-1.54 1.21-2.12v3.66c0 3.87 3.13 7 7 7h9.14l-.65 2.34a5.005 5.005 0 0 1-6.16 3.48ZM24 5.21V11c0 2.76-2.24 5-5 5h-9c-.97 0-1.87-.28-2.64-.75l6.06-6.06a.61.61 0 0 1 .85 0l1.04 1.04c.98.98 2.69.98 3.67 0L24 5.21Z" fill="#898B93" opacity="1" data-original="#000000" class=""></path></g></svg>`;
+  const SvgImage = () => (
+    <SvgXml
+      xml={svgMarkup}
+      width={width ? width : "22"}
+      height={height ? height : "22"}
+    />
+  );
   return <SvgImage />;
 };

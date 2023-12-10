@@ -54,15 +54,16 @@ import { Topsights } from "../../utilities/Tops";
 import { MapEmbedView } from "./MapEmbedView";
 import { CurrencySelect } from "./CurrencySelect";
 
-export const DestinationDetail = ({
-  destinationDetailVisible,
-  setDestinationDetailVisible,
-}) => {
+export const DestinationDetail = ({ modalDestinationDetailsRef }) => {
   const modalRef = useRef<Modalize>(null);
+  const modalCurrencyRef = useRef<Modalize>(null);
+  const modalEmbedRef = useRef<Modalize>(null);
+  const modalCountryPassportSelectRef = useRef<Modalize>(null);
+
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [countrySelectVisible, setCountrySelectVisible] = useState(false);
-  const [mapEmbedViewVisible, setMapEmbedViewVisible] = useState("");
+  const [placeTitle, setPlaceTitle] = useState("");
   const [currencySelectVisible, setCurrencySelectVisible] = useState(false);
 
   const Overview = () => {
@@ -117,7 +118,7 @@ export const DestinationDetail = ({
           <TouchableOpacity
             style={styles.passportBox}
             activeOpacity={0.7}
-            onPress={() => setCountrySelectVisible(true)}
+            onPress={() => onCountryPassportOpen()}
           >
             <PassportIcon />
             <View style={styles.passportTexts}>
@@ -310,7 +311,10 @@ export const DestinationDetail = ({
                 activeOpacity={0.7}
                 style={styles.thingsTodoItem}
                 key={ind}
-                onPress={() => setMapEmbedViewVisible(item?.title)}
+                onPress={() => {
+                  onEmbedModalOpen();
+                  setPlaceTitle(item?.title);
+                }}
               >
                 <ImageBackground
                   style={styles.thingsTodoItemImage}
@@ -669,7 +673,7 @@ export const DestinationDetail = ({
               <TouchableOpacity
                 activeOpacity={0.7}
                 style={styles.currencySelectButton}
-                onPress={() => setCurrencySelectVisible(true)}
+                onPress={() => onCurrencyModalOpen()}
               >
                 <Text style={styles.currencySelectedText}>USD</Text>
                 <DownIcon color={COLORS.primary} size="10" />
@@ -830,157 +834,155 @@ export const DestinationDetail = ({
     />
   );
 
-  useEffect(() => {
-    if (destinationDetailVisible) {
-      if (modalRef.current) modalRef.current.open();
-    }
-  }, [destinationDetailVisible]);
+  const onCurrencyModalOpen = () => {
+    modalCurrencyRef.current?.open();
+  };
+  const onEmbedModalOpen = () => {
+    modalEmbedRef.current?.open();
+  };
+
+  const onCountryPassportOpen = () => {
+    modalCountryPassportSelectRef.current?.open();
+  };
 
   return (
     <>
-      <Portal>
-        <Modalize
-          ref={modalRef}
-          modalTopOffset={0}
-          onClose={setDestinationDetailVisible(false)}
-          withHandle={false}
-          disableScrollIfPossible
-          modalStyle={{
-            minHeight: "100%",
-          }}
-          HeaderComponent={
-            <View style={styles.swiperWrapper}>
-              <TouchableOpacity
-                onPress={() => modalRef.current && modalRef.current.close()}
-                activeOpacity={0.7}
-                style={styles.backButton}
-              >
-                <DownIcon color="#fff" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.addToBucketButton,
-                  {
-                    backgroundColor:
-                      1 == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)",
-                  },
-                ]}
-                activeOpacity={0.7}
-              >
-                <Mark2 color="#fff" />
-              </TouchableOpacity>
-              <Swiper
-                activeDotColor="#fff"
-                style={styles.wrapper}
-                showsButtons={false}
-                loop={false}
-                dotColor="#949494"
-                automaticallyAdjustContentInsets
-                paginationStyle={{
-                  position: "absolute",
-                  justifyContent: "flex-end",
-                  paddingRight: 15,
-                  bottom: 16,
-                }}
-              >
-                <View style={styles.slide1}>
-                  <ImageBackground
-                    style={styles.box}
-                    resizeMode="cover"
-                    source={{
-                      uri: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=10&w=3273&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Ds",
-                    }}
-                  >
-                    <LinearGradient
-                      style={styles.gradientWrapper}
-                      colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.4)"]}
-                    ></LinearGradient>
-                  </ImageBackground>
-                </View>
-                <View style={styles.slide2}>
-                  <ImageBackground
-                    style={styles.box}
-                    resizeMode="cover"
-                    source={{
-                      uri: "https://images.unsplash.com/photo-1500039436846-25ae2f11882e?q=10&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                    }}
-                  >
-                    <LinearGradient
-                      style={styles.gradientWrapper}
-                      colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.4)"]}
-                    ></LinearGradient>
-                  </ImageBackground>
-                </View>
-                <View style={styles.slide3}>
-                  <ImageBackground
-                    style={styles.box}
-                    resizeMode="cover"
-                    source={{
-                      uri: "https://images.unsplash.com/photo-1507666664345-c49223375e33?q=10&w=3274&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                    }}
-                  >
-                    <LinearGradient
-                      style={styles.gradientWrapper}
-                      colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.4)"]}
-                    ></LinearGradient>
-                  </ImageBackground>
-                </View>
-              </Swiper>
-
-              <View style={styles.otherInfo}>
-                <View style={styles.labelItem}>
-                  <Text style={styles.labelItemText}>France</Text>
-                </View>
-                <View style={styles.ratingLabel}>
-                  <View
-                    style={{
-                      position: "relative",
-                      top: -1,
-                      opacity: 0.8,
-                    }}
-                  >
-                    <StarIcon size={15} color="#FFBC3E" />
-                  </View>
-                  <Text style={styles.ratingText}>4.9 /</Text>
-                  <Text style={styles.ratingText}>80m visitors</Text>
-                </View>
-              </View>
-            </View>
+      <View style={styles.swiperWrapper}>
+        <TouchableOpacity
+          onPress={() =>
+            modalDestinationDetailsRef.current &&
+            modalDestinationDetailsRef.current.close()
           }
+          activeOpacity={0.7}
+          style={styles.backButton}
         >
-          <View
-            style={{
-              flex: 1,
-              paddingTop: 15,
-              height: "100%",
-            }}
-          >
-            <TabView
-              navigationState={{ index, routes }}
-              renderScene={renderScene}
-              onIndexChange={setIndex}
-              initialLayout={{ width: layout.width }}
-              style={{
-                flex: 1,
-                height: SIZES.height - 330,
+          <DownIcon color="#fff" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.addToBucketButton,
+            {
+              backgroundColor: 1 == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)",
+            },
+          ]}
+          activeOpacity={0.7}
+        >
+          <Mark2 color="#fff" />
+        </TouchableOpacity>
+        <Swiper
+          activeDotColor="#fff"
+          style={styles.wrapper}
+          showsButtons={false}
+          loop={false}
+          dotColor="#949494"
+          automaticallyAdjustContentInsets
+          paginationStyle={{
+            position: "absolute",
+            justifyContent: "flex-end",
+            paddingRight: 15,
+            bottom: 16,
+          }}
+        >
+          <View style={styles.slide1}>
+            <ImageBackground
+              style={styles.box}
+              resizeMode="cover"
+              source={{
+                uri: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=10&w=3273&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Ds",
               }}
-              renderTabBar={renderTabBar}
-            />
+            >
+              <LinearGradient
+                style={styles.gradientWrapper}
+                colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.4)"]}
+              ></LinearGradient>
+            </ImageBackground>
           </View>
+          <View style={styles.slide2}>
+            <ImageBackground
+              style={styles.box}
+              resizeMode="cover"
+              source={{
+                uri: "https://images.unsplash.com/photo-1500039436846-25ae2f11882e?q=10&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+              }}
+            >
+              <LinearGradient
+                style={styles.gradientWrapper}
+                colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.4)"]}
+              ></LinearGradient>
+            </ImageBackground>
+          </View>
+          <View style={styles.slide3}>
+            <ImageBackground
+              style={styles.box}
+              resizeMode="cover"
+              source={{
+                uri: "https://images.unsplash.com/photo-1507666664345-c49223375e33?q=10&w=3274&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+              }}
+            >
+              <LinearGradient
+                style={styles.gradientWrapper}
+                colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.4)"]}
+              ></LinearGradient>
+            </ImageBackground>
+          </View>
+        </Swiper>
+
+        <View style={styles.otherInfo}>
+          <View style={styles.labelItem}>
+            <Text style={styles.labelItemText}>France</Text>
+          </View>
+          <View style={styles.ratingLabel}>
+            <View
+              style={{
+                position: "relative",
+                top: -1,
+                opacity: 0.8,
+              }}
+            >
+              <StarIcon size={15} color="#FFBC3E" />
+            </View>
+            <Text style={styles.ratingText}>4.9 /</Text>
+            <Text style={styles.ratingText}>80m visitors</Text>
+          </View>
+        </View>
+      </View>
+      <View
+        style={{
+          flex: 1,
+          paddingTop: 15,
+          height: "100%",
+        }}
+      >
+        <TabView
+          navigationState={{ index, routes }}
+          renderScene={renderScene}
+          onIndexChange={setIndex}
+          initialLayout={{ width: layout.width }}
+          style={{
+            flex: 1,
+            height: SIZES.height - 330,
+          }}
+          renderTabBar={renderTabBar}
+        />
+      </View>
+
+      <Portal>
+        <Modalize ref={modalCountryPassportSelectRef} modalTopOffset={65}>
+          <CountrySelect />
         </Modalize>
       </Portal>
-      <CountrySelect
-        countrySelectVisible={countrySelectVisible}
-        setCountrySelectVisible={setCountrySelectVisible}
-      />
-      <MapEmbedView
-        mapEmbedViewVisible={mapEmbedViewVisible}
-        setMapEmbedViewVisible={setMapEmbedViewVisible}
-      />
-      <CurrencySelect
-        currencySelectVisible={currencySelectVisible}
-        setCurrencySelectVisible={setCurrencySelectVisible}
-      />
+
+      <Portal>
+        <Modalize ref={modalEmbedRef} modalTopOffset={65} adjustToContentHeight>
+          <MapEmbedView placeTitle={placeTitle} modalEmbedRef={modalEmbedRef} />
+        </Modalize>
+      </Portal>
+
+      <Portal>
+        <Modalize ref={modalCurrencyRef} modalTopOffset={65}>
+          <CurrencySelect />
+        </Modalize>
+      </Portal>
     </>
   );
 };

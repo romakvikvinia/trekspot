@@ -20,18 +20,7 @@ import {
 } from "../../utilities/SvgIcons.utility";
 import { LinearGradient } from "expo-linear-gradient";
 
-export const CountrySearch = ({
-  countrySearchVisible,
-  setCountrySearchVisible,
-}) => {
-  const modalRef = useRef<Modalize>(null);
-
-  useEffect(() => {
-    if (countrySearchVisible) {
-      if (modalRef.current) modalRef.current.open();
-    }
-  }, [countrySearchVisible]);
-
+export const CountrySearch = ({ modalDestinationSearchRef }) => {
   const Country = ({ item }: any) => {
     const countryCode = item.iso2 as string;
 
@@ -66,52 +55,42 @@ export const CountrySearch = ({
   };
 
   return (
-    <Portal>
-      <Modalize
-        ref={modalRef}
-        modalTopOffset={0}
-        onClose={setCountrySearchVisible(false)}
-        withHandle={false}
-        modalStyle={{
-          minHeight: "100%",
-          paddingTop: 55,
-        }}
-        HeaderComponent={
-          <View style={styles.modalHeader}>
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Search..."
-              placeholderTextColor={COLORS.darkgray}
-              autoFocus={true}
-            />
-            <TouchableOpacity
-              style={styles.cancelButton}
-              onPress={() => modalRef.current && modalRef.current.close()}
-            >
-              <Text style={styles.cancelButtonText}>Cancel</Text>
-            </TouchableOpacity>
-          </View>
-        }
-      >
-        <View
-          style={{
-            flex: 1,
-            height: SIZES.height - 125,
-            justifyContent: "center",
-            paddingHorizontal: 15,
-            paddingBottom: 25,
-          }}
+    <>
+      <View style={styles.modalHeader}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search..."
+          placeholderTextColor={COLORS.darkgray}
+          autoFocus={true}
+        />
+        <TouchableOpacity
+          style={styles.cancelButton}
+          onPress={() =>
+            modalDestinationSearchRef.current &&
+            modalDestinationSearchRef.current.close()
+          }
         >
-          <FlashList
-            data={CountriesList.slice(0, 15)}
-            renderItem={({ item }) => <Country item={item} />}
-            estimatedItemSize={200}
-            horizontal={false}
-            showsVerticalScrollIndicator={false}
-          />
-        </View>
-      </Modalize>
-    </Portal>
+          <Text style={styles.cancelButtonText}>Cancel</Text>
+        </TouchableOpacity>
+      </View>
+      <View
+        style={{
+          flex: 1,
+          height: SIZES.height - 125,
+          justifyContent: "center",
+          paddingHorizontal: 15,
+          paddingBottom: 25,
+        }}
+      >
+        <FlashList
+          data={CountriesList.slice(0, 15)}
+          renderItem={({ item }) => <Country item={item} />}
+          estimatedItemSize={200}
+          horizontal={false}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
+    </>
   );
 };
 
@@ -158,6 +137,7 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     marginLeft: 15,
+    paddingVertical: 10,
   },
   cancelButtonText: {
     color: COLORS.gray,

@@ -11,6 +11,7 @@ import {
   MapSvg,
   Mark,
   Mark2,
+  SearchIcon,
   Share,
   VisitedIcon,
 } from "../../utilities/SvgIcons.utility";
@@ -23,22 +24,32 @@ import { COLORS, SIZES } from "../../styles/theme";
 import { Flags } from "../../utilities/flags";
 import { useNavigation } from "@react-navigation/native";
 import ShareModal from "../../common/components/ShareModal";
+import {
+  BucketlistModal,
+  WishlistModal,
+} from "../../common/components/BucketlistModal";
 
 export const MapView = () => {
   const navigation = useNavigation();
 
   const modalRef = useRef<Modalize>(null);
   const shareModalRef = useRef<Modalize>(null);
+  const BucketListModalRef = useRef<Modalize>(null);
 
   const onOpen = useCallback(() => {
     if (modalRef.current) modalRef.current.open();
   }, []);
+
   const onShareModalOpen = useCallback(() => {
-    if (modalRef.current) shareModalRef.current.open();
+    if (shareModalRef.current) shareModalRef.current.open();
   }, []);
+
+  const onBucketlistOpen = useCallback(() => {
+    if (BucketListModalRef.current) BucketListModalRef.current.open();
+  }, []);
+
   const [visitedCountry, setVisitedCountry] = useState(null);
   const [livedCountry, setLivedCountry] = useState(null);
-  const [shareModalVisible, setShareModalVisible] = useState(false);
 
   const Country = ({ item }: any) => {
     // Assuming that `item` contains the ISO2 country code
@@ -102,6 +113,37 @@ export const MapView = () => {
       <View style={styles.mapContainer}>
         <View style={styles.topActions}>
           <View style={styles.left}>
+            {/* <View
+              style={{
+                backgroundColor: "#fff",
+                height: 38,
+                width: "95%",
+                borderRadius: 30,
+                flexDirection: "row",
+                paddingLeft: 15,
+                alignItems: "center",
+                shadowColor: "#000",
+                shadowOffset: {
+                  width: 0,
+                  height: 2,
+                },
+                shadowOpacity: 0.05,
+                shadowRadius: 3.84,
+                elevation: 5,
+              }}
+            >
+              <SearchIcon width="15" />
+              <TextInput
+                placeholder="Search places"
+                placeholderTextColor="#333"
+                style={{
+                  height: 38,
+                  paddingLeft: 10,
+                  fontSize: 14,
+                  color: "#000",
+                }}
+              />
+            </View> */}
             <TouchableOpacity
               onPress={() => onOpen()}
               style={[styles.btn, { marginRight: 10 }]}
@@ -110,7 +152,7 @@ export const MapView = () => {
               <Text style={styles.txt}>Add Visit</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => navigation.navigate("BucketList")}
+              onPress={() => onBucketlistOpen()}
               style={styles.btn}
             >
               <Mark2 />
@@ -223,6 +265,22 @@ export const MapView = () => {
           <ShareModal />
         </Modalize>
       </Portal>
+
+      <Portal>
+        <Modalize
+          ref={BucketListModalRef}
+          modalTopOffset={65}
+          disableScrollIfPossible
+          adjustToContentHeight
+          HeaderComponent={
+            <View style={styles.rowItemHeader}>
+              <Text style={styles.h2}>Bucket List</Text>
+            </View>
+          }
+        >
+          <BucketlistModal />
+        </Modalize>
+      </Portal>
     </>
   );
 };
@@ -230,6 +288,18 @@ const styles = StyleSheet.create({
   modalHeader: {
     width: "100%",
     padding: 15,
+  },
+  rowItemHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+  },
+  h2: {
+    fontSize: 22,
+    color: "#000",
+    fontWeight: "bold",
   },
   infoRow: {
     width: "100%",
@@ -280,16 +350,25 @@ const styles = StyleSheet.create({
   left: {
     flexDirection: "row",
     display: "flex",
+    flex: 1,
   },
   btn: {
     backgroundColor: "#fff",
-    height: 30,
+    height: 38,
     paddingHorizontal: 15,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 15,
+    borderRadius: 20,
     flexDirection: "row",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   countryItem: {
     paddingHorizontal: 15,
@@ -334,6 +413,7 @@ const styles = StyleSheet.create({
   txt: {
     fontSize: 14,
     marginLeft: 5,
+    color: "#333",
   },
   sublabel: {
     fontSize: 14,
@@ -353,6 +433,7 @@ const styles = StyleSheet.create({
     display: "flex",
     paddingHorizontal: 15,
     justifyContent: "space-between",
+    alignItems: "center",
     paddingBottom: 15,
   },
   rowBox: {

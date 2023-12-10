@@ -29,6 +29,8 @@ import { SceneMap, TabBar, TabView } from "react-native-tab-view";
 import { CountrySelect } from "../../common/components/CountrySelect";
 import { CountrySearch } from "../../common/components/CountrySearch";
 import { DestinationDetail } from "../../common/components/DestinationDetail";
+import { Portal } from "react-native-portalize";
+import { Modalize } from "react-native-modalize";
 
 const Popular = [
   {
@@ -59,8 +61,11 @@ const Popular = [
 
 const Explore = () => {
   const navigation = useNavigation();
-  const [destinationDetailVisible, setDestinationDetailVisible] =
-    useState(false);
+  const modalDestinationDetailsRef = useRef<Modalize>(null);
+  const onDestinationModaltOpen = () => {
+    modalDestinationDetailsRef.current?.open();
+  };
+
   return (
     <>
       <ScrollView
@@ -110,7 +115,7 @@ const Explore = () => {
                   <TouchableOpacity
                     style={styles.gradientWrapper}
                     activeOpacity={0.7}
-                    onPress={() => setDestinationDetailVisible(true)}
+                    onPress={() => onDestinationModaltOpen()}
                   >
                     <LinearGradient
                       style={styles.gradientWrapper}
@@ -601,10 +606,25 @@ const Explore = () => {
           </ScrollView>
         </View>
       </ScrollView>
-      <DestinationDetail
-        destinationDetailVisible={destinationDetailVisible}
-        setDestinationDetailVisible={setDestinationDetailVisible}
-      />
+
+      <Portal>
+        <Modalize
+          ref={modalDestinationDetailsRef}
+          modalTopOffset={0}
+          withHandle={false}
+          disableScrollIfPossible
+          modalStyle={{
+            minHeight: "100%",
+          }}
+          scrollViewProps={{
+            alwaysBounceVertical: false,
+          }}
+        >
+          <DestinationDetail
+            modalDestinationDetailsRef={modalDestinationDetailsRef}
+          />
+        </Modalize>
+      </Portal>
     </>
   );
 };
@@ -697,8 +717,16 @@ const BucketList = () => {
   const navigation = useNavigation();
   const layout = useWindowDimensions();
   const [index, setIndex] = React.useState(0);
-  const [countrySelectVisible, setCountrySelectVisible] = useState(false);
-  const [countrySearchVisible, setCountrySearchVisible] = useState(false);
+
+  const modalDestinationSearchRef = useRef<Modalize>(null);
+  const modalCountryPassportSelectRef = useRef<Modalize>(null);
+
+  const onDestinationSearchOpen = () => {
+    modalDestinationSearchRef.current?.open();
+  };
+  const onCountryPassportOpen = () => {
+    modalCountryPassportSelectRef.current?.open();
+  };
 
   const [routes] = React.useState([
     { key: "explore", title: "Explore" },
@@ -747,7 +775,7 @@ const BucketList = () => {
             <TouchableOpacity
               style={styles.passportBox}
               activeOpacity={0.7}
-              onPress={() => setCountrySelectVisible(true)}
+              onPress={() => onCountryPassportOpen()}
             >
               <PassportIcon />
               <View style={styles.passportTexts}>
@@ -758,7 +786,7 @@ const BucketList = () => {
             <TouchableOpacity
               style={styles.searchButton}
               activeOpacity={0.7}
-              onPress={() => setCountrySearchVisible(true)}
+              onPress={() => onDestinationSearchOpen()}
             >
               <SearchIcon />
             </TouchableOpacity>
@@ -775,14 +803,29 @@ const BucketList = () => {
           renderTabBar={renderTabBar}
         />
       </SafeAreaView>
-      <CountrySelect
-        countrySelectVisible={countrySelectVisible}
-        setCountrySelectVisible={setCountrySelectVisible}
-      />
-      <CountrySearch
-        countrySearchVisible={countrySearchVisible}
-        setCountrySearchVisible={setCountrySearchVisible}
-      />
+
+      <Portal>
+        <Modalize
+          ref={modalDestinationSearchRef}
+          adjustToContentHeight
+          modalTopOffset={0}
+          withHandle={false}
+          modalStyle={{
+            minHeight: "100%",
+            paddingTop: 55,
+          }}
+        >
+          <CountrySearch
+            modalDestinationSearchRef={modalDestinationSearchRef}
+          />
+        </Modalize>
+      </Portal>
+
+      <Portal>
+        <Modalize ref={modalCountryPassportSelectRef} modalTopOffset={65}>
+          <CountrySelect />
+        </Modalize>
+      </Portal>
     </>
   );
 };

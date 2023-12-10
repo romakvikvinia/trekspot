@@ -15,17 +15,8 @@ import { useCallback, useEffect, useRef } from "react";
 import { Flags } from "../../utilities/flags";
 import { CheckCircleIcon } from "../../utilities/SvgIcons.utility";
 
-export const CountrySelect = ({
-  countrySelectVisible,
-  setCountrySelectVisible,
-}) => {
+export const CountrySelect = () => {
   const modalRef = useRef<Modalize>(null);
-
-  useEffect(() => {
-    if (countrySelectVisible) {
-      if (modalRef.current) modalRef.current.open();
-    }
-  }, [countrySelectVisible]);
 
   const Country = ({ item }: any) => {
     const countryCode = item.iso2 as string;
@@ -67,30 +58,22 @@ export const CountrySelect = ({
   };
 
   return (
-    <Portal>
-      <Modalize
-        ref={modalRef}
-        modalTopOffset={65}
-        onClose={setCountrySelectVisible(false)}
-        HeaderComponent={
-          <View style={styles.modalHeader}>
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Search..."
-              placeholderTextColor={COLORS.darkgray}
-            />
-          </View>
-        }
-      >
-        <View style={{ flex: 1, height: SIZES.height - 155 }}>
-          <FlashList
-            data={CountriesList}
-            renderItem={({ item }) => <Country item={item} />}
-            estimatedItemSize={200}
-          />
-        </View>
-      </Modalize>
-    </Portal>
+    <>
+      <View style={styles.modalHeader}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search..."
+          placeholderTextColor={COLORS.darkgray}
+        />
+      </View>
+      <View style={{ flex: 1, height: SIZES.height - 155 }}>
+        <FlashList
+          data={CountriesList}
+          renderItem={({ item }) => <Country item={item} />}
+          estimatedItemSize={200}
+        />
+      </View>
+    </>
   );
 };
 
