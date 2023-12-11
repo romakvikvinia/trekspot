@@ -10,7 +10,6 @@ import {
   MapSvg,
   Mark,
   Mark2,
-  SearchIcon,
   Share,
   VisitedIcon,
 } from "../../utilities/SvgIcons.utility";
@@ -23,10 +22,8 @@ import { COLORS, SIZES } from "../../styles/theme";
 
 import { useNavigation } from "@react-navigation/native";
 import ShareModal from "../../common/components/ShareModal";
-import {
-  BucketlistModal,
-  WishlistModal,
-} from "../../common/components/BucketlistModal";
+import { BucketlistModal } from "../../common/components/BucketlistModal";
+import { CountryItem } from "../../components/homde/CountryItem";
 
 export const MapView = () => {
   const navigation = useNavigation();
@@ -47,65 +44,9 @@ export const MapView = () => {
     if (BucketListModalRef.current) BucketListModalRef.current.open();
   }, []);
 
-  const [visitedCountry, setVisitedCountry] = useState(null);
-  const [livedCountry, setLivedCountry] = useState(null);
-
-  const Country = ({ item }: any) => {
-    // Assuming that `item` contains the ISO2 country code
-    const countryCode = item.iso2 as string;
-
-    // Check if the image path exists in the mapping
-    // @ts-ignore
-    const imagePath = Flags[countryCode];
-
-    return (
-      <View style={styles.countryItem}>
-        <View style={styles.countryItemLeft}>
-          <View
-            style={{
-              width: 31,
-              height: 21,
-              borderRadius: 3,
-              overflow: "hidden",
-              borderWidth: 1,
-              borderColor: "#fafafa",
-            }}
-          >
-            <ImageBackground
-              resizeMode="cover"
-              style={{
-                width: 30,
-                height: 20,
-                backgroundColor: "#ddd",
-              }}
-              source={imagePath ? imagePath : null} // Set the image source
-            />
-          </View>
-          <Text style={styles.itemTitle}>{item.name}</Text>
-        </View>
-        <View style={styles.countryItemActions}>
-          <TouchableOpacity
-            style={[
-              styles.countryItemActionButton,
-              visitedCountry === countryCode ? styles.countryActive : null,
-            ]}
-            onPress={() => setVisitedCountry(countryCode)}
-          >
-            <VisitedIcon active={visitedCountry === countryCode} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.countryItemActionButton,
-              livedCountry === countryCode ? styles.countryLived : null,
-            ]}
-            onPress={() => setLivedCountry(countryCode)}
-          >
-            <LivedIcon active={livedCountry === countryCode} />
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  };
+  const handleVisited = useCallback((code: string) => {
+    console.log(code);
+  }, []);
 
   return (
     <>
@@ -252,7 +193,9 @@ export const MapView = () => {
           <View style={{ flex: 1, height: SIZES.height - 200 }}>
             <FlashList
               data={CountriesList}
-              renderItem={({ item }) => <CountryItem {...item} />}
+              renderItem={({ item }) => (
+                <CountryItem {...item} onVisited={handleVisited} />
+              )}
               estimatedItemSize={200}
             />
           </View>

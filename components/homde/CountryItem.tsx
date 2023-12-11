@@ -15,6 +15,7 @@ interface HomeProps {
   capital: string;
   lived?: boolean;
   visited?: boolean;
+  onVisited: (code: string) => void;
 }
 
 export const CountryItem: React.FC<HomeProps> = ({
@@ -23,6 +24,7 @@ export const CountryItem: React.FC<HomeProps> = ({
   capital,
   lived,
   visited,
+  onVisited,
 }) => {
   // Assuming that `item` contains the ISO2 country code
 
@@ -61,7 +63,7 @@ export const CountryItem: React.FC<HomeProps> = ({
             styles.countryItemActionButton,
             visited ? styles.countryActive : null,
           ]}
-          //   onPress={() => setVisitedCountry(countryCode)}
+          onPress={() => onVisited(iso2)}
         >
           <VisitedIcon active={visited} />
         </TouchableOpacity>
