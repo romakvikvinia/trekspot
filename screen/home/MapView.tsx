@@ -1,5 +1,4 @@
 import {
-  ImageBackground,
   StyleSheet,
   Text,
   TextInput,
@@ -21,7 +20,7 @@ import { useCallback, useRef, useState } from "react";
 import { FlashList } from "@shopify/flash-list";
 import { CountriesList } from "../../utilities/countryList";
 import { COLORS, SIZES } from "../../styles/theme";
-import { Flags } from "../../utilities/flags";
+
 import { useNavigation } from "@react-navigation/native";
 import ShareModal from "../../common/components/ShareModal";
 import {
@@ -253,7 +252,7 @@ export const MapView = () => {
           <View style={{ flex: 1, height: SIZES.height - 200 }}>
             <FlashList
               data={CountriesList}
-              renderItem={({ item }) => <Country item={item} />}
+              renderItem={({ item }) => <CountryItem {...item} />}
               estimatedItemSize={200}
             />
           </View>
@@ -284,6 +283,7 @@ export const MapView = () => {
     </>
   );
 };
+
 const styles = StyleSheet.create({
   modalHeader: {
     width: "100%",
@@ -341,12 +341,7 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
-  itemTitle: {
-    fontSize: 14,
-    fontWeight: "bold",
-    marginLeft: 10,
-    color: "#000",
-  },
+
   left: {
     flexDirection: "row",
     display: "flex",
@@ -370,35 +365,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  countryItem: {
-    paddingHorizontal: 15,
-    marginBottom: 20,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  countryItemActionButton: {
-    backgroundColor: "#fafafa",
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    marginLeft: 8,
-    borderRadius: 5,
-  },
-  countryItemLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  countryItemActions: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  countryActive: {
-    backgroundColor: COLORS.primary,
-  },
-  countryLived: {
-    backgroundColor: "#00d52d",
-  },
+
   amountView: {
     flexDirection: "row",
     alignItems: "center",
