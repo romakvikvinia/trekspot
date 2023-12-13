@@ -3,141 +3,253 @@ export const CountriesList = [
     name: "Afghanistan",
     iso2: "AF",
     capital: "Kabul",
+    coordinates: {
+      latitude: 33.9391,
+      longitude: 67.71,
+    },
   },
   {
     name: "Albania",
     iso2: "AL",
     capital: "Tirana",
+    coordinates: {
+      latitude: 41.3275,
+      longitude: 19.8187,
+    },
   },
   {
     name: "Algeria",
     iso2: "DZ",
     capital: "Algiers",
+    coordinates: {
+      latitude: 28.0339,
+      longitude: 1.6596,
+    },
   },
   {
     name: "Andorra",
     iso2: "AD",
     capital: "Andorra la Vella",
+    coordinates: {
+      latitude: 42.5063,
+      longitude: 1.5218,
+    },
   },
   {
     name: "Angola",
     iso2: "AO",
     capital: "Luanda",
+    coordinates: {
+      latitude: -8.8115,
+      longitude: 13.242,
+    },
   },
   {
     name: "Antigua and Barbuda",
     iso2: "AG",
     capital: "St. John's",
+    coordinates: {
+      latitude: 17.0608,
+      longitude: -61.7964,
+    },
   },
   {
     name: "Argentina",
     iso2: "AR",
     capital: "Buenos Aires",
+    coordinates: {
+      latitude: -34.6118,
+      longitude: -58.4173,
+    },
   },
   {
     name: "Armenia",
     iso2: "AM",
     capital: "Yerevan",
+    coordinates: {
+      latitude: 40.1872,
+      longitude: 44.5152,
+    },
   },
   {
     name: "Australia",
     iso2: "AU",
     capital: "Canberra",
+    coordinates: {
+      latitude: -35.282,
+      longitude: 149.1287,
+    },
   },
   {
     name: "Austria",
     iso2: "AT",
     capital: "Vienna",
+    coordinates: {
+      latitude: 48.8566,
+      longitude: 16.383,
+    },
   },
   {
     name: "Azerbaijan",
     iso2: "AZ",
     capital: "Baku",
+    coordinates: {
+      latitude: 40.4093,
+      longitude: 49.8671,
+    },
   },
   {
     name: "Bahamas",
     iso2: "BS",
     capital: "Nassau",
+    coordinates: {
+      latitude: 25.0343,
+      longitude: -77.3963,
+    },
   },
   {
     name: "Bahrain",
     iso2: "BH",
     capital: "Manama",
+    coordinates: {
+      latitude: 26.2285,
+      longitude: 50.586,
+    },
   },
   {
     name: "Bangladesh",
     iso2: "BD",
     capital: "Dhaka",
+    coordinates: {
+      latitude: 23.8103,
+      longitude: 90.4125,
+    },
   },
   {
     name: "Barbados",
     iso2: "BB",
     capital: "Bridgetown",
+    coordinates: {
+      latitude: 13.0972,
+      longitude: -59.6175,
+    },
   },
   {
     name: "Belarus",
     iso2: "BY",
     capital: "Minsk",
+    coordinates: {
+      latitude: 53.9045,
+      longitude: 27.5615,
+    },
   },
   {
     name: "Belgium",
     iso2: "BE",
     capital: "Brussels",
+    coordinates: {
+      latitude: 50.8503,
+      longitude: 4.3517,
+    },
   },
   {
     name: "Belize",
     iso2: "BZ",
     capital: "Belmopan",
+    coordinates: {
+      latitude: 17.25,
+      longitude: -88.7667,
+    },
   },
   {
     name: "Benin",
     iso2: "BJ",
     capital: "Porto-Novo",
+    coordinates: {
+      latitude: 6.4779,
+      longitude: 2.6323,
+    },
   },
   {
     name: "Bhutan",
     iso2: "BT",
     capital: "Thimphu",
+    coordinates: {
+      latitude: 27.4728,
+      longitude: 89.6393,
+    },
   },
   {
     name: "Bolivia",
     iso2: "BO",
     capital: "La Paz",
+    coordinates: {
+      latitude: -16.5,
+      longitude: -68.15,
+    },
   },
   {
     name: "Bosnia and Herzegovina",
     iso2: "BA",
     capital: "Sarajevo",
+    coordinates: {
+      latitude: 43.8563,
+      longitude: 18.4131,
+    },
   },
   {
     name: "Botswana",
     iso2: "BW",
     capital: "Gaborone",
+    coordinates: {
+      latitude: -24.658,
+      longitude: 25.9087,
+    },
   },
   {
     name: "Brazil",
     iso2: "BR",
     capital: "Brasília",
+    coordinates: {
+      latitude: -15.7801,
+      longitude: -47.9292,
+    },
   },
   {
     name: "Brunei",
     iso2: "BN",
     capital: "Bandar Seri Begawan",
+    coordinates: {
+      latitude: 4.9031,
+      longitude: 114.9408,
+    },
   },
   {
     name: "Bulgaria",
     iso2: "BG",
     capital: "Sofia",
+    coordinates: {
+      latitude: 42.6977,
+      longitude: 23.3219,
+    },
   },
   {
     name: "Burkina Faso",
     iso2: "BF",
     capital: "Ouagadougou",
+    coordinates: {
+      latitude: 12.3714,
+      longitude: -1.5197,
+    },
   },
   {
     name: "Burundi",
     iso2: "BI",
     capital: "Bujumbura",
+    coordinates: {
+      latitude: -3.3731,
+      longitude: 29.9189,
+    },
   },
   {
     name: "Cape Verde",
