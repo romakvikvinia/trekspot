@@ -150,21 +150,22 @@ export const MapView = () => {
               <Mark />
               <Text style={styles.txt}>Add Visit</Text>
             </TouchableOpacity>
+          </View>
+          <View style={{ flexDirection: "row" }}>
             <TouchableOpacity
               onPress={() => onBucketlistOpen()}
-              style={styles.btn}
+              style={[styles.btn, { marginRight: 10 }]}
             >
               <Mark2 />
-              <Text style={styles.txt}>Bucket List</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.btn}
+              onPress={() => onShareModalOpen()}
+            >
+              <Share />
+              <Text style={styles.txt}>Share</Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            style={styles.btn}
-            onPress={() => onShareModalOpen()}
-          >
-            <Share />
-            <Text style={styles.txt}>Share</Text>
-          </TouchableOpacity>
         </View>
         <TouchableOpacity
           activeOpacity={0.7}

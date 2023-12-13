@@ -10,6 +10,8 @@ import {
   useWindowDimensions,
   Image,
   KeyboardAvoidingView,
+  Animated,
+  Easing,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
@@ -847,112 +849,112 @@ export const DestinationDetail = ({ modalDestinationDetailsRef }) => {
 
   return (
     <>
-      <View style={styles.swiperWrapper}>
-        <TouchableOpacity
-          onPress={() =>
-            modalDestinationDetailsRef.current &&
-            modalDestinationDetailsRef.current.close()
-          }
-          activeOpacity={0.7}
-          style={styles.backButton}
-        >
-          <DownIcon color="#fff" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.addToBucketButton,
-            {
-              backgroundColor: 1 == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)",
-            },
-          ]}
-          activeOpacity={0.7}
-        >
-          <Mark2 color="#fff" />
-        </TouchableOpacity>
-        <Swiper
-          activeDotColor="#fff"
-          style={styles.wrapper}
-          showsButtons={false}
-          loop={false}
-          dotColor="#949494"
-          automaticallyAdjustContentInsets
-          paginationStyle={{
-            position: "absolute",
-            justifyContent: "flex-end",
-            paddingRight: 15,
-            bottom: 16,
-          }}
-        >
-          <View style={styles.slide1}>
-            <ImageBackground
-              style={styles.box}
-              resizeMode="cover"
-              source={{
-                uri: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=10&w=3273&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Ds",
-              }}
-            >
-              <LinearGradient
-                style={styles.gradientWrapper}
-                colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.4)"]}
-              ></LinearGradient>
-            </ImageBackground>
-          </View>
-          <View style={styles.slide2}>
-            <ImageBackground
-              style={styles.box}
-              resizeMode="cover"
-              source={{
-                uri: "https://images.unsplash.com/photo-1500039436846-25ae2f11882e?q=10&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-              }}
-            >
-              <LinearGradient
-                style={styles.gradientWrapper}
-                colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.4)"]}
-              ></LinearGradient>
-            </ImageBackground>
-          </View>
-          <View style={styles.slide3}>
-            <ImageBackground
-              style={styles.box}
-              resizeMode="cover"
-              source={{
-                uri: "https://images.unsplash.com/photo-1507666664345-c49223375e33?q=10&w=3274&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-              }}
-            >
-              <LinearGradient
-                style={styles.gradientWrapper}
-                colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.4)"]}
-              ></LinearGradient>
-            </ImageBackground>
-          </View>
-        </Swiper>
-
-        <View style={styles.otherInfo}>
-          <View style={styles.labelItem}>
-            <Text style={styles.labelItemText}>France</Text>
-          </View>
-          <View style={styles.ratingLabel}>
-            <View
-              style={{
-                position: "relative",
-                top: -1,
-                opacity: 0.8,
-              }}
-            >
-              <StarIcon size={15} color="#FFBC3E" />
-            </View>
-            <Text style={styles.ratingText}>4.9 /</Text>
-            <Text style={styles.ratingText}>80m visitors</Text>
-          </View>
-        </View>
-      </View>
       <View
         style={{
           flex: 1,
-          paddingTop: 15,
-          height: "100%",
+          minHeight: "100%",
         }}
       >
+        <View style={[styles.swiperWrapper]}>
+          <TouchableOpacity
+            onPress={() =>
+              modalDestinationDetailsRef.current &&
+              modalDestinationDetailsRef.current.close()
+            }
+            activeOpacity={0.7}
+            style={styles.backButton}
+          >
+            <DownIcon color="#fff" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.addToBucketButton,
+              {
+                backgroundColor: 1 == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)",
+              },
+            ]}
+            activeOpacity={0.7}
+          >
+            <Mark2 color="#fff" />
+          </TouchableOpacity>
+          <Swiper
+            activeDotColor="#fff"
+            style={styles.wrapper}
+            showsButtons={false}
+            loop={false}
+            dotColor="#949494"
+            automaticallyAdjustContentInsets
+            paginationStyle={{
+              position: "absolute",
+              justifyContent: "flex-end",
+              paddingRight: 15,
+              bottom: 16,
+            }}
+          >
+            <View style={styles.slide1}>
+              <ImageBackground
+                style={styles.box}
+                resizeMode="cover"
+                source={{
+                  uri: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=10&w=3273&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Ds",
+                }}
+              >
+                <LinearGradient
+                  style={styles.gradientWrapper}
+                  colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.4)"]}
+                ></LinearGradient>
+              </ImageBackground>
+            </View>
+            <View style={styles.slide2}>
+              <ImageBackground
+                style={styles.box}
+                resizeMode="cover"
+                source={{
+                  uri: "https://images.unsplash.com/photo-1500039436846-25ae2f11882e?q=10&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                }}
+              >
+                <LinearGradient
+                  style={styles.gradientWrapper}
+                  colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.4)"]}
+                ></LinearGradient>
+              </ImageBackground>
+            </View>
+            <View style={styles.slide3}>
+              <ImageBackground
+                style={styles.box}
+                resizeMode="cover"
+                source={{
+                  uri: "https://images.unsplash.com/photo-1507666664345-c49223375e33?q=10&w=3274&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                }}
+              >
+                <LinearGradient
+                  style={styles.gradientWrapper}
+                  colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.4)"]}
+                ></LinearGradient>
+              </ImageBackground>
+            </View>
+          </Swiper>
+
+          <View style={styles.otherInfo}>
+            <View style={styles.labelItem}>
+              <Text style={styles.labelItemText}>France</Text>
+            </View>
+            <View style={styles.ratingLabel}>
+              <View
+                style={{
+                  position: "relative",
+                  top: -1,
+                  opacity: 0.8,
+                }}
+              >
+                <StarIcon size={15} color="#FFBC3E" />
+              </View>
+              <Text style={styles.ratingText}>4.9 /</Text>
+              <Text style={styles.ratingText}>80m visitors</Text>
+            </View>
+          </View>
+        </View>
+
         <TabView
           navigationState={{ index, routes }}
           renderScene={renderScene}
@@ -960,7 +962,7 @@ export const DestinationDetail = ({ modalDestinationDetailsRef }) => {
           initialLayout={{ width: layout.width }}
           style={{
             flex: 1,
-            height: SIZES.height - 330,
+            paddingTop: 15,
           }}
           renderTabBar={renderTabBar}
         />
