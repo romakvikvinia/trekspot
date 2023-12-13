@@ -56,30 +56,14 @@ export const CountrySearch = ({ modalDestinationSearchRef }) => {
 
   return (
     <>
-      <View style={styles.modalHeader}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search..."
-          placeholderTextColor={COLORS.darkgray}
-          autoFocus={true}
-        />
-        <TouchableOpacity
-          style={styles.cancelButton}
-          onPress={() =>
-            modalDestinationSearchRef.current &&
-            modalDestinationSearchRef.current.close()
-          }
-        >
-          <Text style={styles.cancelButtonText}>Cancel</Text>
-        </TouchableOpacity>
-      </View>
       <View
         style={{
           flex: 1,
-          height: SIZES.height - 125,
+          height: "100%",
           justifyContent: "center",
           paddingHorizontal: 15,
           paddingBottom: 25,
+          backgroundColor: "#f8f8f8",
         }}
       >
         <FlashList
@@ -95,22 +79,6 @@ export const CountrySearch = ({ modalDestinationSearchRef }) => {
 };
 
 const styles = StyleSheet.create({
-  modalHeader: {
-    width: "100%",
-    padding: 15,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  searchInput: {
-    height: 40,
-    backgroundColor: "#ececec",
-    borderRadius: SIZES.radius * 5,
-    paddingLeft: 20,
-    fontSize: 16,
-    color: COLORS.black,
-    flex: 1,
-  },
   labelItemText: {
     color: "#000",
     fontSize: 14,
@@ -152,7 +120,7 @@ const styles = StyleSheet.create({
   },
   box: {
     height: 50,
-    backgroundColor: "#fafafa",
+    backgroundColor: "#f8f8f8",
     borderRadius: 15,
     overflow: "hidden",
     width: 50,

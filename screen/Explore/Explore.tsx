@@ -3,6 +3,7 @@ import { COLORS, SIZES } from "../../styles/theme";
 
 import {
   ImageBackground,
+  Keyboard,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -63,7 +64,7 @@ interface ExploreProps {}
 
 export const ExploreScreen: React.FC<ExploreProps> = ({}) => {
   const navigation = useNavigation();
-
+  const [searchActive, setSearchActive] = useState(false);
   const modalDestinationDetailsRef = useRef<Modalize>(null);
   const onDestinationModaltOpen = () => {
     modalDestinationDetailsRef.current?.open();
@@ -85,32 +86,42 @@ export const ExploreScreen: React.FC<ExploreProps> = ({}) => {
     <>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.screenHeader}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            activeOpacity={0.7}
-            style={styles.backButton}
-          >
-            <BackIcon />
-          </TouchableOpacity>
+          <View style={styles.searchBox}>
+            <View style={styles.searchIcon}>
+              <SearchIcon width="15" />
+            </View>
+            <TextInput
+              placeholder="Search here"
+              placeholderTextColor="#333"
+              autoFocus={false}
+              style={styles.searchInput}
+              onFocus={() => setSearchActive(true)}
+            />
+          </View>
           <View style={styles.right}>
-            <TouchableOpacity
-              style={styles.passportBox}
-              activeOpacity={0.7}
-              onPress={() => onCountryPassportOpen()}
-            >
-              <PassportIcon />
-              <View style={styles.passportTexts}>
-                <Text style={styles.passportLabel}>Passport</Text>
-                <Text style={styles.passportCountry}>Georgia</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.searchButton}
-              activeOpacity={0.7}
-              onPress={() => onDestinationSearchOpen()}
-            >
-              <SearchIcon />
-            </TouchableOpacity>
+            {searchActive ? (
+              <TouchableOpacity
+                style={styles.cancelButton}
+                onPress={() => {
+                  setSearchActive(false);
+                  Keyboard.dismiss();
+                }}
+              >
+                <Text style={styles.cancelButtonText}>Cancel</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={styles.passportBox}
+                activeOpacity={0.7}
+                onPress={() => onCountryPassportOpen()}
+              >
+                <PassportIcon />
+                <View style={styles.passportTexts}>
+                  <Text style={styles.passportLabel}>Passport</Text>
+                  <Text style={styles.passportCountry}>Georgia</Text>
+                </View>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
 
@@ -119,7 +130,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({}) => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 25 }}
         >
-          <View style={[styles.rowItem]}>
+          <View style={[styles.rowItem, { paddingTop: 5 }]}>
             <View style={styles.rowItemHeader}>
               <Text style={styles.h2}>Popular</Text>
 
@@ -699,22 +710,23 @@ export const ExploreScreen: React.FC<ExploreProps> = ({}) => {
             />
           </Modalize>
         </Portal>
-        <Portal>
-          <Modalize
-            ref={modalDestinationSearchRef}
-            adjustToContentHeight
-            modalTopOffset={0}
-            withHandle={false}
-            modalStyle={{
-              minHeight: "100%",
-              paddingTop: 55,
+
+        {searchActive ? (
+          <View
+            style={{
+              position: "absolute",
+              backgroundColor: "#fff",
+              top: 110,
+              left: 0,
+              width: "100%",
+              height: SIZES.height - 170,
             }}
           >
             <CountrySearch
               modalDestinationSearchRef={modalDestinationSearchRef}
             />
-          </Modalize>
-        </Portal>
+          </View>
+        ) : null}
 
         <Portal>
           <Modalize ref={modalCountryPassportSelectRef} modalTopOffset={65}>
@@ -729,7 +741,42 @@ export const ExploreScreen: React.FC<ExploreProps> = ({}) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    backgroundColor: "#f8f8f8",
+  },
+  cancelButton: {
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingLeft: 15,
+  },
+  cancelButtonText: {
+    fontSize: 14,
+    color: COLORS.darkgray,
+  },
+  searchBox: {
+    flex: 1,
     backgroundColor: "#fff",
+    flexDirection: "row",
+    borderRadius: 30,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  searchIcon: {
+    paddingLeft: 15,
+  },
+  searchInput: {
+    height: 40,
+    paddingLeft: 10,
+    fontSize: 14,
+    width: "100%",
+    color: "#000",
   },
   notFoundView: {
     alignItems: "center",
@@ -815,18 +862,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#fff",
-    paddingHorizontal: 8,
-    paddingVertical: 7,
-    borderRadius: 6,
-    ...COLORS.shadow,
-    marginLeft: 25,
+    paddingHorizontal: 15,
+    paddingVertical: 9,
+    borderRadius: 30,
+    marginLeft: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 2,
   },
   passportTexts: {
     marginLeft: 5,
   },
   passportLabel: {
     fontSize: 8,
-    color: COLORS.gray,
+    color: COLORS.darkgray,
     marginBottom: 1,
   },
   passportCountry: {
@@ -898,7 +952,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   seeAllButtonTxt: {
-    color: COLORS.darkgray,
+    color: COLORS.primary,
     fontSize: SIZES.body4,
   },
   h2: {

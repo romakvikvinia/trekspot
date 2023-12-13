@@ -1,10 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import MapView, { Geojson, PROVIDER_GOOGLE } from "react-native-maps";
+import * as ImagePicker from "expo-image-picker";
 
 import {
+  ActivityIndicator,
   Image,
   ImageBackground,
   KeyboardAvoidingView,
+  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -18,6 +21,7 @@ import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 import { Flags } from "../../utilities/flags";
 import {
+  AnchorRightIcon,
   BackIcon,
   CloseCircleIcon,
   ImagesIcon,
@@ -26,21 +30,30 @@ import {
 } from "../../utilities/SvgIcons.utility";
 import { COLORS } from "../../styles/theme";
 import { useNavigation } from "@react-navigation/native";
+import * as Permissions from "expo-permissions";
+import { AddMemoriesModal } from "../../common/components/AddMemoriesModal";
 
 const MyWorldScreen = () => {
   const navigation = useNavigation();
-
+  // const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   const [location, setLocation] = useState();
   const [currentCountry, setCurrentCountry] = useState();
   const [beenPlaces, setBeenPlaces] = useState([]);
   const [livedPlaces, setLivedPlaces] = useState([]);
+  const [pickedImages, setPickedImages] = useState([]);
+  const [isSelectingImages, setIsSelectingImages] = useState(false);
 
   const [imagePath, setImagePath] = useState();
   const mapRef = useRef(null);
   const countryDetailModalRef = useRef(null);
+  const memoriesModalRef = useRef(null);
 
   const onCountryDetailOpen = () => {
     countryDetailModalRef.current?.open();
+  };
+
+  const onMemoriesDetailOpen = () => {
+    memoriesModalRef.current?.open();
   };
 
   const handleMapPress = async (event) => {
@@ -247,281 +260,337 @@ const MyWorldScreen = () => {
       },
     ],
   };
+
+  const pickImages = async () => {
+    setPickedImages([]);
+    setIsSelectingImages(true);
+    // requestPermission();
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      aspect: [4, 3],
+      quality: 1,
+      allowsMultipleSelection: true,
+      selectionLimit: 10,
+    });
+
+    if (!result.canceled) {
+      setPickedImages(result);
+      onMemoriesDetailOpen();
+      setIsSelectingImages(false);
+    }
+
+    // if (!result.canceled) {
+    //   // setLoadingImage(true);
+    //   // setImage(result);
+    //   const formData = new FormData();
+
+    //   formData.append("file", {
+    //     uri: result?.assets[0]?.uri,
+    //     type: "image/jpeg",
+    //     name: result?.assets[0]?.fileName || result?.assets[0]?.uri.split("/").pop(),
+    //   });
+    //   console.log("image - formData", formData);
+
+    //   const response = await sendHomeworkFiles(formData);
+    //   console.log("image - response", response);
+    //   if (response) {
+    //     setLoadingImage(false);
+    //     setUploadedImageID(response);
+
+    //   }
+    // }
+  };
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      // setLocation(location);
+    })();
+  }, []);
+
   console.log("currentCountry++", beenPlaces);
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.goBack();
-          handleResetMap();
-          countryDetailModalRef.current &&
-            countryDetailModalRef.current.close();
-        }}
-        activeOpacity={0.7}
-        style={styles.backButton}
-      >
-        <BackIcon />
-      </TouchableOpacity>
-      <MapView
-        ref={mapRef}
-        // provider={PROVIDER_GOOGLE}
-        style={styles.map}
-        onPress={handleMapPress}
-        zoomEnabled
-        zoomControlEnabled
-        pitchEnabled
-        followUserLocation={true}
-        showsUserLocation={true}
-        customMapStyle={[
-          {
-            featureType: "all",
-            elementType: "geometry.fill",
-            stylers: [
-              {
-                weight: "2.00",
-              },
-            ],
-          },
-          {
-            featureType: "all",
-            elementType: "geometry.stroke",
-            stylers: [
-              {
-                color: "#9c9c9c",
-              },
-            ],
-          },
-          {
-            featureType: "all",
-            elementType: "labels.text",
-            stylers: [
-              {
-                visibility: "on",
-              },
-            ],
-          },
-          {
-            featureType: "administrative",
-            elementType: "geometry.fill",
-            stylers: [
-              {
-                color: "#930707",
-              },
-            ],
-          },
-          {
-            featureType: "administrative.country",
-            elementType: "geometry.stroke",
-            stylers: [
-              {
-                color: "#57585e",
-              },
-            ],
-          },
-          {
-            featureType: "administrative.province",
-            elementType: "geometry.stroke",
-            stylers: [
-              {
-                color: "#ffffff",
-              },
-            ],
-          },
-          {
-            featureType: "landscape",
-            elementType: "all",
-            stylers: [
-              {
-                color: "#f2f2f2",
-              },
-            ],
-          },
-          {
-            featureType: "landscape",
-            elementType: "geometry.fill",
-            stylers: [
-              {
-                color: "#ffffff",
-              },
-            ],
-          },
-          {
-            featureType: "landscape.man_made",
-            elementType: "geometry.fill",
-            stylers: [
-              {
-                color: "#ffffff",
-              },
-            ],
-          },
-          {
-            featureType: "landscape.natural.landcover",
-            elementType: "geometry.fill",
-            stylers: [
-              {
-                color: "#ffffff",
-              },
-            ],
-          },
-          {
-            featureType: "landscape.natural.terrain",
-            elementType: "geometry.fill",
-            stylers: [
-              {
-                color: "#7c7a00",
-              },
-            ],
-          },
-          {
-            featureType: "poi",
-            elementType: "all",
-            stylers: [
-              {
-                visibility: "off",
-              },
-            ],
-          },
-          {
-            featureType: "road",
-            elementType: "all",
-            stylers: [
-              {
-                saturation: -100,
-              },
-              {
-                lightness: 45,
-              },
-            ],
-          },
-          {
-            featureType: "road",
-            elementType: "geometry.fill",
-            stylers: [
-              {
-                color: "#eeeeee",
-              },
-            ],
-          },
-          {
-            featureType: "road",
-            elementType: "labels.text.fill",
-            stylers: [
-              {
-                color: "#7b7b7b",
-              },
-            ],
-          },
-          {
-            featureType: "road",
-            elementType: "labels.text.stroke",
-            stylers: [
-              {
-                color: "#ffffff",
-              },
-            ],
-          },
-          {
-            featureType: "road.highway",
-            elementType: "all",
-            stylers: [
-              {
-                visibility: "simplified",
-              },
-            ],
-          },
-          {
-            featureType: "road.arterial",
-            elementType: "labels.icon",
-            stylers: [
-              {
-                visibility: "off",
-              },
-            ],
-          },
-          {
-            featureType: "transit",
-            elementType: "all",
-            stylers: [
-              {
-                visibility: "off",
-              },
-            ],
-          },
-          {
-            featureType: "water",
-            elementType: "all",
-            stylers: [
-              {
-                color: "#46bcec",
-              },
-              {
-                visibility: "on",
-              },
-            ],
-          },
-          {
-            featureType: "water",
-            elementType: "geometry.fill",
-            stylers: [
-              {
-                color: "#a4d7f7",
-              },
-            ],
-          },
-          {
-            featureType: "water",
-            elementType: "labels.text.fill",
-            stylers: [
-              {
-                color: "#070707",
-              },
-            ],
-          },
-          {
-            featureType: "water",
-            elementType: "labels.text.stroke",
-            stylers: [
-              {
-                color: "#ffffff",
-              },
-            ],
-          },
-        ]}
-        mapType="none"
-      >
-        {location && (
-          <Geojson
-            geojson={location || myPlace} // geojson of the countries you want to highlight
-            strokeColor="#fff"
-            fillColor="rgba(0, 115, 255, 0.7)"
-            strokeWidth={2}
-          />
-        )}
-        {beenPlaces?.map((item) => (
-          <Geojson
-            geojson={{
-              type: "FeatureCollection",
-              features: [getCountry(item)],
-            }} // geojson of the countries you want to highlight
-            strokeColor="#fff"
-            fillColor="#500074"
-            strokeWidth={2}
-          />
-        ))}
-        {livedPlaces?.map((item) => (
-          <Geojson
-            geojson={{
-              type: "FeatureCollection",
-              features: [getCountry(item)],
-            }} // geojson of the countries you want to highlight
-            strokeColor="#fff"
-            fillColor="#00d52d"
-            strokeWidth={2}
-          />
-        ))}
-      </MapView>
-
+    <>
+      <View style={styles.container}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+            handleResetMap();
+            countryDetailModalRef.current &&
+              countryDetailModalRef.current.close();
+          }}
+          activeOpacity={0.7}
+          style={styles.backButton}
+        >
+          <BackIcon />
+        </TouchableOpacity>
+        <MapView
+          ref={mapRef}
+          provider={Platform.OS === "android" ? PROVIDER_GOOGLE : undefined}
+          style={styles.map}
+          onPress={handleMapPress}
+          zoomEnabled
+          zoomControlEnabled
+          pitchEnabled
+          followUserLocation={true}
+          showsUserLocation={true}
+          customMapStyle={[
+            {
+              featureType: "all",
+              elementType: "geometry.fill",
+              stylers: [
+                {
+                  weight: "2.00",
+                },
+              ],
+            },
+            {
+              featureType: "all",
+              elementType: "geometry.stroke",
+              stylers: [
+                {
+                  color: "#9c9c9c",
+                },
+              ],
+            },
+            {
+              featureType: "all",
+              elementType: "labels.text",
+              stylers: [
+                {
+                  visibility: "on",
+                },
+              ],
+            },
+            {
+              featureType: "administrative",
+              elementType: "geometry.fill",
+              stylers: [
+                {
+                  color: "#930707",
+                },
+              ],
+            },
+            {
+              featureType: "administrative.country",
+              elementType: "geometry.stroke",
+              stylers: [
+                {
+                  color: "#57585e",
+                },
+              ],
+            },
+            {
+              featureType: "administrative.province",
+              elementType: "geometry.stroke",
+              stylers: [
+                {
+                  color: "#ffffff",
+                },
+              ],
+            },
+            {
+              featureType: "landscape",
+              elementType: "all",
+              stylers: [
+                {
+                  color: "#f2f2f2",
+                },
+              ],
+            },
+            {
+              featureType: "landscape",
+              elementType: "geometry.fill",
+              stylers: [
+                {
+                  color: "#ffffff",
+                },
+              ],
+            },
+            {
+              featureType: "landscape.man_made",
+              elementType: "geometry.fill",
+              stylers: [
+                {
+                  color: "#ffffff",
+                },
+              ],
+            },
+            {
+              featureType: "landscape.natural.landcover",
+              elementType: "geometry.fill",
+              stylers: [
+                {
+                  color: "#ffffff",
+                },
+              ],
+            },
+            {
+              featureType: "landscape.natural.terrain",
+              elementType: "geometry.fill",
+              stylers: [
+                {
+                  color: "#7c7a00",
+                },
+              ],
+            },
+            {
+              featureType: "poi",
+              elementType: "all",
+              stylers: [
+                {
+                  visibility: "off",
+                },
+              ],
+            },
+            {
+              featureType: "road",
+              elementType: "all",
+              stylers: [
+                {
+                  saturation: -100,
+                },
+                {
+                  lightness: 45,
+                },
+              ],
+            },
+            {
+              featureType: "road",
+              elementType: "geometry.fill",
+              stylers: [
+                {
+                  color: "#eeeeee",
+                },
+              ],
+            },
+            {
+              featureType: "road",
+              elementType: "labels.text.fill",
+              stylers: [
+                {
+                  color: "#7b7b7b",
+                },
+              ],
+            },
+            {
+              featureType: "road",
+              elementType: "labels.text.stroke",
+              stylers: [
+                {
+                  color: "#ffffff",
+                },
+              ],
+            },
+            {
+              featureType: "road.highway",
+              elementType: "all",
+              stylers: [
+                {
+                  visibility: "simplified",
+                },
+              ],
+            },
+            {
+              featureType: "road.arterial",
+              elementType: "labels.icon",
+              stylers: [
+                {
+                  visibility: "off",
+                },
+              ],
+            },
+            {
+              featureType: "transit",
+              elementType: "all",
+              stylers: [
+                {
+                  visibility: "off",
+                },
+              ],
+            },
+            {
+              featureType: "water",
+              elementType: "all",
+              stylers: [
+                {
+                  color: "#46bcec",
+                },
+                {
+                  visibility: "on",
+                },
+              ],
+            },
+            {
+              featureType: "water",
+              elementType: "geometry.fill",
+              stylers: [
+                {
+                  color: "#a4d7f7",
+                },
+              ],
+            },
+            {
+              featureType: "water",
+              elementType: "labels.text.fill",
+              stylers: [
+                {
+                  color: "#070707",
+                },
+              ],
+            },
+            {
+              featureType: "water",
+              elementType: "labels.text.stroke",
+              stylers: [
+                {
+                  color: "#ffffff",
+                },
+              ],
+            },
+          ]}
+          mapType="standart"
+        >
+          {location && (
+            <Geojson
+              geojson={location || myPlace} // geojson of the countries you want to highlight
+              strokeColor="#fff"
+              fillColor="rgba(255, 225, 255, 0.5)"
+              strokeWidth={2}
+            />
+          )}
+          {beenPlaces?.map((item) => (
+            <Geojson
+              geojson={{
+                type: "FeatureCollection",
+                features: [getCountry(item)],
+              }} // geojson of the countries you want to highlight
+              strokeColor="#fff"
+              fillColor="rgba(0, 134, 28, 0.6)"
+              strokeWidth={2}
+            />
+          ))}
+          {livedPlaces?.map((item) => (
+            <Geojson
+              geojson={{
+                type: "FeatureCollection",
+                features: [getCountry(item)],
+              }} // geojson of the countries you want to highlight
+              strokeColor="#fff"
+              fillColor="rgba(80, 0, 116, 0.7)"
+              strokeWidth={2}
+            />
+          ))}
+        </MapView>
+      </View>
       <Portal>
         <Modalize
           ref={countryDetailModalRef}
@@ -573,7 +642,7 @@ const MyWorldScreen = () => {
                     backgroundColor:
                       currentCountry?.isoCountryCode &&
                       beenPlaces?.includes(currentCountry?.isoCountryCode)
-                        ? COLORS.primaryDark
+                        ? "rgba(0, 134, 28, 0.7)"
                         : "#fff",
                   },
                 ]}
@@ -610,7 +679,7 @@ const MyWorldScreen = () => {
                     backgroundColor:
                       currentCountry?.isoCountryCode &&
                       livedPlaces?.includes(currentCountry?.isoCountryCode)
-                        ? "#00d52d"
+                        ? "rgba(80, 0, 116, 0.7)"
                         : "#fff",
                   },
                 ]}
@@ -638,19 +707,105 @@ const MyWorldScreen = () => {
                   Lived
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.actionButton}>
-                <ImagesIcon width="25" height="25" active={false} />
-                <Text style={styles.actionButtonsText}>Add stories</Text>
+              <TouchableOpacity
+                onPress={() => pickImages()}
+                style={styles.actionButton}
+              >
+                {isSelectingImages ? (
+                  <ActivityIndicator />
+                ) : (
+                  <>
+                    <ImagesIcon width="25" height="25" active={false} />
+                    <Text style={styles.actionButtonsText}>Add stories</Text>
+                  </>
+                )}
               </TouchableOpacity>
             </View>
           </View>
         </Modalize>
       </Portal>
-    </View>
+      <Portal>
+        <Modalize
+          ref={memoriesModalRef}
+          // modalTopOffset={65}
+          adjustToContentHeight
+          // onClose={() => handleResetMap()}
+          // closeOnOverlayTap={false}
+          HeaderComponent={
+            <View style={styles.memoriesModalHeader}>
+              <View style={styles.currentCountry}>
+                <ImageBackground
+                  resizeMode="cover"
+                  style={{
+                    width: 25,
+                    height: 15,
+                  }}
+                  source={imagePath ? imagePath : null} // Set the image source
+                />
+                <Text style={styles.countryText}>
+                  {currentCountry?.country}
+                </Text>
+              </View>
+
+              <TouchableOpacity style={styles.importImagesButton}>
+                <Text style={styles.importImagesButtonText}>Import</Text>
+                <AnchorRightIcon />
+              </TouchableOpacity>
+            </View>
+          }
+          childrenStyle={{
+            minHeight: "50%",
+          }}
+          style={{ minHeight: "50%" }}
+        >
+          <AddMemoriesModal
+            images={pickedImages}
+            setPickedImages={setPickedImages}
+            pickImages={pickImages}
+            isSelectingImages={isSelectingImages}
+          />
+        </Modalize>
+      </Portal>
+    </>
   );
 };
 export default MyWorldScreen;
 const styles = StyleSheet.create({
+  currentCountry: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  importImagesButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    paddingRight: 8,
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: "#000",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  importImagesButtonText: {
+    fontSize: 14,
+    color: "#000",
+  },
+  memoriesModalHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 15,
+  },
+  countryText: {
+    marginLeft: 10,
+    fontSize: 14,
+    fontWeight: "bold",
+  },
+  countryTextLabel: {
+    color: "#333",
+    fontSize: 20,
+    fontWeight: "bold",
+    marginRight: 15,
+  },
   actionButtons: {
     flexDirection: "row",
     alignItems: "center",

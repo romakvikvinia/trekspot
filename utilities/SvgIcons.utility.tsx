@@ -472,10 +472,12 @@ export const BackIcon = ({ color }) => {
   const SvgImage = () => <SvgXml xml={svgMarkup} width="25" height="25" />;
   return <SvgImage />;
 };
-export const TrashIcon = () => {
+export const TrashIcon = ({ width }) => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M448 85.333h-66.133C371.66 35.703 328.002.064 277.333 0h-42.667c-50.669.064-94.327 35.703-104.533 85.333H64c-11.782 0-21.333 9.551-21.333 21.333S52.218 128 64 128h21.333v277.333C85.404 464.214 133.119 511.93 192 512h128c58.881-.07 106.596-47.786 106.667-106.667V128H448c11.782 0 21.333-9.551 21.333-21.333S459.782 85.333 448 85.333zM234.667 362.667c0 11.782-9.551 21.333-21.333 21.333-11.783 0-21.334-9.551-21.334-21.333v-128c0-11.782 9.551-21.333 21.333-21.333 11.782 0 21.333 9.551 21.333 21.333v128zm85.333 0c0 11.782-9.551 21.333-21.333 21.333-11.782 0-21.333-9.551-21.333-21.333v-128c0-11.782 9.551-21.333 21.333-21.333 11.782 0 21.333 9.551 21.333 21.333v128zM174.315 85.333c9.074-25.551 33.238-42.634 60.352-42.667h42.667c27.114.033 51.278 17.116 60.352 42.667H174.315z" fill="red" opacity="1" data-original="#000000" class=""></path></g></svg>
   `;
-  const SvgImage = () => <SvgXml xml={svgMarkup} width="20" height="20" />;
+  const SvgImage = () => (
+    <SvgXml xml={svgMarkup} width={width ? width : "20"} height="20" />
+  );
   return <SvgImage />;
 };
 export const PlusIcon = ({ color }) => {
@@ -1948,5 +1950,21 @@ export const ImagesIcon = ({ width, height, active }) => {
       height={height ? height : "22"}
     />
   );
+  return <SvgImage />;
+};
+
+export const Marker = () => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path fill="#3eb655" d="M341.025 389.854c-27.67 14.977-52.042 35.414-70.828 60.8-7.085 9.49-21.314 9.468-28.37-.044l-.062-.083c-18.277-24.371-41.252-45.061-68.163-59.15-57.242-29.828-96.21-89.486-96.21-158.536 0-105.223 91.261-189.505 199.279-177.447 81.488 9.14 147.493 75.017 156.759 156.505 8.63 76.538-30.973 144.698-92.405 177.955z" opacity="1" data-original="#3eb655" class="" style="
+  fill: #fff;
+"></path><path fill="#ffffff" d="M339.817 232.841c0 46.321-37.622 83.835-83.834 83.835-46.324 0-83.837-37.514-83.837-83.835 0-46.212 37.513-83.834 83.837-83.834 46.212 0 83.834 37.622 83.834 83.834z" opacity="1" data-original="#ffffff" class=""></path><path d="M323.837 183.692c-13.812-10.04-30.758-15.99-49.139-15.99-46.323 0-83.881 37.611-83.881 83.827 0 18.328 5.897 35.274 15.884 49.086-20.93-15.192-34.53-39.895-34.53-67.784 0-46.217 37.505-83.828 83.828-83.828 27.837 0 52.592 13.652 67.838 34.689z" opacity="1" fill="#00000010" data-original="#00000010" style="
+  fill: #fff;
+" class=""></path></g></svg>`;
+  const SvgImage = () => <SvgXml xml={svgMarkup} width={35} height={35} />;
+  return <SvgImage />;
+};
+
+export const AnchorRightIcon = () => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="m15.4 9.88-4.59-4.59a1 1 0 0 0-1.41 0 1 1 0 0 0 0 1.42l4.6 4.58a1 1 0 0 1 0 1.42l-4.6 4.58a1 1 0 0 0 1.41 1.42l4.59-4.59a3 3 0 0 0 0-4.24Z" fill="#000000" opacity="1" data-original="#000000"></path></g></svg>`;
+  const SvgImage = () => <SvgXml xml={svgMarkup} width={15} height={15} />;
   return <SvgImage />;
 };
