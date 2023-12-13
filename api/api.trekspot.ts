@@ -12,15 +12,16 @@ import {
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 
-let token: any;
 const prepHeaders = async (headers: Headers) => {
-  token = token ? token : await getFullToken();
+  let token = await getFullToken();
 
-  if (token) {
+  if (token && new Date().getTime() < token.expire) {
     // set Token
     headers.set("Authorization", `Bearer ${token.token}`);
     // console.log("token", token.token);
     // console.log(headers);
+  } else {
+    // refetch
   }
 
   return headers;
@@ -29,8 +30,7 @@ const prepHeaders = async (headers: Headers) => {
 export const trekSpotApi = createApi({
   // refetchOnMountOrArgChange: true,
   baseQuery: graphqlRequestBaseQuery({
-    // url: "http://localhost:8080/graphql",
-    url: "http://192.168.0.105:8080/graphql",
+    url: "http://localhost:8080/graphql",
     prepareHeaders: prepHeaders,
     customErrors: ({ name, response }) => {
       console.log(name, response);

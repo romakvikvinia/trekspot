@@ -60,9 +60,7 @@ export type UserArgType = Partial<
 >;
 
 export type UpdateMeResponseType = {
-  data: {
-    updateMe: UserType;
-  };
+  updateMe: UserType;
 };
 
 export type meResponseType = {

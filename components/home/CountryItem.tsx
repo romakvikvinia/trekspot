@@ -8,6 +8,7 @@ import {
 import { Flags } from "../../utilities/flags";
 import { LivedIcon, VisitedIcon } from "../../utilities/SvgIcons.utility";
 import { COLORS } from "../../styles/theme";
+import { useState } from "react";
 
 interface HomeProps {
   name: string;
@@ -21,11 +22,11 @@ interface HomeProps {
 export const CountryItem: React.FC<HomeProps> = ({
   name,
   iso2,
-  capital,
   lived,
   visited,
   onVisited,
 }) => {
+  const [state, setState] = useState({ isVisited: visited, isLived: lived });
   // Assuming that `item` contains the ISO2 country code
 
   // Check if the image path exists in the mapping
@@ -61,11 +62,17 @@ export const CountryItem: React.FC<HomeProps> = ({
         <TouchableOpacity
           style={[
             styles.countryItemActionButton,
-            visited ? styles.countryActive : null,
+            state.isVisited ? styles.countryActive : null,
           ]}
-          onPress={() => onVisited(iso2)}
+          onPress={() => {
+            setState((prevState) => ({
+              ...prevState,
+              isVisited: !prevState.isVisited,
+            }));
+            onVisited(iso2);
+          }}
         >
-          <VisitedIcon active={visited} />
+          <VisitedIcon active={state.isVisited} />
         </TouchableOpacity>
         <TouchableOpacity
           style={[

@@ -15,7 +15,7 @@ import {
 } from "../../utilities/SvgIcons.utility";
 import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FlashList } from "@shopify/flash-list";
 import { CountriesList } from "../../utilities/countryList";
 import { COLORS, SIZES } from "../../styles/theme";
@@ -24,11 +24,28 @@ import ShareModal from "../../common/components/ShareModal";
 import { BucketlistModal } from "../../common/components/BucketlistModal";
 import { CountryItem } from "../../components/home/CountryItem";
 import { useUpdateMeMutation, useMeQuery } from "../../api/api.trekspot";
+import { CountryType } from "../../api/api.types";
 
 export const MapView = () => {
-  const { data, refetch, requestId } = useMeQuery();
+  const [state, setState] = useState<{ visited_countries: CountryType[] }>({
+    visited_countries: [],
+  });
+  const {
+    data,
+    refetch,
+    isLoading: isMeLoading,
+    isSuccess: isMeSuccess,
+  } = useMeQuery();
 
-  const [updateMe, { isLoading, isError, isSuccess }] = useUpdateMeMutation();
+  const [
+    updateMe,
+    {
+      isLoading: isUpdateMeLoading,
+      isError,
+      isSuccess: isUpdateMeSuccess,
+      data: updateMeData,
+    },
+  ] = useUpdateMeMutation();
   const modalRef = useRef<Modalize>(null);
   const shareModalRef = useRef<Modalize>(null);
   const BucketListModalRef = useRef<Modalize>(null);
@@ -47,18 +64,38 @@ export const MapView = () => {
 
   const handleVisited = useCallback(
     (code: string) => {
-      if (!data) return;
-      let visited_countries = data.me.visited_countries.map((i) => i.iso2);
-
+      const { visited_countries: visited } = state;
+      let visited_countries = visited.map((i) => i.iso2);
+      console.log("visited_countries1", visited_countries, code);
       visited_countries = visited_countries.includes(code)
         ? visited_countries.filter((i) => i !== code)
         : [...visited_countries, code];
-
+      console.log("visited_countries2", visited_countries);
       updateMe({ visited_countries });
-      refetch();
+      // refetch();
     },
-    [data]
+    [state]
   );
+
+  useEffect(() => {
+    if (isMeSuccess && data && data.me) {
+      console.log("first fetch me");
+      setState((prevState) => ({
+        ...prevState,
+        visited_countries: data.me.visited_countries,
+      }));
+    }
+  }, [isMeSuccess]);
+
+  useEffect(() => {
+    if (isUpdateMeSuccess && updateMeData && updateMeData.updateMe) {
+      console.log("updateMe", updateMeData.updateMe.visited_countries);
+      setState((prevState) => ({
+        ...prevState,
+        visited_countries: updateMeData.updateMe.visited_countries,
+      }));
+    }
+  }, [isUpdateMeSuccess]);
 
   return (
     <>
@@ -179,6 +216,7 @@ export const MapView = () => {
         <Modalize
           ref={modalRef}
           modalTopOffset={65}
+          onClosed={() => console.log("closed")}
           HeaderComponent={
             <View style={styles.modalHeader}>
               <TextInput
@@ -205,13 +243,16 @@ export const MapView = () => {
         >
           <View style={{ flex: 1, height: SIZES.height - 200 }}>
             <FlashList
-              key={requestId}
+              keyExtractor={(item) =>
+                `${item.iso2}-${item.name}-${item.capital}`
+              }
+              extraData={state.visited_countries}
               data={CountriesList}
               renderItem={({ item }) => (
                 <CountryItem
                   {...item}
                   onVisited={handleVisited}
-                  visited={data?.me.visited_countries.some(
+                  visited={state.visited_countries.some(
                     (i) => i.iso2 === item.iso2
                   )}
                 />
