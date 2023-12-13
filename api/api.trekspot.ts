@@ -6,15 +6,21 @@ import {
   AuthLoginResponseType,
   AuthLogUpType,
   AuthSignUpResponseType,
+  UpdateMeResponseType,
+  UserArgType,
+  meResponseType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 
+let token: any;
 const prepHeaders = async (headers: Headers) => {
-  let token = await getFullToken();
+  token = token ? token : await getFullToken();
 
-  if (token && new Date().getTime() < token.expire) {
+  if (token) {
     // set Token
     headers.set("Authorization", `Bearer ${token.token}`);
+    // console.log("token", token.token);
+    // console.log(headers);
   }
 
   return headers;
@@ -23,9 +29,11 @@ const prepHeaders = async (headers: Headers) => {
 export const trekSpotApi = createApi({
   // refetchOnMountOrArgChange: true,
   baseQuery: graphqlRequestBaseQuery({
-    url: "http://localhost:8080/graphql",
+    // url: "http://localhost:8080/graphql",
+    url: "http://192.168.0.105:8080/graphql",
     prepareHeaders: prepHeaders,
     customErrors: ({ name, response }) => {
+      console.log(name, response);
       return {
         name,
         stack: null,
@@ -95,7 +103,84 @@ export const trekSpotApi = createApi({
       },
       invalidatesTags: (result, error) => (error ? [] : ["signUp"]),
     }),
+
+    /**
+     * Update me
+     * this updates user information
+     */
+
+    updateMe: builder.mutation<UpdateMeResponseType, UserArgType>({
+      query: ({ visited_countries = [], lived_countries = [] }) => {
+        return {
+          variables: { visited_countries, lived_countries },
+          document: gql`
+            mutation (
+              $visited_countries: [String!]
+              $lived_countries: [String!]
+            ) {
+              updateMe(
+                input: {
+                  visited_countries: $visited_countries
+                  lived_countries: $lived_countries
+                }
+              ) {
+                firstName
+                lastName
+                email
+                role
+                emailVerifiedAt
+                visited_countries {
+                  id
+                  name
+                  iso2
+                }
+                lived_countries {
+                  id
+                  name
+                  iso2
+                }
+              }
+            }
+          `,
+        };
+      },
+    }),
+
+    /**
+     * Get user info
+     *
+     */
+    me: builder.query<meResponseType, void>({
+      query: () => ({
+        document: gql`
+          query {
+            me {
+              firstName
+              lastName
+              email
+              role
+              emailVerifiedAt
+              visited_countries {
+                id
+                name
+                iso2
+              }
+              lived_countries {
+                id
+                name
+                iso2
+              }
+            }
+          }
+        `,
+      }),
+    }),
   }),
 });
 
-export const { useSignInMutation, useSignUpMutation } = trekSpotApi;
+export const {
+  useSignInMutation,
+  useSignUpMutation,
+  useUpdateMeMutation,
+  useMeQuery,
+} = trekSpotApi;

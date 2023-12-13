@@ -15,19 +15,20 @@ import {
 } from "../../utilities/SvgIcons.utility";
 import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 import { FlashList } from "@shopify/flash-list";
 import { CountriesList } from "../../utilities/countryList";
 import { COLORS, SIZES } from "../../styles/theme";
 
-import { useNavigation } from "@react-navigation/native";
 import ShareModal from "../../common/components/ShareModal";
 import { BucketlistModal } from "../../common/components/BucketlistModal";
-import { CountryItem } from "../../components/homde/CountryItem";
+import { CountryItem } from "../../components/home/CountryItem";
+import { useUpdateMeMutation, useMeQuery } from "../../api/api.trekspot";
 
 export const MapView = () => {
-  const navigation = useNavigation();
+  const { data, refetch, requestId } = useMeQuery();
 
+  const [updateMe, { isLoading, isError, isSuccess }] = useUpdateMeMutation();
   const modalRef = useRef<Modalize>(null);
   const shareModalRef = useRef<Modalize>(null);
   const BucketListModalRef = useRef<Modalize>(null);
@@ -44,9 +45,20 @@ export const MapView = () => {
     if (BucketListModalRef.current) BucketListModalRef.current.open();
   }, []);
 
-  const handleVisited = useCallback((code: string) => {
-    console.log(code);
-  }, []);
+  const handleVisited = useCallback(
+    (code: string) => {
+      if (!data) return;
+      let visited_countries = data.me.visited_countries.map((i) => i.iso2);
+
+      visited_countries = visited_countries.includes(code)
+        ? visited_countries.filter((i) => i !== code)
+        : [...visited_countries, code];
+
+      updateMe({ visited_countries });
+      refetch();
+    },
+    [data]
+  );
 
   return (
     <>
@@ -193,9 +205,16 @@ export const MapView = () => {
         >
           <View style={{ flex: 1, height: SIZES.height - 200 }}>
             <FlashList
+              key={requestId}
               data={CountriesList}
               renderItem={({ item }) => (
-                <CountryItem {...item} onVisited={handleVisited} />
+                <CountryItem
+                  {...item}
+                  onVisited={handleVisited}
+                  visited={data?.me.visited_countries.some(
+                    (i) => i.iso2 === item.iso2
+                  )}
+                />
               )}
               estimatedItemSize={200}
             />

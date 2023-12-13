@@ -68,7 +68,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
   return (
     <NavigationContainer onReady={checkAuth} theme={theme}>
       <AuthContext.Provider value={authContext}>
-        {false ? <AuthRoute /> : <AppRoute />}
+        {!state.isAuthenticated ? <AuthRoute /> : <AppRoute />}
       </AuthContext.Provider>
     </NavigationContainer>
   );
