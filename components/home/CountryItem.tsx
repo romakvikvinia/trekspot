@@ -8,7 +8,9 @@ import {
 import { Flags } from "../../utilities/flags";
 import { LivedIcon, VisitedIcon } from "../../utilities/SvgIcons.utility";
 import { COLORS } from "../../styles/theme";
-import { useState } from "react";
+import { useState, memo } from "react";
+import { storeCountries } from "../../helpers/secure.storage";
+import { useVisitedOrLivedCountries } from "../../package/store";
 
 interface HomeProps {
   name: string;
@@ -19,74 +21,74 @@ interface HomeProps {
   onVisited: (code: string) => void;
 }
 
-export const CountryItem: React.FC<HomeProps> = ({
-  name,
-  iso2,
-  lived,
-  visited,
-  onVisited,
-}) => {
-  const [state, setState] = useState({ isVisited: visited, isLived: lived });
-  // Assuming that `item` contains the ISO2 country code
+export const CountryItem: React.FC<HomeProps> = memo(
+  ({ name, iso2, lived, visited, onVisited }) => {
+    const onVisitedCountries = useVisitedOrLivedCountries(
+      (state) => state.updateVisitedCountries
+    );
+    const [state, setState] = useState({ isVisited: visited, isLived: lived });
+    // Assuming that `item` contains the ISO2 country code
 
-  // Check if the image path exists in the mapping
-  // @ts-ignore
-  const imagePath = Flags[iso2];
+    // Check if the image path exists in the mapping
+    // @ts-ignore
+    const imagePath = Flags[iso2];
 
-  return (
-    <View style={styles.countryItem}>
-      <View style={styles.countryItemLeft}>
-        <View
-          style={{
-            width: 31,
-            height: 21,
-            borderRadius: 3,
-            overflow: "hidden",
-            borderWidth: 1,
-            borderColor: "#fafafa",
-          }}
-        >
-          <ImageBackground
-            resizeMode="cover"
+    return (
+      <View style={styles.countryItem}>
+        <View style={styles.countryItemLeft}>
+          <View
             style={{
-              width: 30,
-              height: 20,
-              backgroundColor: "#ddd",
+              width: 31,
+              height: 21,
+              borderRadius: 3,
+              overflow: "hidden",
+              borderWidth: 1,
+              borderColor: "#fafafa",
             }}
-            source={imagePath ? imagePath : null} // Set the image source
-          />
+          >
+            <ImageBackground
+              resizeMode="cover"
+              style={{
+                width: 30,
+                height: 20,
+                backgroundColor: "#ddd",
+              }}
+              source={imagePath ? imagePath : null} // Set the image source
+            />
+          </View>
+          <Text style={styles.itemTitle}>{name}</Text>
         </View>
-        <Text style={styles.itemTitle}>{name}</Text>
+        <View style={styles.countryItemActions}>
+          <TouchableOpacity
+            style={[
+              styles.countryItemActionButton,
+              state.isVisited ? styles.countryActive : null,
+            ]}
+            onPress={() => {
+              // storeCountries(iso2);
+              onVisitedCountries(iso2);
+              setState((prevState) => ({
+                ...prevState,
+                isVisited: !prevState.isVisited,
+              }));
+            }}
+          >
+            <VisitedIcon active={state.isVisited} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.countryItemActionButton,
+              lived ? styles.countryLived : null,
+            ]}
+            //   onPress={() => setLivedCountry(countryCode)}
+          >
+            <LivedIcon active={lived} />
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.countryItemActions}>
-        <TouchableOpacity
-          style={[
-            styles.countryItemActionButton,
-            state.isVisited ? styles.countryActive : null,
-          ]}
-          onPress={() => {
-            setState((prevState) => ({
-              ...prevState,
-              isVisited: !prevState.isVisited,
-            }));
-            onVisited(iso2);
-          }}
-        >
-          <VisitedIcon active={state.isVisited} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.countryItemActionButton,
-            lived ? styles.countryLived : null,
-          ]}
-          //   onPress={() => setLivedCountry(countryCode)}
-        >
-          <LivedIcon active={lived} />
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-};
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   itemTitle: {

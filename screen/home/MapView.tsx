@@ -24,12 +24,29 @@ import ShareModal from "../../common/components/ShareModal";
 import { BucketlistModal } from "../../common/components/BucketlistModal";
 import { CountryItem } from "../../components/home/CountryItem";
 import { useUpdateMeMutation, useMeQuery } from "../../api/api.trekspot";
-import { CountryType } from "../../api/api.types";
+import { getCountries } from "../../helpers/secure.storage";
+import { useVisitedOrLivedCountries } from "../../package/store";
+
+type ICountry = {
+  name: string;
+  iso2: string;
+  capital: string;
+  lived?: boolean;
+  visited?: boolean;
+};
 
 export const MapView = () => {
-  const [state, setState] = useState<{ visited_countries: CountryType[] }>({
+  const [state, setState] = useState<{
+    countries: ICountry[];
+    visited_countries: string[];
+  }>({
     visited_countries: [],
+    countries: CountriesList,
   });
+
+  const visited_countries = useVisitedOrLivedCountries(
+    (state) => state.visited_countries
+  );
   const {
     data,
     refetch,
@@ -62,41 +79,40 @@ export const MapView = () => {
     if (BucketListModalRef.current) BucketListModalRef.current.open();
   }, []);
 
-  const handleVisited = useCallback(
-    (code: string) => {
-      const { visited_countries: visited } = state;
-      let visited_countries = visited.map((i) => i.iso2);
-      console.log("visited_countries1", visited_countries, code);
-      visited_countries = visited_countries.includes(code)
-        ? visited_countries.filter((i) => i !== code)
-        : [...visited_countries, code];
-      console.log("visited_countries2", visited_countries);
-      updateMe({ visited_countries });
-      // refetch();
-    },
-    [state]
-  );
+  const handleCountriesModalClose = useCallback(async () => {
+    // console.log("finish", await getCountries());
+    console.log("finish", visited_countries);
+  }, [visited_countries]);
+
+  const handleVisited = (code: string) => {
+    console.log("code", code);
+  };
 
   useEffect(() => {
     if (isMeSuccess && data && data.me) {
       console.log("first fetch me");
+      const visited_countries = data.me.visited_countries.map((i) => i.iso2);
       setState((prevState) => ({
         ...prevState,
-        visited_countries: data.me.visited_countries,
+        visited_countries,
+        countries: prevState.countries.map((i) => {
+          i.visited = visited_countries.includes(i.iso2);
+          return i;
+        }),
       }));
     }
   }, [isMeSuccess]);
 
   useEffect(() => {
     if (isUpdateMeSuccess && updateMeData && updateMeData.updateMe) {
-      console.log("updateMe", updateMeData.updateMe.visited_countries);
-      setState((prevState) => ({
-        ...prevState,
-        visited_countries: updateMeData.updateMe.visited_countries,
-      }));
+      // console.log("updateMe", updateMeData.updateMe.visited_countries);
+      // setState((prevState) => ({
+      //   ...prevState,
+      //   visited_countries: updateMeData.updateMe.visited_countries,
+      // }));
     }
   }, [isUpdateMeSuccess]);
-
+  console.log(state.visited_countries);
   return (
     <>
       <View style={styles.mapContainer}>
@@ -216,7 +232,7 @@ export const MapView = () => {
         <Modalize
           ref={modalRef}
           modalTopOffset={65}
-          onClosed={() => console.log("closed")}
+          onClosed={handleCountriesModalClose}
           HeaderComponent={
             <View style={styles.modalHeader}>
               <TextInput
@@ -246,16 +262,10 @@ export const MapView = () => {
               keyExtractor={(item) =>
                 `${item.iso2}-${item.name}-${item.capital}`
               }
-              extraData={state.visited_countries}
+              // extraData={state.countries}
               data={CountriesList}
               renderItem={({ item }) => (
-                <CountryItem
-                  {...item}
-                  onVisited={handleVisited}
-                  visited={state.visited_countries.some(
-                    (i) => i.iso2 === item.iso2
-                  )}
-                />
+                <CountryItem {...item} onVisited={handleVisited} />
               )}
               estimatedItemSize={200}
             />
