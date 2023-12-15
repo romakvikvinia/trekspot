@@ -46,8 +46,6 @@ export const Wishlist = ({ wishlistVisible, setWishlistVisible }) => {
     setWishlist((prevState) => [...prevState, { name: item }]);
   };
 
-  console.log("wishlistsss", wishlist);
-
   return (
     <Portal>
       <Modalize

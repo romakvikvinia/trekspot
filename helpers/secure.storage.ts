@@ -1,5 +1,5 @@
 import * as SecureStore from "expo-secure-store";
-import { string } from "yup";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const storeToken = async (token: any) => {
   try {
@@ -28,22 +28,33 @@ export const deleteItemFromStorage = async (key = "token") => {
   }
 };
 
+export const storeInitialCountryCodes = async (
+  key: string = "visited_countries",
+  codes: string[] = []
+) => {
+  try {
+    await AsyncStorage.setItem(key, JSON.stringify(codes));
+  } catch (e) {
+    return false;
+  }
+  return true;
+};
+
 export const storeCountries = async (code: any, key = "visited_countries") => {
   try {
     const defaultValue: string[] = [];
-    let visited_countries = await SecureStore.getItemAsync(key);
+    let countries = await AsyncStorage.getItem(key);
+
     // @ts-ignore
-    visited_countries = (
-      visited_countries ? JSON.parse(visited_countries) : defaultValue
-    ) as string[];
+    countries = (countries ? JSON.parse(countries) : defaultValue) as string[];
 
     //@ts-ignore
-    visited_countries =
-      visited_countries && visited_countries.includes(code)
-        ? visited_countries
-        : visited_countries?.concat(code);
+    countries =
+      countries && countries.includes(code) && Array.isArray(countries)
+        ? countries.filter((i) => i !== code)
+        : countries?.concat(code);
 
-    await SecureStore.setItemAsync(key, JSON.stringify(visited_countries));
+    await AsyncStorage.setItem(key, JSON.stringify(countries));
   } catch (e) {
     return false;
   }
@@ -53,13 +64,23 @@ export const storeCountries = async (code: any, key = "visited_countries") => {
 export const getCountries = async (key = "visited_countries") => {
   try {
     const defaultValue: string[] = [];
-    let visited_countries = await SecureStore.getItemAsync(key);
+    let countries = await AsyncStorage.getItem(key);
     // @ts-ignore
-    visited_countries = (
-      visited_countries ? JSON.parse(visited_countries) : defaultValue
-    ) as string[];
+    countries = (countries ? JSON.parse(countries) : defaultValue) as string[];
 
-    return visited_countries;
+    return countries;
+  } catch (e) {
+    return false;
+  }
+};
+
+export const deleteFromAsyncStorage = async (key: string | string[]) => {
+  try {
+    if (Array.isArray(key)) {
+      await Promise.all(key.map(async (i) => await AsyncStorage.removeItem(i)));
+    } else {
+      await AsyncStorage.removeItem(key);
+    }
   } catch (e) {
     return false;
   }

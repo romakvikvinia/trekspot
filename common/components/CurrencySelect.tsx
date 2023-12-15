@@ -23,7 +23,6 @@ export const CurrencySelect = () => {
         style={[styles.countryItem, { width: "100%" }]}
         activeOpacity={0.7}
       >
-        {console.log("item", item)}
         <Text style={[styles.itemTitle, { fontSize: 16 }]}>
           {item.name} ({item.symbol})
         </Text>

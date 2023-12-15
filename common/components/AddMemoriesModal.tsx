@@ -17,11 +17,9 @@ export const AddMemoriesModal = ({
   pickImages,
   isSelectingImages,
 }) => {
-  console.log("images", images);
-
   const handleRemoveImage = (id) => {
     const filteredImages = images?.assets?.filter((img) => img?.assetId !== id);
-    console.log("filteredImages", filteredImages);
+
     setPickedImages((prevState) => {
       return {
         ...prevState,

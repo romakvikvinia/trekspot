@@ -46,11 +46,10 @@ const ShareModal = () => {
 
   const ShareItem = async () => {
     const aa = await Sharing.isAvailableAsync();
-    console.log("aa", aa);
+
     let img = "";
     let racxa = ref.current.capture();
     const image = ref.current.capture().then((uri) => {
-      console.log("do something with ", uri);
       Sharing.shareAsync(`${uri}`, {
         mimeType: "image/jpeg",
 
@@ -58,7 +57,6 @@ const ShareModal = () => {
       });
       racxa = uri;
     });
-    console.log("racxa", racxa);
   };
 
   return (

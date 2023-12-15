@@ -23,9 +23,16 @@ import { COLORS, SIZES } from "../../styles/theme";
 import ShareModal from "../../common/components/ShareModal";
 import { BucketlistModal } from "../../common/components/BucketlistModal";
 import { CountryItem } from "../../components/home/CountryItem";
-import { useUpdateMeMutation, useMeQuery } from "../../api/api.trekspot";
-import { getCountries } from "../../helpers/secure.storage";
-import { useVisitedOrLivedCountries } from "../../package/store";
+import {
+  useUpdateMeMutation,
+  useMeQuery,
+  useLazyMeQuery,
+  trekSpotApi,
+} from "../../api/api.trekspot";
+import {
+  getCountries,
+  storeInitialCountryCodes,
+} from "../../helpers/secure.storage";
 
 type ICountry = {
   name: string;
@@ -39,30 +46,18 @@ export const MapView = () => {
   const [state, setState] = useState<{
     countries: ICountry[];
     visited_countries: string[];
+    lived_countries: string[];
   }>({
     visited_countries: [],
+    lived_countries: [],
     countries: CountriesList,
   });
 
-  const visited_countries = useVisitedOrLivedCountries(
-    (state) => state.visited_countries
-  );
-  const {
-    data,
-    refetch,
-    isLoading: isMeLoading,
-    isSuccess: isMeSuccess,
-  } = useMeQuery();
+  const [refetch, { data, isSuccess: isMeSuccess }] =
+    trekSpotApi.endpoints.me.useLazyQuery();
 
-  const [
-    updateMe,
-    {
-      isLoading: isUpdateMeLoading,
-      isError,
-      isSuccess: isUpdateMeSuccess,
-      data: updateMeData,
-    },
-  ] = useUpdateMeMutation();
+  const [updateMe, { isSuccess: isUpdateMeSuccess, data: updateMeData }] =
+    useUpdateMeMutation();
   const modalRef = useRef<Modalize>(null);
   const shareModalRef = useRef<Modalize>(null);
   const BucketListModalRef = useRef<Modalize>(null);
@@ -80,39 +75,84 @@ export const MapView = () => {
   }, []);
 
   const handleCountriesModalClose = useCallback(async () => {
-    // console.log("finish", await getCountries());
-    console.log("finish", visited_countries);
-  }, [visited_countries]);
+    let visited_countries = await getCountries();
+    let lived_countries = await getCountries("lived_countries");
 
-  const handleVisited = (code: string) => {
-    console.log("code", code);
-  };
+    const payload: {
+      visited_countries?: string[];
+      lived_countries?: string[];
+    } = { visited_countries: [], lived_countries: [] };
 
-  useEffect(() => {
+    if (visited_countries && Array.isArray(visited_countries))
+      payload.visited_countries = visited_countries;
+
+    if (lived_countries && Array.isArray(lived_countries))
+      payload.lived_countries = lived_countries;
+
+    updateMe(payload);
+  }, []);
+
+  /**
+   * First fetch about me
+   */
+  const handleFirstFetchMeInfo = useCallback(async () => {
     if (isMeSuccess && data && data.me) {
-      console.log("first fetch me");
       const visited_countries = data.me.visited_countries.map((i) => i.iso2);
+      const lived_countries = data.me.lived_countries.map((i) => i.iso2);
+      storeInitialCountryCodes("visited_countries", visited_countries);
+      storeInitialCountryCodes("lived_countries", lived_countries);
+      console.log("visited_countries", visited_countries);
+      console.log("lived_countries", lived_countries);
+      setState((prevState) => ({
+        ...prevState,
+        visited_countries,
+        lived_countries,
+        countries: prevState.countries.map((i) => {
+          i.visited = visited_countries.includes(i.iso2);
+          i.lived = lived_countries.includes(i.iso2);
+          return i;
+        }),
+      }));
+    }
+  }, [isMeSuccess, data]);
+
+  /**
+   * handle fetch update me
+   */
+
+  const handleUpdateMeSuccess = useCallback(() => {
+    if (isUpdateMeSuccess && updateMeData && updateMeData.updateMe) {
+      const visited_countries = updateMeData.updateMe.visited_countries.map(
+        (i) => i.iso2
+      );
+      const lived_countries = updateMeData.updateMe.lived_countries.map(
+        (i) => i.iso2
+      );
+
       setState((prevState) => ({
         ...prevState,
         visited_countries,
         countries: prevState.countries.map((i) => {
           i.visited = visited_countries.includes(i.iso2);
+          i.lived = lived_countries.includes(i.iso2);
           return i;
         }),
       }));
     }
-  }, [isMeSuccess]);
+  }, [isUpdateMeSuccess]);
 
   useEffect(() => {
-    if (isUpdateMeSuccess && updateMeData && updateMeData.updateMe) {
-      // console.log("updateMe", updateMeData.updateMe.visited_countries);
-      // setState((prevState) => ({
-      //   ...prevState,
-      //   visited_countries: updateMeData.updateMe.visited_countries,
-      // }));
-    }
-  }, [isUpdateMeSuccess]);
-  console.log(state.visited_countries);
+    handleFirstFetchMeInfo();
+  }, [handleFirstFetchMeInfo]);
+
+  useEffect(() => {
+    handleUpdateMeSuccess();
+  }, [handleUpdateMeSuccess]);
+
+  useEffect(() => {
+    if (refetch) refetch();
+  }, [refetch]);
+
   return (
     <>
       <View style={styles.mapContainer}>
@@ -263,10 +303,8 @@ export const MapView = () => {
                 `${item.iso2}-${item.name}-${item.capital}`
               }
               // extraData={state.countries}
-              data={CountriesList}
-              renderItem={({ item }) => (
-                <CountryItem {...item} onVisited={handleVisited} />
-              )}
+              data={state.countries}
+              renderItem={({ item }) => <CountryItem {...item} />}
               estimatedItemSize={200}
             />
           </View>
