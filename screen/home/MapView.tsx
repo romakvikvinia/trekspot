@@ -10,27 +10,59 @@ import {
   MapSvg,
   Mark,
   Mark2,
-  SearchIcon,
   Share,
   VisitedIcon,
 } from "../../utilities/SvgIcons.utility";
 import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FlashList } from "@shopify/flash-list";
 import { CountriesList } from "../../utilities/countryList";
 import { COLORS, SIZES } from "../../styles/theme";
 
-import { useNavigation } from "@react-navigation/native";
 import ShareModal from "../../common/components/ShareModal";
-import {
-  BucketlistModal,
-  WishlistModal,
-} from "../../common/components/BucketlistModal";
+import { BucketlistModal } from "../../common/components/BucketlistModal";
+import { CountryItem } from "../../components/home/CountryItem";
+import { useUpdateMeMutation, useMeQuery } from "../../api/api.trekspot";
+import { getCountries } from "../../helpers/secure.storage";
+import { useVisitedOrLivedCountries } from "../../package/store";
+
+type ICountry = {
+  name: string;
+  iso2: string;
+  capital: string;
+  lived?: boolean;
+  visited?: boolean;
+};
 
 export const MapView = () => {
-  const navigation = useNavigation();
+  const [state, setState] = useState<{
+    countries: ICountry[];
+    visited_countries: string[];
+  }>({
+    visited_countries: [],
+    countries: CountriesList,
+  });
 
+  const visited_countries = useVisitedOrLivedCountries(
+    (state) => state.visited_countries
+  );
+  const {
+    data,
+    refetch,
+    isLoading: isMeLoading,
+    isSuccess: isMeSuccess,
+  } = useMeQuery();
+
+  const [
+    updateMe,
+    {
+      isLoading: isUpdateMeLoading,
+      isError,
+      isSuccess: isUpdateMeSuccess,
+      data: updateMeData,
+    },
+  ] = useUpdateMeMutation();
   const modalRef = useRef<Modalize>(null);
   const shareModalRef = useRef<Modalize>(null);
   const BucketListModalRef = useRef<Modalize>(null);
@@ -47,66 +79,40 @@ export const MapView = () => {
     if (BucketListModalRef.current) BucketListModalRef.current.open();
   }, []);
 
-  const [visitedCountry, setVisitedCountry] = useState(null);
-  const [livedCountry, setLivedCountry] = useState(null);
+  const handleCountriesModalClose = useCallback(async () => {
+    // console.log("finish", await getCountries());
+    console.log("finish", visited_countries);
+  }, [visited_countries]);
 
-  const Country = ({ item }: any) => {
-    // Assuming that `item` contains the ISO2 country code
-    const countryCode = item.iso2 as string;
-
-    // Check if the image path exists in the mapping
-    // @ts-ignore
-    const imagePath = Flags[countryCode];
-
-    return (
-      <View style={styles.countryItem}>
-        <View style={styles.countryItemLeft}>
-          <View
-            style={{
-              width: 31,
-              height: 21,
-              borderRadius: 3,
-              overflow: "hidden",
-              borderWidth: 1,
-              borderColor: "#fafafa",
-            }}
-          >
-            <ImageBackground
-              resizeMode="cover"
-              style={{
-                width: 30,
-                height: 20,
-                backgroundColor: "#ddd",
-              }}
-              source={imagePath ? imagePath : null} // Set the image source
-            />
-          </View>
-          <Text style={styles.itemTitle}>{item.name}</Text>
-        </View>
-        <View style={styles.countryItemActions}>
-          <TouchableOpacity
-            style={[
-              styles.countryItemActionButton,
-              visitedCountry === countryCode ? styles.countryActive : null,
-            ]}
-            onPress={() => setVisitedCountry(countryCode)}
-          >
-            <VisitedIcon active={visitedCountry === countryCode} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.countryItemActionButton,
-              livedCountry === countryCode ? styles.countryLived : null,
-            ]}
-            onPress={() => setLivedCountry(countryCode)}
-          >
-            <LivedIcon active={livedCountry === countryCode} />
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
+  const handleVisited = (code: string) => {
+    console.log("code", code);
   };
 
+  useEffect(() => {
+    if (isMeSuccess && data && data.me) {
+      console.log("first fetch me");
+      const visited_countries = data.me.visited_countries.map((i) => i.iso2);
+      setState((prevState) => ({
+        ...prevState,
+        visited_countries,
+        countries: prevState.countries.map((i) => {
+          i.visited = visited_countries.includes(i.iso2);
+          return i;
+        }),
+      }));
+    }
+  }, [isMeSuccess]);
+
+  useEffect(() => {
+    if (isUpdateMeSuccess && updateMeData && updateMeData.updateMe) {
+      // console.log("updateMe", updateMeData.updateMe.visited_countries);
+      // setState((prevState) => ({
+      //   ...prevState,
+      //   visited_countries: updateMeData.updateMe.visited_countries,
+      // }));
+    }
+  }, [isUpdateMeSuccess]);
+  console.log(state.visited_countries);
   return (
     <>
       <View style={styles.mapContainer}>
@@ -226,6 +232,7 @@ export const MapView = () => {
         <Modalize
           ref={modalRef}
           modalTopOffset={65}
+          onClosed={handleCountriesModalClose}
           HeaderComponent={
             <View style={styles.modalHeader}>
               <TextInput
@@ -252,8 +259,14 @@ export const MapView = () => {
         >
           <View style={{ flex: 1, height: SIZES.height - 200 }}>
             <FlashList
+              keyExtractor={(item) =>
+                `${item.iso2}-${item.name}-${item.capital}`
+              }
+              // extraData={state.countries}
               data={CountriesList}
-              renderItem={({ item }) => <CountryItem {...item} />}
+              renderItem={({ item }) => (
+                <CountryItem {...item} onVisited={handleVisited} />
+              )}
               estimatedItemSize={200}
             />
           </View>

@@ -1,21 +1,10 @@
-import React from "react";
-import {
-  Text,
-  View,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  ImageBackground,
-  Platform,
-} from "react-native";
+import React, { useEffect } from "react";
+import { Text, View, SafeAreaView, ScrollView, StyleSheet } from "react-native";
 
-import { LinearGradient } from "expo-linear-gradient";
 import { MapView } from "./MapView";
 import { COLORS, SIZES } from "../../styles/theme";
 import {
   AfricaIcon,
-  Antarctica,
   AsiaIcon,
   Australia,
   EuropeIcon,
