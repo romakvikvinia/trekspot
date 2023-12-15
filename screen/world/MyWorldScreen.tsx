@@ -32,6 +32,7 @@ import { COLORS } from "../../styles/theme";
 import { useNavigation } from "@react-navigation/native";
 import * as Permissions from "expo-permissions";
 import { AddMemoriesModal } from "../../common/components/AddMemoriesModal";
+import { CountriesList } from "../../utilities/countryList";
 
 const MyWorldScreen = () => {
   const navigation = useNavigation();
@@ -179,12 +180,17 @@ const MyWorldScreen = () => {
       }
 
       // If not, add it to the array along with pickedImages
+      const countryData = CountriesList?.find(
+        (item) => item.iso2 === countryCode
+      );
+
       return [
         ...placesArray,
         countryCode
           ? {
               countryCode,
               ...pickedImages,
+              coordinates: countryData?.coordinates,
             }
           : null, // Ensure null values are filtered out
       ].filter(Boolean);
@@ -194,7 +200,7 @@ const MyWorldScreen = () => {
     memoriesModalRef.current?.close();
   };
 
-  console.log("beess", beenPlaces);
+  console.log("beenPlaces", beenPlaces);
 
   useEffect(() => {
     (async () => {
@@ -483,42 +489,46 @@ const MyWorldScreen = () => {
               strokeWidth={2}
             />
           ))}
-
-          <Marker
-            coordinate={{ latitude: 41.716667, longitude: 44.783333 }}
-            // title={"title"}
-            // description={"description"}
-          >
-            <View
-              style={{
-                backgroundColor: "#fff",
-                padding: 0,
-                borderRadius: 50,
-                borderWidth: 2,
-                borderColor: "#fff",
-                shadowColor: "#000",
-                shadowOffset: {
-                  width: 0,
-                  height: 2,
-                },
-                shadowOpacity: 0.1,
-                shadowRadius: 3.84,
-                elevation: 5,
+          {beenPlaces?.map((item) => (
+            <Marker
+              coordinate={{
+                latitude: item?.coordinates?.latitude,
+                longitude: item?.coordinates?.longitude,
               }}
+              // title={"title"}
+              // description={"description"}
             >
-              <ImageBackground
+              <View
                 style={{
-                  width: 40,
-                  height: 40,
+                  backgroundColor: "#fff",
+                  padding: 0,
                   borderRadius: 50,
-                  overflow: "hidden",
+                  borderWidth: 2,
+                  borderColor: "#fff",
+                  shadowColor: "#000",
+                  shadowOffset: {
+                    width: 0,
+                    height: 2,
+                  },
+                  shadowOpacity: 0.2,
+                  shadowRadius: 3.84,
+                  elevation: 5,
                 }}
-                source={{
-                  uri: "https://images.unsplash.com/photo-1635438556492-cff83abdd3c2?q=10&w=3348&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                }}
-              />
-            </View>
-          </Marker>
+              >
+                <ImageBackground
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 50,
+                    overflow: "hidden",
+                  }}
+                  source={{
+                    uri: item?.assets[0].uri,
+                  }}
+                />
+              </View>
+            </Marker>
+          ))}
         </MapView>
       </View>
       <Portal>

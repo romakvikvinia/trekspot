@@ -1,9 +1,12 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { ImageBackground } from "react-native";
 import { Host } from "react-native-portalize";
 
 import {
+  FlightIcon,
   HomeBold,
   MyWorldBold,
+  SearchBoldIcon,
   SearchIcon,
   SettingsBold,
   SettingsLine,
@@ -38,16 +41,28 @@ export const AppRoute: React.FC<AppRouteProps> = ({}) => {
                 return <MyWorldBold color={focused ? "#000" : "#8e8e8e"} />;
               }
               case "Trips": {
-                return <TripBold color={focused ? "#000" : "#8e8e8e"} />;
+                return <FlightIcon color={focused ? "#000" : "#8e8e8e"} />;
               }
               case "Explore": {
-                return <SearchIcon color={focused ? "#000" : "#8e8e8e"} />;
+                return <SearchBoldIcon color={focused ? "#000" : "#8e8e8e"} />;
               }
-              case "Settings": {
-                return <SettingsBold color={focused ? "#000" : "#8e8e8e"} />;
+              case "Account": {
+                return (
+                  <ImageBackground
+                    resizeMode="cover"
+                    style={{
+                      width: 25,
+                      borderRadius: 50,
+                      overflow: "hidden",
+                      height: 25,
+                    }}
+                    source={{
+                      uri: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=10&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                    }}
+                  />
+                );
               }
             }
-            // You can return any component that you like here!
           },
           // tabBarShowLabel: false,
           headerShown: false,
@@ -64,7 +79,7 @@ export const AppRoute: React.FC<AppRouteProps> = ({}) => {
         <Tab.Screen name="Been" component={MyWorldRouteStack} />
         <Tab.Screen name="Explore" component={ExploreRoutesStack} />
         <Tab.Screen name="Trips" component={TripRouteStack} />
-        <Tab.Screen name="Settings" component={SettingRouteStack} />
+        <Tab.Screen name="Account" component={SettingRouteStack} />
       </Tab.Navigator>
     </Host>
   );

@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 import { COLORS } from "../../styles/theme";
-import { ImagesIcon, TrashIcon } from "../../utilities/SvgIcons.utility";
+import { ImagesIcon, TrashIcon, XIcon } from "../../utilities/SvgIcons.utility";
 
 export const AddMemoriesModal = ({
   images,
@@ -61,7 +61,7 @@ export const AddMemoriesModal = ({
               style={styles.removeImageButton}
               onPress={() => handleRemoveImage(item?.assetId)}
             >
-              <TrashIcon width="12" />
+              <XIcon width="10" height="10" />
             </TouchableOpacity>
           </ImageBackground>
         ))}
