@@ -3,10 +3,8 @@ import {
   StackNavigationProp,
   createStackNavigator,
 } from "@react-navigation/stack";
-import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { HomeScreen } from "../../screen/home/HomeScreen";
 import { PrimaryColor } from "../../styles/colors";
-import { THeaderButton } from "../../common/ui/THeaderButton";
 import BucketList from "../../screen/BucketList";
 import BucketListAllScreen from "../../screen/BucketList/BucketListAll";
 import ShareStats from "../../screen/Share";
@@ -17,7 +15,7 @@ type HomeRouteStackParamList = {
   Main: undefined;
   BucketList: undefined;
   BucketListAll: undefined;
-  Share: undefined;
+  ShareStats: undefined;
 };
 
 const Stack = createStackNavigator<HomeRouteStackParamList>();

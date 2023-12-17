@@ -7,7 +7,7 @@ export const CountriesList = [
       latitude: 34.094326,
       longitude: 66.36995,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Albania",
@@ -17,7 +17,7 @@ export const CountriesList = [
       latitude: 41.100988,
       longitude: 20.047248,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Algeria",
@@ -27,7 +27,7 @@ export const CountriesList = [
       latitude: 28.884561,
       longitude: 2.59381,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Andorra",
@@ -37,7 +37,7 @@ export const CountriesList = [
       latitude: 42.545442,
       longitude: 1.58223,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Angola",
@@ -47,7 +47,7 @@ export const CountriesList = [
       latitude: -12.04932,
       longitude: 17.557906,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Antigua and Barbuda",
@@ -57,7 +57,7 @@ export const CountriesList = [
       latitude: 17.081245,
       longitude: -61.792794,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Argentina",
@@ -67,7 +67,7 @@ export const CountriesList = [
       latitude: -36.151477,
       longitude: -65.063029,
     },
-    continents: ["South America"],
+    continent: "South America",
   },
   {
     name: "Armenia",
@@ -77,7 +77,7 @@ export const CountriesList = [
       latitude: 40.249513,
       longitude: 44.947493,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Australia",
@@ -87,7 +87,7 @@ export const CountriesList = [
       latitude: -26.942005,
       longitude: 134.000674,
     },
-    continents: ["Oceania"],
+    continent: "Oceania",
   },
   {
     name: "Austria",
@@ -97,7 +97,7 @@ export const CountriesList = [
       latitude: 47.679989,
       longitude: 14.947254,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Azerbaijan",
@@ -107,7 +107,7 @@ export const CountriesList = [
       latitude: 40.522872,
       longitude: 47.454745,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Bahamas",
@@ -117,7 +117,7 @@ export const CountriesList = [
       latitude: 24.461562,
       longitude: -77.97063,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Bahrain",
@@ -127,7 +127,7 @@ export const CountriesList = [
       latitude: 26.067706,
       longitude: 50.553182,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Bangladesh",
@@ -137,7 +137,7 @@ export const CountriesList = [
       latitude: 24.017356,
       longitude: 90.120178,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Barbados",
@@ -147,7 +147,7 @@ export const CountriesList = [
       latitude: 13.158707,
       longitude: -59.551065,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Belarus",
@@ -157,7 +157,7 @@ export const CountriesList = [
       latitude: 53.77244,
       longitude: 28.38226,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Belgium",
@@ -167,7 +167,7 @@ export const CountriesList = [
       latitude: 50.594809,
       longitude: 4.965363,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Belize",
@@ -177,7 +177,7 @@ export const CountriesList = [
       latitude: 17.207783,
       longitude: -88.642324,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Benin",
@@ -187,7 +187,7 @@ export const CountriesList = [
       latitude: 9.514418,
       longitude: 2.348253,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Bhutan",
@@ -197,7 +197,7 @@ export const CountriesList = [
       latitude: 27.356131,
       longitude: 90.505782,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Bolivia",
@@ -207,7 +207,7 @@ export const CountriesList = [
       latitude: -17.12273,
       longitude: -64.164394,
     },
-    continents: ["South America"],
+    continent: "South America",
   },
   {
     name: "Bosnia and Herzegovina",
@@ -217,7 +217,7 @@ export const CountriesList = [
       latitude: 44.169023,
       longitude: 17.911672,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Botswana",
@@ -227,7 +227,7 @@ export const CountriesList = [
       latitude: -22.520968,
       longitude: 23.920464,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Brazil",
@@ -237,7 +237,7 @@ export const CountriesList = [
       latitude: -9.542167,
       longitude: -51.405148,
     },
-    continents: ["South America"],
+    continent: "South America",
   },
   {
     name: "Brunei",
@@ -247,7 +247,7 @@ export const CountriesList = [
       latitude: 4.465042,
       longitude: 114.623528,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Bulgaria",
@@ -257,7 +257,7 @@ export const CountriesList = [
       latitude: 42.638517,
       longitude: 25.100905,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Burkina Faso",
@@ -267,7 +267,7 @@ export const CountriesList = [
       latitude: 12.148733,
       longitude: -1.603375,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Burundi",
@@ -277,7 +277,7 @@ export const CountriesList = [
       latitude: -3.356403,
       longitude: 29.930471,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Cape Verde",
@@ -287,7 +287,7 @@ export const CountriesList = [
       latitude: 15.06909,
       longitude: -23.625341,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Cambodia",
@@ -297,7 +297,7 @@ export const CountriesList = [
       latitude: 12.551487,
       longitude: 104.942664,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Cameroon",
@@ -307,7 +307,7 @@ export const CountriesList = [
       latitude: 5.027609,
       longitude: 12.676266,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Canada",
@@ -317,7 +317,7 @@ export const CountriesList = [
       latitude: 59.382377,
       longitude: -105.963188,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Central African Republic",
@@ -327,7 +327,7 @@ export const CountriesList = [
       latitude: 6.614337,
       longitude: 19.176645,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Chad",
@@ -337,7 +337,7 @@ export const CountriesList = [
       latitude: 15.278935,
       longitude: 18.338907,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Chile",
@@ -347,7 +347,7 @@ export const CountriesList = [
       latitude: -33.830983,
       longitude: -70.962921,
     },
-    continents: ["South America"],
+    continent: "South America",
   },
   {
     name: "China",
@@ -357,7 +357,7 @@ export const CountriesList = [
       latitude: 33.362313,
       longitude: 103.722585,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Colombia",
@@ -367,7 +367,7 @@ export const CountriesList = [
       latitude: 4.17106,
       longitude: -73.193937,
     },
-    continents: ["South America"],
+    continent: "South America",
   },
   {
     name: "Comoros",
@@ -377,7 +377,7 @@ export const CountriesList = [
       latitude: -11.732913,
       longitude: 43.353157,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Congo (Congo-Brazzaville)",
@@ -387,7 +387,7 @@ export const CountriesList = [
       latitude: -1.460205,
       longitude: 15.694773,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Costa Rica",
@@ -397,7 +397,7 @@ export const CountriesList = [
       latitude: 9.921901,
       longitude: -84.011738,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Croatia",
@@ -407,7 +407,7 @@ export const CountriesList = [
       latitude: 45.335007,
       longitude: 15.546456,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Cuba",
@@ -417,7 +417,7 @@ export const CountriesList = [
       latitude: 21.892606,
       longitude: -78.765576,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Cyprus",
@@ -427,7 +427,7 @@ export const CountriesList = [
       latitude: 35.007444,
       longitude: 33.213489,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Ivory Coast",
@@ -437,7 +437,7 @@ export const CountriesList = [
       latitude: 7.872419,
       longitude: -5.596598,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Czechia",
@@ -447,7 +447,7 @@ export const CountriesList = [
       latitude: 49.773794,
       longitude: 15.604534,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "DR of the Congo",
@@ -457,7 +457,7 @@ export const CountriesList = [
       latitude: -1.857246,
       longitude: 23.490572,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Denmark",
@@ -467,7 +467,7 @@ export const CountriesList = [
       latitude: 56.005939,
       longitude: 9.53045,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Djibouti",
@@ -477,7 +477,7 @@ export const CountriesList = [
       latitude: 11.540902,
       longitude: 42.481531,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Dominica",
@@ -487,7 +487,7 @@ export const CountriesList = [
       latitude: 15.424327,
       longitude: -61.335549,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Dominican Republic",
@@ -497,7 +497,7 @@ export const CountriesList = [
       latitude: 18.79535,
       longitude: -70.268483,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Ecuador",
@@ -507,7 +507,7 @@ export const CountriesList = [
       latitude: 1.683958,
       longitude: -78.624537,
     },
-    continents: ["South America"],
+    continent: "South America",
   },
   {
     name: "Egypt",
@@ -517,7 +517,7 @@ export const CountriesList = [
       latitude: 26.059897,
       longitude: 29.942822,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "El Salvador",
@@ -527,7 +527,7 @@ export const CountriesList = [
       latitude: 13.705413,
       longitude: -88.86735,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Equatorial Guinea",
@@ -537,7 +537,7 @@ export const CountriesList = [
       latitude: 1.54228,
       longitude: 10.408889,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Eritrea",
@@ -547,7 +547,7 @@ export const CountriesList = [
       latitude: 15.331173,
       longitude: 39.223143,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Estonia",
@@ -557,7 +557,7 @@ export const CountriesList = [
       latitude: 58.615026,
       longitude: 25.721836,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Eswatini (Swaziland)",
@@ -567,7 +567,7 @@ export const CountriesList = [
       latitude: -26.518602,
       longitude: 31.558669,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Ethiopia",
@@ -577,7 +577,7 @@ export const CountriesList = [
       latitude: 9.045699,
       longitude: 40.453537,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Fiji",
@@ -587,7 +587,7 @@ export const CountriesList = [
       latitude: -17.915115,
       longitude: 177.945028,
     },
-    continents: ["Oceania"],
+    continent: "Oceania",
   },
   {
     name: "Finland",
@@ -597,7 +597,7 @@ export const CountriesList = [
       latitude: 64.74922,
       longitude: 27.072522,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "France",
@@ -607,7 +607,7 @@ export const CountriesList = [
       latitude: 47.077177,
       longitude: 2.582812,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Gabon",
@@ -617,7 +617,7 @@ export const CountriesList = [
       latitude: -0.329531,
       longitude: 11.908262,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Gambia",
@@ -627,7 +627,7 @@ export const CountriesList = [
       latitude: 13.516418,
       longitude: -15.390282,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Georgia",
@@ -637,7 +637,7 @@ export const CountriesList = [
       latitude: 42.038068,
       longitude: 43.805146,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Germany",
@@ -647,7 +647,7 @@ export const CountriesList = [
       latitude: 51.277277,
       longitude: 10.38294,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Ghana",
@@ -657,7 +657,7 @@ export const CountriesList = [
       latitude: 7.732915,
       longitude: -1.167342,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Greece",
@@ -667,7 +667,7 @@ export const CountriesList = [
       latitude: 39.262852,
       longitude: 22.004435,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Grenada",
@@ -677,7 +677,7 @@ export const CountriesList = [
       latitude: 12.107919,
       longitude: -61.679631,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Guatemala",
@@ -687,7 +687,7 @@ export const CountriesList = [
       latitude: 15.463587,
       longitude: -90.288458,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Guinea",
@@ -697,7 +697,7 @@ export const CountriesList = [
       latitude: 10.765545,
       longitude: -10.717911,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Guinea-Bissau",
@@ -707,7 +707,7 @@ export const CountriesList = [
       latitude: 11.977328,
       longitude: -14.80696,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Guyana",
@@ -717,7 +717,7 @@ export const CountriesList = [
       latitude: 4.630567,
       longitude: -59.0428783,
     },
-    continents: ["South America"],
+    continent: "South America",
   },
   {
     name: "Haiti",
@@ -727,7 +727,7 @@ export const CountriesList = [
       latitude: 18.874657,
       longitude: -72.165755,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Holy See",
@@ -737,7 +737,7 @@ export const CountriesList = [
       latitude: 41.903392,
       longitude: 12.453007,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Honduras",
@@ -747,7 +747,7 @@ export const CountriesList = [
       latitude: 14.665456,
       longitude: -86.507575,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Hungary",
@@ -757,7 +757,7 @@ export const CountriesList = [
       latitude: 47.205532,
       longitude: 19.326777,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Iceland",
@@ -767,7 +767,7 @@ export const CountriesList = [
       latitude: 64.808213,
       longitude: -18.432283,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "India",
@@ -777,7 +777,7 @@ export const CountriesList = [
       latitude: 23.585461,
       longitude: 79.485195,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Indonesia",
@@ -787,7 +787,7 @@ export const CountriesList = [
       latitude: -0.865804,
       longitude: 114.419068,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Iran",
@@ -797,7 +797,7 @@ export const CountriesList = [
       latitude: 31.662582,
       longitude: 54.405241,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Iraq",
@@ -807,7 +807,7 @@ export const CountriesList = [
       latitude: 32.666975,
       longitude: 42.847625,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Ireland",
@@ -817,7 +817,7 @@ export const CountriesList = [
       latitude: 53.0912,
       longitude: -7.933953,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Israel",
@@ -827,7 +827,7 @@ export const CountriesList = [
       latitude: 32.044586,
       longitude: 34.882561,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Italy",
@@ -837,7 +837,7 @@ export const CountriesList = [
       latitude: 42.154783,
       longitude: 13.601936,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Jamaica",
@@ -847,7 +847,7 @@ export const CountriesList = [
       latitude: 18.112992,
       longitude: -77.3011,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Japan",
@@ -857,7 +857,7 @@ export const CountriesList = [
       latitude: 35.872624,
       longitude: 138.231507,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Jordan",
@@ -867,7 +867,7 @@ export const CountriesList = [
       latitude: 31.15892,
       longitude: 36.624326,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Kazakhstan",
@@ -877,7 +877,7 @@ export const CountriesList = [
       latitude: 47.903065,
       longitude: 67.861791,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Kenya",
@@ -887,7 +887,7 @@ export const CountriesList = [
       latitude: 0.549435,
       longitude: 38.608963,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Kiribati",
@@ -897,7 +897,7 @@ export const CountriesList = [
       latitude: 1.85734,
       longitude: -157.38195,
     },
-    continents: ["Oceania"],
+    continent: "Oceania",
   },
   {
     name: "Kuwait",
@@ -907,7 +907,7 @@ export const CountriesList = [
       latitude: 29.26589,
       longitude: 47.518259,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Kyrgyzstan",
@@ -917,7 +917,7 @@ export const CountriesList = [
       latitude: 41.646544,
       longitude: 74.50135,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Laos",
@@ -927,7 +927,7 @@ export const CountriesList = [
       latitude: 19.840437,
       longitude: 102.343252,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Latvia",
@@ -937,7 +937,7 @@ export const CountriesList = [
       latitude: 56.725999,
       longitude: 25.19071,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Lebanon",
@@ -947,7 +947,7 @@ export const CountriesList = [
       latitude: 33.942467,
       longitude: 35.869154,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Lesotho",
@@ -957,7 +957,7 @@ export const CountriesList = [
       latitude: -29.645311,
       longitude: 28.254527,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Liberia",
@@ -967,7 +967,7 @@ export const CountriesList = [
       latitude: 6.207143,
       longitude: -9.25584,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Libya",
@@ -977,7 +977,7 @@ export const CountriesList = [
       latitude: 26.695617,
       longitude: 17.750764,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Liechtenstein",
@@ -987,7 +987,7 @@ export const CountriesList = [
       latitude: 47.144481,
       longitude: 9.55069,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Lithuania",
@@ -997,7 +997,7 @@ export const CountriesList = [
       latitude: 55.251663,
       longitude: 23.947517,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Luxembourg",
@@ -1007,7 +1007,7 @@ export const CountriesList = [
       latitude: 49.778279,
       longitude: 6.086537,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Madagascar",
@@ -1017,7 +1017,7 @@ export const CountriesList = [
       latitude: -20.654105,
       longitude: 46.297423,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Malawi",
@@ -1027,7 +1027,7 @@ export const CountriesList = [
       latitude: -13.384461,
       longitude: 34.136899,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Malaysia",
@@ -1037,7 +1037,7 @@ export const CountriesList = [
       latitude: 3.432499,
       longitude: 102.372359,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Maldives",
@@ -1047,7 +1047,7 @@ export const CountriesList = [
       latitude: -0.692959,
       longitude: 73.151248,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Mali",
@@ -1057,7 +1057,7 @@ export const CountriesList = [
       latitude: 17.129281,
       longitude: -2.330446,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Malta",
@@ -1067,7 +1067,7 @@ export const CountriesList = [
       latitude: 35.889992,
       longitude: 14.432581,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Marshall Islands",
@@ -1077,7 +1077,7 @@ export const CountriesList = [
       latitude: 7.294033,
       longitude: 168.733056,
     },
-    continents: ["Oceania"],
+    continent: "Oceania",
   },
   {
     name: "Mauritania",
@@ -1087,7 +1087,7 @@ export const CountriesList = [
       latitude: 20.628589,
       longitude: -10.554376,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Mauritius",
@@ -1097,7 +1097,7 @@ export const CountriesList = [
       latitude: -20.309564,
       longitude: 57.559193,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Mexico",
@@ -1107,7 +1107,7 @@ export const CountriesList = [
       latitude: 23.353634,
       longitude: -102.497437,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Micronesia",
@@ -1117,7 +1117,7 @@ export const CountriesList = [
       latitude: 6.872354,
       longitude: 158.22543,
     },
-    continents: ["Oceania"],
+    continent: "Oceania",
   },
   {
     name: "Moldova",
@@ -1127,7 +1127,7 @@ export const CountriesList = [
       latitude: 47.337972,
       longitude: 28.574276,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Monaco",
@@ -1137,7 +1137,7 @@ export const CountriesList = [
       latitude: 43.739932,
       longitude: 7.411903,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Mongolia",
@@ -1147,7 +1147,7 @@ export const CountriesList = [
       latitude: 46.497655,
       longitude: 103.731049,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Montenegro",
@@ -1157,7 +1157,7 @@ export const CountriesList = [
       latitude: 42.729189,
       longitude: 19.163936,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Morocco",
@@ -1167,7 +1167,7 @@ export const CountriesList = [
       latitude: 31.597924,
       longitude: -6.419817,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Mozambique",
@@ -1177,7 +1177,7 @@ export const CountriesList = [
       latitude: -17.710513,
       longitude: 35.347942,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Myanmar",
@@ -1187,7 +1187,7 @@ export const CountriesList = [
       latitude: 20.681223,
       longitude: 96.299073,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Namibia",
@@ -1197,7 +1197,7 @@ export const CountriesList = [
       latitude: -22.514331,
       longitude: 17.203835,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Nauru",
@@ -1207,7 +1207,7 @@ export const CountriesList = [
       latitude: -0.528838,
       longitude: 166.934209,
     },
-    continents: ["Oceania"],
+    continent: "Oceania",
   },
   {
     name: "Nepal",
@@ -1217,7 +1217,7 @@ export const CountriesList = [
       latitude: 28.033128,
       longitude: 83.895304,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Netherlands",
@@ -1227,7 +1227,7 @@ export const CountriesList = [
       latitude: 52.089153,
       longitude: 5.453183,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "New Zealand",
@@ -1237,7 +1237,7 @@ export const CountriesList = [
       latitude: -42.090683,
       longitude: 173.257991,
     },
-    continents: ["Oceania"],
+    continent: "Oceania",
   },
   {
     name: "Nicaragua",
@@ -1247,7 +1247,7 @@ export const CountriesList = [
       latitude: 12.609211,
       longitude: -84.824915,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Niger",
@@ -1257,7 +1257,7 @@ export const CountriesList = [
       latitude: 17.022861,
       longitude: 8.893387,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Nigeria",
@@ -1267,7 +1267,7 @@ export const CountriesList = [
       latitude: 9.25629,
       longitude: 7.972401,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "North Macedonia",
@@ -1277,7 +1277,7 @@ export const CountriesList = [
       latitude: 41.515037,
       longitude: 21.683111,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "North Korea",
@@ -1287,7 +1287,7 @@ export const CountriesList = [
       latitude: 39.917408,
       longitude: 126.981493,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Norway",
@@ -1297,7 +1297,7 @@ export const CountriesList = [
       latitude: 62.384645,
       longitude: 9.852518,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Oman",
@@ -1307,7 +1307,7 @@ export const CountriesList = [
       latitude: 20.357386,
       longitude: 56.944317,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Pakistan",
@@ -1317,7 +1317,7 @@ export const CountriesList = [
       latitude: 29.681723,
       longitude: 69.287414,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Palau",
@@ -1327,7 +1327,7 @@ export const CountriesList = [
       latitude: 7.478309,
       longitude: 134.562218,
     },
-    continents: ["Oceania"],
+    continent: "Oceania",
   },
   {
     name: "Palestine",
@@ -1337,7 +1337,7 @@ export const CountriesList = [
       latitude: 31.742455,
       longitude: 35.281704,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Panama",
@@ -1347,7 +1347,7 @@ export const CountriesList = [
       latitude: 8.432969,
       longitude: -80.810336,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Papua New Guinea",
@@ -1357,7 +1357,7 @@ export const CountriesList = [
       latitude: -6.720311,
       longitude: 145.103981,
     },
-    continents: ["Oceania"],
+    continent: "Oceania",
   },
   {
     name: "Paraguay",
@@ -1367,7 +1367,7 @@ export const CountriesList = [
       latitude: -23.519314,
       longitude: -58.249823,
     },
-    continents: ["South America"],
+    continent: "South America",
   },
   {
     name: "Peru",
@@ -1377,7 +1377,7 @@ export const CountriesList = [
       latitude: -9.693226,
       longitude: -75.099652,
     },
-    continents: ["South America"],
+    continent: "South America",
   },
   {
     name: "Philippines",
@@ -1387,7 +1387,7 @@ export const CountriesList = [
       latitude: 14.275166,
       longitude: 121.0534,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Poland",
@@ -1397,7 +1397,7 @@ export const CountriesList = [
       latitude: 52.227564,
       longitude: 19.063668,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Portugal",
@@ -1407,7 +1407,7 @@ export const CountriesList = [
       latitude: 39.537919,
       longitude: -8.146208,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Qatar",
@@ -1417,7 +1417,7 @@ export const CountriesList = [
       latitude: 25.260696,
       longitude: 51.207467,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Romania",
@@ -1427,7 +1427,7 @@ export const CountriesList = [
       latitude: 45.674046,
       longitude: 24.797751,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Russia",
@@ -1437,7 +1437,7 @@ export const CountriesList = [
       latitude: 61.40741,
       longitude: 92.863749,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Rwanda",
@@ -1447,7 +1447,7 @@ export const CountriesList = [
       latitude: -2.061558,
       longitude: 29.918611,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Saint Kitts and Nevis",
@@ -1457,7 +1457,7 @@ export const CountriesList = [
       latitude: 17.315752,
       longitude: -62.732322,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Saint Lucia",
@@ -1467,7 +1467,7 @@ export const CountriesList = [
       latitude: 13.878137,
       longitude: -60.978471,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Saint Vincent and the Grenadines",
@@ -1477,7 +1477,7 @@ export const CountriesList = [
       latitude: 13.228186,
       longitude: -61.192829,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Samoa",
@@ -1487,7 +1487,7 @@ export const CountriesList = [
       latitude: -13.659545,
       longitude: -172.411991,
     },
-    continents: ["Oceania"],
+    continent: "Oceania",
   },
   {
     name: "San Marino",
@@ -1497,7 +1497,7 @@ export const CountriesList = [
       latitude: 43.926553,
       longitude: 12.448472,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Sao Tome and Principe",
@@ -1507,7 +1507,7 @@ export const CountriesList = [
       latitude: 0.21847,
       longitude: 6.599868,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Saudi Arabia",
@@ -1517,7 +1517,7 @@ export const CountriesList = [
       latitude: 22.924822,
       longitude: 45.067205,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Senegal",
@@ -1527,7 +1527,7 @@ export const CountriesList = [
       latitude: 14.208736,
       longitude: -14.631658,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Serbia",
@@ -1537,7 +1537,7 @@ export const CountriesList = [
       latitude: 43.983086,
       longitude: 20.797826,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Seychelles",
@@ -1547,7 +1547,7 @@ export const CountriesList = [
       latitude: -4.674943,
       longitude: 55.476781,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Sierra Leone",
@@ -1557,7 +1557,7 @@ export const CountriesList = [
       latitude: 8.392917,
       longitude: -11.915556,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Singapore",
@@ -1567,7 +1567,7 @@ export const CountriesList = [
       latitude: 1.321546,
       longitude: 103.83256,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Slovakia",
@@ -1577,7 +1577,7 @@ export const CountriesList = [
       latitude: 48.808074,
       longitude: 19.265246,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Slovenia",
@@ -1587,7 +1587,7 @@ export const CountriesList = [
       latitude: 46.069129,
       longitude: 14.749149,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Solomon Islands",
@@ -1597,7 +1597,7 @@ export const CountriesList = [
       latitude: -9.662966,
       longitude: 160.272396,
     },
-    continents: ["Oceania"],
+    continent: "Oceania",
   },
   {
     name: "Somalia",
@@ -1607,7 +1607,7 @@ export const CountriesList = [
       latitude: 3.132266,
       longitude: 45.003051,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "South Africa",
@@ -1617,7 +1617,7 @@ export const CountriesList = [
       latitude: -30.644667,
       longitude: 26.1406985,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "South Korea",
@@ -1627,7 +1627,7 @@ export const CountriesList = [
       latitude: 36.405851,
       longitude: 128.015221,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "South Sudan",
@@ -1637,7 +1637,7 @@ export const CountriesList = [
       latitude: 6.91434,
       longitude: 30.242143,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Spain",
@@ -1647,7 +1647,7 @@ export const CountriesList = [
       latitude: 40.068751,
       longitude: -3.403233,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Sri Lanka",
@@ -1657,7 +1657,7 @@ export const CountriesList = [
       latitude: 7.305781,
       longitude: 80.633505,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Sudan",
@@ -1667,7 +1667,7 @@ export const CountriesList = [
       latitude: 15.465887,
       longitude: 30.061608,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Suriname",
@@ -1677,7 +1677,7 @@ export const CountriesList = [
       latitude: 3.901328,
       longitude: -55.683175,
     },
-    continents: ["South America"],
+    continent: "South America",
   },
   {
     name: "Sweden",
@@ -1687,7 +1687,7 @@ export const CountriesList = [
       latitude: 62.515089,
       longitude: 15.7967,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Switzerland",
@@ -1697,7 +1697,7 @@ export const CountriesList = [
       latitude: 46.678978,
       longitude: 8.11841,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Syria",
@@ -1707,7 +1707,7 @@ export const CountriesList = [
       latitude: 34.804443,
       longitude: 38.62534,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Tajikistan",
@@ -1717,7 +1717,7 @@ export const CountriesList = [
       latitude: 38.840397,
       longitude: 70.953607,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Tanzania",
@@ -1727,7 +1727,7 @@ export const CountriesList = [
       latitude: -6.760545,
       longitude: 34.724184,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Thailand",
@@ -1737,7 +1737,7 @@ export const CountriesList = [
       latitude: 14.88317,
       longitude: 101.137365,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Timor-Leste",
@@ -1747,7 +1747,7 @@ export const CountriesList = [
       latitude: -8.846764,
       longitude: 125.898198,
     },
-    continents: ["Oceania"],
+    continent: "Oceania",
   },
   {
     name: "Togo",
@@ -1757,7 +1757,7 @@ export const CountriesList = [
       latitude: 8.416691,
       longitude: 1.091019,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Tonga",
@@ -1767,7 +1767,7 @@ export const CountriesList = [
       latitude: -21.227083,
       longitude: -175.15126,
     },
-    continents: ["Oceania"],
+    continent: "Oceania",
   },
   {
     name: "Trinidad and Tobago",
@@ -1777,7 +1777,7 @@ export const CountriesList = [
       latitude: 10.33685,
       longitude: -61.253173,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Tunisia",
@@ -1787,7 +1787,7 @@ export const CountriesList = [
       latitude: 33.616905,
       longitude: 9.523697,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Turkey",
@@ -1797,7 +1797,7 @@ export const CountriesList = [
       latitude: 39.309076,
       longitude: 35.248818,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "Turkmenistan",
@@ -1807,7 +1807,7 @@ export const CountriesList = [
       latitude: 39.287759,
       longitude: 59.25801,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Tuvalu",
@@ -1817,7 +1817,7 @@ export const CountriesList = [
       latitude: -8.526209,
       longitude: 179.193391,
     },
-    continents: ["Oceania"],
+    continent: "Oceania",
   },
   {
     name: "Uganda",
@@ -1827,7 +1827,7 @@ export const CountriesList = [
       latitude: 1.311794,
       longitude: 32.462875,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Ukraine",
@@ -1837,7 +1837,7 @@ export const CountriesList = [
       latitude: 49.215157,
       longitude: 31.63328,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "United Arab Emirates",
@@ -1847,7 +1847,7 @@ export const CountriesList = [
       latitude: 24.011516,
       longitude: 54.780112,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "United Kingdom",
@@ -1857,7 +1857,7 @@ export const CountriesList = [
       latitude: 52.8876,
       longitude: -1.557282,
     },
-    continents: ["Europe"],
+    continent: "Europe",
   },
   {
     name: "United States",
@@ -1867,7 +1867,7 @@ export const CountriesList = [
       latitude: 40.182226,
       longitude: -99.834143,
     },
-    continents: ["North America"],
+    continent: "North America",
   },
   {
     name: "Uruguay",
@@ -1877,7 +1877,7 @@ export const CountriesList = [
       latitude: -33.012919,
       longitude: -55.999118,
     },
-    continents: ["South America"],
+    continent: "South America",
   },
   {
     name: "Uzbekistan",
@@ -1887,7 +1887,7 @@ export const CountriesList = [
       latitude: 41.606114,
       longitude: 63.784536,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Vanuatu",
@@ -1897,7 +1897,7 @@ export const CountriesList = [
       latitude: -15.461028,
       longitude: 167.04519,
     },
-    continents: ["Oceania"],
+    continent: "Oceania",
   },
   {
     name: "Venezuela",
@@ -1907,7 +1907,7 @@ export const CountriesList = [
       latitude: 6.825358,
       longitude: -64.925016,
     },
-    continents: ["South America"],
+    continent: "South America",
   },
   {
     name: "Vietnam",
@@ -1917,7 +1917,7 @@ export const CountriesList = [
       latitude: 15.793322,
       longitude: 108.107031,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Yemen",
@@ -1927,7 +1927,7 @@ export const CountriesList = [
       latitude: 15.568928,
       longitude: 47.957065,
     },
-    continents: ["Asia"],
+    continent: "Asia",
   },
   {
     name: "Zambia",
@@ -1937,7 +1937,7 @@ export const CountriesList = [
       latitude: -13.791394,
       longitude: 27.8535,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
   {
     name: "Zimbabwe",
@@ -1947,6 +1947,6 @@ export const CountriesList = [
       latitude: -19.173357,
       longitude: 29.862368,
     },
-    continents: ["Africa"],
+    continent: "Africa",
   },
 ];

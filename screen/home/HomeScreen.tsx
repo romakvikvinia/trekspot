@@ -11,14 +11,43 @@ import {
   NAmerica,
   SAmerica,
 } from "../../utilities/SvgIcons.utility";
+import { useAnalyticsQuery } from "../../api/api.trekspot";
+import { formatPercentage } from "../../helpers/number.helper";
 
 interface HomeProps {}
 
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
+  const { data, isLoading, isSuccess } = useAnalyticsQuery();
+  // transform data
+  const europeCountries =
+    data && data.analytics.territories.items["Europe"]
+      ? data.analytics.territories.items["Europe"]
+      : 0;
+  const asiaCountries =
+    data && data?.analytics.territories.items["Asia"]
+      ? data?.analytics.territories.items["Asia"]
+      : 0;
+  const africaCountries =
+    data && data.analytics.territories.items["Africa"]
+      ? data.analytics.territories.items["Africa"]
+      : 0;
+  const northAmericaCountries =
+    data && data.analytics.territories.items["North America"]
+      ? data.analytics.territories.items["North America"]
+      : 0;
+  const southAmericaCountries =
+    data && data.analytics.territories.items["South America"]
+      ? data.analytics.territories.items["South America"]
+      : 0;
+  const oceaniaCountries =
+    data && data.analytics.territories.items["Oceania"]
+      ? data.analytics.territories.items["Oceania"]
+      : 0;
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <MapView />
+        <MapView analytic={data?.analytics} />
         <ScrollView
           style={styles.mapStats}
           showsVerticalScrollIndicator={false}
@@ -47,7 +76,11 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
                 </View>
               </View>
               <View style={styles.statWrapp}>
-                <Text style={styles.mapStatsPercentText}>0</Text>
+                <Text style={styles.mapStatsPercentText}>
+                  {formatPercentage(
+                    europeCountries ? (europeCountries / 44) * 100 : 0
+                  )}
+                </Text>
                 <Text style={styles.percentText}>%</Text>
               </View>
             </View>
@@ -65,7 +98,11 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
               </View>
 
               <View style={styles.statWrapp}>
-                <Text style={styles.mapStatsPercentText}>0</Text>
+                <Text style={styles.mapStatsPercentText}>
+                  {formatPercentage(
+                    asiaCountries ? (asiaCountries / 48) * 100 : 0
+                  )}
+                </Text>
                 <Text style={styles.percentText}>%</Text>
               </View>
             </View>
@@ -82,7 +119,11 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
                 </View>
               </View>
               <View style={styles.statWrapp}>
-                <Text style={styles.mapStatsPercentText}>0</Text>
+                <Text style={styles.mapStatsPercentText}>
+                  {formatPercentage(
+                    africaCountries ? (africaCountries / 54) * 100 : 0
+                  )}
+                </Text>
                 <Text style={styles.percentText}>%</Text>
               </View>
             </View>
@@ -99,7 +140,13 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
                 </View>
               </View>
               <View style={styles.statWrapp}>
-                <Text style={styles.mapStatsPercentText}>0</Text>
+                <Text style={styles.mapStatsPercentText}>
+                  {formatPercentage(
+                    northAmericaCountries
+                      ? (northAmericaCountries / 2) * 100
+                      : 0
+                  )}
+                </Text>
                 <Text style={styles.percentText}>%</Text>
               </View>
             </View>
@@ -116,7 +163,13 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
                 </View>
               </View>
               <View style={styles.statWrapp}>
-                <Text style={styles.mapStatsPercentText}>0</Text>
+                <Text style={styles.mapStatsPercentText}>
+                  {formatPercentage(
+                    southAmericaCountries
+                      ? (southAmericaCountries / 33) * 100
+                      : 0
+                  )}
+                </Text>
                 <Text style={styles.percentText}>%</Text>
               </View>
             </View>
@@ -133,7 +186,11 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
                 </View>
               </View>
               <View style={styles.statWrapp}>
-                <Text style={styles.mapStatsPercentText}>0</Text>
+                <Text style={styles.mapStatsPercentText}>
+                  {formatPercentage(
+                    oceaniaCountries ? (oceaniaCountries / 14) * 100 : 0
+                  )}
+                </Text>
                 <Text style={styles.percentText}>%</Text>
               </View>
             </View>
