@@ -1,7 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import MapView, { Geojson, Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, {
+  Callout,
+  Geojson,
+  Marker,
+  PROVIDER_GOOGLE,
+} from "react-native-maps";
 import * as ImagePicker from "expo-image-picker";
-import InstagramStories from "@birdwingo/react-native-instagram-stories";
+import Carousel, { Pagination } from "react-native-snap-carousel";
 
 import {
   ActivityIndicator,
@@ -11,6 +16,7 @@ import {
   Platform,
   SafeAreaView,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -27,9 +33,11 @@ import {
   CloseCircleIcon,
   ImagesIcon,
   LivedIcon,
+  TrashIcon,
   VisitedIcon,
+  XIcon,
 } from "../../utilities/SvgIcons.utility";
-import { COLORS } from "../../styles/theme";
+import { COLORS, SIZES } from "../../styles/theme";
 import { useNavigation } from "@react-navigation/native";
 import * as Permissions from "expo-permissions";
 import { AddMemoriesModal } from "../../common/components/AddMemoriesModal";
@@ -44,12 +52,13 @@ const MyWorldScreen = () => {
   const [livedPlaces, setLivedPlaces] = useState([]);
   const [pickedImages, setPickedImages] = useState([]);
   const [isSelectingImages, setIsSelectingImages] = useState(false);
-  const [storiesVisible, setStoriesVisible] = useState(false);
+  const [activeSlide, setActiveSlide] = useState({ index: 0 });
 
   const [imagePath, setImagePath] = useState();
   const mapRef = useRef(null);
-  const storiesRef = useRef(null);
+  const carouselRef = useRef(null);
   const countryDetailModalRef = useRef(null);
+  const galleryRef = useRef(null);
   const memoriesModalRef = useRef(null);
 
   const onCountryDetailOpen = () => {
@@ -58,6 +67,10 @@ const MyWorldScreen = () => {
 
   const onMemoriesDetailOpen = () => {
     memoriesModalRef.current?.open();
+  };
+
+  const onGalleryOpen = () => {
+    galleryRef.current?.open();
   };
 
   const handleMapPress = async (event) => {
@@ -216,28 +229,34 @@ const MyWorldScreen = () => {
       // setLocation(location);
     })();
   }, []);
-  const stories = [
+
+  const images = [
     {
-      id: "user1",
-      name: "User 1",
-      imgUrl:
-        "https://images.unsplash.com/photo-1682685797828-d3b2561deef4?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Da",
-      stories: [
-        {
-          id: "story1",
-          sourceUrl:
-            "https://images.unsplash.com/photo-1682685797828-d3b2561deef4?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        },
-        {
-          id: "story2",
-          sourceUrl:
-            "https://images.unsplash.com/photo-1682685797828-d3b2561deef4?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        },
-      ],
+      id: 1,
+      url: "https://images.unsplash.com/photo-1682687982141-0143020ed57a?q=10&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    },
+    {
+      id: 2,
+      url: "https://images.unsplash.com/photo-1682687982502-b05f0565753a?q=10&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    },
+    {
+      id: 3,
+      url: "https://images.unsplash.com/photo-1682685796766-0fddd3e480de?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
   ];
 
-  // console.log("currentCountry++", beenPlaces);
+  const RenderItem = ({ item, index }) => {
+    return (
+      <ImageBackground
+        source={{ uri: item?.url }}
+        style={{
+          width: SIZES.width,
+          height: SIZES.height,
+          flex: 1,
+        }}
+      ></ImageBackground>
+    );
+  };
 
   return (
     <>
@@ -480,6 +499,7 @@ const MyWorldScreen = () => {
             },
           ]}
           mapType="standard"
+          onSnapToItem={() => alert("ss")}
         >
           {location && (
             <Geojson
@@ -513,7 +533,7 @@ const MyWorldScreen = () => {
           ))}
           {beenPlaces?.map((item) => (
             <Marker
-              onPress={() => storiesRef.show("user1")}
+              onPress={() => onGalleryOpen()}
               coordinate={{
                 latitude: item?.coordinates?.latitude,
                 longitude: item?.coordinates?.longitude,
@@ -536,6 +556,8 @@ const MyWorldScreen = () => {
                   shadowOpacity: 0.2,
                   shadowRadius: 3.84,
                   elevation: 5,
+                  position: "relative",
+                  zIndex: 2,
                 }}
               >
                 <ImageBackground
@@ -554,14 +576,7 @@ const MyWorldScreen = () => {
           ))}
         </MapView>
       </View>
-      {storiesVisible ? (
-        <InstagramStories
-          ref={storiesRef}
-          stories={stories}
-          modalAnimationDuration={0}
-          closeIconColor="#fff"
-        />
-      ) : null}
+
       <Portal>
         <Modalize
           ref={countryDetailModalRef}
@@ -749,11 +764,134 @@ const MyWorldScreen = () => {
           />
         </Modalize>
       </Portal>
+
+      <Portal>
+        <Modalize
+          ref={galleryRef}
+          modalTopOffset={0}
+          withHandle={false}
+          disableScrollIfPossible
+          modalStyle={{
+            minHeight: "100%",
+            backgroundColor: "#000",
+            flex: 1,
+          }}
+          scrollViewProps={{
+            alwaysBounceVertical: false,
+          }}
+        >
+          <View style={styles.galleryHeader}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.galleryImageDeleteButton}
+            >
+              <TrashIcon color="#fff" width="17" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.closeGalleryButton}
+              onPress={() => galleryRef?.current?.close()}
+            >
+              <XIcon color="#fff" />
+            </TouchableOpacity>
+          </View>
+
+          <Carousel
+            ref={carouselRef}
+            data={images}
+            renderItem={RenderItem}
+            sliderWidth={SIZES.width}
+            itemWidth={SIZES.width}
+            inactiveSlideShift={0}
+            onSnapToItem={(index) => setActiveSlide({ index })}
+            useScrollView={true}
+          />
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            resizeMode="cover"
+            style={{
+              position: "absolute",
+              bottom: 50,
+              width: "100%",
+              paddingHorizontal: 15,
+            }}
+            contentContainerStyle={{
+              justifyContent: "center",
+              flexDirection: "row",
+              flexGrow: 1,
+            }}
+          >
+            {images?.map((item, ind) => (
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={{
+                  borderColor:
+                    activeSlide?.index === ind
+                      ? "#fff"
+                      : "rgba(255, 255, 255, 0.1)",
+                  borderWidth: 2,
+                  borderRadius: 10,
+                  marginRight: 8,
+                  overflow: "hidden",
+                }}
+                onPress={() => carouselRef?.current?.snapToItem(ind)}
+              >
+                <ImageBackground
+                  resizeMode="cover"
+                  style={{
+                    width: 50,
+                    height: 50,
+                    borderRadius: 8,
+                    overflow: "hidden",
+                  }}
+                  source={{
+                    uri: item?.url,
+                  }}
+                ></ImageBackground>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </Modalize>
+      </Portal>
     </>
   );
 };
 export default MyWorldScreen;
 const styles = StyleSheet.create({
+  galleryHeader: {
+    paddingTop: 55,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 15,
+    position: "absolute",
+    zIndex: 1,
+    width: "100%",
+  },
+  galleryImageDeleteButton: {
+    borderColor: "#000",
+    borderRadius: 50,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 0,
+    borderColor: "#000",
+    width: 40,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  closeGalleryButton: {
+    width: 40,
+    height: 40,
+    borderWidth: 0,
+    borderColor: "#000",
+    borderRadius: 50,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   currentCountry: {
     flexDirection: "row",
     alignItems: "center",
