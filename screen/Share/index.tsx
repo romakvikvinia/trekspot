@@ -49,10 +49,9 @@ const ShareStats: React.FC<SettingProps> = ({}) => {
   const ShareItem = async () => {
     let img = "";
     const image = ref.current.capture().then((uri) => {
-      console.log("do something with ", uri);
       img = uri;
     });
-    console.log("image", img);
+
     await Sharing.shareAsync(`file://${img}`);
   };
 

@@ -1,3 +1,4 @@
+import { useCallback, useState } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -8,6 +9,7 @@ import {
 import { Flags } from "../../utilities/flags";
 import { LivedIcon, VisitedIcon } from "../../utilities/SvgIcons.utility";
 import { COLORS } from "../../styles/theme";
+import { storeCountries } from "../../helpers/secure.storage";
 
 interface HomeProps {
   name: string;
@@ -20,13 +22,30 @@ interface HomeProps {
 export const CountryItem: React.FC<HomeProps> = ({
   name,
   iso2,
-  capital,
   lived,
   visited,
 }) => {
-  // Assuming that `item` contains the ISO2 country code
+  const [state, setState] = useState({
+    isVisited: visited || false,
+    isLived: lived || false,
+  });
 
-  // Check if the image path exists in the mapping
+  const handleVisited = useCallback((code: string) => {
+    storeCountries(code);
+    setState((prevState) => ({
+      ...prevState,
+      isVisited: !prevState.isVisited,
+    }));
+  }, []);
+
+  const handleLived = useCallback((code: string) => {
+    storeCountries(code, "lived_countries");
+    setState((prevState) => ({
+      ...prevState,
+      isLived: !prevState.isLived,
+    }));
+  }, []);
+
   // @ts-ignore
   const imagePath = Flags[iso2];
 
@@ -59,20 +78,20 @@ export const CountryItem: React.FC<HomeProps> = ({
         <TouchableOpacity
           style={[
             styles.countryItemActionButton,
-            visited ? styles.countryActive : null,
+            state.isVisited ? styles.countryActive : null,
           ]}
-          //   onPress={() => setVisitedCountry(countryCode)}
+          onPress={() => handleVisited(iso2)}
         >
-          <VisitedIcon active={visited} />
+          <VisitedIcon active={state.isVisited} />
         </TouchableOpacity>
         <TouchableOpacity
           style={[
             styles.countryItemActionButton,
-            lived ? styles.countryLived : null,
+            state.isLived ? styles.countryLived : null,
           ]}
-          //   onPress={() => setLivedCountry(countryCode)}
+          onPress={() => handleLived(iso2)}
         >
-          <LivedIcon active={lived} />
+          <LivedIcon active={state.isLived} />
         </TouchableOpacity>
       </View>
     </View>

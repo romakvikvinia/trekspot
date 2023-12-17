@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { AuthContext } from "../../package/context/auth.context";
+import { deleteFromAsyncStorage } from "../../helpers/secure.storage";
 
 interface SettingProps {}
 
 export const SettingScreen: React.FC<SettingProps> = ({}) => {
-  //@ts-ignore
   const { signOut } = useContext(AuthContext);
   return (
     <>
@@ -14,6 +14,7 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
         <TouchableOpacity
           onPress={async () => {
             signOut();
+            deleteFromAsyncStorage(["visited_countries", "lived_countries"]);
           }}
         >
           <Text>Logout</Text>

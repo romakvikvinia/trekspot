@@ -45,7 +45,7 @@ const BucketList = () => {
         latitude,
         longitude,
       });
-      console.log("currentCountry", currentCountry);
+
       let result = getCountry(currentCountry.isoCountryCode);
       if (currentCountry && result) {
         setLocation({
@@ -54,7 +54,7 @@ const BucketList = () => {
         });
       }
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
     }
   };
 

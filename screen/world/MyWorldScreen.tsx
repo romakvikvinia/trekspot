@@ -68,7 +68,6 @@ const MyWorldScreen = () => {
         longitude,
       });
 
-      console.log("currentCountry", currentCountry);
       let result = getCountry(currentCountry.isoCountryCode);
       if (currentCountry && result) {
         setLocation({
@@ -87,7 +86,7 @@ const MyWorldScreen = () => {
         onCountryDetailOpen();
       }
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
     }
   };
   const handleResetMap = () => {
@@ -164,7 +163,7 @@ const MyWorldScreen = () => {
   };
 
   const handleImportImages = () => {
-    console.log("currentCountry", beenPlaces, currentCountry);
+    // console.log("currentCountry", beenPlaces, currentCountry);
 
     setBeenPlaces((prevState) => {
       const countryCode = currentCountry?.isoCountryCode;
@@ -203,13 +202,13 @@ const MyWorldScreen = () => {
     memoriesModalRef.current?.close();
   };
 
-  console.log("beenPlaces", beenPlaces);
+  // console.log("beenPlaces", beenPlaces);
 
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        console.log("Permission to access location was denied");
+        // console.log("Permission to access location was denied");
         return;
       }
 
@@ -238,7 +237,7 @@ const MyWorldScreen = () => {
     },
   ];
 
-  console.log("currentCountry++", beenPlaces);
+  // console.log("currentCountry++", beenPlaces);
 
   return (
     <>
