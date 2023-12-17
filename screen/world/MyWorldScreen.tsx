@@ -42,6 +42,7 @@ import { useNavigation } from "@react-navigation/native";
 import * as Permissions from "expo-permissions";
 import { AddMemoriesModal } from "../../common/components/AddMemoriesModal";
 import { CountriesList } from "../../utilities/countryList";
+import { LinearGradient } from "expo-linear-gradient";
 
 const MyWorldScreen = () => {
   const navigation = useNavigation();
@@ -233,28 +234,43 @@ const MyWorldScreen = () => {
   const images = [
     {
       id: 1,
-      url: "https://images.unsplash.com/photo-1682687982141-0143020ed57a?q=10&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      url: "https://images.unsplash.com/photo-1682687982141-0143020ed57a?q=10&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
       id: 2,
-      url: "https://images.unsplash.com/photo-1682687982502-b05f0565753a?q=10&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      url: "https://images.unsplash.com/photo-1682687982502-b05f0565753a?q=10&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
       id: 3,
-      url: "https://images.unsplash.com/photo-1682685796766-0fddd3e480de?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      url: "https://images.unsplash.com/photo-1682685796766-0fddd3e480de?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
   ];
 
   const RenderItem = ({ item, index }) => {
     return (
-      <ImageBackground
-        source={{ uri: item?.url }}
+      <LinearGradient
         style={{
           width: SIZES.width,
           height: SIZES.height,
           flex: 1,
         }}
-      ></ImageBackground>
+        colors={["rgba(255,255,255,0.2)", "rgba(0,0,0,0.1)"]}
+      >
+        <Image
+          style={{
+            width: SIZES.width,
+            height: SIZES.height,
+            flex: 1,
+          }}
+          source={{
+            uri: item?.url,
+          }}
+          cachePolicy="memory"
+          contentFit="cover"
+          transition={1000}
+          placeholder={<ActivityIndicator />}
+        />
+      </LinearGradient>
     );
   };
 
@@ -771,6 +787,7 @@ const MyWorldScreen = () => {
           modalTopOffset={0}
           withHandle={false}
           disableScrollIfPossible
+          onClose={() => setActiveSlide({ index: 0 })}
           modalStyle={{
             minHeight: "100%",
             backgroundColor: "#000",
@@ -837,8 +854,7 @@ const MyWorldScreen = () => {
                 }}
                 onPress={() => carouselRef?.current?.snapToItem(ind)}
               >
-                <ImageBackground
-                  resizeMode="cover"
+                <Image
                   style={{
                     width: 50,
                     height: 50,
@@ -848,7 +864,10 @@ const MyWorldScreen = () => {
                   source={{
                     uri: item?.url,
                   }}
-                ></ImageBackground>
+                  // placeholder={blurhash}
+                  contentFit="cover"
+                  transition={1000}
+                />
               </TouchableOpacity>
             ))}
           </ScrollView>

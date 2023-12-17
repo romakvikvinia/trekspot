@@ -56,6 +56,292 @@ import { Topsights } from "../../utilities/Tops";
 import { MapEmbedView } from "./MapEmbedView";
 import { CurrencySelect } from "./CurrencySelect";
 
+const DATA = {
+  name: {
+    common: "France",
+    official: "French Republic",
+    nativeName: {
+      fra: { official: "République française", common: "France" },
+    },
+  },
+  gallery: [],
+  rating: "",
+  visitors: "",
+  tld: [".fr"],
+  cca2: "FR",
+  ccn3: "250",
+  cca3: "FRA",
+  cioc: "FRA",
+  independent: true,
+  status: "officially-assigned",
+  unMember: true,
+  currencies: { EUR: { name: "Euro", symbol: "€" } },
+  idd: { root: "+3", suffixes: ["3"] },
+  capital: ["Paris"],
+  altSpellings: ["FR", "French Republic", "République française"],
+  region: "Europe",
+  subregion: "Western Europe",
+  languages: { fra: "French" },
+  latlng: [46.0, 2.0],
+  landlocked: false,
+  borders: ["AND", "BEL", "DEU", "ITA", "LUX", "MCO", "ESP", "CHE"],
+  area: 551695.0,
+  demonyms: {
+    eng: { f: "French", m: "French" },
+    fra: { f: "Française", m: "Français" },
+  },
+  maps: {
+    googleMaps: "https://goo.gl/maps/g7QxxSFsWyTPKuzd7",
+    openStreetMaps: "https://www.openstreetmap.org/relation/1403916",
+  },
+  population: 67391582,
+  gini: { "2018": 32.4 },
+  fifa: "FRA",
+  car: { signs: ["F"], side: "right" },
+  timezones: [
+    "UTC-10:00",
+    "UTC-09:30",
+    "UTC-09:00",
+    "UTC-08:00",
+    "UTC-04:00",
+    "UTC-03:00",
+    "UTC+01:00",
+    "UTC+02:00",
+    "UTC+03:00",
+    "UTC+04:00",
+    "UTC+05:00",
+    "UTC+10:00",
+    "UTC+11:00",
+    "UTC+12:00",
+  ],
+  continents: ["Europe"],
+  startOfWeek: "monday",
+  capitalInfo: { latlng: [48.87, 2.33] },
+  postalCode: { format: "#####", regex: "^(\\d{5})$" },
+  overview: "",
+  telecoms: [],
+  emergency: [
+    {
+      emergency: "",
+    },
+    {
+      police: "",
+    },
+    {
+      ambulance: "",
+    },
+    {
+      fire: "",
+    },
+  ],
+  transport: {
+    local: [
+      {
+        name: "",
+        ios: "",
+        android: "",
+      },
+    ],
+    types: [],
+  },
+  taxi: [
+    {
+      name: "",
+      ios: "",
+      android: "",
+      logo: "",
+    },
+  ],
+  dining: {
+    highlights: [
+      {
+        name: "",
+        thumbnail: "",
+        url: "",
+        reviews: "",
+        reviewAmount: "",
+        address: "",
+      },
+    ],
+    localcuisine: [
+      {
+        name: "",
+        thumbnail: "",
+        url: "",
+        reviews: "",
+        reviewAmount: "",
+        address: "",
+      },
+    ],
+    streetfood: [
+      {
+        name: "",
+        thumbnail: "",
+        url: "",
+        reviews: "",
+        reviewAmount: "",
+        address: "",
+      },
+    ],
+  },
+  speaking: [
+    {
+      title: "Greatings",
+      values: [
+        {
+          Hello: "",
+        },
+        {
+          Goodbye: "",
+        },
+        {
+          "Good evening": "",
+        },
+        {
+          "Good night": "",
+        },
+      ],
+    },
+    {
+      title: "Polite Expressions",
+      values: [
+        {
+          Please: "",
+        },
+        {
+          "Thank you": "",
+        },
+        {
+          "You're welcome": "",
+        },
+        {
+          "Excuse me / I'm sorry": "",
+        },
+      ],
+    },
+    {
+      title: "Common Courtesies",
+      values: [
+        {
+          Yes: "",
+        },
+        {
+          No: "",
+        },
+        {
+          "Excuse me": "",
+        },
+      ],
+    },
+    {
+      title: "Asking for Help",
+      values: [
+        {
+          "Can you help me?": "",
+        },
+        {
+          "Where is?": "",
+        },
+      ],
+    },
+    {
+      title: "Directions",
+      values: [
+        {
+          Left: "",
+        },
+        {
+          Right: "",
+        },
+        {
+          "Straight ahead": "",
+        },
+      ],
+    },
+    {
+      title: "Numbers",
+      values: [
+        {
+          One: "",
+        },
+        {
+          Two: "",
+        },
+        {
+          Three: "",
+        },
+        {
+          Four: "",
+        },
+        {
+          Five: "",
+        },
+      ],
+    },
+    {
+      title: "Basic Phrases",
+      values: [
+        {
+          "How are you?": "",
+        },
+        {
+          "I don't understand": "",
+        },
+        {
+          "I don't speak French very well": "",
+        },
+      ],
+    },
+    {
+      title: "Dining",
+      values: [
+        {
+          Menu: "",
+        },
+        {
+          Water: "",
+        },
+        {
+          "The check, please": "",
+        },
+      ],
+    },
+  ],
+  weatherInformation: {
+    averageTemperatures: {
+      spring: "",
+      summer: "",
+      autumn: "",
+      winter: "",
+    },
+    seasonalConsiderations: "",
+  },
+  shopping: {
+    districts: [
+      {
+        name: "",
+        address: "",
+        thumbnail: "",
+      },
+    ],
+    specialties: [
+      {
+        name: "",
+        address: "",
+        thumbnail: "",
+      },
+    ],
+  },
+  eventsAndFestivals: [
+    {
+      name: "",
+      description: "",
+      date: "",
+    },
+  ],
+  culturalEtiquette: "",
+};
+
 export const DestinationDetail = ({ modalDestinationDetailsRef }) => {
   const modalRef = useRef<Modalize>(null);
   const modalCurrencyRef = useRef<Modalize>(null);
