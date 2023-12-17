@@ -9,6 +9,7 @@ import {
   UpdateMeResponseType,
   UserArgType,
   meResponseType,
+  AnalyticsResponseType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 
@@ -177,6 +178,26 @@ export const trekSpotApi = createApi({
         `,
       }),
     }),
+    /**
+     * Get user analytics
+     *
+     */
+    analytics: builder.query<AnalyticsResponseType, void>({
+      query: () => ({
+        document: gql`
+          query {
+            analytics {
+              availableCountries
+              achievedCountries
+              territories {
+                quantity
+                items
+              }
+            }
+          }
+        `,
+      }),
+    }),
   }),
 });
 
@@ -186,4 +207,5 @@ export const {
   useUpdateMeMutation,
   useMeQuery,
   useLazyMeQuery,
+  useAnalyticsQuery,
 } = trekSpotApi;

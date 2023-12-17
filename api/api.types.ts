@@ -66,3 +66,16 @@ export type UpdateMeResponseType = {
 export type meResponseType = {
   me: UserType;
 };
+
+export type AnalyticsType = {
+  availableCountries: number;
+  achievedCountries: number;
+  territories: {
+    quantity: number;
+    items: Record<string, number>;
+  };
+};
+
+export type AnalyticsResponseType = {
+  analytics: AnalyticsType;
+};

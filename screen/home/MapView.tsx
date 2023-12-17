@@ -15,7 +15,7 @@ import {
 } from "../../utilities/SvgIcons.utility";
 import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FlashList } from "@shopify/flash-list";
 import { CountriesList } from "../../utilities/countryList";
 import { COLORS, SIZES } from "../../styles/theme";
@@ -33,6 +33,8 @@ import {
   getCountries,
   storeInitialCountryCodes,
 } from "../../helpers/secure.storage";
+import { AnalyticsType } from "../../api/api.types";
+import { formatPercentage } from "../../helpers/number.helper";
 
 type ICountry = {
   name: string;
@@ -42,7 +44,11 @@ type ICountry = {
   visited?: boolean;
 };
 
-export const MapView = () => {
+interface MapVIewProps {
+  analytic?: AnalyticsType;
+}
+
+export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
   const [state, setState] = useState<{
     countries: ICountry[];
     visited_countries: string[];
@@ -101,8 +107,6 @@ export const MapView = () => {
       const lived_countries = data.me.lived_countries.map((i) => i.iso2);
       storeInitialCountryCodes("visited_countries", visited_countries);
       storeInitialCountryCodes("lived_countries", lived_countries);
-      console.log("visited_countries", visited_countries);
-      console.log("lived_countries", lived_countries);
       setState((prevState) => ({
         ...prevState,
         visited_countries,
@@ -152,6 +156,14 @@ export const MapView = () => {
   useEffect(() => {
     if (refetch) refetch();
   }, [refetch]);
+
+  // transform data
+
+  let world =
+    analytic && analytic.achievedCountries
+      ? (analytic.achievedCountries / analytic.availableCountries) * 100
+      : 0;
+  world = formatPercentage(world);
 
   return (
     <>
@@ -234,7 +246,7 @@ export const MapView = () => {
                 alignItems: "center",
               }}
             >
-              <Text style={styles.lg}>24</Text>
+              <Text style={styles.lg}>{world}</Text>
               <Text
                 style={[styles.sublabel, { marginLeft: 2, marginBottom: 2 }]}
               >
@@ -246,10 +258,18 @@ export const MapView = () => {
           </View>
           <View style={[styles.rowBox]}>
             <View style={styles.amountView}>
-              <Text style={styles.lg}>34</Text>
+              <Text style={styles.lg}>
+                {analytic && analytic.achievedCountries
+                  ? analytic.achievedCountries
+                  : 0}
+              </Text>
               <View style={styles.labelView}>
                 <Text style={styles.sublabel}>/</Text>
-                <Text style={[styles.sublabel, { marginTop: 2 }]}> 195</Text>
+                <Text style={[styles.sublabel, { marginTop: 2 }]}>
+                  {analytic && analytic.availableCountries
+                    ? analytic.availableCountries
+                    : 0}
+                </Text>
               </View>
             </View>
 
@@ -257,10 +277,16 @@ export const MapView = () => {
           </View>
           <View style={[styles.rowBox]}>
             <View style={styles.amountView}>
-              <Text style={styles.lg}>3</Text>
+              <Text style={styles.lg}>
+                {analytic &&
+                analytic.territories &&
+                analytic.territories.quantity
+                  ? analytic.territories.quantity
+                  : 0}
+              </Text>
               <View style={styles.labelView}>
                 <Text style={styles.sublabel}>/</Text>
-                <Text style={[styles.sublabel, { marginTop: 2 }]}> 6</Text>
+                <Text style={[styles.sublabel, { marginTop: 2 }]}>6</Text>
               </View>
             </View>
             <Text style={styles.statLabel}>Territories</Text>
