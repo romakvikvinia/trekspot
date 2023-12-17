@@ -2847,7 +2847,7 @@
       "fifa": "AZE",
       "car": { "signs": ["AZ"], "side": "right" },
       "timezones": ["UTC+04:00"],
-      "continents": ["Europe", "Asia"],
+      "continents": ["Europe"],
       "startOfWeek": "monday",
       "capitalInfo": { "latlng": [40.38, 49.87] },
       "postalCode": { "format": "AZ ####", "regex": "^(?:AZ)*(\\d{4})$" },
@@ -10544,7 +10544,7 @@
     },
     {
       "name": {
-        "common": "Congo",
+        "common": "Congo (Congo-Brazzaville)",
         "official": "Republic of the Congo",
         "nativeName": {
           "fra": {
@@ -39217,7 +39217,7 @@
         "UTC+11:00",
         "UTC+12:00"
       ],
-      "continents": ["Europe", "Asia"],
+      "continents": ["Europe"],
       "startOfWeek": "monday",
       "capitalInfo": { "latlng": [55.75, 37.6] },
       "postalCode": { "format": "######", "regex": "^(\\d{6})$" },

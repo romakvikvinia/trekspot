@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import MapView, { Geojson, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import * as ImagePicker from "expo-image-picker";
+import InstagramStories from "@birdwingo/react-native-instagram-stories";
 
 import {
   ActivityIndicator,
@@ -43,9 +44,11 @@ const MyWorldScreen = () => {
   const [livedPlaces, setLivedPlaces] = useState([]);
   const [pickedImages, setPickedImages] = useState([]);
   const [isSelectingImages, setIsSelectingImages] = useState(false);
+  const [storiesVisible, setStoriesVisible] = useState(false);
 
   const [imagePath, setImagePath] = useState();
   const mapRef = useRef(null);
+  const storiesRef = useRef(null);
   const countryDetailModalRef = useRef(null);
   const memoriesModalRef = useRef(null);
 
@@ -214,6 +217,26 @@ const MyWorldScreen = () => {
       // setLocation(location);
     })();
   }, []);
+  const stories = [
+    {
+      id: "user1",
+      name: "User 1",
+      imgUrl:
+        "https://images.unsplash.com/photo-1682685797828-d3b2561deef4?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Da",
+      stories: [
+        {
+          id: "story1",
+          sourceUrl:
+            "https://images.unsplash.com/photo-1682685797828-d3b2561deef4?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        },
+        {
+          id: "story2",
+          sourceUrl:
+            "https://images.unsplash.com/photo-1682685797828-d3b2561deef4?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        },
+      ],
+    },
+  ];
 
   console.log("currentCountry++", beenPlaces);
 
@@ -491,6 +514,7 @@ const MyWorldScreen = () => {
           ))}
           {beenPlaces?.map((item) => (
             <Marker
+              onPress={() => storiesRef.show("user1")}
               coordinate={{
                 latitude: item?.coordinates?.latitude,
                 longitude: item?.coordinates?.longitude,
@@ -531,6 +555,14 @@ const MyWorldScreen = () => {
           ))}
         </MapView>
       </View>
+      {storiesVisible ? (
+        <InstagramStories
+          ref={storiesRef}
+          stories={stories}
+          modalAnimationDuration={0}
+          closeIconColor="#fff"
+        />
+      ) : null}
       <Portal>
         <Modalize
           ref={countryDetailModalRef}
