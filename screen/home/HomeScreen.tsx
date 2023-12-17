@@ -17,7 +17,7 @@ import { formatPercentage } from "../../helpers/number.helper";
 interface HomeProps {}
 
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
-  const { data, isLoading, isSuccess } = useAnalyticsQuery();
+  const { data, isLoading, isSuccess, refetch } = useAnalyticsQuery();
   // transform data
   const europeCountries =
     data && data.analytics.territories.items["Europe"]
@@ -47,7 +47,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <MapView analytic={data?.analytics} />
+        <MapView analytic={data?.analytics} updateAnalytics={refetch} />
         <ScrollView
           style={styles.mapStats}
           showsVerticalScrollIndicator={false}

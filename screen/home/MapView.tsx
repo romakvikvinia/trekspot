@@ -46,9 +46,13 @@ type ICountry = {
 
 interface MapVIewProps {
   analytic?: AnalyticsType;
+  updateAnalytics: () => void;
 }
 
-export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
+export const MapView: React.FC<MapVIewProps> = ({
+  analytic,
+  updateAnalytics,
+}) => {
   const [state, setState] = useState<{
     countries: ICountry[];
     visited_countries: string[];
@@ -96,6 +100,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
       payload.lived_countries = lived_countries;
 
     updateMe(payload);
+    updateAnalytics();
   }, []);
 
   /**
