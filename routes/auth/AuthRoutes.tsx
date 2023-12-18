@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   StackNavigationProp,
   createStackNavigator,
@@ -7,6 +7,7 @@ import { SignInScreen } from "../../screen/auth/SignInScreen";
 import { SignUpScreen } from "../../screen/auth/SignUpScreen";
 import { GetStartedScreen } from "../../screen/auth/GetStartedScreen";
 import { ResetPasswordScreen } from "../../screen/auth/ResetPassword";
+import { useNavigation } from "@react-navigation/native";
 
 interface AuthRouteProps {}
 
@@ -22,15 +23,14 @@ const Stack = createStackNavigator<AuthStackParamList>();
 export type AuthStackNavigationProp = StackNavigationProp<AuthStackParamList>;
 
 export const AuthRoute: React.FC<AuthRouteProps> = () => {
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    navigation.navigate("GetStarted");
+  }, []);
+
   return (
-    <Stack.Navigator initialRouteName="GetStarted">
-      <Stack.Screen
-        name="GetStarted"
-        component={GetStartedScreen}
-        options={{
-          header: () => null,
-        }}
-      />
+    <Stack.Navigator initialRouteName="SignIn">
       <Stack.Screen
         name="SignIn"
         component={SignInScreen}
@@ -38,6 +38,11 @@ export const AuthRoute: React.FC<AuthRouteProps> = () => {
           header: () => null,
         }}
       />
+      <Stack.Group
+        screenOptions={{ presentation: "modal", headerShown: false }}
+      >
+        <Stack.Screen name="GetStarted" component={GetStartedScreen} />
+      </Stack.Group>
       <Stack.Screen
         name="SignUp"
         component={SignUpScreen}

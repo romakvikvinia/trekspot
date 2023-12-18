@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Text, View, SafeAreaView, ScrollView, StyleSheet } from "react-native";
+import { Text, View, ScrollView, StyleSheet } from "react-native";
 
 import { MapView } from "./MapView";
 import { COLORS, SIZES } from "../../styles/theme";
@@ -13,6 +13,7 @@ import {
 } from "../../utilities/SvgIcons.utility";
 import { useAnalyticsQuery } from "../../api/api.trekspot";
 import { formatPercentage } from "../../helpers/number.helper";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface HomeProps {}
 
@@ -45,7 +46,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
       : 0;
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} forceInset={{ top: "always" }}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <MapView analytic={data?.analytics} updateAnalytics={refetch} />
         <ScrollView

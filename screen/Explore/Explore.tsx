@@ -37,7 +37,7 @@ const Popular = [
   {
     id: 0,
     image:
-      "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=10&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=10&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     title: "France",
     rating: 4.9,
     visitors: "80m",
@@ -45,7 +45,7 @@ const Popular = [
   {
     id: 0,
     image:
-      "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=10&w=3383&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=10&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     title: "Italy",
     rating: 4.5,
     visitors: "75m",
@@ -53,7 +53,7 @@ const Popular = [
   {
     id: 0,
     image:
-      "https://images.unsplash.com/photo-1494949360228-4e9bde560065?q=10&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1494949360228-4e9bde560065?q=10&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     title: "Thailand",
     rating: 4.2,
     visitors: "25m",

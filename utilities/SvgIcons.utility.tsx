@@ -1739,28 +1739,42 @@ export const TransportIcon = ({ color }) => {
   return <SvgImage />;
 };
 export const TopThingsIcon = ({ color }) => {
-  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M21 3H3C1.346 3 0 4.346 0 6v13h6.923l3.749 3.157a2.01 2.01 0 0 0 1.337.507 1.94 1.94 0 0 0 1.292-.484L17.149 19h6.852V6c0-1.654-1.346-3-3-3ZM7.667 10.509 5.835 11.57l.737 2.239-.421.291-1.811-1.401-1.82 1.407-.4-.302.724-2.265L1 10.513V10h2.416l.654-2.501h.54L5.263 10h2.403v.509Zm7.667 0-1.832 1.061.737 2.239-.421.291-1.811-1.401-1.82 1.407-.4-.302.724-2.265-1.844-1.026V10h2.416l.654-2.501h.54L12.93 10h2.403v.509Zm7.667 0-1.832 1.061.737 2.239-.421.291-1.811-1.401-1.82 1.407-.4-.302.724-2.265-1.844-1.026V10h2.416l.654-2.501h.54L20.597 10H23v.509Z" fill=${
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M24 18.5c0 3.033-2.467 5.5-5.5 5.5S13 21.533 13 18.5s2.467-5.5 5.5-5.5 5.5 2.467 5.5 5.5ZM5.5 13C2.467 13 0 15.467 0 18.5S2.467 24 5.5 24s5.5-2.467 5.5-5.5S8.533 13 5.5 13ZM20 4V2.5a2.5 2.5 0 1 0-5 0V4h5Zm-1 2H5a5 5 0 0 0-5 5v2.418C1.371 11.935 3.326 11 5.5 11s4.129.935 5.5 2.418V10c0-.551.449-1 1-1s1 .449 1 1v3.418C14.371 11.935 16.326 11 18.5 11s4.129.935 5.5 2.418V11a5 5 0 0 0-5-5ZM9 4V2.5A2.5 2.5 0 0 0 6.5 0h-.008a2.527 2.527 0 0 0-2.518 2.51L3.97 4H9Z" fill=${
+    color ? color : "#000000"
+  } opacity="1" data-original="#000000" class=""></path></g></svg>`;
+  const SvgImage = () => <SvgXml xml={svgMarkup} width="20" height="20" />;
+  return <SvgImage />;
+};
+export const EventsIcon = ({ color }) => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M0 19c0 2.757 2.243 5 5 5h14c2.757 0 5-2.243 5-5v-9H0v9Zm3-4c0-1.103.897-2 2-2h2c1.103 0 2 .897 2 2v2c0 1.103-.897 2-2 2H5c-1.103 0-2-.897-2-2v-2Zm4.001 2H5v-2h2v2ZM24 7v1H0V7c0-2.757 2.243-5 5-5h1V1a1 1 0 0 1 2 0v1h8V1a1 1 0 0 1 2 0v1h1c2.757 0 5 2.243 5 5Z" fill=${
+    color ? color : "#000000"
+  } opacity="1" data-original="#000000" class=""></path></g></svg>`;
+  const SvgImage = () => <SvgXml xml={svgMarkup} width="20" height="20" />;
+  return <SvgImage />;
+};
+export const ToursIcon = ({ color }) => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M23.6 10.936c-.022-.048-5.819-8.625-5.819-8.625-1.11-1.554-2.347-2.31-3.782-2.31-1.671 0-2.523.847-3.728 2.241-.023.029-1.197 1.759-1.197 1.759s-.575 1 .923 1c2.098 0 3.918 1.059 5.409 3.148l5.328 7.878c.287.424.864.578 1.295.302a4.28 4.28 0 0 0 1.298-1.303 4.241 4.241 0 0 0 .271-4.09Zm-13.101 8.421 2.516 4.644H6.981l2.542-4.698c.126-.272.374-.302.474-.302s.348.029.501.356Zm8.827 2.669a4.255 4.255 0 0 1-3.603 1.975h-.432l-3.005-5.542a2.5 2.5 0 0 0-2.288-1.458c-.993 0-1.87.559-2.26 1.403l-3.031 5.597h-.432a4.253 4.253 0 0 1-3.603-1.975 4.241 4.241 0 0 1-.271-4.09c.022-.048 5.847-8.668 5.873-8.698 1.203-1.392 2.054-2.237 3.724-2.237 1.435 0 2.672.756 3.782 2.31 0 0 5.796 8.578 5.819 8.625a4.244 4.244 0 0 1-.271 4.09Z" fill=${
     color ? color : "#000000"
   } opacity="1" data-original="#000000" class=""></path></g></svg>`;
   const SvgImage = () => <SvgXml xml={svgMarkup} width="20" height="20" />;
   return <SvgImage />;
 };
 export const DiningIcon = ({ color }) => {
-  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M24 22a1 1 0 0 1-1 1H1a1 1 0 0 1 0-2h22a1 1 0 0 1 1 1ZM2 19h20a1 1 0 0 0 1-1v-1A11.01 11.01 0 0 0 13 6.051V4.723a2 2 0 1 0-2 0v1.328A11.01 11.01 0 0 0 1 17v1a1 1 0 0 0 1 1Z" fill=${
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M.164 4.705C.928 1.592 5.211-.055 7.84 1.621a6.16 6.16 0 0 1 8.32 0c6.436-3.279 11.424 6.113 4.514 9.092a.934.934 0 0 0-.674.851V17H4v-5.436a.934.934 0 0 0-.674-.851A5.017 5.017 0 0 1 .164 4.705ZM4 19a4.559 4.559 0 0 0 4.5 5h7a4.559 4.559 0 0 0 4.5-5Z" fill=${
     color ? color : "#000000"
   } opacity="1" data-original="#000000" class=""></path></g></svg>`;
   const SvgImage = () => <SvgXml xml={svgMarkup} width="20" height="20" />;
   return <SvgImage />;
 };
 export const LanguageIcon = ({ color }) => {
-  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M5.986 9.4a.08.08 0 0 0-.079.063L5.096 12.9h1.757l-.787-3.437a.081.081 0 0 0-.079-.063Z" fill="#000000" opacity="1" data-original="#000000" class=""></path><path d="M11 4H3a3 3 0 0 0-3 3v13h11V4ZM7.173 14.3H4.764L4.363 16H2.926l1.616-6.853a1.49 1.49 0 0 1 2.056-1.021c.439.184.734.606.842 1.07L8.999 16H7.562l-.389-1.7ZM21 4h-8v16h11V7c0-1.654-1.346-3-3-3Zm1 6.253h-.932c-.121 1.275-.617 2.731-1.607 3.866.663.403 1.49.665 2.539.665v1.253c-1.456 0-2.595-.418-3.488-1.053-.896.64-2.049 1.053-3.512 1.053v-1.253c1.049 0 1.881-.258 2.545-.661A6.575 6.575 0 0 1 16.322 12h1.336c.204.468.487.92.847 1.325.818-.92 1.192-2.108 1.303-3.071H15V9.001h2.873v-1h1.253v1h2.873v1.253Z" fill=${
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M20 9.616v.021c0 .34-.276.616-.616.616h-.316c-.121 1.275-.617 2.731-1.607 3.866a4.593 4.593 0 0 0 1.984.639c.315.03.555.296.555.613v.021a.617.617 0 0 1-.68.613c-1.137-.109-2.059-.489-2.808-1.022-.753.538-1.686.915-2.832 1.022a.618.618 0 0 1-.679-.614v-.021a.62.62 0 0 1 .568-.614 4.578 4.578 0 0 0 1.977-.635 6.289 6.289 0 0 1-.83-1.22.62.62 0 0 1 1.098-.578c.184.352.415.69.692 1 .818-.92 1.192-2.108 1.303-3.071h-4.191a.616.616 0 0 1-.616-.616v-.021c0-.34.276-.616.616-.616h2.257v-.384c0-.34.276-.616.616-.616h.021c.34 0 .616.276.616.616v.384h2.257c.34 0 .616.276.616.616ZM5.986 9.4a.08.08 0 0 0-.079.063L5.096 12.9h1.757l-.787-3.437a.081.081 0 0 0-.079-.063ZM24 8.5v7c0 3.033-2.468 5.5-5.5 5.5h-13A5.5 5.5 0 0 1 0 15.5v-7A5.5 5.5 0 0 1 5.5 3h13C21.532 3 24 5.467 24 8.5ZM8.804 15.144 7.441 9.196c-.107-.464-.403-.886-.842-1.07a1.49 1.49 0 0 0-2.056 1.021L3.13 15.14a.7.7 0 0 0 1.362.321l.274-1.161h2.409l.265 1.157a.7.7 0 0 0 .682.543h.002a.7.7 0 0 0 .682-.856ZM21 8.5C21 7.122 19.879 6 18.5 6H12v12h6.5c1.379 0 2.5-1.122 2.5-2.5v-7Z" fill=${
     color ? color : "#000000"
   } opacity="1" data-original="#000000" class=""></path></g></svg>`;
   const SvgImage = () => <SvgXml xml={svgMarkup} width="20" height="20" />;
   return <SvgImage />;
 };
 export const CurrencyIcon = ({ color }) => {
-  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M21 0H3C1.346 0 0 1.346 0 3v21h24V3c0-1.654-1.346-3-3-3ZM10.644 10.76l3.041.507A2.761 2.761 0 0 1 16 14c0 1.654-1.346 3-3 3v2h-2v-2c-1.654 0-3-1.346-3-3h2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1 .768.768 0 0 0-.644-.76l-3.041-.507A2.761 2.761 0 0 1 8 10c0-1.654 1.346-3 3-3V5h2v2c1.654 0 3 1.346 3 3h-2c0-.551-.448-1-1-1h-2c-.552 0-1 .449-1 1 0 .378.271.698.644.76Z" fill=${
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M12 0C5.383 0 0 5.383 0 12c.603 15.898 23.4 15.894 24 0 0-6.617-5.383-12-12-12Zm1 17v1c-.005 1.308-1.995 1.307-2 0v-1h-.268a3.01 3.01 0 0 1-2.598-1.499 1 1 0 1 1 1.73-1.002c.179.31.511.501.867.501h2.268c.997.065 1.443-1.55.356-1.76l-3.041-.507C6.812 12.084 7.566 6.98 10.999 7V6c.006-1.308 1.995-1.307 2 0v1h.268c1.067 0 2.063.575 2.598 1.5a1 1 0 1 1-1.73 1.001 1.004 1.004 0 0 0-.867-.5H11c-.997-.065-1.442 1.55-.356 1.76l3.041.507c3.502.649 2.748 5.753-.685 5.733Z" fill=${
     color ? color : "#000000"
   } opacity="1" data-original="#000000" class=""></path></g></svg>`;
   const SvgImage = () => <SvgXml xml={svgMarkup} width="20" height="20" />;

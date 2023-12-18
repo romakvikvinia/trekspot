@@ -35,6 +35,7 @@ import {
   DrivingSideLeft,
   DrivingSideRight,
   EmergencyIcon,
+  EventsIcon,
   FireBrigadeIcon,
   InfoIcon,
   LanguageIcon,
@@ -46,6 +47,7 @@ import {
   PoliceIcon,
   StarIcon,
   TopThingsIcon,
+  ToursIcon,
   TramwayIcon,
   TransportIcon,
   TrolleybusIcon,
@@ -467,6 +469,27 @@ export const DestinationDetail = ({ modalDestinationDetailsRef }) => {
       </ScrollView>
     );
   };
+  const Events = () => {
+    return (
+      <ScrollView
+        style={styles.tabWrapper}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text>Events</Text>
+      </ScrollView>
+    );
+  };
+  const Tours = () => {
+    return (
+      <ScrollView
+        style={styles.tabWrapper}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text>Tours</Text>
+      </ScrollView>
+    );
+  };
+
   const Transport = () => {
     return (
       <ScrollView
@@ -1028,6 +1051,8 @@ export const DestinationDetail = ({ modalDestinationDetailsRef }) => {
     transport: Transport,
     thingsTodo: ThingsTodo,
     dining: Dining,
+    tours: Tours,
+    events: Events,
     language: Language,
     currency: Currency,
     emergency: Emergency,
@@ -1037,7 +1062,9 @@ export const DestinationDetail = ({ modalDestinationDetailsRef }) => {
     { key: "visa", title: "Visa" },
     { key: "transport", title: "Transport" },
     { key: "thingsTodo", title: "Top sights" },
-    { key: "dining", title: "Dining" },
+    { key: "events", title: "Events" },
+    { key: "tours", title: "Tours" },
+    { key: "dining", title: "Dishes" },
     { key: "language", title: "Language" },
     { key: "currency", title: "Currency" },
     { key: "emergency", title: "Emergency" },
@@ -1085,6 +1112,14 @@ export const DestinationDetail = ({ modalDestinationDetailsRef }) => {
             <TopThingsIcon
               color={focused ? COLORS.primaryDark : COLORS.darkgray}
             />
+          )}
+          {route?.key === "events" && (
+            <EventsIcon
+              color={focused ? COLORS.primaryDark : COLORS.darkgray}
+            />
+          )}
+          {route?.key === "tours" && (
+            <ToursIcon color={focused ? COLORS.primaryDark : COLORS.darkgray} />
           )}
           {route?.key === "dining" && (
             <DiningIcon
@@ -1182,7 +1217,7 @@ export const DestinationDetail = ({ modalDestinationDetailsRef }) => {
                 style={styles.box}
                 resizeMode="cover"
                 source={{
-                  uri: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=10&w=3273&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Ds",
+                  uri: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=10&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Ds",
                 }}
               >
                 <LinearGradient
@@ -1196,7 +1231,7 @@ export const DestinationDetail = ({ modalDestinationDetailsRef }) => {
                 style={styles.box}
                 resizeMode="cover"
                 source={{
-                  uri: "https://images.unsplash.com/photo-1500039436846-25ae2f11882e?q=10&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                  uri: "https://images.unsplash.com/photo-1500039436846-25ae2f11882e?q=10&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                 }}
               >
                 <LinearGradient
@@ -1210,7 +1245,7 @@ export const DestinationDetail = ({ modalDestinationDetailsRef }) => {
                 style={styles.box}
                 resizeMode="cover"
                 source={{
-                  uri: "https://images.unsplash.com/photo-1507666664345-c49223375e33?q=10&w=3274&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                  uri: "https://images.unsplash.com/photo-1507666664345-c49223375e33?q=10&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                 }}
               >
                 <LinearGradient

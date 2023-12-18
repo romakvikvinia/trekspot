@@ -8,6 +8,7 @@ import { AuthContext } from "../package/context/auth.context";
 import { AuthRoute } from "./auth/AuthRoutes";
 import { deleteItemFromStorage, getFullToken } from "../helpers/secure.storage";
 import { AppRoute } from "./AppRoute";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 //reselect
 
@@ -66,11 +67,13 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
   };
 
   return (
-    <NavigationContainer onReady={checkAuth} theme={theme}>
-      <AuthContext.Provider value={authContext}>
-        {/* {!state.isAuthenticated ? <AuthRoute /> : <AppRoute />} */}
-        <AppRoute />
-      </AuthContext.Provider>
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer onReady={checkAuth} theme={theme}>
+        <AuthContext.Provider value={authContext}>
+          {/* {!state.isAuthenticated ? <AuthRoute /> : <AppRoute />} */}
+          <AppRoute />
+        </AuthContext.Provider>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 };
