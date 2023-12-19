@@ -23,12 +23,7 @@ import { COLORS, SIZES } from "../../styles/theme";
 import ShareModal from "../../common/components/ShareModal";
 import { BucketlistModal } from "../../common/components/BucketlistModal";
 import { CountryItem } from "../../components/home/CountryItem";
-import {
-  useUpdateMeMutation,
-  useMeQuery,
-  useLazyMeQuery,
-  trekSpotApi,
-} from "../../api/api.trekspot";
+import { useUpdateMeMutation, trekSpotApi } from "../../api/api.trekspot";
 import {
   getCountries,
   storeInitialCountryCodes,
@@ -170,6 +165,24 @@ export const MapView: React.FC<MapVIewProps> = ({
       : 0;
   world = formatPercentage(world);
 
+  let countriesOnMap: string[] = [];
+
+  if (state.lived_countries.length >= state.visited_countries.length) {
+    countriesOnMap = state.lived_countries;
+    state.visited_countries.forEach((code) => {
+      if (!countriesOnMap.includes(code)) {
+        countriesOnMap.push(code);
+      }
+    });
+  } else {
+    countriesOnMap = state.visited_countries;
+    state.lived_countries.forEach((code) => {
+      if (!countriesOnMap.includes(code)) {
+        countriesOnMap.push(code);
+      }
+    });
+  }
+
   return (
     <>
       <View style={styles.mapContainer}>
@@ -240,7 +253,7 @@ export const MapView: React.FC<MapVIewProps> = ({
             alignItems: "center",
           }}
         >
-          <MapSvg />
+          <MapSvg countries={countriesOnMap} />
         </TouchableOpacity>
 
         <View style={styles.row}>
@@ -330,12 +343,18 @@ export const MapView: React.FC<MapVIewProps> = ({
         >
           <View style={{ flex: 1, height: SIZES.height - 200 }}>
             <FlashList
-              keyExtractor={(item) =>
-                `${item.iso2}-${item.name}-${item.capital}`
-              }
+              // keyExtractor={(item) =>
+              //   `${item.iso2}-${item.name}-${item.capital}`
+              // }
               // extraData={state.countries}
               data={state.countries}
-              renderItem={({ item }) => <CountryItem {...item} />}
+              renderItem={({ item }) => (
+                <CountryItem
+                  {...item}
+                  visited_countries={state.visited_countries}
+                  lived_countries={state.lived_countries}
+                />
+              )}
               estimatedItemSize={200}
             />
           </View>
