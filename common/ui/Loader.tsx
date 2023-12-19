@@ -2,9 +2,11 @@ import React from "react";
 import { ActivityIndicator } from "react-native";
 import { Center } from "./Center";
 
-interface LoaderProps {}
+interface LoaderProps {
+  isLoading: boolean;
+}
 
-export const Loader: React.FC<LoaderProps> = ({}) => {
+export const Loader: React.FC<LoaderProps> = ({ isLoading = false }) => {
   return (
     <Center>
       <ActivityIndicator size="large" color="#0861a4" />

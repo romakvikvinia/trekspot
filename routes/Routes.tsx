@@ -9,6 +9,7 @@ import { AuthRoute } from "./auth/AuthRoutes";
 import { deleteItemFromStorage, getFullToken } from "../helpers/secure.storage";
 import { AppRoute } from "./AppRoute";
 import { Loader } from "../common/ui/Loader";
+import { Alert } from "react-native";
 
 //reselect
 
@@ -25,20 +26,23 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
       let token = await getFullToken();
 
       // await deleteItemFromStorage();
-      if (token && new Date().getTime() >= token.expire) {
+      if (!token || (token && new Date().getTime() >= token.expire)) {
         // unauthorize
+
         await deleteItemFromStorage();
         dispatch({ type: "SIGN_OUT" });
+        await SplashScreen.hideAsync();
         return;
       }
 
       // // setToken(tokens.access_token);
       dispatch({ type: "SIGN_IN", payload: { token: token.token } });
     } catch (error) {
-      // console.log(error);
+      console.log("error", error);
+      // Alert.alert(JSON.stringify(error));
     }
     await SplashScreen.hideAsync();
-  }, []);
+  }, [dispatch]);
 
   const authContext = React.useMemo(
     () => ({
@@ -77,7 +81,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
             <AppRoute />
           )
         ) : (
-          <Loader />
+          <Loader isLoading={state.isLoading} />
         )}
         {/* <AppRoute /> */}
       </AuthContext.Provider>
