@@ -1,5 +1,13 @@
 import React, { useEffect } from "react";
-import { Text, View, ScrollView, StyleSheet } from "react-native";
+import {
+  Text,
+  View,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Platform,
+  StatusBar,
+} from "react-native";
 
 import { MapView } from "./MapView";
 import { COLORS, SIZES } from "../../styles/theme";
@@ -13,11 +21,13 @@ import {
 } from "../../utilities/SvgIcons.utility";
 import { useAnalyticsQuery } from "../../api/api.trekspot";
 import { formatPercentage } from "../../helpers/number.helper";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface HomeProps {}
 
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
+  const insets = useSafeAreaInsets();
+
   const { data, isLoading, isSuccess, refetch } = useAnalyticsQuery();
   // transform data
   const europeCountries =
@@ -46,13 +56,20 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
       : 0;
 
   return (
-    <SafeAreaView style={styles.safeArea} forceInset={{ top: "always" }}>
+    <View
+      style={[
+        styles.safeArea,
+        {
+          paddingTop: insets.top,
+          paddingBottom: 0,
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+        },
+      ]}
+    >
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <MapView analytic={data?.analytics} updateAnalytics={refetch} />
-        <ScrollView
-          style={styles.mapStats}
-          showsVerticalScrollIndicator={false}
-        >
+        <View style={styles.mapStats}>
           <Text style={{ fontSize: 24, fontWeight: "bold", color: "#000" }}>
             Territories
           </Text>
@@ -196,7 +213,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
               </View>
             </View>
           </View>
-        </ScrollView>
+        </View>
         {/* <View
           style={[
             styles.rowItem,
@@ -334,7 +351,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
           </ScrollView>
         </View> */}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
