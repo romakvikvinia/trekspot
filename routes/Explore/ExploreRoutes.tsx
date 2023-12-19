@@ -3,28 +3,25 @@ import {
   StackNavigationProp,
   createStackNavigator,
 } from "@react-navigation/stack";
-import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { THeaderButton } from "../../common/ui/THeaderButton";
-import { PrimaryColor } from "../../styles/colors";
-import MyWorldScreen from "../../screen/world/MyWorldScreen";
+import { ExploreScreen } from "../../screen/Explore/Explore";
 
-interface MyWorldRouteProps {}
+interface ExploreRoutesProps {}
 
-type MyWorldRouteStackParamList = {
-  World: undefined;
+type ExploreRoutesStackParamList = {
+  Explore: undefined;
 };
 
-const Stack = createStackNavigator<MyWorldRouteStackParamList>();
+const Stack = createStackNavigator<ExploreRoutesStackParamList>();
 
-export type MyWorldRouteStackNavigationProp =
-  StackNavigationProp<MyWorldRouteStackParamList>;
+export type ExploreRoutesStackNavigationProp =
+  StackNavigationProp<ExploreRoutesStackParamList>;
 
-export const MyWorldRouteStack: React.FC<MyWorldRouteProps> = ({}) => {
+export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="World"
-        component={MyWorldScreen}
+        name="Explore"
+        component={ExploreScreen}
         options={({ route, navigation }) => ({
           header: () => null,
           // headerLeft: () => (

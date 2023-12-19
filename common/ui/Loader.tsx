@@ -6,7 +6,7 @@ interface LoaderProps {
   isLoading: boolean;
 }
 
-export const Loader: React.FC<LoaderProps> = ({ isLoading }) => {
+export const Loader: React.FC<LoaderProps> = ({ isLoading = false }) => {
   return (
     isLoading && (
       <Center>
@@ -14,8 +14,4 @@ export const Loader: React.FC<LoaderProps> = ({ isLoading }) => {
       </Center>
     )
   );
-};
-
-Loader.defaultProps = {
-  isLoading: false,
 };

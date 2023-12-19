@@ -37,10 +37,14 @@ export const COLORS = {
   border: '#F0F2F6',
 
   shadow: {
-    shadowOffset: { width: -1, height: 1 },
-    shadowColor: '#C1C3C5',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
     shadowOpacity: 0.1,
-    shadowRadius: 1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 };
 

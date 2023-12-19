@@ -39,7 +39,45 @@
     },
     "owner": "trekspot",
     "expo": {
-      "plugins": ["expo-apple-authentication"]
+      "plugins": [
+        "react-native-fbsdk-next",
+        {
+          "appID": "714520072398-6nt61odp4p76fdfdcu8e7lhoom6qnkf0.apps.googleusercontent.com",
+          "clientToken": "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",
+          "displayName": "TrekSpot",
+          "scheme": "fb714520072398-6nt61odp4p76fdfdcu8e7lhoom6qnkf0.apps.googleusercontent.com",
+          "advertiserIDCollectionEnabled": false,
+          "autoLogAppEventsEnabled": false,
+          "isAutoInitEnabled": true,
+          "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
+        },
+        [
+          "expo-location",
+          {
+            "locationAlwaysAndWhenInUsePermission": "Allow Trekspot to use your location."
+          }
+        ],
+        [
+          "expo-document-picker",
+          {
+            "iCloudContainerEnvironment": "Production"
+          }
+        ],
+        [
+          "expo-image-picker",
+          {
+            "photosPermission": "Allow Trekspot to access your photos."
+          }
+        ],
+        [
+          "expo-media-library",
+          {
+            "photosPermission": "Allow Trekspot to access your photos.",
+            "savePhotosPermission": "Allow Trekspot to save photos.",
+            "isAccessMediaLocationEnabled": true
+          }
+        ]
+      ]
     },
     "runtimeVersion": {
       "policy": "sdkVersion"

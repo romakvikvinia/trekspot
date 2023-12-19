@@ -1,12 +1,11 @@
-/**
- * configs
- */
 export enum SocialProvidersEnum {
   Facebook = "Facebook",
   Google = "Google",
   Apple = "Apple",
 }
-
+/**
+ * Login related types
+ */
 export type TokenType = {
   token: string;
   expire: number;
@@ -23,6 +22,9 @@ export type AuthLoginType = {
   password: string;
 };
 
+/**
+ * Sign up related types
+ */
 export type AuthLogUpType = AuthLoginType & {
   firstName: string;
   lastName: string;
@@ -33,7 +35,6 @@ export type AuthSignUpResponseType = {
     signUp: Omit<AuthLogUpType, "password">;
   };
 };
-
 export type AuthSocialLogInInput = Pick<TokenType, "token"> & {
   provider: SocialProvidersEnum;
 };
@@ -41,4 +42,53 @@ export type AuthSocialLogInResponseType = {
   data: {
     socialLogin: TokenType;
   };
+};
+
+/**
+ * Update me
+ * user updated related types
+ */
+export type CountryType = {
+  id?: string;
+  name: string;
+  iso2: string;
+  capital: string;
+};
+
+export type UserType = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+  emailVerifiedAt: Date;
+  visited_countries: CountryType[];
+  lived_countries: CountryType[];
+};
+
+export type UserArgType = Partial<
+  Omit<UserType, "visited_countries" | "lived_countries"> & {
+    visited_countries: string[];
+    lived_countries: string[];
+  }
+>;
+
+export type UpdateMeResponseType = {
+  updateMe: UserType;
+};
+
+export type meResponseType = {
+  me: UserType;
+};
+
+export type AnalyticsType = {
+  availableCountries: number;
+  achievedCountries: number;
+  territories: {
+    quantity: number;
+    items: Record<string, number>;
+  };
+};
+
+export type AnalyticsResponseType = {
+  analytics: AnalyticsType;
 };

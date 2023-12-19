@@ -6,6 +6,10 @@ import {
   AuthLoginResponseType,
   AuthLogUpType,
   AuthSignUpResponseType,
+  UpdateMeResponseType,
+  UserArgType,
+  meResponseType,
+  AnalyticsResponseType,
   AuthSocialLogInResponseType,
   AuthSocialLogInInput,
 } from "./api.types";
@@ -14,24 +18,27 @@ import { getFullToken } from "../helpers/secure.storage";
 const prepHeaders = async (headers: Headers) => {
   let token = await getFullToken();
 
+  // if (token && new Date().getTime() < token.expire) {
   if (token && new Date().getTime() < token.expire) {
     // set Token
     headers.set("Authorization", `Bearer ${token.token}`);
+  } else {
+    // refetch
   }
 
   return headers;
 };
 
 export const trekSpotApi = createApi({
-  // refetchOnMountOrArgChange: true,
+  refetchOnMountOrArgChange: true,
+  // refetchOnFocus: true,
   baseQuery: graphqlRequestBaseQuery({
     // url: "http://192.168.0.105:8080/graphql",
     url: "http://localhost:8080/graphql",
+    // url: "https://trekspot.io/graphql",
     prepareHeaders: prepHeaders,
-    customErrors: ({ name, response, request }) => {
-      // console.log(response);
-      console.log("here");
-      console.log(request);
+    customErrors: ({ name, response }) => {
+      // console.log(name, response);
       return {
         name,
         stack: null,
@@ -44,6 +51,31 @@ export const trekSpotApi = createApi({
   }),
   tagTypes: ["signUp", "signIn", "authSocial"],
   endpoints: (builder) => ({
+    /**
+     * Social Auth with provider
+     */
+
+    authBySocialNetwork: builder.mutation<
+      AuthSocialLogInResponseType,
+      AuthSocialLogInInput
+    >({
+      query: ({ token, provider }) => ({
+        variables: { token, provider },
+        document: gql`
+          mutation ($token: String!, $provider: Provider!) {
+            socialLogin(input: { token: $token, provider: $provider }) {
+              token
+              expire
+            }
+          }
+        `,
+      }),
+      transformResponse: (response: AuthSocialLogInResponseType) => {
+        return response;
+      },
+      invalidatesTags: (result, error) => (error ? [] : ["authSocial"]),
+    }),
+
     /**
      * Sign In
      */
@@ -103,34 +135,105 @@ export const trekSpotApi = createApi({
     }),
 
     /**
-     * Social Auth with provider
+     * Update me
+     * this updates user information
      */
 
-    authBySocialNetwork: builder.mutation<
-      AuthSocialLogInResponseType,
-      AuthSocialLogInInput
-    >({
-      query: ({ token, provider }) => ({
-        variables: { token, provider },
+    updateMe: builder.mutation<UpdateMeResponseType, UserArgType>({
+      query: ({ visited_countries = [], lived_countries = [] }) => {
+        return {
+          variables: { visited_countries, lived_countries },
+          document: gql`
+            mutation (
+              $visited_countries: [String!]
+              $lived_countries: [String!]
+            ) {
+              updateMe(
+                input: {
+                  visited_countries: $visited_countries
+                  lived_countries: $lived_countries
+                }
+              ) {
+                firstName
+                lastName
+                email
+                role
+                emailVerifiedAt
+                visited_countries {
+                  id
+                  name
+                  iso2
+                }
+                lived_countries {
+                  id
+                  name
+                  iso2
+                }
+              }
+            }
+          `,
+        };
+      },
+    }),
+
+    /**
+     * Get user info
+     *
+     */
+    me: builder.query<meResponseType, void>({
+      query: () => ({
         document: gql`
-          mutation ($token: String!, $provider: Provider!) {
-            socialLogin(input: { token: $token, provider: $provider }) {
-              token
-              expire
+          query {
+            me {
+              firstName
+              lastName
+              email
+              role
+              emailVerifiedAt
+              visited_countries {
+                id
+                name
+                iso2
+              }
+              lived_countries {
+                id
+                name
+                iso2
+              }
             }
           }
         `,
       }),
-      transformResponse: (response: AuthSocialLogInResponseType) => {
-        return response;
-      },
-      invalidatesTags: (result, error) => (error ? [] : ["authSocial"]),
+    }),
+    /**
+     * Get user analytics
+     *
+     */
+    analytics: builder.query<AnalyticsResponseType, void>({
+      query: () => ({
+        document: gql`
+          query {
+            analytics {
+              availableCountries
+              achievedCountries
+              territories {
+                quantity
+                items
+              }
+            }
+          }
+        `,
+      }),
     }),
   }),
 });
 
 export const {
+  useAuthBySocialNetworkMutation,
   useSignInMutation,
   useSignUpMutation,
-  useAuthBySocialNetworkMutation,
+  useUpdateMeMutation,
+  useMeQuery,
+  useLazyMeQuery,
+  useAnalyticsQuery,
 } = trekSpotApi;

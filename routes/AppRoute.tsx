@@ -1,18 +1,19 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { ImageBackground } from "react-native";
 import { Host } from "react-native-portalize";
 
-import { PrimaryColor } from "../styles/colors";
-
 import {
+  FlightIcon,
   HomeBold,
-  HomeLine,
   MyWorldBold,
-  MyWorldLine,
+  SearchBoldIcon,
+  SearchIcon,
   SettingsBold,
   SettingsLine,
+  TopSights,
   TripBold,
-  TripLine,
 } from "../utilities/SvgIcons.utility";
+import { ExploreRoutesStack } from "./Explore/ExploreRoutes";
 import { HomeRouteStack } from "./home/HomeRoutes";
 import { SettingRouteStack } from "./setting/SettingRoutes";
 import { TripRouteStack } from "./trip/TripRoutes";
@@ -27,36 +28,58 @@ export const AppRoute: React.FC<AppRouteProps> = ({}) => {
     <Host>
       <Tab.Navigator
         screenOptions={({ route }) => ({
-          tabBarActiveTintColor: PrimaryColor,
+          tabBarActiveTintColor: "#000",
           tabBarLabelStyle: {
-            //   fontFamily: "",
+            fontSize: 10,
           },
           tabBarIcon: ({ focused }) => {
             switch (route.name) {
               case "Home": {
-                return focused ? <HomeBold /> : <HomeLine />;
+                return <HomeBold color={focused ? "#000" : "#8e8e8e"} />;
               }
-              case "MyWorld": {
-                return focused ? <MyWorldBold /> : <MyWorldLine />;
+              case "Been": {
+                return <MyWorldBold color={focused ? "#000" : "#8e8e8e"} />;
               }
-              case "Trip": {
-                return focused ? <TripBold /> : <TripLine />;
+              case "Trips": {
+                return <FlightIcon color={focused ? "#000" : "#8e8e8e"} />;
               }
-              case "Settings": {
-                return focused ? <SettingsBold /> : <SettingsLine />;
+              case "Explore": {
+                return <SearchBoldIcon color={focused ? "#000" : "#8e8e8e"} />;
+              }
+              case "Account": {
+                return (
+                  <ImageBackground
+                    resizeMode="cover"
+                    style={{
+                      width: 25,
+                      borderRadius: 50,
+                      overflow: "hidden",
+                      height: 25,
+                    }}
+                    source={{
+                      uri: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=10&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                    }}
+                  />
+                );
               }
             }
-            // You can return any component that you like here!
           },
           // tabBarShowLabel: false,
           headerShown: false,
+          tabBarStyle: {
+            borderTopColor: "#f6f6f6",
+            borderTopWidth: 1,
+            paddingTop: 5,
+            backgroundColor: "#fff",
+          },
         })}
         initialRouteName="Home"
       >
         <Tab.Screen name="Home" component={HomeRouteStack} />
-        <Tab.Screen name="MyWorld" component={MyWorldRouteStack} />
-        <Tab.Screen name="Trip" component={TripRouteStack} />
-        <Tab.Screen name="Settings" component={SettingRouteStack} />
+        <Tab.Screen name="Been" component={MyWorldRouteStack} />
+        <Tab.Screen name="Explore" component={ExploreRoutesStack} />
+        <Tab.Screen name="Trips" component={TripRouteStack} />
+        <Tab.Screen name="Account" component={SettingRouteStack} />
       </Tab.Navigator>
     </Host>
   );

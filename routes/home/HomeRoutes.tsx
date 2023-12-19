@@ -3,15 +3,19 @@ import {
   StackNavigationProp,
   createStackNavigator,
 } from "@react-navigation/stack";
-import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { HomeScreen } from "../../screen/home/HomeScreen";
 import { PrimaryColor } from "../../styles/colors";
-import { THeaderButton } from "../../common/ui/THeaderButton";
+import BucketList from "../../screen/BucketList";
+import BucketListAllScreen from "../../screen/BucketList/BucketListAll";
+import ShareStats from "../../screen/Share";
 
 interface HomeRouteProps {}
 
 type HomeRouteStackParamList = {
   Main: undefined;
+  BucketList: undefined;
+  BucketListAll: undefined;
+  ShareStats: undefined;
 };
 
 const Stack = createStackNavigator<HomeRouteStackParamList>();
@@ -36,6 +40,28 @@ export const HomeRouteStack: React.FC<HomeRouteProps> = ({}) => {
       <Stack.Screen
         name="Main"
         component={HomeScreen}
+        options={() => ({
+          header: () => null,
+        })}
+      />
+      <Stack.Screen
+        name="BucketList"
+        component={BucketList}
+        options={() => ({
+          header: () => null,
+        })}
+      />
+      <Stack.Screen
+        name="BucketListAll"
+        component={BucketListAllScreen}
+        options={() => ({
+          header: () => null,
+        })}
+      />
+
+      <Stack.Screen
+        name="ShareStats"
+        component={ShareStats}
         options={() => ({
           header: () => null,
         })}
