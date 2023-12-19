@@ -26,7 +26,7 @@ type RestoreTokenType = {
 export type ActionType = SignInType | SignOutType | RestoreTokenType;
 
 export const defaultState = (): AuthStateType => ({
-  isLoading: false,
+  isLoading: true,
   expire: null,
   token: null,
   refresh_token: null,

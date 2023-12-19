@@ -8,6 +8,7 @@ import { AuthContext } from "../package/context/auth.context";
 import { AuthRoute } from "./auth/AuthRoutes";
 import { deleteItemFromStorage, getFullToken } from "../helpers/secure.storage";
 import { AppRoute } from "./AppRoute";
+import { Loader } from "../common/ui/Loader";
 
 //reselect
 
@@ -22,7 +23,8 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
   const checkAuth = useCallback(async () => {
     try {
       let token = await getFullToken();
-      await deleteItemFromStorage();
+
+      // await deleteItemFromStorage();
       if (token && new Date().getTime() >= token.expire) {
         // unauthorize
         await deleteItemFromStorage();
@@ -68,7 +70,15 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
   return (
     <NavigationContainer onReady={checkAuth} theme={theme}>
       <AuthContext.Provider value={authContext}>
-        {!state.isAuthenticated ? <AuthRoute /> : <AppRoute />}
+        {!state.isLoading ? (
+          !state.isAuthenticated ? (
+            <AuthRoute />
+          ) : (
+            <AppRoute />
+          )
+        ) : (
+          <Loader />
+        )}
         {/* <AppRoute /> */}
       </AuthContext.Provider>
     </NavigationContainer>

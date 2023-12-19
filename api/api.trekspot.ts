@@ -17,11 +17,9 @@ const prepHeaders = async (headers: Headers) => {
   let token = await getFullToken();
 
   // if (token && new Date().getTime() < token.expire) {
-  if (token) {
+  if (token && new Date().getTime() < token.expire) {
     // set Token
     headers.set("Authorization", `Bearer ${token.token}`);
-    // console.log("token", token.token);
-    // console.log(headers);
   } else {
     // refetch
   }
@@ -33,8 +31,8 @@ export const trekSpotApi = createApi({
   refetchOnMountOrArgChange: true,
   // refetchOnFocus: true,
   baseQuery: graphqlRequestBaseQuery({
-    // url: "http://localhost:8080/graphql",
-    url: "https://trekspot.io/graphql",
+    url: "http://localhost:8080/graphql",
+    // url: "https://trekspot.io/graphql",
     prepareHeaders: prepHeaders,
     customErrors: ({ name, response }) => {
       // console.log(name, response);
