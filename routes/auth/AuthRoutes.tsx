@@ -26,9 +26,9 @@ export const AuthRoute: React.FC<AuthRouteProps> = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    navigation.navigate("GetStarted");
+    // navigation.navigate("GetStarted");
   }, []);
-
+  console.log("SIGN_OUT");
   return (
     <Stack.Navigator initialRouteName="SignIn">
       <Stack.Screen
@@ -50,13 +50,13 @@ export const AuthRoute: React.FC<AuthRouteProps> = () => {
           header: () => null,
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="ResetPassword"
         component={ResetPasswordScreen}
         options={{
           header: () => null,
         }}
-      />
+      /> */}
     </Stack.Navigator>
   );
 };

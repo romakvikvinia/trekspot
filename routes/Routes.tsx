@@ -28,18 +28,21 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
       // await deleteItemFromStorage();
       if (!token || (token && new Date().getTime() >= token.expire)) {
         // unauthorize
+
         await deleteItemFromStorage();
         dispatch({ type: "SIGN_OUT" });
+        await SplashScreen.hideAsync();
         return;
       }
 
       // // setToken(tokens.access_token);
       dispatch({ type: "SIGN_IN", payload: { token: token.token } });
     } catch (error) {
-      Alert.alert(JSON.stringify(error));
+      console.log("error", error);
+      // Alert.alert(JSON.stringify(error));
     }
     await SplashScreen.hideAsync();
-  }, []);
+  }, [dispatch]);
 
   const authContext = React.useMemo(
     () => ({
@@ -67,7 +70,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
       border: "transparent",
     },
   };
-
+  console.log(state);
   return (
     <NavigationContainer onReady={checkAuth} theme={theme}>
       <AuthContext.Provider value={authContext}>
