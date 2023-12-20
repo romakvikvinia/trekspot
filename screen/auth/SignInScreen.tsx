@@ -66,7 +66,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
 
         await storeToken(token);
         signIn(token);
-        dispatch(trekSpotApi.util.invalidateTags([]));
+        dispatch(trekSpotApi.util.invalidateTags(["me"]));
       } catch (error) {
         // console.log(error)
       }
