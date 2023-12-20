@@ -11,7 +11,7 @@ import ShareStats from "../../screen/Share";
 
 interface HomeRouteProps {}
 
-type HomeRouteStackParamList = {
+export type HomeRouteStackParamList = {
   Main: undefined;
   BucketList: undefined;
   BucketListAll: undefined;

@@ -1,22 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import MapView, {
-  Callout,
-  Geojson,
-  Marker,
-  PROVIDER_GOOGLE,
-} from "react-native-maps";
+import MapView, { Geojson, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import * as ImagePicker from "expo-image-picker";
-import Carousel, { Pagination } from "react-native-snap-carousel";
+import Carousel from "react-native-snap-carousel";
 
 import {
   ActivityIndicator,
   Image,
   ImageBackground,
-  KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -38,15 +30,49 @@ import {
   XIcon,
 } from "../../utilities/SvgIcons.utility";
 import { COLORS, SIZES } from "../../styles/theme";
-import { useNavigation } from "@react-navigation/native";
-import * as Permissions from "expo-permissions";
-import { AddMemoriesModal } from "../../common/components/AddMemoriesModal";
-import { CountriesList } from "../../utilities/countryList";
-import { LinearGradient } from "expo-linear-gradient";
 
-const MyWorldScreen = () => {
-  const navigation = useNavigation();
-  // const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+import { AddMemoriesModal } from "../../common/components/AddMemoriesModal";
+import { CountriesList, ICountry } from "../../utilities/countryList";
+import { LinearGradient } from "expo-linear-gradient";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { MyWorldRouteStackParamList } from "../../routes/world/MyWorldRoutes";
+import { useMeQuery } from "../../api/api.trekspot";
+
+type HomeProps = NativeStackScreenProps<MyWorldRouteStackParamList, "World">;
+
+const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
+  const { data, isLoading, isSuccess } = useMeQuery();
+  const [state, setState] = useState<{
+    lived_countries: ICountry[];
+    visited_countries: ICountry[];
+  }>({
+    lived_countries: [],
+    visited_countries: [],
+  });
+
+  const fillLivedAndVisitedCountries = useCallback(() => {
+    if (!isSuccess || !data) return;
+    const { lived_countries, visited_countries } = data.me;
+    let lived: any = lived_countries.map((i) => i.iso2);
+    let visited: any = visited_countries.map((i) => i.iso2);
+    lived = lived.map((i: string) => {
+      visited = visited.filter((j) => j !== i);
+      return CountriesList.find((c) => c.iso2 === i);
+    });
+    visited = visited.map((i: string) =>
+      CountriesList.find((c) => c.iso2 === i)
+    );
+    setState((prevState) => ({
+      ...prevState,
+      lived_countries: lived,
+      visited_countries: visited,
+    }));
+  }, [isSuccess, data]);
+
+  useEffect(() => {
+    fillLivedAndVisitedCountries();
+  }, [fillLivedAndVisitedCountries]);
+
   const [location, setLocation] = useState();
   const [currentCountry, setCurrentCountry] = useState();
   const [beenPlaces, setBeenPlaces] = useState([]);
@@ -536,23 +562,23 @@ const MyWorldScreen = () => {
               strokeWidth={2}
             />
           ))} */}
-          {livedPlaces?.map((item) => (
+          {state.lived_countries.map((item) => (
             <Geojson
               geojson={{
                 type: "FeatureCollection",
-                features: [getCountry(item)],
+                features: [getCountry(item.iso2)],
               }} // geojson of the countries you want to highlight
               strokeColor="#fff"
               fillColor="rgba(80, 0, 116, 0.7)"
               strokeWidth={2}
             />
           ))}
-          {beenPlaces?.map((item) => (
+          {state.visited_countries.map((item) => (
             <Marker
               onPress={() => onGalleryOpen()}
               coordinate={{
-                latitude: item?.coordinates?.latitude,
-                longitude: item?.coordinates?.longitude,
+                latitude: item.coordinates.latitude,
+                longitude: item.coordinates.longitude,
               }}
               // title={"title"}
               // description={"description"}
@@ -576,17 +602,20 @@ const MyWorldScreen = () => {
                   zIndex: 2,
                 }}
               >
-                <ImageBackground
-                  style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 50,
-                    overflow: "hidden",
-                  }}
-                  source={{
-                    uri: item?.assets[0].uri,
-                  }}
-                />
+                {item && "assets" in item ? (
+                  <ImageBackground
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 50,
+                      overflow: "hidden",
+                    }}
+                    source={{
+                      //@ts-ignore
+                      uri: item?.assets[0].uri,
+                    }}
+                  />
+                ) : null}
               </View>
             </Marker>
           ))}

@@ -1,3 +1,4 @@
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -15,9 +16,8 @@ import {
 } from "../../utilities/SvgIcons.utility";
 import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
-import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FlashList } from "@shopify/flash-list";
-import { CountriesList } from "../../utilities/countryList";
+import { CountriesList, ICountry } from "../../utilities/countryList";
 import { COLORS, SIZES } from "../../styles/theme";
 
 import ShareModal from "../../common/components/ShareModal";
@@ -31,14 +31,7 @@ import {
 import { AnalyticsType } from "../../api/api.types";
 import { formatPercentage } from "../../helpers/number.helper";
 import { useDispatch } from "react-redux";
-
-type ICountry = {
-  name: string;
-  iso2: string;
-  capital: string;
-  lived?: boolean;
-  visited?: boolean;
-};
+import { debounce } from "../../helpers/debounce.helper";
 
 interface MapVIewProps {
   analytic?: AnalyticsType;
@@ -50,7 +43,9 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
     countries: ICountry[];
     visited_countries: string[];
     lived_countries: string[];
+    search: string;
   }>({
+    search: "",
     visited_countries: [],
     lived_countries: [],
     countries: CountriesList,
@@ -108,11 +103,6 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
         ...prevState,
         visited_countries,
         lived_countries,
-        countries: prevState.countries.map((i) => {
-          i.visited = visited_countries.includes(i.iso2);
-          i.lived = lived_countries.includes(i.iso2);
-          return i;
-        }),
       }));
     }
   }, [isMeSuccess, data]);
@@ -133,11 +123,6 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
       setState((prevState) => ({
         ...prevState,
         visited_countries,
-        countries: prevState.countries.map((i) => {
-          i.visited = visited_countries.includes(i.iso2);
-          i.lived = lived_countries.includes(i.iso2);
-          return i;
-        }),
       }));
       dispatch(trekSpotApi.util.invalidateTags(["analytics"]));
     }
@@ -154,6 +139,18 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
   useEffect(() => {
     if (refetch) refetch();
   }, [refetch]);
+
+  const handelSearch = debounce(
+    useCallback((search: string) => {
+      setState((prevState) => ({
+        ...prevState,
+        search,
+      }));
+    }, []),
+    1000
+  );
+
+  //
 
   // transform data
 
@@ -180,6 +177,13 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
       }
     });
   }
+
+  const filteredCountries =
+    state.search && state.search.length > 1
+      ? state.countries.filter((i) =>
+          i.name.toLowerCase().includes(state.search.toLowerCase())
+        )
+      : state.countries;
 
   return (
     <>
@@ -321,6 +325,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
                 style={styles.searchInput}
                 placeholder="Search..."
                 placeholderTextColor={COLORS.darkgray}
+                onChangeText={handelSearch}
               />
 
               <View style={styles.infoRow}>
@@ -344,8 +349,8 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
               // keyExtractor={(item) =>
               //   `${item.iso2}-${item.name}-${item.capital}`
               // }
-              // extraData={state.countries}
-              data={state.countries}
+              extraData={filteredCountries}
+              data={filteredCountries}
               renderItem={({ item }) => (
                 <CountryItem
                   {...item}

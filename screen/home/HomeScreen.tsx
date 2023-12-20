@@ -22,8 +22,10 @@ import {
 import { useAnalyticsQuery } from "../../api/api.trekspot";
 import { formatPercentage } from "../../helpers/number.helper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { HomeRouteStackParamList } from "../../routes/home/HomeRoutes";
 
-interface HomeProps {}
+type HomeProps = NativeStackScreenProps<HomeRouteStackParamList, "Main">;
 
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
   const insets = useSafeAreaInsets();
