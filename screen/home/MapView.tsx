@@ -123,8 +123,11 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
       setState((prevState) => ({
         ...prevState,
         visited_countries,
+        lived_countries,
+        search: "",
       }));
       dispatch(trekSpotApi.util.invalidateTags(["analytics"]));
+      dispatch(trekSpotApi.util.invalidateTags(["me"]));
     }
   }, [isUpdateMeSuccess, dispatch]);
 

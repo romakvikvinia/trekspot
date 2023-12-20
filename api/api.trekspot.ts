@@ -147,7 +147,35 @@ export const trekSpotApi = createApi({
           `,
         };
       },
-      providesTags: ["updateMe"],
+      transformResponse: (response: UpdateMeResponseType) => {
+        // console.log("finish");
+        return response;
+      },
+
+      // async onQueryStarted(old, { dispatch, queryFulfilled }) {
+      //   // const patchResult = dispatch(
+      //   //   trekSpotApi.util.updateQueryData("me", undefined, (draft) => {
+      //   //     Object.assign(draft, {});
+
+      //   //   })
+      //   // );
+
+      //   try {
+      //     const { data } = await queryFulfilled;
+      //     console.log("data", JSON.stringify(data.updateMe, null, 2));
+      //     if (data.updateMe)
+      //       dispatch(
+      //         trekSpotApi.util.updateQueryData("me", undefined, (draft) => {
+      //           //@ts-ignore
+      //           Object.assign(draft, { ...data.updateMe });
+      //           console.log("draft", data);
+      //         })
+      //       );
+      //   } catch {
+      //     // patchResult.undo();
+      //   }
+      // },
+      // providesTags: ["updateMe"],
     }),
 
     /**
