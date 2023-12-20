@@ -46,7 +46,7 @@ export const trekSpotApi = createApi({
       };
     },
   }),
-  tagTypes: ["signUp", "signIn"],
+  tagTypes: ["signUp", "signIn", "analytics"],
   endpoints: (builder) => ({
     /**
      * Sign In
@@ -103,6 +103,7 @@ export const trekSpotApi = createApi({
       transformResponse: (response: AuthSignUpResponseType) => {
         return response;
       },
+
       invalidatesTags: (result, error) => (error ? [] : ["signUp"]),
     }),
 
@@ -196,6 +197,10 @@ export const trekSpotApi = createApi({
           }
         `,
       }),
+      transformResponse: (response: AnalyticsResponseType) => {
+        return response;
+      },
+      providesTags: ["analytics"],
     }),
   }),
 });

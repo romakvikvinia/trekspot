@@ -30,6 +30,7 @@ import {
 } from "../../helpers/secure.storage";
 import { AnalyticsType } from "../../api/api.types";
 import { formatPercentage } from "../../helpers/number.helper";
+import { useDispatch } from "react-redux";
 
 type ICountry = {
   name: string;
@@ -41,13 +42,10 @@ type ICountry = {
 
 interface MapVIewProps {
   analytic?: AnalyticsType;
-  updateAnalytics: () => void;
 }
 
-export const MapView: React.FC<MapVIewProps> = ({
-  analytic,
-  updateAnalytics,
-}) => {
+export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
+  const dispatch = useDispatch();
   const [state, setState] = useState<{
     countries: ICountry[];
     visited_countries: string[];
@@ -95,7 +93,6 @@ export const MapView: React.FC<MapVIewProps> = ({
       payload.lived_countries = lived_countries;
 
     updateMe(payload);
-    updateAnalytics();
   }, []);
 
   /**
@@ -142,8 +139,9 @@ export const MapView: React.FC<MapVIewProps> = ({
           return i;
         }),
       }));
+      dispatch(trekSpotApi.util.invalidateTags(["analytics"]));
     }
-  }, [isUpdateMeSuccess]);
+  }, [isUpdateMeSuccess, dispatch]);
 
   useEffect(() => {
     handleFirstFetchMeInfo();

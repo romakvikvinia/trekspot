@@ -28,7 +28,7 @@ interface HomeProps {}
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
   const insets = useSafeAreaInsets();
 
-  const { data, isLoading, isSuccess, refetch } = useAnalyticsQuery();
+  const { data, isLoading, isSuccess } = useAnalyticsQuery();
   // transform data
   const europeCountries =
     data && data.analytics.territories.items["Europe"]
@@ -68,7 +68,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
       ]}
     >
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <MapView analytic={data?.analytics} updateAnalytics={refetch} />
+        <MapView analytic={data?.analytics} />
         <View style={styles.mapStats}>
           <Text style={{ fontSize: 24, fontWeight: "bold", color: "#000" }}>
             Territories
