@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import * as Sharing from "expo-sharing";
 import {
   ImageBackground,
@@ -8,10 +8,9 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Share,
 } from "react-native";
 import ViewShot from "react-native-view-shot";
-import { AuthContext } from "../../package/context/auth.context";
+
 import { COLORS } from "../../styles/theme";
 import {
   BackIcon,
@@ -20,42 +19,34 @@ import {
   MessageIcon,
   ShareIcon,
 } from "../../utilities/SvgIcons.utility";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { HomeRouteStackParamList } from "../../routes/home/HomeRoutes";
 
-interface SettingProps {}
+type ShareScreenProps = NativeStackScreenProps<
+  HomeRouteStackParamList,
+  "ShareStats"
+>;
 
-const ShareStats: React.FC<SettingProps> = ({}) => {
+export const ShareScreen: React.FC<ShareScreenProps> = ({}) => {
   const navigation = useNavigation();
-  const [index, setIndex] = useState(0);
+  const [state, setState] = useState({ index: 0 });
   const ref = useRef();
 
-  const handleNewImage = () => {
-    if (index === 2) {
-      setIndex(0);
-    } else {
-      setIndex(index + 1);
-    }
-  };
+  const handleNewImage = useCallback(() => {
+    setState((prevState) => ({
+      ...prevState,
+      index: prevState.index !== 2 ? prevState.index + 1 : 0,
+    }));
+  }, []);
 
-  const copyToClipboard = () => {
-    const content = "Share your travel";
-
-    setTimeout(() => {
-      Share.share({
-        message: `${content}`,
-      });
-    }, 500);
-  };
-
-  const ShareItem = async () => {
-    let img = "";
-    const image = ref.current.capture().then((uri) => {
-      img = uri;
-    });
+  const ShareItem = useCallback(async () => {
+    if (!ref.current) return;
+    // @ts-ignore
+    let img = await ref.current.capture();
 
     await Sharing.shareAsync(`file://${img}`);
-  };
+  }, []);
 
-  //@ts-ignore
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.shareWrapper}>
@@ -70,6 +61,7 @@ const ShareStats: React.FC<SettingProps> = ({}) => {
         </View>
         <View style={styles.middle}>
           <ViewShot
+            //@ts-ignore
             ref={ref}
             options={{
               fileName: "Your-File-Name",
@@ -77,7 +69,7 @@ const ShareStats: React.FC<SettingProps> = ({}) => {
               quality: 0.9,
             }}
           >
-            {index === 0 ? (
+            {state.index === 0 ? (
               <ImageBackground
                 style={{
                   height: 400,
@@ -90,7 +82,7 @@ const ShareStats: React.FC<SettingProps> = ({}) => {
                 {/* <Text>...Something to rasterize.. skds mdslk</Text> */}
               </ImageBackground>
             ) : null}
-            {index === 1 ? (
+            {state.index === 1 ? (
               <ImageBackground
                 style={{
                   height: 300,
@@ -102,7 +94,7 @@ const ShareStats: React.FC<SettingProps> = ({}) => {
                 <Text>...Something to rasterize.. skds mdslk</Text>
               </ImageBackground>
             ) : null}
-            {index === 2 ? (
+            {state.index === 2 ? (
               <ImageBackground
                 style={{
                   height: 300,
@@ -159,7 +151,7 @@ const ShareStats: React.FC<SettingProps> = ({}) => {
     </SafeAreaView>
   );
 };
-export default ShareStats;
+
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,

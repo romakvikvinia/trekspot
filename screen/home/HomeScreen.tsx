@@ -1,13 +1,5 @@
-import React, { useEffect } from "react";
-import {
-  Text,
-  View,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Platform,
-  StatusBar,
-} from "react-native";
+import React from "react";
+import { Text, View, ScrollView, StyleSheet } from "react-native";
 
 import { MapView } from "./MapView";
 import { COLORS, SIZES } from "../../styles/theme";
