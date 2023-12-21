@@ -369,7 +369,21 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
 
       <Portal>
         <Modalize ref={shareModalRef} modalTopOffset={65} adjustToContentHeight>
-          <ShareModal />
+          <ShareModal
+            key={`share-on-map-${world}`}
+            countries={countriesOnMap}
+            world={world}
+            achievedCountries={
+              analytic && analytic.achievedCountries
+                ? analytic.achievedCountries
+                : 0
+            }
+            territories={
+              analytic && analytic.territories && analytic.territories.quantity
+                ? analytic.territories.quantity
+                : 0
+            }
+          />
         </Modalize>
       </Portal>
 

@@ -286,7 +286,7 @@ export const Chart = () => {
   return <SvgImage />;
 };
 
-export const Mark = ({ color, size }) => {
+export const Mark = ({ color = null, size = "10" }) => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" width="28.164" height="36.211" viewBox="0 0 28.164 36.211">
   <g id="Group_105" data-name="Group 105" transform="translate(-11 -5)">
     <path id="Path_750" data-name="Path 750" d="M25.082,5A14.082,14.082,0,0,0,11,19.082c0,11.4,14.082,22.129,14.082,22.129S39.164,30.482,39.164,19.082A14.082,14.082,0,0,0,25.082,5Zm0,20.788a6.706,6.706,0,1,1,6.706-6.706A6.706,6.706,0,0,1,25.082,25.788Z" transform="translate(0 0)" fill=${
@@ -305,7 +305,7 @@ export const Mark = ({ color, size }) => {
   return <SvgImage />;
 };
 
-export const Mark2 = ({ color }) => {
+export const Mark2 = ({ color = "" }) => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" width="49.9" height="41.138" viewBox="0 0 49.9 41.138">
   <g id="Group_270" data-name="Group 270" transform="translate(-8.1 -23.8)">
     <path id="Path_1863" fill=${
