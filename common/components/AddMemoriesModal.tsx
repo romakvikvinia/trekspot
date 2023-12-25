@@ -1,33 +1,29 @@
 import {
   ActivityIndicator,
   ImageBackground,
-  SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { COLORS } from "../../styles/theme";
-import { ImagesIcon, TrashIcon, XIcon } from "../../utilities/SvgIcons.utility";
+import * as ImagePicker from "expo-image-picker";
 
-export const AddMemoriesModal = ({
+import { ImagesIcon, XIcon } from "../../utilities/SvgIcons.utility";
+import React from "react";
+
+interface IAddMemoriesModalProps {
+  images: ImagePicker.ImagePickerResult["assets"];
+  setPickedImages: (assetId: string) => void;
+  pickImages: () => Promise<void>;
+  isSelectingImages: boolean;
+}
+
+export const AddMemoriesModal: React.FC<IAddMemoriesModalProps> = ({
   images,
   setPickedImages,
   pickImages,
   isSelectingImages,
 }) => {
-  const handleRemoveImage = (id) => {
-    const filteredImages = images?.assets?.filter((img) => img?.assetId !== id);
-
-    setPickedImages((prevState) => {
-      return {
-        ...prevState,
-        assets: filteredImages,
-      };
-    });
-  };
-
   return (
     <>
       <View
@@ -35,35 +31,38 @@ export const AddMemoriesModal = ({
           styles.importImagesWrapper,
           {
             justifyContent:
-              images?.assets?.length > 0 ? "flex-start" : "center",
+              images && images.length > 0 ? "flex-start" : "center",
           },
         ]}
       >
-        {images?.assets?.map((item) => (
-          <ImageBackground
-            resizeMode="cover"
-            style={{
-              minWidth: "28%",
-              height: 120,
-              margin: 5,
-              borderRadius: 5,
-              position: "relative",
-              overflow: "hidden",
-            }}
-            source={{
-              uri: item?.uri,
-            }}
-            key={item?.assetId}
-          >
-            <TouchableOpacity
-              style={styles.removeImageButton}
-              onPress={() => handleRemoveImage(item?.assetId)}
+        {images &&
+          images.map((item) => (
+            <ImageBackground
+              resizeMode="cover"
+              style={{
+                minWidth: "28%",
+                height: 120,
+                margin: 5,
+                borderRadius: 5,
+                position: "relative",
+                overflow: "hidden",
+              }}
+              source={{
+                uri: item?.uri,
+              }}
+              key={item?.assetId}
             >
-              <XIcon width="10" height="10" />
-            </TouchableOpacity>
-          </ImageBackground>
-        ))}
-        {images?.assets?.length === 0 ? (
+              <TouchableOpacity
+                style={styles.removeImageButton}
+                onPress={() =>
+                  item && item.assetId && setPickedImages(item.assetId)
+                }
+              >
+                <XIcon width="10" height="10" />
+              </TouchableOpacity>
+            </ImageBackground>
+          ))}
+        {images && images.length === 0 ? (
           <TouchableOpacity
             onPress={() => pickImages()}
             style={styles.noImageWrapper}

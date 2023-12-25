@@ -42,6 +42,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MyWorldRouteStackParamList } from "../../routes/world/MyWorldRoutes";
 import { useMeQuery } from "../../api/api.trekspot";
+import { uploadImage } from "../../api/api.file";
+import { customMapStyle } from "../../styles/mapView.style";
 
 type HomeProps = NativeStackScreenProps<MyWorldRouteStackParamList, "World">;
 
@@ -53,17 +55,21 @@ interface ILocation {
 const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
   const { data, isLoading, isSuccess } = useMeQuery();
   const [state, setState] = useState<{
+    isSelectingImages: boolean;
     lived_countries: ICountry[];
     visited_countries: ICountry[];
     currentCountry: Location.LocationGeocodedAddress | null;
     location: ILocation | null;
     imagePath: any;
+    pickedImages: ImagePicker.ImagePickerResult["assets"] | null;
   }>({
+    isSelectingImages: false,
     lived_countries: [],
     visited_countries: [],
     currentCountry: null,
     location: null,
     imagePath: null,
+    pickedImages: null,
   });
 
   const fillLivedAndVisitedCountries = useCallback(() => {
@@ -90,17 +96,23 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
     fillLivedAndVisitedCountries();
   }, [fillLivedAndVisitedCountries]);
 
+  const setPickedImages = useCallback((assetId: string) => {
+    setState((prevState) => ({
+      ...prevState,
+      pickedImages: prevState.pickedImages
+        ? prevState.pickedImages.filter((img) => img.assetId !== assetId)
+        : null,
+    }));
+  }, []);
+
   // must delete
   const [location, setLocation] = useState();
   const [currentCountry, setCurrentCountry] = useState();
   const [beenPlaces, setBeenPlaces] = useState([]);
   const [livedPlaces, setLivedPlaces] = useState([]);
 
-  const [pickedImages, setPickedImages] = useState([]);
-  const [isSelectingImages, setIsSelectingImages] = useState(false);
   const [activeSlide, setActiveSlide] = useState({ index: 0 });
 
-  const [imagePath, setImagePath] = useState();
   const mapRef = useRef(null);
   const carouselRef = useRef(null);
   const countryDetailModalRef = useRef(null);
@@ -191,9 +203,11 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
   };
 
   const pickImages = async () => {
-    setPickedImages([]);
-    setIsSelectingImages(true);
-    // requestPermission();
+    setState((prevSate) => ({
+      ...prevSate,
+      isSelectingImages: true,
+      pickedImages: null,
+    }));
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
@@ -204,36 +218,45 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
     });
 
     if (!result.canceled) {
-      setPickedImages(result);
+      setState((prevSate) => ({
+        ...prevSate,
+        pickedImages: result.assets,
+        isSelectingImages: false,
+      }));
       onMemoriesDetailOpen();
-      setIsSelectingImages(false);
     } else {
-      setIsSelectingImages(false);
+      setState((prevSate) => ({ ...prevSate, isSelectingImages: false }));
     }
-
-    // if (!result.canceled) {
-    //   // setLoadingImage(true);
-    //   // setImage(result);
-    //   const formData = new FormData();
-
-    //   formData.append("file", {
-    //     uri: result?.assets[0]?.uri,
-    //     type: "image/jpeg",
-    //     name: result?.assets[0]?.fileName || result?.assets[0]?.uri.split("/").pop(),
-    //   });
-    //   console.log("image - formData", formData);
-
-    //   const response = await sendHomeworkFiles(formData);
-    //   console.log("image - response", response);
-    //   if (response) {
-    //     setLoadingImage(false);
-    //     setUploadedImageID(response);
-
-    //   }
-    // }
   };
 
-  const handleImportImages = () => {
+  const handleImportImages = useCallback(async () => {
+    const { pickedImages } = state;
+    if (!pickedImages) return;
+    setState((prevState) => ({ ...prevState, isSelectingImages: true }));
+
+    try {
+      const formData = new FormData();
+
+      pickedImages.forEach((file) => {
+        // @ts-ignore
+        formData.append("files", {
+          uri:
+            Platform.OS === "android"
+              ? file.uri
+              : file.uri.replace("file://", ""),
+          type: "image/jpeg",
+          name: file.fileName || file.uri.split("/").pop(),
+        });
+      });
+      await uploadImage(formData);
+      setState((prevState) => ({
+        ...prevState,
+        isSelectingImages: false,
+        pickedImages: null,
+      }));
+    } catch (error) {
+      setState((prevState) => ({ ...prevState, isSelectingImages: false }));
+    }
     // console.log("currentCountry", beenPlaces, currentCountry);
 
     setBeenPlaces((prevState) => {
@@ -269,9 +292,8 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
       ].filter(Boolean);
     });
 
-    setPickedImages([]);
     memoriesModalRef.current?.close();
-  };
+  }, [state]);
 
   // console.log("beenPlaces", beenPlaces);
 
@@ -375,229 +397,15 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
           zoomEnabled
           zoomControlEnabled
           pitchEnabled
-          followUserLocation={true}
+          followsUserLocation={true}
           showsUserLocation={true}
-          customMapStyle={[
-            {
-              featureType: "all",
-              elementType: "geometry.fill",
-              stylers: [
-                {
-                  weight: "2.00",
-                },
-              ],
-            },
-            {
-              featureType: "all",
-              elementType: "geometry.stroke",
-              stylers: [
-                {
-                  color: "#9c9c9c",
-                },
-              ],
-            },
-            {
-              featureType: "all",
-              elementType: "labels.text",
-              stylers: [
-                {
-                  visibility: "on",
-                },
-              ],
-            },
-            {
-              featureType: "administrative",
-              elementType: "geometry.fill",
-              stylers: [
-                {
-                  color: "#930707",
-                },
-              ],
-            },
-            {
-              featureType: "administrative.country",
-              elementType: "geometry.stroke",
-              stylers: [
-                {
-                  color: "#57585e",
-                },
-              ],
-            },
-            {
-              featureType: "administrative.province",
-              elementType: "geometry.stroke",
-              stylers: [
-                {
-                  color: "#ffffff",
-                },
-              ],
-            },
-            {
-              featureType: "landscape",
-              elementType: "all",
-              stylers: [
-                {
-                  color: "#f2f2f2",
-                },
-              ],
-            },
-            {
-              featureType: "landscape",
-              elementType: "geometry.fill",
-              stylers: [
-                {
-                  color: "#ffffff",
-                },
-              ],
-            },
-            {
-              featureType: "landscape.man_made",
-              elementType: "geometry.fill",
-              stylers: [
-                {
-                  color: "#ffffff",
-                },
-              ],
-            },
-            {
-              featureType: "landscape.natural.landcover",
-              elementType: "geometry.fill",
-              stylers: [
-                {
-                  color: "#ffffff",
-                },
-              ],
-            },
-            {
-              featureType: "landscape.natural.terrain",
-              elementType: "geometry.fill",
-              stylers: [
-                {
-                  color: "#7c7a00",
-                },
-              ],
-            },
-            {
-              featureType: "poi",
-              elementType: "all",
-              stylers: [
-                {
-                  visibility: "off",
-                },
-              ],
-            },
-            {
-              featureType: "road",
-              elementType: "all",
-              stylers: [
-                {
-                  saturation: -100,
-                },
-                {
-                  lightness: 45,
-                },
-              ],
-            },
-            {
-              featureType: "road",
-              elementType: "geometry.fill",
-              stylers: [
-                {
-                  color: "#eeeeee",
-                },
-              ],
-            },
-            {
-              featureType: "road",
-              elementType: "labels.text.fill",
-              stylers: [
-                {
-                  color: "#7b7b7b",
-                },
-              ],
-            },
-            {
-              featureType: "road",
-              elementType: "labels.text.stroke",
-              stylers: [
-                {
-                  color: "#ffffff",
-                },
-              ],
-            },
-            {
-              featureType: "road.highway",
-              elementType: "all",
-              stylers: [
-                {
-                  visibility: "simplified",
-                },
-              ],
-            },
-            {
-              featureType: "road.arterial",
-              elementType: "labels.icon",
-              stylers: [
-                {
-                  visibility: "off",
-                },
-              ],
-            },
-            {
-              featureType: "transit",
-              elementType: "all",
-              stylers: [
-                {
-                  visibility: "off",
-                },
-              ],
-            },
-            {
-              featureType: "water",
-              elementType: "all",
-              stylers: [
-                {
-                  color: "#46bcec",
-                },
-                {
-                  visibility: "on",
-                },
-              ],
-            },
-            {
-              featureType: "water",
-              elementType: "geometry.fill",
-              stylers: [
-                {
-                  color: "#a4d7f7",
-                },
-              ],
-            },
-            {
-              featureType: "water",
-              elementType: "labels.text.fill",
-              stylers: [
-                {
-                  color: "#070707",
-                },
-              ],
-            },
-            {
-              featureType: "water",
-              elementType: "labels.text.stroke",
-              stylers: [
-                {
-                  color: "#ffffff",
-                },
-              ],
-            },
-          ]}
+          customMapStyle={customMapStyle}
           mapType="standard"
-          onSnapToItem={() => alert("ss")}
+          // onSnapToItem={() => alert("ss")}
         >
-          {location && (
+          {state.location && (
             <Geojson
-              geojson={location} // geojson of the countries you want to highlight
+              geojson={state.location} // geojson of the countries you want to highlight
               strokeColor="#fff"
               fillColor="rgba(255, 225, 255, 0.5)"
               strokeWidth={2}
@@ -700,7 +508,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
                     width: 35,
                     height: 25,
                   }}
-                  source={imagePath ? imagePath : null} // Set the image source
+                  source={state.imagePath} // Set the image source
                 />
                 <Text style={styles.countryText}>
                   {state.currentCountry?.country}
@@ -771,7 +579,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
                 onPress={() => pickImages()}
                 style={styles.actionButton}
               >
-                {isSelectingImages ? (
+                {state.isSelectingImages ? (
                   <ActivityIndicator />
                 ) : (
                   <>
@@ -800,7 +608,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
                     width: 25,
                     height: 15,
                   }}
-                  source={imagePath ? imagePath : null} // Set the image source
+                  source={state.imagePath} // Set the image source
                 />
                 <Text style={styles.countryText}>
                   {currentCountry?.country}
@@ -822,10 +630,10 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
           style={{ minHeight: "50%" }}
         >
           <AddMemoriesModal
-            images={pickedImages}
+            images={state.pickedImages}
             setPickedImages={setPickedImages}
             pickImages={pickImages}
-            isSelectingImages={isSelectingImages}
+            isSelectingImages={state.isSelectingImages}
           />
         </Modalize>
       </Portal>

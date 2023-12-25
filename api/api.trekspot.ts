@@ -12,6 +12,7 @@ import {
   AnalyticsResponseType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
+import { baseUrl } from "../helpers/baseUrl.helper";
 
 const prepHeaders = async (headers: Headers) => {
   let token = await getFullToken();
@@ -31,7 +32,8 @@ export const trekSpotApi = createApi({
   refetchOnMountOrArgChange: true,
   // refetchOnFocus: true,
   baseQuery: graphqlRequestBaseQuery({
-    url: "http://localhost:8080/graphql",
+    url: `${baseUrl}/graphql`,
+    // url: "http://localhost:8080/graphql",
     // url: "http://192.168.0.105:8080/graphql",
     // url: "https://trekspot.io/graphql",
     prepareHeaders: prepHeaders,

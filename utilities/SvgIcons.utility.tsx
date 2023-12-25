@@ -1990,7 +1990,12 @@ export const ImessageIcon = () => {
 //   const SvgImage = () => <SvgXml xml={svgMarkup} width="22" height="22" />;
 //   return <SvgImage />;
 // };
-export const ImagesIcon = ({ width, height, active }) => {
+interface IImagesIcon {
+  width?: string;
+  height?: string;
+  active?: boolean;
+}
+export const ImagesIcon = ({ width, height, active }: IImagesIcon) => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M12.01 7.77a2.604 2.604 0 0 1 3.68 0l1.04 1.04c.23.23.62.23.85 0l5.95-5.95A5.006 5.006 0 0 0 19.01 0H10C7.24 0 5 2.24 5 5v6c0 1.07.34 2.06.91 2.87l6.1-6.1ZM9.5 3c.83 0 1.5.67 1.5 1.5S10.33 6 9.5 6 8 5.33 8 4.5 8.67 3 9.5 3Zm2.83 20.82-8.67-2.41a5.005 5.005 0 0 1-3.48-6.16l1.61-5.78c.23-.82.65-1.54 1.21-2.12v3.66c0 3.87 3.13 7 7 7h9.14l-.65 2.34a5.005 5.005 0 0 1-6.16 3.48ZM24 5.21V11c0 2.76-2.24 5-5 5h-9c-.97 0-1.87-.28-2.64-.75l6.06-6.06a.61.61 0 0 1 .85 0l1.04 1.04c.98.98 2.69.98 3.67 0L24 5.21Z" fill="#898B93" opacity="1" data-original="#000000" class=""></path></g></svg>`;
   const SvgImage = () => (
     <SvgXml
@@ -2018,7 +2023,12 @@ export const AnchorRightIcon = () => {
   return <SvgImage />;
 };
 
-export const XIcon = ({ color, width, height }) => {
+interface IXIcon {
+  color?: string;
+  width?: string;
+  height?: string;
+}
+export const XIcon = ({ color, width, height }: IXIcon) => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 512.021 512.021" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M301.258 256.01 502.645 54.645c12.501-12.501 12.501-32.769 0-45.269-12.501-12.501-32.769-12.501-45.269 0L256.01 210.762 54.645 9.376c-12.501-12.501-32.769-12.501-45.269 0s-12.501 32.769 0 45.269L210.762 256.01 9.376 457.376c-12.501 12.501-12.501 32.769 0 45.269s32.769 12.501 45.269 0L256.01 301.258l201.365 201.387c12.501 12.501 32.769 12.501 45.269 0 12.501-12.501 12.501-32.769 0-45.269L301.258 256.01z" fill=${
     color ? color : "#000000"
   } opacity="1" data-original="#000000" class=""></path></g></svg>`;
