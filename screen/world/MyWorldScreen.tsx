@@ -78,13 +78,14 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
     const { lived_countries, visited_countries } = data.me;
     let lived: any = lived_countries.map((i) => i.iso2);
     let visited: any = visited_countries.map((i) => i.iso2);
-    lived = lived.map((i: string) => {
-      visited = visited.filter((j) => j !== i);
+
+    visited = visited.map((i: string) => {
+      lived = lived.filter((j: string) => j !== i);
       return CountriesList.find((c) => c.iso2 === i);
     });
-    visited = visited.map((i: string) =>
-      CountriesList.find((c) => c.iso2 === i)
-    );
+
+    lived = lived.map((i: string) => CountriesList.find((c) => c.iso2 === i));
+
     setState((prevState) => ({
       ...prevState,
       lived_countries: lived,
@@ -106,7 +107,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
   }, []);
 
   // must delete
-  const [location, setLocation] = useState();
+
   const [currentCountry, setCurrentCountry] = useState();
   const [beenPlaces, setBeenPlaces] = useState([]);
   const [livedPlaces, setLivedPlaces] = useState([]);
@@ -357,14 +358,15 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
    * Transform data
    */
 
-  const livedHere =
-    state.currentCountry &&
-    state.lived_countries.find(
-      (place) => place.iso2 === state.currentCountry?.isoCountryCode
-    );
   const visitedHere =
     state.currentCountry &&
     state.visited_countries.find(
+      (place) => place.iso2 === state.currentCountry?.isoCountryCode
+    );
+
+  const livedHere =
+    state.currentCountry &&
+    state.lived_countries.find(
       (place) => place.iso2 === state.currentCountry?.isoCountryCode
     );
 
@@ -398,7 +400,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
           zoomControlEnabled
           pitchEnabled
           followsUserLocation={true}
-          showsUserLocation={true}
+          // showsUserLocation={true}
           customMapStyle={customMapStyle}
           mapType="standard"
           // onSnapToItem={() => alert("ss")}
