@@ -164,6 +164,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
 
         await storeToken(token);
         signIn(token);
+        dispatch(trekSpotApi.util.invalidateTags(["me"]));
       } catch (error) {
         // console.log(error)
       }
@@ -336,7 +337,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                   isLoadingSocialAuth
                 }
               >
-                {formik.isSubmitting || isLoading ? (
+                {formik.isSubmitting || isLoading || isSuccess ? (
                   <ActivityIndicator size="small" color="#fff" />
                 ) : (
                   <Text style={globalStyles.buttonItemPrimaryText}>

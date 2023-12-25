@@ -1,13 +1,5 @@
-import React, { useEffect } from "react";
-import {
-  Text,
-  View,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Platform,
-  StatusBar,
-} from "react-native";
+import React from "react";
+import { Text, View, ScrollView, StyleSheet } from "react-native";
 
 import { MapView } from "./MapView";
 import { COLORS, SIZES } from "../../styles/theme";
@@ -22,13 +14,15 @@ import {
 import { useAnalyticsQuery } from "../../api/api.trekspot";
 import { formatPercentage } from "../../helpers/number.helper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { HomeRouteStackParamList } from "../../routes/home/HomeRoutes";
 
-interface HomeProps {}
+type HomeProps = NativeStackScreenProps<HomeRouteStackParamList, "Main">;
 
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
   const insets = useSafeAreaInsets();
 
-  const { data, isLoading, isSuccess, refetch } = useAnalyticsQuery();
+  const { data, isLoading, isSuccess } = useAnalyticsQuery();
   // transform data
   const europeCountries =
     data && data.analytics.territories.items["Europe"]
@@ -68,7 +62,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
       ]}
     >
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <MapView analytic={data?.analytics} updateAnalytics={refetch} />
+        <MapView analytic={data?.analytics} />
         <View style={styles.mapStats}>
           <Text style={{ fontSize: 24, fontWeight: "bold", color: "#000" }}>
             Territories

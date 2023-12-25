@@ -1,7 +1,6 @@
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import {
   ImageBackground,
-  Share,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -11,53 +10,44 @@ import * as Sharing from "expo-sharing";
 import ViewShot from "react-native-view-shot";
 import { COLORS } from "../../styles/theme";
 import {
-  BackIcon,
-  CopyIcon,
   ImessageIcon,
   InstagramIcon,
   MapSvg,
-  MessageIcon,
   MessengerIcon,
-  ShareIcon,
   TrekspotWhite,
 } from "../../utilities/SvgIcons.utility";
-
-const ShareModal = () => {
-  const [index, setIndex] = useState(0);
+interface ShareModalProps {
+  world: number;
+  territories: number;
+  achievedCountries: number;
+  countries: any[];
+}
+const ShareModal: React.FC<ShareModalProps> = ({
+  countries,
+  world,
+  territories,
+  achievedCountries,
+}) => {
   const ref = useRef();
+  const [state, setState] = useState({ index: 0 });
 
-  const handleNewImage = () => {
-    if (index === 2) {
-      setIndex(0);
-    } else {
-      setIndex(index + 1);
-    }
-  };
+  const handleNewImage = useCallback(() => {
+    setState((prevState) => ({
+      ...prevState,
+      index: prevState.index !== 2 ? prevState.index + 1 : 0,
+    }));
+  }, []);
 
-  const copyToClipboard = () => {
-    const content = "Share your travel";
+  const ShareItem = useCallback(async () => {
+    //@ts-ignore
+    let uri = await ref.current.capture();
+    Sharing.shareAsync(`${uri}`, {
+      mimeType: "image/jpeg",
 
-    setTimeout(() => {
-      Share.share({
-        message: `${content}`,
-      });
-    }, 500);
-  };
-
-  const ShareItem = async () => {
-    const aa = await Sharing.isAvailableAsync();
-
-    let img = "";
-    let racxa = ref.current.capture();
-    const image = ref.current.capture().then((uri) => {
-      Sharing.shareAsync(`${uri}`, {
-        mimeType: "image/jpeg",
-
-        UTI: "JPEG",
-      });
-      racxa = uri;
+      UTI: "JPEG",
     });
-  };
+  }, []);
+  console.log(countries);
 
   return (
     <View style={styles.shareWrapper}>
@@ -67,6 +57,7 @@ const ShareModal = () => {
         activeOpacity={0.95}
       >
         <ViewShot
+          //@ts-ignore
           ref={ref}
           options={{
             fileName: "Your-File-Name",
@@ -87,7 +78,7 @@ const ShareModal = () => {
             borderRadius: 15,
           }}
         >
-          {index === 0 ? (
+          {state.index === 0 ? (
             <View
               style={{
                 height: 430,
@@ -100,7 +91,7 @@ const ShareModal = () => {
                 backgroundColor: "#000",
               }}
             >
-              <MapSvg width="300" />
+              <MapSvg width={300} countries={countries} />
               <View style={styles.row}>
                 <View style={[styles.rowBox]}>
                   <View
@@ -109,7 +100,7 @@ const ShareModal = () => {
                       alignItems: "center",
                     }}
                   >
-                    <Text style={styles.lg}>24</Text>
+                    <Text style={styles.lg}>{world}</Text>
                     <Text
                       style={[
                         styles.sublabel,
@@ -124,11 +115,10 @@ const ShareModal = () => {
                 </View>
                 <View style={[styles.rowBox]}>
                   <View style={styles.amountView}>
-                    <Text style={styles.lg}>34</Text>
+                    <Text style={styles.lg}>{achievedCountries}</Text>
                     <View style={styles.labelView}>
                       <Text style={styles.sublabel}>/</Text>
                       <Text style={[styles.sublabel, { marginTop: 2 }]}>
-                        {" "}
                         195
                       </Text>
                     </View>
@@ -138,13 +128,10 @@ const ShareModal = () => {
                 </View>
                 <View style={[styles.rowBox]}>
                   <View style={styles.amountView}>
-                    <Text style={styles.lg}>3</Text>
+                    <Text style={styles.lg}>{territories}</Text>
                     <View style={styles.labelView}>
                       <Text style={styles.sublabel}>/</Text>
-                      <Text style={[styles.sublabel, { marginTop: 2 }]}>
-                        {" "}
-                        6
-                      </Text>
+                      <Text style={[styles.sublabel, { marginTop: 2 }]}>6</Text>
                     </View>
                   </View>
                   <Text style={styles.statLabel}>Territories</Text>
@@ -167,7 +154,7 @@ const ShareModal = () => {
               </View>
             </View>
           ) : null}
-          {index === 1 ? (
+          {state.index === 1 ? (
             <ImageBackground
               style={{
                 height: 300,
@@ -179,7 +166,7 @@ const ShareModal = () => {
               <Text>...Something to rasterize.. skds mdslk</Text>
             </ImageBackground>
           ) : null}
-          {index === 2 ? (
+          {state.index === 2 ? (
             <ImageBackground
               style={{
                 height: 300,

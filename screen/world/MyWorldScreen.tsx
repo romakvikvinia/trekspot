@@ -1,22 +1,19 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import MapView, {
-  Callout,
   Geojson,
+  MapPressEvent,
   Marker,
   PROVIDER_GOOGLE,
 } from "react-native-maps";
 import * as ImagePicker from "expo-image-picker";
-import Carousel, { Pagination } from "react-native-snap-carousel";
+import Carousel from "react-native-snap-carousel";
 
 import {
   ActivityIndicator,
   Image,
   ImageBackground,
-  KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -38,19 +35,67 @@ import {
   XIcon,
 } from "../../utilities/SvgIcons.utility";
 import { COLORS, SIZES } from "../../styles/theme";
-import { useNavigation } from "@react-navigation/native";
-import * as Permissions from "expo-permissions";
-import { AddMemoriesModal } from "../../common/components/AddMemoriesModal";
-import { CountriesList } from "../../utilities/countryList";
-import { LinearGradient } from "expo-linear-gradient";
 
-const MyWorldScreen = () => {
-  const navigation = useNavigation();
-  // const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+import { AddMemoriesModal } from "../../common/components/AddMemoriesModal";
+import { CountriesList, ICountry } from "../../utilities/countryList";
+import { LinearGradient } from "expo-linear-gradient";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { MyWorldRouteStackParamList } from "../../routes/world/MyWorldRoutes";
+import { useMeQuery } from "../../api/api.trekspot";
+
+type HomeProps = NativeStackScreenProps<MyWorldRouteStackParamList, "World">;
+
+interface ILocation {
+  type: string;
+  features: any[];
+}
+
+const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
+  const { data, isLoading, isSuccess } = useMeQuery();
+  const [state, setState] = useState<{
+    lived_countries: ICountry[];
+    visited_countries: ICountry[];
+    currentCountry: Location.LocationGeocodedAddress | null;
+    location: ILocation | null;
+    imagePath: any;
+  }>({
+    lived_countries: [],
+    visited_countries: [],
+    currentCountry: null,
+    location: null,
+    imagePath: null,
+  });
+
+  const fillLivedAndVisitedCountries = useCallback(() => {
+    if (!isSuccess || !data) return;
+
+    const { lived_countries, visited_countries } = data.me;
+    let lived: any = lived_countries.map((i) => i.iso2);
+    let visited: any = visited_countries.map((i) => i.iso2);
+    lived = lived.map((i: string) => {
+      visited = visited.filter((j) => j !== i);
+      return CountriesList.find((c) => c.iso2 === i);
+    });
+    visited = visited.map((i: string) =>
+      CountriesList.find((c) => c.iso2 === i)
+    );
+    setState((prevState) => ({
+      ...prevState,
+      lived_countries: lived,
+      visited_countries: visited,
+    }));
+  }, [isSuccess, data]);
+
+  useEffect(() => {
+    fillLivedAndVisitedCountries();
+  }, [fillLivedAndVisitedCountries]);
+
+  // must delete
   const [location, setLocation] = useState();
   const [currentCountry, setCurrentCountry] = useState();
   const [beenPlaces, setBeenPlaces] = useState([]);
   const [livedPlaces, setLivedPlaces] = useState([]);
+
   const [pickedImages, setPickedImages] = useState([]);
   const [isSelectingImages, setIsSelectingImages] = useState(false);
   const [activeSlide, setActiveSlide] = useState({ index: 0 });
@@ -74,7 +119,7 @@ const MyWorldScreen = () => {
     galleryRef.current?.open();
   };
 
-  const handleMapPress = async (event) => {
+  const handleMapPress = async (event: MapPressEvent) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
     try {
       let [currentCountry] = await Location.reverseGeocodeAsync({
@@ -84,30 +129,42 @@ const MyWorldScreen = () => {
 
       let result = getCountry(currentCountry.isoCountryCode);
       if (currentCountry && result) {
-        setLocation({
-          type: "FeatureCollection",
-          features: [result],
-        });
-
         mapRef.current?.animateToRegion({
           latitude: latitude,
           longitude: longitude,
           latitudeDelta: 0.00001,
           longitudeDelta: 20,
         });
-        setImagePath(Flags[currentCountry.isoCountryCode]);
-        setCurrentCountry(currentCountry);
+
+        setState((prevState) => ({
+          ...prevState,
+          currentCountry,
+          imagePath:
+            (currentCountry &&
+              currentCountry.isoCountryCode &&
+              currentCountry.isoCountryCode in Flags &&
+              //@ts-ignore
+              Flags[currentCountry.isoCountryCode]) ||
+            null,
+          location: {
+            type: "FeatureCollection",
+            features: [result],
+          },
+        }));
         onCountryDetailOpen();
       }
     } catch (error) {
       // console.log(error.message);
     }
   };
-  const handleResetMap = () => {
-    setImagePath("");
-    setCurrentCountry("");
-    setLocation("");
-  };
+  const handleResetMap = useCallback(() => {
+    setState((prevState) => ({
+      ...prevState,
+      currentCountry: null,
+      imagePath: null,
+      location: null,
+    }));
+  }, []);
 
   const handleBeen = () => {
     setBeenPlaces((prevState) => {
@@ -273,6 +330,27 @@ const MyWorldScreen = () => {
       </LinearGradient>
     );
   };
+
+  /*
+   * Transform data
+   */
+
+  const livedHere =
+    state.currentCountry &&
+    state.lived_countries.find(
+      (place) => place.iso2 === state.currentCountry?.isoCountryCode
+    );
+  const visitedHere =
+    state.currentCountry &&
+    state.visited_countries.find(
+      (place) => place.iso2 === state.currentCountry?.isoCountryCode
+    );
+
+  // console.log("livedHere", livedHere);
+  // console.log("visitedHere", visitedHere);
+  // console.log(state.currentCountry);
+
+  // console.log("redux", redux.api.queries);
 
   return (
     <>
@@ -525,34 +603,37 @@ const MyWorldScreen = () => {
               strokeWidth={2}
             />
           )}
-          {/* {beenPlaces?.map((item) => (
+          {state.visited_countries.map((item) => (
             <Geojson
+              key={`visited_countries-${item.iso2}`}
               geojson={{
                 type: "FeatureCollection",
-                features: [getCountry(item)],
+                features: [getCountry(item.iso2)],
+              }} // geojson of the countries you want to highlight
+              fillColor="rgba(80, 0, 116, 0.7)"
+              strokeColor="#fff"
+              strokeWidth={2}
+            />
+          ))}
+          {state.lived_countries.map((item) => (
+            <Geojson
+              key={`lived_countries-${item.iso2}`}
+              geojson={{
+                type: "FeatureCollection",
+                features: [getCountry(item.iso2)],
               }} // geojson of the countries you want to highlight
               strokeColor="#fff"
               fillColor="rgba(0, 134, 28, 0.6)"
               strokeWidth={2}
             />
-          ))} */}
-          {livedPlaces?.map((item) => (
-            <Geojson
-              geojson={{
-                type: "FeatureCollection",
-                features: [getCountry(item)],
-              }} // geojson of the countries you want to highlight
-              strokeColor="#fff"
-              fillColor="rgba(80, 0, 116, 0.7)"
-              strokeWidth={2}
-            />
           ))}
-          {beenPlaces?.map((item) => (
+          {state.visited_countries.map((item) => (
             <Marker
+              key={`marker-visited_countries-${item.iso2}`}
               onPress={() => onGalleryOpen()}
               coordinate={{
-                latitude: item?.coordinates?.latitude,
-                longitude: item?.coordinates?.longitude,
+                latitude: item.coordinates.latitude,
+                longitude: item.coordinates.longitude,
               }}
               // title={"title"}
               // description={"description"}
@@ -576,17 +657,20 @@ const MyWorldScreen = () => {
                   zIndex: 2,
                 }}
               >
-                <ImageBackground
-                  style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 50,
-                    overflow: "hidden",
-                  }}
-                  source={{
-                    uri: item?.assets[0].uri,
-                  }}
-                />
+                {item && "assets" in item ? (
+                  <ImageBackground
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 50,
+                      overflow: "hidden",
+                    }}
+                    source={{
+                      //@ts-ignore
+                      uri: item?.assets[0].uri,
+                    }}
+                  />
+                ) : null}
               </View>
             </Marker>
           ))}
@@ -619,7 +703,7 @@ const MyWorldScreen = () => {
                   source={imagePath ? imagePath : null} // Set the image source
                 />
                 <Text style={styles.countryText}>
-                  {currentCountry?.country}
+                  {state.currentCountry?.country}
                 </Text>
               </View>
               <TouchableOpacity
@@ -641,40 +725,18 @@ const MyWorldScreen = () => {
                 style={[
                   styles.actionButton,
                   {
-                    backgroundColor:
-                      currentCountry?.isoCountryCode &&
-                      beenPlaces?.some(
-                        (place) =>
-                          place.countryCode === currentCountry?.isoCountryCode
-                      )
-                        ? "rgba(0, 134, 28, 0.7)"
-                        : "#fff",
+                    backgroundColor: visitedHere
+                      ? "rgba(80, 0, 116, 0.7)"
+                      : "#fff",
                   },
                 ]}
               >
-                <VisitedIcon
-                  width="25"
-                  height="25"
-                  active={
-                    currentCountry?.isoCountryCode &&
-                    beenPlaces?.some(
-                      (place) =>
-                        place.countryCode === currentCountry?.isoCountryCode
-                    )
-                  }
-                />
+                <VisitedIcon width="25" height="25" active={visitedHere} />
                 <Text
                   style={[
                     styles.actionButtonsText,
                     {
-                      color:
-                        currentCountry?.isoCountryCode &&
-                        beenPlaces?.some(
-                          (place) =>
-                            place.countryCode === currentCountry?.isoCountryCode
-                        )
-                          ? "#fff"
-                          : "#898B93",
+                      color: visitedHere ? "#fff" : "#898B93",
                     },
                   ]}
                 >
@@ -687,31 +749,18 @@ const MyWorldScreen = () => {
                 style={[
                   styles.actionButton,
                   {
-                    backgroundColor:
-                      currentCountry?.isoCountryCode &&
-                      livedPlaces?.includes(currentCountry?.isoCountryCode)
-                        ? "rgba(80, 0, 116, 0.7)"
-                        : "#fff",
+                    backgroundColor: livedHere
+                      ? "rgba(0, 134, 28, 0.7)"
+                      : "#fff",
                   },
                 ]}
               >
-                <LivedIcon
-                  width="25"
-                  height="25"
-                  active={
-                    currentCountry?.isoCountryCode &&
-                    livedPlaces?.includes(currentCountry?.isoCountryCode)
-                  }
-                />
+                <LivedIcon width="25" height="25" active={livedHere} />
                 <Text
                   style={[
                     styles.actionButtonsText,
                     {
-                      color:
-                        currentCountry?.isoCountryCode &&
-                        livedPlaces?.includes(currentCountry?.isoCountryCode)
-                          ? "#fff"
-                          : "#898B93",
+                      color: livedHere ? "#fff" : "#898B93",
                     },
                   ]}
                 >
@@ -841,6 +890,7 @@ const MyWorldScreen = () => {
           >
             {images?.map((item, ind) => (
               <TouchableOpacity
+                key={`images-${ind}`}
                 activeOpacity={0.7}
                 style={{
                   borderColor:

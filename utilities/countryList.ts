@@ -1,3 +1,13 @@
+export type ICountry = {
+  name: string;
+  iso2: string;
+  capital: string;
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  continent: string;
+};
 export const CountriesList = [
   {
     name: "Afghanistan",
