@@ -10,6 +10,7 @@ import {
   UserArgType,
   meResponseType,
   AnalyticsResponseType,
+  StoriesResponseType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -49,7 +50,7 @@ export const trekSpotApi = createApi({
       };
     },
   }),
-  tagTypes: ["signUp", "signIn", "analytics", "me", "updateMe"],
+  tagTypes: ["signUp", "signIn", "analytics", "me", "updateMe", "stories"],
   endpoints: (builder) => ({
     /**
      * Sign In
@@ -238,6 +239,29 @@ export const trekSpotApi = createApi({
       },
       providesTags: ["analytics"],
     }),
+    /**
+     * Get user stories
+     *
+     */
+    stories: builder.query<StoriesResponseType, void>({
+      query: () => ({
+        document: gql`
+          query {
+            stories {
+              iso2
+              images {
+                id
+                url
+              }
+            }
+          }
+        `,
+      }),
+      transformResponse: (response: StoriesResponseType) => {
+        return response;
+      },
+      providesTags: ["stories"],
+    }),
   }),
 });
 
@@ -248,4 +272,5 @@ export const {
   useMeQuery,
   useLazyMeQuery,
   useAnalyticsQuery,
+  useStoriesQuery,
 } = trekSpotApi;

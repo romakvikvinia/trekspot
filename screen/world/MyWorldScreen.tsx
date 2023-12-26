@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import MapView, {
   Geojson,
   MapPressEvent,
-  Marker,
   PROVIDER_GOOGLE,
 } from "react-native-maps";
 import * as ImagePicker from "expo-image-picker";
@@ -10,7 +9,6 @@ import Carousel from "react-native-snap-carousel";
 
 import {
   ActivityIndicator,
-  Image,
   ImageBackground,
   Platform,
   ScrollView,
@@ -19,6 +17,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Image } from "expo-image";
 import * as Location from "expo-location";
 import { getCountry } from "../../utilities/countries";
 import { Portal } from "react-native-portalize";
@@ -38,12 +37,15 @@ import { COLORS, SIZES } from "../../styles/theme";
 
 import { AddMemoriesModal } from "../../common/components/AddMemoriesModal";
 import { CountriesList, ICountry } from "../../utilities/countryList";
-import { LinearGradient } from "expo-linear-gradient";
+
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MyWorldRouteStackParamList } from "../../routes/world/MyWorldRoutes";
-import { useMeQuery } from "../../api/api.trekspot";
+import { useMeQuery, useStoriesQuery } from "../../api/api.trekspot";
 import { uploadImage } from "../../api/api.file";
 import { customMapStyle } from "../../styles/mapView.style";
+import { VisitedCountryItem } from "../../components/world/VisitedCountryItem";
+import { StoryType } from "../../api/api.types";
+import { CarouselItem } from "../../components/world/CarouselItem";
 
 type HomeProps = NativeStackScreenProps<MyWorldRouteStackParamList, "World">;
 
@@ -53,8 +55,20 @@ interface ILocation {
 }
 
 const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
+  const mapRef = useRef<any>(null);
+  const carouselRef = useRef<any>(null);
+  const countryDetailModalRef = useRef<any>(null);
+  const galleryRef = useRef<any>(null);
+  const memoriesModalRef = useRef<any>(null);
+  //
   const { data, isLoading, isSuccess } = useMeQuery();
+  const {
+    data: storiesData,
+    isLoading: isStoriesLoading,
+    isSuccess: isStoriesSuccess,
+  } = useStoriesQuery();
   const [state, setState] = useState<{
+    story: StoryType | null;
     isSelectingImages: boolean;
     lived_countries: ICountry[];
     visited_countries: ICountry[];
@@ -63,6 +77,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
     imagePath: any;
     pickedImages: ImagePicker.ImagePickerResult["assets"] | null;
   }>({
+    story: null,
     isSelectingImages: false,
     lived_countries: [],
     visited_countries: [],
@@ -114,12 +129,6 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
 
   const [activeSlide, setActiveSlide] = useState({ index: 0 });
 
-  const mapRef = useRef(null);
-  const carouselRef = useRef(null);
-  const countryDetailModalRef = useRef(null);
-  const galleryRef = useRef(null);
-  const memoriesModalRef = useRef(null);
-
   const onCountryDetailOpen = () => {
     countryDetailModalRef.current?.open();
   };
@@ -128,9 +137,11 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
     memoriesModalRef.current?.open();
   };
 
-  const onGalleryOpen = () => {
+  const onGalleryOpen = useCallback((story: StoryType) => {
+    if (!story) return;
+    setState((prevState) => ({ ...prevState, story }));
     galleryRef.current?.open();
-  };
+  }, []);
 
   const handleMapPress = async (event: MapPressEvent) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
@@ -326,34 +337,6 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
     },
   ];
 
-  const RenderItem = ({ item, index }) => {
-    return (
-      <LinearGradient
-        style={{
-          width: SIZES.width,
-          height: SIZES.height,
-          flex: 1,
-        }}
-        colors={["rgba(255,255,255,0.2)", "rgba(0,0,0,0.1)"]}
-      >
-        <Image
-          style={{
-            width: SIZES.width,
-            height: SIZES.height,
-            flex: 1,
-          }}
-          source={{
-            uri: item?.url,
-          }}
-          cachePolicy="memory"
-          contentFit="cover"
-          transition={1000}
-          placeholder={<ActivityIndicator />}
-        />
-      </LinearGradient>
-    );
-  };
-
   /*
    * Transform data
    */
@@ -374,7 +357,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
   // console.log("visitedHere", visitedHere);
   // console.log(state.currentCountry);
 
-  // console.log("redux", redux.api.queries);
+  console.log("stories", storiesData);
 
   return (
     <>
@@ -437,53 +420,20 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
               strokeWidth={2}
             />
           ))}
-          {state.visited_countries.map((item) => (
-            <Marker
-              key={`marker-visited_countries-${item.iso2}`}
-              onPress={() => onGalleryOpen()}
-              coordinate={{
-                latitude: item.coordinates.latitude,
-                longitude: item.coordinates.longitude,
-              }}
-              // title={"title"}
-              // description={"description"}
-            >
-              <View
-                style={{
-                  backgroundColor: "#fff",
-                  padding: 0,
-                  borderRadius: 50,
-                  borderWidth: 2,
-                  borderColor: "#fff",
-                  shadowColor: "#000",
-                  shadowOffset: {
-                    width: 0,
-                    height: 2,
-                  },
-                  shadowOpacity: 0.2,
-                  shadowRadius: 3.84,
-                  elevation: 5,
-                  position: "relative",
-                  zIndex: 2,
-                }}
-              >
-                {item && "assets" in item ? (
-                  <ImageBackground
-                    style={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: 50,
-                      overflow: "hidden",
-                    }}
-                    source={{
-                      //@ts-ignore
-                      uri: item?.assets[0].uri,
-                    }}
-                  />
-                ) : null}
-              </View>
-            </Marker>
-          ))}
+          {state.visited_countries.map((item) => {
+            const story =
+              storiesData &&
+              storiesData.stories &&
+              storiesData.stories.find((story) => story.iso2 === item.iso2);
+            return (
+              <VisitedCountryItem
+                key={`marker-visited_countries-${item.iso2}`}
+                item={item}
+                story={story}
+                onGalleryOpen={onGalleryOpen}
+              />
+            );
+          })}
         </MapView>
       </View>
 
@@ -674,8 +624,10 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
 
           <Carousel
             ref={carouselRef}
-            data={images}
-            renderItem={RenderItem}
+            //@ts-ignore
+            data={state.story && state.story.images}
+            //@ts-ignore
+            renderItem={CarouselItem}
             sliderWidth={SIZES.width}
             itemWidth={SIZES.width}
             inactiveSlideShift={0}
@@ -685,7 +637,6 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            resizeMode="cover"
             style={{
               position: "absolute",
               bottom: 50,
@@ -698,38 +649,39 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
               flexGrow: 1,
             }}
           >
-            {images?.map((item, ind) => (
-              <TouchableOpacity
-                key={`images-${ind}`}
-                activeOpacity={0.7}
-                style={{
-                  borderColor:
-                    activeSlide?.index === ind
-                      ? "#fff"
-                      : "rgba(255, 255, 255, 0.1)",
-                  borderWidth: 2,
-                  borderRadius: 10,
-                  marginRight: 8,
-                  overflow: "hidden",
-                }}
-                onPress={() => carouselRef?.current?.snapToItem(ind)}
-              >
-                <Image
+            {state.story &&
+              state.story.images.map((item, ind) => (
+                <TouchableOpacity
+                  key={`images-${ind}`}
+                  activeOpacity={0.7}
                   style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 8,
+                    borderColor:
+                      activeSlide?.index === ind
+                        ? "#fff"
+                        : "rgba(255, 255, 255, 0.1)",
+                    borderWidth: 2,
+                    borderRadius: 10,
+                    marginRight: 8,
                     overflow: "hidden",
                   }}
-                  source={{
-                    uri: item?.url,
-                  }}
-                  // placeholder={blurhash}
-                  contentFit="cover"
-                  transition={1000}
-                />
-              </TouchableOpacity>
-            ))}
+                  onPress={() => carouselRef?.current?.snapToItem(ind)}
+                >
+                  <Image
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: 8,
+                      overflow: "hidden",
+                    }}
+                    source={{
+                      uri: item?.url,
+                    }}
+                    // placeholder={blurhash}
+                    contentFit="cover"
+                    transition={1000}
+                  />
+                </TouchableOpacity>
+              ))}
           </ScrollView>
         </Modalize>
       </Portal>
