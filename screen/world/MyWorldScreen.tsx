@@ -47,6 +47,7 @@ import {
   useCreateOrUpdateStoriesMutation,
   useMeQuery,
   useStoriesQuery,
+  useUpdateMeMutation,
 } from "../../api/api.trekspot";
 import { uploadImage } from "../../api/api.file";
 import { customMapStyle } from "../../styles/mapView.style";
@@ -71,6 +72,9 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
   const memoriesModalRef = useRef<any>(null);
   //
   const { data, isLoading, isSuccess } = useMeQuery();
+  //
+  const [updateMe, { isSuccess: isUpdateMeSuccess, data: updateMeData }] =
+    useUpdateMeMutation();
   //
   const [
     createOrUpdateStories,
@@ -201,11 +205,35 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
     }));
   }, []);
 
-  const handleBeen = () => {
-    console.log("Been here");
-  };
+  const handleBeen = useCallback(() => {
+    if (!state.currentCountry || !data || !state.currentCountry.isoCountryCode)
+      return;
+    const visited_countries = data.me.visited_countries.map((i) => i.iso2);
 
-  const handleLived = () => {};
+    if (
+      !visited_countries.find(
+        (i) => state.currentCountry && i === state.currentCountry.isoCountryCode
+      )
+    ) {
+      visited_countries.push(state.currentCountry.isoCountryCode);
+      updateMe({ visited_countries });
+    }
+  }, [data, state.currentCountry]);
+
+  const handleLived = useCallback(() => {
+    if (!state.currentCountry || !data || !state.currentCountry.isoCountryCode)
+      return;
+    const lived_countries = data.me.lived_countries.map((i) => i.iso2);
+
+    if (
+      !lived_countries.find(
+        (i) => state.currentCountry && i === state.currentCountry.isoCountryCode
+      )
+    ) {
+      lived_countries.push(state.currentCountry.isoCountryCode);
+      updateMe({ lived_countries });
+    }
+  }, [data, state.currentCountry]);
 
   const pickImages = async () => {
     setState((prevSate) => ({
@@ -291,6 +319,12 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
       dispatch(trekSpotApi.util.invalidateTags(["stories", "me"]));
     }
   }, [isStoriesUpdateSuccess]);
+
+  useEffect(() => {
+    if (isUpdateMeSuccess) {
+      dispatch(trekSpotApi.util.invalidateTags(["me"]));
+    }
+  }, [isUpdateMeSuccess]);
 
   /*
    * Transform data
