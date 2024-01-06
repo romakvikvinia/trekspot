@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import MapView, {
   Geojson,
   MapPressEvent,
@@ -40,7 +41,12 @@ import { CountriesList, ICountry } from "../../utilities/countryList";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MyWorldRouteStackParamList } from "../../routes/world/MyWorldRoutes";
-import { useMeQuery, useStoriesQuery } from "../../api/api.trekspot";
+import {
+  trekSpotApi,
+  useCreateOrUpdateStoriesMutation,
+  useMeQuery,
+  useStoriesQuery,
+} from "../../api/api.trekspot";
 import { uploadImage } from "../../api/api.file";
 import { customMapStyle } from "../../styles/mapView.style";
 import { VisitedCountryItem } from "../../components/world/VisitedCountryItem";
@@ -55,6 +61,7 @@ interface ILocation {
 }
 
 const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
+  const dispatch = useDispatch();
   const mapRef = useRef<any>(null);
   const carouselRef = useRef<any>(null);
   const countryDetailModalRef = useRef<any>(null);
@@ -62,11 +69,17 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
   const memoriesModalRef = useRef<any>(null);
   //
   const { data, isLoading, isSuccess } = useMeQuery();
+  //
+  const [
+    createOrUpdateStories,
+    { isSuccess: isStoriesUpdateSuccess, isLoading: isStoriesUpdateLoading },
+  ] = useCreateOrUpdateStoriesMutation();
   const {
     data: storiesData,
     isLoading: isStoriesLoading,
     isSuccess: isStoriesSuccess,
   } = useStoriesQuery();
+
   const [state, setState] = useState<{
     story: StoryType | null;
     isSelectingImages: boolean;
@@ -129,9 +142,9 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
 
   const [activeSlide, setActiveSlide] = useState({ index: 0 });
 
-  const onCountryDetailOpen = () => {
+  const onCountryDetailOpen = useCallback(() => {
     countryDetailModalRef.current?.open();
-  };
+  }, []);
 
   const onMemoriesDetailOpen = () => {
     memoriesModalRef.current?.open();
@@ -242,8 +255,8 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
   };
 
   const handleImportImages = useCallback(async () => {
-    const { pickedImages } = state;
-    if (!pickedImages) return;
+    const { pickedImages, currentCountry } = state;
+    if (!pickedImages || !currentCountry) return;
     setState((prevState) => ({ ...prevState, isSelectingImages: true }));
 
     try {
@@ -260,12 +273,19 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
           name: file.fileName || file.uri.split("/").pop(),
         });
       });
-      await uploadImage(formData);
+
+      const images = (await uploadImage(formData)) as string[];
+
+      if (currentCountry.isoCountryCode)
+        createOrUpdateStories({ images, iso2: currentCountry.isoCountryCode });
+
       setState((prevState) => ({
         ...prevState,
         isSelectingImages: false,
         pickedImages: null,
+        currentCountry: null,
       }));
+      if (countryDetailModalRef.current) countryDetailModalRef.current.close();
     } catch (error) {
       setState((prevState) => ({ ...prevState, isSelectingImages: false }));
     }
@@ -307,8 +327,6 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
     memoriesModalRef.current?.close();
   }, [state]);
 
-  // console.log("beenPlaces", beenPlaces);
-
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -318,24 +336,15 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      // setLocation(location);
+      // setState((prevState) => ({ ...prevState, location }));
     })();
   }, []);
 
-  const images = [
-    {
-      id: 1,
-      url: "https://images.unsplash.com/photo-1682687982141-0143020ed57a?q=10&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: 2,
-      url: "https://images.unsplash.com/photo-1682687982502-b05f0565753a?q=10&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: 3,
-      url: "https://images.unsplash.com/photo-1682685796766-0fddd3e480de?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-  ];
+  useEffect(() => {
+    if (isStoriesUpdateSuccess) {
+      dispatch(trekSpotApi.util.invalidateTags(["stories", "me"]));
+    }
+  }, [isStoriesUpdateSuccess]);
 
   /*
    * Transform data
@@ -357,7 +366,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
   // console.log("visitedHere", visitedHere);
   // console.log(state.currentCountry);
 
-  console.log("stories", storiesData);
+  // console.log("stories", state);
 
   return (
     <>

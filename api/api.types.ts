@@ -101,3 +101,12 @@ export type StoryType = {
 export type StoriesResponseType = {
   stories: StoryType[];
 };
+
+export type CreateOrUpdateStoriesInput = {
+  iso2: string;
+  images: string[];
+};
+
+export type CreateOrUpdateStoriesResponseType = {
+  createOrUpdateStore: StoryType;
+};

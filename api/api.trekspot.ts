@@ -11,6 +11,8 @@ import {
   meResponseType,
   AnalyticsResponseType,
   StoriesResponseType,
+  CreateOrUpdateStoriesInput,
+  CreateOrUpdateStoriesResponseType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -50,7 +52,15 @@ export const trekSpotApi = createApi({
       };
     },
   }),
-  tagTypes: ["signUp", "signIn", "analytics", "me", "updateMe", "stories"],
+  tagTypes: [
+    "signUp",
+    "signIn",
+    "analytics",
+    "me",
+    "updateMe",
+    "stories",
+    "createOrUpdateStories",
+  ],
   endpoints: (builder) => ({
     /**
      * Sign In
@@ -262,6 +272,32 @@ export const trekSpotApi = createApi({
       },
       providesTags: ["stories"],
     }),
+
+    /**
+     * Create or update Stories
+     */
+    createOrUpdateStories: builder.mutation<
+      CreateOrUpdateStoriesResponseType,
+      CreateOrUpdateStoriesInput
+    >({
+      query: ({ iso2, images }) => ({
+        variables: { iso2, images },
+        document: gql`
+          mutation ($iso2: ID!, $images: [ID!]!) {
+            createOrUpdateStore(input: { iso2: $iso2, images: $images }) {
+              id
+              iso2
+              images {
+                url
+              }
+            }
+          }
+        `,
+      }),
+      invalidatesTags: ["createOrUpdateStories"],
+    }),
+
+    //
   }),
 });
 
@@ -273,4 +309,5 @@ export const {
   useLazyMeQuery,
   useAnalyticsQuery,
   useStoriesQuery,
+  useCreateOrUpdateStoriesMutation,
 } = trekSpotApi;
