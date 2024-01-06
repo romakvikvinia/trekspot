@@ -4,6 +4,7 @@ import MapView, {
   Geojson,
   MapPressEvent,
   PROVIDER_GOOGLE,
+  GeojsonProps,
 } from "react-native-maps";
 import * as ImagePicker from "expo-image-picker";
 import Carousel from "react-native-snap-carousel";
@@ -52,6 +53,7 @@ import { customMapStyle } from "../../styles/mapView.style";
 import { VisitedCountryItem } from "../../components/world/VisitedCountryItem";
 import { StoryType } from "../../api/api.types";
 import { CarouselItem } from "../../components/world/CarouselItem";
+import { Geometry } from "react-native-google-places-autocomplete";
 
 type HomeProps = NativeStackScreenProps<MyWorldRouteStackParamList, "World">;
 
@@ -136,10 +138,6 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
 
   // must delete
 
-  const [currentCountry, setCurrentCountry] = useState();
-  const [beenPlaces, setBeenPlaces] = useState([]);
-  const [livedPlaces, setLivedPlaces] = useState([]);
-
   const [activeSlide, setActiveSlide] = useState({ index: 0 });
 
   const onCountryDetailOpen = useCallback(() => {
@@ -204,28 +202,10 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
   }, []);
 
   const handleBeen = () => {
-    setBeenPlaces((prevState) => {
-      const countryCode = currentCountry?.isoCountryCode;
-
-      if (countryCode && prevState.includes(countryCode)) {
-        return prevState.filter((code) => code !== countryCode);
-      }
-
-      return [...prevState, countryCode].filter(Boolean);
-    });
+    console.log("Been here");
   };
 
-  const handleLived = () => {
-    setLivedPlaces((prevState) => {
-      const countryCode = currentCountry?.isoCountryCode;
-
-      if (countryCode && prevState.includes(countryCode)) {
-        return prevState.filter((code) => code !== countryCode);
-      }
-
-      return [...prevState, countryCode].filter(Boolean);
-    });
-  };
+  const handleLived = () => {};
 
   const pickImages = async () => {
     setState((prevSate) => ({
@@ -289,40 +269,6 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
     } catch (error) {
       setState((prevState) => ({ ...prevState, isSelectingImages: false }));
     }
-    // console.log("currentCountry", beenPlaces, currentCountry);
-
-    setBeenPlaces((prevState) => {
-      const countryCode = currentCountry?.isoCountryCode;
-
-      // Ensure prevState is always an array
-      const placesArray = Array.isArray(prevState) ? prevState : [];
-
-      // Check if the country code is already in the array
-      const alreadyExists = placesArray.some(
-        (place) => place.countryCode === countryCode
-      );
-
-      // If the country code is already in the array, remove it
-      if (countryCode && alreadyExists) {
-        return placesArray.filter((place) => place.countryCode !== countryCode);
-      }
-
-      // If not, add it to the array along with pickedImages
-      const countryData = CountriesList?.find(
-        (item) => item.iso2 === countryCode
-      );
-
-      return [
-        ...placesArray,
-        countryCode
-          ? {
-              countryCode,
-              ...pickedImages,
-              coordinates: countryData?.coordinates,
-            }
-          : null, // Ensure null values are filtered out
-      ].filter(Boolean);
-    });
 
     memoriesModalRef.current?.close();
   }, [state]);
@@ -399,7 +345,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
         >
           {state.location && (
             <Geojson
-              geojson={state.location} // geojson of the countries you want to highlight
+              geojson={state.location as GeojsonProps["geojson"]} // geojson of the countries you want to highlight
               strokeColor="#fff"
               fillColor="rgba(255, 225, 255, 0.5)"
               strokeWidth={2}
@@ -500,7 +446,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
                   },
                 ]}
               >
-                <VisitedIcon width="25" height="25" active={visitedHere} />
+                <VisitedIcon width={25} height={25} active={!!visitedHere} />
                 <Text
                   style={[
                     styles.actionButtonsText,
@@ -524,7 +470,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
                   },
                 ]}
               >
-                <LivedIcon width="25" height="25" active={livedHere} />
+                <LivedIcon width={25} height={25} active={!!livedHere} />
                 <Text
                   style={[
                     styles.actionButtonsText,
@@ -571,9 +517,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
                   }}
                   source={state.imagePath} // Set the image source
                 />
-                <Text style={styles.countryText}>
-                  {currentCountry?.country}
-                </Text>
+                <Text style={styles.countryText}>currentCountry</Text>
               </View>
 
               <TouchableOpacity
@@ -588,6 +532,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
           childrenStyle={{
             minHeight: "50%",
           }}
+          //@ts-ignore
           style={{ minHeight: "50%" }}
         >
           <AddMemoriesModal
@@ -716,10 +661,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 0,
-    borderColor: "#000",
     width: 40,
     height: 40,
-    alignItems: "center",
     justifyContent: "center",
   },
   closeGalleryButton: {
@@ -756,11 +699,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 15,
   },
-  countryText: {
-    marginLeft: 10,
-    fontSize: 14,
-    fontWeight: "bold",
-  },
+
   countryTextLabel: {
     color: "#333",
     fontSize: 20,
@@ -809,11 +748,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  // countryText: {
+  //   fontSize: 26,
+  //   fontWeight: "bold",
+  //   color: "#000",
+  //   marginLeft: 8,
+  // },
   countryText: {
-    fontSize: 26,
+    marginLeft: 10,
+    fontSize: 14,
     fontWeight: "bold",
-    color: "#000",
-    marginLeft: 8,
   },
   backButton: {
     width: 40,
