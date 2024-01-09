@@ -137,7 +137,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({}) => {
               <TouchableOpacity
                 activeOpacity={0.7}
                 style={styles.seeAllButton}
-                onPress={() => navigation.navigate("BucketListAll")}
+                onPress={() => navigation.navigate("SeeAllScreen")}
               >
                 <Text style={styles.seeAllButtonTxt}>See all</Text>
               </TouchableOpacity>

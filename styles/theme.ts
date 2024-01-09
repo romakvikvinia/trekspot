@@ -1,40 +1,40 @@
-import { Dimensions } from 'react-native';
-const { width, height } = Dimensions.get('window');
+import { Dimensions } from "react-native";
+const { width, height } = Dimensions.get("window");
 
 export const COLORS = {
   // base colors
-  primary: '#92339C',
-  secondary: '#DA528C',
+  primary: "#92339C",
+  secondary: "#DA528C",
   secondaryLight: "#C98CCC",
-  primaryDark: '#500074',
+  primaryDark: "#500074",
 
-  green: '#319010',
-  lightGreen: '#E6FEF0',
+  green: "#319010",
+  lightGreen: "#E6FEF0",
 
-  lime: '#00BA63',
-  emerald: '#2BC978',
+  lime: "#00BA63",
+  emerald: "#2BC978",
 
-  red: '#FF4134',
-  lightRed: '#FFF1F0',
+  red: "#FF4134",
+  lightRed: "#FFF1F0",
 
-  purple: '#6B3CE9',
-  lightpurple: '#F3EFFF',
+  purple: "#6B3CE9",
+  lightpurple: "#F3EFFF",
 
-  yellow: '#FFC664',
-  lightyellow: '#FFF9EC',
+  yellow: "#FFC664",
+  lightyellow: "#FFF9EC",
 
-  black: '#0A0F40',
-  white: '#FFFFFF',
+  black: "#0A0F40",
+  white: "#FFFFFF",
 
-  lightGray: '#FCFBFC',
-  gray: '#C1C3C5',
-  darkgray: '#7d7d7d',
+  lightGray: "#FCFBFC",
+  gray: "#8C8C8C",
+  darkgray: "#7d7d7d",
 
-  background: '#f0f5ff',
+  background: "#f0f5ff",
 
-  transparent: 'transparent',
+  transparent: "transparent",
 
-  border: '#F0F2F6',
+  border: "#F0F2F6",
 
   shadow: {
     shadowColor: "#000",

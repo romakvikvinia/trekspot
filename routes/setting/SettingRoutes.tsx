@@ -38,6 +38,7 @@ export const SettingRouteStack: React.FC<SettingRouteProps> = ({}) => {
         name="Setting"
         component={SettingScreen}
         options={({ route, navigation }) => ({
+          headerShown: false,
           // headerLeft: () => (
           //   <HeaderButtons HeaderButtonComponent={THeaderButton}>
           //     <Item
