@@ -8,6 +8,8 @@ import { AuthContext } from "../package/context/auth.context";
 import { AuthRoute } from "./auth/AuthRoutes";
 import { deleteItemFromStorage, getFullToken } from "../helpers/secure.storage";
 import { AppRoute } from "./AppRoute";
+import { Loader } from "../common/ui/Loader";
+import { Alert } from "react-native";
 
 //reselect
 
@@ -22,21 +24,25 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
   const checkAuth = useCallback(async () => {
     try {
       let token = await getFullToken();
-      await deleteItemFromStorage();
-      if (token && new Date().getTime() >= token.expire) {
+
+      // await deleteItemFromStorage();
+      if (!token || (token && new Date().getTime() >= token.expire)) {
         // unauthorize
+
         await deleteItemFromStorage();
         dispatch({ type: "SIGN_OUT" });
+        await SplashScreen.hideAsync();
         return;
       }
 
       // // setToken(tokens.access_token);
       dispatch({ type: "SIGN_IN", payload: { token: token.token } });
     } catch (error) {
-      // console.log(error);
+      console.log("error", error);
+      // Alert.alert(JSON.stringify(error));
     }
     await SplashScreen.hideAsync();
-  }, []);
+  }, [dispatch]);
 
   const authContext = React.useMemo(
     () => ({
@@ -68,8 +74,16 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
   return (
     <NavigationContainer onReady={checkAuth} theme={theme}>
       <AuthContext.Provider value={authContext}>
-        {/* {!state.isAuthenticated ? <AuthRoute /> : <AppRoute />} */}
-        <AppRoute />
+        {!state.isLoading ? (
+          !state.isAuthenticated ? (
+            <AuthRoute />
+          ) : (
+            <AppRoute />
+          )
+        ) : (
+          <Loader isLoading={state.isLoading} />
+        )}
+        {/* <AppRoute /> */}
       </AuthContext.Provider>
     </NavigationContainer>
   );

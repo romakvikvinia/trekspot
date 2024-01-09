@@ -1,27 +1,25 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import MapView, {
-  Callout,
   Geojson,
-  Marker,
+  MapPressEvent,
   PROVIDER_GOOGLE,
+  GeojsonProps,
 } from "react-native-maps";
 import * as ImagePicker from "expo-image-picker";
-import Carousel, { Pagination } from "react-native-snap-carousel";
+import Carousel from "react-native-snap-carousel";
 
 import {
   ActivityIndicator,
-  Image,
   ImageBackground,
-  KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Image } from "expo-image";
 import * as Location from "expo-location";
 import { getCountry } from "../../utilities/countries";
 import { Portal } from "react-native-portalize";
@@ -38,43 +36,130 @@ import {
   XIcon,
 } from "../../utilities/SvgIcons.utility";
 import { COLORS, SIZES } from "../../styles/theme";
-import { useNavigation } from "@react-navigation/native";
-import * as Permissions from "expo-permissions";
+
 import { AddMemoriesModal } from "../../common/components/AddMemoriesModal";
-import { CountriesList } from "../../utilities/countryList";
-import { LinearGradient } from "expo-linear-gradient";
+import { CountriesList, ICountry } from "../../utilities/countryList";
 
-const MyWorldScreen = () => {
-  const navigation = useNavigation();
-  // const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
-  const [location, setLocation] = useState();
-  const [currentCountry, setCurrentCountry] = useState();
-  const [beenPlaces, setBeenPlaces] = useState([]);
-  const [livedPlaces, setLivedPlaces] = useState([]);
-  const [pickedImages, setPickedImages] = useState([]);
-  const [isSelectingImages, setIsSelectingImages] = useState(false);
-  const [activeSlide, setActiveSlide] = useState({ index: 0 });
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { MyWorldRouteStackParamList } from "../../routes/world/MyWorldRoutes";
+import {
+  trekSpotApi,
+  useCreateOrUpdateStoriesMutation,
+  useMeQuery,
+  useStoriesQuery,
+  useUpdateMeMutation,
+} from "../../api/api.trekspot";
+import { uploadImage } from "../../api/api.file";
+import { customMapStyle } from "../../styles/mapView.style";
+import { VisitedCountryItem } from "../../components/world/VisitedCountryItem";
+import { StoryType } from "../../api/api.types";
+import { CarouselItem } from "../../components/world/CarouselItem";
 
-  const [imagePath, setImagePath] = useState();
-  const mapRef = useRef(null);
-  const carouselRef = useRef(null);
-  const countryDetailModalRef = useRef(null);
-  const galleryRef = useRef(null);
-  const memoriesModalRef = useRef(null);
+type HomeProps = NativeStackScreenProps<MyWorldRouteStackParamList, "World">;
 
-  const onCountryDetailOpen = () => {
+interface ILocation {
+  type: string;
+  features: any[];
+}
+
+const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const mapRef = useRef<any>(null);
+  const carouselRef = useRef<any>(null);
+  const countryDetailModalRef = useRef<any>(null);
+  const galleryRef = useRef<any>(null);
+  const memoriesModalRef = useRef<any>(null);
+  //
+  const { data, isLoading, isSuccess } = useMeQuery();
+  //
+  const [updateMe, { isSuccess: isUpdateMeSuccess, data: updateMeData }] =
+    useUpdateMeMutation();
+  //
+  const [
+    createOrUpdateStories,
+    { isSuccess: isStoriesUpdateSuccess, isLoading: isStoriesUpdateLoading },
+  ] = useCreateOrUpdateStoriesMutation();
+  const {
+    data: storiesData,
+    isLoading: isStoriesLoading,
+    isSuccess: isStoriesSuccess,
+  } = useStoriesQuery();
+
+  const [state, setState] = useState<{
+    story: StoryType | null;
+    isSelectingImages: boolean;
+    lived_countries: ICountry[];
+    visited_countries: ICountry[];
+    currentCountry: Location.LocationGeocodedAddress | null;
+    location: ILocation | null;
+    imagePath: any;
+    pickedImages: ImagePicker.ImagePickerResult["assets"] | null;
+    activeSliderIndex: number;
+  }>({
+    story: null,
+    isSelectingImages: false,
+    lived_countries: [],
+    visited_countries: [],
+    currentCountry: null,
+    location: null,
+    imagePath: null,
+    pickedImages: null,
+    activeSliderIndex: -1,
+  });
+
+  const fillLivedAndVisitedCountries = useCallback(() => {
+    if (!isSuccess || !data) return;
+
+    const { lived_countries, visited_countries } = data.me;
+    let lived: any = lived_countries.map((i) => i.iso2);
+    let visited: any = visited_countries.map((i) => i.iso2);
+
+    visited = visited.map((i: string) => {
+      lived = lived.filter((j: string) => j !== i);
+      return CountriesList.find((c) => c.iso2 === i);
+    });
+
+    lived = lived.map((i: string) => CountriesList.find((c) => c.iso2 === i));
+
+    setState((prevState) => ({
+      ...prevState,
+      lived_countries: lived,
+      visited_countries: visited,
+    }));
+  }, [isSuccess, data]);
+
+  useEffect(() => {
+    fillLivedAndVisitedCountries();
+  }, [fillLivedAndVisitedCountries]);
+
+  const setPickedImages = useCallback((assetId: string) => {
+    setState((prevState) => ({
+      ...prevState,
+      pickedImages: prevState.pickedImages
+        ? prevState.pickedImages.filter((img) => img.assetId !== assetId)
+        : null,
+    }));
+  }, []);
+
+  // must delete
+
+  // const [activeSlide, setActiveSlide] = useState({ index: 0 });
+
+  const onCountryDetailOpen = useCallback(() => {
     countryDetailModalRef.current?.open();
-  };
+  }, []);
 
   const onMemoriesDetailOpen = () => {
     memoriesModalRef.current?.open();
   };
 
-  const onGalleryOpen = () => {
+  const onGalleryOpen = useCallback((story: StoryType) => {
+    if (!story) return;
+    setState((prevState) => ({ ...prevState, story }));
     galleryRef.current?.open();
-  };
+  }, []);
 
-  const handleMapPress = async (event) => {
+  const handleMapPress = async (event: MapPressEvent) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
     try {
       let [currentCountry] = await Location.reverseGeocodeAsync({
@@ -84,59 +169,104 @@ const MyWorldScreen = () => {
 
       let result = getCountry(currentCountry.isoCountryCode);
       if (currentCountry && result) {
-        setLocation({
-          type: "FeatureCollection",
-          features: [result],
-        });
-
         mapRef.current?.animateToRegion({
           latitude: latitude,
           longitude: longitude,
           latitudeDelta: 0.00001,
           longitudeDelta: 20,
         });
-        setImagePath(Flags[currentCountry.isoCountryCode]);
-        setCurrentCountry(currentCountry);
+
+        setState((prevState) => ({
+          ...prevState,
+          currentCountry,
+          imagePath:
+            (currentCountry &&
+              currentCountry.isoCountryCode &&
+              currentCountry.isoCountryCode in Flags &&
+              //@ts-ignore
+              Flags[currentCountry.isoCountryCode]) ||
+            null,
+          location: {
+            type: "FeatureCollection",
+            features: [result],
+          },
+        }));
         onCountryDetailOpen();
       }
     } catch (error) {
       // console.log(error.message);
     }
   };
-  const handleResetMap = () => {
-    setImagePath("");
-    setCurrentCountry("");
-    setLocation("");
-  };
+  const handleResetMap = useCallback(() => {
+    setState((prevState) => ({
+      ...prevState,
+      currentCountry: null,
+      imagePath: null,
+      location: null,
+    }));
+  }, []);
 
-  const handleBeen = () => {
-    setBeenPlaces((prevState) => {
-      const countryCode = currentCountry?.isoCountryCode;
+  const handleBeen = useCallback(() => {
+    if (!state.currentCountry || !data || !state.currentCountry.isoCountryCode)
+      return;
+    const visited_countries = data.me.visited_countries.map((i) => i.iso2);
+    const lived_countries = data.me.lived_countries.map((i) => i.iso2);
 
-      if (countryCode && prevState.includes(countryCode)) {
-        return prevState.filter((code) => code !== countryCode);
-      }
+    if (
+      !visited_countries.find(
+        (i) => state.currentCountry && i === state.currentCountry.isoCountryCode
+      )
+    ) {
+      visited_countries.push(state.currentCountry.isoCountryCode);
 
-      return [...prevState, countryCode].filter(Boolean);
-    });
-  };
+      // const currentVisited_countries: ICountry[] = [];
+      // const currentLived_countries: ICountry[] = [];
 
-  const handleLived = () => {
-    setLivedPlaces((prevState) => {
-      const countryCode = currentCountry?.isoCountryCode;
+      // visited_countries.forEach((i) => {
+      //   let current = CountriesList.find((c) => c.iso2 === i);
+      //   if (current) {
+      //     currentVisited_countries.push(current);
+      //   }
+      // });
+      // lived_countries.forEach((i) => {
+      //   let current = CountriesList.find((c) => c.iso2 === i);
+      //   if (current) {
+      //     currentLived_countries.push(current);
+      //   }
+      // });
 
-      if (countryCode && prevState.includes(countryCode)) {
-        return prevState.filter((code) => code !== countryCode);
-      }
+      // setState((prevState) => ({
+      //   ...prevState,
+      //   visited_countries: currentVisited_countries,
+      //   lived_countries: currentLived_countries,
+      // }));
 
-      return [...prevState, countryCode].filter(Boolean);
-    });
-  };
+      updateMe({ visited_countries, lived_countries });
+    }
+  }, [data, state.currentCountry]);
+
+  const handleLived = useCallback(() => {
+    if (!state.currentCountry || !data || !state.currentCountry.isoCountryCode)
+      return;
+    const lived_countries = data.me.lived_countries.map((i) => i.iso2);
+    const visited_countries = data.me.visited_countries.map((i) => i.iso2);
+
+    if (
+      !lived_countries.find(
+        (i) => state.currentCountry && i === state.currentCountry.isoCountryCode
+      )
+    ) {
+      lived_countries.push(state.currentCountry.isoCountryCode);
+      updateMe({ lived_countries, visited_countries });
+    }
+  }, [data, state.currentCountry]);
 
   const pickImages = async () => {
-    setPickedImages([]);
-    setIsSelectingImages(true);
-    // requestPermission();
+    setState((prevSate) => ({
+      ...prevSate,
+      isSelectingImages: true,
+      pickedImages: null,
+    }));
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
@@ -147,132 +277,112 @@ const MyWorldScreen = () => {
     });
 
     if (!result.canceled) {
-      setPickedImages(result);
+      setState((prevSate) => ({
+        ...prevSate,
+        pickedImages: result.assets,
+        isSelectingImages: false,
+      }));
       onMemoriesDetailOpen();
-      setIsSelectingImages(false);
     } else {
-      setIsSelectingImages(false);
+      setState((prevSate) => ({ ...prevSate, isSelectingImages: false }));
+    }
+  };
+
+  const handleImportImages = useCallback(async () => {
+    const { pickedImages, currentCountry } = state;
+    if (!pickedImages || !currentCountry) return;
+    setState((prevState) => ({ ...prevState, isSelectingImages: true }));
+
+    try {
+      const formData = new FormData();
+
+      pickedImages.forEach((file) => {
+        // @ts-ignore
+        formData.append("files", {
+          uri:
+            Platform.OS === "android"
+              ? file.uri
+              : file.uri.replace("file://", ""),
+          type: "image/jpeg",
+          name: file.fileName || file.uri.split("/").pop(),
+        });
+      });
+
+      const images = (await uploadImage(formData)) as string[];
+
+      if (currentCountry.isoCountryCode)
+        createOrUpdateStories({ images, iso2: currentCountry.isoCountryCode });
+
+      setState((prevState) => ({
+        ...prevState,
+        isSelectingImages: false,
+        pickedImages: null,
+        currentCountry: null,
+      }));
+      if (countryDetailModalRef.current) countryDetailModalRef.current.close();
+    } catch (error) {
+      setState((prevState) => ({ ...prevState, isSelectingImages: false }));
     }
 
-    // if (!result.canceled) {
-    //   // setLoadingImage(true);
-    //   // setImage(result);
-    //   const formData = new FormData();
-
-    //   formData.append("file", {
-    //     uri: result?.assets[0]?.uri,
-    //     type: "image/jpeg",
-    //     name: result?.assets[0]?.fileName || result?.assets[0]?.uri.split("/").pop(),
-    //   });
-    //   console.log("image - formData", formData);
-
-    //   const response = await sendHomeworkFiles(formData);
-    //   console.log("image - response", response);
-    //   if (response) {
-    //     setLoadingImage(false);
-    //     setUploadedImageID(response);
-
-    //   }
-    // }
-  };
-
-  const handleImportImages = () => {
-    // console.log("currentCountry", beenPlaces, currentCountry);
-
-    setBeenPlaces((prevState) => {
-      const countryCode = currentCountry?.isoCountryCode;
-
-      // Ensure prevState is always an array
-      const placesArray = Array.isArray(prevState) ? prevState : [];
-
-      // Check if the country code is already in the array
-      const alreadyExists = placesArray.some(
-        (place) => place.countryCode === countryCode
-      );
-
-      // If the country code is already in the array, remove it
-      if (countryCode && alreadyExists) {
-        return placesArray.filter((place) => place.countryCode !== countryCode);
-      }
-
-      // If not, add it to the array along with pickedImages
-      const countryData = CountriesList?.find(
-        (item) => item.iso2 === countryCode
-      );
-
-      return [
-        ...placesArray,
-        countryCode
-          ? {
-              countryCode,
-              ...pickedImages,
-              coordinates: countryData?.coordinates,
-            }
-          : null, // Ensure null values are filtered out
-      ].filter(Boolean);
-    });
-
-    setPickedImages([]);
     memoriesModalRef.current?.close();
-  };
+  }, [state]);
 
-  // console.log("beenPlaces", beenPlaces);
+  const handleTrashImage = useCallback(() => {
+    const { activeSliderIndex, story } = state;
+    if (!story || !story.images.length || activeSliderIndex == -1) return;
+
+    const image = story.images[activeSliderIndex];
+
+    if (!image) return;
+    console.log("handleTrashImage", image);
+  }, [state]);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     let { status } = await Location.requestForegroundPermissionsAsync();
+  //     if (status !== "granted") {
+  //       // console.log("Permission to access location was denied");
+  //       return;
+  //     }
+
+  //     let location = await Location.getCurrentPositionAsync({});
+  //     // setState((prevState) => ({ ...prevState, location }));
+  //   })();
+  // }, []);
 
   useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        // console.log("Permission to access location was denied");
-        return;
-      }
+    if (isStoriesUpdateSuccess) {
+      dispatch(trekSpotApi.util.invalidateTags(["stories", "me", "analytics"]));
+    }
+  }, [isStoriesUpdateSuccess]);
 
-      let location = await Location.getCurrentPositionAsync({});
-      // setLocation(location);
-    })();
-  }, []);
+  useEffect(() => {
+    if (isUpdateMeSuccess) {
+      dispatch(trekSpotApi.util.invalidateTags(["me", "analytics"]));
+    }
+  }, [isUpdateMeSuccess]);
 
-  const images = [
-    {
-      id: 1,
-      url: "https://images.unsplash.com/photo-1682687982141-0143020ed57a?q=10&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: 2,
-      url: "https://images.unsplash.com/photo-1682687982502-b05f0565753a?q=10&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: 3,
-      url: "https://images.unsplash.com/photo-1682685796766-0fddd3e480de?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-  ];
+  /*
+   * Transform data
+   */
 
-  const RenderItem = ({ item, index }) => {
-    return (
-      <LinearGradient
-        style={{
-          width: SIZES.width,
-          height: SIZES.height,
-          flex: 1,
-        }}
-        colors={["rgba(255,255,255,0.2)", "rgba(0,0,0,0.1)"]}
-      >
-        <Image
-          style={{
-            width: SIZES.width,
-            height: SIZES.height,
-            flex: 1,
-          }}
-          source={{
-            uri: item?.url,
-          }}
-          cachePolicy="memory"
-          contentFit="cover"
-          transition={1000}
-          placeholder={<ActivityIndicator />}
-        />
-      </LinearGradient>
+  const visitedHere =
+    state.currentCountry &&
+    state.visited_countries.find(
+      (place) => place.iso2 === state.currentCountry?.isoCountryCode
     );
-  };
+
+  const livedHere =
+    state.currentCountry &&
+    state.lived_countries.find(
+      (place) => place.iso2 === state.currentCountry?.isoCountryCode
+    );
+
+  // console.log("livedHere", livedHere);
+  // console.log("visitedHere", visitedHere);
+  // console.log(state.currentCountry);
+
+  // console.log("stories", state);
 
   return (
     <>
@@ -297,299 +407,58 @@ const MyWorldScreen = () => {
           zoomEnabled
           zoomControlEnabled
           pitchEnabled
-          followUserLocation={true}
-          showsUserLocation={true}
-          customMapStyle={[
-            {
-              featureType: "all",
-              elementType: "geometry.fill",
-              stylers: [
-                {
-                  weight: "2.00",
-                },
-              ],
-            },
-            {
-              featureType: "all",
-              elementType: "geometry.stroke",
-              stylers: [
-                {
-                  color: "#9c9c9c",
-                },
-              ],
-            },
-            {
-              featureType: "all",
-              elementType: "labels.text",
-              stylers: [
-                {
-                  visibility: "on",
-                },
-              ],
-            },
-            {
-              featureType: "administrative",
-              elementType: "geometry.fill",
-              stylers: [
-                {
-                  color: "#930707",
-                },
-              ],
-            },
-            {
-              featureType: "administrative.country",
-              elementType: "geometry.stroke",
-              stylers: [
-                {
-                  color: "#57585e",
-                },
-              ],
-            },
-            {
-              featureType: "administrative.province",
-              elementType: "geometry.stroke",
-              stylers: [
-                {
-                  color: "#ffffff",
-                },
-              ],
-            },
-            {
-              featureType: "landscape",
-              elementType: "all",
-              stylers: [
-                {
-                  color: "#f2f2f2",
-                },
-              ],
-            },
-            {
-              featureType: "landscape",
-              elementType: "geometry.fill",
-              stylers: [
-                {
-                  color: "#ffffff",
-                },
-              ],
-            },
-            {
-              featureType: "landscape.man_made",
-              elementType: "geometry.fill",
-              stylers: [
-                {
-                  color: "#ffffff",
-                },
-              ],
-            },
-            {
-              featureType: "landscape.natural.landcover",
-              elementType: "geometry.fill",
-              stylers: [
-                {
-                  color: "#ffffff",
-                },
-              ],
-            },
-            {
-              featureType: "landscape.natural.terrain",
-              elementType: "geometry.fill",
-              stylers: [
-                {
-                  color: "#7c7a00",
-                },
-              ],
-            },
-            {
-              featureType: "poi",
-              elementType: "all",
-              stylers: [
-                {
-                  visibility: "off",
-                },
-              ],
-            },
-            {
-              featureType: "road",
-              elementType: "all",
-              stylers: [
-                {
-                  saturation: -100,
-                },
-                {
-                  lightness: 45,
-                },
-              ],
-            },
-            {
-              featureType: "road",
-              elementType: "geometry.fill",
-              stylers: [
-                {
-                  color: "#eeeeee",
-                },
-              ],
-            },
-            {
-              featureType: "road",
-              elementType: "labels.text.fill",
-              stylers: [
-                {
-                  color: "#7b7b7b",
-                },
-              ],
-            },
-            {
-              featureType: "road",
-              elementType: "labels.text.stroke",
-              stylers: [
-                {
-                  color: "#ffffff",
-                },
-              ],
-            },
-            {
-              featureType: "road.highway",
-              elementType: "all",
-              stylers: [
-                {
-                  visibility: "simplified",
-                },
-              ],
-            },
-            {
-              featureType: "road.arterial",
-              elementType: "labels.icon",
-              stylers: [
-                {
-                  visibility: "off",
-                },
-              ],
-            },
-            {
-              featureType: "transit",
-              elementType: "all",
-              stylers: [
-                {
-                  visibility: "off",
-                },
-              ],
-            },
-            {
-              featureType: "water",
-              elementType: "all",
-              stylers: [
-                {
-                  color: "#46bcec",
-                },
-                {
-                  visibility: "on",
-                },
-              ],
-            },
-            {
-              featureType: "water",
-              elementType: "geometry.fill",
-              stylers: [
-                {
-                  color: "#a4d7f7",
-                },
-              ],
-            },
-            {
-              featureType: "water",
-              elementType: "labels.text.fill",
-              stylers: [
-                {
-                  color: "#070707",
-                },
-              ],
-            },
-            {
-              featureType: "water",
-              elementType: "labels.text.stroke",
-              stylers: [
-                {
-                  color: "#ffffff",
-                },
-              ],
-            },
-          ]}
+          followsUserLocation={true}
+          // showsUserLocation={true}
+          customMapStyle={customMapStyle}
           mapType="standard"
-          onSnapToItem={() => alert("ss")}
+          // onSnapToItem={() => alert("ss")}
         >
-          {location && (
+          {state.location && (
             <Geojson
-              geojson={location} // geojson of the countries you want to highlight
+              geojson={state.location as GeojsonProps["geojson"]} // geojson of the countries you want to highlight
               strokeColor="#fff"
               fillColor="rgba(255, 225, 255, 0.5)"
               strokeWidth={2}
             />
           )}
-          {/* {beenPlaces?.map((item) => (
+          {state.visited_countries.map((item) => (
             <Geojson
+              key={`visited_countries-${item.iso2}`}
               geojson={{
                 type: "FeatureCollection",
-                features: [getCountry(item)],
+                features: [getCountry(item.iso2)],
+              }} // geojson of the countries you want to highlight
+              fillColor="rgba(80, 0, 116, 0.7)"
+              strokeColor="#fff"
+              strokeWidth={2}
+            />
+          ))}
+          {state.lived_countries.map((item) => (
+            <Geojson
+              key={`lived_countries-${item.iso2}`}
+              geojson={{
+                type: "FeatureCollection",
+                features: [getCountry(item.iso2)],
               }} // geojson of the countries you want to highlight
               strokeColor="#fff"
               fillColor="rgba(0, 134, 28, 0.6)"
               strokeWidth={2}
             />
-          ))} */}
-          {livedPlaces?.map((item) => (
-            <Geojson
-              geojson={{
-                type: "FeatureCollection",
-                features: [getCountry(item)],
-              }} // geojson of the countries you want to highlight
-              strokeColor="#fff"
-              fillColor="rgba(80, 0, 116, 0.7)"
-              strokeWidth={2}
-            />
           ))}
-          {beenPlaces?.map((item) => (
-            <Marker
-              onPress={() => onGalleryOpen()}
-              coordinate={{
-                latitude: item?.coordinates?.latitude,
-                longitude: item?.coordinates?.longitude,
-              }}
-              // title={"title"}
-              // description={"description"}
-            >
-              <View
-                style={{
-                  backgroundColor: "#fff",
-                  padding: 0,
-                  borderRadius: 50,
-                  borderWidth: 2,
-                  borderColor: "#fff",
-                  shadowColor: "#000",
-                  shadowOffset: {
-                    width: 0,
-                    height: 2,
-                  },
-                  shadowOpacity: 0.2,
-                  shadowRadius: 3.84,
-                  elevation: 5,
-                  position: "relative",
-                  zIndex: 2,
-                }}
-              >
-                <ImageBackground
-                  style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 50,
-                    overflow: "hidden",
-                  }}
-                  source={{
-                    uri: item?.assets[0].uri,
-                  }}
-                />
-              </View>
-            </Marker>
-          ))}
+          {state.visited_countries.map((item) => {
+            const story =
+              storiesData &&
+              storiesData.stories &&
+              storiesData.stories.find((story) => story.iso2 === item.iso2);
+            return (
+              <VisitedCountryItem
+                key={`marker-visited_countries-${item.iso2}`}
+                item={item}
+                story={story}
+                onGalleryOpen={onGalleryOpen}
+              />
+            );
+          })}
         </MapView>
       </View>
 
@@ -616,10 +485,10 @@ const MyWorldScreen = () => {
                     width: 35,
                     height: 25,
                   }}
-                  source={imagePath ? imagePath : null} // Set the image source
+                  source={state.imagePath} // Set the image source
                 />
                 <Text style={styles.countryText}>
-                  {currentCountry?.country}
+                  {state.currentCountry?.country}
                 </Text>
               </View>
               <TouchableOpacity
@@ -641,40 +510,18 @@ const MyWorldScreen = () => {
                 style={[
                   styles.actionButton,
                   {
-                    backgroundColor:
-                      currentCountry?.isoCountryCode &&
-                      beenPlaces?.some(
-                        (place) =>
-                          place.countryCode === currentCountry?.isoCountryCode
-                      )
-                        ? "rgba(0, 134, 28, 0.7)"
-                        : "#fff",
+                    backgroundColor: visitedHere
+                      ? "rgba(80, 0, 116, 0.7)"
+                      : "#fff",
                   },
                 ]}
               >
-                <VisitedIcon
-                  width="25"
-                  height="25"
-                  active={
-                    currentCountry?.isoCountryCode &&
-                    beenPlaces?.some(
-                      (place) =>
-                        place.countryCode === currentCountry?.isoCountryCode
-                    )
-                  }
-                />
+                <VisitedIcon width={25} height={25} active={!!visitedHere} />
                 <Text
                   style={[
                     styles.actionButtonsText,
                     {
-                      color:
-                        currentCountry?.isoCountryCode &&
-                        beenPlaces?.some(
-                          (place) =>
-                            place.countryCode === currentCountry?.isoCountryCode
-                        )
-                          ? "#fff"
-                          : "#898B93",
+                      color: visitedHere ? "#fff" : "#898B93",
                     },
                   ]}
                 >
@@ -687,31 +534,18 @@ const MyWorldScreen = () => {
                 style={[
                   styles.actionButton,
                   {
-                    backgroundColor:
-                      currentCountry?.isoCountryCode &&
-                      livedPlaces?.includes(currentCountry?.isoCountryCode)
-                        ? "rgba(80, 0, 116, 0.7)"
-                        : "#fff",
+                    backgroundColor: livedHere
+                      ? "rgba(0, 134, 28, 0.7)"
+                      : "#fff",
                   },
                 ]}
               >
-                <LivedIcon
-                  width="25"
-                  height="25"
-                  active={
-                    currentCountry?.isoCountryCode &&
-                    livedPlaces?.includes(currentCountry?.isoCountryCode)
-                  }
-                />
+                <LivedIcon width={25} height={25} active={!!livedHere} />
                 <Text
                   style={[
                     styles.actionButtonsText,
                     {
-                      color:
-                        currentCountry?.isoCountryCode &&
-                        livedPlaces?.includes(currentCountry?.isoCountryCode)
-                          ? "#fff"
-                          : "#898B93",
+                      color: livedHere ? "#fff" : "#898B93",
                     },
                   ]}
                 >
@@ -722,7 +556,7 @@ const MyWorldScreen = () => {
                 onPress={() => pickImages()}
                 style={styles.actionButton}
               >
-                {isSelectingImages ? (
+                {state.isSelectingImages ? (
                   <ActivityIndicator />
                 ) : (
                   <>
@@ -751,11 +585,9 @@ const MyWorldScreen = () => {
                     width: 25,
                     height: 15,
                   }}
-                  source={imagePath ? imagePath : null} // Set the image source
+                  source={state.imagePath} // Set the image source
                 />
-                <Text style={styles.countryText}>
-                  {currentCountry?.country}
-                </Text>
+                <Text style={styles.countryText}>currentCountry</Text>
               </View>
 
               <TouchableOpacity
@@ -770,13 +602,14 @@ const MyWorldScreen = () => {
           childrenStyle={{
             minHeight: "50%",
           }}
+          //@ts-ignore
           style={{ minHeight: "50%" }}
         >
           <AddMemoriesModal
-            images={pickedImages}
+            images={state.pickedImages}
             setPickedImages={setPickedImages}
             pickImages={pickImages}
-            isSelectingImages={isSelectingImages}
+            isSelectingImages={state.isSelectingImages}
           />
         </Modalize>
       </Portal>
@@ -787,7 +620,12 @@ const MyWorldScreen = () => {
           modalTopOffset={0}
           withHandle={false}
           disableScrollIfPossible
-          onClose={() => setActiveSlide({ index: 0 })}
+          onClose={() =>
+            setState((prevState) => ({
+              ...prevState,
+              activeSliderIndex: 0,
+            }))
+          }
           modalStyle={{
             minHeight: "100%",
             backgroundColor: "#000",
@@ -801,6 +639,7 @@ const MyWorldScreen = () => {
             <TouchableOpacity
               activeOpacity={0.7}
               style={styles.galleryImageDeleteButton}
+              onPress={handleTrashImage}
             >
               <TrashIcon color="#fff" width="17" />
             </TouchableOpacity>
@@ -815,18 +654,24 @@ const MyWorldScreen = () => {
 
           <Carousel
             ref={carouselRef}
-            data={images}
-            renderItem={RenderItem}
+            //@ts-ignore
+            data={state.story && state.story.images}
+            //@ts-ignore
+            renderItem={CarouselItem}
             sliderWidth={SIZES.width}
             itemWidth={SIZES.width}
             inactiveSlideShift={0}
-            onSnapToItem={(index) => setActiveSlide({ index })}
+            onSnapToItem={(index) =>
+              setState((prevState) => ({
+                ...prevState,
+                activeSliderIndex: index,
+              }))
+            }
             useScrollView={true}
           />
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            resizeMode="cover"
             style={{
               position: "absolute",
               bottom: 50,
@@ -839,37 +684,39 @@ const MyWorldScreen = () => {
               flexGrow: 1,
             }}
           >
-            {images?.map((item, ind) => (
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={{
-                  borderColor:
-                    activeSlide?.index === ind
-                      ? "#fff"
-                      : "rgba(255, 255, 255, 0.1)",
-                  borderWidth: 2,
-                  borderRadius: 10,
-                  marginRight: 8,
-                  overflow: "hidden",
-                }}
-                onPress={() => carouselRef?.current?.snapToItem(ind)}
-              >
-                <Image
+            {state.story &&
+              state.story.images.map((item, ind) => (
+                <TouchableOpacity
+                  key={`images-${ind}`}
+                  activeOpacity={0.7}
                   style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 8,
+                    borderColor:
+                      state.activeSliderIndex === ind
+                        ? "#fff"
+                        : "rgba(255, 255, 255, 0.1)",
+                    borderWidth: 2,
+                    borderRadius: 10,
+                    marginRight: 8,
                     overflow: "hidden",
                   }}
-                  source={{
-                    uri: item?.url,
-                  }}
-                  // placeholder={blurhash}
-                  contentFit="cover"
-                  transition={1000}
-                />
-              </TouchableOpacity>
-            ))}
+                  onPress={() => carouselRef?.current?.snapToItem(ind)}
+                >
+                  <Image
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: 8,
+                      overflow: "hidden",
+                    }}
+                    source={{
+                      uri: item?.url,
+                    }}
+                    // placeholder={blurhash}
+                    contentFit="cover"
+                    transition={1000}
+                  />
+                </TouchableOpacity>
+              ))}
           </ScrollView>
         </Modalize>
       </Portal>
@@ -895,10 +742,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 0,
-    borderColor: "#000",
     width: 40,
     height: 40,
-    alignItems: "center",
     justifyContent: "center",
   },
   closeGalleryButton: {
@@ -935,11 +780,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 15,
   },
-  countryText: {
-    marginLeft: 10,
-    fontSize: 14,
-    fontWeight: "bold",
-  },
+
   countryTextLabel: {
     color: "#333",
     fontSize: 20,
@@ -988,11 +829,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  // countryText: {
+  //   fontSize: 26,
+  //   fontWeight: "bold",
+  //   color: "#000",
+  //   marginLeft: 8,
+  // },
   countryText: {
-    fontSize: 26,
+    marginLeft: 10,
+    fontSize: 14,
     fontWeight: "bold",
-    color: "#000",
-    marginLeft: 8,
   },
   backButton: {
     width: 40,

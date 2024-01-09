@@ -3,14 +3,12 @@ import {
   StackNavigationProp,
   createStackNavigator,
 } from "@react-navigation/stack";
-import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { THeaderButton } from "../../common/ui/THeaderButton";
-import { PrimaryColor } from "../../styles/colors";
+
 import MyWorldScreen from "../../screen/world/MyWorldScreen";
 
 interface MyWorldRouteProps {}
 
-type MyWorldRouteStackParamList = {
+export type MyWorldRouteStackParamList = {
   World: undefined;
 };
 
@@ -27,16 +25,6 @@ export const MyWorldRouteStack: React.FC<MyWorldRouteProps> = ({}) => {
         component={MyWorldScreen}
         options={({ route, navigation }) => ({
           header: () => null,
-          // headerLeft: () => (
-          //   <HeaderButtons HeaderButtonComponent={THeaderButton}>
-          //     <Item
-          //       title="UndoSignature"
-          //       iconName="md-menu"
-          //       color={PrimaryColor}
-          //       onPress={navigation.toggleDrawer}
-          //     />
-          //   </HeaderButtons>
-          // ),
         })}
       />
     </Stack.Navigator>

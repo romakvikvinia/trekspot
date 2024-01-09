@@ -7,11 +7,10 @@ import { HomeScreen } from "../../screen/home/HomeScreen";
 import { PrimaryColor } from "../../styles/colors";
 import BucketList from "../../screen/BucketList";
 import BucketListAllScreen from "../../screen/BucketList/BucketListAll";
-import ShareStats from "../../screen/Share";
 
 interface HomeRouteProps {}
 
-type HomeRouteStackParamList = {
+export type HomeRouteStackParamList = {
   Main: undefined;
   BucketList: undefined;
   BucketListAll: undefined;
@@ -54,14 +53,6 @@ export const HomeRouteStack: React.FC<HomeRouteProps> = ({}) => {
       <Stack.Screen
         name="BucketListAll"
         component={BucketListAllScreen}
-        options={() => ({
-          header: () => null,
-        })}
-      />
-
-      <Stack.Screen
-        name="ShareStats"
-        component={ShareStats}
         options={() => ({
           header: () => null,
         })}

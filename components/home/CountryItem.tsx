@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -15,19 +15,19 @@ interface HomeProps {
   name: string;
   iso2: string;
   capital: string;
-  lived?: boolean;
-  visited?: boolean;
+  visited_countries: string[];
+  lived_countries: string[];
 }
 
 export const CountryItem: React.FC<HomeProps> = ({
   name,
   iso2,
-  lived,
-  visited,
+  visited_countries,
+  lived_countries,
 }) => {
   const [state, setState] = useState({
-    isVisited: visited || false,
-    isLived: lived || false,
+    isVisited: visited_countries.includes(iso2),
+    isLived: lived_countries.includes(iso2),
   });
 
   const handleVisited = useCallback((code: string) => {
@@ -45,6 +45,20 @@ export const CountryItem: React.FC<HomeProps> = ({
       isLived: !prevState.isLived,
     }));
   }, []);
+
+  useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      isVisited: visited_countries.includes(iso2),
+    }));
+  }, [visited_countries, iso2]);
+
+  useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      isLived: lived_countries.includes(iso2),
+    }));
+  }, [lived_countries, iso2]);
 
   // @ts-ignore
   const imagePath = Flags[iso2];
