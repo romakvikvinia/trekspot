@@ -12,8 +12,12 @@ import {
   AnalyticsResponseType,
   AuthSocialLogInResponseType,
   AuthSocialLogInInput,
+  StoriesResponseType,
+  CreateOrUpdateStoriesInput,
+  CreateOrUpdateStoriesResponseType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
+import { baseUrl } from "../helpers/baseUrl.helper";
 
 const prepHeaders = async (headers: Headers) => {
   let token = await getFullToken();
@@ -34,7 +38,8 @@ export const trekSpotApi = createApi({
   // refetchOnFocus: true,
   baseQuery: graphqlRequestBaseQuery({
     // url: "http://192.168.0.105:8080/graphql",
-    url: "http://localhost:8080/graphql",
+    url: `${baseUrl}/graphql`,
+    // url: "http://localhost:8080/graphql",
     // url: "http://192.168.0.105:8080/graphql",
     // url: "https://trekspot.io/graphql",
     prepareHeaders: prepHeaders,
@@ -50,7 +55,16 @@ export const trekSpotApi = createApi({
       };
     },
   }),
-  tagTypes: ["signUp", "signIn", "analytics", "me", "updateMe"],
+  tagTypes: [
+    "authSocial",
+    "signUp",
+    "signIn",
+    "analytics",
+    "me",
+    "updateMe",
+    "stories",
+    "createOrUpdateStories",
+  ],
   endpoints: (builder) => ({
     /**
      * Social Auth with provider
@@ -264,6 +278,55 @@ export const trekSpotApi = createApi({
       },
       providesTags: ["analytics"],
     }),
+    /**
+     * Get user stories
+     *
+     */
+    stories: builder.query<StoriesResponseType, void>({
+      query: () => ({
+        document: gql`
+          query {
+            stories {
+              iso2
+              images {
+                id
+                url
+              }
+            }
+          }
+        `,
+      }),
+      transformResponse: (response: StoriesResponseType) => {
+        return response;
+      },
+      providesTags: ["stories"],
+    }),
+
+    /**
+     * Create or update Stories
+     */
+    createOrUpdateStories: builder.mutation<
+      CreateOrUpdateStoriesResponseType,
+      CreateOrUpdateStoriesInput
+    >({
+      query: ({ iso2, images }) => ({
+        variables: { iso2, images },
+        document: gql`
+          mutation ($iso2: ID!, $images: [ID!]!) {
+            createOrUpdateStore(input: { iso2: $iso2, images: $images }) {
+              id
+              iso2
+              images {
+                url
+              }
+            }
+          }
+        `,
+      }),
+      invalidatesTags: ["createOrUpdateStories"],
+    }),
+
+    //
   }),
 });
 
@@ -275,4 +338,6 @@ export const {
   useMeQuery,
   useLazyMeQuery,
   useAnalyticsQuery,
+  useStoriesQuery,
+  useCreateOrUpdateStoriesMutation,
 } = trekSpotApi;

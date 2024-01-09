@@ -26,6 +26,7 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
         name="Trips"
         component={TripScreen}
         options={({ route, navigation }) => ({
+          headerShown: false,
           // headerLeft: () => (
           //   <HeaderButtons HeaderButtonComponent={THeaderButton}>
           //     <Item

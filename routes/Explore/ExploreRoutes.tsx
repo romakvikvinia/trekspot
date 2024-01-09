@@ -4,11 +4,13 @@ import {
   createStackNavigator,
 } from "@react-navigation/stack";
 import { ExploreScreen } from "../../screen/Explore/Explore";
+import SeeAllScreen from "../../screen/Explore/BucketListAll";
 
 interface ExploreRoutesProps {}
 
 type ExploreRoutesStackParamList = {
   Explore: undefined;
+  SeeAllScreen: undefined;
 };
 
 const Stack = createStackNavigator<ExploreRoutesStackParamList>();
@@ -34,6 +36,13 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
           //     />
           //   </HeaderButtons>
           // ),
+        })}
+      />
+      <Stack.Screen
+        name="SeeAllScreen"
+        component={SeeAllScreen}
+        options={() => ({
+          header: () => null,
         })}
       />
     </Stack.Navigator>

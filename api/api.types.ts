@@ -92,3 +92,34 @@ export type AnalyticsType = {
 export type AnalyticsResponseType = {
   analytics: AnalyticsType;
 };
+
+export type ImageType = {
+  id?: string;
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  destination: string;
+  filename: string;
+  url: string;
+  size: number;
+};
+
+export type StoryType = {
+  id?: string;
+  iso2: string;
+  images: ImageType[];
+};
+
+export type StoriesResponseType = {
+  stories: StoryType[];
+};
+
+export type CreateOrUpdateStoriesInput = {
+  iso2: string;
+  images: string[];
+};
+
+export type CreateOrUpdateStoriesResponseType = {
+  createOrUpdateStore: StoryType;
+};
