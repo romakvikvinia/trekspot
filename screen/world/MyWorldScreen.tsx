@@ -54,7 +54,6 @@ import { customMapStyle } from "../../styles/mapView.style";
 import { VisitedCountryItem } from "../../components/world/VisitedCountryItem";
 import { StoryType } from "../../api/api.types";
 import { CarouselItem } from "../../components/world/CarouselItem";
-import { Geometry } from "react-native-google-places-autocomplete";
 
 type HomeProps = NativeStackScreenProps<MyWorldRouteStackParamList, "World">;
 
@@ -95,6 +94,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
     location: ILocation | null;
     imagePath: any;
     pickedImages: ImagePicker.ImagePickerResult["assets"] | null;
+    activeSliderIndex: number;
   }>({
     story: null,
     isSelectingImages: false,
@@ -104,6 +104,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
     location: null,
     imagePath: null,
     pickedImages: null,
+    activeSliderIndex: -1,
   });
 
   const fillLivedAndVisitedCountries = useCallback(() => {
@@ -142,7 +143,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
 
   // must delete
 
-  const [activeSlide, setActiveSlide] = useState({ index: 0 });
+  // const [activeSlide, setActiveSlide] = useState({ index: 0 });
 
   const onCountryDetailOpen = useCallback(() => {
     countryDetailModalRef.current?.open();
@@ -209,6 +210,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
     if (!state.currentCountry || !data || !state.currentCountry.isoCountryCode)
       return;
     const visited_countries = data.me.visited_countries.map((i) => i.iso2);
+    const lived_countries = data.me.lived_countries.map((i) => i.iso2);
 
     if (
       !visited_countries.find(
@@ -216,7 +218,30 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
       )
     ) {
       visited_countries.push(state.currentCountry.isoCountryCode);
-      updateMe({ visited_countries });
+
+      // const currentVisited_countries: ICountry[] = [];
+      // const currentLived_countries: ICountry[] = [];
+
+      // visited_countries.forEach((i) => {
+      //   let current = CountriesList.find((c) => c.iso2 === i);
+      //   if (current) {
+      //     currentVisited_countries.push(current);
+      //   }
+      // });
+      // lived_countries.forEach((i) => {
+      //   let current = CountriesList.find((c) => c.iso2 === i);
+      //   if (current) {
+      //     currentLived_countries.push(current);
+      //   }
+      // });
+
+      // setState((prevState) => ({
+      //   ...prevState,
+      //   visited_countries: currentVisited_countries,
+      //   lived_countries: currentLived_countries,
+      // }));
+
+      updateMe({ visited_countries, lived_countries });
     }
   }, [data, state.currentCountry]);
 
@@ -224,6 +249,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
     if (!state.currentCountry || !data || !state.currentCountry.isoCountryCode)
       return;
     const lived_countries = data.me.lived_countries.map((i) => i.iso2);
+    const visited_countries = data.me.visited_countries.map((i) => i.iso2);
 
     if (
       !lived_countries.find(
@@ -231,7 +257,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
       )
     ) {
       lived_countries.push(state.currentCountry.isoCountryCode);
-      updateMe({ lived_countries });
+      updateMe({ lived_countries, visited_countries });
     }
   }, [data, state.currentCountry]);
 
@@ -301,28 +327,38 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
     memoriesModalRef.current?.close();
   }, [state]);
 
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        // console.log("Permission to access location was denied");
-        return;
-      }
+  const handleTrashImage = useCallback(() => {
+    const { activeSliderIndex, story } = state;
+    if (!story || !story.images.length || activeSliderIndex == -1) return;
 
-      let location = await Location.getCurrentPositionAsync({});
-      // setState((prevState) => ({ ...prevState, location }));
-    })();
-  }, []);
+    const image = story.images[activeSliderIndex];
+
+    if (!image) return;
+    console.log("handleTrashImage", image);
+  }, [state]);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     let { status } = await Location.requestForegroundPermissionsAsync();
+  //     if (status !== "granted") {
+  //       // console.log("Permission to access location was denied");
+  //       return;
+  //     }
+
+  //     let location = await Location.getCurrentPositionAsync({});
+  //     // setState((prevState) => ({ ...prevState, location }));
+  //   })();
+  // }, []);
 
   useEffect(() => {
     if (isStoriesUpdateSuccess) {
-      dispatch(trekSpotApi.util.invalidateTags(["stories", "me"]));
+      dispatch(trekSpotApi.util.invalidateTags(["stories", "me", "analytics"]));
     }
   }, [isStoriesUpdateSuccess]);
 
   useEffect(() => {
     if (isUpdateMeSuccess) {
-      dispatch(trekSpotApi.util.invalidateTags(["me"]));
+      dispatch(trekSpotApi.util.invalidateTags(["me", "analytics"]));
     }
   }, [isUpdateMeSuccess]);
 
@@ -584,7 +620,12 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
           modalTopOffset={0}
           withHandle={false}
           disableScrollIfPossible
-          onClose={() => setActiveSlide({ index: 0 })}
+          onClose={() =>
+            setState((prevState) => ({
+              ...prevState,
+              activeSliderIndex: 0,
+            }))
+          }
           modalStyle={{
             minHeight: "100%",
             backgroundColor: "#000",
@@ -598,6 +639,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
             <TouchableOpacity
               activeOpacity={0.7}
               style={styles.galleryImageDeleteButton}
+              onPress={handleTrashImage}
             >
               <TrashIcon color="#fff" width="17" />
             </TouchableOpacity>
@@ -619,7 +661,12 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
             sliderWidth={SIZES.width}
             itemWidth={SIZES.width}
             inactiveSlideShift={0}
-            onSnapToItem={(index) => setActiveSlide({ index })}
+            onSnapToItem={(index) =>
+              setState((prevState) => ({
+                ...prevState,
+                activeSliderIndex: index,
+              }))
+            }
             useScrollView={true}
           />
           <ScrollView
@@ -644,7 +691,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
                   activeOpacity={0.7}
                   style={{
                     borderColor:
-                      activeSlide?.index === ind
+                      state.activeSliderIndex === ind
                         ? "#fff"
                         : "rgba(255, 255, 255, 0.1)",
                     borderWidth: 2,
