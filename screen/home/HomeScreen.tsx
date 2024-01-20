@@ -16,11 +16,13 @@ import { formatPercentage } from "../../helpers/number.helper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { HomeRouteStackParamList } from "../../routes/home/HomeRoutes";
+import { useSelector } from "react-redux";
 
 type HomeProps = NativeStackScreenProps<HomeRouteStackParamList, "Main">;
 
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
   const insets = useSafeAreaInsets();
+  const state = useSelector((state) => state.api);
 
   const { data, isLoading, isSuccess } = useAnalyticsQuery();
   // transform data
@@ -48,7 +50,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
     data && data.analytics.territories.items["Oceania"]
       ? data.analytics.territories.items["Oceania"]
       : 0;
-
+  console.log(state);
   return (
     <View
       style={[

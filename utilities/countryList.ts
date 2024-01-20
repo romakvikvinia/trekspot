@@ -7,6 +7,7 @@ export type ICountry = {
     longitude: number;
   };
   continent: string;
+  isPopular: boolean;
 };
 export const CountriesList = [
   {
@@ -18,6 +19,7 @@ export const CountriesList = [
       longitude: 66.36995,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Albania",
@@ -28,6 +30,7 @@ export const CountriesList = [
       longitude: 20.047248,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Algeria",
@@ -38,6 +41,7 @@ export const CountriesList = [
       longitude: 2.59381,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Andorra",
@@ -48,6 +52,7 @@ export const CountriesList = [
       longitude: 1.58223,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Angola",
@@ -58,6 +63,7 @@ export const CountriesList = [
       longitude: 17.557906,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Antigua and Barbuda",
@@ -68,6 +74,7 @@ export const CountriesList = [
       longitude: -61.792794,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Argentina",
@@ -78,6 +85,7 @@ export const CountriesList = [
       longitude: -65.063029,
     },
     continent: "South America",
+    isPopular: false,
   },
   {
     name: "Armenia",
@@ -88,6 +96,7 @@ export const CountriesList = [
       longitude: 44.947493,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Australia",
@@ -98,6 +107,7 @@ export const CountriesList = [
       longitude: 134.000674,
     },
     continent: "Oceania",
+    isPopular: false,
   },
   {
     name: "Austria",
@@ -108,6 +118,7 @@ export const CountriesList = [
       longitude: 14.947254,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Azerbaijan",
@@ -118,6 +129,7 @@ export const CountriesList = [
       longitude: 47.454745,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Bahamas",
@@ -128,6 +140,7 @@ export const CountriesList = [
       longitude: -77.97063,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Bahrain",
@@ -138,6 +151,7 @@ export const CountriesList = [
       longitude: 50.553182,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Bangladesh",
@@ -148,6 +162,7 @@ export const CountriesList = [
       longitude: 90.120178,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Barbados",
@@ -158,6 +173,7 @@ export const CountriesList = [
       longitude: -59.551065,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Belarus",
@@ -168,6 +184,7 @@ export const CountriesList = [
       longitude: 28.38226,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Belgium",
@@ -178,6 +195,7 @@ export const CountriesList = [
       longitude: 4.965363,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Belize",
@@ -188,6 +206,7 @@ export const CountriesList = [
       longitude: -88.642324,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Benin",
@@ -198,6 +217,7 @@ export const CountriesList = [
       longitude: 2.348253,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Bhutan",
@@ -208,6 +228,7 @@ export const CountriesList = [
       longitude: 90.505782,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Bolivia",
@@ -218,6 +239,7 @@ export const CountriesList = [
       longitude: -64.164394,
     },
     continent: "South America",
+    isPopular: false,
   },
   {
     name: "Bosnia and Herzegovina",
@@ -228,6 +250,7 @@ export const CountriesList = [
       longitude: 17.911672,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Botswana",
@@ -238,6 +261,7 @@ export const CountriesList = [
       longitude: 23.920464,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Brazil",
@@ -248,6 +272,7 @@ export const CountriesList = [
       longitude: -51.405148,
     },
     continent: "South America",
+    isPopular: false,
   },
   {
     name: "Brunei",
@@ -258,6 +283,7 @@ export const CountriesList = [
       longitude: 114.623528,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Bulgaria",
@@ -268,6 +294,7 @@ export const CountriesList = [
       longitude: 25.100905,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Burkina Faso",
@@ -278,6 +305,7 @@ export const CountriesList = [
       longitude: -1.603375,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Burundi",
@@ -288,6 +316,7 @@ export const CountriesList = [
       longitude: 29.930471,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Cape Verde",
@@ -298,6 +327,7 @@ export const CountriesList = [
       longitude: -23.625341,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Cambodia",
@@ -308,6 +338,7 @@ export const CountriesList = [
       longitude: 104.942664,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Cameroon",
@@ -318,6 +349,7 @@ export const CountriesList = [
       longitude: 12.676266,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Canada",
@@ -328,6 +360,7 @@ export const CountriesList = [
       longitude: -105.963188,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Central African Republic",
@@ -338,6 +371,7 @@ export const CountriesList = [
       longitude: 19.176645,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Chad",
@@ -348,6 +382,7 @@ export const CountriesList = [
       longitude: 18.338907,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Chile",
@@ -358,6 +393,7 @@ export const CountriesList = [
       longitude: -70.962921,
     },
     continent: "South America",
+    isPopular: false,
   },
   {
     name: "China",
@@ -368,6 +404,7 @@ export const CountriesList = [
       longitude: 103.722585,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Colombia",
@@ -378,6 +415,7 @@ export const CountriesList = [
       longitude: -73.193937,
     },
     continent: "South America",
+    isPopular: false,
   },
   {
     name: "Comoros",
@@ -388,6 +426,7 @@ export const CountriesList = [
       longitude: 43.353157,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Congo (Congo-Brazzaville)",
@@ -398,6 +437,7 @@ export const CountriesList = [
       longitude: 15.694773,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Costa Rica",
@@ -408,6 +448,7 @@ export const CountriesList = [
       longitude: -84.011738,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Croatia",
@@ -418,6 +459,7 @@ export const CountriesList = [
       longitude: 15.546456,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Cuba",
@@ -428,6 +470,7 @@ export const CountriesList = [
       longitude: -78.765576,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Cyprus",
@@ -438,6 +481,7 @@ export const CountriesList = [
       longitude: 33.213489,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Ivory Coast",
@@ -448,6 +492,7 @@ export const CountriesList = [
       longitude: -5.596598,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Czechia",
@@ -458,6 +503,7 @@ export const CountriesList = [
       longitude: 15.604534,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "DR of the Congo",
@@ -468,6 +514,7 @@ export const CountriesList = [
       longitude: 23.490572,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Denmark",
@@ -478,6 +525,7 @@ export const CountriesList = [
       longitude: 9.53045,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Djibouti",
@@ -488,6 +536,7 @@ export const CountriesList = [
       longitude: 42.481531,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Dominica",
@@ -498,6 +547,7 @@ export const CountriesList = [
       longitude: -61.335549,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Dominican Republic",
@@ -508,6 +558,7 @@ export const CountriesList = [
       longitude: -70.268483,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Ecuador",
@@ -518,6 +569,7 @@ export const CountriesList = [
       longitude: -78.624537,
     },
     continent: "South America",
+    isPopular: false,
   },
   {
     name: "Egypt",
@@ -528,6 +580,7 @@ export const CountriesList = [
       longitude: 29.942822,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "El Salvador",
@@ -538,6 +591,7 @@ export const CountriesList = [
       longitude: -88.86735,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Equatorial Guinea",
@@ -548,6 +602,7 @@ export const CountriesList = [
       longitude: 10.408889,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Eritrea",
@@ -558,6 +613,7 @@ export const CountriesList = [
       longitude: 39.223143,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Estonia",
@@ -568,6 +624,7 @@ export const CountriesList = [
       longitude: 25.721836,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Eswatini (Swaziland)",
@@ -578,6 +635,7 @@ export const CountriesList = [
       longitude: 31.558669,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Ethiopia",
@@ -588,6 +646,7 @@ export const CountriesList = [
       longitude: 40.453537,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Fiji",
@@ -598,6 +657,7 @@ export const CountriesList = [
       longitude: 177.945028,
     },
     continent: "Oceania",
+    isPopular: false,
   },
   {
     name: "Finland",
@@ -608,6 +668,7 @@ export const CountriesList = [
       longitude: 27.072522,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "France",
@@ -618,6 +679,7 @@ export const CountriesList = [
       longitude: 2.582812,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Gabon",
@@ -628,6 +690,7 @@ export const CountriesList = [
       longitude: 11.908262,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Gambia",
@@ -638,6 +701,7 @@ export const CountriesList = [
       longitude: -15.390282,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Georgia",
@@ -648,6 +712,7 @@ export const CountriesList = [
       longitude: 43.805146,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Germany",
@@ -658,6 +723,7 @@ export const CountriesList = [
       longitude: 10.38294,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Ghana",
@@ -668,6 +734,7 @@ export const CountriesList = [
       longitude: -1.167342,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Greece",
@@ -678,6 +745,7 @@ export const CountriesList = [
       longitude: 22.004435,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Grenada",
@@ -688,6 +756,7 @@ export const CountriesList = [
       longitude: -61.679631,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Guatemala",
@@ -698,6 +767,7 @@ export const CountriesList = [
       longitude: -90.288458,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Guinea",
@@ -708,6 +778,7 @@ export const CountriesList = [
       longitude: -10.717911,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Guinea-Bissau",
@@ -718,6 +789,7 @@ export const CountriesList = [
       longitude: -14.80696,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Guyana",
@@ -728,6 +800,7 @@ export const CountriesList = [
       longitude: -59.0428783,
     },
     continent: "South America",
+    isPopular: false,
   },
   {
     name: "Haiti",
@@ -738,6 +811,7 @@ export const CountriesList = [
       longitude: -72.165755,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Holy See",
@@ -748,6 +822,7 @@ export const CountriesList = [
       longitude: 12.453007,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Honduras",
@@ -758,6 +833,7 @@ export const CountriesList = [
       longitude: -86.507575,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Hungary",
@@ -768,6 +844,7 @@ export const CountriesList = [
       longitude: 19.326777,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Iceland",
@@ -778,6 +855,7 @@ export const CountriesList = [
       longitude: -18.432283,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "India",
@@ -788,6 +866,7 @@ export const CountriesList = [
       longitude: 79.485195,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Indonesia",
@@ -798,6 +877,7 @@ export const CountriesList = [
       longitude: 114.419068,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Iran",
@@ -808,6 +888,7 @@ export const CountriesList = [
       longitude: 54.405241,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Iraq",
@@ -818,6 +899,7 @@ export const CountriesList = [
       longitude: 42.847625,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Ireland",
@@ -828,6 +910,7 @@ export const CountriesList = [
       longitude: -7.933953,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Israel",
@@ -838,6 +921,7 @@ export const CountriesList = [
       longitude: 34.882561,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Italy",
@@ -848,6 +932,7 @@ export const CountriesList = [
       longitude: 13.601936,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Jamaica",
@@ -858,6 +943,7 @@ export const CountriesList = [
       longitude: -77.3011,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Japan",
@@ -868,6 +954,7 @@ export const CountriesList = [
       longitude: 138.231507,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Jordan",
@@ -878,6 +965,7 @@ export const CountriesList = [
       longitude: 36.624326,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Kazakhstan",
@@ -888,6 +976,7 @@ export const CountriesList = [
       longitude: 67.861791,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Kenya",
@@ -898,6 +987,7 @@ export const CountriesList = [
       longitude: 38.608963,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Kiribati",
@@ -908,6 +998,7 @@ export const CountriesList = [
       longitude: -157.38195,
     },
     continent: "Oceania",
+    isPopular: false,
   },
   {
     name: "Kuwait",
@@ -918,6 +1009,7 @@ export const CountriesList = [
       longitude: 47.518259,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Kyrgyzstan",
@@ -928,6 +1020,7 @@ export const CountriesList = [
       longitude: 74.50135,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Laos",
@@ -938,6 +1031,7 @@ export const CountriesList = [
       longitude: 102.343252,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Latvia",
@@ -948,6 +1042,7 @@ export const CountriesList = [
       longitude: 25.19071,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Lebanon",
@@ -958,6 +1053,7 @@ export const CountriesList = [
       longitude: 35.869154,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Lesotho",
@@ -968,6 +1064,7 @@ export const CountriesList = [
       longitude: 28.254527,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Liberia",
@@ -978,6 +1075,7 @@ export const CountriesList = [
       longitude: -9.25584,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Libya",
@@ -988,6 +1086,7 @@ export const CountriesList = [
       longitude: 17.750764,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Liechtenstein",
@@ -998,6 +1097,7 @@ export const CountriesList = [
       longitude: 9.55069,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Lithuania",
@@ -1008,6 +1108,7 @@ export const CountriesList = [
       longitude: 23.947517,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Luxembourg",
@@ -1018,6 +1119,7 @@ export const CountriesList = [
       longitude: 6.086537,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Madagascar",
@@ -1028,6 +1130,7 @@ export const CountriesList = [
       longitude: 46.297423,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Malawi",
@@ -1038,6 +1141,7 @@ export const CountriesList = [
       longitude: 34.136899,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Malaysia",
@@ -1048,6 +1152,7 @@ export const CountriesList = [
       longitude: 102.372359,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Maldives",
@@ -1058,6 +1163,7 @@ export const CountriesList = [
       longitude: 73.151248,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Mali",
@@ -1068,6 +1174,7 @@ export const CountriesList = [
       longitude: -2.330446,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Malta",
@@ -1078,6 +1185,7 @@ export const CountriesList = [
       longitude: 14.432581,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Marshall Islands",
@@ -1088,6 +1196,7 @@ export const CountriesList = [
       longitude: 168.733056,
     },
     continent: "Oceania",
+    isPopular: false,
   },
   {
     name: "Mauritania",
@@ -1098,6 +1207,7 @@ export const CountriesList = [
       longitude: -10.554376,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Mauritius",
@@ -1108,6 +1218,7 @@ export const CountriesList = [
       longitude: 57.559193,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Mexico",
@@ -1118,6 +1229,7 @@ export const CountriesList = [
       longitude: -102.497437,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Micronesia",
@@ -1128,6 +1240,7 @@ export const CountriesList = [
       longitude: 158.22543,
     },
     continent: "Oceania",
+    isPopular: false,
   },
   {
     name: "Moldova",
@@ -1138,6 +1251,7 @@ export const CountriesList = [
       longitude: 28.574276,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Monaco",
@@ -1148,6 +1262,7 @@ export const CountriesList = [
       longitude: 7.411903,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Mongolia",
@@ -1158,6 +1273,7 @@ export const CountriesList = [
       longitude: 103.731049,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Montenegro",
@@ -1168,6 +1284,7 @@ export const CountriesList = [
       longitude: 19.163936,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Morocco",
@@ -1178,6 +1295,7 @@ export const CountriesList = [
       longitude: -6.419817,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Mozambique",
@@ -1188,6 +1306,7 @@ export const CountriesList = [
       longitude: 35.347942,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Myanmar",
@@ -1198,6 +1317,7 @@ export const CountriesList = [
       longitude: 96.299073,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Namibia",
@@ -1208,6 +1328,7 @@ export const CountriesList = [
       longitude: 17.203835,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Nauru",
@@ -1218,6 +1339,7 @@ export const CountriesList = [
       longitude: 166.934209,
     },
     continent: "Oceania",
+    isPopular: false,
   },
   {
     name: "Nepal",
@@ -1228,6 +1350,7 @@ export const CountriesList = [
       longitude: 83.895304,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Netherlands",
@@ -1238,6 +1361,7 @@ export const CountriesList = [
       longitude: 5.453183,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "New Zealand",
@@ -1248,6 +1372,7 @@ export const CountriesList = [
       longitude: 173.257991,
     },
     continent: "Oceania",
+    isPopular: false,
   },
   {
     name: "Nicaragua",
@@ -1258,6 +1383,7 @@ export const CountriesList = [
       longitude: -84.824915,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Niger",
@@ -1268,6 +1394,7 @@ export const CountriesList = [
       longitude: 8.893387,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Nigeria",
@@ -1278,6 +1405,7 @@ export const CountriesList = [
       longitude: 7.972401,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "North Macedonia",
@@ -1288,6 +1416,7 @@ export const CountriesList = [
       longitude: 21.683111,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "North Korea",
@@ -1298,6 +1427,7 @@ export const CountriesList = [
       longitude: 126.981493,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Norway",
@@ -1308,6 +1438,7 @@ export const CountriesList = [
       longitude: 9.852518,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Oman",
@@ -1318,6 +1449,7 @@ export const CountriesList = [
       longitude: 56.944317,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Pakistan",
@@ -1328,6 +1460,7 @@ export const CountriesList = [
       longitude: 69.287414,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Palau",
@@ -1338,6 +1471,7 @@ export const CountriesList = [
       longitude: 134.562218,
     },
     continent: "Oceania",
+    isPopular: false,
   },
   {
     name: "Palestine",
@@ -1348,6 +1482,7 @@ export const CountriesList = [
       longitude: 35.281704,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Panama",
@@ -1358,6 +1493,7 @@ export const CountriesList = [
       longitude: -80.810336,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Papua New Guinea",
@@ -1368,6 +1504,7 @@ export const CountriesList = [
       longitude: 145.103981,
     },
     continent: "Oceania",
+    isPopular: false,
   },
   {
     name: "Paraguay",
@@ -1378,6 +1515,7 @@ export const CountriesList = [
       longitude: -58.249823,
     },
     continent: "South America",
+    isPopular: false,
   },
   {
     name: "Peru",
@@ -1388,6 +1526,7 @@ export const CountriesList = [
       longitude: -75.099652,
     },
     continent: "South America",
+    isPopular: false,
   },
   {
     name: "Philippines",
@@ -1398,6 +1537,7 @@ export const CountriesList = [
       longitude: 121.0534,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Poland",
@@ -1408,6 +1548,7 @@ export const CountriesList = [
       longitude: 19.063668,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Portugal",
@@ -1418,6 +1559,7 @@ export const CountriesList = [
       longitude: -8.146208,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Qatar",
@@ -1428,6 +1570,7 @@ export const CountriesList = [
       longitude: 51.207467,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Romania",
@@ -1438,6 +1581,7 @@ export const CountriesList = [
       longitude: 24.797751,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Russia",
@@ -1448,6 +1592,7 @@ export const CountriesList = [
       longitude: 92.863749,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Rwanda",
@@ -1458,6 +1603,7 @@ export const CountriesList = [
       longitude: 29.918611,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Saint Kitts and Nevis",
@@ -1468,6 +1614,7 @@ export const CountriesList = [
       longitude: -62.732322,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Saint Lucia",
@@ -1478,6 +1625,7 @@ export const CountriesList = [
       longitude: -60.978471,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Saint Vincent and the Grenadines",
@@ -1488,6 +1636,7 @@ export const CountriesList = [
       longitude: -61.192829,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Samoa",
@@ -1498,6 +1647,7 @@ export const CountriesList = [
       longitude: -172.411991,
     },
     continent: "Oceania",
+    isPopular: false,
   },
   {
     name: "San Marino",
@@ -1508,6 +1658,7 @@ export const CountriesList = [
       longitude: 12.448472,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Sao Tome and Principe",
@@ -1518,6 +1669,7 @@ export const CountriesList = [
       longitude: 6.599868,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Saudi Arabia",
@@ -1528,6 +1680,7 @@ export const CountriesList = [
       longitude: 45.067205,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Senegal",
@@ -1538,6 +1691,7 @@ export const CountriesList = [
       longitude: -14.631658,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Serbia",
@@ -1548,6 +1702,7 @@ export const CountriesList = [
       longitude: 20.797826,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Seychelles",
@@ -1558,6 +1713,7 @@ export const CountriesList = [
       longitude: 55.476781,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Sierra Leone",
@@ -1568,6 +1724,7 @@ export const CountriesList = [
       longitude: -11.915556,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Singapore",
@@ -1578,6 +1735,7 @@ export const CountriesList = [
       longitude: 103.83256,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Slovakia",
@@ -1588,6 +1746,7 @@ export const CountriesList = [
       longitude: 19.265246,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Slovenia",
@@ -1598,6 +1757,7 @@ export const CountriesList = [
       longitude: 14.749149,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Solomon Islands",
@@ -1608,6 +1768,7 @@ export const CountriesList = [
       longitude: 160.272396,
     },
     continent: "Oceania",
+    isPopular: false,
   },
   {
     name: "Somalia",
@@ -1618,6 +1779,7 @@ export const CountriesList = [
       longitude: 45.003051,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "South Africa",
@@ -1628,6 +1790,7 @@ export const CountriesList = [
       longitude: 26.1406985,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "South Korea",
@@ -1638,6 +1801,7 @@ export const CountriesList = [
       longitude: 128.015221,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "South Sudan",
@@ -1648,6 +1812,7 @@ export const CountriesList = [
       longitude: 30.242143,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Spain",
@@ -1658,6 +1823,7 @@ export const CountriesList = [
       longitude: -3.403233,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Sri Lanka",
@@ -1668,6 +1834,7 @@ export const CountriesList = [
       longitude: 80.633505,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Sudan",
@@ -1678,6 +1845,7 @@ export const CountriesList = [
       longitude: 30.061608,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Suriname",
@@ -1688,6 +1856,7 @@ export const CountriesList = [
       longitude: -55.683175,
     },
     continent: "South America",
+    isPopular: false,
   },
   {
     name: "Sweden",
@@ -1698,6 +1867,7 @@ export const CountriesList = [
       longitude: 15.7967,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Switzerland",
@@ -1708,6 +1878,7 @@ export const CountriesList = [
       longitude: 8.11841,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Syria",
@@ -1718,6 +1889,7 @@ export const CountriesList = [
       longitude: 38.62534,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Tajikistan",
@@ -1728,6 +1900,7 @@ export const CountriesList = [
       longitude: 70.953607,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Tanzania",
@@ -1738,6 +1911,7 @@ export const CountriesList = [
       longitude: 34.724184,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Thailand",
@@ -1748,6 +1922,7 @@ export const CountriesList = [
       longitude: 101.137365,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Timor-Leste",
@@ -1758,6 +1933,7 @@ export const CountriesList = [
       longitude: 125.898198,
     },
     continent: "Oceania",
+    isPopular: false,
   },
   {
     name: "Togo",
@@ -1768,6 +1944,7 @@ export const CountriesList = [
       longitude: 1.091019,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Tonga",
@@ -1778,6 +1955,7 @@ export const CountriesList = [
       longitude: -175.15126,
     },
     continent: "Oceania",
+    isPopular: false,
   },
   {
     name: "Trinidad and Tobago",
@@ -1788,6 +1966,7 @@ export const CountriesList = [
       longitude: -61.253173,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Tunisia",
@@ -1798,6 +1977,7 @@ export const CountriesList = [
       longitude: 9.523697,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Turkey",
@@ -1808,6 +1988,7 @@ export const CountriesList = [
       longitude: 35.248818,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "Turkmenistan",
@@ -1818,6 +1999,7 @@ export const CountriesList = [
       longitude: 59.25801,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Tuvalu",
@@ -1828,6 +2010,7 @@ export const CountriesList = [
       longitude: 179.193391,
     },
     continent: "Oceania",
+    isPopular: false,
   },
   {
     name: "Uganda",
@@ -1838,6 +2021,7 @@ export const CountriesList = [
       longitude: 32.462875,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Ukraine",
@@ -1848,6 +2032,7 @@ export const CountriesList = [
       longitude: 31.63328,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "United Arab Emirates",
@@ -1858,6 +2043,7 @@ export const CountriesList = [
       longitude: 54.780112,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "United Kingdom",
@@ -1868,6 +2054,7 @@ export const CountriesList = [
       longitude: -1.557282,
     },
     continent: "Europe",
+    isPopular: false,
   },
   {
     name: "United States",
@@ -1878,6 +2065,7 @@ export const CountriesList = [
       longitude: -99.834143,
     },
     continent: "North America",
+    isPopular: false,
   },
   {
     name: "Uruguay",
@@ -1888,6 +2076,7 @@ export const CountriesList = [
       longitude: -55.999118,
     },
     continent: "South America",
+    isPopular: false,
   },
   {
     name: "Uzbekistan",
@@ -1898,6 +2087,7 @@ export const CountriesList = [
       longitude: 63.784536,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Vanuatu",
@@ -1908,6 +2098,7 @@ export const CountriesList = [
       longitude: 167.04519,
     },
     continent: "Oceania",
+    isPopular: false,
   },
   {
     name: "Venezuela",
@@ -1918,6 +2109,7 @@ export const CountriesList = [
       longitude: -64.925016,
     },
     continent: "South America",
+    isPopular: false,
   },
   {
     name: "Vietnam",
@@ -1928,6 +2120,7 @@ export const CountriesList = [
       longitude: 108.107031,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Yemen",
@@ -1938,6 +2131,7 @@ export const CountriesList = [
       longitude: 47.957065,
     },
     continent: "Asia",
+    isPopular: false,
   },
   {
     name: "Zambia",
@@ -1948,6 +2142,7 @@ export const CountriesList = [
       longitude: 27.8535,
     },
     continent: "Africa",
+    isPopular: false,
   },
   {
     name: "Zimbabwe",
@@ -1958,5 +2153,6 @@ export const CountriesList = [
       longitude: 29.862368,
     },
     continent: "Africa",
+    isPopular: false,
   },
 ];

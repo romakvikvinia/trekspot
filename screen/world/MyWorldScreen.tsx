@@ -49,11 +49,12 @@ import {
   useStoriesQuery,
   useUpdateMeMutation,
 } from "../../api/api.trekspot";
-import { uploadImage } from "../../api/api.file";
+import { deleteImage, uploadImage } from "../../api/api.file";
 import { customMapStyle } from "../../styles/mapView.style";
 import { VisitedCountryItem } from "../../components/world/VisitedCountryItem";
-import { StoryType } from "../../api/api.types";
+import { StoriesResponseType, StoryType } from "../../api/api.types";
 import { CarouselItem } from "../../components/world/CarouselItem";
+import { ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
 
 type HomeProps = NativeStackScreenProps<MyWorldRouteStackParamList, "World">;
 
@@ -63,7 +64,7 @@ interface ILocation {
 }
 
 const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<ThunkDispatch<any, any, AnyAction>>();
   const mapRef = useRef<any>(null);
   const carouselRef = useRef<any>(null);
   const countryDetailModalRef = useRef<any>(null);
@@ -87,6 +88,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
 
   const [state, setState] = useState<{
     story: StoryType | null;
+    isDeleteImageLoading: boolean;
     isSelectingImages: boolean;
     lived_countries: ICountry[];
     visited_countries: ICountry[];
@@ -98,6 +100,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
   }>({
     story: null,
     isSelectingImages: false,
+    isDeleteImageLoading: false,
     lived_countries: [],
     visited_countries: [],
     currentCountry: null,
@@ -327,14 +330,53 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
     memoriesModalRef.current?.close();
   }, [state]);
 
-  const handleTrashImage = useCallback(() => {
-    const { activeSliderIndex, story } = state;
-    if (!story || !story.images.length || activeSliderIndex == -1) return;
+  const handleTrashImage = useCallback(async () => {
+    let { activeSliderIndex, story } = state;
+    console.log("gre", activeSliderIndex);
+    if (!story || !story.images.length) return;
+
+    activeSliderIndex = activeSliderIndex == -1 ? 0 : activeSliderIndex;
 
     const image = story.images[activeSliderIndex];
 
-    if (!image) return;
-    console.log("handleTrashImage", image);
+    if (!image || !image.id) return;
+
+    try {
+      setState((prevState) => ({ ...prevState, isDeleteImageLoading: true }));
+
+      await deleteImage(image.id);
+      setState((prevState) => ({
+        ...prevState,
+        isDeleteImageLoading: false,
+        story: prevState.story
+          ? {
+              ...prevState.story,
+              images: prevState.story.images.filter((im) => im.id !== image.id),
+            }
+          : null,
+      }));
+      dispatch(
+        trekSpotApi.util.updateQueryData(
+          "stories",
+          undefined,
+          (res: StoriesResponseType) => {
+            const currentStories = res.stories.find(
+              (s) => s.iso2 === story.iso2
+            );
+            if (currentStories) {
+              currentStories.images = currentStories.images.splice(
+                activeSliderIndex,
+                1
+              );
+            }
+            // stories.splice(activeSliderIndex, 1);
+            // return stories;
+          }
+        )
+      );
+    } catch (error) {
+      setState((prevState) => ({ ...prevState, isDeleteImageLoading: false }));
+    }
   }, [state]);
 
   // useEffect(() => {
@@ -377,12 +419,6 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
     state.lived_countries.find(
       (place) => place.iso2 === state.currentCountry?.isoCountryCode
     );
-
-  // console.log("livedHere", livedHere);
-  // console.log("visitedHere", visitedHere);
-  // console.log(state.currentCountry);
-
-  // console.log("stories", state);
 
   return (
     <>
@@ -587,7 +623,9 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
                   }}
                   source={state.imagePath} // Set the image source
                 />
-                <Text style={styles.countryText}>currentCountry</Text>
+                <Text style={styles.countryText}>
+                  {state.currentCountry?.country}
+                </Text>
               </View>
 
               <TouchableOpacity
