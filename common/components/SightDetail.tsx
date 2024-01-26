@@ -7,6 +7,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import {
+  ClickOutsideProvider,
+  useClickOutside,
+} from "react-native-click-outside";
 import Swiper from "react-native-swiper";
 import { COLORS, SIZES } from "../../styles/theme";
 import {
@@ -22,6 +26,8 @@ export const SightDetail = ({
   setSightDetailVisible,
   data,
 }) => {
+  const ref = useClickOutside(() => setSightDetailVisible(false));
+
   return (
     <Modal
       animationType={"none"}
@@ -29,106 +35,109 @@ export const SightDetail = ({
       visible={sightDetailVisible}
       //   onRequestClose={this.closeModal}
     >
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-          height: "100%",
-        }}
-      >
+      <ClickOutsideProvider>
         <View
           style={{
-            flexDirection: "row",
-            justifyContent: "flex-end",
-            width: "95%",
-            marginBottom: 15,
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            height: "100%",
           }}
         >
-          <TouchableOpacity
-            style={styles.closeModal}
-            onPress={() => setSightDetailVisible(false)}
-          >
-            <CloseCircleIcon size="30" color="#fff" />
-          </TouchableOpacity>
-        </View>
-        <ScrollView style={styles.modalContent}>
-          <Swiper
-            activeDotColor="#fff"
-            style={[styles.wrapper]}
-            showsButtons={false}
-            loop={true}
-            dotColor="#949494"
-            automaticallyAdjustContentInsets
-            paginationStyle={{
-              position: "absolute",
-              justifyContent: "center",
-              left: 0,
-              top: 0,
-              height: 10,
-            }}
-            autoplay={true}
-            dotStyle={{
-              width: SIZES.width / data?.gallery?.length - 15,
-              height: 3,
-            }}
-            activeDotStyle={{
-              backgroundColor: "#fff",
-              width: SIZES.width / data?.gallery?.length - 15,
-              height: 3,
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              width: "95%",
+              marginBottom: 15,
             }}
           >
-            {data?.gallery?.map((item, ind) => (
-              <Image
-                style={[styles.box]}
-                resizeMode="cover"
-                source={{
-                  uri: item,
-                }}
-                key={`slide-${ind}`}
-              ></Image>
-            ))}
-          </Swiper>
-          <View style={styles.sightDetails}>
-            <View style={styles.headingRow}>
-              <Text style={styles.sightDetailsTitle}>{data?.title}</Text>
-
-              <TouchableOpacity
-                style={[
-                  styles.addToBucketButton,
-                  {
-                    backgroundColor:
-                      1 == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)",
-                  },
-                ]}
-                activeOpacity={0.7}
-              >
-                <Mark2 color="#fff" />
-              </TouchableOpacity>
-            </View>
-            <Text style={styles.sightDetailsDescription}>
-              {data?.description}
-            </Text>
-            <View style={styles.ratingWrapper}>
-              <View
-                style={{
-                  position: "relative",
-                  top: -1,
-                  opacity: 0.8,
-                }}
-              >
-                <StarIcon size={15} color="#FFBC3E" />
-              </View>
-              <Text style={styles.ratingText}>{data?.rating}</Text>
-              <Text style={styles.type}>{data?.type}</Text>
-            </View>
-            <Text style={styles.address}>
-              <TripLocationIcon color="#000" size="12" /> {data?.address}
-            </Text>
+            <TouchableOpacity
+              style={styles.closeModal}
+              onPress={() => setSightDetailVisible(false)}
+            >
+              <CloseCircleIcon size="30" color="#fff" />
+            </TouchableOpacity>
           </View>
-        </ScrollView>
-      </View>
+
+          <ScrollView style={styles.modalContent} ref={ref}>
+            <Swiper
+              activeDotColor="#fff"
+              style={[styles.wrapper]}
+              showsButtons={false}
+              loop={true}
+              dotColor="#949494"
+              automaticallyAdjustContentInsets
+              paginationStyle={{
+                position: "absolute",
+                justifyContent: "center",
+                left: 0,
+                top: 0,
+                height: 10,
+              }}
+              autoplay={true}
+              dotStyle={{
+                width: SIZES.width / data?.gallery?.length - 15,
+                height: 3,
+              }}
+              activeDotStyle={{
+                backgroundColor: "#fff",
+                width: SIZES.width / data?.gallery?.length - 15,
+                height: 3,
+              }}
+            >
+              {data?.gallery?.map((item, ind) => (
+                <Image
+                  style={[styles.box]}
+                  resizeMode="cover"
+                  source={{
+                    uri: item,
+                  }}
+                  key={`slide-${ind}`}
+                ></Image>
+              ))}
+            </Swiper>
+            <View style={styles.sightDetails}>
+              <View style={styles.headingRow}>
+                <Text style={styles.sightDetailsTitle}>{data?.title}</Text>
+
+                <TouchableOpacity
+                  style={[
+                    styles.addToBucketButton,
+                    {
+                      backgroundColor:
+                        1 == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)",
+                    },
+                  ]}
+                  activeOpacity={0.7}
+                >
+                  <Mark2 color="#fff" />
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.sightDetailsDescription}>
+                {data?.description}
+              </Text>
+              <View style={styles.ratingWrapper}>
+                <View
+                  style={{
+                    position: "relative",
+                    top: -1,
+                    opacity: 0.8,
+                  }}
+                >
+                  <StarIcon size={15} color="#FFBC3E" />
+                </View>
+                <Text style={styles.ratingText}>{data?.rating}</Text>
+                <Text style={styles.type}>{data?.type}</Text>
+              </View>
+              <Text style={styles.address}>
+                <TripLocationIcon color="#000" size="12" /> {data?.address}
+              </Text>
+            </View>
+          </ScrollView>
+        </View>
+      </ClickOutsideProvider>
     </Modal>
   );
 };
