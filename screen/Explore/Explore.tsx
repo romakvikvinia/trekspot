@@ -179,7 +179,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({}) => {
                         colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
                       >
                         <View style={styles.labelItem}>
-                          <Mark color="#fff" />
+                          <Mark color="#fff" size="15" />
                           <Text style={styles.labelItemText}>{item.title}</Text>
                         </View>
                         <View style={styles.ratingLabel}>

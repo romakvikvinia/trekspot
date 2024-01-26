@@ -228,7 +228,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
               onPress={() => onOpen()}
               style={[styles.btn, { marginRight: 10 }]}
             >
-              <Mark />
+              <Mark size="15" />
               <Text style={styles.txt}>Add Visit</Text>
             </TouchableOpacity>
           </View>
@@ -398,6 +398,10 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
               <Text style={styles.h2}>Bucket List</Text>
             </View>
           }
+          modalStyle={{
+            backgroundColor: "#F2F2F7",
+            minHeight: "80%",
+          }}
         >
           <BucketlistModal />
         </Modalize>
@@ -420,7 +424,7 @@ const styles = StyleSheet.create({
   },
   h2: {
     fontSize: 22,
-    color: "#000",
+    color: COLORS.black,
     fontWeight: "bold",
   },
   infoRow: {

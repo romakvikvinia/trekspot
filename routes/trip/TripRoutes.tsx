@@ -11,7 +11,7 @@ import { PrimaryColor } from "../../styles/colors";
 interface TripRouteProps {}
 
 type TripRouteStackParamList = {
-  Trips: undefined;
+  TripsScreen: undefined;
 };
 
 const Stack = createStackNavigator<TripRouteStackParamList>();
@@ -23,7 +23,7 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Trips"
+        name="TripsScreen"
         component={TripScreen}
         options={({ route, navigation }) => ({
           headerShown: false,

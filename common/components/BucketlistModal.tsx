@@ -4,20 +4,15 @@ import { NoDestinationFoundIcon } from "../../utilities/SvgIcons.utility";
 
 export const BucketlistModal = () => {
   return (
-    <ScrollView
-      style={{ flex: 1, backgroundColor: "#f8f8f8", minHeight: 600 }}
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ flexGrow: 1, flex: 1 }}
-    >
-      <View style={[styles.rowItem, { flex: 1, flexGrow: 1 }]}>
-        <View style={styles.notFoundView}>
-          <NoDestinationFoundIcon />
-          <Text style={styles.notFoundViewText}>
-            Your bucket list is empty, go to Explore page and add your next
-            destination
-          </Text>
-        </View>
-        {/* {Popular?.map((item, ind) => (
+    <View style={[styles.rowItem, { flex: 1, flexGrow: 1 }]}>
+      <View style={styles.notFoundView}>
+        <NoDestinationFoundIcon />
+        <Text style={styles.notFoundViewText}>
+          Your bucket list is empty, go to Explore page and add your next
+          destination
+        </Text>
+      </View>
+      {/* {Popular?.map((item, ind) => (
           <>
             <ImageBackground
               style={[
@@ -71,8 +66,7 @@ export const BucketlistModal = () => {
             </ImageBackground>
           </>
         ))} */}
-      </View>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -87,11 +81,12 @@ const styles = StyleSheet.create({
     marginTop: 70,
   },
   notFoundViewText: {
-    fontSize: 16,
+    fontSize: 14,
     maxWidth: "80%",
     textAlign: "center",
     marginTop: 25,
     color: COLORS.darkgray,
+    lineHeight: 20,
   },
   backButton: {
     width: 40,
@@ -238,7 +233,7 @@ const styles = StyleSheet.create({
   rowItem: {
     width: "100%",
     paddingTop: 25,
-    backgroundColor: "#f8f8f8",
+    backgroundColor: "#F2F2F7",
   },
   rowItemHeader: {
     flexDirection: "row",

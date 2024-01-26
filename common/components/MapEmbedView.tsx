@@ -6,7 +6,7 @@ import { Portal } from "react-native-portalize";
 import { COLORS, SIZES } from "../../styles/theme";
 import { CloseCircleIcon } from "../../utilities/SvgIcons.utility";
 
-export const MapEmbedView = ({ placeTitle, modalEmbedRef }) => {
+export const MapEmbedView = ({ placeTitle, modalEmbedRef, blogUrl }) => {
   return (
     <>
       <TouchableOpacity
@@ -26,9 +26,10 @@ export const MapEmbedView = ({ placeTitle, modalEmbedRef }) => {
           overflow: "hidden",
         }}
       >
-        <WebView
-          source={{
-            html: `
+        {!blogUrl ? (
+          <WebView
+            source={{
+              html: `
                 <html>
                     <head>
                         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -44,10 +45,19 @@ export const MapEmbedView = ({ placeTitle, modalEmbedRef }) => {
                     </body>
                 </html> 
               `,
-          }}
-          useWebKit={true}
-          style={{ flex: 1, margin: 0, padding: 0 }}
-        />
+            }}
+            useWebKit={true}
+            style={{ flex: 1, margin: 0, padding: 0 }}
+          />
+        ) : (
+          <WebView
+            source={{
+              url: blogUrl,
+            }}
+            useWebKit={true}
+            style={{ flex: 1, margin: 0, padding: 0 }}
+          />
+        )}
       </View>
     </>
   );

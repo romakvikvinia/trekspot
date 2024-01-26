@@ -2,6 +2,26 @@ import { StyleSheet } from "react-native";
 import { COLORS } from "../../styles/theme";
 
 export const styles = StyleSheet.create({
+  showMoreButtonWrapper: {
+    width: "100%",
+    justifyContent: "center",
+    flexDirection: "row",
+    marginBottom: 35,
+  },
+  showMoreButton: {
+    width: 150,
+    height: 35,
+    backgroundColor: "#ddd",
+    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 30,
+  },
+  showMoreButtonText: {
+    fontSize: 12,
+    color: COLORS.black,
+    fontWeight: "500",
+  },
   tabContentHeader: {
     paddingHorizontal: 15,
     marginTop: 20,
@@ -257,10 +277,11 @@ export const styles = StyleSheet.create({
     marginBottom: 25,
   },
   thingsTodo: {
-    marginTop: 0,
+    marginTop: 25,
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
+    paddingHorizontal: 15,
   },
   thingsTodoItemDetails: {
     marginTop: 10,
@@ -269,7 +290,7 @@ export const styles = StyleSheet.create({
   },
   thingsTodoItemImage: {
     width: "100%",
-    height: 110,
+    minHeight: 110,
     borderTopEndRadius: 10,
     borderTopLeftRadius: 10,
     overflow: "hidden",
@@ -277,15 +298,15 @@ export const styles = StyleSheet.create({
   },
 
   thingsTodoItemiIn: {
-    marginTop: 5,
+    marginTop: 10,
   },
   thingsTodoItemTitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#000",
-    fontWeight: "bold",
+    fontWeight: "600",
   },
   thingsTodoItemiInprice: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#000",
   },
   thingsTodoItem: {
@@ -294,9 +315,21 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     borderColor: "#f1f1f1",
+    backgroundColor: "#f2f2f2",
+    minHeight: 200,
+  },
+  forYouRow: {
+    marginVertical: 0,
+  },
+  forYouRowTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: COLORS.black,
+    paddingHorizontal: 15,
+    marginBottom: 15,
   },
   thingsTodoItemiIntypeText: {
-    fontSize: 14,
+    fontSize: 12,
     color: COLORS.darkgray,
     marginRight: 5,
     marginBottom: 5,

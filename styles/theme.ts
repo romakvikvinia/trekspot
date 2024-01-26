@@ -23,12 +23,12 @@ export const COLORS = {
   yellow: "#FFC664",
   lightyellow: "#FFF9EC",
 
-  black: "#0A0F40",
+  black: "#000", //"#0A0F40",
   white: "#FFFFFF",
 
   lightGray: "#FCFBFC",
   gray: "#8C8C8C",
-  darkgray: "#7d7d7d",
+  darkgray: "#85858B",
 
   background: "#f0f5ff",
 
