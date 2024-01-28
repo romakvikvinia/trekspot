@@ -35,12 +35,6 @@ export type AuthSignUpResponseType = {
  * Update me
  * user updated related types
  */
-export type CountryType = {
-  id?: string;
-  name: string;
-  iso2: string;
-  capital: string;
-};
 
 export type UserType = {
   firstName: string;
@@ -110,3 +104,60 @@ export type CreateOrUpdateStoriesInput = {
 export type CreateOrUpdateStoriesResponseType = {
   createOrUpdateStore: StoryType;
 };
+
+export type CountryType = {
+  id?: string;
+  name: string;
+  iso2: string;
+  capital: string;
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  continent: string;
+  isPopular: boolean;
+  rate: number;
+  visitors: string;
+  gallery: [];
+  domain: null;
+  independent: true;
+  unMember: true;
+  currencies: Record<string, { name: string; symbol: string }> | null;
+  idd: { root: string; suffixes: string[] };
+  region: string;
+  subregion: string;
+  languages: Record<string, string>;
+  population: number;
+  car: { signs: string[]; side: string };
+  continents: string[];
+  startOfWeek: string;
+  postalCode: { format: string; regex: string };
+  overview: string;
+  telecoms: string[];
+  emergency: {
+    emergency: string;
+    police: string;
+    ambulance: string;
+    fire: string;
+  };
+  transportTypes: string[];
+  taxi: { name: string; ios: string; logo: string; android: string }[];
+  security: string;
+  recognizedFor: { emoji: string; title: string }[];
+  religions: string[];
+  whenToVisit: string;
+  nationalDay: string;
+  plugTypes: string[];
+  image: string;
+  images: [];
+};
+
+export type CountriesResponseType = {
+  countries: CountryType[];
+};
+
+export type CountriesArgsType = Partial<{
+  skip: number;
+  take: number;
+  isPopular: boolean;
+}>;

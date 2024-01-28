@@ -13,6 +13,8 @@ import {
   StoriesResponseType,
   CreateOrUpdateStoriesInput,
   CreateOrUpdateStoriesResponseType,
+  CountriesArgsType,
+  CountriesResponseType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -297,7 +299,33 @@ export const trekSpotApi = createApi({
       invalidatesTags: ["createOrUpdateStories"],
     }),
 
-    //
+    /**
+     * fetch popular countries
+     */
+
+    countries: builder.query<CountriesResponseType, CountriesArgsType>({
+      query: ({ skip = 0, take = 20, isPopular = false }) => ({
+        variables: { skip, take, isPopular },
+        document: gql`
+          query ($skip: Int!, $take: Int!, $isPopular: Boolean!) {
+            countries(
+              input: { skip: $skip, take: $take, isPopular: $isPopular }
+            ) {
+              id
+              name
+              rate
+              visitors
+              image {
+                url
+              }
+              images {
+                url
+              }
+            }
+          }
+        `,
+      }),
+    }),
   }),
 });
 
@@ -310,4 +338,5 @@ export const {
   useAnalyticsQuery,
   useStoriesQuery,
   useCreateOrUpdateStoriesMutation,
+  useCountriesQuery,
 } = trekSpotApi;

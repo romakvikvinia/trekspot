@@ -13,25 +13,23 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 
 import {
-  BackIcon,
-  LocationCircle,
   Mark,
-  Mark2,
-  NoDestinationFoundIcon,
   PassportIcon,
   SearchIcon,
   StarIcon,
 } from "../../utilities/SvgIcons.utility";
 import { LinearGradient } from "expo-linear-gradient";
-import { SceneMap, TabBar, TabView } from "react-native-tab-view";
 import { CountrySelect } from "../../common/components/CountrySelect";
 import { CountrySearch } from "../../common/components/CountrySearch";
 import { DestinationDetail } from "../../common/components/DestinationDetail";
 import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
+import { useCountriesQuery } from "../../api/api.trekspot";
+import { CountryItem } from "../../components/explore/CountryItem";
 
 const Popular = [
   {
@@ -60,10 +58,17 @@ const Popular = [
   },
 ];
 
-interface ExploreProps {}
+type ExploreProps = NativeStackScreenProps<
+  ExploreRoutesStackParamList,
+  "Explore"
+>;
 
-export const ExploreScreen: React.FC<ExploreProps> = ({}) => {
-  const navigation = useNavigation();
+export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
+  const {
+    data: popularCountries,
+    isLoading,
+    isSuccess,
+  } = useCountriesQuery({ isPopular: true });
   const [searchActive, setSearchActive] = useState(false);
   const modalDestinationDetailsRef = useRef<Modalize>(null);
   const onDestinationModaltOpen = () => {
@@ -130,6 +135,9 @@ export const ExploreScreen: React.FC<ExploreProps> = ({}) => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 25 }}
         >
+          {/**
+           * Popular Countries
+           */}
           <View style={[styles.rowItem, { paddingTop: 5 }]}>
             <View style={styles.rowItemHeader}>
               <Text style={styles.h2}>Popular</Text>
@@ -147,64 +155,14 @@ export const ExploreScreen: React.FC<ExploreProps> = ({}) => {
               style={styles.contentBox}
               showsHorizontalScrollIndicator={false}
             >
-              {Popular?.map((item, ind) => (
-                <>
-                  <ImageBackground
-                    style={[styles.box, styles.typeMd]}
-                    resizeMode="cover"
-                    source={{
-                      uri: item.image,
-                    }}
-                    key={ind}
-                  >
-                    <TouchableOpacity
-                      style={[
-                        styles.addToBucketButton,
-                        {
-                          backgroundColor:
-                            ind == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)",
-                        },
-                      ]}
-                      activeOpacity={0.7}
-                    >
-                      <Mark2 color="#fff" />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.gradientWrapper}
-                      activeOpacity={0.7}
-                      onPress={() => onDestinationModaltOpen()}
-                    >
-                      <LinearGradient
-                        style={styles.gradientWrapper}
-                        colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
-                      >
-                        <View style={styles.labelItem}>
-                          <Mark color="#fff" size="15" />
-                          <Text style={styles.labelItemText}>{item.title}</Text>
-                        </View>
-                        <View style={styles.ratingLabel}>
-                          <View
-                            style={{
-                              position: "relative",
-                              top: -1,
-                              opacity: 0.8,
-                            }}
-                          >
-                            <StarIcon color="#FFBC3E" />
-                          </View>
-                          <Text style={styles.ratingText}>{item.rating} /</Text>
-                          <Text style={styles.ratingText}>
-                            {item.visitors} visitors
-                          </Text>
-                        </View>
-                      </LinearGradient>
-                    </TouchableOpacity>
-                  </ImageBackground>
-                  {Popular.length === ind + 1 && (
-                    <View style={{ width: 20 }}></View>
-                  )}
-                </>
-              ))}
+              {popularCountries &&
+                popularCountries.countries.map((item, ind) => (
+                  <CountryItem
+                    key={`popular-country-${item.id}`}
+                    item={item}
+                    isWith={popularCountries.countries.length - 1 === ind}
+                  />
+                ))}
             </ScrollView>
           </View>
           <View style={[styles.rowItem]}>

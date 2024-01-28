@@ -10,7 +10,7 @@ export type ICountry = {
   isPopular: boolean;
   rate: number;
   visitors: string;
-  gallery: [];
+  gallery: string[];
   domain: null;
   independent: true;
   unMember: true;
@@ -40,7 +40,10 @@ export type ICountry = {
   whenToVisit: string;
   nationalDay: string;
   plugTypes: string[];
+  image: string;
+  images: any[];
 };
+
 export const CountriesList = [
   {
     name: "Afghanistan",
@@ -84,6 +87,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Albania",
@@ -127,6 +132,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Algeria",
@@ -170,6 +177,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Andorra",
@@ -213,6 +222,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Angola",
@@ -256,6 +267,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Antigua and Barbuda",
@@ -299,6 +312,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Argentina",
@@ -342,6 +357,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Armenia",
@@ -385,6 +402,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Australia",
@@ -428,6 +447,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Austria",
@@ -471,6 +492,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Azerbaijan",
@@ -514,6 +537,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Bahamas",
@@ -557,6 +582,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Bahrain",
@@ -600,6 +627,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Bangladesh",
@@ -643,6 +672,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Barbados",
@@ -686,6 +717,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Belarus",
@@ -729,6 +762,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Belgium",
@@ -772,6 +807,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Belize",
@@ -815,6 +852,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Benin",
@@ -858,6 +897,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Bhutan",
@@ -901,6 +942,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Bolivia",
@@ -944,6 +987,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Bosnia and Herzegovina",
@@ -987,6 +1032,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Botswana",
@@ -1030,6 +1077,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Brazil",
@@ -1073,6 +1122,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Brunei",
@@ -1116,6 +1167,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Bulgaria",
@@ -1159,6 +1212,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Burkina Faso",
@@ -1202,6 +1257,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Burundi",
@@ -1245,6 +1302,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Cape Verde",
@@ -1288,6 +1347,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Cambodia",
@@ -1331,6 +1392,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Cameroon",
@@ -1374,6 +1437,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Canada",
@@ -1417,6 +1482,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Central African Republic",
@@ -1460,6 +1527,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Chad",
@@ -1503,6 +1572,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Chile",
@@ -1546,6 +1617,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "China",
@@ -1589,6 +1662,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Colombia",
@@ -1632,6 +1707,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Comoros",
@@ -1675,6 +1752,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Congo (Congo-Brazzaville)",
@@ -1718,6 +1797,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Costa Rica",
@@ -1761,6 +1842,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Croatia",
@@ -1804,6 +1887,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Cuba",
@@ -1847,6 +1932,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Cyprus",
@@ -1890,6 +1977,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Ivory Coast",
@@ -1933,6 +2022,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Czechia",
@@ -1976,6 +2067,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "DR of the Congo",
@@ -2019,6 +2112,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Denmark",
@@ -2062,6 +2157,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Djibouti",
@@ -2105,6 +2202,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Dominica",
@@ -2148,6 +2247,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Dominican Republic",
@@ -2191,6 +2292,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Ecuador",
@@ -2234,6 +2337,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Egypt",
@@ -2277,6 +2382,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "El Salvador",
@@ -2320,6 +2427,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Equatorial Guinea",
@@ -2363,6 +2472,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Eritrea",
@@ -2406,6 +2517,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Estonia",
@@ -2449,6 +2562,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Eswatini (Swaziland)",
@@ -2492,6 +2607,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Ethiopia",
@@ -2535,6 +2652,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Fiji",
@@ -2578,6 +2697,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Finland",
@@ -2621,6 +2742,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "France",
@@ -2664,6 +2787,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Gabon",
@@ -2707,6 +2832,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Gambia",
@@ -2750,6 +2877,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Georgia",
@@ -2793,6 +2922,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Germany",
@@ -2836,6 +2967,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Ghana",
@@ -2879,6 +3012,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Greece",
@@ -2922,6 +3057,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Grenada",
@@ -2965,6 +3102,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Guatemala",
@@ -3008,6 +3147,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Guinea",
@@ -3051,6 +3192,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Guinea-Bissau",
@@ -3094,6 +3237,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Guyana",
@@ -3137,6 +3282,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Haiti",
@@ -3180,6 +3327,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Holy See",
@@ -3223,6 +3372,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Honduras",
@@ -3266,6 +3417,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Hungary",
@@ -3309,6 +3462,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Iceland",
@@ -3352,6 +3507,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "India",
@@ -3395,6 +3552,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Indonesia",
@@ -3438,6 +3597,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Iran",
@@ -3481,6 +3642,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Iraq",
@@ -3524,6 +3687,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Ireland",
@@ -3567,6 +3732,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Israel",
@@ -3610,6 +3777,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Italy",
@@ -3653,6 +3822,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Jamaica",
@@ -3696,6 +3867,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Japan",
@@ -3739,6 +3912,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Jordan",
@@ -3782,6 +3957,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Kazakhstan",
@@ -3825,6 +4002,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Kenya",
@@ -3868,6 +4047,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Kiribati",
@@ -3911,6 +4092,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Kuwait",
@@ -3954,6 +4137,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Kyrgyzstan",
@@ -3997,6 +4182,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Laos",
@@ -4040,6 +4227,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Latvia",
@@ -4083,6 +4272,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Lebanon",
@@ -4126,6 +4317,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Lesotho",
@@ -4169,6 +4362,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Liberia",
@@ -4212,6 +4407,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Libya",
@@ -4255,6 +4452,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Liechtenstein",
@@ -4298,6 +4497,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Lithuania",
@@ -4341,6 +4542,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Luxembourg",
@@ -4384,6 +4587,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Madagascar",
@@ -4427,6 +4632,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Malawi",
@@ -4470,6 +4677,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Malaysia",
@@ -4513,6 +4722,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Maldives",
@@ -4556,6 +4767,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Mali",
@@ -4599,6 +4812,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Malta",
@@ -4642,6 +4857,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Marshall Islands",
@@ -4685,6 +4902,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Mauritania",
@@ -4728,6 +4947,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Mauritius",
@@ -4771,6 +4992,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Mexico",
@@ -4814,6 +5037,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Micronesia",
@@ -4857,6 +5082,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Moldova",
@@ -4900,6 +5127,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Monaco",
@@ -4943,6 +5172,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Mongolia",
@@ -4986,6 +5217,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Montenegro",
@@ -5029,6 +5262,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Morocco",
@@ -5072,6 +5307,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Mozambique",
@@ -5115,6 +5352,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Myanmar",
@@ -5158,6 +5397,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Namibia",
@@ -5201,6 +5442,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Nauru",
@@ -5244,6 +5487,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Nepal",
@@ -5287,6 +5532,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Netherlands",
@@ -5330,6 +5577,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "New Zealand",
@@ -5373,6 +5622,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Nicaragua",
@@ -5416,6 +5667,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Niger",
@@ -5459,6 +5712,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Nigeria",
@@ -5502,6 +5757,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "North Macedonia",
@@ -5545,6 +5802,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "North Korea",
@@ -5588,6 +5847,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Norway",
@@ -5631,6 +5892,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Oman",
@@ -5674,6 +5937,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Pakistan",
@@ -5717,6 +5982,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Palau",
@@ -5760,6 +6027,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Palestine",
@@ -5803,6 +6072,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Panama",
@@ -5846,6 +6117,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Papua New Guinea",
@@ -5889,6 +6162,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Paraguay",
@@ -5932,6 +6207,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Peru",
@@ -5975,6 +6252,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Philippines",
@@ -6018,6 +6297,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Poland",
@@ -6061,6 +6342,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Portugal",
@@ -6104,6 +6387,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Qatar",
@@ -6147,6 +6432,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Romania",
@@ -6190,6 +6477,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Russia",
@@ -6233,6 +6522,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Rwanda",
@@ -6276,6 +6567,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Saint Kitts and Nevis",
@@ -6319,6 +6612,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Saint Lucia",
@@ -6362,6 +6657,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Saint Vincent and the Grenadines",
@@ -6405,6 +6702,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Samoa",
@@ -6448,6 +6747,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "San Marino",
@@ -6491,6 +6792,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Sao Tome and Principe",
@@ -6534,6 +6837,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Saudi Arabia",
@@ -6577,6 +6882,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Senegal",
@@ -6620,6 +6927,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Serbia",
@@ -6663,6 +6972,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Seychelles",
@@ -6706,6 +7017,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Sierra Leone",
@@ -6749,6 +7062,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Singapore",
@@ -6792,6 +7107,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Slovakia",
@@ -6835,6 +7152,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Slovenia",
@@ -6878,6 +7197,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Solomon Islands",
@@ -6921,6 +7242,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Somalia",
@@ -6964,6 +7287,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "South Africa",
@@ -7007,6 +7332,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "South Korea",
@@ -7050,6 +7377,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "South Sudan",
@@ -7093,6 +7422,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Spain",
@@ -7136,6 +7467,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Sri Lanka",
@@ -7179,6 +7512,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Sudan",
@@ -7222,6 +7557,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Suriname",
@@ -7265,6 +7602,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Sweden",
@@ -7308,6 +7647,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Switzerland",
@@ -7351,6 +7692,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Syria",
@@ -7394,6 +7737,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Tajikistan",
@@ -7437,6 +7782,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Tanzania",
@@ -7480,6 +7827,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Thailand",
@@ -7523,6 +7872,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Timor-Leste",
@@ -7566,6 +7917,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Togo",
@@ -7609,6 +7962,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Tonga",
@@ -7652,6 +8007,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Trinidad and Tobago",
@@ -7695,6 +8052,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Tunisia",
@@ -7738,6 +8097,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Turkey",
@@ -7781,6 +8142,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Turkmenistan",
@@ -7824,6 +8187,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Tuvalu",
@@ -7867,6 +8232,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Uganda",
@@ -7910,6 +8277,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Ukraine",
@@ -7953,6 +8322,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "United Arab Emirates",
@@ -7996,6 +8367,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "United Kingdom",
@@ -8039,6 +8412,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "United States",
@@ -8082,6 +8457,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Uruguay",
@@ -8125,6 +8502,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Uzbekistan",
@@ -8168,6 +8547,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Vanuatu",
@@ -8211,6 +8592,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Venezuela",
@@ -8254,6 +8637,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Vietnam",
@@ -8297,6 +8682,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Yemen",
@@ -8340,6 +8727,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Zambia",
@@ -8383,6 +8772,8 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
   {
     name: "Zimbabwe",
@@ -8426,5 +8817,7 @@ export const CountriesList = [
     whenToVisit: "",
     nationalDay: "",
     plugTypes: [],
+    image: null,
+    images: [],
   },
 ];
