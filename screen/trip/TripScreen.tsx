@@ -14,6 +14,9 @@ import {
 } from "react-native";
 import { COLORS, SIZES } from "../../styles/theme";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { DatePickerModal } from "react-native-paper-dates";
+import { enGB, registerTranslation } from "react-native-paper-dates";
+registerTranslation("en", enGB);
 
 import {
   AddUser,
@@ -36,13 +39,11 @@ import {
   VertDots,
 } from "../../utilities/SvgIcons.utility";
 import { BlurView } from "expo-blur";
-import {
-  useClickOutside,
-  ClickOutsideProvider,
-} from "react-native-click-outside";
+
 import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 import { TextInput } from "react-native-gesture-handler";
+import { CreateTrip } from "./CreateTrip";
 
 interface TripProps {}
 
@@ -625,110 +626,7 @@ export const TripScreen: React.FC<TripProps> = ({}) => {
             minHeight: "100%",
           }}
         >
-          <LinearGradient
-            style={[styles.tripModalGradient, { padding: 0 }]}
-            // colors={["#6565E1", "#BC94B9", "#E89994"]}
-            colors={["#425E82", "#71615C", "#9A633B"]}
-            start={{ x: -1, y: 1 }}
-            end={{ x: 1, y: 0 }}
-          >
-            {/* <Image
-            source={{
-              uri: "https://images.unsplash.com/photo-1550340499-a6c60fc8287c?q=20&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            }}
-            cachePolicy="memory"
-            contentFit="cover"
-            transition={0}
-            style={styles.tripModalGradient}
-          > */}
-            <View style={styles.newTripWrapper}>
-              <View style={styles.newTripHeader}>
-                <Text style={styles.newTripHeaderTitleText}>New trip</Text>
-                <TouchableOpacity>
-                  <Text>Close</Text>
-                </TouchableOpacity>
-              </View>
-              {/* <BlurView intensity={100} style={styles.tripNameInputWrapper}> */}
-              <TextInput
-                placeholder="Enter trip name"
-                placeholderTextColor="rgba(255, 255, 255, 0.6)"
-                style={styles.tripNameInput}
-              />
-              {/* </BlurView> */}
-              <ScrollView style={{ flex: 1 }}>
-                <View style={styles.newTripBoxes}>
-                  <BlurView
-                    intensity={100}
-                    style={[styles.newTripBox, styles.fullBox]}
-                  >
-                    <TouchableOpacity
-                      activeOpacity={0.5}
-                      style={styles.datePickerTopRow}
-                    >
-                      <View style={styles.datePickerTopRowLeft}>
-                        <CalendarFilledIcon />
-                        <Text style={styles.datePickerTopRowLeftText}>
-                          Itinerary
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      activeOpacity={0.5}
-                      style={styles.datePickerBottomRow}
-                    >
-                      <View style={styles.datePickerBottomRowLeft}>
-                        <Text style={styles.startsDateLabel}>Start</Text>
-                        <Text style={styles.startsDateText}>Set date</Text>
-                      </View>
-                      <Text style={{ fontSize: 25, color: COLORS.black }}>
-                        -
-                      </Text>
-                      <View style={styles.datePickerBottomRowRight}>
-                        <Text style={styles.startsDateLabel}>End</Text>
-                        <Text style={styles.startsDateText}>End date</Text>
-                      </View>
-                    </TouchableOpacity>
-                  </BlurView>
-                  <BlurView
-                    intensity={100}
-                    style={[styles.newTripBox, styles.halfBox]}
-                  >
-                    <TripLocationIcon />
-                    <Text style={styles.halfBoxLabelText}>Where to?</Text>
-                    <Text style={styles.halfBoxValueText}>
-                      London, United Kingdom
-                    </Text>
-                  </BlurView>
-                  <BlurView
-                    intensity={100}
-                    style={[styles.newTripBox, styles.halfBox]}
-                  >
-                    <PrivateIcon size="20" />
-                    <Text style={styles.halfBoxLabelText}>Accessibility</Text>
-                    <Text style={styles.halfBoxValueText}>Private</Text>
-                  </BlurView>
-                  <BlurView
-                    intensity={100}
-                    style={[styles.newTripBox, styles.halfBox]}
-                  >
-                    <OneUserIcon size="20" />
-                    <Text style={styles.halfBoxLabelText}>Travel type</Text>
-                    <Text style={styles.halfBoxValueText}>Solo</Text>
-                  </BlurView>
-                  <BlurView
-                    intensity={100}
-                    style={[styles.newTripBox, styles.halfBox]}
-                  >
-                    <ImageIcon size="20" />
-                    <Text style={styles.halfBoxLabelText}>
-                      Background image
-                    </Text>
-                  </BlurView>
-                </View>
-              </ScrollView>
-            </View>
-            {/* </Image> */}
-          </LinearGradient>
+          <CreateTrip newTripModalRef={newTripModal} />
         </Modalize>
       </Portal>
     </>
@@ -740,16 +638,38 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F2F2F7",
   },
+  cancelTripButton: {
+    paddingVertical: 7,
+    paddingHorizontal: 12,
+    borderRadius: 30,
+    backgroundColor: "#fff",
+  },
+  cancelTripButtonText: {
+    color: COLORS.black,
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  createTripButton: {
+    paddingVertical: 7,
+    paddingHorizontal: 12,
+    borderRadius: 30,
+    backgroundColor: COLORS.primaryDark,
+  },
+  createTripButtonText: {
+    color: COLORS.white,
+    fontSize: 14,
+    fontWeight: "500",
+  },
   halfBoxLabelText: {
     marginTop: 10,
-    fontSize: 12,
+    fontSize: 16,
+    fontWeight: "500",
     color: COLORS.black,
-    opacity: 0.8,
   },
   halfBoxValueText: {
     marginTop: 5,
-    fontWeight: "500",
-    fontSize: 14,
+    fontSize: 13,
+    opacity: 0.9,
     color: COLORS.black,
   },
   datePickerTopRow: {
@@ -773,7 +693,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   startsDateText: {
-    fontSize: 14,
+    fontSize: 16,
     color: COLORS.black,
     fontWeight: "500",
   },
