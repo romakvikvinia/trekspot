@@ -15,6 +15,8 @@ import {
   CreateOrUpdateStoriesResponseType,
   CountriesArgsType,
   CountriesResponseType,
+  CountryArgsType,
+  CountryResponseType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -326,6 +328,85 @@ export const trekSpotApi = createApi({
         `,
       }),
     }),
+
+    /**
+     * Get Country
+     */
+
+    country: builder.query<CountryResponseType, CountryArgsType>({
+      query: ({ id }) => ({
+        variables: { id },
+        document: gql`
+          query ($id: String!) {
+            country(id: $id) {
+              id
+              name
+              iso2
+              capital
+              continent
+              isPopular
+              coordinates {
+                latitude
+                longitude
+              }
+              rate
+              visitors
+              gallery
+              domain
+              independent
+              unMember
+              currencies
+              idd {
+                root
+                suffixes
+              }
+              region
+              subregion
+              languages
+              population
+              car {
+                side
+                signs
+              }
+              continents
+              startOfWeek
+              postalCode {
+                format
+                regex
+              }
+              overview
+              telecoms
+              emergency {
+                emergency
+                police
+                ambulance
+                fire
+              }
+              transportTypes
+              taxi {
+                name
+                ios
+                android
+                logo
+              }
+              security
+              recognizedFor {
+                emoji
+                title
+              }
+              religions
+              whenToVisit
+              nationalDay
+              plugTypes
+              images {
+                url
+              }
+            }
+          }
+        `,
+      }),
+    }),
+    //
   }),
 });
 
@@ -339,4 +420,6 @@ export const {
   useStoriesQuery,
   useCreateOrUpdateStoriesMutation,
   useCountriesQuery,
+  useCountryQuery,
+  useLazyCountryQuery,
 } = trekSpotApi;

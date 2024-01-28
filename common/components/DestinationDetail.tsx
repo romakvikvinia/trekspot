@@ -28,7 +28,7 @@ import {
   useFocusedTab,
 } from "react-native-collapsible-tab-view";
 
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   AmbulanceIcon,
   AutumnIcon,
@@ -83,6 +83,7 @@ import { Dining } from "./Destination/Dining";
 import { Language } from "./Destination/Language";
 import { Currency } from "./Destination/Currency";
 import { Emergency } from "./Destination/Emergency";
+import { useLazyCountryQuery } from "../../api/api.trekspot";
 
 const DATA = {
   name: {
@@ -831,7 +832,17 @@ const DATA = {
   ],
 };
 
-export const DestinationDetail = ({ modalDestinationDetailsRef }) => {
+type DestinationDetailProps = {
+  id: string;
+  modalDestinationDetailsRef: any;
+};
+
+export const DestinationDetail: React.FC<DestinationDetailProps> = ({
+  id,
+  modalDestinationDetailsRef,
+}) => {
+  const [getCountry, { isLoading, data, isError }] = useLazyCountryQuery();
+
   const modalCountryPassportSelectRef = useRef<Modalize>(null);
 
   const [countrySelectVisible, setCountrySelectVisible] = useState(false);
@@ -839,6 +850,10 @@ export const DestinationDetail = ({ modalDestinationDetailsRef }) => {
   const [blogUrl, setBlogUrl] = useState("");
   const [currencySelectVisible, setCurrencySelectVisible] = useState(false);
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+
+  useEffect(() => {
+    if (id) getCountry({ id });
+  }, [id]);
 
   const onCountryPassportOpen = () => {
     modalCountryPassportSelectRef.current?.open();
@@ -850,7 +865,6 @@ export const DestinationDetail = ({ modalDestinationDetailsRef }) => {
         style={{
           flex: 1,
           minHeight: "100%",
-          // backgroundColor: "red",
         }}
       >
         <Tabs.Container
@@ -893,21 +907,28 @@ export const DestinationDetail = ({ modalDestinationDetailsRef }) => {
                   bottom: 16,
                 }}
               >
-                {DATA?.gallery?.map((item, ind) => (
-                  <ImageBackground
-                    style={styles.box}
-                    resizeMode="cover"
-                    source={{
-                      uri: item,
-                    }}
-                    key={`slide-${ind}`}
-                  >
-                    <LinearGradient
-                      style={styles.gradientWrapper}
-                      colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.4)"]}
-                    ></LinearGradient>
-                  </ImageBackground>
-                ))}
+                {data ? (
+                  data.country.images.map((item, ind) => (
+                    <ImageBackground
+                      style={styles.box}
+                      resizeMode="cover"
+                      source={{
+                        uri: item.url,
+                      }}
+                      key={`slide-${ind}`}
+                    >
+                      <LinearGradient
+                        style={styles.gradientWrapper}
+                        colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.4)"]}
+                      ></LinearGradient>
+                    </ImageBackground>
+                  ))
+                ) : (
+                  <LinearGradient
+                    style={styles.gradientWrapper}
+                    colors={["rgba(147, 21, 21, 0.1)", "rgba(9, 21, 135, 0.9)"]}
+                  ></LinearGradient>
+                )}
               </Swiper>
 
               <View style={styles.otherInfo}>
@@ -926,7 +947,7 @@ export const DestinationDetail = ({ modalDestinationDetailsRef }) => {
                   </View>
                   <Text style={styles.ratingText}>{DATA?.rating} /</Text>
                   <Text style={styles.ratingText}>
-                    {DATA?.visitors} visitors
+                    {data?.country.visitors} visitors
                   </Text>
                 </View>
               </View>
@@ -1008,7 +1029,7 @@ export const DestinationDetail = ({ modalDestinationDetailsRef }) => {
               bounces={false}
               showsVerticalScrollIndicator={false}
             >
-              <Overview DATA={DATA} />
+              <Overview country={data?.country} />
             </Tabs.ScrollView>
           </Tabs.Tab>
           <Tabs.Tab

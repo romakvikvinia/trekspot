@@ -263,7 +263,11 @@ export const TripLocationIcon = ({ size, color }) => {
   return <SvgImage />;
 };
 
-export const DownIcon = ({ color, size }) => {
+interface IDownIcon {
+  color?: string;
+  size?: number;
+}
+export const DownIcon: React.FC<IDownIcon> = ({ color, size }) => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="m0 8.057 9.52 9.507a3.507 3.507 0 0 0 4.948 0L24 8.046l-2.121-2.117-9.531 9.517a.5.5 0 0 1-.707 0L2.121 5.94Z" fill=${
     color ? color : "#000000"
   } opacity="1" data-original="#000000"></path></g></svg>

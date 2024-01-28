@@ -13,16 +13,22 @@ import { Mark, Mark2, StarIcon } from "../../utilities/SvgIcons.utility";
 type CountryItemProps = {
   item: CountryType;
   isWith?: boolean;
+  openModal: (countryId: string) => void;
 };
 
-export const CountryItem: React.FC<CountryItemProps> = ({ item, isWith }) => {
+export const CountryItem: React.FC<CountryItemProps> = ({
+  item,
+  isWith,
+  openModal,
+}) => {
   return (
     <>
       <ImageBackground
         style={[styles.box, styles.typeMd]}
         resizeMode="cover"
         source={{
-          uri: item.image,
+          uri: item.image?.url,
+          // uri: item.image?.url,
         }}
         // key={ind}
       >
@@ -40,7 +46,7 @@ export const CountryItem: React.FC<CountryItemProps> = ({ item, isWith }) => {
         <TouchableOpacity
           style={styles.gradientWrapper}
           activeOpacity={0.7}
-          //   onPress={() => onDestinationModaltOpen()}
+          onPress={() => openModal(item.id!)}
         >
           <LinearGradient
             style={styles.gradientWrapper}

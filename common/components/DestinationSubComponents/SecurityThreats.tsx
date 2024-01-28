@@ -7,7 +7,11 @@ import {
 } from "../../../utilities/SvgIcons.utility";
 import { styles } from "../_styles";
 
-export const SecurityThreats = ({ data }) => {
+type SecurityThreatsProps = {
+  type: string;
+};
+
+export const SecurityThreats: React.FC<SecurityThreatsProps> = ({ type }) => {
   return (
     <View style={styles.keyValue}>
       <Text style={styles.key}>Security</Text>
@@ -29,7 +33,7 @@ export const SecurityThreats = ({ data }) => {
             width: "100%",
           }}
         >
-          {data?.type === "secure" ? (
+          {type === "secure" ? (
             <>
               <CheckIcon color="#1a806b" />
               <Text
@@ -46,7 +50,7 @@ export const SecurityThreats = ({ data }) => {
               </Text>
             </>
           ) : null}
-          {data?.type === "warning" ? (
+          {type === "warning" ? (
             <>
               <CheckIcon color="#d27d00" />
               <Text
@@ -63,7 +67,7 @@ export const SecurityThreats = ({ data }) => {
               </Text>
             </>
           ) : null}
-          {data?.type === "danger" ? (
+          {type === "danger" ? (
             <>
               <CloseCircleIcon color={COLORS.red} size={25} />
               <Text

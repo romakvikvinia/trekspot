@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { COLORS, SIZES } from "../../styles/theme";
 
 import {
@@ -63,17 +63,25 @@ type ExploreProps = NativeStackScreenProps<
   "Explore"
 >;
 
+type ExploreScreenState = {
+  countryId: string;
+};
+
 export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
   const {
     data: popularCountries,
     isLoading,
     isSuccess,
   } = useCountriesQuery({ isPopular: true });
+  const [state, setState] = useState<ExploreScreenState>({ countryId: "" });
   const [searchActive, setSearchActive] = useState(false);
   const modalDestinationDetailsRef = useRef<Modalize>(null);
-  const onDestinationModaltOpen = () => {
+
+  const onDestinationModalOpen = useCallback((countryId: string) => {
+    setState((prevState) => ({ ...prevState, countryId }));
     modalDestinationDetailsRef.current?.open();
-  };
+  }, []);
+
   const layout = useWindowDimensions();
   const [index, setIndex] = React.useState(0);
 
@@ -87,13 +95,19 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
     modalCountryPassportSelectRef.current?.open();
   };
 
+  /**
+   * Transform data
+   */
+
+  const popularCountriesLength = popularCountries?.countries.length || 0;
+
   return (
     <>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.screenHeader}>
           <View style={styles.searchBox}>
             <View style={styles.searchIcon}>
-              <SearchIcon width="15" />
+              <SearchIcon width={15} />
             </View>
             <TextInput
               placeholder="Search here"
@@ -160,7 +174,8 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
                   <CountryItem
                     key={`popular-country-${item.id}`}
                     item={item}
-                    isWith={popularCountries.countries.length - 1 === ind}
+                    isWith={popularCountriesLength - 1 === ind}
+                    openModal={onDestinationModalOpen}
                   />
                 ))}
             </ScrollView>
@@ -664,6 +679,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
             }}
           >
             <DestinationDetail
+              id={state.countryId}
               modalDestinationDetailsRef={modalDestinationDetailsRef}
             />
           </Modalize>

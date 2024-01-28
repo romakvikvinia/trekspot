@@ -104,7 +104,10 @@ export type CreateOrUpdateStoriesInput = {
 export type CreateOrUpdateStoriesResponseType = {
   createOrUpdateStore: StoryType;
 };
-
+export type FileType = {
+  id?: string;
+  url: string;
+};
 export type CountryType = {
   id?: string;
   name: string;
@@ -148,8 +151,17 @@ export type CountryType = {
   whenToVisit: string;
   nationalDay: string;
   plugTypes: string[];
-  image: string;
-  images: [];
+  weatherInformation: {
+    averageTemperatures: {
+      spring: string;
+      summer: string;
+      autumn: string;
+      winter: string;
+    };
+    seasonalConsiderations: string;
+  };
+  image: FileType;
+  images: FileType[];
 };
 
 export type CountriesResponseType = {
@@ -161,3 +173,11 @@ export type CountriesArgsType = Partial<{
   take: number;
   isPopular: boolean;
 }>;
+
+export type CountryResponseType = {
+  country: CountryType;
+};
+
+export type CountryArgsType = {
+  id: string;
+};
