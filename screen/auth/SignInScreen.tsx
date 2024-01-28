@@ -27,10 +27,10 @@ import {
   AppleIcon,
   FacebookIcon,
   GoogleIcon,
-  TrekSpotLinear,
 } from "../../utilities/SvgIcons.utility";
 import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
+import { TrekSpotLinear } from "../../utilities/svg/TrekSpotLinear";
 
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 

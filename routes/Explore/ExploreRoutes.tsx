@@ -3,12 +3,12 @@ import {
   StackNavigationProp,
   createStackNavigator,
 } from "@react-navigation/stack";
-import { ExploreScreen } from "../../screen/Explore/Explore";
+import { ExploreScreen } from "../../screen/Explore/ExploreScreen";
 import SeeAllScreen from "../../screen/Explore/BucketListAll";
 
 interface ExploreRoutesProps {}
 
-type ExploreRoutesStackParamList = {
+export type ExploreRoutesStackParamList = {
   Explore: undefined;
   SeeAllScreen: undefined;
 };

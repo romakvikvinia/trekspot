@@ -13,7 +13,7 @@ import {
   TopSights,
   TripBold,
 } from "../utilities/SvgIcons.utility";
-import { ExploreRoutesStack } from "./Explore/ExploreRoutes";
+import { ExploreRoutesStack } from "./explore/ExploreRoutes";
 import { HomeRouteStack } from "./home/HomeRoutes";
 import { SettingRouteStack } from "./setting/SettingRoutes";
 import { TripRouteStack } from "./trip/TripRoutes";

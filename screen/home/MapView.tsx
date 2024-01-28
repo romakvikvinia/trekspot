@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import {
   LivedIcon,
-  MapSvg,
   Mark,
   Mark2,
   Share,
@@ -32,6 +31,7 @@ import { AnalyticsType } from "../../api/api.types";
 import { formatPercentage } from "../../helpers/number.helper";
 import { useDispatch } from "react-redux";
 import { debounce } from "../../helpers/debounce.helper";
+import { MapSvg } from "../../utilities/svg/map";
 
 interface MapVIewProps {
   analytic?: AnalyticsType;

@@ -12,10 +12,10 @@ import { COLORS } from "../../styles/theme";
 import {
   ImessageIcon,
   InstagramIcon,
-  MapSvg,
   MessengerIcon,
   TrekspotWhite,
 } from "../../utilities/SvgIcons.utility";
+import { MapSvg } from "../../utilities/svg/map";
 interface ShareModalProps {
   world: number;
   territories: number;
