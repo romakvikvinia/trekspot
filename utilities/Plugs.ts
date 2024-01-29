@@ -76,7 +76,7 @@ export const Plugs = [
   },
 ];
 
-export const PlugImages = {
+export const PlugImages: Record<string, any> = {
   A: require("../assets/plugs/A.png"),
   B: require("../assets/plugs/B.png"),
   C: require("../assets/plugs/C.png"),

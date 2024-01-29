@@ -181,3 +181,19 @@ export type CountryResponseType = {
 export type CountryArgsType = {
   id: string;
 };
+
+//
+
+export type PassportIndexType = {
+  form: string;
+  to: string;
+  requirement: string;
+};
+export type PassportIndexesArgsType = {
+  from: string;
+  to: string;
+};
+
+export type PassportIndexesResponseType = {
+  passportIndex: PassportIndexType;
+};

@@ -19,9 +19,6 @@ type OverviewProps = {
 };
 
 const Overview: React.FC<OverviewProps> = memo(function ({ country }) {
-  // const currencyObj = country.currencies[Object.keys(country.currencies)[0]];
-  const currencyObj = null;
-  console.log("aaaa", country);
   if (!country) return null;
   return (
     <ScrollView

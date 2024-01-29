@@ -17,6 +17,8 @@ import {
   CountriesResponseType,
   CountryArgsType,
   CountryResponseType,
+  PassportIndexesArgsType,
+  PassportIndexesResponseType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -398,9 +400,36 @@ export const trekSpotApi = createApi({
               whenToVisit
               nationalDay
               plugTypes
+              weatherInformation {
+                averageTemperatures {
+                  summer
+                  spring
+                  autumn
+                  winter
+                }
+                seasonalConsiderations
+              }
               images {
                 url
               }
+            }
+          }
+        `,
+      }),
+    }),
+    // Get passport indexes for country
+    getPassportIndexes: builder.query<
+      PassportIndexesResponseType,
+      PassportIndexesArgsType
+    >({
+      query: ({ from, to }) => ({
+        variables: { from, to },
+        document: gql`
+          query ($from: String!, $to: String!) {
+            passportIndex(input: { from: $from, to: $to }) {
+              from
+              to
+              requirement
             }
           }
         `,
@@ -422,4 +451,5 @@ export const {
   useCountriesQuery,
   useCountryQuery,
   useLazyCountryQuery,
+  useLazyGetPassportIndexesQuery,
 } = trekSpotApi;
