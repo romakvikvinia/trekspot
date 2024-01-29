@@ -10,14 +10,20 @@ import { styles } from "../_styles";
 import { useLazyGetPassportIndexesQuery } from "../../../api/api.trekspot";
 
 import { NotFound } from "../../../components/common/NotFound";
+import { CountryType } from "../../../api/api.types";
 
-export const Visa = () => {
+type VisaProps = {
+  country: CountryType;
+};
+
+export const Visa: React.FC<VisaProps> = ({ country }) => {
   const [fetchVisaInfo, { data, isLoading, isError }] =
     useLazyGetPassportIndexesQuery();
 
   useEffect(() => {
-    fetchVisaInfo({ from: "GE", to: "FR" });
+    fetchVisaInfo({ from: country.iso2, to: "FR" });
   }, []);
+
   return (
     <ScrollView
       style={styles.tabWrapper}
@@ -25,7 +31,7 @@ export const Visa = () => {
       alwaysBounceVertical={false}
     >
       <View style={styles.visaTabHeader}>
-        <Text style={styles.travelToText}>Traveling to france</Text>
+        <Text style={styles.travelToText}>Traveling to {country.name}</Text>
 
         <TouchableOpacity
           style={styles.passportBox}
@@ -48,14 +54,15 @@ export const Visa = () => {
             <View style={[styles.textContentWrapper, styles.successBg]}>
               <CheckCircleIcon color="#1a806b" />
               <Text style={[styles.headingText, styles.success]}>
-                Georgian passport holders don't need visa to travel to France
+                Georgian passport holders don't need visa to travel to{" "}
+                {country.name}
               </Text>
             </View>
           ) : (
             <View style={[styles.textContentWrapper, styles.dangerBg]}>
               <CloseCircleIcon color="#D74E4E" />
               <Text style={[styles.headingText, styles.danger]}>
-                Georgian passport holders need visa to travel to USA
+                Georgian passport holders need visa to travel to {country.name}
               </Text>
             </View>
           )}
@@ -69,7 +76,7 @@ export const Visa = () => {
                 <View style={styles.staysNtypeRow}>
                   <Text style={styles.staysNtypeRowKey}>Allowed stay:</Text>
                   <Text style={styles.staysNtypeRowValue}>
-                    {data.passportIndex.requirement !== "visa free"
+                    {!isNaN(parseFloat(data.passportIndex.requirement))
                       ? `${data.passportIndex.requirement} Days`
                       : data.passportIndex.requirement}
                   </Text>

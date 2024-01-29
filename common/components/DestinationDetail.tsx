@@ -1029,7 +1029,7 @@ export const DestinationDetail: React.FC<DestinationDetailProps> = ({
               bounces={false}
               showsVerticalScrollIndicator={false}
             >
-              <Overview country={data?.country} />
+              {data && <Overview country={data.country} />}
             </Tabs.ScrollView>
           </Tabs.Tab>
           <Tabs.Tab
@@ -1055,7 +1055,7 @@ export const DestinationDetail: React.FC<DestinationDetailProps> = ({
               bounces={false}
               showsVerticalScrollIndicator={false}
             >
-              <Visa />
+              {data && <Visa country={data.country} />}
             </Tabs.ScrollView>
           </Tabs.Tab>
           <Tabs.Tab
