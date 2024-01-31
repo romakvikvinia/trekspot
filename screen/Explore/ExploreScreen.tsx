@@ -207,6 +207,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
                     <TouchableOpacity
                       style={styles.gradientWrapper}
                       activeOpacity={0.7}
+                      onPress={() => onDestinationModalOpen()}
                     >
                       <LinearGradient
                         style={styles.gradientWrapper}

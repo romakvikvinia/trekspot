@@ -23,9 +23,15 @@ import { RangePicker } from "./RangePicker";
 import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 import { Destination } from "./Destination";
+import { Accessibility } from "./Accessibility";
+import { TravelType } from "./TravelType";
+import { Background } from "./Background";
 
 export const CreateTripContent = ({ newTripModalRef }) => {
   const modalDestinationRef = useRef(null);
+  const modalAccessibilityRef = useRef(null);
+  const modalBackgroundRef = useRef(null);
+  const modalTravelTypeRef = useRef(null);
 
   const [range, setRange] = useState({
     startDate: undefined,
@@ -36,6 +42,15 @@ export const CreateTripContent = ({ newTripModalRef }) => {
   const [open, setOpen] = useState(false);
   const onDestinationModalOpen = () => {
     modalDestinationRef.current?.open();
+  };
+  const onAccessibilityModalOpen = () => {
+    modalAccessibilityRef.current?.open();
+  };
+  const onTravelTypeModalOpen = () => {
+    modalTravelTypeRef.current?.open();
+  };
+  const onBackgroundModalOpen = () => {
+    modalBackgroundRef.current?.open();
   };
 
   return (
@@ -117,7 +132,10 @@ export const CreateTripContent = ({ newTripModalRef }) => {
               intensity={100}
               style={[styles.newTripBox, styles.halfBox]}
             >
-              <TouchableOpacity activeOpacity={0.5}>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => onAccessibilityModalOpen()}
+              >
                 <PrivateIcon size="20" />
                 <Text style={styles.halfBoxLabelText}>Accessibility</Text>
                 <Text style={styles.halfBoxValueText}>Private</Text>
@@ -127,7 +145,10 @@ export const CreateTripContent = ({ newTripModalRef }) => {
               intensity={100}
               style={[styles.newTripBox, styles.halfBox]}
             >
-              <TouchableOpacity activeOpacity={0.5}>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => onTravelTypeModalOpen()}
+              >
                 <OneUserIcon size="20" />
                 <Text style={styles.halfBoxLabelText}>Travel type</Text>
                 <Text style={styles.halfBoxValueText}>Solo</Text>
@@ -137,7 +158,10 @@ export const CreateTripContent = ({ newTripModalRef }) => {
               intensity={100}
               style={[styles.newTripBox, styles.halfBox]}
             >
-              <TouchableOpacity activeOpacity={0.5}>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => onBackgroundModalOpen()}
+              >
                 <ImageIcon size="20" />
                 <Text style={styles.halfBoxLabelText}>Background image</Text>
               </TouchableOpacity>
@@ -162,6 +186,42 @@ export const CreateTripContent = ({ newTripModalRef }) => {
           }}
         >
           <Destination />
+        </Modalize>
+      </Portal>
+      <Portal>
+        <Modalize
+          ref={modalAccessibilityRef}
+          modalTopOffset={65}
+          scrollViewProps={{
+            alwaysBounceVertical: false,
+            showsVerticalScrollIndicator: false,
+          }}
+        >
+          <Accessibility />
+        </Modalize>
+      </Portal>
+      <Portal>
+        <Modalize
+          ref={modalTravelTypeRef}
+          modalTopOffset={65}
+          scrollViewProps={{
+            alwaysBounceVertical: false,
+            showsVerticalScrollIndicator: false,
+          }}
+        >
+          <TravelType />
+        </Modalize>
+      </Portal>
+      <Portal>
+        <Modalize
+          ref={modalBackgroundRef}
+          modalTopOffset={65}
+          scrollViewProps={{
+            alwaysBounceVertical: false,
+            showsVerticalScrollIndicator: false,
+          }}
+        >
+          <Background />
         </Modalize>
       </Portal>
     </>
