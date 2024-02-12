@@ -1185,7 +1185,7 @@ export const DestinationDetail: React.FC<DestinationDetailProps> = ({
               bounces={false}
               showsVerticalScrollIndicator={false}
             >
-              <Dining />
+              {data && data.country && <Dining country={data.country} />}
             </Tabs.ScrollView>
           </Tabs.Tab>
           <Tabs.Tab
