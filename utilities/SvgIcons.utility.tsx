@@ -682,7 +682,7 @@ export const EmergencyIcon = ({ color }) => {
 
 interface ICloseCircleIcon {
   color: string;
-  size: number;
+  size: number | string;
 }
 export const CloseCircleIcon = ({
   color = "",

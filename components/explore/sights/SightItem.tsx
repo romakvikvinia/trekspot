@@ -8,9 +8,10 @@ import { StarIcon } from "../../../utilities/SvgIcons.utility";
 
 type SightItemProps = {
   item: SightType;
+  onHandleItem?: (sight: SightType) => void;
 };
 
-export const SightItem: React.FC<SightItemProps> = ({ item }) => {
+export const SightItem: React.FC<SightItemProps> = ({ item, onHandleItem }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.7}
@@ -24,7 +25,7 @@ export const SightItem: React.FC<SightItemProps> = ({ item }) => {
       ]}
       key={`sight-item-${item.id}`}
       onPress={() => {
-        // setSightDetailVisible(true);
+        if (onHandleItem) onHandleItem(item);
       }}
     >
       {item.image && (

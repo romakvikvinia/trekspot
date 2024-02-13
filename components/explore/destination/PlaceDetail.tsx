@@ -1,16 +1,16 @@
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Swiper from "react-native-swiper";
-import { styles } from "../../common/components/_styles";
-import { COLORS } from "../../styles/theme";
-import { DownIcon, Mark2, StarIcon } from "../../utilities/SvgIcons.utility";
-import { exploreStyles } from "../../components/explore/sights/_exploreStyles";
-import { CityType } from "../../api/api.types";
-import { useLazyGetSightsQuery } from "../../api/api.trekspot";
-import { SightItem } from "../../components/explore/sights/SightItem";
-import { SightsContainer } from "../../components/explore/sights/SightsContainer";
+import { styles } from "../../../common/components/_styles";
+import { DownIcon, Mark2, StarIcon } from "../../../utilities/SvgIcons.utility";
+import { exploreStyles } from "../sights/_exploreStyles";
+import { CityType, SightType } from "../../../api/api.types";
+import { useLazyGetSightsQuery } from "../../../api/api.trekspot";
+import { SightItem } from "../sights/SightItem";
+import { SightsContainer } from "../sights/SightsContainer";
+import { SightDetail } from "../sights/SightDetail";
 
 const place = {
   name: "Paris",
@@ -250,26 +250,33 @@ const place = {
 };
 
 type PlaceDetailProps = {
-  onEmbedModalOpen: any;
-  setBlogUrl: any;
-  setPlaceTitle: any;
   city: CityType;
 };
 
-export const PlaceDetail: React.FC<PlaceDetailProps> = ({
-  onEmbedModalOpen,
-  setBlogUrl,
-  setPlaceTitle,
-  city,
-}) => {
-  const [getSights, { data, isLoading }] = useLazyGetSightsQuery();
+interface IState {
+  sight: SightType | null;
+  modalRef?: any;
+}
 
-  const [sightDetailVisible, setSightDetailVisible] = useState(false);
-  console.log("images", city.images);
+export const PlaceDetail: React.FC<PlaceDetailProps> = ({ city, modalRef }) => {
+  const [state, setState] = useState<IState>({ sight: null });
+  const [getSights, { data, isLoading }] = useLazyGetSightsQuery();
 
   useEffect(() => {
     getSights({ iso2: "FR", city: "Paris" });
   }, []);
+
+  const handleSetSightItem = useCallback((sight: SightType) => {
+    setState((prevState) => ({ ...prevState, sight }));
+  }, []);
+
+  const handleClose = useCallback(() => {
+    if (modalRef && modalRef.current) {
+      modalRef.current.close();
+    }
+  }, []);
+
+  // transform data
 
   const topSights = (data && "Top Sights" in data && data["Top Sights"]) || [];
   let sights = data && { ...data };
@@ -296,10 +303,7 @@ export const PlaceDetail: React.FC<PlaceDetailProps> = ({
           ]}
         >
           <TouchableOpacity
-            onPress={() =>
-              modalDestinationDetailsRef.current &&
-              modalDestinationDetailsRef.current.close()
-            }
+            onPress={handleClose}
             activeOpacity={0.7}
             style={[
               styles.backButton,
@@ -314,7 +318,8 @@ export const PlaceDetail: React.FC<PlaceDetailProps> = ({
             style={[
               styles.addToBucketButton,
               {
-                backgroundColor: 1 == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)",
+                // backgroundColor: 1 == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)", // check for favorite
+                backgroundColor: "rgba(0, 0, 0, 0.3)",
                 top: 15,
               },
             ]}
@@ -389,13 +394,14 @@ export const PlaceDetail: React.FC<PlaceDetailProps> = ({
             }}
           >
             {topSights.map((item) => (
-              <SightItem item={item} />
+              <SightItem item={item} onHandleItem={handleSetSightItem} />
             ))}
           </ScrollView>
         </View>
         {sights && Object.keys(sights).length && (
           <SightsContainer items={sights} />
         )}
+        {state.sight && <SightDetail data={state.sight} />}
       </View>
     </>
   );

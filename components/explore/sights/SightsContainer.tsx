@@ -26,9 +26,11 @@ export const SightsContainer: React.FC<SightsContainerProps> = ({ items }) => {
   const [state, setState] = useState<IState>({ isOpen: {}, item: null });
 
   const handleOpenSightDetail = useCallback((item: SightType) => {
+    console.log("click", item);
     setState((prevState) => ({ ...prevState, item }));
   }, []);
 
+  console.log(state);
   return (
     <>
       {Object.keys(items).map((key) => (
@@ -191,11 +193,7 @@ export const SightsContainer: React.FC<SightsContainerProps> = ({ items }) => {
           ) : null}
         </View>
       ))}
-      <SightDetail
-        isVisible={!!state.item}
-        setSightDetailVisible={() => {}}
-        data={state.item!}
-      />
+      <SightDetail data={state.item!} />
     </>
   );
 };

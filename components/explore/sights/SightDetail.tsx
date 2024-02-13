@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import {
   Modal,
@@ -23,23 +23,36 @@ import {
 import { SightType } from "../../../api/api.types";
 
 type SightDetailProps = {
-  isVisible: boolean;
-  setSightDetailVisible: any;
   data: SightType;
 };
 
-export const SightDetail: React.FC<SightDetailProps> = ({
-  isVisible,
-  setSightDetailVisible,
-  data,
-}) => {
-  const ref = useClickOutside(() => setSightDetailVisible(false));
+export const SightDetail: React.FC<SightDetailProps> = ({ data }) => {
+  const [state, setState] = useState({ isOpen: false });
+
+  const ref = useClickOutside(() => {
+    setState((prevState) => ({
+      ...prevState,
+      isOpen: false,
+    }));
+    // clear data from parent
+  });
+
+  useEffect(() => {
+    if (data && !state.isOpen) {
+      setState((prevState) => ({
+        ...prevState,
+        isOpen: !!data,
+      }));
+    }
+  }, [data]);
+
+  if (!data) return null;
 
   return (
     <Modal
       animationType={"none"}
       transparent={true}
-      visible={isVisible}
+      visible={state.isOpen}
       //   onRequestClose={this.closeModal}
     >
       <ClickOutsideProvider>
@@ -60,14 +73,12 @@ export const SightDetail: React.FC<SightDetailProps> = ({
               marginBottom: 15,
             }}
           >
-            <TouchableOpacity
-              style={styles.closeModal}
-              onPress={() => setSightDetailVisible(false)}
-            >
+            <TouchableOpacity style={styles.closeModal}>
               <CloseCircleIcon size="30" color="#fff" />
             </TouchableOpacity>
           </View>
 
+          {/* @ts-ignore */}
           <ScrollView style={styles.modalContent} ref={ref}>
             <Swiper
               activeDotColor="#fff"
@@ -85,26 +96,27 @@ export const SightDetail: React.FC<SightDetailProps> = ({
               }}
               autoplay={true}
               dotStyle={{
-                width: SIZES.width / data?.gallery?.length - 15,
+                width: SIZES.width / data.images.length - 15,
                 height: 3,
               }}
               activeDotStyle={{
                 backgroundColor: "#fff",
-                width: SIZES.width / data?.gallery?.length - 15,
+                width: SIZES.width / data.images.length - 15,
                 height: 3,
               }}
             >
-              {data?.gallery?.map((item, ind) => (
+              {data.images?.map((item, ind) => (
                 <Image
                   style={[styles.box]}
                   resizeMode="cover"
                   source={{
-                    uri: item,
+                    uri: item.url,
                   }}
                   key={`slide-${ind}`}
                 ></Image>
               ))}
             </Swiper>
+
             <View style={styles.sightDetails}>
               <View style={styles.headingRow}>
                 <Text style={styles.sightDetailsTitle}>{data?.title}</Text>
@@ -113,8 +125,8 @@ export const SightDetail: React.FC<SightDetailProps> = ({
                   style={[
                     styles.addToBucketButton,
                     {
-                      backgroundColor:
-                        1 == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)",
+                      backgroundColor: "rgba(0, 0, 0, 0.3)",
+                      // 1 == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)", // if this place is marked as favorate
                     },
                   ]}
                   activeOpacity={0.7}
@@ -135,12 +147,14 @@ export const SightDetail: React.FC<SightDetailProps> = ({
                 >
                   <StarIcon size={15} color="#FFBC3E" />
                 </View>
-                <Text style={styles.ratingText}>{data?.rating}</Text>
-                <Text style={styles.type}>{data?.type}</Text>
+                <Text style={styles.ratingText}>{data.rate}</Text>
+                <Text style={styles.type}>{data.category}</Text>
               </View>
-              <Text style={styles.address}>
-                <TripLocationIcon color="#000" size="12" /> {data?.address}
-              </Text>
+              {data.address && (
+                <Text style={styles.address}>
+                  <TripLocationIcon color="#000" size="12" /> {data.address}
+                </Text>
+              )}
             </View>
           </ScrollView>
         </View>

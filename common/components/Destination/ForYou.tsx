@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
-import { PlaceDetail } from "../../../screen/Explore/PlaceDetail";
+import { PlaceDetail } from "../../../components/explore/destination/PlaceDetail";
 import { MarkerFillIcon } from "../../../utilities/SvgIcons.utility";
 import { MapEmbedView } from "../MapEmbedView";
 import { styles } from "../_styles";
@@ -33,7 +33,11 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
   const [fetchCountryCities, { data, isLoading: isCitiesLoading }] =
     useLazyGetCitiesQuery();
   const [blogUrl, setBlogUrl] = useState("");
-  const [placeTitle, setPlaceTitle] = useState("");
+
+  // methods
+  const closePlaceDetailModal = useCallback(() => {
+    setState((prevState) => ({ ...prevState, city: null }));
+  }, []);
 
   const onEmbedModalOpen = () => {
     modalEmbedRef.current?.open();
@@ -54,7 +58,6 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
     });
   }, [fetchCountryCities, country]);
 
-  console.log(data);
   return (
     <>
       <View style={[styles.forYouRow, { marginTop: 25 }]}>
@@ -143,7 +146,6 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
                   onPress={() => {
                     onEmbedModalOpen();
                     setBlogUrl("");
-                    setPlaceTitle(item?.title);
                   }}
                 >
                   <Image
@@ -236,7 +238,6 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
                   onPress={() => {
                     onEmbedModalOpen();
                     setBlogUrl("");
-                    setPlaceTitle(item?.title);
                   }}
                 >
                   <Image
@@ -327,7 +328,7 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
                   key={ind}
                   onPress={() => {
                     onEmbedModalOpen();
-                    setPlaceTitle("");
+
                     setBlogUrl(item?.url);
                   }}
                 >
@@ -384,12 +385,7 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
           }}
         >
           {state.city && (
-            <PlaceDetail
-              setPlaceTitle={setPlaceTitle}
-              onEmbedModalOpen={onEmbedModalOpen}
-              setBlogUrl={setBlogUrl}
-              city={state.city}
-            />
+            <PlaceDetail city={state.city} modalRef={modalPlaceDetail} />
           )}
         </Modalize>
       </Portal>
@@ -397,7 +393,7 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
         <Modalize ref={modalEmbedRef} modalTopOffset={65} adjustToContentHeight>
           <MapEmbedView
             blogUrl={blogUrl}
-            placeTitle={placeTitle}
+            placeTitle={state.city && state.city.city}
             modalEmbedRef={modalEmbedRef}
           />
         </Modalize>

@@ -47,7 +47,6 @@ const ShareModal: React.FC<ShareModalProps> = ({
       UTI: "JPEG",
     });
   }, []);
-  console.log(countries);
 
   return (
     <View style={styles.shareWrapper}>
