@@ -375,6 +375,9 @@ export const ForYou = ({ DATA }) => {
             alwaysBounceVertical: false,
             showsVerticalScrollIndicator: false,
           }}
+          velocity={100000}
+          tapGestureEnabled={false}
+          closeSnapPointStraightEnabled={false}
         >
           <PlaceDetail
             setPlaceTitle={setPlaceTitle}

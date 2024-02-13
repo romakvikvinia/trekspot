@@ -1,3 +1,4 @@
+import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
@@ -376,14 +377,9 @@ export const PlaceDetail = ({
           ]}
         >
           <Text style={exploreStyles.placeSpotsRowTitle}>Top sights</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{
-              paddingHorizontal: 15,
-            }}
-          >
-            {place?.topSights?.map((item, ind) => (
+          <FlashList
+            data={place?.topSights.slice(0, 15)}
+            renderItem={({ item }) => (
               <TouchableOpacity
                 activeOpacity={0.7}
                 style={[
@@ -391,10 +387,9 @@ export const PlaceDetail = ({
                   {
                     width: 170,
                     marginRight: 5,
-                    height: "auto",
+                    height: 250,
                   },
                 ]}
-                key={ind}
                 onPress={() => {
                   setSightDetailVisible(true);
                 }}
@@ -459,8 +454,14 @@ export const PlaceDetail = ({
                   </View>
                 </View>
               </TouchableOpacity>
-            ))}
-          </ScrollView>
+            )}
+            estimatedItemSize={200}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingHorizontal: 15,
+            }}
+          />
         </View>
 
         <View style={[exploreStyles.placeSpotsRow, { marginTop: 10 }]}>
@@ -490,15 +491,9 @@ export const PlaceDetail = ({
             {!eventsVisible ? <DownCircleIcon /> : <UpCircleIcon />}
           </TouchableOpacity>
           {eventsVisible ? (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingHorizontal: 15,
-                paddingBottom: 10,
-              }}
-            >
-              {place?.events?.map((item, ind) => (
+            <FlashList
+              data={place?.events.slice(0, 15)}
+              renderItem={({ item }) => (
                 <TouchableOpacity
                   activeOpacity={0.7}
                   style={[
@@ -506,10 +501,9 @@ export const PlaceDetail = ({
                     {
                       width: 170,
                       marginRight: 5,
-                      height: "auto",
+                      height: 270,
                     },
                   ]}
-                  key={ind}
                   onPress={() => {
                     onEmbedModalOpen();
                     setBlogUrl(item?.url);
@@ -583,8 +577,14 @@ export const PlaceDetail = ({
                     </View>
                   </View>
                 </TouchableOpacity>
-              ))}
-            </ScrollView>
+              )}
+              estimatedItemSize={200}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingHorizontal: 15,
+              }}
+            />
           ) : null}
         </View>
 
@@ -616,15 +616,9 @@ export const PlaceDetail = ({
             {!historicalPlacesVisible ? <DownCircleIcon /> : <UpCircleIcon />}
           </TouchableOpacity>
           {historicalPlacesVisible ? (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingHorizontal: 15,
-                paddingBottom: 10,
-              }}
-            >
-              {place?.topSights?.map((item, ind) => (
+            <FlashList
+              data={place?.topSights.slice(0, 15)}
+              renderItem={({ item }) => (
                 <TouchableOpacity
                   activeOpacity={0.7}
                   style={[
@@ -632,15 +626,12 @@ export const PlaceDetail = ({
                     {
                       width: 170,
                       marginRight: 5,
-                      height: 240,
+                      height: 250,
                     },
                   ]}
-                  key={ind}
-                  // onPress={() => {
-                  //   onEmbedModalOpen();
-                  //   setBlogUrl("");
-                  //   setPlaceTitle(item?.title);
-                  // }}
+                  onPress={() => {
+                    setSightDetailVisible(true);
+                  }}
                 >
                   <Image
                     style={[
@@ -655,12 +646,7 @@ export const PlaceDetail = ({
                     source={{
                       uri: item?.thumbnail,
                     }}
-                  >
-                    <View style={styles.mapButton}>
-                      <MarkerFillIcon color="#fff" size="10" />
-                      <Text style={styles.mapButtonText}>Map</Text>
-                    </View>
-                  </Image>
+                  ></Image>
 
                   <View style={styles.thingsTodoItemDetails}>
                     <Text style={styles.thingsTodoItemTitle}>
@@ -692,11 +678,31 @@ export const PlaceDetail = ({
                           {item?.type}
                         </Text>
                       ) : null}
+                      <View style={exploreStyles.ratingWrapper}>
+                        <View
+                          style={{
+                            position: "relative",
+                            top: -1,
+                            opacity: 0.8,
+                          }}
+                        >
+                          <StarIcon size={15} color="#FFBC3E" />
+                        </View>
+                        <Text style={exploreStyles.ratingText}>
+                          {item?.rating}
+                        </Text>
+                      </View>
                     </View>
                   </View>
                 </TouchableOpacity>
-              ))}
-            </ScrollView>
+              )}
+              estimatedItemSize={200}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingHorizontal: 15,
+              }}
+            />
           ) : null}
         </View>
 
@@ -728,15 +734,9 @@ export const PlaceDetail = ({
             {!museumsVisible ? <DownCircleIcon /> : <UpCircleIcon />}
           </TouchableOpacity>
           {museumsVisible ? (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingHorizontal: 15,
-                paddingBottom: 10,
-              }}
-            >
-              {place?.topSights?.map((item, ind) => (
+            <FlashList
+              data={place?.topSights.slice(0, 15)}
+              renderItem={({ item }) => (
                 <TouchableOpacity
                   activeOpacity={0.7}
                   style={[
@@ -744,15 +744,12 @@ export const PlaceDetail = ({
                     {
                       width: 170,
                       marginRight: 5,
-                      height: 240,
+                      height: 250,
                     },
                   ]}
-                  key={ind}
-                  // onPress={() => {
-                  //   onEmbedModalOpen();
-                  //   setBlogUrl("");
-                  //   setPlaceTitle(item?.title);
-                  // }}
+                  onPress={() => {
+                    setSightDetailVisible(true);
+                  }}
                 >
                   <Image
                     style={[
@@ -767,12 +764,7 @@ export const PlaceDetail = ({
                     source={{
                       uri: item?.thumbnail,
                     }}
-                  >
-                    <View style={styles.mapButton}>
-                      <MarkerFillIcon color="#fff" size="10" />
-                      <Text style={styles.mapButtonText}>Map</Text>
-                    </View>
-                  </Image>
+                  ></Image>
 
                   <View style={styles.thingsTodoItemDetails}>
                     <Text style={styles.thingsTodoItemTitle}>
@@ -804,11 +796,31 @@ export const PlaceDetail = ({
                           {item?.type}
                         </Text>
                       ) : null}
+                      <View style={exploreStyles.ratingWrapper}>
+                        <View
+                          style={{
+                            position: "relative",
+                            top: -1,
+                            opacity: 0.8,
+                          }}
+                        >
+                          <StarIcon size={15} color="#FFBC3E" />
+                        </View>
+                        <Text style={exploreStyles.ratingText}>
+                          {item?.rating}
+                        </Text>
+                      </View>
                     </View>
                   </View>
                 </TouchableOpacity>
-              ))}
-            </ScrollView>
+              )}
+              estimatedItemSize={200}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingHorizontal: 15,
+              }}
+            />
           ) : null}
         </View>
 
@@ -839,15 +851,9 @@ export const PlaceDetail = ({
             {!attractionVisible ? <DownCircleIcon /> : <UpCircleIcon />}
           </TouchableOpacity>
           {attractionVisible ? (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingHorizontal: 15,
-                paddingBottom: 10,
-              }}
-            >
-              {place?.topSights?.map((item, ind) => (
+            <FlashList
+              data={place?.topSights.slice(0, 15)}
+              renderItem={({ item }) => (
                 <TouchableOpacity
                   activeOpacity={0.7}
                   style={[
@@ -855,15 +861,12 @@ export const PlaceDetail = ({
                     {
                       width: 170,
                       marginRight: 5,
-                      height: 240,
+                      height: 250,
                     },
                   ]}
-                  key={ind}
-                  // onPress={() => {
-                  //   onEmbedModalOpen();
-                  //   setBlogUrl("");
-                  //   setPlaceTitle(item?.title);
-                  // }}
+                  onPress={() => {
+                    setSightDetailVisible(true);
+                  }}
                 >
                   <Image
                     style={[
@@ -878,12 +881,7 @@ export const PlaceDetail = ({
                     source={{
                       uri: item?.thumbnail,
                     }}
-                  >
-                    <View style={styles.mapButton}>
-                      <MarkerFillIcon color="#fff" size="10" />
-                      <Text style={styles.mapButtonText}>Map</Text>
-                    </View>
-                  </Image>
+                  ></Image>
 
                   <View style={styles.thingsTodoItemDetails}>
                     <Text style={styles.thingsTodoItemTitle}>
@@ -915,11 +913,31 @@ export const PlaceDetail = ({
                           {item?.type}
                         </Text>
                       ) : null}
+                      <View style={exploreStyles.ratingWrapper}>
+                        <View
+                          style={{
+                            position: "relative",
+                            top: -1,
+                            opacity: 0.8,
+                          }}
+                        >
+                          <StarIcon size={15} color="#FFBC3E" />
+                        </View>
+                        <Text style={exploreStyles.ratingText}>
+                          {item?.rating}
+                        </Text>
+                      </View>
                     </View>
                   </View>
                 </TouchableOpacity>
-              ))}
-            </ScrollView>
+              )}
+              estimatedItemSize={200}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingHorizontal: 15,
+              }}
+            />
           ) : null}
         </View>
 
@@ -951,15 +969,9 @@ export const PlaceDetail = ({
             {!marketsVisible ? <DownCircleIcon /> : <UpCircleIcon />}
           </TouchableOpacity>
           {marketsVisible ? (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingHorizontal: 15,
-                paddingBottom: 10,
-              }}
-            >
-              {place?.topSights?.map((item, ind) => (
+            <FlashList
+              data={place?.topSights.slice(0, 15)}
+              renderItem={({ item }) => (
                 <TouchableOpacity
                   activeOpacity={0.7}
                   style={[
@@ -967,15 +979,12 @@ export const PlaceDetail = ({
                     {
                       width: 170,
                       marginRight: 5,
-                      height: 240,
+                      height: 250,
                     },
                   ]}
-                  key={ind}
-                  // onPress={() => {
-                  //   onEmbedModalOpen();
-                  //   setBlogUrl("");
-                  //   setPlaceTitle(item?.title);
-                  // }}
+                  onPress={() => {
+                    setSightDetailVisible(true);
+                  }}
                 >
                   <Image
                     style={[
@@ -990,12 +999,7 @@ export const PlaceDetail = ({
                     source={{
                       uri: item?.thumbnail,
                     }}
-                  >
-                    <View style={styles.mapButton}>
-                      <MarkerFillIcon color="#fff" size="10" />
-                      <Text style={styles.mapButtonText}>Map</Text>
-                    </View>
-                  </Image>
+                  ></Image>
 
                   <View style={styles.thingsTodoItemDetails}>
                     <Text style={styles.thingsTodoItemTitle}>
@@ -1027,11 +1031,31 @@ export const PlaceDetail = ({
                           {item?.type}
                         </Text>
                       ) : null}
+                      <View style={exploreStyles.ratingWrapper}>
+                        <View
+                          style={{
+                            position: "relative",
+                            top: -1,
+                            opacity: 0.8,
+                          }}
+                        >
+                          <StarIcon size={15} color="#FFBC3E" />
+                        </View>
+                        <Text style={exploreStyles.ratingText}>
+                          {item?.rating}
+                        </Text>
+                      </View>
                     </View>
                   </View>
                 </TouchableOpacity>
-              ))}
-            </ScrollView>
+              )}
+              estimatedItemSize={200}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingHorizontal: 15,
+              }}
+            />
           ) : null}
         </View>
 
@@ -1175,15 +1199,9 @@ export const PlaceDetail = ({
             {!blogVisible ? <DownCircleIcon /> : <UpCircleIcon />}
           </TouchableOpacity>
           {blogVisible ? (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingHorizontal: 15,
-                paddingBottom: 10,
-              }}
-            >
-              {place?.topSights?.map((item, ind) => (
+            <FlashList
+              data={place?.topSights.slice(0, 15)}
+              renderItem={({ item }) => (
                 <TouchableOpacity
                   activeOpacity={0.7}
                   style={[
@@ -1191,15 +1209,12 @@ export const PlaceDetail = ({
                     {
                       width: 170,
                       marginRight: 5,
-                      height: 240,
+                      height: 250,
                     },
                   ]}
-                  key={ind}
-                  // onPress={() => {
-                  //   onEmbedModalOpen();
-                  //   setBlogUrl("");
-                  //   setPlaceTitle(item?.title);
-                  // }}
+                  onPress={() => {
+                    setSightDetailVisible(true);
+                  }}
                 >
                   <Image
                     style={[
@@ -1214,12 +1229,7 @@ export const PlaceDetail = ({
                     source={{
                       uri: item?.thumbnail,
                     }}
-                  >
-                    <View style={styles.mapButton}>
-                      <MarkerFillIcon color="#fff" size="10" />
-                      <Text style={styles.mapButtonText}>Map</Text>
-                    </View>
-                  </Image>
+                  ></Image>
 
                   <View style={styles.thingsTodoItemDetails}>
                     <Text style={styles.thingsTodoItemTitle}>
@@ -1251,11 +1261,31 @@ export const PlaceDetail = ({
                           {item?.type}
                         </Text>
                       ) : null}
+                      <View style={exploreStyles.ratingWrapper}>
+                        <View
+                          style={{
+                            position: "relative",
+                            top: -1,
+                            opacity: 0.8,
+                          }}
+                        >
+                          <StarIcon size={15} color="#FFBC3E" />
+                        </View>
+                        <Text style={exploreStyles.ratingText}>
+                          {item?.rating}
+                        </Text>
+                      </View>
                     </View>
                   </View>
                 </TouchableOpacity>
-              ))}
-            </ScrollView>
+              )}
+              estimatedItemSize={200}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingHorizontal: 15,
+              }}
+            />
           ) : null}
         </View>
       </View>

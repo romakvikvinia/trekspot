@@ -14,10 +14,27 @@ import moment from "moment";
 import { COLORS, SIZES } from "../../styles/theme";
 import {
   CalendarFilledIcon,
+  DownCircleIcon,
+  EditIcon,
+  FlightIcon,
   ImageIcon,
   OneUserIcon,
+  PlusIcon,
   PrivateIcon,
+  Share,
   TripLocationIcon,
+  BusIcon,
+  ShipIcon,
+  USDIcon,
+  NotesIcon,
+  TicketIcon,
+  StarsIcon,
+  LodgeIcon,
+  ToursIcon,
+  MuseumIcon,
+  EatIcon,
+  MapIcon,
+  ToDoIcon,
 } from "../../utilities/SvgIcons.utility";
 import { RangePicker } from "./RangePicker";
 import { Portal } from "react-native-portalize";
@@ -26,15 +43,15 @@ import { Destination } from "./Destination";
 import { Accessibility } from "./Accessibility";
 import { TravelType } from "./TravelType";
 import { Background } from "./Background";
+import { ActivityList } from "./ActivityList";
 
 export const CreateTripContent = ({
-  newTripModalRef,
+  tripActivitesModal,
   gradient,
   setGradient,
-  tripActivitesModal,
 }) => {
   const modalDestinationRef = useRef(null);
-  const modalAccessibilityRef = useRef(null);
+  const modalActivityRef = useRef(null);
   const modalBackgroundRef = useRef(null);
   const modalTravelTypeRef = useRef(null);
 
@@ -42,16 +59,15 @@ export const CreateTripContent = ({
     startDate: undefined,
     endDate: undefined,
   });
-  const [tripAccess, setTripAccess] = useState(false);
   const [destination, setDestination] = useState();
-  const [travelType, setTravelType] = useState(false);
+  const [activity, setActivity] = useState([]);
 
   const [open, setOpen] = useState(false);
   const onDestinationModalOpen = () => {
     modalDestinationRef.current?.open();
   };
-  const onAccessibilityModalOpen = () => {
-    modalAccessibilityRef.current?.open();
+  const onActivityModalOpen = () => {
+    modalActivityRef.current?.open();
   };
   const onTravelTypeModalOpen = () => {
     modalTravelTypeRef.current?.open();
@@ -60,140 +76,399 @@ export const CreateTripContent = ({
     modalBackgroundRef.current?.open();
   };
 
-  const handleCreateNewTrip = () => {
-    tripActivitesModal.current?.open();
-    newTripModalRef.current?.close();
-  };
-
   return (
     <>
       <View style={styles.newTripWrapper}>
         <View style={styles.newTripHeader}>
           <TouchableOpacity
             style={styles.cancelTripButton}
-            onPress={() => newTripModalRef?.current?.close()}
+            onPress={() => tripActivitesModal?.current?.close()}
           >
-            <Text style={styles.cancelTripButtonText}>Cancel</Text>
+            <DownCircleIcon color="#fff" size="25" />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.createTripButton}
-            onPress={() => handleCreateNewTrip()}
-          >
-            <Text style={styles.createTripButtonText}>Create</Text>
-          </TouchableOpacity>
+          <View style={{ flexDirection: "row" }}>
+            {/* <TouchableOpacity style={styles.createTripButton}>
+              <Share size="22" color="#fff" />
+            </TouchableOpacity> */}
+            <TouchableOpacity
+              activeOpacity={0.5}
+              style={[styles.createTripButton]}
+            >
+              <Text style={{ fontSize: 16, color: COLORS.black }}>Edit</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        {/* <BlurView intensity={100} style={styles.tripNameInputWrapper}> */}
-        <TextInput
-          placeholder="Enter trip name"
-          placeholderTextColor="rgba(255, 255, 255, 0.6)"
-          style={styles.tripNameInput}
-          selectionColor="#fff"
-        />
-        {/* </BlurView> */}
+        <Text style={styles.tripName}>My trip</Text>
         <ScrollView style={{ flex: 1 }}>
           <View style={styles.newTripBoxes}>
-            <BlurView
-              intensity={100}
-              style={[styles.newTripBox, styles.fullBox]}
+            <View
+              style={{
+                width: "100%",
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
             >
-              <TouchableOpacity
-                activeOpacity={0.5}
-                style={styles.datePickerTopRow}
+              <BlurView
+                intensity={100}
+                style={[styles.newTripBox, styles.fullBox, { width: "60%" }]}
               >
-                <View style={styles.datePickerTopRowLeft}>
-                  <CalendarFilledIcon />
+                <View style={styles.datePickerTopRow}>
                   <Text style={styles.datePickerTopRowLeftText}>Itinerary</Text>
+                  <Text
+                    style={[
+                      styles.datePickerTopRowLeftText,
+                      { fontWeight: "400", fontSize: 12 },
+                    ]}
+                  >
+                    14 days
+                  </Text>
                 </View>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  style={styles.datePickerBottomRow}
+                  onPress={() => setOpen(true)}
+                >
+                  <View style={styles.datePickerBottomRowLeft}>
+                    <Text style={styles.startsDateLabel}>Dates</Text>
+                    <Text style={styles.startsDateText}>22 Nov</Text>
+                  </View>
+                  <Text
+                    style={{
+                      fontSize: 25,
+                      color: COLORS.black,
+                      position: "relative",
+                      top: 10,
+                    }}
+                  >
+                    -
+                  </Text>
+                  <View style={styles.datePickerBottomRowRight}>
+                    <Text style={styles.startsDateLabel}></Text>
+                    <Text style={styles.startsDateText}>28 Nov</Text>
+                  </View>
+                </TouchableOpacity>
+              </BlurView>
+              <BlurView
+                intensity={100}
+                style={[styles.newTripBox, styles.halfBox, { width: "38%" }]}
+              >
+                <View style={styles.iconBox}>
+                  <TripLocationIcon color="#C6C6C6" />
+                </View>
+                <Text style={styles.halfBoxLabelText}>London</Text>
+                <Text
+                  style={[styles.halfBoxLabelText, { opacity: 0.5 }]}
+                  numberOfLines={1}
+                >
+                  United Kingdom
+                </Text>
+              </BlurView>
+            </View>
+            <BlurView
+              intensity={100}
+              style={[styles.newTripBox, styles.halfBox, { width: "32%" }]}
+            >
               <TouchableOpacity
                 activeOpacity={0.5}
-                style={styles.datePickerBottomRow}
-                onPress={() => setOpen(true)}
+                style={{ flex: 1, justifyContent: "center" }}
               >
-                <View style={styles.datePickerBottomRowLeft}>
-                  <Text style={styles.startsDateLabel}>Start</Text>
-                  <Text style={styles.startsDateText}>
-                    {range?.startDate
-                      ? moment(range?.startDate).format("DD MMM")
-                      : "Set date"}
-                  </Text>
+                <View style={styles.iconBox}>
+                  <USDIcon width="18" color="#C6C6C6" />
                 </View>
-                <Text style={{ fontSize: 25, color: COLORS.black }}>-</Text>
-                <View style={styles.datePickerBottomRowRight}>
-                  <Text style={styles.startsDateLabel}>End</Text>
-                  <Text style={styles.startsDateText}>
-                    {range?.endDate
-                      ? moment(range?.endDate).format("DD MMM")
-                      : "Set date"}
-                  </Text>
-                </View>
+                <Text
+                  style={[
+                    styles.halfBoxLabelText,
+                    {
+                      marginTop: 25,
+                      fontSize: 14,
+                      color: "#424242",
+                    },
+                  ]}
+                >
+                  Expenses
+                </Text>
               </TouchableOpacity>
             </BlurView>
             <BlurView
               intensity={100}
-              style={[styles.newTripBox, styles.halfBox]}
+              style={[styles.newTripBox, styles.halfBox, { width: "32%" }]}
             >
               <TouchableOpacity
                 activeOpacity={0.5}
-                onPress={() => onDestinationModalOpen()}
+                style={{ flex: 1, justifyContent: "center" }}
               >
-                <TripLocationIcon />
-                <Text style={styles.halfBoxLabelText}>Where to?</Text>
-                {destination ? (
-                  <Text style={styles.halfBoxValueText}>{destination}</Text>
-                ) : null}
+                <View style={styles.iconBox}>
+                  <NotesIcon width="18" color="#C6C6C6" />
+                </View>
+                <Text
+                  style={[
+                    styles.halfBoxLabelText,
+                    {
+                      marginTop: 25,
+                      fontSize: 14,
+                      color: "#424242",
+                    },
+                  ]}
+                >
+                  Notes
+                </Text>
               </TouchableOpacity>
             </BlurView>
             {/* <BlurView
               intensity={100}
-              style={[styles.newTripBox, styles.halfBox]}
+              style={[styles.newTripBox, styles.halfBox, { width: "32%" }]}
             >
               <TouchableOpacity
                 activeOpacity={0.5}
-                style={styles.newTripBoxButton}
-                onPress={() => onAccessibilityModalOpen()}
+                style={{ flex: 1, justifyContent: "center" }}
               >
-                <PrivateIcon size="20" />
-                <Text style={styles.halfBoxLabelText}>Accessibility</Text>
-                <Text style={styles.halfBoxValueText}>Private</Text>
-              </TouchableOpacity>
-            </BlurView> */}
-            {/* <BlurView
-              intensity={100}
-              style={[styles.newTripBox, styles.halfBox]}
-            >
-              <TouchableOpacity
-                activeOpacity={0.5}
-                style={styles.newTripBoxButton}
-                onPress={() => onTravelTypeModalOpen()}
-              >
-                <OneUserIcon size="20" />
-                <Text style={styles.halfBoxLabelText}>Travel type</Text>
-                <Text style={styles.halfBoxValueText}>Solo</Text>
+                <Text style={styles.amount}>5</Text>
+                <View style={styles.iconBox}>
+                  <FlightIcon width="18" color="#C6C6C6" />
+                </View>
+                <Text
+                  style={[
+                    styles.halfBoxLabelText,
+                    {
+                      marginTop: 25,
+                      fontSize: 14,
+                      color: "#424242",
+                    },
+                  ]}
+                >
+                  Flight
+                </Text>
               </TouchableOpacity>
             </BlurView> */}
             <BlurView
               intensity={100}
-              style={[styles.newTripBox, styles.halfBox]}
+              style={[styles.newTripBox, styles.halfBox, { width: "32%" }]}
             >
               <TouchableOpacity
                 activeOpacity={0.5}
-                style={styles.newTripBoxButton}
-                onPress={() => onBackgroundModalOpen()}
+                style={{ flex: 1, justifyContent: "center" }}
               >
-                <ImageIcon size="20" />
-                <Text style={styles.halfBoxLabelText}>Background image</Text>
+                <View style={styles.iconBox}>
+                  <BusIcon width="18" color="#C6C6C6" />
+                </View>
+                <Text
+                  style={[
+                    styles.halfBoxLabelText,
+                    {
+                      marginTop: 25,
+                      fontSize: 14,
+                      color: "#424242",
+                    },
+                  ]}
+                >
+                  Transport
+                </Text>
+              </TouchableOpacity>
+            </BlurView>
+            <BlurView
+              intensity={100}
+              style={[styles.newTripBox, styles.halfBox, { width: "32%" }]}
+            >
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={{ flex: 1, justifyContent: "center" }}
+              >
+                <View style={styles.iconBox}>
+                  <ShipIcon width="20" color="#C6C6C6" />
+                </View>
+                <Text
+                  style={[
+                    styles.halfBoxLabelText,
+                    {
+                      marginTop: 25,
+                      fontSize: 14,
+                      color: "#424242",
+                    },
+                  ]}
+                >
+                  Cruise
+                </Text>
+              </TouchableOpacity>
+            </BlurView>
+            <BlurView
+              intensity={100}
+              style={[styles.newTripBox, styles.halfBox, { width: "32%" }]}
+            >
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={{ flex: 1, justifyContent: "center" }}
+              >
+                <View style={styles.iconBox}>
+                  <TicketIcon width="20" color="#C6C6C6" />
+                </View>
+                <Text
+                  style={[
+                    styles.halfBoxLabelText,
+                    {
+                      marginTop: 25,
+                      fontSize: 14,
+                      color: "#424242",
+                    },
+                  ]}
+                >
+                  Event
+                </Text>
+              </TouchableOpacity>
+            </BlurView>
+            <BlurView
+              intensity={100}
+              style={[styles.newTripBox, styles.halfBox, { width: "32%" }]}
+            >
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={{ flex: 1, justifyContent: "center" }}
+              >
+                <View style={styles.iconBox}>
+                  <ToDoIcon width="20" color="#C6C6C6" />
+                </View>
+                <Text
+                  style={[
+                    styles.halfBoxLabelText,
+                    {
+                      marginTop: 25,
+                      fontSize: 14,
+                      color: "#424242",
+                    },
+                  ]}
+                >
+                  Other
+                </Text>
+              </TouchableOpacity>
+            </BlurView>
+            <BlurView
+              intensity={100}
+              style={[styles.newTripBox, styles.halfBox, { width: "32%" }]}
+            >
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={{ flex: 1, justifyContent: "center" }}
+              >
+                <View style={styles.iconBox}>
+                  <LodgeIcon width="20" color="#C6C6C6" />
+                </View>
+                <Text
+                  style={[
+                    styles.halfBoxLabelText,
+                    {
+                      marginTop: 25,
+                      fontSize: 14,
+                      color: "#424242",
+                    },
+                  ]}
+                >
+                  Lodging
+                </Text>
+              </TouchableOpacity>
+            </BlurView>
+            <BlurView
+              intensity={100}
+              style={[styles.newTripBox, styles.halfBox, { width: "32%" }]}
+            >
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={{ flex: 1, justifyContent: "center" }}
+              >
+                <View style={styles.iconBox}>
+                  <MapIcon width="20" color="#C6C6C6" />
+                </View>
+                <Text
+                  style={[
+                    styles.halfBoxLabelText,
+                    {
+                      marginTop: 25,
+                      fontSize: 14,
+                      color: "#424242",
+                    },
+                  ]}
+                >
+                  Tour
+                </Text>
+              </TouchableOpacity>
+            </BlurView>
+            <BlurView
+              intensity={100}
+              style={[styles.newTripBox, styles.halfBox, { width: "32%" }]}
+            >
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={{ flex: 1, justifyContent: "center" }}
+              >
+                <View style={styles.iconBox}>
+                  <MuseumIcon width="20" color="#C6C6C6" />
+                </View>
+                <Text
+                  style={[
+                    styles.halfBoxLabelText,
+                    {
+                      marginTop: 25,
+                      fontSize: 14,
+                      color: "#424242",
+                    },
+                  ]}
+                >
+                  Museum
+                </Text>
+              </TouchableOpacity>
+            </BlurView>
+            <BlurView
+              intensity={100}
+              style={[styles.newTripBox, styles.halfBox, { width: "32%" }]}
+            >
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={{ flex: 1, justifyContent: "center" }}
+              >
+                <View style={styles.iconBox}>
+                  <EatIcon width="20" color="#C6C6C6" />
+                </View>
+                <Text
+                  style={[
+                    styles.halfBoxLabelText,
+                    {
+                      marginTop: 25,
+                      fontSize: 14,
+                      color: "#424242",
+                    },
+                  ]}
+                >
+                  Restaurant
+                </Text>
+              </TouchableOpacity>
+            </BlurView>
+            <BlurView
+              intensity={100}
+              style={[styles.newTripBox, styles.halfBox, { width: "32%" }]}
+            >
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={{ flex: 1, justifyContent: "center" }}
+                onPress={() => onActivityModalOpen()}
+              >
+                <View style={styles.iconBox}>
+                  <PlusIcon size="30" color="#C6C6C6" />
+                </View>
+                <Text
+                  style={[
+                    styles.halfBoxLabelText,
+                    {
+                      marginTop: 25,
+                      fontSize: 14,
+                      color: "#424242",
+                    },
+                  ]}
+                >
+                  Add activity
+                </Text>
               </TouchableOpacity>
             </BlurView>
           </View>
         </ScrollView>
       </View>
-      <RangePicker
-        range={range}
-        setRange={setRange}
-        open={open}
-        setOpen={setOpen}
-      />
 
       <Portal>
         <Modalize
@@ -211,26 +486,25 @@ export const CreateTripContent = ({
           <Destination />
         </Modalize>
       </Portal>
-      {/* <Portal>
+      <Portal>
         <Modalize
           modalStyle={{
             backgroundColor: "#F2F2F7",
-            minHeight: "70%",
+            minHeight: "95%",
           }}
-          ref={modalAccessibilityRef}
+          ref={modalActivityRef}
           modalTopOffset={65}
           adjustToContentHeight
           scrollViewProps={{
             alwaysBounceVertical: false,
             showsVerticalScrollIndicator: false,
+            keyboardShouldPersistTaps: "handled",
           }}
         >
-          <Accessibility
-            tripAccess={tripAccess}
-            setTripAccess={setTripAccess}
-          />
+          <ActivityList activity={activity} setActivity={setActivity} />
         </Modalize>
       </Portal>
+      {/* 
       <Portal>
         <Modalize
           ref={modalTravelTypeRef}
@@ -268,7 +542,7 @@ export const CreateTripContent = ({
   );
 };
 
-export const CreateTrip = ({ newTripModalRef, tripActivitesModal }) => {
+export const TripActivites = ({ tripActivitesModal }) => {
   const [gradient, setGradient] = useState(["#756A95", "#975B76", "#B75E68"]);
 
   return gradient ? (
@@ -281,7 +555,6 @@ export const CreateTrip = ({ newTripModalRef, tripActivitesModal }) => {
       <CreateTripContent
         gradient={gradient}
         setGradient={setGradient}
-        newTripModalRef={newTripModalRef}
         tripActivitesModal={tripActivitesModal}
       />
     </LinearGradient>
@@ -295,10 +568,7 @@ export const CreateTrip = ({ newTripModalRef, tripActivitesModal }) => {
       transition={0}
       style={styles.tripModalGradient}
     >
-      <CreateTripContent
-        newTripModalRef={newTripModalRef}
-        tripActivitesModal={tripActivitesModal}
-      />
+      <CreateTripContent tripActivitesModal={tripActivitesModal} />
     </Image>
   );
 };
@@ -309,25 +579,40 @@ const styles = StyleSheet.create({
     backgroundColor: "#F2F2F7",
   },
   cancelTripButton: {
-    paddingVertical: 7,
-    paddingHorizontal: 20,
-    borderRadius: 30,
-    backgroundColor: "rgba(0, 0, 0, 0.1)",
+    position: "relative",
   },
   cancelTripButtonText: {
     color: COLORS.white,
     fontSize: 14,
     fontWeight: "500",
   },
+  tripName: {
+    fontSize: 28,
+    color: COLORS.white,
+    fontWeight: "700",
+    marginBottom: 15,
+  },
+  iconBox: {
+    width: 35,
+    height: 35,
+    backgroundColor: "#333",
+    borderRadius: 100,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   createTripButton: {
+    marginRight: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 25,
     paddingVertical: 7,
     paddingHorizontal: 20,
-    borderRadius: 30,
-    backgroundColor: COLORS.white,
   },
   createTripButtonText: {
     color: COLORS.black,
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "500",
   },
   halfBoxLabelText: {
@@ -344,6 +629,7 @@ const styles = StyleSheet.create({
   },
   datePickerTopRow: {
     flexDirection: "row",
+    justifyContent: "space-between",
     width: "100%",
     paddingHorizontal: 15,
     paddingVertical: 15,
@@ -352,7 +638,6 @@ const styles = StyleSheet.create({
   },
   datePickerTopRowLeftText: {
     fontSize: 14,
-    marginLeft: 8,
     color: COLORS.black,
     fontWeight: "500",
     marginTop: 2,
@@ -364,7 +649,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   startsDateText: {
-    fontSize: 16,
+    fontSize: 24,
     color: COLORS.black,
     fontWeight: "500",
   },
@@ -380,6 +665,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 15,
     justifyContent: "space-between",
+    paddingTop: 5,
   },
   datePickerTopRowLeft: {
     flexDirection: "row",
@@ -410,13 +696,21 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  amount: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: COLORS.black,
+    position: "absolute",
+    right: 0,
+    top: 0,
+  },
   newTripBox: {
     width: 100,
     height: 100,
     backgroundColor: "rgba(204, 206, 206, 0.6)",
     borderRadius: 20,
     marginRight: 0,
-    marginBottom: 15,
+    marginBottom: 10,
     overflow: "hidden",
   },
   halfBox: {
