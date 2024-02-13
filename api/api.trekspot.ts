@@ -19,6 +19,11 @@ import {
   CountryResponseType,
   PassportIndexesArgsType,
   PassportIndexesResponseType,
+  CitiesArgsType,
+  CitiesResponseType,
+  SightsArgsType,
+  SightsResponseType,
+  SightsFetchResponseType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -66,6 +71,7 @@ export const trekSpotApi = createApi({
     "updateMe",
     "stories",
     "createOrUpdateStories",
+    "getSights",
   ],
   endpoints: (builder) => ({
     /**
@@ -435,6 +441,111 @@ export const trekSpotApi = createApi({
         `,
       }),
     }),
+    /**
+     *  cities
+     */
+
+    getCities: builder.query<CitiesResponseType, CitiesArgsType>({
+      query: ({ skip = 0, take = 20, iso2, in_top_sight = false }) => ({
+        variables: { skip, take, iso2, in_top_sight },
+        document: gql`
+          query (
+            $skip: Int!
+            $take: Int!
+            $iso2: String
+            $in_top_sight: Boolean
+          ) {
+            cities(
+              input: {
+                skip: $skip
+                take: $take
+                iso2: $iso2
+                in_top_sight: $in_top_sight
+              }
+            ) {
+              id
+              city
+              city_ascii
+              country
+              iso2
+              capital
+              lat
+              lng
+              rate
+              description
+              image {
+                url
+              }
+              images {
+                id
+                url
+              }
+            }
+          }
+        `,
+      }),
+    }),
+    /**
+     * Sights
+     */
+    getSights: builder.query<SightsResponseType, SightsArgsType>({
+      query: ({ skip = 0, take = 100, iso2, city = "" }) => ({
+        variables: { skip, take, iso2, city },
+        document: gql`
+          query ($skip: Int!, $take: Int!, $iso2: String!, $city: String) {
+            sights(
+              input: { skip: $skip, take: $take, iso2: $iso2, city: $city }
+            ) {
+              id
+              iso2
+              title
+              rate
+              category
+              price
+              reviews
+              iso2
+              city
+              address
+              url
+              description
+              workingHours {
+                day
+                hours
+              }
+              image {
+                url
+              }
+              images {
+                url
+              }
+            }
+          }
+        `,
+      }),
+      providesTags: ["getSights"],
+      transformResponse: (response: SightsFetchResponseType) => {
+        let transformedData: Record<string, any[]> = {};
+        let sights = response.sights || [];
+
+        if (sights.length) {
+          transformedData["Top Sights"] = sights.splice(0, 10);
+          if (sights.length) {
+            sights.forEach((res) => {
+              if (res.category in transformedData) {
+                transformedData[res.category] = [
+                  ...transformedData[res.category],
+                  res,
+                ];
+              } else {
+                transformedData[res.category] = [res];
+              }
+            });
+          }
+        }
+
+        return transformedData;
+      },
+    }),
     //
   }),
 });
@@ -452,4 +563,7 @@ export const {
   useCountryQuery,
   useLazyCountryQuery,
   useLazyGetPassportIndexesQuery,
+  useGetCitiesQuery,
+  useLazyGetCitiesQuery,
+  useLazyGetSightsQuery,
 } = trekSpotApi;

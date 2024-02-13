@@ -21,7 +21,7 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
     useLazyGetPassportIndexesQuery();
 
   useEffect(() => {
-    fetchVisaInfo({ from: country.iso2, to: "FR" });
+    fetchVisaInfo({ from: "GE", to: country.iso2 });
   }, []);
 
   return (

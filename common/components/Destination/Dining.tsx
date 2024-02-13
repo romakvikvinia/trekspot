@@ -8,8 +8,13 @@ import {
 import { COLORS } from "../../../styles/theme";
 import { StarIcon } from "../../../utilities/SvgIcons.utility";
 import { styles } from "../_styles";
+import { CountryType } from "../../../api/api.types";
 
-export const Dining = ({ onEmbedModalOpen, setBlogUrl, setPlaceTitle }) => {
+type DiningProps = {
+  country: CountryType;
+};
+
+export const Dining: React.FC<DiningProps> = ({ country }) => {
   const dishes = [
     {
       src: "https://cdn.tasteatlas.com//images/dishes/b075a8fbe7224ef787272cf4d979e388.jpg?mw=660",
@@ -256,28 +261,16 @@ export const Dining = ({ onEmbedModalOpen, setBlogUrl, setPlaceTitle }) => {
                       marginTop: 5,
                     }}
                   >
-                    <Text style={styles.thingsTodoItemiIntypeText}>
-                      Top spot:
-                    </Text>
-                    <TouchableOpacity
-                      activeOpacity={0.7}
-                      onPress={() => {
-                        onEmbedModalOpen();
-                        setBlogUrl("");
-                        setPlaceTitle(item?.restaurant);
+                    <Text
+                      style={{
+                        color: COLORS.primary,
+                        fontSize: 14,
+                        fontWeight: "600",
                       }}
+                      selectable={true}
                     >
-                      <Text
-                        style={{
-                          color: COLORS.primary,
-                          fontSize: 14,
-                          fontWeight: "600",
-                        }}
-                        selectable={true}
-                      >
-                        {item?.restaurant}
-                      </Text>
-                    </TouchableOpacity>
+                      {item?.restaurant}
+                    </Text>
                   </View>
                 </View>
               </View>
