@@ -1,77 +1,31 @@
-import { FlashList } from "@shopify/flash-list";
-import { Image } from "expo-image";
-import {
-  ImageBackground,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-  ScrollView,
-  useWindowDimensions,
-  KeyboardAvoidingView,
-  Animated,
-  Easing,
-  Linking,
-  Platform,
-} from "react-native";
+import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useNavigation } from "@react-navigation/native";
+
 import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
-import { COLORS, SIZES } from "../../styles/theme";
+import { COLORS } from "../../styles/theme";
 import Swiper from "react-native-swiper";
 import { styles } from "./_styles";
-import {
-  Tabs,
-  MaterialTabBar,
-  useFocusedTab,
-} from "react-native-collapsible-tab-view";
+import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
 
 import React, { useEffect, useRef, useState } from "react";
 import {
-  AmbulanceIcon,
-  AutumnIcon,
-  BackIcon,
-  BusIcon,
-  CallIcon,
-  CheckCircleIcon,
-  CloseCircleIcon,
   CurrencyIcon,
   DiningIcon,
   DownIcon,
-  DownLongArrow,
-  DrivingSideLeft,
-  DrivingSideRight,
   EmergencyIcon,
   EventsIcon,
-  FireBrigadeIcon,
   ForYouIcon,
   InfoIcon,
   LanguageIcon,
-  Mark,
   Mark2,
-  MarkerFillIcon,
-  MetroIcon,
   PassportIcon,
-  PoliceIcon,
-  SpringIcon,
   StarIcon,
-  SummerIcon,
   TopThingsIcon,
   ToursIcon,
-  TramwayIcon,
   TransportIcon,
-  TrolleybusIcon,
-  WinterIcon,
 } from "../../utilities/SvgIcons.utility";
 import { CountrySelect } from "./CountrySelect";
-import { Topsights } from "../../utilities/Tops";
-import { MapEmbedView } from "./MapEmbedView";
-import { CurrencySelect } from "./CurrencySelect";
-import { SecurityThreats } from "./DestinationSubComponents/SecurityThreats";
-import { PlugImages } from "../../utilities/Plugs";
-import { NotFound } from "../../components/common/NotFound";
 import { ForYou } from "./Destination/ForYou";
 import Overview from "./Destination/Overview";
 import { Visa } from "./Destination/Visa";
@@ -1003,7 +957,7 @@ export const DestinationDetail: React.FC<DestinationDetailProps> = ({
               bounces={false}
               showsVerticalScrollIndicator={false}
             >
-              <ForYou DATA={DATA} />
+              {data && <ForYou DATA={DATA} country={data?.country} />}
             </Tabs.ScrollView>
           </Tabs.Tab>
           <Tabs.Tab

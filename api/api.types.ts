@@ -197,3 +197,67 @@ export type PassportIndexesArgsType = {
 export type PassportIndexesResponseType = {
   passportIndex: PassportIndexType;
 };
+
+// cities
+export type CityType = {
+  id?: string;
+  city: string;
+  city_ascii: string;
+  country: string;
+  iso2: string;
+  capital: string;
+  lat: number;
+  lng: number;
+  description: string;
+  rate: number;
+  visitors: string;
+  image: FileType;
+  images: FileType[];
+};
+
+export type CitiesArgsType = Partial<
+  Omit<CityType, "id"> & {
+    in_top_sight: boolean;
+    skip: number;
+    take: number;
+  }
+>;
+
+export type CitiesResponseType = {
+  cities: CityType[];
+};
+
+//
+type WorkingHour = {
+  day: string;
+  hours: string;
+};
+
+export type SightType = {
+  id: string;
+  iso2: string;
+  title: string;
+  rate: number;
+  category: string;
+  price: string;
+  reviews: string;
+  city: string;
+  address: string;
+  url: string;
+  description: string;
+  workingHours: WorkingHour[];
+  image: FileType;
+  images: FileType[];
+};
+
+export type SightsArgsType = {
+  city?: string;
+  iso2: string;
+  skip?: number;
+  take?: number;
+};
+
+export type SightsResponseType = Record<string, SightType[]>;
+export type SightsFetchResponseType = {
+  sights: SightType[];
+};

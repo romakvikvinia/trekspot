@@ -1,34 +1,60 @@
-import { useNavigation } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
-import { useRef, useState } from "react";
-import {
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
 import { PlaceDetail } from "../../../screen/Explore/PlaceDetail";
 import { MarkerFillIcon } from "../../../utilities/SvgIcons.utility";
 import { MapEmbedView } from "../MapEmbedView";
 import { styles } from "../_styles";
+import { CityType, CountryType } from "../../../api/api.types";
+import { useLazyGetCitiesQuery } from "../../../api/api.trekspot";
+import { Loader } from "../../ui/Loader";
+import { ForYouCountryItem } from "../../../components/explore/ForYouCountryItem";
 
-export const ForYou = ({ DATA }) => {
+type ForYouPros = {
+  DATA: any;
+  country: CountryType;
+};
+
+interface IState {
+  showMoreCities: boolean;
+  city: CityType | null;
+}
+
+export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
   const modalEmbedRef = useRef(null);
   const modalPlaceDetail = useRef(null);
+  const [state, setState] = useState<IState>({
+    showMoreCities: false,
+    city: null,
+  });
+  const [fetchCountryCities, { data, isLoading: isCitiesLoading }] =
+    useLazyGetCitiesQuery();
   const [blogUrl, setBlogUrl] = useState("");
   const [placeTitle, setPlaceTitle] = useState("");
 
   const onEmbedModalOpen = () => {
     modalEmbedRef.current?.open();
   };
-  const onPlaceDetailOpen = () => {
-    modalPlaceDetail.current?.open();
-  };
 
+  const onPlaceDetailOpen = useCallback((city: CityType) => {
+    setState((prevState) => ({
+      ...prevState,
+      city,
+    }));
+    modalPlaceDetail.current?.open();
+  }, []);
+
+  useEffect(() => {
+    fetchCountryCities({
+      iso2: country.iso2,
+      in_top_sight: true,
+    });
+  }, [fetchCountryCities, country]);
+
+  console.log(data);
   return (
     <>
       <View style={[styles.forYouRow, { marginTop: 25 }]}>
@@ -47,62 +73,43 @@ export const ForYou = ({ DATA }) => {
           ]}
         >
           <FlashList
-            renderItem={({ item, ind }) => {
-              return (
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={[
-                    styles.thingsTodoItem,
-                    {
-                      width: "95%",
-                      marginBottom: 10,
-                    },
-                  ]}
-                  key={ind}
-                  onPress={() => onPlaceDetailOpen()}
-                >
-                  <Image
-                    style={[
-                      styles.thingsTodoItemImage,
-                      {
-                        minHeight: 120,
-                      },
-                    ]}
-                    cachePolicy="memory"
-                    contentFit="cover"
-                    transition={0}
-                    source={{
-                      uri: item.thumbnail,
-                    }}
-                  ></Image>
-
-                  <View style={styles.thingsTodoItemDetails}>
-                    <Text style={styles.thingsTodoItemTitle}>{item.title}</Text>
-
-                    <View style={styles.thingsTodoItemiIn}>
-                      <Text
-                        style={[
-                          styles.thingsTodoItemiIntypeText,
-                          { fontSize: 12 },
-                        ]}
-                      >
-                        {item.description}
-                      </Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              );
-            }}
+            renderItem={({ item }) => (
+              <ForYouCountryItem
+                key={`ForYouCountryItem-${item.id}`}
+                item={item}
+                onPlaceDetailOpen={onPlaceDetailOpen}
+              />
+            )}
             numColumns={3}
             estimatedItemSize={10}
-            data={DATA?.mustSeePlaces?.slice(0, 6)}
+            data={
+              data?.cities.slice(
+                0,
+                state.showMoreCities ? data.cities.length : 6
+              ) || []
+            }
           />
         </View>
-        <View style={styles.showMoreButtonWrapper}>
-          <TouchableOpacity activeOpacity={0.7} style={styles.showMoreButton}>
-            <Text style={styles.showMoreButtonText}>Show more</Text>
-          </TouchableOpacity>
-        </View>
+        {!isCitiesLoading ? (
+          <View style={styles.showMoreButtonWrapper}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.showMoreButton}
+              onPress={() =>
+                setState((prevState) => ({
+                  ...prevState,
+                  showMoreCities: !prevState.showMoreCities,
+                }))
+              }
+            >
+              <Text style={styles.showMoreButtonText}>
+                {state.showMoreCities ? `Show less` : `Show more`}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <Loader isLoading />
+        )}
       </View>
 
       <View style={[styles.forYouRow]}>
@@ -376,11 +383,14 @@ export const ForYou = ({ DATA }) => {
             showsVerticalScrollIndicator: false,
           }}
         >
-          <PlaceDetail
-            setPlaceTitle={setPlaceTitle}
-            onEmbedModalOpen={onEmbedModalOpen}
-            setBlogUrl={setBlogUrl}
-          />
+          {state.city && (
+            <PlaceDetail
+              setPlaceTitle={setPlaceTitle}
+              onEmbedModalOpen={onEmbedModalOpen}
+              setBlogUrl={setBlogUrl}
+              city={state.city}
+            />
+          )}
         </Modalize>
       </Portal>
       <Portal>

@@ -1,3 +1,4 @@
+import React from "react";
 import { Image } from "expo-image";
 import {
   Modal,
@@ -12,17 +13,23 @@ import {
   useClickOutside,
 } from "react-native-click-outside";
 import Swiper from "react-native-swiper";
-import { COLORS, SIZES } from "../../styles/theme";
+import { COLORS, SIZES } from "../../../styles/theme";
 import {
   CloseCircleIcon,
-  LocationCircle,
   Mark2,
   StarIcon,
   TripLocationIcon,
-} from "../../utilities/SvgIcons.utility";
+} from "../../../utilities/SvgIcons.utility";
+import { SightType } from "../../../api/api.types";
 
-export const SightDetail = ({
-  sightDetailVisible = false,
+type SightDetailProps = {
+  isVisible: boolean;
+  setSightDetailVisible: any;
+  data: SightType;
+};
+
+export const SightDetail: React.FC<SightDetailProps> = ({
+  isVisible,
   setSightDetailVisible,
   data,
 }) => {
@@ -32,7 +39,7 @@ export const SightDetail = ({
     <Modal
       animationType={"none"}
       transparent={true}
-      visible={sightDetailVisible}
+      visible={isVisible}
       //   onRequestClose={this.closeModal}
     >
       <ClickOutsideProvider>
