@@ -234,12 +234,6 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
           </View>
           <View style={{ flexDirection: "row" }}>
             <TouchableOpacity
-              onPress={() => onBucketlistOpen()}
-              style={[styles.btn, { marginRight: 10 }]}
-            >
-              <Mark2 />
-            </TouchableOpacity>
-            <TouchableOpacity
               style={styles.btn}
               onPress={() => onShareModalOpen()}
             >
@@ -386,26 +380,6 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
           />
         </Modalize>
       </Portal>
-
-      <Portal>
-        <Modalize
-          ref={BucketListModalRef}
-          modalTopOffset={65}
-          disableScrollIfPossible
-          adjustToContentHeight
-          HeaderComponent={
-            <View style={styles.rowItemHeader}>
-              <Text style={styles.h2}>Bucket List</Text>
-            </View>
-          }
-          modalStyle={{
-            backgroundColor: "#F2F2F7",
-            minHeight: "80%",
-          }}
-        >
-          <BucketlistModal />
-        </Modalize>
-      </Portal>
     </>
   );
 };
@@ -415,18 +389,7 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 15,
   },
-  rowItemHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-  },
-  h2: {
-    fontSize: 22,
-    color: COLORS.black,
-    fontWeight: "bold",
-  },
+
   infoRow: {
     width: "100%",
     flexDirection: "row",

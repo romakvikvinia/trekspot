@@ -1,24 +1,40 @@
 import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
-import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Text } from "react-native";
+import { SearchComponent } from "../../common/ui/SearchComponent";
+import { searchComponentStyles } from "../../styles/searchComponentStyles";
 import { COLORS, SIZES } from "../../styles/theme";
-import { Mark } from "../../utilities/SvgIcons.utility";
+import {
+  CloseCircleIcon,
+  Mark,
+  SearchIcon,
+} from "../../utilities/SvgIcons.utility";
 
 export const Destination = () => {
+  const [search, setSearch] = useState("");
   return (
     <>
       <View style={styles.modalHeader}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search countries or cities"
-          placeholderTextColor={COLORS.darkgray}
-          // onChangeText={handelSearch}
-        />
+        <SearchComponent search={search} setSearch={setSearch} />
       </View>
       <View
         style={{ flex: 1, height: SIZES.height - 200, paddingHorizontal: 20 }}
       >
+        <View
+          style={{
+            marginTop: 15,
+          }}
+        >
+          <ActivityIndicator />
+        </View>
         <FlashList
           // keyExtractor={(item) =>
           //   `${item.iso2}-${item.name}-${item.capital}`

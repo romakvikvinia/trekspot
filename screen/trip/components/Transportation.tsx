@@ -16,7 +16,9 @@ import {
 import { ActivityIcon } from "../ActivityList";
 import { RangePicker } from "../RangePicker";
 import { styles } from "../_styles";
-import { SearchAutoComplete } from "./SearchAutoComplete";
+import { ExpenseInput } from "./ExpenseInput";
+import { PlaceSearch } from "./PlaceSearch";
+import { SeatInput } from "./SeatInput";
 
 const Transportation = ({ activeActivity, activities, refPagerView }) => {
   const [open, setOpen] = useState(null);
@@ -24,10 +26,22 @@ const Transportation = ({ activeActivity, activities, refPagerView }) => {
     startDate: undefined,
     endDate: undefined,
   });
+  const [place, setPlace] = useState({
+    from: "",
+    to: "",
+  });
   const modalSearchAutocompleteRef = useRef(null);
+  const modalSeatRef = useRef(null);
+  const modalExpensesRef = useRef(null);
 
   const onSearchAutocompleteOpen = () => {
     modalSearchAutocompleteRef.current?.open();
+  };
+  const onSeatOpen = () => {
+    modalSeatRef.current?.open();
+  };
+  const onExpensesOpen = () => {
+    modalExpensesRef.current?.open();
   };
 
   return (
@@ -78,9 +92,11 @@ const Transportation = ({ activeActivity, activities, refPagerView }) => {
               <CirclePin />
               <View style={styles.addActivityFromToText}>
                 <Text style={styles.addActivityFromToLabel}>From</Text>
-                <Text style={styles.addActivityFromToValue}>
-                  Tbilisi, Georgia
-                </Text>
+                {place?.from ? (
+                  <Text numberOfLines={1} style={styles.addActivityFromToValue}>
+                    {place?.from}
+                  </Text>
+                ) : null}
               </View>
             </View>
           </TouchableOpacity>
@@ -89,7 +105,7 @@ const Transportation = ({ activeActivity, activities, refPagerView }) => {
             activeOpacity={0.5}
           >
             <View style={styles.addActivityFromToIn}>
-              <LocationPin />
+              <LocationPin color="#666361" />
               <View style={styles.addActivityFromToText}>
                 <Text style={styles.addActivityFromToLabel}>To</Text>
                 <Text style={styles.addActivityFromToValue}>
@@ -130,7 +146,11 @@ const Transportation = ({ activeActivity, activities, refPagerView }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.addActivityOthers}>
-          <TouchableOpacity activeOpacity={0.5} style={styles.addActivitySeat}>
+          <TouchableOpacity
+            onPress={() => onSeatOpen()}
+            activeOpacity={0.5}
+            style={styles.addActivitySeat}
+          >
             <SeatIcon color="#666361" />
             <Text style={styles.addActivitySeatLabel}>Seat</Text>
             <Text style={styles.addActivitySeatLabelValue}>13</Text>
@@ -138,6 +158,7 @@ const Transportation = ({ activeActivity, activities, refPagerView }) => {
           <TouchableOpacity
             activeOpacity={0.5}
             style={styles.addActivityExpenses}
+            onPress={() => onExpensesOpen()}
           >
             <USDIcon color="#666361" />
             <Text style={styles.addActivityExpensesLabel}>Expanses</Text>
@@ -167,7 +188,41 @@ const Transportation = ({ activeActivity, activities, refPagerView }) => {
             backgroundColor: "#F2F2F7",
           }}
         >
-          <SearchAutoComplete />
+          <PlaceSearch
+            setPlace={setPlace}
+            modalSearchAutocompleteRef={modalSearchAutocompleteRef}
+          />
+        </Modalize>
+      </Portal>
+
+      <Portal>
+        <Modalize
+          ref={modalSeatRef}
+          modalTopOffset={65}
+          scrollViewProps={{
+            alwaysBounceVertical: false,
+            showsVerticalScrollIndicator: false,
+          }}
+          modalStyle={{
+            backgroundColor: "#F2F2F7",
+          }}
+        >
+          <SeatInput modalSeatRef={modalSeatRef} />
+        </Modalize>
+      </Portal>
+      <Portal>
+        <Modalize
+          ref={modalExpensesRef}
+          modalTopOffset={65}
+          scrollViewProps={{
+            alwaysBounceVertical: false,
+            showsVerticalScrollIndicator: false,
+          }}
+          modalStyle={{
+            backgroundColor: "#F2F2F7",
+          }}
+        >
+          <ExpenseInput modalExpensesRef={modalExpensesRef} />
         </Modalize>
       </Portal>
     </>

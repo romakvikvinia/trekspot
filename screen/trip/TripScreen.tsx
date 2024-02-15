@@ -75,11 +75,7 @@ export const TripScreen: React.FC<TripProps> = ({}) => {
             <Text style={styles.newTripButtonText}>New trip</Text>
           </TouchableOpacity>
         </View>
-        <View
-          style={{
-            flex: 1,
-          }}
-        ></View>
+
         <ScrollView style={{ flex: 1, paddingHorizontal: 15 }}>
           {false ? (
             <View style={styles.notFoundView}>

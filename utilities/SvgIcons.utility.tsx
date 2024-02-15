@@ -816,7 +816,40 @@ export const BusIcon = ({ width, color }) => {
   return <SvgImage />;
 };
 export const CirclePin = ({ width, color }) => {
-  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path fill="#4a0067" d="M512 256c0 141.387-114.613 256-256 256S0 397.387 0 256 114.613 0 256 0s256 114.613 256 256zm0 0" opacity="1" data-original="#e76e54" class=""></path><path fill="#ffffff" d="M384 256c0 70.691-57.309 128-128 128s-128-57.309-128-128 57.309-128 128-128 128 57.309 128 128zm0 0" opacity="1" data-original="#dd523c" class=""></path></g></svg>`;
+  const svgMarkup = `<svg id="Group_345" data-name="Group 345" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" y1="0.96" x2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#7f2f9f"/>
+      <stop offset="1" stop-color="#e86580"/>
+    </linearGradient>
+  </defs>
+  <path id="Path_2073" data-name="Path 2073" d="M512,256c0,141.387-114.613,256-256,256S0,397.387,0,256,114.613,0,256,0,512,114.613,512,256Zm0,0" fill="url(#linear-gradient)"/>
+  <path id="Path_2074" data-name="Path 2074" d="M384,256A128,128,0,1,1,256,128,128,128,0,0,1,384,256Zm0,0" fill="#fff"/>
+</svg>
+`;
+  const SvgImage = () => (
+    <SvgXml
+      xml={svgMarkup}
+      width={width ? width : "20"}
+      height={width ? width : "20"}
+    />
+  );
+  return <SvgImage />;
+};
+export const LocationPinGradient = ({ width, color }) => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="395.734" height="472.684" viewBox="0 0 395.734 472.684">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#e56381"/>
+      <stop offset="1" stop-color="#7f2f9f"/>
+    </linearGradient>
+  </defs>
+  <g id="Group_346" data-name="Group 346" transform="translate(-2)">
+    <path id="Path_2075" data-name="Path 2075" d="M199.867,0C90.638.12,2.12,88.638,2,197.867,2,302.38,168.208,445.853,187.085,461.88l12.782,10.8,12.782-10.8c18.876-16.027,185.085-159.5,185.085-264.014C397.613,88.638,309.1.12,199.867,0Zm0,296.8A98.933,98.933,0,1,1,298.8,197.867,98.933,98.933,0,0,1,199.867,296.8Z" fill="url(#linear-gradient)"/>
+    <circle id="Ellipse_24" data-name="Ellipse 24" cx="59.648" cy="59.648" r="59.648" transform="translate(140.854 138.854)" fill="url(#linear-gradient)"/>
+  </g>
+</svg>
+`;
   const SvgImage = () => (
     <SvgXml
       xml={svgMarkup}
@@ -827,7 +860,11 @@ export const CirclePin = ({ width, color }) => {
   return <SvgImage />;
 };
 export const LocationPin = ({ width, color }) => {
-  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M12 0A10.011 10.011 0 0 0 2 10c0 5.282 8.4 12.533 9.354 13.343l.646.546.646-.546C13.6 22.533 22 15.282 22 10A10.011 10.011 0 0 0 12 0Zm0 15a5 5 0 1 1 5-5 5.006 5.006 0 0 1-5 5Z" fill="#000000" opacity="1" data-original="#000000" class=""></path><circle cx="12" cy="10" r="3" fill="#000000" opacity="1" data-original="#000000" class=""></circle></g></svg>`;
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M12 0A10.011 10.011 0 0 0 2 10c0 5.282 8.4 12.533 9.354 13.343l.646.546.646-.546C13.6 22.533 22 15.282 22 10A10.011 10.011 0 0 0 12 0Zm0 15a5 5 0 1 1 5-5 5.006 5.006 0 0 1-5 5Z" fill=${
+    color ? color : "#000000"
+  } opacity="1" data-original="#000000" class=""></path><circle cx="12" cy="10" r="3" fill=${
+    color ? color : "#000000"
+  } opacity="1" data-original="#000000" class=""></circle></g></svg>`;
   const SvgImage = () => (
     <SvgXml
       xml={svgMarkup}

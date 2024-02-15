@@ -91,8 +91,8 @@ export const styles = StyleSheet.create({
     position: "absolute",
     borderWidth: 1,
     borderStyle: "dashed",
-    height: 50,
-    top: 55,
+    height: 30,
+    top: 50,
     left: 24,
     borderColor: "#ccc",
   },
@@ -111,6 +111,7 @@ export const styles = StyleSheet.create({
     marginTop: 5,
     color: "#808080",
     fontSize: 14,
+    width: "90%",
   },
   addActivitySeatLabelValue: {
     marginTop: 5,
@@ -135,6 +136,7 @@ export const styles = StyleSheet.create({
   },
   addActivityFromToText: {
     marginLeft: 10,
+    flex: 1,
   },
   addActivityTitleInput: {
     color: COLORS.black,
@@ -166,15 +168,14 @@ export const styles = StyleSheet.create({
     color: COLORS.black,
   },
   saveButtonText: {
-    fontSize: 16,
-    fontWeight: "500",
+    fontSize: 14,
     color: COLORS.black,
   },
   saveButton: {
     padding: 10,
     marginTop: -10,
     marginRight: -10,
-    width: 100,
+    minWidth: 50,
     flexDirection: "row",
     justifyContent: "flex-end",
   },
@@ -183,15 +184,14 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   backToPrevSlideText: {
-    fontSize: 16,
-    fontWeight: "500",
+    fontSize: 14,
     color: COLORS.black,
   },
   backToPrevSlide: {
     padding: 10,
     marginTop: -10,
     marginLeft: -10,
-    width: 100,
+    minWidth: 50,
   },
   modalHeader: {
     width: "100%",

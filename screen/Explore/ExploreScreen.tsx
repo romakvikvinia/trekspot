@@ -16,6 +16,7 @@ import {
 
 import {
   Mark,
+  Mark2,
   PassportIcon,
   SearchIcon,
   StarIcon,
@@ -30,6 +31,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
 import { useCountriesQuery } from "../../api/api.trekspot";
 import { CountryItem } from "../../components/explore/CountryItem";
+import { BucketlistModal } from "../../common/components/BucketlistModal";
 
 const Popular = [
   {
@@ -81,7 +83,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
     setState((prevState) => ({ ...prevState, countryId }));
     modalDestinationDetailsRef.current?.open();
   }, []);
-
+  const BucketListModalRef = useRef<Modalize>(null);
   const layout = useWindowDimensions();
   const [index, setIndex] = React.useState(0);
 
@@ -94,7 +96,9 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
   const onCountryPassportOpen = () => {
     modalCountryPassportSelectRef.current?.open();
   };
-
+  const onBucketlistOpen = useCallback(() => {
+    if (BucketListModalRef.current) BucketListModalRef.current.open();
+  }, []);
   /**
    * Transform data
    */
@@ -130,15 +134,10 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
               </TouchableOpacity>
             ) : (
               <TouchableOpacity
-                style={styles.passportBox}
-                activeOpacity={0.7}
-                onPress={() => onCountryPassportOpen()}
+                onPress={() => onBucketlistOpen()}
+                style={styles.bucketListButton}
               >
-                <PassportIcon />
-                <View style={styles.passportTexts}>
-                  <Text style={styles.passportLabel}>Passport</Text>
-                  <Text style={styles.passportCountry}>Georgia</Text>
-                </View>
+                <Mark2 color={COLORS.black} />
               </TouchableOpacity>
             )}
           </View>
@@ -182,7 +181,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
           </View>
           <View style={[styles.rowItem]}>
             <View style={styles.rowItemHeader}>
-              <Text style={styles.h2}>Visa free for you</Text>
+              <Text style={styles.h2}>Top Cities</Text>
 
               <TouchableOpacity activeOpacity={0.7} style={styles.seeAllButton}>
                 <Text style={styles.seeAllButtonTxt}>See all</Text>
@@ -252,7 +251,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
           </View>
           <View style={[styles.rowItem]}>
             <View style={styles.rowItemHeader}>
-              <Text style={styles.h2}>Luxury</Text>
+              <Text style={styles.h2}>Europe</Text>
 
               <TouchableOpacity activeOpacity={0.7} style={styles.seeAllButton}>
                 <Text style={styles.seeAllButtonTxt}>See all</Text>
@@ -321,7 +320,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
           </View>
           <View style={[styles.rowItem]}>
             <View style={styles.rowItemHeader}>
-              <Text style={styles.h2}>Budget friendly</Text>
+              <Text style={styles.h2}>Asia</Text>
 
               <TouchableOpacity activeOpacity={0.7} style={styles.seeAllButton}>
                 <Text style={styles.seeAllButtonTxt}>See all</Text>
@@ -390,7 +389,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
           </View>
           <View style={[styles.rowItem]}>
             <View style={styles.rowItemHeader}>
-              <Text style={styles.h2}>For family</Text>
+              <Text style={styles.h2}>America</Text>
 
               <TouchableOpacity activeOpacity={0.7} style={styles.seeAllButton}>
                 <Text style={styles.seeAllButtonTxt}>See all</Text>
@@ -459,145 +458,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
           </View>
           <View style={[styles.rowItem]}>
             <View style={styles.rowItemHeader}>
-              <Text style={styles.h2}>For couples</Text>
-
-              <TouchableOpacity activeOpacity={0.7} style={styles.seeAllButton}>
-                <Text style={styles.seeAllButtonTxt}>See all</Text>
-              </TouchableOpacity>
-            </View>
-
-            <ScrollView
-              horizontal
-              style={styles.contentBox}
-              showsHorizontalScrollIndicator={false}
-            >
-              {Popular?.map((item, ind) => (
-                <>
-                  <ImageBackground
-                    style={styles.box}
-                    resizeMode="cover"
-                    source={{
-                      uri: item.image,
-                    }}
-                    key={ind}
-                  >
-                    <TouchableOpacity
-                      style={styles.gradientWrapper}
-                      activeOpacity={0.7}
-                    >
-                      <LinearGradient
-                        style={styles.gradientWrapper}
-                        colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
-                      >
-                        <View style={styles.labelItem}>
-                          <Mark color="#fff" size="sm" />
-                          <Text style={[styles.labelItemText, styles.titleSm]}>
-                            {item.title}
-                          </Text>
-                        </View>
-                        <View style={styles.ratingLabel}>
-                          <View
-                            style={{
-                              position: "relative",
-                              top: -1,
-                              opacity: 0.8,
-                            }}
-                          >
-                            <StarIcon color="#FFBC3E" />
-                          </View>
-                          <Text
-                            style={[styles.ratingText, styles.ratingTextXs]}
-                          >
-                            {item.rating} /
-                          </Text>
-                          <Text
-                            style={[styles.ratingText, styles.ratingTextXs]}
-                          >
-                            {item.visitors} visitors
-                          </Text>
-                        </View>
-                      </LinearGradient>
-                    </TouchableOpacity>
-                  </ImageBackground>
-                  {Popular.length === ind + 1 && (
-                    <View style={{ width: 20 }}></View>
-                  )}
-                </>
-              ))}
-            </ScrollView>
-          </View>
-          <View style={[styles.rowItem]}>
-            <View style={styles.rowItemHeader}>
-              <Text style={styles.h2}>Best islands</Text>
-
-              <TouchableOpacity activeOpacity={0.7} style={styles.seeAllButton}>
-                <Text style={styles.seeAllButtonTxt}>See all</Text>
-              </TouchableOpacity>
-            </View>
-
-            <ScrollView
-              horizontal
-              style={styles.contentBox}
-              showsHorizontalScrollIndicator={false}
-            >
-              {Popular?.map((item, ind) => (
-                <>
-                  <ImageBackground
-                    style={styles.box}
-                    resizeMode="cover"
-                    source={{
-                      uri: item.image,
-                    }}
-                    key={ind}
-                  >
-                    <TouchableOpacity
-                      style={styles.gradientWrapper}
-                      activeOpacity={0.7}
-                    >
-                      <LinearGradient
-                        style={styles.gradientWrapper}
-                        colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
-                      >
-                        <View style={styles.labelItem}>
-                          <Mark color="#fff" size="sm" />
-                          <Text style={[styles.labelItemText, styles.titleSm]}>
-                            {item.title}
-                          </Text>
-                        </View>
-                        <View style={styles.ratingLabel}>
-                          <View
-                            style={{
-                              position: "relative",
-                              top: -1,
-                              opacity: 0.8,
-                            }}
-                          >
-                            <StarIcon color="#FFBC3E" />
-                          </View>
-                          <Text
-                            style={[styles.ratingText, styles.ratingTextXs]}
-                          >
-                            {item.rating} /
-                          </Text>
-                          <Text
-                            style={[styles.ratingText, styles.ratingTextXs]}
-                          >
-                            {item.visitors} visitors
-                          </Text>
-                        </View>
-                      </LinearGradient>
-                    </TouchableOpacity>
-                  </ImageBackground>
-                  {Popular.length === ind + 1 && (
-                    <View style={{ width: 20 }}></View>
-                  )}
-                </>
-              ))}
-            </ScrollView>
-          </View>
-          <View style={[styles.rowItem]}>
-            <View style={styles.rowItemHeader}>
-              <Text style={styles.h2}>Best beaches</Text>
+              <Text style={styles.h2}>Oceania</Text>
 
               <TouchableOpacity activeOpacity={0.7} style={styles.seeAllButton}>
                 <Text style={styles.seeAllButtonTxt}>See all</Text>
@@ -685,7 +546,25 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
             />
           </Modalize>
         </Portal>
-
+        <Portal>
+          <Modalize
+            ref={BucketListModalRef}
+            modalTopOffset={65}
+            disableScrollIfPossible
+            adjustToContentHeight
+            HeaderComponent={
+              <View style={[styles.rowItemHeader, { paddingTop: 15 }]}>
+                <Text style={styles.h2}>Bucket List</Text>
+              </View>
+            }
+            modalStyle={{
+              backgroundColor: "#F2F2F7",
+              minHeight: "80%",
+            }}
+          >
+            <BucketlistModal />
+          </Modalize>
+        </Portal>
         {searchActive ? (
           <View
             style={{
@@ -718,6 +597,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f8f8f8",
   },
+
   cancelButton: {
     height: 40,
     alignItems: "center",
@@ -727,6 +607,24 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     fontSize: 14,
     color: COLORS.darkgray,
+  },
+  bucketListButton: {
+    minWidth: 40,
+    height: 40,
+    backgroundColor: "#fff",
+    borderRadius: 50,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 2,
   },
   searchBox: {
     flex: 1,
@@ -807,13 +705,13 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   titleSm: {
-    fontSize: 13,
+    fontSize: 14,
     marginLeft: 2,
   },
   labelItemText: {
     color: "#fff",
     fontSize: 22,
-    fontWeight: "bold",
+    fontWeight: "500",
     marginLeft: 5,
   },
   labelItem: {
@@ -933,7 +831,7 @@ const styles = StyleSheet.create({
   h2: {
     fontSize: 22,
     color: "#000",
-    fontWeight: "bold",
+    fontWeight: "600",
   },
   contentBox: {
     marginTop: 5,
