@@ -69,8 +69,9 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     position: "absolute",
-    left: 15,
-    top: 15,
+    left: 7,
+    top: 7,
+    padding: 8,
   },
   addActivityTitleInput: {
     color: COLORS.black,

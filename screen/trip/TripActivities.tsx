@@ -466,6 +466,16 @@ export const CreateTripContent = ({
                 </Text>
               </TouchableOpacity>
             </BlurView>
+
+            {/* This should be visible always to preserve space */}
+            <View
+              style={[
+                styles.newTripBox,
+                styles.halfBox,
+                { width: "32%", backgroundColor: "transparent" },
+              ]}
+            ></View>
+            {/* This should be visible always to preserve space */}
           </View>
         </ScrollView>
       </View>
@@ -491,6 +501,7 @@ export const CreateTripContent = ({
           modalStyle={{
             backgroundColor: "#F2F2F7",
             minHeight: "95%",
+            flex: 1,
           }}
           ref={modalActivityRef}
           modalTopOffset={65}
@@ -501,7 +512,11 @@ export const CreateTripContent = ({
             keyboardShouldPersistTaps: "handled",
           }}
         >
-          <ActivityList activity={activity} setActivity={setActivity} />
+          <ActivityList
+            modalActivityRef={modalActivityRef}
+            activity={activity}
+            setActivity={setActivity}
+          />
         </Modalize>
       </Portal>
       {/* 
@@ -602,7 +617,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   createTripButton: {
-    marginRight: 5,
+    marginRight: 0,
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#fff",

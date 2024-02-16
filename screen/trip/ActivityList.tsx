@@ -66,7 +66,11 @@ export const ActivityIcon = ({ index }) => {
   }
 };
 
-export const ActivityList = ({ activityType, setActivityType }) => {
+export const ActivityList = ({
+  activityType,
+  setActivityType,
+  modalActivityRef,
+}) => {
   const [activeActivity, setActiveActivity] = useState(null);
   const refPagerView = useRef(null);
 
@@ -80,7 +84,11 @@ export const ActivityList = ({ activityType, setActivityType }) => {
       <View style={styles.wrapper} key="1">
         <View style={styles.modalHeader}>
           <Text style={styles.title}>Add activity</Text>
-          <TouchableOpacity activeOpacity={0.5} style={styles.closeButton}>
+          <TouchableOpacity
+            onPress={() => modalActivityRef?.current?.close()}
+            activeOpacity={0.5}
+            style={styles.closeButton}
+          >
             <CloseCircleIcon size="25" />
           </TouchableOpacity>
         </View>
