@@ -1,95 +1,67 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 
 import {
-  ImageBackground,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 
 import { COLORS, SIZES } from "../../styles/theme";
-import { Mark, StarIcon } from "../../utilities/SvgIcons.utility";
+
 import { CountryType } from "../../api/api.types";
+import { CountryItem } from "./CountryItem";
+import { CountryDetailModal } from "./destination/CountryDetailModal";
 
 interface DestinationContainerProps {
   title: string;
   countries: CountryType[];
 }
 
+interface IState {
+  countryId: string | null;
+}
+
 export const DestinationContainer: React.FC<DestinationContainerProps> = ({
   countries,
   title,
 }) => {
+  const [state, setState] = useState<IState>({ countryId: null });
+
+  const handleDetailOfCountry = useCallback((countryId: string) => {
+    setState((prevState) => ({ ...prevState, countryId }));
+  }, []);
+
   return (
-    <View style={[styles.rowItem]}>
-      <View style={styles.rowItemHeader}>
-        <Text style={styles.h2}>{title}</Text>
+    <>
+      <View style={[styles.rowItem]}>
+        <View style={styles.rowItemHeader}>
+          <Text style={styles.h2}>{title}</Text>
 
-        <TouchableOpacity activeOpacity={0.7}>
-          <Text style={styles.seeAllButtonTxt}>See all</Text>
-        </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.7}>
+            <Text style={styles.seeAllButtonTxt}>See all</Text>
+          </TouchableOpacity>
+        </View>
+
+        <ScrollView
+          horizontal
+          style={styles.contentBox}
+          showsHorizontalScrollIndicator={false}
+        >
+          {countries.map((country, ind) => (
+            <CountryItem
+              key={`popular-country-${country.id}`}
+              item={country}
+              isWith={countries.length - 1 === ind}
+              openModal={() => handleDetailOfCountry(country.id!)}
+            />
+          ))}
+        </ScrollView>
       </View>
-
-      <ScrollView
-        horizontal
-        style={styles.contentBox}
-        showsHorizontalScrollIndicator={false}
-      >
-        {countries.map((item, ind) => (
-          <>
-            <ImageBackground
-              style={styles.box}
-              resizeMode="cover"
-              source={{
-                uri: item.image?.url,
-              }}
-              key={ind}
-            >
-              <TouchableOpacity
-                style={styles.gradientWrapper}
-                activeOpacity={0.7}
-                // onPress={() => onDestinationModalOpen()}
-              >
-                <LinearGradient
-                  style={styles.gradientWrapper}
-                  colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
-                >
-                  <View style={styles.labelItem}>
-                    <Mark color="#fff" size="sm" />
-                    <Text style={[styles.labelItemText, styles.titleSm]}>
-                      {item.name}
-                    </Text>
-                  </View>
-                  <View style={styles.ratingLabel}>
-                    <View
-                      style={{
-                        position: "relative",
-                        top: -1,
-                        opacity: 0.8,
-                      }}
-                    >
-                      <StarIcon color="#FFBC3E" />
-                    </View>
-                    <Text style={[styles.ratingText, styles.ratingTextXs]}>
-                      {item.rate} /
-                    </Text>
-                    <Text style={[styles.ratingText, styles.ratingTextXs]}>
-                      {item.visitors} visitors
-                    </Text>
-                  </View>
-                </LinearGradient>
-              </TouchableOpacity>
-            </ImageBackground>
-            {countries.length === ind + 1 && (
-              <View style={{ width: 20 }}></View>
-            )}
-          </>
-        ))}
-      </ScrollView>
-    </View>
+      {/** Country detail modal */}
+      {state.countryId && <CountryDetailModal id={state.countryId} />}
+    </>
   );
 };
 

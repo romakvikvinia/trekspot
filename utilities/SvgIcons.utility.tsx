@@ -676,7 +676,11 @@ export const InfoIcon = ({ color }) => {
   const SvgImage = () => <SvgXml xml={svgMarkup} width="20" height="20" />;
   return <SvgImage />;
 };
-export const TransportIcon = ({ color }) => {
+
+interface ITransportIcon {
+  color: string;
+}
+export const TransportIcon = ({ color = "" }: ITransportIcon) => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M18 5H2v-.816a3.007 3.007 0 0 1 1.691-2.7c3.284-1.9 9.338-1.894 12.617 0A3.009 3.009 0 0 1 18 4.184ZM2 14v5h2v2h2v-4a13.348 13.348 0 0 1 .639-3Zm22 4v4h-2v2h-4v-2h-4v2h-4v-2H8v-4a11.027 11.027 0 0 1 .189-2h15.622A11.027 11.027 0 0 1 24 18Zm-11.994 0a1 1 0 0 0 0 2 1 1 0 0 0 0-2Zm8 0a1 1 0 0 0 0 2 1 1 0 0 0 0-2Zm-9.942-7.154-1.218 2.923c-.031.076-.053.155-.083.231h14.474c-.03-.076-.052-.155-.083-.231l-1.218-2.922A2.991 2.991 0 0 0 19.167 9h-6.334a2.992 2.992 0 0 0-2.769 1.846Zm-1.846-.769A4.987 4.987 0 0 1 12.833 7H2v1H0v2a2 2 0 0 0 2 2h5.417Z" fill=${
     color ? color : "#000000"
   } opacity="1" data-original="#000000" class=""></path></g></svg>`;

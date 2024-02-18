@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
 import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 
@@ -18,12 +19,12 @@ import { Mark2, SearchIcon } from "../../utilities/SvgIcons.utility";
 
 import { CountrySelect } from "../../common/components/CountrySelect";
 import { CountrySearch } from "../../common/components/CountrySearch";
-import { DestinationDetail } from "../../components/explore/destination/DestinationDetail";
+import { DestinationDetail } from "../../components/explore/destination/CountryDetailModal";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
 import { useCountriesQuery, useGetCitiesQuery } from "../../api/api.trekspot";
-import { CountryItem } from "../../components/explore/CountryItem";
+
 import { BucketlistModal } from "../../common/components/BucketlistModal";
 import { DestinationContainer } from "../../components/explore/DestinationContainer";
 import { CitiesContainer } from "../../components/explore/CitiesContainer";
@@ -77,8 +78,6 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
   /**
    * Transform data
    */
-
-  const popularCountriesLength = popularCountries?.countries.length || 0;
 
   const cities = data && data.cities ? data.cities : [];
 
@@ -146,7 +145,14 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
           {/**
            * Popular Countries
            */}
-          <View style={[styles.rowItem, { paddingTop: 5 }]}>
+
+          <DestinationContainer
+            key={`DestinationContainer-Popular-Countries`}
+            title="Popular Countries"
+            countries={(popularCountries && popularCountries.countries) || []}
+          />
+
+          {/* <View style={[styles.rowItem, { paddingTop: 5 }]}>
             <View style={styles.rowItemHeader}>
               <Text style={styles.h2}>Popular</Text>
 
@@ -172,7 +178,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
                   />
                 ))}
             </ScrollView>
-          </View>
+          </View> */}
 
           {/**
            * Top cities
@@ -189,26 +195,6 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
               ))
             : null}
         </ScrollView>
-
-        <Portal>
-          <Modalize
-            ref={modalDestinationDetailsRef}
-            modalTopOffset={0}
-            withHandle={false}
-            disableScrollIfPossible
-            modalStyle={{
-              minHeight: "100%",
-            }}
-            scrollViewProps={{
-              alwaysBounceVertical: false,
-            }}
-          >
-            <DestinationDetail
-              id={state.countryId}
-              modalDestinationDetailsRef={modalDestinationDetailsRef}
-            />
-          </Modalize>
-        </Portal>
 
         <Portal>
           <Modalize
