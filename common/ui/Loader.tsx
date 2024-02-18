@@ -7,9 +7,9 @@ interface LoaderProps {
 }
 
 export const Loader: React.FC<LoaderProps> = ({ isLoading = false }) => {
-  return (
+  return isLoading ? (
     <Center>
       <ActivityIndicator size="large" color="#0861a4" />
     </Center>
-  );
+  ) : null;
 };

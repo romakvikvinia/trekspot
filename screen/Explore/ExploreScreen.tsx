@@ -25,6 +25,7 @@ import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes"
 import { useCountriesQuery, useGetCitiesQuery } from "../../api/api.trekspot";
 import { CountryItem } from "../../components/explore/CountryItem";
 import { BucketlistModal } from "../../common/components/BucketlistModal";
+import { DestinationContainer } from "../../components/explore/DestinationContainer";
 import { CitiesContainer } from "../../components/explore/CitiesContainer";
 
 type ExploreProps = NativeStackScreenProps<
@@ -50,9 +51,10 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
     isSuccess,
   } = useCountriesQuery({ isPopular: true });
 
-  const { data: cities, isLoading: isCitiesLoading } = useGetCitiesQuery({
+  const { data, isLoading: isCitiesLoading } = useGetCitiesQuery({
+    skip: 0,
+    take: 10,
     isTop: true,
-    inTopSight: true,
   });
 
   const [state, setState] = useState<ExploreScreenState>({ countryId: "" });
@@ -74,7 +76,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
 
   const popularCountriesLength = popularCountries?.countries.length || 0;
 
-  console.log(cities);
+  const cities = data && data.cities ? data.cities : [];
 
   return (
     <>
@@ -153,15 +155,15 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
           {/**
            * Top cities
            */}
-          <CitiesContainer title="Top Cities" cities={[]} />
+          <CitiesContainer title="Top Cities" cities={cities} />
 
-          <CitiesContainer title="Europe" cities={[]} />
+          <DestinationContainer title="Europe" cities={[]} />
 
-          <CitiesContainer title="Asia" cities={[]} />
+          <DestinationContainer title="Asia" cities={[]} />
 
-          <CitiesContainer title="America" cities={[]} />
+          <DestinationContainer title="America" cities={[]} />
 
-          <CitiesContainer title="Oceania" cities={[]} />
+          <DestinationContainer title="Oceania" cities={[]} />
         </ScrollView>
 
         <Portal>
@@ -183,6 +185,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
             />
           </Modalize>
         </Portal>
+
         <Portal>
           <Modalize
             ref={BucketListModalRef}

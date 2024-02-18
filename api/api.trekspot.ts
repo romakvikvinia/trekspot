@@ -453,7 +453,7 @@ export const trekSpotApi = createApi({
         inTopSight = false,
         isTop = false,
       }) => ({
-        variables: { skip, take, iso2, inTopSight },
+        variables: { skip, take, iso2, inTopSight, isTop },
         document: gql`
           query (
             $skip: Int!

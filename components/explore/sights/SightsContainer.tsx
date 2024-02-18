@@ -26,15 +26,16 @@ export const SightsContainer: React.FC<SightsContainerProps> = ({ items }) => {
   const [state, setState] = useState<IState>({ isOpen: {}, item: null });
 
   const handleOpenSightDetail = useCallback((item: SightType) => {
-    console.log("click", item);
     setState((prevState) => ({ ...prevState, item }));
   }, []);
 
-  console.log(state);
   return (
     <>
       {Object.keys(items).map((key) => (
-        <View style={[exploreStyles.placeSpotsRow, { marginTop: 10 }]}>
+        <View
+          key={`SightsContainer-item-${key}`}
+          style={[exploreStyles.placeSpotsRow, { marginTop: 10 }]}
+        >
           <TouchableOpacity
             activeOpacity={0.7}
             style={exploreStyles.placeSpotsRowTrigger}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 
 import {
   ImageBackground,
@@ -13,81 +13,102 @@ import { LinearGradient } from "expo-linear-gradient";
 import { COLORS, SIZES } from "../../styles/theme";
 import { Mark, StarIcon } from "../../utilities/SvgIcons.utility";
 import { CityType } from "../../api/api.types";
+import { CityDetailModal } from "./destination/CityDetailModal";
 
 interface CitiesContainerProps {
   title: string;
   cities: CityType[];
 }
 
+interface IState {
+  city: CityType | null;
+}
+
 export const CitiesContainer: React.FC<CitiesContainerProps> = ({
   cities,
   title,
 }) => {
+  const [state, setState] = useState<IState>({ city: null });
+
+  const handleCity = useCallback((city: CityType) => {
+    setState((prevState) => ({ ...prevState, city }));
+  }, []);
+
+  //   console.log("CitiesContainer", state);
+
   return (
-    <View style={[styles.rowItem]}>
-      <View style={styles.rowItemHeader}>
-        <Text style={styles.h2}>{title}</Text>
+    <>
+      <View style={[styles.rowItem]}>
+        <View style={styles.rowItemHeader}>
+          <Text style={styles.h2}>{title}</Text>
 
-        <TouchableOpacity activeOpacity={0.7}>
-          <Text style={styles.seeAllButtonTxt}>See all</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity activeOpacity={0.7}>
+            <Text style={styles.seeAllButtonTxt}>See all</Text>
+          </TouchableOpacity>
+        </View>
 
-      <ScrollView
-        horizontal
-        style={styles.contentBox}
-        showsHorizontalScrollIndicator={false}
-      >
-        {cities.map((item, ind) => (
-          <>
-            <ImageBackground
-              style={styles.box}
-              resizeMode="cover"
-              source={{
-                uri: item.image.url,
-              }}
-              key={ind}
-            >
-              <TouchableOpacity
-                style={styles.gradientWrapper}
-                activeOpacity={0.7}
-                // onPress={() => onDestinationModalOpen()}
+        <ScrollView
+          horizontal
+          style={styles.contentBox}
+          showsHorizontalScrollIndicator={false}
+        >
+          {cities.map((item, ind) => (
+            <>
+              <ImageBackground
+                style={styles.box}
+                resizeMode="cover"
+                source={{
+                  uri: item.image?.url,
+                }}
+                key={ind}
               >
-                <LinearGradient
+                <TouchableOpacity
                   style={styles.gradientWrapper}
-                  colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                  activeOpacity={0.7}
+                  onPress={() => handleCity(item)}
                 >
-                  <View style={styles.labelItem}>
-                    <Mark color="#fff" size="sm" />
-                    <Text style={[styles.labelItemText, styles.titleSm]}>
-                      {item.city}
-                    </Text>
-                  </View>
-                  <View style={styles.ratingLabel}>
-                    <View
-                      style={{
-                        position: "relative",
-                        top: -1,
-                        opacity: 0.8,
-                      }}
-                    >
-                      <StarIcon color="#FFBC3E" />
+                  <LinearGradient
+                    style={styles.gradientWrapper}
+                    colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                  >
+                    <View style={styles.labelItem}>
+                      <Mark color="#fff" size="sm" />
+                      <Text style={[styles.labelItemText, styles.titleSm]}>
+                        {item.city}
+                      </Text>
                     </View>
-                    <Text style={[styles.ratingText, styles.ratingTextXs]}>
-                      {item.rate} /
-                    </Text>
-                    <Text style={[styles.ratingText, styles.ratingTextXs]}>
-                      {item.visitors} visitors
-                    </Text>
-                  </View>
-                </LinearGradient>
-              </TouchableOpacity>
-            </ImageBackground>
-            {cities.length === ind + 1 && <View style={{ width: 20 }}></View>}
-          </>
-        ))}
-      </ScrollView>
-    </View>
+                    <View style={styles.ratingLabel}>
+                      <View
+                        style={{
+                          position: "relative",
+                          top: -1,
+                          opacity: 0.8,
+                        }}
+                      >
+                        <StarIcon color="#FFBC3E" />
+                      </View>
+                      <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                        {item.rate} /
+                      </Text>
+                      <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                        {item.visitors} visitors
+                      </Text>
+                    </View>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </ImageBackground>
+              {cities.length === ind + 1 && <View style={{ width: 20 }}></View>}
+            </>
+          ))}
+        </ScrollView>
+        {/**
+         * city detail modal
+         */}
+        {state.city && (
+          <CityDetailModal key={state.city.id} city={state.city} />
+        )}
+      </View>
+    </>
   );
 };
 

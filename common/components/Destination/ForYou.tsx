@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
-import { PlaceDetail } from "../../../components/explore/destination/PlaceDetail";
+import { CityDetailModal } from "../../../components/explore/destination/CityDetailModal";
 import { MarkerFillIcon } from "../../../utilities/SvgIcons.utility";
 import { MapEmbedView } from "../MapEmbedView";
 import { styles } from "../_styles";
@@ -25,7 +25,7 @@ interface IState {
 
 export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
   const modalEmbedRef = useRef(null);
-  const modalPlaceDetail = useRef(null);
+
   const [state, setState] = useState<IState>({
     showMoreCities: false,
     city: null,
@@ -33,11 +33,6 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
   const [fetchCountryCities, { data, isLoading: isCitiesLoading }] =
     useLazyGetCitiesQuery();
   const [blogUrl, setBlogUrl] = useState("");
-
-  // methods
-  const closePlaceDetailModal = useCallback(() => {
-    setState((prevState) => ({ ...prevState, city: null }));
-  }, []);
 
   const onEmbedModalOpen = () => {
     modalEmbedRef.current?.open();
@@ -48,7 +43,6 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
       ...prevState,
       city,
     }));
-    modalPlaceDetail.current?.open();
   }, []);
 
   useEffect(() => {
@@ -57,6 +51,8 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
       inTopSight: true,
     });
   }, [fetchCountryCities, country]);
+
+  // console.log("data for you", data);
 
   return (
     <>
@@ -374,24 +370,8 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
         </View>
       </View>
 
-      <Portal>
-        <Modalize
-          ref={modalPlaceDetail}
-          withHandle={false}
-          modalTopOffset={30}
-          scrollViewProps={{
-            alwaysBounceVertical: false,
-            showsVerticalScrollIndicator: false,
-          }}
-          velocity={100000}
-          tapGestureEnabled={false}
-          closeSnapPointStraightEnabled={false}
-        >
-          {state.city && (
-            <PlaceDetail city={state.city} modalRef={modalPlaceDetail} />
-          )}
-        </Modalize>
-      </Portal>
+      {state.city && <CityDetailModal city={state.city} />}
+
       <Portal>
         <Modalize ref={modalEmbedRef} modalTopOffset={65} adjustToContentHeight>
           <MapEmbedView
