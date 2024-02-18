@@ -12,10 +12,10 @@ import { COLORS } from "../../styles/theme";
 import {
   ImessageIcon,
   InstagramIcon,
-  MapSvg,
   MessengerIcon,
   TrekspotWhite,
 } from "../../utilities/SvgIcons.utility";
+import { MapSvg } from "../../utilities/svg/map";
 interface ShareModalProps {
   world: number;
   territories: number;
@@ -47,7 +47,6 @@ const ShareModal: React.FC<ShareModalProps> = ({
       UTI: "JPEG",
     });
   }, []);
-  console.log(countries);
 
   return (
     <View style={styles.shareWrapper}>

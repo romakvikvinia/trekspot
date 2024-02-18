@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import {
   LivedIcon,
-  MapSvg,
   Mark,
   Mark2,
   Share,
@@ -32,6 +31,7 @@ import { AnalyticsType } from "../../api/api.types";
 import { formatPercentage } from "../../helpers/number.helper";
 import { useDispatch } from "react-redux";
 import { debounce } from "../../helpers/debounce.helper";
+import { MapSvg } from "../../utilities/svg/map";
 
 interface MapVIewProps {
   analytic?: AnalyticsType;
@@ -228,17 +228,11 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
               onPress={() => onOpen()}
               style={[styles.btn, { marginRight: 10 }]}
             >
-              <Mark />
+              <Mark size="15" />
               <Text style={styles.txt}>Add Visit</Text>
             </TouchableOpacity>
           </View>
           <View style={{ flexDirection: "row" }}>
-            <TouchableOpacity
-              onPress={() => onBucketlistOpen()}
-              style={[styles.btn, { marginRight: 10 }]}
-            >
-              <Mark2 />
-            </TouchableOpacity>
             <TouchableOpacity
               style={styles.btn}
               onPress={() => onShareModalOpen()}
@@ -386,22 +380,6 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
           />
         </Modalize>
       </Portal>
-
-      <Portal>
-        <Modalize
-          ref={BucketListModalRef}
-          modalTopOffset={65}
-          disableScrollIfPossible
-          adjustToContentHeight
-          HeaderComponent={
-            <View style={styles.rowItemHeader}>
-              <Text style={styles.h2}>Bucket List</Text>
-            </View>
-          }
-        >
-          <BucketlistModal />
-        </Modalize>
-      </Portal>
     </>
   );
 };
@@ -411,18 +389,7 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 15,
   },
-  rowItemHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-  },
-  h2: {
-    fontSize: 22,
-    color: "#000",
-    fontWeight: "bold",
-  },
+
   infoRow: {
     width: "100%",
     flexDirection: "row",

@@ -1,0 +1,391 @@
+import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+
+import { Modalize, useModalize } from "react-native-modalize";
+import { Portal } from "react-native-portalize";
+import { COLORS } from "../../../styles/theme";
+import Swiper from "react-native-swiper";
+import { styles } from "../../../common/components/_styles";
+import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
+
+import React, { useEffect, useRef, useState } from "react";
+import {
+  DiningIcon,
+  DownIcon,
+  EmergencyIcon,
+  ForYouIcon,
+  InfoIcon,
+  // LanguageIcon,
+  Mark2,
+  PassportIcon,
+  StarIcon,
+  TransportIcon,
+} from "../../../utilities/SvgIcons.utility";
+import { CountrySelect } from "../../../common/components/CountrySelect";
+import { ForYou } from "../../../common/components/Destination/ForYou";
+import Overview from "../../../common/components/Destination/Overview";
+import { Visa } from "../../../common/components/Destination/Visa";
+import { Transport } from "../../../common/components/Destination/Transport";
+
+import { Dining } from "../../../common/components/Destination/Dining";
+
+// import { Language } from "../../../common/components/Destination/Language";
+
+import { Emergency } from "../../../common/components/Destination/Emergency";
+import { useLazyCountryQuery } from "../../../api/api.trekspot";
+
+type CountryDetailModalProps = {
+  id: string;
+};
+
+export const CountryDetailModal: React.FC<CountryDetailModalProps> = ({
+  id,
+}) => {
+  const { ref, open, close } = useModalize();
+  const [getCountry, { isLoading, data, isError }] = useLazyCountryQuery();
+
+  const modalCountryPassportSelectRef = useRef<Modalize>(null);
+
+  useEffect(() => {
+    if (id) getCountry({ id });
+  }, [id]);
+
+  useEffect(() => {
+    if (ref && ref.current) open();
+  }, [ref.current]);
+
+  return (
+    <>
+      <Portal>
+        <Modalize
+          ref={ref}
+          modalTopOffset={0}
+          withHandle={false}
+          disableScrollIfPossible
+          modalStyle={{
+            minHeight: "100%",
+          }}
+          scrollViewProps={{
+            alwaysBounceVertical: false,
+          }}
+        >
+          <View
+            style={{
+              flex: 1,
+              minHeight: "100%",
+            }}
+          >
+            <Tabs.Container
+              minHeaderHeight={120}
+              renderHeader={() => (
+                <View style={[styles.swiperWrapper]}>
+                  <TouchableOpacity
+                    onPress={() => ref && close()}
+                    activeOpacity={0.7}
+                    style={styles.backButton}
+                  >
+                    <DownIcon color="#fff" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.addToBucketButton,
+                      {
+                        backgroundColor: "rgba(0, 0, 0, 0.3)",
+                        // 1 == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)",
+                      },
+                    ]}
+                    activeOpacity={0.7}
+                  >
+                    <Mark2 color="#fff" />
+                  </TouchableOpacity>
+                  <Swiper
+                    activeDotColor="#fff"
+                    showsButtons={false}
+                    loop={false}
+                    dotColor="#949494"
+                    automaticallyAdjustContentInsets
+                    paginationStyle={{
+                      position: "absolute",
+                      justifyContent: "flex-end",
+                      paddingRight: 15,
+                      bottom: 16,
+                    }}
+                  >
+                    {data ? (
+                      data.country.images.map((item, ind) => (
+                        <ImageBackground
+                          style={styles.box}
+                          resizeMode="cover"
+                          source={{
+                            uri: item.url,
+                          }}
+                          key={`slide-${ind}`}
+                        >
+                          <LinearGradient
+                            style={styles.gradientWrapper}
+                            colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.4)"]}
+                          ></LinearGradient>
+                        </ImageBackground>
+                      ))
+                    ) : (
+                      <LinearGradient
+                        style={styles.gradientWrapper}
+                        colors={[
+                          "rgba(147, 21, 21, 0.1)",
+                          "rgba(9, 21, 135, 0.9)",
+                        ]}
+                      ></LinearGradient>
+                    )}
+                  </Swiper>
+
+                  <View style={styles.otherInfo}>
+                    <View style={styles.labelItem}>
+                      <Text style={styles.labelItemText}>
+                        {data?.country.name}
+                      </Text>
+                    </View>
+                    <View style={styles.ratingLabel}>
+                      <View
+                        style={{
+                          position: "relative",
+                          top: -1,
+                          opacity: 0.8,
+                        }}
+                      >
+                        <StarIcon size={15} color="#FFBC3E" />
+                      </View>
+                      <Text style={styles.ratingText}>
+                        {data?.country.rate} /
+                      </Text>
+                      <Text style={styles.ratingText}>
+                        {data?.country.visitors} visitors
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              )}
+              headerHeight={300} // optional
+              containerStyle={{
+                flex: 1,
+                backgroundColor: COLORS.lightGray,
+              }}
+              headerContainerStyle={{
+                elevation: 0,
+                shadowColor: "#fff",
+              }}
+              renderTabBar={(props) => (
+                <MaterialTabBar
+                  {...props}
+                  scrollEnabled
+                  indicatorStyle={{
+                    backgroundColor: COLORS.black,
+                    height: 3,
+                  }}
+                  style={{
+                    paddingLeft: 10,
+                  }}
+                  tabStyle={{
+                    height: 70,
+                    marginRight: 15,
+                  }}
+                />
+              )}
+            >
+              <Tabs.Tab
+                name="ForYou"
+                label={(props) => (
+                  <View style={styles.customTab}>
+                    <ForYouIcon color={COLORS.black} />
+                    <Text
+                      style={[
+                        styles.customTabLabel,
+                        {
+                          color: COLORS.black,
+                        },
+                      ]}
+                    >
+                      For you
+                    </Text>
+                  </View>
+                )}
+              >
+                <Tabs.ScrollView
+                  alwaysBounceVertical={false}
+                  bounces={false}
+                  showsVerticalScrollIndicator={false}
+                >
+                  {data && <ForYou DATA={[]} country={data?.country} />}
+                </Tabs.ScrollView>
+              </Tabs.Tab>
+              <Tabs.Tab
+                name="Overview"
+                label={(props) => (
+                  <View style={styles.customTab}>
+                    <InfoIcon color={COLORS.black} />
+                    <Text
+                      style={[
+                        styles.customTabLabel,
+                        {
+                          color: COLORS.black,
+                        },
+                      ]}
+                    >
+                      Overview
+                    </Text>
+                  </View>
+                )}
+              >
+                <Tabs.ScrollView
+                  alwaysBounceVertical={false}
+                  bounces={false}
+                  showsVerticalScrollIndicator={false}
+                >
+                  {data && <Overview country={data.country} />}
+                </Tabs.ScrollView>
+              </Tabs.Tab>
+              <Tabs.Tab
+                name="Visa"
+                label={(props) => (
+                  <View style={styles.customTab}>
+                    <PassportIcon color={COLORS.black} />
+                    <Text
+                      style={[
+                        styles.customTabLabel,
+                        {
+                          color: COLORS.black,
+                        },
+                      ]}
+                    >
+                      Visa
+                    </Text>
+                  </View>
+                )}
+              >
+                <Tabs.ScrollView
+                  alwaysBounceVertical={false}
+                  bounces={false}
+                  showsVerticalScrollIndicator={false}
+                >
+                  {data && <Visa country={data.country} />}
+                </Tabs.ScrollView>
+              </Tabs.Tab>
+              <Tabs.Tab
+                name="Transport"
+                label={(props) => (
+                  <View style={styles.customTab}>
+                    <TransportIcon color={COLORS.black} />
+                    <Text
+                      style={[
+                        styles.customTabLabel,
+                        {
+                          color: COLORS.black,
+                        },
+                      ]}
+                    >
+                      Transport
+                    </Text>
+                  </View>
+                )}
+              >
+                <Tabs.ScrollView
+                  alwaysBounceVertical={false}
+                  bounces={false}
+                  showsVerticalScrollIndicator={false}
+                >
+                  {data && <Transport country={data.country} />}
+                </Tabs.ScrollView>
+              </Tabs.Tab>
+
+              <Tabs.Tab
+                name="Dishes"
+                label={(props) => (
+                  <View style={styles.customTab}>
+                    <DiningIcon color={COLORS.black} />
+                    <Text
+                      style={[
+                        styles.customTabLabel,
+                        {
+                          color: COLORS.black,
+                        },
+                      ]}
+                    >
+                      Dishes
+                    </Text>
+                  </View>
+                )}
+              >
+                <Tabs.ScrollView
+                  alwaysBounceVertical={false}
+                  bounces={false}
+                  showsVerticalScrollIndicator={false}
+                >
+                  {data && data.country && <Dining country={data.country} />}
+                </Tabs.ScrollView>
+              </Tabs.Tab>
+              {/* 
+              <Tabs.Tab
+                name="Language"
+                label={(props) => (
+                  <View style={styles.customTab}>
+                    <LanguageIcon color={COLORS.black} />
+                    <Text
+                      style={[
+                        styles.customTabLabel,
+                        {
+                          color: COLORS.black,
+                        },
+                      ]}
+                    >
+                      Language
+                    </Text>
+                  </View>
+                )}
+              >
+                <Tabs.ScrollView
+                  alwaysBounceVertical={false}
+                  bounces={false}
+                  showsVerticalScrollIndicator={false}
+                >
+                  <Language />
+                </Tabs.ScrollView>
+              </Tabs.Tab> */}
+
+              <Tabs.Tab
+                name="Emergency"
+                label={(props) => (
+                  <View style={styles.customTab}>
+                    <EmergencyIcon color={COLORS.black} />
+                    <Text
+                      style={[
+                        styles.customTabLabel,
+                        {
+                          color: COLORS.black,
+                        },
+                      ]}
+                    >
+                      Emergency
+                    </Text>
+                  </View>
+                )}
+              >
+                <Tabs.ScrollView
+                  alwaysBounceVertical={false}
+                  bounces={false}
+                  showsVerticalScrollIndicator={false}
+                >
+                  {data && data.country && <Emergency country={data.country} />}
+                </Tabs.ScrollView>
+              </Tabs.Tab>
+            </Tabs.Container>
+          </View>
+
+          <Portal>
+            <Modalize ref={modalCountryPassportSelectRef} modalTopOffset={65}>
+              <CountrySelect />
+            </Modalize>
+          </Portal>
+        </Modalize>
+      </Portal>
+    </>
+  );
+};

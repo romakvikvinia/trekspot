@@ -92,3 +92,46 @@ export const formDataRequest = async (
     }
   );
 };
+
+export const jsonRequest = async (
+  url: string,
+  isPrivate = true,
+  body: any,
+  method = "GET"
+  // isFile = false
+) => {
+  const headers = new Headers();
+
+  headers.append("Accept", "application/json");
+  /**
+   * set lang param
+   */
+  //   headers.append('Accept-Language', i18n.language);
+
+  if (isPrivate === true) {
+    let token = await getFullToken();
+
+    if (token && new Date().getTime() < token.expire) {
+      // set Token
+      headers.set("Authorization", `Bearer ${token.token}`);
+    } else {
+      // refetch
+    }
+  }
+  var options: any = { headers, mode: "cors", method: method };
+
+  if (body) {
+    options.method = method;
+    options.body = JSON.stringify(body);
+    options.body = body;
+  }
+
+  return fetch(url, options).then(
+    (response: Response) => {
+      return handleResponse(response);
+    },
+    (error: Response) => {
+      return handleError(error, url);
+    }
+  );
+};

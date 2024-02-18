@@ -1,22 +1,18 @@
-import { create } from "zustand";
+import { configureStore } from "@reduxjs/toolkit";
+import { trekSpotApi } from "../../api/api.trekspot";
+// reducers
 
-type State = {
-  visited_countries: string[];
-  lived_countries: string[];
-};
+export const store = configureStore({
+  reducer: {
+    // [chatAppApi.reducerPath]: (state, action) => action.type !== HYDRATE ? chatAppApi.reducer(state, action) : {...state, ...(action.payload as unknown)[chatAppApi.reducerPath]},
+    [trekSpotApi.reducerPath]: trekSpotApi.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(trekSpotApi.middleware),
+  devTools: true,
+});
 
-type Action = {
-  updateVisitedCountries: (code: string) => void;
-};
-
-// Create your store, which includes both state and (optionally) actions
-export const useVisitedOrLivedCountries = create<State & Action>((set) => ({
-  visited_countries: [],
-  lived_countries: [],
-  updateVisitedCountries: (code: string) =>
-    set((state) => ({
-      visited_countries: state.visited_countries.includes(code)
-        ? state.visited_countries.filter((i) => i !== code)
-        : [...state.visited_countries, code],
-    })),
-}));
+// Infer the `RootState` and `AppDispatch` types from the store itself
+export type RootState = ReturnType<typeof store.getState>;
+// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
+export type AppDispatch = typeof store.dispatch;

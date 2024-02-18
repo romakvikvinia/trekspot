@@ -15,6 +15,17 @@ import {
   StoriesResponseType,
   CreateOrUpdateStoriesInput,
   CreateOrUpdateStoriesResponseType,
+  CountriesArgsType,
+  CountriesResponseType,
+  CountryArgsType,
+  CountryResponseType,
+  PassportIndexesArgsType,
+  PassportIndexesResponseType,
+  CitiesArgsType,
+  CitiesResponseType,
+  SightsArgsType,
+  SightsResponseType,
+  SightsFetchResponseType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -64,6 +75,7 @@ export const trekSpotApi = createApi({
     "updateMe",
     "stories",
     "createOrUpdateStories",
+    "getSights",
   ],
   endpoints: (builder) => ({
     /**
@@ -326,6 +338,252 @@ export const trekSpotApi = createApi({
       invalidatesTags: ["createOrUpdateStories"],
     }),
 
+    /**
+     * fetch popular countries
+     */
+
+    countries: builder.query<CountriesResponseType, CountriesArgsType>({
+      query: ({ skip = 0, take = 20, isPopular = false }) => ({
+        variables: { skip, take, isPopular },
+        document: gql`
+          query ($skip: Int!, $take: Int!, $isPopular: Boolean!) {
+            countries(
+              input: { skip: $skip, take: $take, isPopular: $isPopular }
+            ) {
+              id
+              name
+              rate
+              visitors
+              continent
+              image {
+                url
+              }
+              images {
+                url
+              }
+            }
+          }
+        `,
+      }),
+    }),
+
+    /**
+     * Get Country
+     */
+
+    country: builder.query<CountryResponseType, CountryArgsType>({
+      query: ({ id }) => ({
+        variables: { id },
+        document: gql`
+          query ($id: String!) {
+            country(id: $id) {
+              id
+              name
+              iso2
+              capital
+              continent
+              isPopular
+              coordinates {
+                latitude
+                longitude
+              }
+              rate
+              visitors
+              gallery
+              domain
+              independent
+              unMember
+              currencies
+              idd {
+                root
+                suffixes
+              }
+              region
+              subregion
+              languages
+              population
+              car {
+                side
+                signs
+              }
+              continents
+              startOfWeek
+              postalCode {
+                format
+                regex
+              }
+              overview
+              telecoms
+              emergency {
+                emergency
+                police
+                ambulance
+                fire
+              }
+              transportTypes
+              taxi {
+                name
+                ios
+                android
+                logo
+              }
+              security
+              recognizedFor {
+                emoji
+                title
+              }
+              religions
+              whenToVisit
+              nationalDay
+              plugTypes
+              weatherInformation {
+                averageTemperatures {
+                  summer
+                  spring
+                  autumn
+                  winter
+                }
+                seasonalConsiderations
+              }
+              images {
+                url
+              }
+            }
+          }
+        `,
+      }),
+    }),
+    // Get passport indexes for country
+    getPassportIndexes: builder.query<
+      PassportIndexesResponseType,
+      PassportIndexesArgsType
+    >({
+      query: ({ from, to }) => ({
+        variables: { from, to },
+        document: gql`
+          query ($from: String!, $to: String!) {
+            passportIndex(input: { from: $from, to: $to }) {
+              from
+              to
+              requirement
+            }
+          }
+        `,
+      }),
+    }),
+    /**
+     *  cities
+     */
+
+    getCities: builder.query<CitiesResponseType, CitiesArgsType>({
+      query: ({
+        skip = 0,
+        take = 20,
+        iso2,
+        inTopSight = false,
+        isTop = false,
+      }) => ({
+        variables: { skip, take, iso2, inTopSight, isTop },
+        document: gql`
+          query (
+            $skip: Int!
+            $take: Int!
+            $iso2: String
+            $inTopSight: Boolean
+            $isTop: Boolean
+          ) {
+            cities(
+              input: {
+                skip: $skip
+                take: $take
+                iso2: $iso2
+                inTopSight: $inTopSight
+                isTop: $isTop
+              }
+            ) {
+              id
+              city
+              city_ascii
+              country
+              iso2
+              capital
+              lat
+              lng
+              rate
+              description
+              image {
+                url
+              }
+              images {
+                id
+                url
+              }
+            }
+          }
+        `,
+      }),
+    }),
+    /**
+     * Sights
+     */
+    getSights: builder.query<SightsResponseType, SightsArgsType>({
+      query: ({ skip = 0, take = 100, iso2, city = "" }) => ({
+        variables: { skip, take, iso2, city },
+        document: gql`
+          query ($skip: Int!, $take: Int!, $iso2: String!, $city: String) {
+            sights(
+              input: { skip: $skip, take: $take, iso2: $iso2, city: $city }
+            ) {
+              id
+              iso2
+              title
+              rate
+              category
+              price
+              reviews
+              iso2
+              city
+              address
+              url
+              description
+              workingHours {
+                day
+                hours
+              }
+              image {
+                url
+              }
+              images {
+                url
+              }
+            }
+          }
+        `,
+      }),
+      providesTags: ["getSights"],
+      transformResponse: (response: SightsFetchResponseType) => {
+        let transformedData: Record<string, any[]> = {};
+        let sights = response.sights || [];
+
+        if (sights.length) {
+          transformedData["Top Sights"] = sights.splice(0, 10);
+          if (sights.length) {
+            sights.forEach((res) => {
+              if (res.category in transformedData) {
+                transformedData[res.category] = [
+                  ...transformedData[res.category],
+                  res,
+                ];
+              } else {
+                transformedData[res.category] = [res];
+              }
+            });
+          }
+        }
+
+        return transformedData;
+      },
+    }),
     //
   }),
 });
@@ -340,4 +598,11 @@ export const {
   useAnalyticsQuery,
   useStoriesQuery,
   useCreateOrUpdateStoriesMutation,
+  useCountriesQuery,
+  useCountryQuery,
+  useLazyCountryQuery,
+  useLazyGetPassportIndexesQuery,
+  useGetCitiesQuery,
+  useLazyGetCitiesQuery,
+  useLazyGetSightsQuery,
 } = trekSpotApi;

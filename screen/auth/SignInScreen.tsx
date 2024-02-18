@@ -35,10 +35,10 @@ import {
   AppleIcon,
   FacebookIcon,
   GoogleIcon,
-  TrekSpotLinear,
 } from "../../utilities/SvgIcons.utility";
 import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
+import { TrekSpotLinear } from "../../utilities/svg/TrekSpotLinear";
 import * as Facebook from "expo-auth-session/providers/facebook";
 import * as Google from "expo-auth-session/providers/google";
 import * as AppleAuthentication from "expo-apple-authentication";
@@ -51,6 +51,7 @@ import {
 } from "../../config";
 import { Loader } from "../../common/ui/Loader";
 Logs.enableExpoCliLogging();
+
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 WebBrowser.maybeCompleteAuthSession();
 export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {

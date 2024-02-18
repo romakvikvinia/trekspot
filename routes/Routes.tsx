@@ -38,7 +38,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
       // // setToken(tokens.access_token);
       dispatch({ type: "SIGN_IN", payload: { token: token.token } });
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       // Alert.alert(JSON.stringify(error));
     }
     await SplashScreen.hideAsync();

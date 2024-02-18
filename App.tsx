@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet } from "react-native";
+
 import { trekSpotApi } from "./api/api.trekspot";
 import { ApiProvider } from "@reduxjs/toolkit/dist/query/react";
 import { useFonts } from "expo-font";
@@ -24,7 +25,9 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
+
   return (
+    // <Provider store={store}>
     <ApiProvider api={trekSpotApi}>
       <GestureHandlerRootView
         // onLayout={onLayoutRootView}
@@ -34,6 +37,7 @@ export default function App() {
         <Routes />
       </GestureHandlerRootView>
     </ApiProvider>
+    // </Provider>
   );
 }
 

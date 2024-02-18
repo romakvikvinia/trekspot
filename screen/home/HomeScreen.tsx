@@ -3,19 +3,20 @@ import { Text, View, ScrollView, StyleSheet } from "react-native";
 
 import { MapView } from "./MapView";
 import { COLORS, SIZES } from "../../styles/theme";
-import {
-  AfricaIcon,
-  AsiaIcon,
-  Australia,
-  EuropeIcon,
-  NAmerica,
-  SAmerica,
-} from "../../utilities/SvgIcons.utility";
+
 import { useAnalyticsQuery } from "../../api/api.trekspot";
 import { formatPercentage } from "../../helpers/number.helper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { HomeRouteStackParamList } from "../../routes/home/HomeRoutes";
+import {
+  EuropeIcon,
+  AsiaIcon,
+  AfricaIcon,
+  NAmerica,
+  SAmerica,
+  Australia,
+} from "../../utilities/svg";
 
 type HomeProps = NativeStackScreenProps<HomeRouteStackParamList, "Main">;
 
