@@ -217,7 +217,8 @@ export type CityType = {
 
 export type CitiesArgsType = Partial<
   Omit<CityType, "id"> & {
-    in_top_sight: boolean;
+    inTopSight: boolean;
+    isTop: boolean;
     skip: number;
     take: number;
   }

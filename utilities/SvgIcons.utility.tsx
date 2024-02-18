@@ -8,7 +8,7 @@ export const Chart = () => {
 };
 interface IMark {
   color: string;
-  size: number;
+  size: number | string;
 }
 export const Mark = ({ color = "", size = 10 }: Partial<IMark>) => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" width="28.164" height="36.211" viewBox="0 0 28.164 36.211">

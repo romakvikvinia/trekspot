@@ -54,7 +54,7 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
   useEffect(() => {
     fetchCountryCities({
       iso2: country.iso2,
-      in_top_sight: true,
+      inTopSight: true,
     });
   }, [fetchCountryCities, country]);
 
