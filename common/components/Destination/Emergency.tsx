@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Linking,
   ScrollView,
@@ -12,57 +13,66 @@ import {
   PoliceIcon,
 } from "../../../utilities/SvgIcons.utility";
 import { styles } from "../_styles";
+import { CountryType } from "../../../api/api.types";
 
-export const Emergency = ({ DATA }) => {
+interface EmergencyProps {
+  country: CountryType;
+}
+
+export const Emergency: React.FC<EmergencyProps> = ({ country }) => {
   return (
     <ScrollView style={styles.tabWrapper} showsVerticalScrollIndicator={false}>
       <View style={styles.emergencyNumbers}>
-        {DATA?.emergency?.emergency ? (
+        {country?.emergency?.emergency ? (
           <TouchableOpacity
             activeOpacity={0.7}
             style={[styles.emergencyButtonItem, { backgroundColor: "#af0101" }]}
-            onPress={() => Linking.openURL(`tel:${DATA?.emergency?.emergency}`)}
+            onPress={() =>
+              Linking.openURL(`tel:${country?.emergency?.emergency}`)
+            }
           >
             <CallIcon />
             <Text style={styles.emergencyButtonItemText}>
-              EU Emergency - {DATA?.emergency?.emergency}
+              EU Emergency - {country?.emergency?.emergency}
             </Text>
           </TouchableOpacity>
         ) : null}
 
-        {DATA?.emergency?.police ? (
+        {country?.emergency?.police ? (
           <TouchableOpacity
             activeOpacity={0.7}
             style={[styles.emergencyButtonItem, { backgroundColor: "#366dc2" }]}
-            onPress={() => Linking.openURL(`tel:${DATA?.emergency?.police}`)}
+            onPress={() => Linking.openURL(`tel:${country?.emergency?.police}`)}
           >
             <PoliceIcon />
             <Text style={styles.emergencyButtonItemText}>
-              Police - {DATA?.emergency?.police}
+              Police - {country?.emergency?.police}
             </Text>
           </TouchableOpacity>
         ) : null}
-        {DATA?.emergency?.ambulance ? (
+        {country?.emergency?.ambulance ? (
           <TouchableOpacity
             activeOpacity={0.7}
             style={[styles.emergencyButtonItem, { backgroundColor: "#f14e2f" }]}
-            onPress={() => Linking.openURL(`tel:${DATA?.emergency?.ambulance}`)}
+            onPress={() =>
+              Linking.openURL(`tel:${country?.emergency?.ambulance}`)
+            }
           >
             <AmbulanceIcon />
             <Text style={styles.emergencyButtonItemText}>
-              Ambulance - {DATA?.emergency?.ambulance}
+              Ambulance - {country?.emergency?.ambulance}
             </Text>
           </TouchableOpacity>
         ) : null}
-        {DATA?.emergency?.fire ? (
+        {country?.emergency?.fire ? (
           <TouchableOpacity
             activeOpacity={0.7}
             style={[styles.emergencyButtonItem, { backgroundColor: "#f10d00" }]}
-            onPress={() => Linking.openURL(`tel:${DATA?.emergency?.fire}`)}
+            onPress={() => Linking.openURL(`tel:${country?.emergency?.fire}`)}
           >
             <FireBrigadeIcon />
             <Text style={styles.emergencyButtonItemText}>
-              Fire brigade - {DATA?.emergency?.fire}
+              Fire brigade - {country?.emergency?.fire}
             </Text>
           </TouchableOpacity>
         ) : null}

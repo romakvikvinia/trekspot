@@ -806,7 +806,11 @@ export const DrivingSideLeft = () => {
   const SvgImage = () => <SvgXml xml={svgMarkup} width="75" height="45" />;
   return <SvgImage />;
 };
-export const BusIcon = ({ width, color }) => {
+interface IBusIcon {
+  width: number;
+  color: string;
+}
+export const BusIcon = ({ width = 0, color = "" }: Partial<IBusIcon>) => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M24 9v3a2 2 0 0 1-2 2h-9V6h9v3Zm-3.822-7.531c-3.673-1.9-12.694-1.893-16.357 0A2.978 2.978 0 0 0 2.017 4h19.966a2.977 2.977 0 0 0-1.805-2.531ZM2 16h20v6h-2v2h-5v-2H9v2H4v-2H2Zm15 4a1 1 0 0 0 0-2 1 1 0 0 0 0 2ZM7 20a1 1 0 0 0 0-2 1 1 0 0 0 0 2Zm4-6V6H2v3H0v3a2 2 0 0 0 2 2Z" fill=${
     color ? color : "#000000"
   } opacity="1" data-original="#000000" class=""></path></g></svg>`;
