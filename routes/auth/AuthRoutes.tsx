@@ -23,7 +23,7 @@ const Stack = createStackNavigator<AuthStackParamList>();
 export type AuthStackNavigationProp = StackNavigationProp<AuthStackParamList>;
 
 export const AuthRoute: React.FC<AuthRouteProps> = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<AuthStackNavigationProp>();
 
   useEffect(() => {
     // navigation.navigate("GetStarted");

@@ -22,8 +22,9 @@ import { TInput } from "../../common/ui/TInput";
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
 import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
-import { TrekSpotLinear } from "../../utilities/SvgIcons.utility";
+
 import { trekSpotApi, useSignUpMutation } from "../../api/api.trekspot";
+import { TrekSpotLinear } from "../../utilities/svg";
 
 type SignUpScreenProps = NativeStackScreenProps<AuthStackParamList, "SignUp">;
 
