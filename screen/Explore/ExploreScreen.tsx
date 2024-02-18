@@ -27,6 +27,7 @@ import { CountryItem } from "../../components/explore/CountryItem";
 import { BucketlistModal } from "../../common/components/BucketlistModal";
 import { DestinationContainer } from "../../components/explore/DestinationContainer";
 import { CitiesContainer } from "../../components/explore/CitiesContainer";
+import { CountryType } from "../../api/api.types";
 
 type ExploreProps = NativeStackScreenProps<
   ExploreRoutesStackParamList,
@@ -57,6 +58,9 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
     isTop: true,
   });
 
+  let { data: notPopularCountries, isLoading: isNotPopularCountriesLoading } =
+    useCountriesQuery({ isPopular: false });
+
   const [state, setState] = useState<ExploreScreenState>({ countryId: "" });
 
   const [searchActive, setSearchActive] = useState(false);
@@ -77,6 +81,24 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
   const popularCountriesLength = popularCountries?.countries.length || 0;
 
   const cities = data && data.cities ? data.cities : [];
+
+  const countriesAreNotPopular =
+    notPopularCountries && notPopularCountries.countries
+      ? notPopularCountries.countries
+      : [];
+
+  const countriesAreNotPopularMap: Record<string, CountryType[]> = {};
+
+  countriesAreNotPopular.forEach((country) => {
+    if (country.continent in countriesAreNotPopularMap) {
+      countriesAreNotPopularMap[country.continent] = [
+        country,
+        ...countriesAreNotPopularMap[country.continent],
+      ];
+    } else {
+      countriesAreNotPopularMap[country.continent] = [country];
+    }
+  });
 
   return (
     <>
@@ -157,13 +179,15 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
            */}
           <CitiesContainer title="Top Cities" cities={cities} />
 
-          <DestinationContainer title="Europe" cities={[]} />
-
-          <DestinationContainer title="Asia" cities={[]} />
-
-          <DestinationContainer title="America" cities={[]} />
-
-          <DestinationContainer title="Oceania" cities={[]} />
+          {Object.keys(countriesAreNotPopularMap).length
+            ? Object.keys(countriesAreNotPopularMap).map((continent) => (
+                <DestinationContainer
+                  key={`DestinationContainer-${continent}`}
+                  title={continent}
+                  countries={countriesAreNotPopularMap[continent]}
+                />
+              ))
+            : null}
         </ScrollView>
 
         <Portal>

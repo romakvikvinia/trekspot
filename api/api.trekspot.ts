@@ -325,6 +325,7 @@ export const trekSpotApi = createApi({
               name
               rate
               visitors
+              continent
               image {
                 url
               }

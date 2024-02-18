@@ -12,15 +12,15 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import { COLORS, SIZES } from "../../styles/theme";
 import { Mark, StarIcon } from "../../utilities/SvgIcons.utility";
-import { CityType } from "../../api/api.types";
+import { CountryType } from "../../api/api.types";
 
 interface DestinationContainerProps {
   title: string;
-  cities: CityType[];
+  countries: CountryType[];
 }
 
 export const DestinationContainer: React.FC<DestinationContainerProps> = ({
-  cities,
+  countries,
   title,
 }) => {
   return (
@@ -38,7 +38,7 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
         style={styles.contentBox}
         showsHorizontalScrollIndicator={false}
       >
-        {cities.map((item, ind) => (
+        {countries.map((item, ind) => (
           <>
             <ImageBackground
               style={styles.box}
@@ -60,7 +60,7 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
                   <View style={styles.labelItem}>
                     <Mark color="#fff" size="sm" />
                     <Text style={[styles.labelItemText, styles.titleSm]}>
-                      {item.city}
+                      {item.name}
                     </Text>
                   </View>
                   <View style={styles.ratingLabel}>
@@ -83,7 +83,9 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
                 </LinearGradient>
               </TouchableOpacity>
             </ImageBackground>
-            {cities.length === ind + 1 && <View style={{ width: 20 }}></View>}
+            {countries.length === ind + 1 && (
+              <View style={{ width: 20 }}></View>
+            )}
           </>
         ))}
       </ScrollView>
