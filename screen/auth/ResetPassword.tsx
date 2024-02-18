@@ -22,15 +22,20 @@ import { SignInValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
 import { useSignInMutation } from "../../api/api.trekspot";
-import { AuthResponseType } from "../../api/api.types";
+
 import { storeToken } from "../../helpers/secure.storage";
 import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
 import { TrekSpotLinear } from "../../utilities/svg/TrekSpotLinear";
 
-type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
+type ResetPasswordScreenProps = NativeStackScreenProps<
+  AuthStackParamList,
+  "ResetPassword"
+>;
 
-export const ResetPasswordScreen: React.FC<SignInProps> = ({ navigation }) => {
+export const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({
+  navigation,
+}) => {
   const [fetchSignIn, { data, isLoading, error, isError, isSuccess }] =
     useSignInMutation();
   //@ts-ignore
@@ -53,20 +58,17 @@ export const ResetPasswordScreen: React.FC<SignInProps> = ({ navigation }) => {
     fadeValue: new Animated.Value(0),
   });
 
-  const handleSaveToken = useCallback(
-    async (auth: AuthResponseType["data"]) => {
-      try {
-        let token = { ...auth.login };
-        token.expire = new Date().getTime() + token.expire;
+  const handleSaveToken = useCallback(async (auth: any) => {
+    try {
+      let token = { ...auth.login };
+      token.expire = new Date().getTime() + token.expire;
 
-        await storeToken(token);
-        signIn(token);
-      } catch (error) {
-        // console.log(error)
-      }
-    },
-    []
-  );
+      await storeToken(token);
+      signIn(token);
+    } catch (error) {
+      // console.log(error)
+    }
+  }, []);
   //animations
   useEffect(() => {
     Animated.timing(fadeValue, {
