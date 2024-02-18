@@ -17,6 +17,7 @@ import { CountryDetailModal } from "./destination/CountryDetailModal";
 interface DestinationContainerProps {
   title: string;
   countries: CountryType[];
+  seeAllItems?: boolean;
 }
 
 interface IState {
@@ -26,6 +27,7 @@ interface IState {
 export const DestinationContainer: React.FC<DestinationContainerProps> = ({
   countries,
   title,
+  seeAllItems = true,
 }) => {
   const [state, setState] = useState<IState>({ countryId: null });
 
@@ -38,10 +40,11 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
       <View style={[styles.rowItem]}>
         <View style={styles.rowItemHeader}>
           <Text style={styles.h2}>{title}</Text>
-
-          <TouchableOpacity activeOpacity={0.7}>
-            <Text style={styles.seeAllButtonTxt}>See all</Text>
-          </TouchableOpacity>
+          {seeAllItems && (
+            <TouchableOpacity activeOpacity={0.7}>
+              <Text style={styles.seeAllButtonTxt}>See all</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         <ScrollView

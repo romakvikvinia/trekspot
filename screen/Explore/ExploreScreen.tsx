@@ -19,7 +19,6 @@ import { Mark2, SearchIcon } from "../../utilities/SvgIcons.utility";
 
 import { CountrySelect } from "../../common/components/CountrySelect";
 import { CountrySearch } from "../../common/components/CountrySearch";
-import { DestinationDetail } from "../../components/explore/destination/CountryDetailModal";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
@@ -35,16 +34,11 @@ type ExploreProps = NativeStackScreenProps<
   "Explore"
 >;
 
-type ExploreScreenState = {
-  countryId: string;
-};
-
 export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
   // refs
   const BucketListModalRef = useRef<Modalize>(null);
   const modalDestinationSearchRef = useRef<Modalize>(null);
   const modalCountryPassportSelectRef = useRef<Modalize>(null);
-  const modalDestinationDetailsRef = useRef<Modalize>(null);
 
   //data
   const {
@@ -55,21 +49,14 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
 
   const { data, isLoading: isCitiesLoading } = useGetCitiesQuery({
     skip: 0,
-    take: 10,
+    take: 15,
     isTop: true,
   });
 
   let { data: notPopularCountries, isLoading: isNotPopularCountriesLoading } =
-    useCountriesQuery({ isPopular: false });
-
-  const [state, setState] = useState<ExploreScreenState>({ countryId: "" });
+    useCountriesQuery({ isPopular: false, skip: 0, take: 60 });
 
   const [searchActive, setSearchActive] = useState(false);
-
-  const onDestinationModalOpen = useCallback((countryId: string) => {
-    setState((prevState) => ({ ...prevState, countryId }));
-    modalDestinationDetailsRef.current?.open();
-  }, []);
 
   const onBucketlistOpen = useCallback(() => {
     if (BucketListModalRef.current) BucketListModalRef.current.open();
@@ -150,40 +137,17 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
             key={`DestinationContainer-Popular-Countries`}
             title="Popular Countries"
             countries={(popularCountries && popularCountries.countries) || []}
+            seeAllItems={false}
           />
-
-          {/* <View style={[styles.rowItem, { paddingTop: 5 }]}>
-            <View style={styles.rowItemHeader}>
-              <Text style={styles.h2}>Popular</Text>
-
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => navigation.navigate("SeeAllScreen")}
-              >
-                <Text style={styles.seeAllButtonTxt}>See all</Text>
-              </TouchableOpacity>
-            </View>
-            <ScrollView
-              horizontal
-              style={styles.contentBox}
-              showsHorizontalScrollIndicator={false}
-            >
-              {popularCountries &&
-                popularCountries.countries.map((item, ind) => (
-                  <CountryItem
-                    key={`popular-country-${item.id}`}
-                    item={item}
-                    isWith={popularCountriesLength - 1 === ind}
-                    openModal={onDestinationModalOpen}
-                  />
-                ))}
-            </ScrollView>
-          </View> */}
 
           {/**
            * Top cities
            */}
-          <CitiesContainer title="Top Cities" cities={cities} />
+          <CitiesContainer
+            title="Top Cities"
+            cities={cities}
+            seeAllItems={false}
+          />
 
           {Object.keys(countriesAreNotPopularMap).length
             ? Object.keys(countriesAreNotPopularMap).map((continent) => (

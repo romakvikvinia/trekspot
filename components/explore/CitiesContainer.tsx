@@ -18,6 +18,7 @@ import { CityDetailModal } from "./destination/CityDetailModal";
 interface CitiesContainerProps {
   title: string;
   cities: CityType[];
+  seeAllItems?: boolean;
 }
 
 interface IState {
@@ -27,6 +28,7 @@ interface IState {
 export const CitiesContainer: React.FC<CitiesContainerProps> = ({
   cities,
   title,
+  seeAllItems = true,
 }) => {
   const [state, setState] = useState<IState>({ city: null });
 
@@ -42,9 +44,11 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
         <View style={styles.rowItemHeader}>
           <Text style={styles.h2}>{title}</Text>
 
-          <TouchableOpacity activeOpacity={0.7}>
-            <Text style={styles.seeAllButtonTxt}>See all</Text>
-          </TouchableOpacity>
+          {seeAllItems && (
+            <TouchableOpacity activeOpacity={0.7}>
+              <Text style={styles.seeAllButtonTxt}>See all</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         <ScrollView
