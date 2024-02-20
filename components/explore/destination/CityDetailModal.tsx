@@ -133,7 +133,7 @@ export const CityDetailModal: React.FC<CityDetailProps> = ({ city }) => {
                       source={{
                         uri: item.url,
                       }}
-                      key={`slide-${item.id}`}
+                      key={`slide-${item.id}-${city.id}`}
                     >
                       <LinearGradient
                         style={styles.gradientWrapper}
@@ -182,7 +182,11 @@ export const CityDetailModal: React.FC<CityDetailProps> = ({ city }) => {
                   }}
                 >
                   {topSights.map((item) => (
-                    <SightItem item={item} onHandleItem={handleSetSightItem} />
+                    <SightItem
+                      key={`top-sights-${item.id}-${item.title}`}
+                      item={item}
+                      onHandleItem={handleSetSightItem}
+                    />
                   ))}
                 </ScrollView>
               </View>

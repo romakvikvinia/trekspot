@@ -135,24 +135,24 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
             seeAllItems={false}
           />
 
-          <DestinationContainer
-            title="Africa"
-            countries={
-              (randomCountries && randomCountries.groupedCountry.africa) || []
-            }
-          />
-          <DestinationContainer
-            title="Asia"
-            countries={
-              (randomCountries && randomCountries.groupedCountry.asia) || []
-            }
-          />
-          <DestinationContainer
-            title="Europe"
-            countries={
-              (randomCountries && randomCountries.groupedCountry.europe) || []
-            }
-          />
+          {randomCountries &&
+            randomCountries.groupedCountry &&
+            randomCountries.groupedCountry.asia.length && (
+              <DestinationContainer
+                title="Asia"
+                countries={randomCountries.groupedCountry.asia}
+              />
+            )}
+
+          {randomCountries &&
+            randomCountries.groupedCountry &&
+            randomCountries.groupedCountry.europe.length && (
+              <DestinationContainer
+                title="Europe"
+                countries={randomCountries.groupedCountry.europe}
+              />
+            )}
+
           <DestinationContainer
             title="North America"
             countries={

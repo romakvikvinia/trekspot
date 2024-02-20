@@ -53,7 +53,7 @@ export const CountryDetailModal: React.FC<CountryDetailModalProps> = ({
   useEffect(() => {
     if (ref && ref.current) open();
   }, [ref.current]);
-
+  console.log("id", id);
   return (
     <>
       <Portal>

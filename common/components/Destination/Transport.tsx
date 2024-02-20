@@ -29,28 +29,40 @@ export const Transport: React.FC<TransportProps> = ({ country }) => {
       <View style={styles.transports}>
         {country.transportTypes?.map((item) => {
           return item === "Bus" ? (
-            <View style={styles.transportItem}>
+            <View
+              style={styles.transportItem}
+              key={`transport-${item}-${country.id}`}
+            >
               <View style={styles.transportItemIcon}>
                 <BusIcon />
               </View>
               <Text style={styles.transportText}>Bus</Text>
             </View>
           ) : item === "Metro" ? (
-            <View style={styles.transportItem}>
+            <View
+              style={styles.transportItem}
+              key={`transport-${item}-${country.id}`}
+            >
               <View style={styles.transportItemIcon}>
                 <MetroIcon />
               </View>
               <Text style={styles.transportText}>Metro</Text>
             </View>
           ) : item === "Trolleybus" ? (
-            <View style={styles.transportItem}>
+            <View
+              style={styles.transportItem}
+              key={`transport-${item}-${country.id}`}
+            >
               <View style={styles.transportItemIcon}>
                 <TrolleybusIcon />
               </View>
               <Text style={styles.transportText}>Trolleybus</Text>
             </View>
           ) : item === "Trams" ? (
-            <View style={styles.transportItem}>
+            <View
+              style={styles.transportItem}
+              key={`transport-${item}-${country.id}`}
+            >
               <View style={styles.transportItemIcon}>
                 <TramwayIcon />
               </View>
