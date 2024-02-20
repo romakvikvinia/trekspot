@@ -1,3 +1,4 @@
+import React from "react";
 import {
   ImageBackground,
   Linking,
@@ -14,14 +15,19 @@ import {
   TrolleybusIcon,
 } from "../../../utilities/SvgIcons.utility";
 import { styles } from "../_styles";
+import { CountryType } from "../../../api/api.types";
 
-export const Transport = ({ DATA }) => {
+interface TransportProps {
+  country: CountryType;
+}
+
+export const Transport: React.FC<TransportProps> = ({ country }) => {
   return (
     <ScrollView style={styles.tabWrapper} showsVerticalScrollIndicator={false}>
       <Text style={styles.secondaryTitle}>Public transport</Text>
 
       <View style={styles.transports}>
-        {DATA?.transportTypes?.map((item) => {
+        {country.transportTypes?.map((item) => {
           return item === "Bus" ? (
             <View style={styles.transportItem}>
               <View style={styles.transportItemIcon}>
@@ -55,27 +61,27 @@ export const Transport = ({ DATA }) => {
       </View>
       <Text style={styles.secondaryTitle}>Taxi apps</Text>
       <View style={styles.transports}>
-        {DATA?.taxi?.map((item, ind) => (
+        {country.taxi.map((item, ind) => (
           <TouchableOpacity
             activeOpacity={0.7}
             style={styles.transportItem}
             key={`taxt-${ind}`}
             onPress={() =>
               Linking.openURL(
-                `${Platform.OS === "android" ? item?.android : item?.ios}`
+                `${Platform.OS === "android" ? item.android : item.ios}`
               )
             }
           >
             <View style={styles.transportItemIcon}>
               <ImageBackground
                 source={{
-                  uri: item?.logo,
+                  uri: item.logo,
                 }}
                 resizeMode="contain"
                 style={{ width: 30, height: 20 }}
               />
             </View>
-            <Text style={styles.transportText}>{item?.name}</Text>
+            <Text style={styles.transportText}>{item.name}</Text>
           </TouchableOpacity>
         ))}
       </View>

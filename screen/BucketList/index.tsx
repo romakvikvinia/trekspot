@@ -28,7 +28,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { SceneMap, TabBar, TabView } from "react-native-tab-view";
 import { CountrySelect } from "../../common/components/CountrySelect";
 import { CountrySearch } from "../../common/components/CountrySearch";
-import { DestinationDetail } from "../../components/explore/destination/DestinationDetail";
+import { DestinationDetail } from "../../components/explore/destination/CountryDetailModal";
 import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 

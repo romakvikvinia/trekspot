@@ -13,11 +13,12 @@ import {
   TopSights,
   TripBold,
 } from "../utilities/SvgIcons.utility";
-import { ExploreRoutesStack } from "./Explore/ExploreRoutes";
+
 import { HomeRouteStack } from "./home/HomeRoutes";
 import { SettingRouteStack } from "./setting/SettingRoutes";
 import { TripRouteStack } from "./trip/TripRoutes";
 import { MyWorldRouteStack } from "./world/MyWorldRoutes";
+import { ExploreRoutesStack } from "./explore/ExploreRoutes";
 
 const Tab = createBottomTabNavigator();
 

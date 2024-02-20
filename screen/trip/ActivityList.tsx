@@ -44,7 +44,7 @@ const activities = [
   { label: "Cruise", color: "#337BFF", Icon: ShipIcon },
   { label: "Other", color: "#838383", Icon: ToDoIcon },
 ];
-export const ActivityIcon = ({ index }) => {
+const ActivityIcon = ({ index }) => {
   console.log("index", index);
   switch (index) {
     case 0:

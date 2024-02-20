@@ -217,7 +217,8 @@ export type CityType = {
 
 export type CitiesArgsType = Partial<
   Omit<CityType, "id"> & {
-    in_top_sight: boolean;
+    inTopSight: boolean;
+    isTop: boolean;
     skip: number;
     take: number;
   }
@@ -260,4 +261,15 @@ export type SightsArgsType = {
 export type SightsResponseType = Record<string, SightType[]>;
 export type SightsFetchResponseType = {
   sights: SightType[];
+};
+
+export type RandomCountriesGroupByContinentResponseType = {
+  groupedCountry: {
+    asia: CountryType[];
+    africa: CountryType[];
+    europe: CountryType[];
+    oceania: CountryType[];
+    southAmerica: CountryType[];
+    northAmerica: CountryType[];
+  };
 };

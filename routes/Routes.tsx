@@ -38,7 +38,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
       // // setToken(tokens.access_token);
       dispatch({ type: "SIGN_IN", payload: { token: token.token } });
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       // Alert.alert(JSON.stringify(error));
     }
     await SplashScreen.hideAsync();
@@ -74,7 +74,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
   return (
     <NavigationContainer onReady={checkAuth} theme={theme}>
       <AuthContext.Provider value={authContext}>
-        {/* {!state.isLoading ? (
+        {!state.isLoading ? (
           !state.isAuthenticated ? (
             <AuthRoute />
           ) : (
@@ -82,8 +82,8 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
           )
         ) : (
           <Loader isLoading={state.isLoading} />
-        )} */}
-        <AppRoute />
+        )}
+        {/* <AppRoute /> */}
       </AuthContext.Provider>
     </NavigationContainer>
   );

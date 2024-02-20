@@ -24,6 +24,7 @@ import {
   SightsArgsType,
   SightsResponseType,
   SightsFetchResponseType,
+  RandomCountriesGroupByContinentResponseType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -325,6 +326,7 @@ export const trekSpotApi = createApi({
               name
               rate
               visitors
+              continent
               image {
                 url
               }
@@ -446,21 +448,29 @@ export const trekSpotApi = createApi({
      */
 
     getCities: builder.query<CitiesResponseType, CitiesArgsType>({
-      query: ({ skip = 0, take = 20, iso2, in_top_sight = false }) => ({
-        variables: { skip, take, iso2, in_top_sight },
+      query: ({
+        skip = 0,
+        take = 20,
+        iso2,
+        inTopSight = false,
+        isTop = false,
+      }) => ({
+        variables: { skip, take, iso2, inTopSight, isTop },
         document: gql`
           query (
             $skip: Int!
             $take: Int!
             $iso2: String
-            $in_top_sight: Boolean
+            $inTopSight: Boolean
+            $isTop: Boolean
           ) {
             cities(
               input: {
                 skip: $skip
                 take: $take
                 iso2: $iso2
-                in_top_sight: $in_top_sight
+                inTopSight: $inTopSight
+                isTop: $isTop
               }
             ) {
               id
@@ -547,6 +557,51 @@ export const trekSpotApi = createApi({
       },
     }),
     //
+    getRandomCountriesGroupedByContinent: builder.query<
+      RandomCountriesGroupByContinentResponseType,
+      void
+    >({
+      query: () => ({
+        document: gql`
+          query {
+            groupedCountry {
+              asia {
+                ...CountryBasicFields
+              }
+              africa {
+                ...CountryBasicFields
+              }
+              europe {
+                ...CountryBasicFields
+              }
+              oceania {
+                ...CountryBasicFields
+              }
+              southAmerica {
+                ...CountryBasicFields
+              }
+              northAmerica {
+                ...CountryBasicFields
+              }
+            }
+          }
+          fragment CountryBasicFields on Country {
+            id
+            name
+            rate
+            visitors
+            continent
+            image {
+              url
+            }
+            images {
+              url
+            }
+          }
+        `,
+      }),
+    }),
+    //
   }),
 });
 
@@ -566,4 +621,5 @@ export const {
   useGetCitiesQuery,
   useLazyGetCitiesQuery,
   useLazyGetSightsQuery,
+  useGetRandomCountriesGroupedByContinentQuery,
 } = trekSpotApi;
