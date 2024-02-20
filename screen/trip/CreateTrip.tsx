@@ -364,7 +364,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   startsDateText: {
-    fontSize: 16,
+    fontSize: 18,
     color: COLORS.black,
     fontWeight: "500",
   },

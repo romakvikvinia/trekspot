@@ -1,71 +1,248 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { FlashList } from "@shopify/flash-list";
+import { Image } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORS, SIZES } from "../../styles/theme";
-import { NoDestinationFoundIcon } from "../../utilities/SvgIcons.utility";
+import {
+  Mark,
+  Mark2,
+  NoDestinationFoundIcon,
+} from "../../utilities/SvgIcons.utility";
+import * as Haptics from "expo-haptics";
 
 export const BucketlistModal = () => {
   return (
     <View style={[styles.rowItem, { flex: 1, flexGrow: 1 }]}>
-      <View style={styles.notFoundView}>
+      {/* <View style={styles.notFoundView}>
         <NoDestinationFoundIcon />
         <Text style={styles.notFoundViewText}>
           Your bucket list is empty, go to Explore page and add your next
           destination
         </Text>
-      </View>
-      {/* {Popular?.map((item, ind) => (
-          <>
-            <ImageBackground
+      </View> */}
+
+      <Text style={styles.titleItem}>Countries</Text>
+      <View style={{ minHeight: 200 }}>
+        <FlashList
+          data={Array.from([0, 1, 2, 4])}
+          numColumns={3}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              activeOpacity={0.7}
               style={[
-                styles.box,
-                { width: "100%", marginBottom: 15, height: 150 },
+                styles.thingsTodoItem,
+                {
+                  width: "49%",
+                  height: 130,
+                  flex: 1,
+                  paddingHorizontal: 5,
+                  marginBottom: 15,
+                },
               ]}
-              resizeMode="cover"
-              source={{
-                uri: item.image,
-              }}
-              key={ind}
             >
-              <TouchableOpacity
+              <Image
+                cachePolicy="memory"
+                contentFit="cover"
+                transition={0}
                 style={[
-                  styles.addToBucketButton,
-                  {
-                    backgroundColor: true
-                      ? COLORS.primary
-                      : "rgba(0, 0, 0, 0.3)",
-                  },
+                  styles.box,
+                  { width: "100%", marginBottom: 15, height: 130 },
                 ]}
-                activeOpacity={0.7}
+                resizeMode="cover"
+                source={{
+                  uri: "https://cdn.pixabay.com/photo/2018/04/25/09/26/eiffel-tower-3349075_1280.jpg",
+                }}
               >
-                <Mark2 color="#fff" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.gradientWrapper}
-                activeOpacity={0.7}
-              >
-                <LinearGradient
-                  style={styles.gradientWrapper}
-                  colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                <TouchableOpacity
+                  style={[
+                    styles.addToBucketButton,
+                    {
+                      backgroundColor: true
+                        ? COLORS.primary
+                        : "rgba(0, 0, 0, 0.3)",
+                    },
+                  ]}
+                  onPress={() =>
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+                  }
+                  activeOpacity={0.7}
                 >
-                  <View style={styles.labelItem}>
-                    <Mark color="#fff" />
-                    <Text style={styles.labelItemText}>{item.title}</Text>
-                  </View>
-                  <View style={styles.ratingLabel}>
-                    <View
-                      style={{ position: "relative", top: -1, opacity: 0.8 }}
-                    >
-                      <StarIcon color="#FFBC3E" />
+                  <Mark2 color="#fff" size="10" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.gradientWrapper}
+                  activeOpacity={0.7}
+                >
+                  <LinearGradient
+                    style={styles.gradientWrapper}
+                    colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                  >
+                    <View style={styles.labelItem}>
+                      <Mark color="#fff" />
+                      <Text numberOfLines={1} style={styles.labelItemText}>
+                        Paris
+                      </Text>
                     </View>
-                    <Text style={styles.ratingText}>{item.rating} /</Text>
-                    <Text style={styles.ratingText}>
-                      {item.visitors} visitors
-                    </Text>
-                  </View>
-                </LinearGradient>
-              </TouchableOpacity>
-            </ImageBackground>
-          </>
-        ))} */}
+                  </LinearGradient>
+                </TouchableOpacity>
+              </Image>
+            </TouchableOpacity>
+          )}
+          estimatedItemSize={200}
+          contentContainerStyle={{
+            paddingHorizontal: 10,
+          }}
+        />
+      </View>
+
+      <Text style={[styles.titleItem, { marginTop: 25 }]}>Museums</Text>
+
+      <View style={{ minHeight: 100 }}>
+        <FlashList
+          data={Array.from([0, 1, 2, 4])}
+          numColumns={3}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={[
+                styles.thingsTodoItem,
+                {
+                  width: "49%",
+                  height: 130,
+                  flex: 1,
+                  paddingHorizontal: 5,
+                  marginBottom: 15,
+                },
+              ]}
+            >
+              <Image
+                cachePolicy="memory"
+                contentFit="cover"
+                transition={0}
+                style={[
+                  styles.box,
+                  { width: "100%", marginBottom: 15, height: 130 },
+                ]}
+                resizeMode="cover"
+                source={{
+                  uri: "https://cdn.pixabay.com/photo/2018/04/25/09/26/eiffel-tower-3349075_1280.jpg",
+                }}
+              >
+                <TouchableOpacity
+                  style={[
+                    styles.addToBucketButton,
+                    {
+                      backgroundColor: true
+                        ? COLORS.primary
+                        : "rgba(0, 0, 0, 0.3)",
+                    },
+                  ]}
+                  onPress={() =>
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+                  }
+                  activeOpacity={0.7}
+                >
+                  <Mark2 color="#fff" size="10" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.gradientWrapper}
+                  activeOpacity={0.7}
+                >
+                  <LinearGradient
+                    style={styles.gradientWrapper}
+                    colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                  >
+                    <View style={styles.labelItem}>
+                      <Mark color="#fff" />
+                      <Text numberOfLines={1} style={styles.labelItemText}>
+                        Paris
+                      </Text>
+                    </View>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </Image>
+            </TouchableOpacity>
+          )}
+          estimatedItemSize={200}
+          contentContainerStyle={{
+            paddingHorizontal: 10,
+          }}
+        />
+      </View>
+      <Text style={[styles.titleItem, { marginTop: 25 }]}>Cities</Text>
+
+      <View style={{ minHeight: 100 }}>
+        <FlashList
+          data={Array.from([0, 1, 2, 4])}
+          numColumns={3}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={[
+                styles.thingsTodoItem,
+                {
+                  width: "49%",
+                  height: 130,
+                  flex: 1,
+                  paddingHorizontal: 5,
+                  marginBottom: 15,
+                },
+              ]}
+            >
+              <Image
+                cachePolicy="memory"
+                contentFit="cover"
+                transition={0}
+                style={[
+                  styles.box,
+                  { width: "100%", marginBottom: 15, height: 130 },
+                ]}
+                resizeMode="cover"
+                source={{
+                  uri: "https://cdn.pixabay.com/photo/2018/04/25/09/26/eiffel-tower-3349075_1280.jpg",
+                }}
+              >
+                <TouchableOpacity
+                  style={[
+                    styles.addToBucketButton,
+                    {
+                      backgroundColor: true
+                        ? COLORS.primary
+                        : "rgba(0, 0, 0, 0.3)",
+                    },
+                  ]}
+                  onPress={() =>
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+                  }
+                  activeOpacity={0.7}
+                >
+                  <Mark2 color="#fff" size="10" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.gradientWrapper}
+                  activeOpacity={0.7}
+                >
+                  <LinearGradient
+                    style={styles.gradientWrapper}
+                    colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                  >
+                    <View style={styles.labelItem}>
+                      <Mark color="#fff" />
+                      <Text numberOfLines={1} style={styles.labelItemText}>
+                        Paris
+                      </Text>
+                    </View>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </Image>
+            </TouchableOpacity>
+          )}
+          estimatedItemSize={100}
+          contentContainerStyle={{
+            paddingHorizontal: 10,
+          }}
+        />
+      </View>
     </View>
   );
 };
@@ -74,6 +251,13 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  titleItem: {
+    paddingHorizontal: 15,
+    marginBottom: 15,
+    fontSize: 20,
+    fontWeight: "500",
+    color: COLORS.black,
   },
   notFoundView: {
     alignItems: "center",
@@ -135,13 +319,12 @@ const styles = StyleSheet.create({
   },
   labelItemText: {
     color: "#fff",
-    fontSize: 22,
+    fontSize: 16,
     fontWeight: "bold",
     marginLeft: 5,
   },
   labelItem: {
     padding: 10,
-    paddingVertical: 0,
     flexDirection: "row",
     alignItems: "center",
   },
@@ -194,15 +377,15 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   addToBucketButton: {
-    width: 30,
-    height: 30,
+    width: 25,
+    height: 25,
     borderRadius: 50,
     backgroundColor: "rgba(0, 0, 0, 0.3)",
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    right: 10,
-    top: 10,
+    right: 8,
+    top: 8,
     zIndex: 3,
   },
   ratingTextXs: {
@@ -232,8 +415,9 @@ const styles = StyleSheet.create({
   },
   rowItem: {
     width: "100%",
-    paddingTop: 25,
+    paddingTop: 15,
     backgroundColor: "#F2F2F7",
+    paddingBottom: 25,
   },
   rowItemHeader: {
     flexDirection: "row",

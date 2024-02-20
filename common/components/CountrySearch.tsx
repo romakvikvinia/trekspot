@@ -1,6 +1,7 @@
 import { FlashList } from "@shopify/flash-list";
 import {
   ImageBackground,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -19,23 +20,19 @@ import {
   StarIcon,
 } from "../../utilities/SvgIcons.utility";
 import { LinearGradient } from "expo-linear-gradient";
+import { Image } from "expo-image";
 
 export const CountrySearch = ({ modalDestinationSearchRef }) => {
-  const Country = ({ item }: any) => {
-    const countryCode = item.iso2 as string;
-
-    // @ts-ignore
-    const imagePath = Flags[countryCode];
-
+  const Item = ({ item }: any) => {
     return (
       <TouchableOpacity style={styles.countryItem} activeOpacity={0.7}>
-        <ImageBackground
+        <Image
           style={styles.box}
           resizeMode="cover"
           source={{
             uri: "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=10&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
           }}
-        ></ImageBackground>
+        ></Image>
         <TouchableOpacity style={styles.gradientWrapper} activeOpacity={0.7}>
           <View style={styles.labelItem}>
             <Text style={[styles.labelItemText]}>{item.name}</Text>
@@ -56,29 +53,63 @@ export const CountrySearch = ({ modalDestinationSearchRef }) => {
 
   return (
     <>
-      <View
+      <ScrollView
         style={{
           flex: 1,
           height: "100%",
-          justifyContent: "center",
           paddingHorizontal: 15,
           paddingBottom: 25,
           backgroundColor: "#f8f8f8",
         }}
+        contentContainerStyle={{
+          justifyContent: "center",
+        }}
       >
-        <FlashList
-          data={CountriesList.slice(0, 15)}
-          renderItem={({ item }) => <Country item={item} />}
-          estimatedItemSize={200}
-          horizontal={false}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
+        <Text style={styles.resultTitle}>Countries</Text>
+        <View style={{ minHeight: 100 }}>
+          <FlashList
+            data={CountriesList.slice(0, 5)}
+            renderItem={({ item }) => <Item item={item} />}
+            estimatedItemSize={200}
+            horizontal={false}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
+
+        <Text style={styles.resultTitle}>Cities</Text>
+        <View style={{ minHeight: 100 }}>
+          <FlashList
+            data={CountriesList.slice(0, 5)}
+            renderItem={({ item }) => <Item item={item} />}
+            estimatedItemSize={200}
+            horizontal={false}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
+        <Text style={styles.resultTitle}>Top sights</Text>
+        <View style={{ minHeight: 100 }}>
+          <FlashList
+            data={CountriesList.slice(0, 5)}
+            renderItem={({ item }) => <Item item={item} />}
+            estimatedItemSize={200}
+            horizontal={false}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
+      </ScrollView>
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  resultTitle: {
+    paddingHorizontal: 0,
+    marginBottom: 15,
+    fontSize: 20,
+    fontWeight: "500",
+    color: COLORS.black,
+    marginTop: 15,
+  },
   labelItemText: {
     color: "#000",
     fontSize: 14,

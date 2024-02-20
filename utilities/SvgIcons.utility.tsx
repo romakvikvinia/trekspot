@@ -48,7 +48,7 @@ export const SearchNotFound = () => {
   return <SvgImage />;
 };
 
-export const Mark2 = ({ color = "" }) => {
+export const Mark2 = ({ color = "", size }) => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" width="49.9" height="41.138" viewBox="0 0 49.9 41.138">
   <g id="Group_270" data-name="Group 270" transform="translate(-8.1 -23.8)">
     <path id="Path_1863" fill=${
@@ -57,7 +57,13 @@ export const Mark2 = ({ color = "" }) => {
   </g>
 </svg>
 `;
-  const SvgImage = () => <SvgXml xml={svgMarkup} width="14" height="14" />;
+  const SvgImage = () => (
+    <SvgXml
+      xml={svgMarkup}
+      width={size ? size : "14"}
+      height={size ? size : "14"}
+    />
+  );
   return <SvgImage />;
 };
 
