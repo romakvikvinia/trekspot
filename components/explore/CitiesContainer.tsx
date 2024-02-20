@@ -57,14 +57,15 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
           showsHorizontalScrollIndicator={false}
         >
           {cities.map((item, ind) => (
-            <>
+            <React.Fragment
+              key={`${title}-cities-${item.id}-${item.city}-${ind}`}
+            >
               <ImageBackground
                 style={styles.box}
                 resizeMode="cover"
                 source={{
                   uri: item.image?.url,
                 }}
-                key={ind}
               >
                 <TouchableOpacity
                   style={styles.gradientWrapper}
@@ -102,7 +103,7 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
                 </TouchableOpacity>
               </ImageBackground>
               {cities.length === ind + 1 && <View style={{ width: 20 }}></View>}
-            </>
+            </React.Fragment>
           ))}
         </ScrollView>
         {/**

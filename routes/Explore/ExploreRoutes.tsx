@@ -9,7 +9,7 @@ import SeeAllScreen from "../../screen/Explore/BucketListAll";
 interface ExploreRoutesProps {}
 
 export type ExploreRoutesStackParamList = {
-  Explore: undefined;
+  ExploreWorld: undefined;
   SeeAllScreen: undefined;
 };
 
@@ -22,7 +22,7 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Explore"
+        name="ExploreWorld"
         component={ExploreScreen}
         options={({ route, navigation }) => ({
           header: () => null,

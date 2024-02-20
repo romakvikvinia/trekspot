@@ -35,7 +35,7 @@ import { CountryType } from "../../api/api.types";
 
 type ExploreProps = NativeStackScreenProps<
   ExploreRoutesStackParamList,
-  "Explore"
+  "ExploreWorld"
 >;
 
 export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {

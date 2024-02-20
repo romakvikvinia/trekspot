@@ -13,12 +13,34 @@ import {
   SeatIcon,
   USDIcon,
 } from "../../../utilities/SvgIcons.utility";
-import { ActivityIcon } from "../ActivityList";
+
 import { RangePicker } from "../RangePicker";
 import { styles } from "../_styles";
 import { ExpenseInput } from "./ExpenseInput";
 import { PlaceSearch } from "./PlaceSearch";
 import { SeatInput } from "./SeatInput";
+
+const ActivityIcon = ({ index }) => {
+  console.log("index", index);
+  switch (index) {
+    case 0:
+      return <BusIcon color="#fff" />;
+    case 1:
+      return <LodgeIcon color="#fff" />;
+    case 2:
+      return <EatIcon color="#fff" />;
+    case 3:
+      return <MapIcon color="#fff" />;
+    case 4:
+      return <TicketIcon color="#fff" />;
+    case 5:
+      return <MuseumIcon color="#fff" />;
+    case 6:
+      return <ShipIcon color="#fff" />;
+    case 7:
+      return <ToDoIcon color="#fff" />;
+  }
+};
 
 const Transportation = ({ activeActivity, activities, refPagerView }) => {
   const [open, setOpen] = useState(null);
