@@ -36,6 +36,10 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
     setState((prevState) => ({ ...prevState, city }));
   }, []);
 
+  const handleClear = useCallback(() => {
+    setState((prevState) => ({ ...prevState, city: null }));
+  }, []);
+
   //   console.log("CitiesContainer", state);
 
   return (
@@ -110,7 +114,7 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
          * city detail modal
          */}
         {state.city && (
-          <CityDetailModal key={state.city.id} city={state.city} />
+          <CityDetailModal city={state.city} closeCallBack={handleClear} />
         )}
       </View>
     </>

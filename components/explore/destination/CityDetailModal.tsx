@@ -17,13 +17,17 @@ import { Loader } from "../../../common/ui/Loader";
 
 type CityDetailProps = {
   city: CityType;
+  closeCallBack?: () => void;
 };
 
 interface IState {
   sight: SightType | null;
 }
 
-export const CityDetailModal: React.FC<CityDetailProps> = ({ city }) => {
+export const CityDetailModal: React.FC<CityDetailProps> = ({
+  city,
+  closeCallBack = () => {},
+}) => {
   const { ref, open, close } = useModalize();
   const [state, setState] = useState<IState>({ sight: null });
   const [getSights, { data, isLoading }] = useLazyGetSightsQuery();
@@ -68,6 +72,7 @@ export const CityDetailModal: React.FC<CityDetailProps> = ({ city }) => {
           velocity={100000}
           tapGestureEnabled={false}
           closeSnapPointStraightEnabled={false}
+          onClose={closeCallBack}
         >
           <Loader isLoading={isLoading} />
           {!isLoading ? (

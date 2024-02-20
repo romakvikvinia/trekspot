@@ -22,23 +22,18 @@ import { CountrySearch } from "../../common/components/CountrySearch";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
-import {
-  useCountriesQuery,
-  useGetCitiesQuery,
-  useGetRandomCountriesGroupedByContinentQuery,
-} from "../../api/api.trekspot";
+import { useCountriesQuery, useGetCitiesQuery } from "../../api/api.trekspot";
 
 import { BucketlistModal } from "../../common/components/BucketlistModal";
 import { DestinationContainer } from "../../components/explore/DestinationContainer";
 import { CitiesContainer } from "../../components/explore/CitiesContainer";
-import { CountryType } from "../../api/api.types";
 
 type ExploreProps = NativeStackScreenProps<
   ExploreRoutesStackParamList,
   "ExploreWorld"
 >;
 
-export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
+export const ExploreScreen: React.FC<ExploreProps> = (props) => {
   // refs
   const BucketListModalRef = useRef<Modalize>(null);
   const modalDestinationSearchRef = useRef<Modalize>(null);
@@ -56,9 +51,6 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
     take: 15,
     isTop: true,
   });
-
-  const { data: randomCountries, isLoading: isRandomCountriesLoading } =
-    useGetRandomCountriesGroupedByContinentQuery();
 
   const [searchActive, setSearchActive] = useState(false);
 
@@ -135,46 +127,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
             seeAllItems={false}
           />
 
-          {randomCountries &&
-            randomCountries.groupedCountry &&
-            randomCountries.groupedCountry.asia.length && (
-              <DestinationContainer
-                title="Asia"
-                countries={randomCountries.groupedCountry.asia}
-              />
-            )}
-
-          {randomCountries &&
-            randomCountries.groupedCountry &&
-            randomCountries.groupedCountry.europe.length && (
-              <DestinationContainer
-                title="Europe"
-                countries={randomCountries.groupedCountry.europe}
-              />
-            )}
-
-          <DestinationContainer
-            title="North America"
-            countries={
-              (randomCountries &&
-                randomCountries.groupedCountry.northAmerica) ||
-              []
-            }
-          />
-          <DestinationContainer
-            title="Oceania"
-            countries={
-              (randomCountries && randomCountries.groupedCountry.oceania) || []
-            }
-          />
-          <DestinationContainer
-            title="South America"
-            countries={
-              (randomCountries &&
-                randomCountries.groupedCountry.southAmerica) ||
-              []
-            }
-          />
+          {/* <DestinationContainer title="South America" countries={[]} /> */}
         </ScrollView>
 
         <Portal>

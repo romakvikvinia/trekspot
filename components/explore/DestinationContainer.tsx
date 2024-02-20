@@ -34,7 +34,11 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
   const handleDetailOfCountry = useCallback((countryId: string) => {
     setState((prevState) => ({ ...prevState, countryId }));
   }, []);
-  console.log("countries", countries);
+
+  const handleClearState = useCallback(() => {
+    setState((prevState) => ({ ...prevState, countryId: null }));
+  }, []);
+
   return (
     <>
       <View style={[styles.rowItem]}>
@@ -63,7 +67,12 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
         </ScrollView>
       </View>
       {/** Country detail modal */}
-      {state.countryId && <CountryDetailModal id={state.countryId} />}
+      {state.countryId && (
+        <CountryDetailModal
+          id={state.countryId}
+          closeCallBack={handleClearState}
+        />
+      )}
     </>
   );
 };
