@@ -44,6 +44,7 @@ import { Accessibility } from "./Accessibility";
 import { TravelType } from "./TravelType";
 import { Background } from "./Background";
 import { ActivityList } from "./ActivityList";
+import TransportationActivities from "./components/TransportationActivities";
 
 export const CreateTripContent = ({
   tripActivitesModal,
@@ -54,6 +55,7 @@ export const CreateTripContent = ({
   const modalActivityRef = useRef(null);
   const modalBackgroundRef = useRef(null);
   const modalTravelTypeRef = useRef(null);
+  const modalTransportationActivitiesRef = useRef(null);
 
   const [range, setRange] = useState({
     startDate: undefined,
@@ -74,6 +76,10 @@ export const CreateTripContent = ({
   };
   const onBackgroundModalOpen = () => {
     modalBackgroundRef.current?.open();
+  };
+
+  const onTransportationActivitiesModalOpen = () => {
+    modalTransportationActivitiesRef.current?.open();
   };
 
   return (
@@ -247,7 +253,11 @@ export const CreateTripContent = ({
               <TouchableOpacity
                 activeOpacity={0.5}
                 style={{ flex: 1, justifyContent: "center" }}
+                onPress={() => onTransportationActivitiesModalOpen()}
               >
+                <View style={styles.amountCircle}>
+                  <Text style={styles.amountCircleText}>5</Text>
+                </View>
                 <View style={styles.iconBox}>
                   <BusIcon width="18" color="#C6C6C6" />
                 </View>
@@ -519,6 +529,43 @@ export const CreateTripContent = ({
           />
         </Modalize>
       </Portal>
+      <Portal>
+        <Modalize
+          ref={modalBackgroundRef}
+          modalTopOffset={65}
+          scrollViewProps={{
+            alwaysBounceVertical: false,
+            showsVerticalScrollIndicator: false,
+          }}
+          adjustToContentHeight
+          modalStyle={{
+            backgroundColor: "#F2F2F7",
+          }}
+        >
+          <Background gradient={gradient} setGradient={setGradient} />
+        </Modalize>
+      </Portal>
+
+      <Portal>
+        <Modalize
+          ref={modalTransportationActivitiesRef}
+          modalTopOffset={65}
+          scrollViewProps={{
+            alwaysBounceVertical: false,
+            showsVerticalScrollIndicator: false,
+          }}
+          adjustToContentHeight
+          modalStyle={{
+            backgroundColor: "#F2F2F7",
+            minHeight: "100%",
+          }}
+        >
+          <TransportationActivities
+            modalTransportationActivitiesRef={modalTransportationActivitiesRef}
+          />
+        </Modalize>
+      </Portal>
+
       {/* 
       <Portal>
         <Modalize
@@ -537,22 +584,6 @@ export const CreateTripContent = ({
           <TravelType travelType={travelType} setTravelType={setTravelType} />
         </Modalize>
       </Portal> */}
-      <Portal>
-        <Modalize
-          ref={modalBackgroundRef}
-          modalTopOffset={65}
-          scrollViewProps={{
-            alwaysBounceVertical: false,
-            showsVerticalScrollIndicator: false,
-          }}
-          adjustToContentHeight
-          modalStyle={{
-            backgroundColor: "#F2F2F7",
-          }}
-        >
-          <Background gradient={gradient} setGradient={setGradient} />
-        </Modalize>
-      </Portal>
     </>
   );
 };
@@ -592,6 +623,22 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#F2F2F7",
+  },
+  amountCircle: {
+    minWidth: 18,
+    width: 18,
+    height: 18,
+    borderRadius: 50,
+    backgroundColor: "#fafafa",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    top: 0,
+    right: 0,
+  },
+  amountCircleText: {
+    fontSize: 12,
+    color: COLORS.black,
   },
   cancelTripButton: {
     position: "relative",

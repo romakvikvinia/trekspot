@@ -20,6 +20,7 @@ import {
   PassportIcon,
   SearchIcon,
   StarIcon,
+  XIcon,
 } from "../../utilities/SvgIcons.utility";
 import { LinearGradient } from "expo-linear-gradient";
 import { CountrySelect } from "../../common/components/CountrySelect";
@@ -552,14 +553,28 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
             modalTopOffset={65}
             disableScrollIfPossible
             adjustToContentHeight
+            velocity={100000}
+            tapGestureEnabled={false}
+            closeSnapPointStraightEnabled={false}
             HeaderComponent={
               <View style={[styles.rowItemHeader, { paddingTop: 15 }]}>
                 <Text style={styles.h2}>Bucket List</Text>
+
+                <TouchableOpacity
+                  onPress={() => BucketListModalRef?.current?.close()}
+                  activeOpacity={0.7}
+                  style={styles.closeButton}
+                >
+                  <XIcon width="13" height="13" />
+                </TouchableOpacity>
               </View>
             }
             modalStyle={{
               backgroundColor: "#F2F2F7",
-              minHeight: "80%",
+              minHeight: "90%",
+            }}
+            scrollViewProps={{
+              showsVerticalScrollIndicator: false,
             }}
           >
             <BucketlistModal />
@@ -607,6 +622,14 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     fontSize: 14,
     color: COLORS.darkgray,
+  },
+  closeButton: {
+    backgroundColor: "#DBDBDB",
+    width: 35,
+    height: 35,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
   },
   bucketListButton: {
     minWidth: 40,
