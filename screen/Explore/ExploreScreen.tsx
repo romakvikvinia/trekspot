@@ -22,7 +22,11 @@ import { CountrySearch } from "../../common/components/CountrySearch";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
-import { useCountriesQuery, useGetCitiesQuery } from "../../api/api.trekspot";
+import {
+  useCountriesQuery,
+  useGetCitiesQuery,
+  useGetRandomCountriesGroupedByContinentQuery,
+} from "../../api/api.trekspot";
 
 import { BucketlistModal } from "../../common/components/BucketlistModal";
 import { DestinationContainer } from "../../components/explore/DestinationContainer";
@@ -53,8 +57,8 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
     isTop: true,
   });
 
-  let { data: notPopularCountries, isLoading: isNotPopularCountriesLoading } =
-    useCountriesQuery({ isPopular: false, skip: 0, take: 60 });
+  const { data: randomCountries, isLoading: isRandomCountriesLoading } =
+    useGetRandomCountriesGroupedByContinentQuery();
 
   const [searchActive, setSearchActive] = useState(false);
 
@@ -67,24 +71,6 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
    */
 
   const cities = data && data.cities ? data.cities : [];
-
-  const countriesAreNotPopular =
-    notPopularCountries && notPopularCountries.countries
-      ? notPopularCountries.countries
-      : [];
-
-  const countriesAreNotPopularMap: Record<string, CountryType[]> = {};
-
-  countriesAreNotPopular.forEach((country) => {
-    if (country.continent in countriesAreNotPopularMap) {
-      countriesAreNotPopularMap[country.continent] = [
-        country,
-        ...countriesAreNotPopularMap[country.continent],
-      ];
-    } else {
-      countriesAreNotPopularMap[country.continent] = [country];
-    }
-  });
 
   return (
     <>
@@ -149,15 +135,46 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
             seeAllItems={false}
           />
 
-          {Object.keys(countriesAreNotPopularMap).length
-            ? Object.keys(countriesAreNotPopularMap).map((continent) => (
-                <DestinationContainer
-                  key={`DestinationContainer-${continent}`}
-                  title={continent}
-                  countries={countriesAreNotPopularMap[continent]}
-                />
-              ))
-            : null}
+          <DestinationContainer
+            title="Africa"
+            countries={
+              (randomCountries && randomCountries.groupedCountry.africa) || []
+            }
+          />
+          <DestinationContainer
+            title="Asia"
+            countries={
+              (randomCountries && randomCountries.groupedCountry.asia) || []
+            }
+          />
+          <DestinationContainer
+            title="Europe"
+            countries={
+              (randomCountries && randomCountries.groupedCountry.europe) || []
+            }
+          />
+          <DestinationContainer
+            title="North America"
+            countries={
+              (randomCountries &&
+                randomCountries.groupedCountry.northAmerica) ||
+              []
+            }
+          />
+          <DestinationContainer
+            title="Oceania"
+            countries={
+              (randomCountries && randomCountries.groupedCountry.oceania) || []
+            }
+          />
+          <DestinationContainer
+            title="South America"
+            countries={
+              (randomCountries &&
+                randomCountries.groupedCountry.southAmerica) ||
+              []
+            }
+          />
         </ScrollView>
 
         <Portal>

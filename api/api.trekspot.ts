@@ -24,6 +24,7 @@ import {
   SightsArgsType,
   SightsResponseType,
   SightsFetchResponseType,
+  RandomCountriesGroupByContinentResponseType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -556,6 +557,51 @@ export const trekSpotApi = createApi({
       },
     }),
     //
+    getRandomCountriesGroupedByContinent: builder.query<
+      RandomCountriesGroupByContinentResponseType,
+      void
+    >({
+      query: () => ({
+        document: gql`
+          query {
+            groupedCountry {
+              asia {
+                ...CountryBasicFields
+              }
+              africa {
+                ...CountryBasicFields
+              }
+              europe {
+                ...CountryBasicFields
+              }
+              oceania {
+                ...CountryBasicFields
+              }
+              southAmerica {
+                ...CountryBasicFields
+              }
+              northAmerica {
+                ...CountryBasicFields
+              }
+            }
+          }
+          fragment CountryBasicFields on Country {
+            id
+            name
+            rate
+            visitors
+            continent
+            image {
+              url
+            }
+            images {
+              url
+            }
+          }
+        `,
+      }),
+    }),
+    //
   }),
 });
 
@@ -575,4 +621,5 @@ export const {
   useGetCitiesQuery,
   useLazyGetCitiesQuery,
   useLazyGetSightsQuery,
+  useGetRandomCountriesGroupedByContinentQuery,
 } = trekSpotApi;

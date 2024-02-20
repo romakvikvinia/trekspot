@@ -262,3 +262,14 @@ export type SightsResponseType = Record<string, SightType[]>;
 export type SightsFetchResponseType = {
   sights: SightType[];
 };
+
+export type RandomCountriesGroupByContinentResponseType = {
+  groupedCountry: {
+    asia: CountryType[];
+    africa: CountryType[];
+    europe: CountryType[];
+    oceania: CountryType[];
+    southAmerica: CountryType[];
+    northAmerica: CountryType[];
+  };
+};

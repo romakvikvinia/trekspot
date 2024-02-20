@@ -271,6 +271,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
       pickedImages: null,
     }));
     const result = await ImagePicker.launchImageLibraryAsync({
+      exif: true,
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
       aspect: [4, 3],

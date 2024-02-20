@@ -54,7 +54,7 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
         >
           {countries.map((country, ind) => (
             <CountryItem
-              key={`popular-country-${country.id}`}
+              key={`popular-country-${country.id}-${country.name}`}
               item={country}
               isWith={countries.length - 1 === ind}
               openModal={() => handleDetailOfCountry(country.id!)}
