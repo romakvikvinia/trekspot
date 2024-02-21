@@ -423,7 +423,14 @@ export const ForYouIcon = ({ color }) => {
   const SvgImage = () => <SvgXml xml={svgMarkup} width={"20"} height={"20"} />;
   return <SvgImage />;
 };
-export const DownCircleIcon = ({ color, size }) => {
+interface IDownCircleIcon {
+  color: string;
+  size: number | string;
+}
+export const DownCircleIcon = ({
+  color = "",
+  size = 0,
+}: Partial<IDownCircleIcon>) => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M12 0a12 12 0 1 0 12 12A12.013 12.013 0 0 0 12 0Zm1.414 15.414a2 2 0 0 1-2.828 0l-4.673-4.673 1.414-1.414L12 14l4.712-4.711 1.414 1.411Z" fill=${
     color ? color : "#ccc"
   } opacity="1" data-original="#ccc" class=""></path></g></svg>`;

@@ -12,7 +12,7 @@ import { CityType, SightType } from "../../../api/api.types";
 import { useLazyGetSightsQuery } from "../../../api/api.trekspot";
 import { SightItem } from "../sights/SightItem";
 import { SightsContainer } from "../sights/SightsContainer";
-import { SightDetail } from "../sights/SightDetail";
+import { SightDetailModal } from "../sights/SightDetailModal";
 import { Loader } from "../../../common/ui/Loader";
 
 type CityDetailProps = {
@@ -57,7 +57,7 @@ export const CityDetailModal: React.FC<CityDetailProps> = ({
   if (sights && data && "Top Sights" in data && data["Top Sights"]) {
     delete sights["Top Sights"];
   }
-  console.log("sights", sights, city.iso2, city.city);
+
   return (
     <>
       <Portal>
@@ -200,7 +200,7 @@ export const CityDetailModal: React.FC<CityDetailProps> = ({
                 <SightsContainer items={sights} />
               ) : null}
 
-              {state.sight && <SightDetail data={state.sight} />}
+              {state.sight && <SightDetailModal data={state.sight} />}
             </View>
           ) : null}
         </Modalize>

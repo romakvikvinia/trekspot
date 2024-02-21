@@ -22,11 +22,16 @@ import { CountrySearch } from "../../common/components/CountrySearch";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
-import { useCountriesQuery, useGetCitiesQuery } from "../../api/api.trekspot";
+import {
+  useCountriesQuery,
+  useGetCitiesQuery,
+  useRandomSightQuery,
+} from "../../api/api.trekspot";
 
 import { BucketlistModal } from "../../common/components/BucketlistModal";
 import { DestinationContainer } from "../../components/explore/DestinationContainer";
 import { CitiesContainer } from "../../components/explore/CitiesContainer";
+import { ExploreSightListContainer } from "../../components/explore/ExploreSightListContainer";
 
 type ExploreProps = NativeStackScreenProps<
   ExploreRoutesStackParamList,
@@ -51,6 +56,9 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
     take: 15,
     isTop: true,
   });
+
+  const { data: randomSightsData, isLoading: isRandomSightsLoading } =
+    useRandomSightQuery({ take: 10 });
 
   const [searchActive, setSearchActive] = useState(false);
 
@@ -125,6 +133,15 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
             title="Top Cities"
             cities={cities}
             seeAllItems={false}
+          />
+
+          {/**
+           * Top sights
+           */}
+
+          <ExploreSightListContainer
+            items={(randomSightsData && randomSightsData.randomSights) || []}
+            title="Top sights"
           />
 
           {/* <DestinationContainer title="South America" countries={[]} /> */}

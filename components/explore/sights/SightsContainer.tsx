@@ -3,15 +3,15 @@ import { Image } from "expo-image";
 import { View, TouchableOpacity, ScrollView, Text } from "react-native";
 import { exploreStyles } from "./_exploreStyles";
 import { styles } from "../../../common/components/_styles";
-// import { COLORS } from "../../../styles/theme";
+import { COLORS } from "../../../styles/theme";
 import {
   DownCircleIcon,
   UpCircleIcon,
-  //   CalendarFilledIcon,
-  //   TripLocationIcon,
+  CalendarFilledIcon,
+  TripLocationIcon,
 } from "../../../utilities/SvgIcons.utility";
 import { SightType } from "../../../api/api.types";
-import { SightDetail } from "./SightDetail";
+import { SightDetailModal } from "./SightDetailModal";
 
 type SightsContainerProps = {
   items: Record<string, SightType[]>;
@@ -149,44 +149,47 @@ export const SightsContainer: React.FC<SightsContainerProps> = ({ items }) => {
                       {/* event type style  */}
 
                       {/* <View style={styles.thingsTodoItemiIn}>
-                    {item?.date ? (
-                      <Text
-                        style={[
-                          styles.thingsTodoItemiIntypeText,
-                          {
-                            fontSize: 14,
-                            color: COLORS.black,
-                            marginBottom: 8,
-                          },
-                        ]}
-                      >
-                        <CalendarFilledIcon size="12" color={COLORS.darkgray} />{" "}
-                        {item?.date}
-                      </Text>
-                    ) : null}
-                    <TouchableOpacity
-                      activeOpacity={0.7}
-                      onPress={() => {
-                        //   onEmbedModalOpen();
-                        //   setBlogUrl("");
-                        //   setPlaceTitle(item?.location);
-                      }}
-                    >
-                      {item?.location ? (
                         <Text
                           style={[
-                            styles.thingsTodoItemiInprice,
+                            styles.thingsTodoItemiIntypeText,
                             {
                               fontSize: 14,
+                              color: COLORS.black,
+                              marginBottom: 8,
                             },
                           ]}
                         >
-                          <TripLocationIcon size="12" color={COLORS.darkgray} />{" "}
-                          {item?.location}
+                          <CalendarFilledIcon
+                            size="12"
+                            color={COLORS.darkgray}
+                          />
+                          02-08-2024
                         </Text>
-                      ) : null}
-                    </TouchableOpacity>
-                  </View> */}
+
+                        <TouchableOpacity
+                          activeOpacity={0.7}
+                          onPress={() => {
+                            //   onEmbedModalOpen();
+                            //   setBlogUrl("");
+                            //   setPlaceTitle(item?.location);
+                          }}
+                        >
+                          <Text
+                            style={[
+                              styles.thingsTodoItemiInprice,
+                              {
+                                fontSize: 14,
+                              },
+                            ]}
+                          >
+                            <TripLocationIcon
+                              size="12"
+                              color={COLORS.darkgray}
+                            />{" "}
+                            Location
+                          </Text>
+                        </TouchableOpacity>
+                      </View> */}
                     </View>
                   </TouchableOpacity>
                 ))}
@@ -194,7 +197,7 @@ export const SightsContainer: React.FC<SightsContainerProps> = ({ items }) => {
           ) : null}
         </View>
       ))}
-      <SightDetail data={state.item!} />
+      <SightDetailModal data={state.item!} />
     </>
   );
 };
