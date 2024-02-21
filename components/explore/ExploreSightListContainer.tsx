@@ -98,6 +98,9 @@ export const ExploreSightListContainer: React.FC<
                       <Text style={[styles.ratingText, styles.ratingTextXs]}>
                         {item.rate}
                       </Text>
+                      {/* <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                        {item.reviews} reviews
+                      </Text> */}
                     </View>
                   </LinearGradient>
                 </TouchableOpacity>

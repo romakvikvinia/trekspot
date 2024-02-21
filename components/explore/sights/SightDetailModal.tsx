@@ -160,6 +160,11 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                   <TripLocationIcon color="#000" size="12" /> {data.address}
                 </Text>
               )}
+              <Text>
+                {data.workingHours
+                  ?.map((i) => `${i.day}-${i.hours}`)
+                  .join(", ")}
+              </Text>
             </View>
           </ScrollView>
         </View>
