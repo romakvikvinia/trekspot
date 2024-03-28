@@ -7,11 +7,13 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { TripScreen } from "../../screen/trip/TripScreen";
 import { THeaderButton } from "../../common/ui/THeaderButton";
 import { PrimaryColor } from "../../styles/colors";
+import { TripDetailScreen } from "../../screen/trip/TripDetailScreen";
 
 interface TripRouteProps {}
 
 type TripRouteStackParamList = {
   TripsScreen: undefined;
+  TripDetailScreen: undefined;
 };
 
 const Stack = createStackNavigator<TripRouteStackParamList>();
@@ -37,6 +39,13 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
           //     />
           //   </HeaderButtons>
           // ),
+        })}
+      />
+      <Stack.Screen
+        name="TripDetailScreen"
+        component={TripDetailScreen}
+        options={({ route, navigation }) => ({
+          headerShown: false,
         })}
       />
     </Stack.Navigator>

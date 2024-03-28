@@ -23,7 +23,7 @@ export const SearchComponent = ({ search, setSearch, withIcon = true }) => {
             paddingLeft: withIcon ? 40 : 15,
           },
         ]}
-        placeholder="Search countries or cities"
+        placeholder="Search cities"
         placeholderTextColor={COLORS.darkgray}
         onChangeText={(e) => setSearch(e)}
         value={search}

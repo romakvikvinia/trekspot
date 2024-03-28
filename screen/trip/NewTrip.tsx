@@ -17,39 +17,37 @@ import {
   ImageIcon,
   OneUserIcon,
   PrivateIcon,
+  StarsIcon,
   TripLocationIcon,
 } from "../../utilities/SvgIcons.utility";
 import { RangePicker } from "./RangePicker";
 import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 import { Destination } from "./Destination";
-import { Accessibility } from "./Accessibility";
+// import { Accessibility } from "./_Forlater/Accessibility";
+// import { TravelType } from "./TravelType";
+import { useNavigation } from "@react-navigation/native";
 import { TravelType } from "./TravelType";
-import { Background } from "./Background";
 
 export const CreateTripContent = ({
   newTripModalRef,
   gradient,
   setGradient,
   tripActivitesModal,
+  range,
+  setOpen,
+  onDestinationModalOpen,
 }) => {
-  const modalDestinationRef = useRef(null);
+  const navigation = useNavigation();
+
   const modalAccessibilityRef = useRef(null);
   const modalBackgroundRef = useRef(null);
   const modalTravelTypeRef = useRef(null);
 
-  const [range, setRange] = useState({
-    startDate: undefined,
-    endDate: undefined,
-  });
   const [tripAccess, setTripAccess] = useState(false);
   const [destination, setDestination] = useState();
   const [travelType, setTravelType] = useState(false);
 
-  const [open, setOpen] = useState(false);
-  const onDestinationModalOpen = () => {
-    modalDestinationRef.current?.open();
-  };
   const onAccessibilityModalOpen = () => {
     modalAccessibilityRef.current?.open();
   };
@@ -69,25 +67,39 @@ export const CreateTripContent = ({
     <>
       <View style={styles.newTripWrapper}>
         <View style={styles.newTripHeader}>
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: "600",
+              color: COLORS.black,
+            }}
+          >
+            New trip
+          </Text>
           <TouchableOpacity
             style={styles.cancelTripButton}
             onPress={() => newTripModalRef?.current?.close()}
           >
             <Text style={styles.cancelTripButtonText}>Cancel</Text>
           </TouchableOpacity>
-          <TouchableOpacity
+
+          {/* <TouchableOpacity
             style={styles.createTripButton}
-            onPress={() => handleCreateNewTrip()}
+            onPress={() => {
+              navigation.navigate("TripDetailScreen");
+              newTripModalRef?.current?.close();
+            }}
           >
             <Text style={styles.createTripButtonText}>Create</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         {/* <BlurView intensity={100} style={styles.tripNameInputWrapper}> */}
         <TextInput
           placeholder="Enter trip name"
-          placeholderTextColor="rgba(255, 255, 255, 0.6)"
+          placeholderTextColor="rgba(0, 0, 0, 0.4)"
           style={styles.tripNameInput}
-          selectionColor="#fff"
+          selectionColor="#000"
+          autoFocus
         />
         {/* </BlurView> */}
         <ScrollView style={{ flex: 1 }}>
@@ -144,21 +156,8 @@ export const CreateTripContent = ({
                 ) : null}
               </TouchableOpacity>
             </BlurView>
-            {/* <BlurView
-              intensity={100}
-              style={[styles.newTripBox, styles.halfBox]}
-            >
-              <TouchableOpacity
-                activeOpacity={0.5}
-                style={styles.newTripBoxButton}
-                onPress={() => onAccessibilityModalOpen()}
-              >
-                <PrivateIcon size="20" />
-                <Text style={styles.halfBoxLabelText}>Accessibility</Text>
-                <Text style={styles.halfBoxValueText}>Private</Text>
-              </TouchableOpacity>
-            </BlurView> */}
-            {/* <BlurView
+
+            <BlurView
               intensity={100}
               style={[styles.newTripBox, styles.halfBox]}
             >
@@ -169,48 +168,40 @@ export const CreateTripContent = ({
               >
                 <OneUserIcon size="20" />
                 <Text style={styles.halfBoxLabelText}>Travel type</Text>
-                <Text style={styles.halfBoxValueText}>Solo</Text>
-              </TouchableOpacity>
-            </BlurView> */}
-            <BlurView
-              intensity={100}
-              style={[styles.newTripBox, styles.halfBox]}
-            >
-              <TouchableOpacity
-                activeOpacity={0.5}
-                style={styles.newTripBoxButton}
-                onPress={() => onBackgroundModalOpen()}
-              >
-                <ImageIcon size="20" />
-                <Text style={styles.halfBoxLabelText}>Background image</Text>
+
+                <Text style={styles.halfBoxValueText}>{travelType}</Text>
               </TouchableOpacity>
             </BlurView>
           </View>
         </ScrollView>
-      </View>
-      <RangePicker
-        range={range}
-        setRange={setRange}
-        open={open}
-        setOpen={setOpen}
-      />
-
-      <Portal>
-        <Modalize
-          ref={modalDestinationRef}
-          modalTopOffset={65}
-          scrollViewProps={{
-            alwaysBounceVertical: false,
-            showsVerticalScrollIndicator: false,
-          }}
-          modalStyle={{
-            backgroundColor: "#F2F2F7",
-            minHeight: "80%",
+        <View
+          style={{
+            paddingBottom: 35,
           }}
         >
-          <Destination />
-        </Modalize>
-      </Portal>
+          <TouchableOpacity style={styles.aiPlanButton}>
+            <LinearGradient
+              style={{
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "row",
+                height: 50,
+              }}
+              colors={["#B0369B", "#BF369A", "#99329D"]}
+            >
+              <Text style={styles.aiPlanButtonText}>Generate AI Itinerary</Text>
+              <StarsIcon width="15" color="#fff" />
+            </LinearGradient>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.manualPlanButton}>
+            <Text style={styles.manualPlanButtonText}>
+              I will plan manually
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
       {/* <Portal>
         <Modalize
           modalStyle={{
@@ -230,7 +221,7 @@ export const CreateTripContent = ({
             setTripAccess={setTripAccess}
           />
         </Modalize>
-      </Portal>
+      </Portal> */}
       <Portal>
         <Modalize
           ref={modalTravelTypeRef}
@@ -245,61 +236,72 @@ export const CreateTripContent = ({
           }}
           adjustToContentHeight
         >
-          <TravelType travelType={travelType} setTravelType={setTravelType} />
-        </Modalize>
-      </Portal> */}
-      <Portal>
-        <Modalize
-          ref={modalBackgroundRef}
-          modalTopOffset={65}
-          scrollViewProps={{
-            alwaysBounceVertical: false,
-            showsVerticalScrollIndicator: false,
-          }}
-          adjustToContentHeight
-          modalStyle={{
-            backgroundColor: "#F2F2F7",
-          }}
-        >
-          <Background gradient={gradient} setGradient={setGradient} />
+          <TravelType
+            modalTravelTypeRef={modalTravelTypeRef}
+            travelType={travelType}
+            setTravelType={setTravelType}
+          />
         </Modalize>
       </Portal>
     </>
   );
 };
 
-export const CreateTrip = ({ newTripModalRef, tripActivitesModal }) => {
-  const [gradient, setGradient] = useState(["#756A95", "#975B76", "#B75E68"]);
+export const NewTrip = ({ newTripModalRef, tripActivitesModal }) => {
+  const [gradient, setGradient] = useState(["#fff", "#fff", "#fff"]);
+  const [range, setRange] = useState({
+    startDate: undefined,
+    endDate: undefined,
+  });
+  const [open, setOpen] = useState(false);
 
-  return gradient ? (
-    <LinearGradient
-      style={[styles.tripModalGradient, { padding: 0 }]}
-      colors={gradient}
-      start={{ x: -1, y: 1 }}
-      end={{ x: 1, y: 0 }}
-    >
-      <CreateTripContent
-        gradient={gradient}
-        setGradient={setGradient}
-        newTripModalRef={newTripModalRef}
-        tripActivitesModal={tripActivitesModal}
+  const modalDestinationRef = useRef(null);
+  const onDestinationModalOpen = () => {
+    modalDestinationRef.current?.open();
+  };
+  return (
+    <>
+      <View
+        style={[styles.tripModalGradient, { padding: 0 }]}
+        // colors={gradient}
+        // start={{ x: -1, y: 1 }}
+        // end={{ x: 1, y: 0 }}
+      >
+        <CreateTripContent
+          gradient={gradient}
+          setGradient={setGradient}
+          newTripModalRef={newTripModalRef}
+          tripActivitesModal={tripActivitesModal}
+          range={range}
+          setOpen={setOpen}
+          onDestinationModalOpen={onDestinationModalOpen}
+        />
+      </View>
+      <RangePicker
+        range={range}
+        setRange={setRange}
+        open={open}
+        setOpen={setOpen}
       />
-    </LinearGradient>
-  ) : (
-    <Image
-      source={{
-        uri: "https://cdn.pixabay.com/photo/2018/04/25/09/26/eiffel-tower-3349075_1280.jpg",
-      }}
-      cachePolicy="memory"
-      contentFit="cover"
-      transition={0}
-      style={styles.tripModalGradient}
-    >
-      <CreateTripContent
-        newTripModalRef={newTripModalRef}
-        tripActivitesModal={tripActivitesModal}
-      />
-    </Image>
+
+      <Portal>
+        <Modalize
+          ref={modalDestinationRef}
+          modalTopOffset={65}
+          scrollViewProps={{
+            alwaysBounceVertical: false,
+            showsVerticalScrollIndicator: false,
+            keyboardShouldPersistTaps: "handled",
+          }}
+          modalStyle={{
+            backgroundColor: "#F2F2F7",
+            minHeight: "80%",
+          }}
+        >
+          <Destination />
+        </Modalize>
+      </Portal>
+    </>
   );
 };
 
@@ -308,6 +310,36 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F2F2F7",
   },
+  aiPlanButton: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    height: 50,
+    borderRadius: 50,
+    overflow: "hidden",
+  },
+  aiPlanButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
+    marginRight: 5,
+  },
+  manualPlanButton: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    height: 50,
+    borderRadius: 50,
+    overflow: "hidden",
+    backgroundColor: "#f2f2f2",
+    marginTop: 15,
+  },
+  manualPlanButtonText: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
   cancelTripButton: {
     paddingVertical: 7,
     paddingHorizontal: 20,
@@ -315,7 +347,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.1)",
   },
   cancelTripButtonText: {
-    color: COLORS.white,
+    color: COLORS.black,
     fontSize: 14,
     fontWeight: "500",
   },
@@ -323,10 +355,10 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
     paddingHorizontal: 20,
     borderRadius: 30,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.primaryDark,
   },
   createTripButtonText: {
-    color: COLORS.black,
+    color: COLORS.white,
     fontSize: 14,
     fontWeight: "500",
   },
@@ -364,7 +396,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   startsDateText: {
-    fontSize: 18,
+    fontSize: 22,
     color: COLORS.black,
     fontWeight: "500",
   },
@@ -450,7 +482,7 @@ const styles = StyleSheet.create({
     height: 50,
     paddingLeft: 0,
     fontSize: 28,
-    color: COLORS.white,
+    color: COLORS.primaryDark,
     fontWeight: "700",
     overflow: "hidden",
     marginBottom: 15,

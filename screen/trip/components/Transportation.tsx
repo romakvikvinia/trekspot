@@ -6,16 +6,25 @@ import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
 import { COLORS } from "../../../styles/theme";
 import {
+  BusIcon,
   CalendarFilledCheckedIcon,
   CalendarFilledIcon,
   CirclePin,
+  EatIcon,
   LocationPin,
+  LodgeIcon,
+  MapIcon,
+  MuseumIcon,
   SeatIcon,
+  ShipIcon,
+  TicketIcon,
+  ToDoIcon,
   USDIcon,
 } from "../../../utilities/SvgIcons.utility";
 
 import { RangePicker } from "../RangePicker";
 import { styles } from "../_styles";
+import { DateSlots } from "./DateSlots";
 import { ExpenseInput } from "./ExpenseInput";
 import { PlaceSearch } from "./PlaceSearch";
 import { SeatInput } from "./SeatInput";
@@ -55,9 +64,13 @@ const Transportation = ({ activeActivity, activities, refPagerView }) => {
   const modalSearchAutocompleteRef = useRef(null);
   const modalSeatRef = useRef(null);
   const modalExpensesRef = useRef(null);
+  const modalDateTimeSlotsRef = useRef(null);
 
   const onSearchAutocompleteOpen = () => {
     modalSearchAutocompleteRef.current?.open();
+  };
+  const onDateTimeModalSlotsOpen = () => {
+    modalDateTimeSlotsRef.current?.open();
   };
   const onSeatOpen = () => {
     modalSeatRef.current?.open();
@@ -141,7 +154,7 @@ const Transportation = ({ activeActivity, activities, refPagerView }) => {
           <TouchableOpacity
             activeOpacity={0.5}
             style={styles.addActivityFromToDate}
-            onPress={() => setOpen(true)}
+            onPress={() => onDateTimeModalSlotsOpen()}
           >
             <CalendarFilledIcon color="#666361" />
             {range?.startDate ? (
@@ -155,7 +168,7 @@ const Transportation = ({ activeActivity, activities, refPagerView }) => {
           <TouchableOpacity
             activeOpacity={0.5}
             style={styles.addActivityFromToDate}
-            onPress={() => setOpen(true)}
+            onPress={() => onDateTimeModalSlotsOpen()}
           >
             <CalendarFilledCheckedIcon color="#666361" />
             {range?.endDate ? (
@@ -198,6 +211,21 @@ const Transportation = ({ activeActivity, activities, refPagerView }) => {
         open={open}
         setOpen={setOpen}
       />
+      <Portal>
+        <Modalize
+          ref={modalDateTimeSlotsRef}
+          modalTopOffset={65}
+          scrollViewProps={{
+            alwaysBounceVertical: false,
+            showsVerticalScrollIndicator: false,
+          }}
+          modalStyle={{
+            backgroundColor: "#F2F2F7",
+          }}
+        >
+          <DateSlots modalDateTimeSlotsRef={modalDateTimeSlotsRef} />
+        </Modalize>
+      </Portal>
       <Portal>
         <Modalize
           ref={modalSearchAutocompleteRef}

@@ -198,6 +198,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     position: "relative",
+    alignItems: "center",
   },
   icon: {
     width: 35,
@@ -227,7 +228,14 @@ export const styles = StyleSheet.create({
     flexWrap: "wrap",
     marginTop: 25,
   },
-  closeButton: {},
+  closeButton: {
+    backgroundColor: "#DBDBDB",
+    width: 30,
+    height: 30,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   title: {
     fontSize: 18,
     fontWeight: "600",

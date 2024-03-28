@@ -34,6 +34,10 @@ export const PlaceSearch = ({ modalSearchAutocompleteRef, setPlace }) => {
         </TouchableOpacity>
 
         <Text style={styles.modalTitle}>From</Text>
+
+        <TouchableOpacity style={styles.saveButton} activeOpacity={0.5}>
+          <Text style={styles.saveButtonText}>Save</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.searchAutocomplete}>
@@ -181,16 +185,30 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "column",
   },
-  modalHeader: {
+  saveButtonText: {
+    fontSize: 14,
+    color: COLORS.black,
+  },
+  saveButton: {
+    padding: 10,
+    marginTop: -10,
+    marginRight: -10,
+    width: 65,
     flexDirection: "row",
+    justifyContent: "flex-end",
+  },
+  modalHeader: {
     position: "relative",
-    justifyContent: "center",
     padding: 15,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   cancelButton: {
-    position: "absolute",
-    left: 15,
-    top: 15,
+    padding: 10,
+    marginTop: -10,
+    marginLeft: -10,
+    width: 65,
+    justifyContent: "flex-start",
   },
   addActivityTitleInput: {
     color: COLORS.black,

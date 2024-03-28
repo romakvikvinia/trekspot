@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import {
+  Linking,
   Modal,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -29,12 +31,24 @@ type SightDetailProps = {
 export const SightDetail: React.FC<SightDetailProps> = ({ data }) => {
   const [state, setState] = useState({ isOpen: false });
 
+  const openMap = (address: string) => {
+    const scheme = Platform.select({
+      ios: "maps://0,0?q=",
+      android: "geo:0,0?q=",
+    });
+    const url = Platform.select({
+      ios: `${scheme}${address}`,
+      android: `${scheme}${address}`,
+    });
+
+    Linking.openURL(url);
+  };
+
   const ref = useClickOutside(() => {
     setState((prevState) => ({
       ...prevState,
       isOpen: false,
     }));
-    // clear data from parent
   });
 
   useEffect(() => {
@@ -93,10 +107,11 @@ export const SightDetail: React.FC<SightDetailProps> = ({ data }) => {
                 left: 0,
                 top: 0,
                 height: 10,
+                marginHorizontal: 15,
               }}
               autoplay={true}
               dotStyle={{
-                width: SIZES.width / data.images.length - 15,
+                width: SIZES.width / data.images.length - 50,
                 height: 3,
               }}
               activeDotStyle={{
@@ -138,6 +153,8 @@ export const SightDetail: React.FC<SightDetailProps> = ({ data }) => {
                 {data?.description}
               </Text>
               <View style={styles.ratingWrapper}>
+                <Text style={styles.type}>{data.category}</Text>
+                <Text style={styles.ratingText}>{data.rate}</Text>
                 <View
                   style={{
                     position: "relative",
@@ -147,13 +164,14 @@ export const SightDetail: React.FC<SightDetailProps> = ({ data }) => {
                 >
                   <StarIcon size={15} color="#FFBC3E" />
                 </View>
-                <Text style={styles.ratingText}>{data.rate}</Text>
-                <Text style={styles.type}>{data.category}</Text>
               </View>
               {data.address && (
-                <Text style={styles.address}>
-                  <TripLocationIcon color="#000" size="12" /> {data.address}
-                </Text>
+                <TouchableOpacity onPress={() => openMap(data.address)}>
+                  <Text style={styles.address}>
+                    <TripLocationIcon color={COLORS.gray} size="12" />{" "}
+                    {data.address}
+                  </Text>
+                </TouchableOpacity>
               )}
             </View>
           </ScrollView>
@@ -191,7 +209,7 @@ export const styles = StyleSheet.create({
   },
   address: {
     fontSize: 14,
-    color: COLORS.black,
+    color: COLORS.gray,
     marginTop: 15,
   },
   sightDetailsTitle: {
@@ -202,8 +220,8 @@ export const styles = StyleSheet.create({
   },
   type: {
     fontSize: 14,
-    marginLeft: 10,
-    color: COLORS.black,
+    marginLeft: 0,
+    color: COLORS.gray,
   },
   ratingWrapper: {
     flexDirection: "row",
@@ -213,7 +231,7 @@ export const styles = StyleSheet.create({
   ratingText: {
     fontSize: 14,
     marginLeft: 5,
-    color: COLORS.black,
+    color: COLORS.gray,
   },
   sightDetailsDescription: {
     fontSize: 14,

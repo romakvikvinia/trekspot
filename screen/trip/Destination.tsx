@@ -10,10 +10,12 @@ import {
 } from "react-native";
 import { Text } from "react-native";
 import { SearchComponent } from "../../common/ui/SearchComponent";
+import { NotFound } from "../../components/common/NotFound";
 import { searchComponentStyles } from "../../styles/searchComponentStyles";
 import { COLORS, SIZES } from "../../styles/theme";
 import {
   CloseCircleIcon,
+  LeftArrowLong,
   Mark,
   SearchIcon,
 } from "../../utilities/SvgIcons.utility";
@@ -57,22 +59,44 @@ export const Destination = () => {
                   borderRadius: 5,
                 }}
               /> */}
-              <Mark color="black" size="15" />
-              <View>
-                <Text style={styles.destinationText}>Paris</Text>
-                <Text
-                  style={[
-                    styles.destinationText,
-                    { fontSize: 12, opacity: 0.7 },
-                  ]}
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    backgroundColor: "#fafafa",
+                    width: 30,
+                    height: 30,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: 50,
+                    marginRight: 5,
+                  }}
                 >
-                  France
-                </Text>
+                  <Mark color="black" size="15" />
+                </View>
+                <View>
+                  <Text style={styles.destinationText}>Paris</Text>
+                  <Text
+                    style={[
+                      styles.destinationText,
+                      { fontSize: 12, opacity: 0.7, marginTop: 2 },
+                    ]}
+                  >
+                    France
+                  </Text>
+                </View>
               </View>
+              <LeftArrowLong width="12" />
             </TouchableOpacity>
           )}
           estimatedItemSize={200}
         />
+        {/* <NotFound /> */}
       </View>
     </>
   );
@@ -101,7 +125,10 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 10,
+    paddingVertical: 15,
+    justifyContent: "space-between",
+    borderBottomWidth: 1,
+    borderBottomColor: "#f5f5f5",
   },
   destinationText: {
     marginLeft: 10,

@@ -43,12 +43,14 @@ import { BlurView } from "expo-blur";
 import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 import { TextInput } from "react-native-gesture-handler";
-import { CreateTrip } from "./CreateTrip";
-import { TripActivites } from "./TripActivities";
+import { NewTrip } from "./NewTrip";
+// import { TripActivites } from "./_Forlater/TripActivities";
+import { useNavigation } from "@react-navigation/native";
 
 interface TripProps {}
 
 export const TripScreen: React.FC<TripProps> = ({}) => {
+  const navigation = useNavigation();
   const [invitedUsers, setInvitedUsers] = useState([
     "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=20&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "https://images.unsplash.com/photo-1704642408219-977150048504?q20&w=3325&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -91,6 +93,7 @@ export const TripScreen: React.FC<TripProps> = ({}) => {
                 <TouchableOpacity
                   style={styles.tripItemHeader}
                   activeOpacity={0.7}
+                  onPress={() => navigation.navigate("TripDetailScreen")}
                 >
                   <Image
                     source={{
@@ -412,27 +415,10 @@ export const TripScreen: React.FC<TripProps> = ({}) => {
             minHeight: "100%",
           }}
         >
-          <CreateTrip
+          <NewTrip
             newTripModalRef={newTripModal}
             tripActivitesModal={tripActivitesModal}
           />
-        </Modalize>
-      </Portal>
-
-      <Portal>
-        <Modalize
-          ref={tripActivitesModal}
-          modalTopOffset={0}
-          withHandle={false}
-          disableScrollIfPossible
-          scrollViewProps={{
-            alwaysBounceVertical: false,
-          }}
-          modalStyle={{
-            minHeight: "100%",
-          }}
-        >
-          <TripActivites tripActivitesModal={tripActivitesModal} />
         </Modalize>
       </Portal>
     </>
