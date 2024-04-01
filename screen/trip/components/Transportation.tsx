@@ -30,7 +30,6 @@ import { PlaceSearch } from "./PlaceSearch";
 import { SeatInput } from "./SeatInput";
 
 const ActivityIcon = ({ index }) => {
-  console.log("index", index);
   switch (index) {
     case 0:
       return <BusIcon color="#fff" />;

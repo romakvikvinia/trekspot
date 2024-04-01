@@ -35,6 +35,10 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
     setState((prevState) => ({ ...prevState, countryId }));
   }, []);
 
+  const handleClearState = useCallback(() => {
+    setState((prevState) => ({ ...prevState, countryId: null }));
+  }, []);
+
   return (
     <>
       <View style={[styles.rowItem]}>
@@ -54,18 +58,21 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
         >
           {countries.map((country, ind) => (
             <CountryItem
-              key={`countries-${country.id}-${country.name}-${title}-${
-                ind + Math.random() * 100000
-              }`}
+              key={`countries-${country.id}-${country.name}-${title}`}
               item={country}
               isWith={countries.length - 1 === ind}
-              openModal={() => handleDetailOfCountry(country.id!)}
+              openModal={handleDetailOfCountry}
             />
           ))}
         </ScrollView>
       </View>
       {/** Country detail modal */}
-      {state.countryId && <CountryDetailModal id={state.countryId} />}
+      {state.countryId && (
+        <CountryDetailModal
+          id={state.countryId}
+          closeCallBack={handleClearState}
+        />
+      )}
     </>
   );
 };

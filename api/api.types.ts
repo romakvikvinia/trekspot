@@ -273,3 +273,13 @@ export type RandomCountriesGroupByContinentResponseType = {
     northAmerica: CountryType[];
   };
 };
+
+export type RandomSightsResponseType = {
+  randomSights: SightType[];
+};
+export type RandomSightsArgsType = {
+  city?: string;
+  title?: string;
+  category?: string;
+  take?: number;
+};

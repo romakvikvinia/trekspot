@@ -24,11 +24,15 @@ import {
 } from "../../../utilities/SvgIcons.utility";
 import { SightType } from "../../../api/api.types";
 
-type SightDetailProps = {
+type SightDetailModalProps = {
   data: SightType;
+  closeCallBack?: () => void;
 };
 
-export const SightDetail: React.FC<SightDetailProps> = ({ data }) => {
+export const SightDetailModal: React.FC<SightDetailModalProps> = ({
+  data,
+  closeCallBack = () => {},
+}) => {
   const [state, setState] = useState({ isOpen: false });
 
   const openMap = (address: string) => {
@@ -49,6 +53,8 @@ export const SightDetail: React.FC<SightDetailProps> = ({ data }) => {
       ...prevState,
       isOpen: false,
     }));
+    closeCallBack();
+    // clear data from parent
   });
 
   useEffect(() => {
@@ -67,7 +73,7 @@ export const SightDetail: React.FC<SightDetailProps> = ({ data }) => {
       animationType={"none"}
       transparent={true}
       visible={state.isOpen}
-      //   onRequestClose={this.closeModal}
+      // onRequestClose={closeCallBack}
     >
       <ClickOutsideProvider>
         <View
@@ -173,6 +179,11 @@ export const SightDetail: React.FC<SightDetailProps> = ({ data }) => {
                   </Text>
                 </TouchableOpacity>
               )}
+              <Text>
+                {data.workingHours
+                  ?.map((i) => `${i.day}-${i.hours}`)
+                  .join(", ")}
+              </Text>
             </View>
           </ScrollView>
         </View>

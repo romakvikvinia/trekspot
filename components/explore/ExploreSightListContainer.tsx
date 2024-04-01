@@ -12,35 +12,34 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import { COLORS, SIZES } from "../../styles/theme";
 import { Mark, StarIcon } from "../../utilities/SvgIcons.utility";
-import { CityType } from "../../api/api.types";
-import { CityDetailModal } from "./destination/CityDetailModal";
 
-interface CitiesContainerProps {
+import { SightType } from "../../api/api.types";
+import { SightDetailModal } from "./sights/SightDetailModal";
+
+interface ExploreSightListContainerProps {
   title: string;
-  cities: CityType[];
+  items: SightType[];
   seeAllItems?: boolean;
 }
 
 interface IState {
-  city: CityType | null;
+  item: SightType | null;
 }
 
-export const CitiesContainer: React.FC<CitiesContainerProps> = ({
-  cities,
-  title,
-  seeAllItems = true,
-}) => {
-  const [state, setState] = useState<IState>({ city: null });
+export const ExploreSightListContainer: React.FC<
+  ExploreSightListContainerProps
+> = ({ items, title, seeAllItems = true }) => {
+  const [state, setState] = useState<IState>({ item: null });
 
-  const handleCity = useCallback((city: CityType) => {
-    setState((prevState) => ({ ...prevState, city }));
+  const handleItem = useCallback((item: SightType) => {
+    setState((prevState) => ({ ...prevState, item }));
   }, []);
 
   const handleClear = useCallback(() => {
-    setState((prevState) => ({ ...prevState, city: null }));
+    setState((prevState) => ({ ...prevState, item: null }));
   }, []);
 
-  //   console.log("CitiesContainer", state);
+  //   console.log("itemsContainer", state);
 
   return (
     <>
@@ -60,9 +59,9 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
           style={styles.contentBox}
           showsHorizontalScrollIndicator={false}
         >
-          {cities.map((item, ind) => (
+          {items.map((item, ind) => (
             <React.Fragment
-              key={`${title}-cities-${item.id}-${item.city}-${ind}`}
+              key={`${title}-items-${item.id}-${item.city}-${ind}`}
             >
               <ImageBackground
                 style={styles.box}
@@ -74,7 +73,7 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
                 <TouchableOpacity
                   style={styles.gradientWrapper}
                   activeOpacity={0.7}
-                  onPress={() => handleCity(item)}
+                  onPress={() => handleItem(item)}
                 >
                   <LinearGradient
                     style={styles.gradientWrapper}
@@ -83,7 +82,7 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
                     <View style={styles.labelItem}>
                       <Mark color="#fff" size="sm" />
                       <Text style={[styles.labelItemText, styles.titleSm]}>
-                        {item.city}
+                        {item.title}
                       </Text>
                     </View>
                     <View style={styles.ratingLabel}>
@@ -97,24 +96,24 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
                         <StarIcon color="#FFBC3E" />
                       </View>
                       <Text style={[styles.ratingText, styles.ratingTextXs]}>
-                        {item.rate} /
+                        {item.rate}
                       </Text>
-                      <Text style={[styles.ratingText, styles.ratingTextXs]}>
-                        {item.visitors} visitors
-                      </Text>
+                      {/* <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                        {item.reviews} reviews
+                      </Text> */}
                     </View>
                   </LinearGradient>
                 </TouchableOpacity>
               </ImageBackground>
-              {cities.length === ind + 1 && <View style={{ width: 20 }}></View>}
+              {items.length === ind + 1 && <View style={{ width: 20 }}></View>}
             </React.Fragment>
           ))}
         </ScrollView>
         {/**
          * city detail modal
          */}
-        {state.city && (
-          <CityDetailModal city={state.city} closeCallBack={handleClear} />
+        {state.item && (
+          <SightDetailModal data={state.item!} closeCallBack={handleClear} />
         )}
       </View>
     </>

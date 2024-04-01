@@ -36,10 +36,12 @@ import { useLazyCountryQuery } from "../../../api/api.trekspot";
 
 type CountryDetailModalProps = {
   id: string;
+  closeCallBack?: () => void;
 };
 
 export const CountryDetailModal: React.FC<CountryDetailModalProps> = ({
   id,
+  closeCallBack = () => {},
 }) => {
   const { ref, open, close } = useModalize();
   const [getCountry, { isLoading, data, isError }] = useLazyCountryQuery();
@@ -68,6 +70,7 @@ export const CountryDetailModal: React.FC<CountryDetailModalProps> = ({
           scrollViewProps={{
             alwaysBounceVertical: false,
           }}
+          onClosed={closeCallBack}
         >
           <View
             style={{

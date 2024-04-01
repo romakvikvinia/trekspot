@@ -78,6 +78,7 @@ import {
 import { FlashList } from "@shopify/flash-list";
 import { MapEmbedView } from "../../common/components/MapEmbedView";
 import { useNavigation } from "@react-navigation/native";
+import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
 
 interface TripProps {}
 
@@ -910,7 +911,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
       </Portal>
 
       {false && (
-        <SightDetail
+        <SightDetailModal
           data={{
             title: "Dubai Burj Khalifa",
             description: "This is Largest building in Dubai",

@@ -7,6 +7,7 @@ import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
 import { MapEmbedView } from "../../common/components/MapEmbedView";
 import { SightDetail } from "../../components/explore/sights/SightDetail";
+import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
 import { exploreStyles } from "../../components/explore/sights/_exploreStyles";
 import { COLORS } from "../../styles/theme";
 import {
@@ -202,7 +203,7 @@ export const TripActivitiesSelect = ({}) => {
         </View>
       </View>
 
-      <SightDetail
+      <SightDetailModal
         data={{
           title: "Dubai Burj Khalifa",
           description: "This is Largest building in Dubai",

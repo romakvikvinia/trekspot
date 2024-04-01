@@ -12,18 +12,22 @@ import { CityType, SightType } from "../../../api/api.types";
 import { useLazyGetSightsQuery } from "../../../api/api.trekspot";
 import { SightItem } from "../sights/SightItem";
 import { SightsContainer } from "../sights/SightsContainer";
-import { SightDetail } from "../sights/SightDetail";
+import { SightDetailModal } from "../sights/SightDetailModal";
 import { Loader } from "../../../common/ui/Loader";
 
 type CityDetailProps = {
   city: CityType;
+  closeCallBack?: () => void;
 };
 
 interface IState {
   sight: SightType | null;
 }
 
-export const CityDetailModal: React.FC<CityDetailProps> = ({ city }) => {
+export const CityDetailModal: React.FC<CityDetailProps> = ({
+  city,
+  closeCallBack = () => {},
+}) => {
   const { ref, open, close } = useModalize();
   const [state, setState] = useState<IState>({ sight: null });
   const [getSights, { data, isLoading }] = useLazyGetSightsQuery();
@@ -53,7 +57,7 @@ export const CityDetailModal: React.FC<CityDetailProps> = ({ city }) => {
   if (sights && data && "Top Sights" in data && data["Top Sights"]) {
     delete sights["Top Sights"];
   }
-  console.log("sights", sights, city.iso2, city.city);
+
   return (
     <>
       <Portal>
@@ -68,6 +72,7 @@ export const CityDetailModal: React.FC<CityDetailProps> = ({ city }) => {
           velocity={100000}
           tapGestureEnabled={false}
           closeSnapPointStraightEnabled={false}
+          onClose={closeCallBack}
         >
           <Loader isLoading={isLoading} />
           {!isLoading ? (
@@ -133,7 +138,7 @@ export const CityDetailModal: React.FC<CityDetailProps> = ({ city }) => {
                       source={{
                         uri: item.url,
                       }}
-                      key={`slide-${item.id}`}
+                      key={`slide-${item.id}-${city.id}`}
                     >
                       <LinearGradient
                         style={styles.gradientWrapper}
@@ -182,7 +187,11 @@ export const CityDetailModal: React.FC<CityDetailProps> = ({ city }) => {
                   }}
                 >
                   {topSights.map((item) => (
-                    <SightItem item={item} onHandleItem={handleSetSightItem} />
+                    <SightItem
+                      key={`top-sights-${item.id}-${item.title}`}
+                      item={item}
+                      onHandleItem={handleSetSightItem}
+                    />
                   ))}
                 </ScrollView>
               </View>
@@ -191,7 +200,7 @@ export const CityDetailModal: React.FC<CityDetailProps> = ({ city }) => {
                 <SightsContainer items={sights} />
               ) : null}
 
-              {state.sight && <SightDetail data={state.sight} />}
+              {state.sight && <SightDetailModal data={state.sight} />}
             </View>
           ) : null}
         </Modalize>

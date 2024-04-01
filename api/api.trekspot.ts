@@ -25,6 +25,8 @@ import {
   SightsResponseType,
   SightsFetchResponseType,
   RandomCountriesGroupByContinentResponseType,
+  RandomSightsResponseType,
+  RandomSightsArgsType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -602,6 +604,51 @@ export const trekSpotApi = createApi({
       }),
     }),
     //
+    randomSight: builder.query<RandomSightsResponseType, RandomSightsArgsType>({
+      query: ({ take = 10, category, title, city }) => ({
+        variables: { take, category, title, city },
+        document: gql`
+          query (
+            $take: Int!
+            $city: String
+            $title: String
+            $category: String
+          ) {
+            randomSights(
+              input: {
+                take: $take
+                city: $city
+                title: $title
+                category: $category
+              }
+            ) {
+              id
+              iso2
+              title
+              rate
+              category
+              price
+              reviews
+              city
+              address
+              url
+              description
+              workingHours {
+                day
+                hours
+              }
+              image {
+                url
+              }
+              images {
+                url
+              }
+            }
+          }
+        `,
+      }),
+    }),
+    //
   }),
 });
 
@@ -622,4 +669,5 @@ export const {
   useLazyGetCitiesQuery,
   useLazyGetSightsQuery,
   useGetRandomCountriesGroupedByContinentQuery,
+  useRandomSightQuery,
 } = trekSpotApi;
