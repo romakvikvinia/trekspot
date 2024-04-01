@@ -1,6 +1,9 @@
 import { Image } from "expo-image";
 import React, { useRef, useState } from "react";
+import * as ImagePicker from "expo-image-picker";
+
 import {
+  Alert,
   Animated,
   KeyboardAvoidingView,
   Linking,
@@ -16,18 +19,27 @@ import {
 import { COLORS, SIZES } from "../../styles/theme";
 import { enGB, registerTranslation } from "react-native-paper-dates";
 registerTranslation("en", enGB);
+import * as DocumentPicker from "expo-document-picker";
 
 import {
   AddUser,
   BackIcon,
+  CameraIcon,
   CheckLiteIcon,
+  DOCIcon,
+  DocsIcon,
+  DocumentIcon,
   DotsIcon,
   EditIcon,
   FileLiteIcon,
+  FilesIcon,
   GlobeIcon,
+  ImgIcon,
   MapIcon,
   NotesIcon,
   NotesIcon2,
+  PDFIcon,
+  PhotosLibraryIcon,
   PinIcon,
   PlusIcon,
   SearchNotFound,
@@ -36,12 +48,13 @@ import {
   ToursIcon,
   TrashIcon,
   USDIcon,
+  VertDots,
   XIcon,
 } from "../../utilities/SvgIcons.utility";
 
 import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
-import { TextInput } from "react-native-gesture-handler";
+import { TapGestureHandler, TextInput } from "react-native-gesture-handler";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { customMapStyle } from "../../styles/mapView.style";
 import {
@@ -62,10 +75,15 @@ import {
   useAnimatedStyle,
   useDerivedValue,
 } from "react-native-reanimated";
+import { FlashList } from "@shopify/flash-list";
+import { MapEmbedView } from "../../common/components/MapEmbedView";
+import { useNavigation } from "@react-navigation/native";
 
 interface TripProps {}
 
 export const TripDetailScreen: React.FC<TripProps> = ({}) => {
+  const navigation = useNavigation();
+
   const [invitedUsers, setInvitedUsers] = useState([
     // "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=20&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     // "https://images.unsplash.com/photo-1704642408219-977150048504?q20&w=3325&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -90,9 +108,19 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
   const invitedUsersModal = useRef<Modalize>(null);
   const activitiesModal = useRef<Modalize>(null);
   const modalQuestionRef = useRef<Modalize>(null);
+  const modalQuestionRef2 = useRef<Modalize>(null);
   const feedbackModalRef = useRef<Modalize>(null);
+  const documentsRefModal = useRef<Modalize>(null);
+  const modalEmbedRef = useRef<Modalize>(null);
+  const modalFileQuestionRef = useRef<Modalize>(null);
+  const modalFileUploadRef = useRef<Modalize>(null);
 
-  const pageRef = useRef();
+  const onFileQuestionsModalOpen = () => {
+    modalFileQuestionRef.current?.open();
+  };
+  const onFileUploadsModalOpen = () => {
+    modalFileUploadRef.current?.open();
+  };
 
   const onInvitedUsersModalOpen = () => {
     invitedUsersModal.current?.open();
@@ -105,11 +133,118 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
     modalQuestionRef.current?.open();
   };
 
+  const onQuestion2ModalOpen = () => {
+    modalQuestionRef2.current?.open();
+  };
+  const onDocumentsModalOpen = () => {
+    documentsRefModal.current?.open();
+  };
+  const onEmbedModalOpen = () => {
+    modalEmbedRef.current?.open();
+  };
+
   const onFeedbackModalOpen = () => {
     feedbackModalRef.current?.open();
   };
 
-  const Header = () => {
+  const pickImageCamera = async () => {
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert(
+        "You've refused to allow this app to access your camera! Go to settings, search for Schoolbook and allow access to camera"
+      );
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync();
+
+    if (!result.canceled) {
+      const formData = new FormData();
+
+      formData.append("file", {
+        uri: result?.assets[0]?.uri,
+        type: "image",
+        name: result?.assets[0]?.fileName || "no-name",
+      });
+
+      // const response = await send(formData);
+      if (response) {
+        // Toast.show(t("carmatebit.ganaxlda"), {
+        //   position: 70,
+        //   backgroundColor: "green",
+        //   textColor: "white",
+        //   hideOnPress: true,
+        //   duration: 3000,
+        //   shadow: true,
+        //   opacity: 1,
+        // });
+      }
+    }
+  };
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log("image result", result);
+
+    if (!result.canceled) {
+      const formData = new FormData();
+
+      formData.append("file", {
+        uri: result?.assets[0]?.uri,
+        type: "image/jpeg",
+        name:
+          result?.assets[0]?.fileName ||
+          result?.assets[0]?.uri.split("/").pop(),
+      });
+      console.log("image - formData", formData);
+
+      // const response = await send(formData);
+      console.log("image - response", response);
+      if (response) {
+        // Toast.show(t("carmatebit.ganaxlda"), {
+        //   position: 70,
+        //   backgroundColor: "green",
+        //   textColor: "white",
+        //   hideOnPress: true,
+        //   duration: 3000,
+        //   shadow: true,
+        //   opacity: 1,
+        // });
+      }
+    }
+  };
+
+  const pickDocument = async () => {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: "*/*",
+      copyToCacheDirectory: true,
+      multiple: false,
+    });
+    if (result.type === "success") {
+      // setLoadingFile(true);
+      // setDocuments(result);
+      // const formData = new FormData();
+      // formData.append("file", {
+      //   uri: result.uri,
+      //   type: result.mimeType,
+      //   name: result.name,
+      // });
+      // const response = await send(formData);
+      // if (response) {
+      // }
+    }
+  };
+
+  const Header = ({ onQuestion2ModalOpen }) => {
     const scrollY = useCurrentTabScrollY();
 
     console.log("scrollYText", scrollY.value.toFixed(2));
@@ -139,8 +274,12 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
         <TouchableOpacity activeOpacity={0.7} style={styles.backButton}>
           <BackIcon />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.7} style={styles.mapButton}>
-          <MapIcon width={15} color />
+        <TouchableOpacity
+          onPress={() => navigation.navigate("TripMapViewScreen")}
+          activeOpacity={0.7}
+          style={styles.mapButton}
+        >
+          <MapIcon width={15} color="black" />
         </TouchableOpacity>
 
         <View style={styles.tripDetailsHeader}>
@@ -156,7 +295,11 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
               <Text style={styles.tripDestination}>Berlin, Germany</Text>
             </View>
             <View style={styles.rightSide}>
-              <TouchableOpacity style={styles.editButton} activeOpacity={0.7}>
+              <TouchableOpacity
+                onPress={() => onQuestion2ModalOpen()}
+                style={styles.editButton}
+                activeOpacity={0.7}
+              >
                 <DotsIcon />
               </TouchableOpacity>
               <View style={styles.bottomActions}>
@@ -215,6 +358,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
               <TouchableOpacity
                 style={styles.bottomActionsButton}
                 activeOpacity={0.7}
+                onPress={() => navigation.navigate("TripInsights")}
               >
                 <StarsIcon width={12} color={COLORS.primaryDark} />
                 <Text style={styles.bottomActionsButtonlabel}>Insights</Text>
@@ -222,9 +366,10 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
               <TouchableOpacity
                 style={styles.bottomActionsButton}
                 activeOpacity={0.7}
+                onPress={() => onDocumentsModalOpen()}
               >
                 <FileLiteIcon width={12} color={COLORS.primaryDark} />
-                <Text style={styles.bottomActionsButtonlabel}>Files</Text>
+                <Text style={styles.bottomActionsButtonlabel}>Docs</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -237,7 +382,9 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
     <>
       <Tabs.Container
         minHeaderHeight={50}
-        renderHeader={() => <Header />}
+        renderHeader={() => (
+          <Header onQuestion2ModalOpen={onQuestion2ModalOpen} />
+        )}
         headerHeight={300} // optional
         containerStyle={{
           flex: 1,
@@ -331,7 +478,10 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
                     <>
                       <TouchableOpacity
                         activeOpacity={0.7}
-                        style={styles.sightItem}
+                        style={[
+                          styles.sightItem,
+                          item === 0 ? styles.checkedIn : null,
+                        ]}
                         onPress={() => setTopSightVisible(true)}
                       >
                         {Platform.OS === "ios" ? (
@@ -437,7 +587,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
                           activeOpacity={0.7}
                           style={styles.checkinButton}
                           onPress={() => {
-                            onFeedbackModalOpen();
+                            // onFeedbackModalOpen();
                           }}
                         >
                           <CheckLiteIcon color={COLORS.gray} width="15" />
@@ -447,7 +597,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
                               { color: COLORS.gray },
                             ]}
                           >
-                            Check in
+                            {item === 0 ? "Checked in" : "Check in"}
                           </Text>
                         </TouchableOpacity>
 
@@ -759,47 +909,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
         </Modalize>
       </Portal>
 
-      <Portal>
-        <Modalize
-          ref={modalQuestionRef}
-          modalTopOffset={65}
-          disableScrollIfPossible
-          adjustToContentHeight
-          velocity={100000}
-          tapGestureEnabled={false}
-          closeSnapPointStraightEnabled={false}
-          modalStyle={{
-            backgroundColor: "#F2F2F7",
-            minHeight: "30%",
-          }}
-          scrollViewProps={{
-            showsVerticalScrollIndicator: false,
-          }}
-        >
-          <QuestionModal modalQuestionRef={modalQuestionRef} title="Action">
-            <View style={questionModaStyles.buttonGroup}>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={[questionModaStyles.button]}
-              >
-                <Text style={questionModaStyles.buttonText}>Edit</Text>
-                <EditIcon size="15" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={[questionModaStyles.button, { borderBottomWidth: 0 }]}
-              >
-                <Text style={[questionModaStyles.buttonText, { color: "red" }]}>
-                  Delete
-                </Text>
-                <TrashIcon size="15" />
-              </TouchableOpacity>
-            </View>
-          </QuestionModal>
-        </Modalize>
-      </Portal>
-
-      {true && (
+      {false && (
         <SightDetail
           data={{
             title: "Dubai Burj Khalifa",
@@ -839,17 +949,366 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
       >
         <PlusIcon />
       </TouchableOpacity>
+
+      {/* Documents */}
+      <Portal>
+        <Modalize
+          ref={documentsRefModal}
+          modalTopOffset={200}
+          HeaderComponent={
+            <>
+              <View style={styles.rowItemHeader}>
+                <Text style={styles.h2}>Documents</Text>
+
+                <TouchableOpacity
+                  onPress={() => documentsRefModal?.current?.close()}
+                  activeOpacity={0.5}
+                  style={styles.closeButton}
+                >
+                  <XIcon width="10" />
+                </TouchableOpacity>
+              </View>
+            </>
+          }
+          modalStyle={{
+            backgroundColor: "#F2F2F7",
+          }}
+        >
+          {true ? (
+            <>
+              <View
+                style={{
+                  paddingBottom: 50,
+                  paddingHorizontal: 15,
+                }}
+              >
+                {[0, 1, 2, 3, 4].map((item) => (
+                  <TouchableOpacity
+                    onPress={() => onEmbedModalOpen()}
+                    style={styles.documentItem}
+                  >
+                    <View style={styles.documentItemLeft}>
+                      {item == 0 && <PDFIcon />}
+                      {item == 1 && <FilesIcon />}
+                      {item == 2 && <DOCIcon />}
+                      {item == 3 && <ImgIcon />}
+                      {item == 4 && <DOCIcon />}
+                      <Text style={styles.documentItemTitle}>File name</Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => onFileQuestionsModalOpen()}
+                      style={styles.documentItemOptions}
+                    >
+                      <VertDots color="#000" size="15" />
+                    </TouchableOpacity>
+                  </TouchableOpacity>
+                ))}
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                  }}
+                >
+                  <TouchableOpacity
+                    style={styles.uploadButton}
+                    onPress={() => onFileUploadsModalOpen()}
+                  >
+                    <PlusIcon />
+                    <Text style={styles.uploadButtonText}>Upload document</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </>
+          ) : (
+            <View style={styles.noResultWrapper}>
+              <DocsIcon />
+              <Text style={styles.noResultWrapperText}>
+                Start uploading documents to your trip. You can add photos,
+                PDFs, text files and etc.
+              </Text>
+
+              <TouchableOpacity
+                style={styles.uploadButton}
+                onPress={() => onFileUploadsModalOpen()}
+              >
+                <PlusIcon />
+                <Text style={styles.uploadButtonText}>Upload document</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </Modalize>
+      </Portal>
+      <Portal>
+        <Modalize
+          ref={modalFileQuestionRef}
+          modalTopOffset={65}
+          disableScrollIfPossible
+          adjustToContentHeight
+          velocity={100000}
+          tapGestureEnabled={false}
+          closeSnapPointStraightEnabled={false}
+          modalStyle={{
+            backgroundColor: "#F2F2F7",
+            minHeight: 200,
+          }}
+          scrollViewProps={{
+            showsVerticalScrollIndicator: false,
+          }}
+        >
+          <QuestionModal modalQuestionRef={modalFileQuestionRef} title="Action">
+            <View style={questionModaStyles.buttonGroup}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() =>
+                  Alert.alert("Do you really want to delete document?", "", [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel",
+                    },
+                    {
+                      text: "Delete",
+                      onPress: () => console.log("OK Pressed"),
+                      style: "destructive",
+                    },
+                  ])
+                }
+                style={[questionModaStyles.button, { borderBottomWidth: 0 }]}
+              >
+                <Text style={[questionModaStyles.buttonText, { color: "red" }]}>
+                  Delete
+                </Text>
+                <TrashIcon size="15" />
+              </TouchableOpacity>
+            </View>
+          </QuestionModal>
+        </Modalize>
+      </Portal>
+
+      <Portal>
+        <Modalize
+          ref={modalFileUploadRef}
+          modalTopOffset={65}
+          disableScrollIfPossible
+          adjustToContentHeight
+          velocity={100000}
+          tapGestureEnabled={false}
+          closeSnapPointStraightEnabled={false}
+          modalStyle={{
+            backgroundColor: "#F2F2F7",
+            minHeight: 300,
+          }}
+          scrollViewProps={{
+            showsVerticalScrollIndicator: false,
+          }}
+        >
+          <QuestionModal modalQuestionRef={modalQuestionRef2} title="Action">
+            <View style={questionModaStyles.buttonGroup}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={[questionModaStyles.button]}
+                onPress={() => pickImageCamera()}
+              >
+                <Text style={questionModaStyles.buttonText}>Take photo</Text>
+                <CameraIcon size="15" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => pickImage()}
+                style={[questionModaStyles.button]}
+              >
+                <Text style={questionModaStyles.buttonText}>
+                  Choose from library
+                </Text>
+                <PhotosLibraryIcon size="15" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => pickDocument()}
+                style={[questionModaStyles.button, { borderBottomWidth: 0 }]}
+              >
+                <Text style={questionModaStyles.buttonText}>
+                  Upload document
+                </Text>
+                <DocumentIcon size="15" />
+              </TouchableOpacity>
+            </View>
+          </QuestionModal>
+        </Modalize>
+      </Portal>
+
+      {/* Questions */}
+
+      <Portal>
+        <Modalize
+          ref={modalQuestionRef2}
+          modalTopOffset={65}
+          disableScrollIfPossible
+          adjustToContentHeight
+          velocity={100000}
+          tapGestureEnabled={false}
+          closeSnapPointStraightEnabled={false}
+          modalStyle={{
+            backgroundColor: "#F2F2F7",
+            minHeight: "30%",
+          }}
+          scrollViewProps={{
+            showsVerticalScrollIndicator: false,
+          }}
+        >
+          <QuestionModal modalQuestionRef={modalQuestionRef2} title="Action">
+            <View style={questionModaStyles.buttonGroup}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={[questionModaStyles.button]}
+              >
+                <Text style={questionModaStyles.buttonText}>Edit</Text>
+                <EditIcon size="15" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() =>
+                  Alert.alert("Do you really want to delete trip?", "", [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel",
+                    },
+                    {
+                      text: "Delete",
+                      onPress: () => console.log("OK Pressed"),
+                      style: "destructive",
+                    },
+                  ])
+                }
+                style={[questionModaStyles.button, { borderBottomWidth: 0 }]}
+              >
+                <Text style={[questionModaStyles.buttonText, { color: "red" }]}>
+                  Delete
+                </Text>
+                <TrashIcon size="15" />
+              </TouchableOpacity>
+            </View>
+          </QuestionModal>
+        </Modalize>
+      </Portal>
+
+      <Portal>
+        <Modalize
+          ref={modalQuestionRef}
+          modalTopOffset={65}
+          disableScrollIfPossible
+          adjustToContentHeight
+          velocity={100000}
+          tapGestureEnabled={false}
+          closeSnapPointStraightEnabled={false}
+          modalStyle={{
+            backgroundColor: "#F2F2F7",
+            minHeight: 200,
+          }}
+          scrollViewProps={{
+            showsVerticalScrollIndicator: false,
+          }}
+        >
+          <QuestionModal modalQuestionRef={modalQuestionRef} title="Action">
+            <View style={questionModaStyles.buttonGroup}>
+              {/* <TouchableOpacity
+                activeOpacity={0.7}
+                style={[questionModaStyles.button]}
+              >
+                <Text style={questionModaStyles.buttonText}>Edit</Text>
+                <EditIcon size="15" />
+              </TouchableOpacity> */}
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() =>
+                  Alert.alert("Do you really want to delete activity?", "", [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel",
+                    },
+                    {
+                      text: "Delete",
+                      onPress: () => console.log("OK Pressed"),
+                      style: "destructive",
+                    },
+                  ])
+                }
+                style={[questionModaStyles.button, { borderBottomWidth: 0 }]}
+              >
+                <Text style={[questionModaStyles.buttonText, { color: "red" }]}>
+                  Delete
+                </Text>
+                <TrashIcon size="15" />
+              </TouchableOpacity>
+            </View>
+          </QuestionModal>
+        </Modalize>
+      </Portal>
+
+      <Portal>
+        <Modalize ref={modalEmbedRef} modalTopOffset={65} adjustToContentHeight>
+          <MapEmbedView
+            blogUrl="https://file-examples.com/wp-content/storage/2017/10/file-sample_150kB.pdf"
+            placeTitle="Tbilisi"
+            modalEmbedRef={modalEmbedRef}
+          />
+        </Modalize>
+      </Portal>
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  uploadButton: {
+    backgroundColor: COLORS.primaryDark,
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 50,
+    paddingHorizontal: 15,
+    marginTop: 25,
+    height: 50,
+  },
+  uploadButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "500",
+  },
+  documentItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: 60,
+    backgroundColor: "#fff",
+    borderRadius: 15,
+    padding: 15,
+    marginBottom: 15,
+  },
+  documentItemLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  documentItemTitle: {
+    marginLeft: 8,
+    fontSize: 16,
+    fontWeight: "500",
+  },
+  documentItemOptions: {
+    padding: 8,
+    marginRight: -8,
+  },
   rowItemHeader: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 15,
-    paddingVertical: 15,
+    paddingTop: 15,
+    paddingBottom: 25,
+  },
+  checkedIn: {
+    opacity: 0.7,
   },
   sightRightActionsButtonText: {
     fontSize: 12,
@@ -872,11 +1331,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 250,
     textAlign: "center",
-    paddingHorizontal: 25,
-    marginTop: 25,
+    paddingHorizontal: 15,
+    marginTop: 45,
   },
   noResultWrapperText: {
-    fontSize: 14,
+    fontSize: 16,
     color: COLORS.darkgray,
     marginTop: 25,
     textAlign: "center",
