@@ -297,10 +297,10 @@ export const styles = StyleSheet.create({
     overflow: "hidden",
     position: "relative",
   },
-  gradientWrapper: {
-    flex: 1,
-    justifyContent: "flex-end",
-  },
+  // gradientWrapper: {
+  //   flex: 1,
+  //   justifyContent: "flex-end",
+  // },
   thingsTodoItemiIn: {
     marginTop: 10,
     paddingBottom: 15,
@@ -322,7 +322,7 @@ export const styles = StyleSheet.create({
     borderColor: "#f1f1f1",
     backgroundColor: "#f2f2f2",
     minHeight: 200,
-    marginHorizontal: "2%",
+    // marginHorizontal: "2%",
   },
   forYouRow: {
     marginVertical: 0,
