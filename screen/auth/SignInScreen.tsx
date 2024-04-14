@@ -15,6 +15,7 @@ import {
   SafeAreaView,
   Alert,
 } from "react-native";
+import Constants from "expo-constants";
 
 import { AuthContext } from "../../package/context/auth.context";
 import { SignInValidationSchema } from "./validationScheme";
@@ -31,6 +32,7 @@ import {
 import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
 import { TrekSpotLinear } from "../../utilities/svg/TrekSpotLinear";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 
@@ -104,6 +106,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
       },
     ]);
   }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView
@@ -112,163 +115,179 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
         // keyboardVerticalOffset={10}
         style={styles.screen}
       >
-        <ScrollView contentContainerStyle={styles.container}>
-          <Animated.View style={{ ...styles.screen, opacity: fadeValue }}>
-            <View style={styles.topSide}>
-              <View style={styles.logoContainer}>
-                <TrekSpotLinear />
-              </View>
-              <View style={styles.signTitle}>
-                <Text style={styles.signTitleText}>
-                  Your travel hub awaits: Sign in to begin!
-                </Text>
-              </View>
-
-              <View style={[styles.item]}>
-                <TInput
-                  invalid={
-                    "email" in formik.errors && "email" in formik.touched
-                  }
-                  keyboardType="email-address"
-                  placeholder="Email"
-                  autoCapitalize="none"
-                  returnKeyType="next"
-                  value={formik.values.email}
-                  onChangeText={formik.handleChange("email")}
-                  onBlur={formik.handleBlur("email")}
-                />
-              </View>
-
-              <View style={[styles.item]}>
-                <TInput
-                  invalid={
-                    "password" in formik.errors && "password" in formik.touched
-                  }
-                  placeholder="Password"
-                  secureTextEntry
-                  keyboardType="default"
-                  autoCapitalize="none"
-                  returnKeyType="go"
-                  value={formik.values.password}
-                  onChangeText={formik.handleChange("password")}
-                  onBlur={formik.handleBlur("password")}
-                  onSubmitEditing={() => {
-                    if (
-                      !("password" in formik.errors) ||
-                      !("Email" in formik.errors) ||
-                      !formik.isSubmitting
-                    ) {
-                      formik.submitForm();
-                    }
-                  }}
-                />
-              </View>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={styles.forgotPassword}
-                onPress={() => navigation.navigate("ResetPassword")}
-              >
-                <Text style={styles.forgotPasswordText}>Forgot password?</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={[
-                  globalStyles.buttonItemPrimary,
-                  "password" in formik.errors ||
-                  "email" in formik.errors ||
-                  formik.isSubmitting
-                    ? globalStyles.buttonItemPrimaryDisabled
-                    : null,
-                ]}
-                onPress={formik.submitForm}
-                disabled={
-                  "password" in formik.errors ||
-                  "email" in formik.errors ||
-                  formik.isSubmitting ||
-                  isLoading
-                }
-              >
-                {formik.isSubmitting || isLoading || isSuccess ? (
-                  <ActivityIndicator size="small" color="#fff" />
-                ) : (
-                  <Text style={globalStyles.buttonItemPrimaryText}>
-                    Sign In
-                  </Text>
-                )}
-              </TouchableOpacity>
-
-              <View style={styles.continueWithDivider}>
-                <View style={styles.borderRow}></View>
-                <Text style={styles.continueWithDividerText}>
-                  Or sign in with
-                </Text>
-              </View>
-
-              <View style={styles.continueWith}>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.continueWithButton}
-                >
-                  <GoogleIcon />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.continueWithButton}
-                >
-                  <AppleIcon />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.continueWithButton}
-                >
-                  <FacebookIcon />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.textWithButtonWrapper}>
-                <Text style={styles.textWithButtonLabel}>New user?</Text>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.textWithButton}
-                  onPress={handleRedirect}
-                >
-                  <Text style={styles.textWithButtonText}>Sign up</Text>
-                </TouchableOpacity>
-              </View>
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={styles.container}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.topSide}>
+            <View style={styles.logoContainer}>
+              <TrekSpotLinear />
             </View>
-            <View style={[styles.textWithButtonWrapper]}>
+            <View style={styles.signTitle}>
+              <Text style={styles.signTitleText}>
+                Your travel hub awaits: Sign in to begin!
+              </Text>
+            </View>
+
+            <View style={[styles.item]}>
+              <TInput
+                invalid={"email" in formik.errors && "email" in formik.touched}
+                keyboardType="email-address"
+                placeholder="Email"
+                autoCapitalize="none"
+                returnKeyType="next"
+                value={formik.values.email}
+                onChangeText={formik.handleChange("email")}
+                onBlur={formik.handleBlur("email")}
+              />
+            </View>
+
+            <View style={[styles.item]}>
+              <TInput
+                invalid={
+                  "password" in formik.errors && "password" in formik.touched
+                }
+                placeholder="Password"
+                secureTextEntry
+                keyboardType="default"
+                autoCapitalize="none"
+                returnKeyType="go"
+                value={formik.values.password}
+                onChangeText={formik.handleChange("password")}
+                onBlur={formik.handleBlur("password")}
+                onSubmitEditing={() => {
+                  if (
+                    !("password" in formik.errors) ||
+                    !("Email" in formik.errors) ||
+                    !formik.isSubmitting
+                  ) {
+                    formik.submitForm();
+                  }
+                }}
+              />
+            </View>
+            <TouchableOpacity
+              activeOpacity={0.1}
+              style={styles.forgotPassword}
+              onPress={() => navigation.navigate("ResetPassword")}
+            >
+              <Text style={styles.forgotPasswordText}>Forgot password?</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              activeOpacity={0.1}
+              style={[
+                globalStyles.buttonItemPrimary,
+                "password" in formik.errors ||
+                "email" in formik.errors ||
+                formik.isSubmitting
+                  ? globalStyles.buttonItemPrimaryDisabled
+                  : null,
+              ]}
+              onPress={formik.submitForm}
+              disabled={
+                "password" in formik.errors ||
+                "email" in formik.errors ||
+                formik.isSubmitting ||
+                isLoading
+              }
+            >
+              {formik.isSubmitting || isLoading || isSuccess ? (
+                <ActivityIndicator size="small" color="#fff" />
+              ) : (
+                <Text style={globalStyles.buttonItemPrimaryText}>Sign In</Text>
+              )}
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                globalStyles.buttonItemPrimary,
+                {
+                  backgroundColor: "#f3f3f3",
+                  marginTop: 15,
+                },
+              ]}
+            >
               <Text
                 style={[
-                  styles.textWithButtonLabel,
+                  globalStyles.buttonItemPrimaryText,
                   {
-                    fontSize: SIZES.body5,
-                    color: COLORS.darkgray,
+                    color: COLORS.primaryDark,
                   },
                 ]}
               >
-                By sign in / sign up you agree our
+                Continue as guest
               </Text>
+            </TouchableOpacity>
+
+            <View style={styles.continueWithDivider}>
+              <View style={styles.borderRow}></View>
+              <Text style={styles.continueWithDividerText}>
+                Or sign in with
+              </Text>
+            </View>
+
+            <View style={styles.continueWith}>
               <TouchableOpacity
-                activeOpacity={0.7}
-                style={styles.textWithButton}
+                activeOpacity={0.1}
+                style={styles.continueWithButton}
               >
-                <Text
-                  style={[
-                    styles.textWithButtonText,
-                    {
-                      fontSize: SIZES.body5,
-                      fontWeight: "normal",
-                      color: COLORS.primaryDark,
-                      // textDecorationLine: "underline",
-                    },
-                  ]}
-                >
-                  privacy policy
-                </Text>
+                <GoogleIcon />
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.1}
+                style={styles.continueWithButton}
+              >
+                <AppleIcon />
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.1}
+                style={styles.continueWithButton}
+              >
+                <FacebookIcon />
               </TouchableOpacity>
             </View>
-          </Animated.View>
+            <View style={styles.textWithButtonWrapper}>
+              <Text style={styles.textWithButtonLabel}>New user?</Text>
+              <TouchableOpacity
+                activeOpacity={0.1}
+                style={styles.textWithButton}
+                onPress={handleRedirect}
+              >
+                <Text style={styles.textWithButtonText}>Sign up</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </ScrollView>
+        <View style={[styles.textWithButtonWrapper]}>
+          <Text
+            style={[
+              styles.textWithButtonLabel,
+              {
+                fontSize: SIZES.body5,
+                color: COLORS.darkgray,
+              },
+            ]}
+          >
+            By sign in / sign up you agree our
+          </Text>
+          <TouchableOpacity activeOpacity={0.1} style={styles.textWithButton}>
+            <Text
+              style={[
+                styles.textWithButtonText,
+                {
+                  fontSize: SIZES.body5,
+                  fontWeight: "normal",
+                  color: COLORS.primaryDark,
+                  // textDecorationLine: "underline",
+                },
+              ]}
+            >
+              privacy policy
+            </Text>
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -278,6 +297,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#ffffff",
+    paddingTop: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 0,
   },
   topSide: {
     width: "100%",
@@ -286,7 +306,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: SIZES.padding * 4,
+    marginTop: SIZES.padding * 2,
   },
   privacyPolicy: {
     fontSize: SIZES.body3,
@@ -354,9 +374,7 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
   },
   container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    flexGrow: 1,
   },
   screen: {
     flex: 1,

@@ -1,5 +1,5 @@
 import { Image } from "expo-image";
-import React, { useRef, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 
 import {
@@ -35,6 +35,7 @@ import {
   FilesIcon,
   GlobeIcon,
   ImgIcon,
+  InsightIcon,
   MapIcon,
   NotesIcon,
   NotesIcon2,
@@ -70,15 +71,298 @@ import { TripActivitiesSelect } from "./TripActivitiesSelect";
 import { Feedback } from "./Feedback";
 import { SightDetail } from "../../components/explore/sights/SightDetail";
 import { LinearGradient } from "expo-linear-gradient";
-import {
-  interpolate,
-  useAnimatedStyle,
-  useDerivedValue,
-} from "react-native-reanimated";
-import { FlashList } from "@shopify/flash-list";
+
 import { MapEmbedView } from "../../common/components/MapEmbedView";
 import { useNavigation } from "@react-navigation/native";
 import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
+
+const DATA = [
+  {
+    id: 0,
+    date: "May 8",
+    activities: [
+      {
+        id: 0,
+        name: "Burjh-Khalifa",
+        images: [
+          "https://cdn.pixabay.com/photo/2019/03/09/13/35/dubai-4044174_1280.jpg",
+          "https://cdn.pixabay.com/photo/2022/01/15/23/03/burj-khalifa-6940925_1280.jpg",
+          "https://cdn.pixabay.com/photo/2022/01/20/21/34/dubai-6953421_1280.jpg",
+          "https://cdn.pixabay.com/photo/2022/02/16/22/31/skyscraper-7017634_1280.jpg",
+        ],
+        coordinates: {
+          lat: 25.1972,
+          long: 55.2744,
+        },
+        rating: "4.9",
+        description:
+          "The Burj Khalifa, located in Dubai, United Arab Emirates, is the tallest building in the world, standing at a staggering height of 828 meters (2,717 feet). Renowned for its futuristic design and breathtaking views, the Burj Khalifa is an iconic symbol of Dubai's ambition and innovation.",
+      },
+      {
+        id: 1,
+        name: "Burjh Al Arabi",
+        coordinates: {
+          lat: 25.1413,
+          long: 55.1855,
+        },
+        images: [
+          "https://cdn.pixabay.com/photo/2015/09/14/17/31/dubai-939844_1280.jpg",
+          "https://cdn.pixabay.com/photo/2017/08/10/16/11/burj-al-arab-2624317_1280.jpg",
+          "https://cdn.pixabay.com/photo/2021/08/22/18/53/hotel-6565940_1280.jpg",
+          "https://cdn.pixabay.com/photo/2020/07/31/17/47/u-a-e-5453672_1280.jpg",
+        ],
+        rating: "4.8",
+        description:
+          "The Burj Al Arab, situated in Dubai, United Arab Emirates, is a luxury hotel known for its distinctive sail-shaped silhouette and opulent amenities. Standing on its own artificial island, it is often hailed as one of the most luxurious and iconic hotels in the world.",
+      },
+      {
+        id: 2,
+        name: "Dubai miracle garden",
+        coordinates: {
+          lat: 25.0675,
+          long: 55.235,
+        },
+        images: [
+          "https://cdn.pixabay.com/photo/2020/03/01/02/13/dubai-4891560_1280.jpg",
+          "https://cdn.pixabay.com/photo/2016/03/04/12/21/dubai-miracle-garden-1235962_1280.jpg",
+          "https://cdn.pixabay.com/photo/2020/01/15/18/22/miracle-garden-4768619_1280.jpg",
+          "https://cdn.pixabay.com/photo/2018/09/18/13/29/miracle-garden-dubai-3686191_1280.jpg",
+        ],
+        rating: "4.8",
+        description:
+          "The Dubai Miracle Garden is a botanical paradise located in Dubai, United Arab Emirates, featuring an impressive array of colorful floral displays, intricate designs, and themed gardens spread across 72,000 square meters. As one of the world's largest natural flower gardens, it captivates visitors with its stunning beauty and imaginative landscapes, making it a must-visit attraction in Dubai.",
+      },
+    ],
+  },
+  {
+    id: 0,
+    date: "May 9",
+    activities: [
+      {
+        id: 0,
+        name: "Burjh-Khalifa",
+        images: [
+          "https://cdn.pixabay.com/photo/2019/03/09/13/35/dubai-4044174_1280.jpg",
+          "https://cdn.pixabay.com/photo/2022/01/15/23/03/burj-khalifa-6940925_1280.jpg",
+          "https://cdn.pixabay.com/photo/2022/01/20/21/34/dubai-6953421_1280.jpg",
+          "https://cdn.pixabay.com/photo/2022/02/16/22/31/skyscraper-7017634_1280.jpg",
+        ],
+        coordinates: {
+          lat: 25.1972,
+          long: 55.2744,
+        },
+        rating: "4.9",
+        description:
+          "The Burj Khalifa, located in Dubai, United Arab Emirates, is the tallest building in the world, standing at a staggering height of 828 meters (2,717 feet). Renowned for its futuristic design and breathtaking views, the Burj Khalifa is an iconic symbol of Dubai's ambition and innovation.",
+      },
+      {
+        id: 1,
+        name: "Burjh Al Arabi",
+        coordinates: {
+          lat: 25.1413,
+          long: 55.1855,
+        },
+        images: [
+          "https://cdn.pixabay.com/photo/2015/09/14/17/31/dubai-939844_1280.jpg",
+          "https://cdn.pixabay.com/photo/2017/08/10/16/11/burj-al-arab-2624317_1280.jpg",
+          "https://cdn.pixabay.com/photo/2021/08/22/18/53/hotel-6565940_1280.jpg",
+          "https://cdn.pixabay.com/photo/2020/07/31/17/47/u-a-e-5453672_1280.jpg",
+        ],
+        rating: "4.8",
+        description:
+          "The Burj Al Arab, situated in Dubai, United Arab Emirates, is a luxury hotel known for its distinctive sail-shaped silhouette and opulent amenities. Standing on its own artificial island, it is often hailed as one of the most luxurious and iconic hotels in the world.",
+      },
+      {
+        id: 2,
+        name: "Dubai miracle garden",
+        coordinates: {
+          lat: 25.0675,
+          long: 55.235,
+        },
+        images: [
+          "https://cdn.pixabay.com/photo/2020/03/01/02/13/dubai-4891560_1280.jpg",
+          "https://cdn.pixabay.com/photo/2016/03/04/12/21/dubai-miracle-garden-1235962_1280.jpg",
+          "https://cdn.pixabay.com/photo/2020/01/15/18/22/miracle-garden-4768619_1280.jpg",
+          "https://cdn.pixabay.com/photo/2018/09/18/13/29/miracle-garden-dubai-3686191_1280.jpg",
+        ],
+        rating: "4.8",
+        description:
+          "The Dubai Miracle Garden is a botanical paradise located in Dubai, United Arab Emirates, featuring an impressive array of colorful floral displays, intricate designs, and themed gardens spread across 72,000 square meters. As one of the world's largest natural flower gardens, it captivates visitors with its stunning beauty and imaginative landscapes, making it a must-visit attraction in Dubai.",
+      },
+    ],
+  },
+  {
+    id: 0,
+    date: "May 10",
+    activities: [
+      {
+        id: 0,
+        name: "Burjh-Khalifa",
+        images: [
+          "https://cdn.pixabay.com/photo/2019/03/09/13/35/dubai-4044174_1280.jpg",
+          "https://cdn.pixabay.com/photo/2022/01/15/23/03/burj-khalifa-6940925_1280.jpg",
+          "https://cdn.pixabay.com/photo/2022/01/20/21/34/dubai-6953421_1280.jpg",
+          "https://cdn.pixabay.com/photo/2022/02/16/22/31/skyscraper-7017634_1280.jpg",
+        ],
+        coordinates: {
+          lat: 25.1972,
+          long: 55.2744,
+        },
+        rating: "4.9",
+        description:
+          "The Burj Khalifa, located in Dubai, United Arab Emirates, is the tallest building in the world, standing at a staggering height of 828 meters (2,717 feet). Renowned for its futuristic design and breathtaking views, the Burj Khalifa is an iconic symbol of Dubai's ambition and innovation.",
+      },
+      {
+        id: 1,
+        name: "Burjh Al Arabi",
+        coordinates: {
+          lat: 25.1413,
+          long: 55.1855,
+        },
+        images: [
+          "https://cdn.pixabay.com/photo/2015/09/14/17/31/dubai-939844_1280.jpg",
+          "https://cdn.pixabay.com/photo/2017/08/10/16/11/burj-al-arab-2624317_1280.jpg",
+          "https://cdn.pixabay.com/photo/2021/08/22/18/53/hotel-6565940_1280.jpg",
+          "https://cdn.pixabay.com/photo/2020/07/31/17/47/u-a-e-5453672_1280.jpg",
+        ],
+        rating: "4.8",
+        description:
+          "The Burj Al Arab, situated in Dubai, United Arab Emirates, is a luxury hotel known for its distinctive sail-shaped silhouette and opulent amenities. Standing on its own artificial island, it is often hailed as one of the most luxurious and iconic hotels in the world.",
+      },
+      {
+        id: 2,
+        name: "Dubai miracle garden",
+        coordinates: {
+          lat: 25.0675,
+          long: 55.235,
+        },
+        images: [
+          "https://cdn.pixabay.com/photo/2020/03/01/02/13/dubai-4891560_1280.jpg",
+          "https://cdn.pixabay.com/photo/2016/03/04/12/21/dubai-miracle-garden-1235962_1280.jpg",
+          "https://cdn.pixabay.com/photo/2020/01/15/18/22/miracle-garden-4768619_1280.jpg",
+          "https://cdn.pixabay.com/photo/2018/09/18/13/29/miracle-garden-dubai-3686191_1280.jpg",
+        ],
+        rating: "4.8",
+        description:
+          "The Dubai Miracle Garden is a botanical paradise located in Dubai, United Arab Emirates, featuring an impressive array of colorful floral displays, intricate designs, and themed gardens spread across 72,000 square meters. As one of the world's largest natural flower gardens, it captivates visitors with its stunning beauty and imaginative landscapes, making it a must-visit attraction in Dubai.",
+      },
+    ],
+  },
+  {
+    id: 0,
+    date: "May 11",
+    activities: [
+      {
+        id: 0,
+        name: "Burjh-Khalifa",
+        images: [
+          "https://cdn.pixabay.com/photo/2019/03/09/13/35/dubai-4044174_1280.jpg",
+          "https://cdn.pixabay.com/photo/2022/01/15/23/03/burj-khalifa-6940925_1280.jpg",
+          "https://cdn.pixabay.com/photo/2022/01/20/21/34/dubai-6953421_1280.jpg",
+          "https://cdn.pixabay.com/photo/2022/02/16/22/31/skyscraper-7017634_1280.jpg",
+        ],
+        coordinates: {
+          lat: 25.1972,
+          long: 55.2744,
+        },
+        rating: "4.9",
+        description:
+          "The Burj Khalifa, located in Dubai, United Arab Emirates, is the tallest building in the world, standing at a staggering height of 828 meters (2,717 feet). Renowned for its futuristic design and breathtaking views, the Burj Khalifa is an iconic symbol of Dubai's ambition and innovation.",
+      },
+      {
+        id: 1,
+        name: "Burjh Al Arabi",
+        coordinates: {
+          lat: 25.1413,
+          long: 55.1855,
+        },
+        images: [
+          "https://cdn.pixabay.com/photo/2015/09/14/17/31/dubai-939844_1280.jpg",
+          "https://cdn.pixabay.com/photo/2017/08/10/16/11/burj-al-arab-2624317_1280.jpg",
+          "https://cdn.pixabay.com/photo/2021/08/22/18/53/hotel-6565940_1280.jpg",
+          "https://cdn.pixabay.com/photo/2020/07/31/17/47/u-a-e-5453672_1280.jpg",
+        ],
+        rating: "4.8",
+        description:
+          "The Burj Al Arab, situated in Dubai, United Arab Emirates, is a luxury hotel known for its distinctive sail-shaped silhouette and opulent amenities. Standing on its own artificial island, it is often hailed as one of the most luxurious and iconic hotels in the world.",
+      },
+      {
+        id: 2,
+        name: "Dubai miracle garden",
+        coordinates: {
+          lat: 25.0675,
+          long: 55.235,
+        },
+        images: [
+          "https://cdn.pixabay.com/photo/2020/03/01/02/13/dubai-4891560_1280.jpg",
+          "https://cdn.pixabay.com/photo/2016/03/04/12/21/dubai-miracle-garden-1235962_1280.jpg",
+          "https://cdn.pixabay.com/photo/2020/01/15/18/22/miracle-garden-4768619_1280.jpg",
+          "https://cdn.pixabay.com/photo/2018/09/18/13/29/miracle-garden-dubai-3686191_1280.jpg",
+        ],
+        rating: "4.8",
+        description:
+          "The Dubai Miracle Garden is a botanical paradise located in Dubai, United Arab Emirates, featuring an impressive array of colorful floral displays, intricate designs, and themed gardens spread across 72,000 square meters. As one of the world's largest natural flower gardens, it captivates visitors with its stunning beauty and imaginative landscapes, making it a must-visit attraction in Dubai.",
+      },
+    ],
+  },
+  {
+    id: 0,
+    date: "May 12",
+    activities: [
+      {
+        id: 0,
+        name: "Burjh-Khalifa",
+        images: [
+          "https://cdn.pixabay.com/photo/2019/03/09/13/35/dubai-4044174_1280.jpg",
+          "https://cdn.pixabay.com/photo/2022/01/15/23/03/burj-khalifa-6940925_1280.jpg",
+          "https://cdn.pixabay.com/photo/2022/01/20/21/34/dubai-6953421_1280.jpg",
+          "https://cdn.pixabay.com/photo/2022/02/16/22/31/skyscraper-7017634_1280.jpg",
+        ],
+        coordinates: {
+          lat: 25.1972,
+          long: 55.2744,
+        },
+        rating: "4.9",
+        description:
+          "The Burj Khalifa, located in Dubai, United Arab Emirates, is the tallest building in the world, standing at a staggering height of 828 meters (2,717 feet). Renowned for its futuristic design and breathtaking views, the Burj Khalifa is an iconic symbol of Dubai's ambition and innovation.",
+      },
+      {
+        id: 1,
+        name: "Burjh Al Arabi",
+        coordinates: {
+          lat: 25.1413,
+          long: 55.1855,
+        },
+        images: [
+          "https://cdn.pixabay.com/photo/2015/09/14/17/31/dubai-939844_1280.jpg",
+          "https://cdn.pixabay.com/photo/2017/08/10/16/11/burj-al-arab-2624317_1280.jpg",
+          "https://cdn.pixabay.com/photo/2021/08/22/18/53/hotel-6565940_1280.jpg",
+          "https://cdn.pixabay.com/photo/2020/07/31/17/47/u-a-e-5453672_1280.jpg",
+        ],
+        rating: "4.8",
+        description:
+          "The Burj Al Arab, situated in Dubai, United Arab Emirates, is a luxury hotel known for its distinctive sail-shaped silhouette and opulent amenities. Standing on its own artificial island, it is often hailed as one of the most luxurious and iconic hotels in the world.",
+      },
+      {
+        id: 2,
+        name: "Dubai miracle garden",
+        coordinates: {
+          lat: 25.0675,
+          long: 55.235,
+        },
+        images: [
+          "https://cdn.pixabay.com/photo/2020/03/01/02/13/dubai-4891560_1280.jpg",
+          "https://cdn.pixabay.com/photo/2016/03/04/12/21/dubai-miracle-garden-1235962_1280.jpg",
+          "https://cdn.pixabay.com/photo/2020/01/15/18/22/miracle-garden-4768619_1280.jpg",
+          "https://cdn.pixabay.com/photo/2018/09/18/13/29/miracle-garden-dubai-3686191_1280.jpg",
+        ],
+        rating: "4.8",
+        description:
+          "The Dubai Miracle Garden is a botanical paradise located in Dubai, United Arab Emirates, featuring an impressive array of colorful floral displays, intricate designs, and themed gardens spread across 72,000 square meters. As one of the world's largest natural flower gardens, it captivates visitors with its stunning beauty and imaginative landscapes, making it a must-visit attraction in Dubai.",
+      },
+    ],
+  },
+];
 
 interface TripProps {}
 
@@ -90,6 +374,8 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
     // "https://images.unsplash.com/photo-1704642408219-977150048504?q20&w=3325&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "https://images.unsplash.com/photo-1704642408219-977150048504?q20&w=3325&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   ]);
+
+  const mapRef = useRef(null);
 
   const [topSightVisible, setTopSightVisible] = useState(false);
 
@@ -245,26 +531,26 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
     }
   };
 
+  useEffect(() => {
+    mapRef.current?.animateToRegion({
+      latitude: DATA[0].activities[0].coordinates?.lat,
+      longitude: DATA[0].activities[0].coordinates?.long,
+      latitudeDelta: 0.00001,
+      longitudeDelta: 0.5,
+    });
+  }, []);
+
   const Header = ({ onQuestion2ModalOpen }) => {
-    const scrollY = useCurrentTabScrollY();
-
-    console.log("scrollYText", scrollY.value.toFixed(2));
-
-    // const stylez = useAnimatedStyle(() => {
-    //   return {
-    //     opacity: interpolate(top.value, [0, 1], [1, 0]), // Adjust the input and output ranges as needed
-    //   };
-    // });
-
     return (
-      <Animated.View style={[styles.mapHeaderContainer]}>
+      <View style={[styles.mapHeaderContainer]}>
         <MapView
-          // ref={mapRef}
+          ref={mapRef}
+          onPress={() => navigation.navigate("TripMapViewScreen")}
           provider={Platform.OS === "android" ? PROVIDER_GOOGLE : undefined}
           style={styles.map}
           // onPress={handleMapPress}
           zoomEnabled
-          zoomControlEnabled
+          // zoomControlEnabled
           pitchEnabled
           followsUserLocation={true}
           // showsUserLocation={true}
@@ -292,8 +578,8 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
             }}
           >
             <View style={styles.leftSide}>
-              <Text style={styles.tripName}>Trip name</Text>
-              <Text style={styles.tripDestination}>Berlin, Germany</Text>
+              <Text style={styles.tripName}>Dubai vacation</Text>
+              <Text style={styles.tripDestination}>Dubai, UAE</Text>
             </View>
             <View style={styles.rightSide}>
               <TouchableOpacity
@@ -361,7 +647,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
                 activeOpacity={0.7}
                 onPress={() => navigation.navigate("TripInsights")}
               >
-                <StarsIcon width={12} color={COLORS.primaryDark} />
+                <InsightIcon size={12} color={COLORS.primaryDark} />
                 <Text style={styles.bottomActionsButtonlabel}>Insights</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -375,7 +661,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
             </View>
           </View>
         </View>
-      </Animated.View>
+      </View>
     );
   };
 
@@ -419,191 +705,178 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
         )}
         revealHeaderOnScroll={true}
       >
-        {["Nov 18", "Nov 19", "Nov 20", "Nov 21", "Nov 22", "Nov 23"].map(
-          (item, ind) => (
-            <Tabs.Tab
-              name={item}
-              label={(props) => (
-                <View style={styles.customTab} key={ind}>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      marginBottom: 3,
-                      color: COLORS.gray,
-                    }}
-                  >
-                    Mon
-                  </Text>
-                  <Text
-                    style={[
-                      styles.customTabLabel,
-                      {
-                        color: COLORS.black,
-                        marginBottom: 5,
-                      },
-                    ]}
-                  >
-                    {item}
-                  </Text>
-                </View>
-              )}
+        {DATA.map((item, ind) => (
+          <Tabs.Tab
+            name={item?.date}
+            label={(props) => (
+              <View style={styles.customTab} key={ind}>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    marginBottom: 3,
+                    color: COLORS.gray,
+                  }}
+                >
+                  Mon
+                </Text>
+                <Text
+                  style={[
+                    styles.customTabLabel,
+                    {
+                      color: COLORS.black,
+                      marginBottom: 5,
+                    },
+                  ]}
+                >
+                  {item?.date}
+                </Text>
+              </View>
+            )}
+          >
+            <Tabs.ScrollView
+              alwaysBounceVertical={false}
+              bounces={false}
+              showsVerticalScrollIndicator={false}
+              style={{
+                paddingTop: 25,
+              }}
+              contentContainerStyle={{
+                paddingHorizontal: 20,
+                position: "relative",
+                // paddingTop: 25,
+                paddingBottom: 60,
+              }}
             >
-              <Tabs.ScrollView
-                alwaysBounceVertical={false}
-                bounces={false}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{
-                  paddingHorizontal: 20,
-                  position: "relative",
-                  paddingTop: 25,
-                }}
-              >
-                {Platform.OS === "ios" ? (
-                  <View
-                    style={{
-                      position: "absolute",
-                      borderWidth: 1.5,
-                      borderStyle: "dashed",
-                      height: "96%",
-                      top: 25,
-                      left: 15,
-                      borderColor: "#ddd",
-                      borderRadius: 1,
-                      opacity: 0.7,
-                    }}
-                  ></View>
-                ) : null}
+              {Platform.OS === "ios" ? (
+                <View
+                  style={{
+                    position: "absolute",
+                    borderWidth: 1.5,
+                    borderStyle: "dashed",
+                    height: "96%",
+                    top: 25,
+                    left: 15,
+                    borderColor: "#ddd",
+                    borderRadius: 1,
+                    opacity: 0.7,
+                  }}
+                ></View>
+              ) : null}
 
-                <View style={styles.sightItemList}>
-                  {[0, 1, 2, 3, 4, 5, 6].map((item, ind) => (
-                    <>
-                      <TouchableOpacity
-                        activeOpacity={0.7}
-                        style={[
-                          styles.sightItem,
-                          item === 0 ? styles.checkedIn : null,
-                        ]}
-                        onPress={() => setTopSightVisible(true)}
-                      >
-                        {Platform.OS === "ios" ? (
-                          <View style={styles.pinIcon}>
-                            <PinIcon size="20" color={COLORS.darkgray} />
-                            <Text
-                              style={{
-                                color: "#fff",
-                                position: "absolute",
-                                fontSize: 10,
-                                top: 3,
-                                left: 7,
-                              }}
-                            >
-                              {ind + 1}
-                            </Text>
-                          </View>
-                        ) : (
-                          <View
-                            style={[
-                              styles.pinIcon,
-                              {
-                                backgroundColor: COLORS.gray,
-                                width: 20,
-                                height: 20,
-                                borderRadius: 50,
-                                position: "absolute",
-                                justifyContent: "center",
-                                alignItems: "center",
-                              },
-                            ]}
-                          >
-                            <Text
-                              style={{
-                                color: "#fff",
-                                fontSize: 10,
-                              }}
-                            >
-                              {ind}
-                            </Text>
-                          </View>
-                        )}
-
-                        <ScrollView
-                          horizontal
-                          showsHorizontalScrollIndicator={false}
-                        >
-                          {[
-                            "https://cdn.pixabay.com/photo/2019/03/09/21/30/downtown-4045035_1280.jpg",
-                            "https://cdn.pixabay.com/photo/2016/11/23/15/32/pedestrians-1853552_1280.jpg",
-                            "https://cdn.pixabay.com/photo/2019/03/09/21/30/downtown-4045037_1280.jpg",
-                            "https://cdn.pixabay.com/photo/2017/04/08/10/42/burj-khalifa-2212978_1280.jpg",
-                            "https://cdn.pixabay.com/photo/2020/01/25/10/36/ferris-wheel-4792152_1280.jpg",
-                          ].map((item) => (
-                            <Image
-                              style={{
-                                width: 80,
-                                height: 80,
-                                borderRadius: 10,
-                                marginRight: 10,
-                              }}
-                              resizeMode="cover"
-                              source={{
-                                uri: item,
-                              }}
-                              // key={`slide-${item.id}`}
-                            ></Image>
-                          ))}
-                        </ScrollView>
-
-                        <View style={styles.sightDetails}>
-                          <Text style={styles.sightTitle}>Burj khalifa</Text>
-                          <View style={styles.ratingLabel}>
-                            <Text style={styles.sightType}>Landmark</Text>
-                            <Text style={[styles.ratingText]}>4.5</Text>
-                            <View
-                              style={{
-                                position: "relative",
-                                top: -1,
-                                opacity: 0.8,
-                              }}
-                            >
-                              <StarIcon color="#FFBC3E" />
-                            </View>
-                          </View>
-
-                          <Text
-                            style={{
-                              fontSize: 14,
-                              fontWeight: "400",
-                              color: COLORS.darkgray,
-                              marginTop: 5,
-                            }}
-                          >
-                            The Burj Khalifa is a skyscraper in Dubai. It is the
-                            world's tallest structure. With a total height of
-                            829.8 m and a roof height...
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                      <View style={styles.sightBottomActions}>
-                        <TouchableOpacity
-                          activeOpacity={0.7}
-                          style={styles.checkinButton}
-                          onPress={() => {
-                            // onFeedbackModalOpen();
+              <View style={styles.sightItemList}>
+                {item?.activities.map((itm, ind) => (
+                  <Fragment key={ind}>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      style={[
+                        styles.sightItem,
+                        // item === 0 ? styles.checkedIn : null,
+                      ]}
+                      onPress={() => setTopSightVisible(true)}
+                    >
+                      <View style={styles.pinIcon}>
+                        <PinIcon size="20" color={COLORS.darkgray} />
+                        <Text
+                          style={{
+                            color: "#fff",
+                            position: "absolute",
+                            fontSize: 10,
+                            top: Platform.OS === "ios" ? 3 : 2,
+                            left: 7,
                           }}
                         >
-                          <CheckLiteIcon color={COLORS.gray} width="15" />
-                          <Text
-                            style={[
-                              styles.checkinButtonText,
-                              { color: COLORS.gray },
-                            ]}
-                          >
-                            {item === 0 ? "Checked in" : "Check in"}
-                          </Text>
-                        </TouchableOpacity>
+                          {ind + 1}
+                        </Text>
+                      </View>
 
-                        <View style={styles.sightRightActions}>
-                          {/* <TouchableOpacity
+                      <ScrollView
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                      >
+                        {Platform?.OS === "ios"
+                          ? itm?.images.map((image, index) => (
+                              <Image
+                                style={{
+                                  width: 80,
+                                  height: 80,
+                                  borderRadius: 10,
+                                  marginRight: 10,
+                                }}
+                                resizeMode="cover"
+                                source={{
+                                  uri: image,
+                                }}
+                                key={`slide-${index}`}
+                              ></Image>
+                            ))
+                          : itm?.images.splice(0, 3).map((image, index) => (
+                              <Image
+                                style={{
+                                  width: 80,
+                                  height: 80,
+                                  borderRadius: 10,
+                                  marginRight: 10,
+                                }}
+                                resizeMode="cover"
+                                source={{
+                                  uri: image,
+                                }}
+                                key={`slide-${index}`}
+                              ></Image>
+                            ))}
+                      </ScrollView>
+
+                      <View style={styles.sightDetails}>
+                        <Text style={styles.sightTitle}>{itm.name}</Text>
+                        <View style={styles.ratingLabel}>
+                          <Text style={styles.sightType}>Landmark</Text>
+                          <Text style={[styles.ratingText]}>{itm.rating}</Text>
+                          <View
+                            style={{
+                              position: "relative",
+                              top: -1,
+                              opacity: 0.8,
+                            }}
+                          >
+                            <StarIcon color="#FFBC3E" />
+                          </View>
+                        </View>
+
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            fontWeight: "400",
+                            color: COLORS.darkgray,
+                            marginTop: 5,
+                          }}
+                          numberOfLines={3}
+                        >
+                          {itm.description}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                    <View style={styles.sightBottomActions}>
+                      <TouchableOpacity
+                        activeOpacity={0.7}
+                        style={styles.checkinButton}
+                        onPress={() => {
+                          // onFeedbackModalOpen();
+                        }}
+                      >
+                        <CheckLiteIcon color={COLORS.gray} width="15" />
+                        <Text
+                          style={[
+                            styles.checkinButtonText,
+                            { color: COLORS.gray },
+                          ]}
+                        >
+                          Checked in
+                          {/* {ititem === 0 ? "Checked in" : "Check in"} */}
+                        </Text>
+                      </TouchableOpacity>
+
+                      <View style={styles.sightRightActions}>
+                        {/* <TouchableOpacity
                             style={[
                               styles.sightRightActionsButton,
                               { width: "auto", paddingHorizontal: 25 },
@@ -614,29 +887,28 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
                               Review
                             </Text>
                           </TouchableOpacity> */}
-                          <TouchableOpacity
-                            style={styles.sightRightActionsButton}
-                            activeOpacity={0.7}
-                            onPress={() => openMap("Burj khalifa")}
-                          >
-                            <MapIcon width="15" color={COLORS.gray} />
-                          </TouchableOpacity>
-                          <TouchableOpacity
-                            onPress={() => onQuestionModalOpen()}
-                            style={styles.sightRightActionsButton}
-                            activeOpacity={0.7}
-                          >
-                            <DotsIcon color={COLORS.gray} />
-                          </TouchableOpacity>
-                        </View>
+                        <TouchableOpacity
+                          style={styles.sightRightActionsButton}
+                          activeOpacity={0.7}
+                          onPress={() => openMap("Burj khalifa")}
+                        >
+                          <MapIcon width="15" color={COLORS.gray} />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => onQuestionModalOpen()}
+                          style={styles.sightRightActionsButton}
+                          activeOpacity={0.7}
+                        >
+                          <DotsIcon color={COLORS.gray} />
+                        </TouchableOpacity>
                       </View>
-                    </>
-                  ))}
-                </View>
-              </Tabs.ScrollView>
-            </Tabs.Tab>
-          )
-        )}
+                    </View>
+                  </Fragment>
+                ))}
+              </View>
+            </Tabs.ScrollView>
+          </Tabs.Tab>
+        ))}
       </Tabs.Container>
 
       <Portal>
@@ -983,7 +1255,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
                   paddingHorizontal: 15,
                 }}
               >
-                {[0, 1, 2, 3, 4].map((item) => (
+                {[0, 1].map((item) => (
                   <TouchableOpacity
                     onPress={() => onEmbedModalOpen()}
                     style={styles.documentItem}
@@ -994,7 +1266,9 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
                       {item == 2 && <DOCIcon />}
                       {item == 3 && <ImgIcon />}
                       {item == 4 && <DOCIcon />}
-                      <Text style={styles.documentItemTitle}>File name</Text>
+                      <Text style={styles.documentItemTitle}>
+                        Flight tickets
+                      </Text>
                     </View>
                     <TouchableOpacity
                       onPress={() => onFileQuestionsModalOpen()}

@@ -1,5 +1,5 @@
 import { Image } from "expo-image";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
   Platform,
   SafeAreaView,
@@ -14,43 +14,68 @@ import { enGB, he, registerTranslation } from "react-native-paper-dates";
 registerTranslation("en", enGB);
 
 import { useNavigation } from "@react-navigation/native";
-import { BackIcon, MarkerFillIcon } from "../../utilities/SvgIcons.utility";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import {
+  BackIcon,
+  MarkerFillIcon,
+  SightsMarkerIcon,
+} from "../../utilities/SvgIcons.utility";
+import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { customMapStyle } from "../../styles/mapView.style";
 import { COLORS } from "../../styles/theme";
 
 interface TripProps {}
 
 export const TripMapViewScreen: React.FC<TripProps> = ({}) => {
+  const mapRef = useRef<any>(null);
   const navigation = useNavigation();
-  const LATITUDE = 41.6831501;
-  const LONGITUDE = 44.8693082;
+
   const markers = [
     {
-      id: 0,
-      amount: 99,
-      coordinate: {
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
+      name: "Burj Khalifa",
+      coordinates: {
+        latitude: 25.1971636,
+        longitude: 55.274249,
       },
     },
     {
-      id: 1,
-      amount: 199,
-      coordinate: {
-        latitude: LATITUDE + 0.004,
-        longitude: LONGITUDE - 0.004,
+      name: "Palm Jumeirah",
+      coordinates: {
+        latitude: 25.1125,
+        longitude: 55.1381,
       },
     },
     {
-      id: 2,
-      amount: 285,
-      coordinate: {
-        latitude: LATITUDE - 0.004,
-        longitude: LONGITUDE - 0.004,
+      name: "The Dubai Mall",
+      coordinates: {
+        latitude: 25.1972,
+        longitude: 55.2794,
+      },
+    },
+    {
+      name: "Burj Al Arab",
+      coordinates: {
+        latitude: 25.1413,
+        longitude: 55.1853,
+      },
+    },
+    {
+      name: "Dubai Marina",
+      coordinates: {
+        latitude: 25.0673,
+        longitude: 55.1401,
       },
     },
   ];
+
+  useEffect(() => {
+    mapRef.current?.animateToRegion({
+      latitude: markers[0].coordinates?.latitude,
+      longitude: markers[0].coordinates?.longitude,
+      latitudeDelta: 0.00001,
+      longitudeDelta: 0.5,
+    });
+  }, []);
+
   return (
     <View style={styles.safeArea}>
       <TouchableOpacity
@@ -61,25 +86,47 @@ export const TripMapViewScreen: React.FC<TripProps> = ({}) => {
       </TouchableOpacity>
 
       <MapView
-        // ref={mapRef}
+        ref={mapRef}
         provider={Platform.OS === "android" ? PROVIDER_GOOGLE : undefined}
         style={styles.map}
         // onPress={handleMapPress}
         zoomEnabled
         zoomControlEnabled
         pitchEnabled
-        followsUserLocation={true}
+        //  followsUserLocation={true}
         // showsUserLocation={true}
-        customMapStyle={customMapStyle}
+        //customMapStyle={customMapStyle}
         mapType="standard"
         // onSnapToItem={() => alert("ss")}
       >
         {markers.map((marker: any, i: any) => {
           return (
-            <Marker key={marker.id} coordinate={marker.coordinate}>
-              <View style={{ width: 20, height: 20 }}>
-                <MarkerFillIcon size="50" color={COLORS.primary} />
+            <Marker key={marker.id} coordinate={marker.coordinates}>
+              <View style={{ width: 50, height: 50 }}>
+                <SightsMarkerIcon size="50" color={COLORS.primary} />
+                <Text
+                  style={{
+                    position: "absolute",
+                    top: 18,
+                    left: 18,
+                    color: "#fff",
+                  }}
+                >
+                  {i + 1}
+                </Text>
               </View>
+              <Callout style={{ width: 150 }}>
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    textAlign: "center",
+                    fontWeight: "500",
+                    fontSize: 16,
+                  }}
+                >
+                  {marker?.name}
+                </Text>
+              </Callout>
             </Marker>
           );
         })}

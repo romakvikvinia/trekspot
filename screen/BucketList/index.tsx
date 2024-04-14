@@ -183,7 +183,7 @@ const Explore = () => {
                       colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
                     >
                       <View style={styles.labelItem}>
-                        <Mark color="#fff" size="sm" />
+                        <Mark color="#fff" />
                         <Text style={[styles.labelItemText, styles.titleSm]}>
                           {item.title}
                         </Text>
@@ -248,7 +248,7 @@ const Explore = () => {
                       colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
                     >
                       <View style={styles.labelItem}>
-                        <Mark color="#fff" size="sm" />
+                        <Mark color="#fff" />
                         <Text style={[styles.labelItemText, styles.titleSm]}>
                           {item.title}
                         </Text>
@@ -313,7 +313,7 @@ const Explore = () => {
                       colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
                     >
                       <View style={styles.labelItem}>
-                        <Mark color="#fff" size="sm" />
+                        <Mark color="#fff" />
                         <Text style={[styles.labelItemText, styles.titleSm]}>
                           {item.title}
                         </Text>
@@ -378,7 +378,7 @@ const Explore = () => {
                       colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
                     >
                       <View style={styles.labelItem}>
-                        <Mark color="#fff" size="sm" />
+                        <Mark color="#fff" />
                         <Text style={[styles.labelItemText, styles.titleSm]}>
                           {item.title}
                         </Text>
@@ -443,7 +443,7 @@ const Explore = () => {
                       colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
                     >
                       <View style={styles.labelItem}>
-                        <Mark color="#fff" size="sm" />
+                        <Mark color="#fff" />
                         <Text style={[styles.labelItemText, styles.titleSm]}>
                           {item.title}
                         </Text>
@@ -508,7 +508,7 @@ const Explore = () => {
                       colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
                     >
                       <View style={styles.labelItem}>
-                        <Mark color="#fff" size="sm" />
+                        <Mark color="#fff" />
                         <Text style={[styles.labelItemText, styles.titleSm]}>
                           {item.title}
                         </Text>
@@ -573,7 +573,7 @@ const Explore = () => {
                       colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
                     >
                       <View style={styles.labelItem}>
-                        <Mark color="#fff" size="sm" />
+                        <Mark color="#fff" />
                         <Text style={[styles.labelItemText, styles.titleSm]}>
                           {item.title}
                         </Text>

@@ -1,5 +1,6 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { COLORS } from "../../styles/theme";
+import Constants from "expo-constants";
 
 export const styles = StyleSheet.create({
   showMoreButtonWrapper: {
@@ -296,9 +297,13 @@ export const styles = StyleSheet.create({
     overflow: "hidden",
     position: "relative",
   },
-
+  gradientWrapper: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
   thingsTodoItemiIn: {
     marginTop: 10,
+    paddingBottom: 15,
   },
   thingsTodoItemTitle: {
     fontSize: 14,
@@ -310,13 +315,14 @@ export const styles = StyleSheet.create({
     color: "#000",
   },
   thingsTodoItem: {
-    marginBottom: 15,
-    width: "48%",
+    marginBottom: 25,
+    width: "96%",
     borderWidth: 1,
     borderRadius: 10,
     borderColor: "#f1f1f1",
     backgroundColor: "#f2f2f2",
     minHeight: 200,
+    marginHorizontal: "2%",
   },
   forYouRow: {
     marginVertical: 0,
@@ -477,16 +483,16 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   backButton: {
-    width: 30,
-    height: 30,
-    backgroundColor: "rgba(0,0,0, 0.2)",
+    width: Platform.OS === "android" ? 30 : 40,
+    height: Platform.OS === "android" ? 30 : 40,
+    backgroundColor: Platform.OS === "android" ? "#000" : "rgba(0,0,0, 0.2)",
     borderRadius: 100,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     ...COLORS.shadow,
     position: "absolute",
-    top: 55,
+    top: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 55,
     left: 15,
     zIndex: 1,
   },
@@ -519,15 +525,15 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
   },
   addToBucketButton: {
-    width: 30,
-    height: 30,
+    width: Platform.OS === "android" ? 30 : 40,
+    height: Platform.OS === "android" ? 30 : 40,
     borderRadius: 50,
-    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    backgroundColor: Platform.OS === "android" ? "#000" : "rgba(0,0,0, 0.2)",
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
     right: 15,
-    top: 55,
+    top: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 55,
     zIndex: 3,
   },
   otherInfo: {

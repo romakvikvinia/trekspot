@@ -68,7 +68,8 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
                 style={styles.box}
                 resizeMode="cover"
                 source={{
-                  uri: item.image?.url,
+                  uri: "https://cdn.pixabay.com/photo/2023/09/25/19/58/piran-8275931_1280.jpg",
+                  //item.image?.url,
                 }}
               >
                 <TouchableOpacity
@@ -81,7 +82,7 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
                     colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
                   >
                     <View style={styles.labelItem}>
-                      <Mark color="#fff" size="sm" />
+                      <Mark color="#fff" />
                       <Text style={[styles.labelItemText, styles.titleSm]}>
                         {item.city}
                       </Text>

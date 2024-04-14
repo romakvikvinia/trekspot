@@ -33,7 +33,7 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
       <View style={styles.visaTabHeader}>
         <Text style={styles.travelToText}>Traveling to {country.name}</Text>
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.passportBox}
           activeOpacity={0.7}
           // onPress={() => onCountryPassportOpen()}
@@ -43,7 +43,7 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
             <Text style={styles.passportLabel}>Passport</Text>
             <Text style={styles.passportCountry}>Georgia</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       {!data && !isLoading && <NotFound />}

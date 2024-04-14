@@ -8,11 +8,15 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { SettingScreen } from "../../screen/setting/SettingScreen";
 import { THeaderButton } from "../../common/ui/THeaderButton";
 import { PrimaryColor } from "../../styles/colors";
+import { EditoProfile } from "../../screen/setting/EditProfile";
+import { ResetPassword } from "../../screen/setting/ResetPassword";
 
 interface SettingRouteProps {}
 
 type SettingRouteStackParamList = {
   Setting: undefined;
+  EditProfile: undefined;
+  ResetPasswordScreen: undefined;
 };
 
 const Stack = createStackNavigator<SettingRouteStackParamList>();
@@ -37,6 +41,40 @@ export const SettingRouteStack: React.FC<SettingRouteProps> = ({}) => {
       <Stack.Screen
         name="Setting"
         component={SettingScreen}
+        options={({ route, navigation }) => ({
+          headerShown: false,
+          // headerLeft: () => (
+          //   <HeaderButtons HeaderButtonComponent={THeaderButton}>
+          //     <Item
+          //       title="UndoSignature"
+          //       iconName="md-menu"
+          //       color={PrimaryColor}
+          //       onPress={navigation.toggleDrawer}
+          //     />
+          //   </HeaderButtons>
+          // ),
+        })}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditoProfile}
+        options={({ route, navigation }) => ({
+          headerShown: false,
+          // headerLeft: () => (
+          //   <HeaderButtons HeaderButtonComponent={THeaderButton}>
+          //     <Item
+          //       title="UndoSignature"
+          //       iconName="md-menu"
+          //       color={PrimaryColor}
+          //       onPress={navigation.toggleDrawer}
+          //     />
+          //   </HeaderButtons>
+          // ),
+        })}
+      />
+      <Stack.Screen
+        name="ResetPasswordScreen"
+        component={ResetPassword}
         options={({ route, navigation }) => ({
           headerShown: false,
           // headerLeft: () => (

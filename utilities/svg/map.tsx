@@ -1,5 +1,6 @@
 import React from "react";
 import { SvgXml } from "react-native-svg";
+import { COLORS } from "../../styles/theme";
 
 interface MapSVGProps {
   width?: number;
@@ -273,7 +274,7 @@ export const MapSvg: React.FC<MapSVGProps> = ({
   countries.forEach((id) => {
     svgMarkup = svgMarkup.replace(
       `fill="#ddd" id="${id}"`,
-      'fill="red" id="${id}"'
+      `fill=${COLORS.primary} id="${id}"`
     );
   });
   const SvgImage = () => (

@@ -81,6 +81,7 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
             )}
             numColumns={3}
             estimatedItemSize={10}
+            showsVerticalScrollIndicator={false}
             data={
               data?.cities.slice(
                 0,

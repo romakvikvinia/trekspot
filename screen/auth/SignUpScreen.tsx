@@ -16,6 +16,7 @@ import {
   SafeAreaView,
   Alert,
 } from "react-native";
+import Constants from "expo-constants";
 
 import { SignUpValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
@@ -95,158 +96,152 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
         behavior={Platform.OS == "ios" ? "padding" : "height"}
         style={styles.screen}
       >
-        <ScrollView contentContainerStyle={styles.container}>
-          <Animated.View style={{ ...styles.screen, opacity: fadeValue }}>
-            <View style={styles.topSide}>
-              <View style={styles.logoContainer}>
-                <TrekSpotLinear />
-              </View>
-              <View style={styles.signTitle}>
-                <Text style={styles.signTitleText}>
-                  Your travel hub awaits: Sign up to begin!
-                </Text>
-              </View>
-
-              <View style={[styles.item]}>
-                <TInput
-                  invalid={
-                    "email" in formik.errors && "email" in formik.touched
-                  }
-                  keyboardType="email-address"
-                  placeholder="Email"
-                  autoCapitalize="none"
-                  returnKeyType="next"
-                  value={formik.values.email}
-                  onChangeText={formik.handleChange("email")}
-                  onBlur={formik.handleBlur("email")}
-                />
-              </View>
-              <View style={[styles.item]}>
-                <TInput
-                  invalid={
-                    "firstName" in formik.errors &&
-                    "firstName" in formik.touched
-                  }
-                  keyboardType="default"
-                  placeholder="First Name"
-                  autoCapitalize="none"
-                  returnKeyType="next"
-                  value={formik.values.firstName}
-                  onChangeText={formik.handleChange("firstName")}
-                  onBlur={formik.handleBlur("firstName")}
-                />
-              </View>
-              <View style={[styles.item]}>
-                <TInput
-                  invalid={
-                    "lastName" in formik.errors && "lastName" in formik.touched
-                  }
-                  keyboardType="default"
-                  placeholder="Last name"
-                  autoCapitalize="none"
-                  returnKeyType="next"
-                  value={formik.values.lastName}
-                  onChangeText={formik.handleChange("lastName")}
-                  onBlur={formik.handleBlur("lastName")}
-                />
-              </View>
-
-              <View style={[styles.item]}>
-                <TInput
-                  invalid={
-                    "password" in formik.errors && "password" in formik.touched
-                  }
-                  placeholder="Password"
-                  secureTextEntry
-                  keyboardType="default"
-                  autoCapitalize="none"
-                  returnKeyType="go"
-                  value={formik.values.password}
-                  onChangeText={formik.handleChange("password")}
-                  onBlur={formik.handleBlur("password")}
-                  onSubmitEditing={() => {
-                    if (
-                      !("password" in formik.errors) ||
-                      !("email" in formik.errors) ||
-                      !formik.isSubmitting
-                    ) {
-                      formik.submitForm();
-                    }
-                  }}
-                />
-              </View>
-
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={[
-                  globalStyles.buttonItemPrimary,
-                  "password" in formik.errors ||
-                  "email" in formik.errors ||
-                  formik.isSubmitting
-                    ? globalStyles.buttonItemPrimaryDisabled
-                    : null,
-                ]}
-                onPress={formik.submitForm}
-                disabled={
-                  "password" in formik.errors ||
-                  "email" in formik.errors ||
-                  formik.isSubmitting ||
-                  isLoading
-                }
-              >
-                {formik.isSubmitting || isLoading ? (
-                  <ActivityIndicator size="small" color="#fff" />
-                ) : (
-                  <Text style={globalStyles.buttonItemPrimaryText}>
-                    Sign Up
-                  </Text>
-                )}
-              </TouchableOpacity>
-
-              <View style={styles.textWithButtonWrapper}>
-                <Text style={styles.textWithButtonLabel}>Have an account?</Text>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.textWithButton}
-                  onPress={() => navigation.navigate("SignIn")}
-                >
-                  <Text style={styles.textWithButtonText}>Sign In</Text>
-                </TouchableOpacity>
-              </View>
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={styles.container}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.topSide}>
+            <View style={styles.logoContainer}>
+              <TrekSpotLinear />
             </View>
-            <View style={[styles.textWithButtonWrapper]}>
-              <Text
-                style={[
-                  styles.textWithButtonLabel,
-                  {
-                    fontSize: SIZES.body5,
-                    color: COLORS.darkgray,
-                  },
-                ]}
-              >
-                By sign in / sign up you agree our
+            <View style={styles.signTitle}>
+              <Text style={styles.signTitleText}>
+                Your travel hub awaits: Sign up to begin!
               </Text>
+            </View>
+
+            <View style={[styles.item]}>
+              <TInput
+                invalid={"email" in formik.errors && "email" in formik.touched}
+                keyboardType="email-address"
+                placeholder="Email"
+                autoCapitalize="none"
+                returnKeyType="next"
+                value={formik.values.email}
+                onChangeText={formik.handleChange("email")}
+                onBlur={formik.handleBlur("email")}
+              />
+            </View>
+            <View style={[styles.item]}>
+              <TInput
+                invalid={
+                  "firstName" in formik.errors && "firstName" in formik.touched
+                }
+                keyboardType="default"
+                placeholder="First Name"
+                autoCapitalize="none"
+                returnKeyType="next"
+                value={formik.values.firstName}
+                onChangeText={formik.handleChange("firstName")}
+                onBlur={formik.handleBlur("firstName")}
+              />
+            </View>
+            <View style={[styles.item]}>
+              <TInput
+                invalid={
+                  "lastName" in formik.errors && "lastName" in formik.touched
+                }
+                keyboardType="default"
+                placeholder="Last name"
+                autoCapitalize="none"
+                returnKeyType="next"
+                value={formik.values.lastName}
+                onChangeText={formik.handleChange("lastName")}
+                onBlur={formik.handleBlur("lastName")}
+              />
+            </View>
+
+            <View style={[styles.item]}>
+              <TInput
+                invalid={
+                  "password" in formik.errors && "password" in formik.touched
+                }
+                placeholder="Password"
+                secureTextEntry
+                keyboardType="default"
+                autoCapitalize="none"
+                returnKeyType="go"
+                value={formik.values.password}
+                onChangeText={formik.handleChange("password")}
+                onBlur={formik.handleBlur("password")}
+                onSubmitEditing={() => {
+                  if (
+                    !("password" in formik.errors) ||
+                    !("email" in formik.errors) ||
+                    !formik.isSubmitting
+                  ) {
+                    formik.submitForm();
+                  }
+                }}
+              />
+            </View>
+
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={[
+                globalStyles.buttonItemPrimary,
+                "password" in formik.errors ||
+                "email" in formik.errors ||
+                formik.isSubmitting
+                  ? globalStyles.buttonItemPrimaryDisabled
+                  : null,
+              ]}
+              onPress={formik.submitForm}
+              disabled={
+                "password" in formik.errors ||
+                "email" in formik.errors ||
+                formik.isSubmitting ||
+                isLoading
+              }
+            >
+              {formik.isSubmitting || isLoading ? (
+                <ActivityIndicator size="small" color="#fff" />
+              ) : (
+                <Text style={globalStyles.buttonItemPrimaryText}>Sign Up</Text>
+              )}
+            </TouchableOpacity>
+
+            <View style={styles.textWithButtonWrapper}>
+              <Text style={styles.textWithButtonLabel}>Have an account?</Text>
               <TouchableOpacity
                 activeOpacity={0.7}
                 style={styles.textWithButton}
+                onPress={() => navigation.navigate("SignIn")}
               >
-                <Text
-                  style={[
-                    styles.textWithButtonText,
-                    {
-                      fontSize: SIZES.body5,
-                      fontWeight: "normal",
-                      color: COLORS.primaryDark,
-                      // textDecorationLine: "underline",
-                    },
-                  ]}
-                >
-                  privacy policy
-                </Text>
+                <Text style={styles.textWithButtonText}>Sign In</Text>
               </TouchableOpacity>
             </View>
-          </Animated.View>
+          </View>
         </ScrollView>
+        <View style={[styles.textWithButtonWrapper]}>
+          <Text
+            style={[
+              styles.textWithButtonLabel,
+              {
+                fontSize: SIZES.body5,
+                color: COLORS.darkgray,
+              },
+            ]}
+          >
+            By sign in / sign up you agree our
+          </Text>
+          <TouchableOpacity activeOpacity={0.7} style={styles.textWithButton}>
+            <Text
+              style={[
+                styles.textWithButtonText,
+                {
+                  fontSize: SIZES.body5,
+                  fontWeight: "normal",
+                  color: COLORS.primaryDark,
+                  // textDecorationLine: "underline",
+                },
+              ]}
+            >
+              privacy policy
+            </Text>
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -255,6 +250,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#ffffff",
+    paddingTop: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 0,
   },
   topSide: {
     width: "100%",
@@ -263,7 +259,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: SIZES.padding * 4,
+    marginTop: SIZES.padding * 2,
   },
   textWithButtonLabel: {
     fontSize: SIZES.body2,
@@ -277,11 +273,8 @@ const styles = StyleSheet.create({
     color: COLORS.secondary,
     fontWeight: "bold",
   },
-
   container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    flexGrow: 1,
   },
   screen: {
     flex: 1,

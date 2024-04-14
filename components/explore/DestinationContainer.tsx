@@ -13,6 +13,7 @@ import { COLORS, SIZES } from "../../styles/theme";
 import { CountryType } from "../../api/api.types";
 import { CountryItem } from "./CountryItem";
 import { CountryDetailModal } from "./destination/CountryDetailModal";
+import { useNavigation } from "@react-navigation/native";
 
 interface DestinationContainerProps {
   title: string;
@@ -29,15 +30,19 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
   title,
   seeAllItems = true,
 }) => {
+  const navigation = useNavigation();
   const [state, setState] = useState<IState>({ countryId: null });
 
   const handleDetailOfCountry = useCallback((countryId: string) => {
-    setState((prevState) => ({ ...prevState, countryId }));
+    // setState((prevState) => ({ ...prevState, countryId }));
+    navigation.navigate("CountryDetailScreen", {
+      countryId: countryId,
+    });
   }, []);
 
-  const handleClearState = useCallback(() => {
-    setState((prevState) => ({ ...prevState, countryId: null }));
-  }, []);
+  // const handleClearState = useCallback(() => {
+  //   setState((prevState) => ({ ...prevState, countryId: null }));
+  // }, []);
 
   return (
     <>
@@ -67,12 +72,12 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
         </ScrollView>
       </View>
       {/** Country detail modal */}
-      {state.countryId && (
+      {/* {state.countryId && (
         <CountryDetailModal
           id={state.countryId}
           closeCallBack={handleClearState}
         />
-      )}
+      )} */}
     </>
   );
 };

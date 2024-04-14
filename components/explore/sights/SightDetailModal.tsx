@@ -97,7 +97,7 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
               <CloseCircleIcon size="30" color="#fff" />
             </TouchableOpacity>
           </View>
-
+          {console.log("data", data)}
           {/* @ts-ignore */}
           <ScrollView style={styles.modalContent} ref={ref}>
             <Swiper
@@ -155,9 +155,6 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                   <Mark2 color="#fff" />
                 </TouchableOpacity>
               </View>
-              <Text style={styles.sightDetailsDescription}>
-                {data?.description}
-              </Text>
               <View style={styles.ratingWrapper}>
                 <Text style={styles.type}>{data.category}</Text>
                 <Text style={styles.ratingText}>{data.rate}</Text>
@@ -171,6 +168,10 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                   <StarIcon size={15} color="#FFBC3E" />
                 </View>
               </View>
+              <Text style={styles.sightDetailsDescription}>
+                {data?.description}
+              </Text>
+
               {data.address && (
                 <TouchableOpacity onPress={() => openMap(data.address)}>
                   <Text style={styles.address}>
@@ -179,11 +180,44 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                   </Text>
                 </TouchableOpacity>
               )}
-              <Text>
-                {data.workingHours
-                  ?.map((i) => `${i.day}-${i.hours}`)
-                  .join(", ")}
-              </Text>
+              {data?.workingHours?.length ? (
+                <Text
+                  style={{
+                    fontSize: 18,
+                    marginBottom: 8,
+                    marginTop: 15,
+                    fontWeight: "500",
+                  }}
+                >
+                  Working hours
+                </Text>
+              ) : null}
+
+              {data.workingHours?.map((i) => (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginBottom: 8,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontWeight: "500",
+                      width: 80,
+                      color: COLORS.gray,
+                    }}
+                  >
+                    {i.day}
+                  </Text>
+
+                  <Text
+                    style={{
+                      fontSize: 12,
+                    }}
+                  >{` ${i.hours}`}</Text>
+                </View>
+              ))}
             </View>
           </ScrollView>
         </View>
@@ -202,7 +236,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 0,
   },
   addToBucketButton: {
     width: 30,
@@ -237,7 +271,8 @@ export const styles = StyleSheet.create({
   ratingWrapper: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 15,
+    marginTop: 5,
+    marginBottom: 10,
   },
   ratingText: {
     fontSize: 14,

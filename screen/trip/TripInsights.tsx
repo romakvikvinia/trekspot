@@ -1,6 +1,7 @@
 import { Image } from "expo-image";
 import React from "react";
 import {
+  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -8,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import Constants from "expo-constants";
 
 import { enGB, he, registerTranslation } from "react-native-paper-dates";
 registerTranslation("en", enGB);
@@ -253,6 +255,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#F2F2F7",
+    paddingTop: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 0,
   },
   noteCardTitle: {
     fontSize: 20,
@@ -276,12 +279,14 @@ const styles = StyleSheet.create({
     padding: 15,
     width: 320,
     height: 150,
+    overflow: "hidden",
     borderRadius: 15,
-    shadowColor: "#ccc",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.9,
-    shadowRadius: 10,
-    elevation: 10,
+    // borderRadius: 15,
+    // shadowColor: "#ccc",
+    // shadowOffset: { width: 0, height: 1 },
+    // shadowOpacity: 0.9,
+    // shadowRadius: 10,
+    // elevation: 10,
     position: "relative",
   },
   dangerType: {

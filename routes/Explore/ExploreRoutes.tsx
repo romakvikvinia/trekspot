@@ -5,12 +5,14 @@ import {
 } from "@react-navigation/stack";
 import { ExploreScreen } from "../../screen/Explore/ExploreScreen";
 import SeeAllScreen from "../../screen/Explore/BucketListAll";
+import { CountryDetailModal } from "../../components/explore/destination/CountryDetailModal";
 
 interface ExploreRoutesProps {}
 
 export type ExploreRoutesStackParamList = {
   ExploreWorld: undefined;
   SeeAllScreen: undefined;
+  CountryDetailScreen: undefined;
 };
 
 const Stack = createStackNavigator<ExploreRoutesStackParamList>();
@@ -41,6 +43,13 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
       <Stack.Screen
         name="SeeAllScreen"
         component={SeeAllScreen}
+        options={() => ({
+          header: () => null,
+        })}
+      />
+      <Stack.Screen
+        name="CountryDetailScreen"
+        component={CountryDetailModal}
         options={() => ({
           header: () => null,
         })}

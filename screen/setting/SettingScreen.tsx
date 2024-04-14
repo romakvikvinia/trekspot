@@ -1,6 +1,7 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import {
   ActivityIndicator,
+  Alert,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -11,23 +12,52 @@ import {
 import { Image } from "expo-image";
 import { AuthContext } from "../../package/context/auth.context";
 import { deleteFromAsyncStorage } from "../../helpers/secure.storage";
+import { COLORS } from "../../styles/theme";
+import {
+  DeleteIcon,
+  EditIcon,
+  LockIcon,
+  LogoutIcon,
+  OneUserIcon,
+  PrivacyIcon,
+  TermsIcon,
+  UserCircleIcon,
+  UsersIcon,
+  VersionIcon,
+} from "../../utilities/SvgIcons.utility";
+import { useNavigation } from "@react-navigation/native";
+import { Portal } from "react-native-portalize";
+import { Modalize } from "react-native-modalize";
+import { MapEmbedView } from "../../common/components/MapEmbedView";
 
 interface SettingProps {}
 
 export const SettingScreen: React.FC<SettingProps> = ({}) => {
+  const modalEmbedRef = useRef<Modalize>(null);
+
   const { signOut } = useContext(AuthContext);
+  const navigation = useNavigation();
+
+  const onModalEmbedOpen = () => {
+    modalEmbedRef.current?.open();
+  };
+
   return (
     <>
       <SafeAreaView style={styles.safeArea}>
-        <ScrollView style={{ flex: 1 }}>
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={{ paddingHorizontal: 15 }}
+        >
           <View style={styles.profileHeader}>
             <View style={styles.profileLeft}>
               <Image
                 style={{
-                  minWidth: 80,
-                  width: 80,
-                  height: 80,
-                  minHeight: 80,
+                  minWidth: 60,
+                  width: 60,
+                  maxWidth: 60,
+                  height: 60,
+                  minHeight: 60,
                   flex: 1,
                   borderRadius: "100%",
                 }}
@@ -36,26 +66,56 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
                 }}
                 cachePolicy="memory"
                 contentFit="cover"
-                transition={1000}
+                transition={0}
                 // placeholder={<ActivityIndicator />}
               />
-              <Text style={styles.username}>Andria Shonia</Text>
+              <View>
+                <Text style={styles.username}>Andria Shonia</Text>
+                <Text style={styles.subTxt}>Welcome</Text>
+              </View>
             </View>
-            <TouchableOpacity activeOpacity={0.7} style={styles.editButton}>
-              <Text style={styles.editButtonText}>Edit profile</Text>
+          </View>
+          <Text style={styles.buttonsWrapperTitle}>Account</Text>
+          <View style={styles.buttonsWrapper}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("EditProfile")}
+              style={styles.button}
+              activeOpacity={0.7}
+            >
+              <UserCircleIcon />
+              <Text style={styles.buttonText}>Edit profile</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]}
+              activeOpacity={0.7}
+              onPress={() => navigation.navigate("ResetPasswordScreen")}
+            >
+              <LockIcon />
+              <Text style={styles.buttonText}>Reset password</Text>
             </TouchableOpacity>
           </View>
+          <Text style={styles.buttonsWrapperTitle}>About</Text>
           <View style={styles.buttonsWrapper}>
-            <TouchableOpacity style={styles.button} activeOpacity={0.7}>
-              <Text style={styles.buttonText}>Edit interests</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} activeOpacity={0.7}>
-              <Text style={styles.buttonText}>Terms of use</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} activeOpacity={0.7}>
+            <TouchableOpacity
+              onPress={() => onModalEmbedOpen()}
+              style={styles.button}
+              activeOpacity={0.7}
+            >
+              <PrivacyIcon />
               <Text style={styles.buttonText}>Privacy Policy</Text>
             </TouchableOpacity>
+            <TouchableOpacity style={[styles.button]} activeOpacity={0.7}>
+              <TermsIcon />
+              <Text style={styles.buttonText}>Terms of Service</Text>
+            </TouchableOpacity>
+            <View
+              style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]}
+            >
+              <VersionIcon />
+              <Text style={styles.buttonText}>Version: 1.0.0</Text>
+            </View>
           </View>
+          <Text style={styles.buttonsWrapperTitle}>Manage</Text>
           <View style={styles.buttonsWrapper}>
             <TouchableOpacity
               style={styles.button}
@@ -68,14 +128,45 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
                 ]);
               }}
             >
+              <LogoutIcon />
               <Text style={styles.buttonText}>Logout</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} activeOpacity={0.7}>
-              <Text style={styles.buttonText}>Deleate account</Text>
+            <TouchableOpacity
+              style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]}
+              activeOpacity={0.7}
+              onPress={() =>
+                Alert.alert("Do you really want to delete account?", "", [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  {
+                    text: "Delete",
+                    onPress: () => console.log("OK Pressed"),
+                    style: "destructive",
+                  },
+                ])
+              }
+            >
+              <DeleteIcon />
+              <Text style={[styles.buttonText, { color: COLORS.red }]}>
+                Delete account
+              </Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
       </SafeAreaView>
+
+      <Portal>
+        <Modalize ref={modalEmbedRef} modalTopOffset={65} adjustToContentHeight>
+          <MapEmbedView
+            blogUrl="https://file-examples.com/wp-content/storage/2017/10/file-sample_150kB.pdf"
+            placeTitle="Tbilisi"
+            modalEmbedRef={modalEmbedRef}
+          />
+        </Modalize>
+      </Portal>
     </>
   );
 };
@@ -83,34 +174,47 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#fff",
-    // backgroundColor: "#f8f8f8",
+    // backgroundColor: "#fff",
+    backgroundColor: "#f8f8f8",
   },
   buttonsWrapper: {
-    padding: 15,
-    borderBottomColor: "#f8f8f8",
-    borderBottomWidth: 5,
+    backgroundColor: "#fff",
+    borderRadius: 15,
+    marginBottom: 25,
   },
   profileHeader: {
-    backgroundColor: "#fff",
     flexDirection: "row",
     display: "flex",
     alignItems: "flex-start",
     justifyContent: "space-between",
-    paddingHorizontal: 15,
     borderBottomColor: "#f8f8f8",
     borderBottomWidth: 5,
     paddingTop: 5,
     paddingBottom: 15,
+    marginBottom: 0,
   },
   profileLeft: {
-    flexDirection: "column",
-    width: "50%",
+    flexDirection: "row",
+    width: "100%",
+    alignItems: "center",
+  },
+  buttonsWrapperTitle: {
+    fontSize: 14,
+    color: COLORS.gray,
+    marginBottom: 10,
   },
   username: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "bold",
-    marginTop: 15,
+    marginTop: 0,
+    marginLeft: 15,
+    color: COLORS.black,
+  },
+  subTxt: {
+    fontSize: 14,
+    marginLeft: 15,
+    marginTop: 5,
+    color: COLORS.gray,
   },
   editButton: {
     marginTop: 30,
@@ -124,10 +228,15 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   button: {
-    marginVertical: 8,
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f2f2f2",
+    flexDirection: "row",
+    alignItems: "center",
   },
   buttonText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "500",
+    marginLeft: 15,
   },
 });

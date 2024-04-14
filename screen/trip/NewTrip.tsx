@@ -3,6 +3,7 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRef, useState } from "react";
 import {
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
@@ -39,6 +40,7 @@ export const CreateTripContent = ({
   onDestinationModalOpen,
 }) => {
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
 
   const modalAccessibilityRef = useRef(null);
   const modalBackgroundRef = useRef(null);
@@ -168,8 +170,9 @@ export const CreateTripContent = ({
               >
                 <OneUserIcon size="20" />
                 <Text style={styles.halfBoxLabelText}>Travel type</Text>
-
-                <Text style={styles.halfBoxValueText}>{travelType}</Text>
+                {travelType ? (
+                  <Text style={styles.halfBoxValueText}>{travelType}</Text>
+                ) : null}
               </TouchableOpacity>
             </BlurView>
           </View>
@@ -179,7 +182,12 @@ export const CreateTripContent = ({
             paddingBottom: 35,
           }}
         >
-          <TouchableOpacity style={styles.aiPlanButton}>
+          <TouchableOpacity
+            style={styles.aiPlanButton}
+            activeOpacity={0.7}
+            onPress={() => setIsLoading(!isLoading)}
+            // disabled={isLoading}
+          >
             <LinearGradient
               style={{
                 flex: 1,
@@ -190,8 +198,21 @@ export const CreateTripContent = ({
               }}
               colors={["#B0369B", "#BF369A", "#99329D"]}
             >
-              <Text style={styles.aiPlanButtonText}>Generate AI Itinerary</Text>
-              <StarsIcon width="15" color="#fff" />
+              {isLoading ? (
+                <>
+                  <ActivityIndicator color="#fff" />
+                  <Text style={[styles.aiPlanButtonText, { marginLeft: 5 }]}>
+                    Planning your itinerary...
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <Text style={styles.aiPlanButtonText}>
+                    Generate AI Itinerary
+                  </Text>
+                  <StarsIcon width="15" color="#fff" />
+                </>
+              )}
             </LinearGradient>
           </TouchableOpacity>
           <TouchableOpacity style={styles.manualPlanButton}>

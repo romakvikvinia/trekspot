@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -7,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import Constants from "expo-constants";
 
 import { enGB, registerTranslation } from "react-native-paper-dates";
 registerTranslation("en", enGB);
@@ -91,6 +93,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#F2F2F7",
+    paddingTop: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 0,
   },
   header: {
     flexDirection: "row",

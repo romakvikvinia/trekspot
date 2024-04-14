@@ -67,7 +67,8 @@ export const ExploreSightListContainer: React.FC<
                 style={styles.box}
                 resizeMode="cover"
                 source={{
-                  uri: item.image?.url,
+                  uri: "https://cdn.pixabay.com/photo/2016/11/22/19/17/buildings-1850129_1280.jpg",
+                  // item.image?.url,
                 }}
               >
                 <TouchableOpacity
@@ -80,7 +81,7 @@ export const ExploreSightListContainer: React.FC<
                     colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
                   >
                     <View style={styles.labelItem}>
-                      <Mark color="#fff" size="sm" />
+                      <Mark color="#fff" />
                       <Text style={[styles.labelItemText, styles.titleSm]}>
                         {item.title}
                       </Text>

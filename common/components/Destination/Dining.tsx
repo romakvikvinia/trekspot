@@ -9,6 +9,7 @@ import { COLORS } from "../../../styles/theme";
 import { StarIcon } from "../../../utilities/SvgIcons.utility";
 import { styles } from "../_styles";
 import { CountryType } from "../../../api/api.types";
+import { FlashList } from "@shopify/flash-list";
 
 type DiningProps = {
   country: CountryType;
@@ -214,13 +215,13 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
       <View style={styles.tabContentHeader}>
         <Text style={styles.tabContentHeaderText}>Popular national dishes</Text>
       </View>
-      <ScrollView
-        style={styles.tabWrapper}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.thingsTodo}>
-          {dishes?.map((item, ind) => (
-            <View style={styles.thingsTodoItem} key={ind}>
+
+      <View style={{ minHeight: 200 }}>
+        <FlashList
+          data={dishes}
+          numColumns={2}
+          renderItem={({ item }) => (
+            <View style={styles.thingsTodoItem} key={item.score}>
               <ImageBackground
                 style={styles.thingsTodoItemImage}
                 source={{
@@ -275,9 +276,13 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
                 </View>
               </View>
             </View>
-          ))}
-        </View>
-      </ScrollView>
+          )}
+          estimatedItemSize={200}
+          contentContainerStyle={{
+            paddingHorizontal: 10,
+          }}
+        />
+      </View>
     </>
   );
 };

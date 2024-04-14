@@ -16,6 +16,7 @@ import {
   Platform,
   SafeAreaView,
 } from "react-native";
+import Constants from "expo-constants";
 
 import { AuthContext } from "../../package/context/auth.context";
 import { SignInValidationSchema } from "./validationScheme";
@@ -94,70 +95,66 @@ export const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({
         style={styles.screen}
       >
         <ScrollView contentContainerStyle={styles.container}>
-          <Animated.View style={{ ...styles.screen, opacity: fadeValue }}>
-            <View style={styles.topSide}>
-              <View style={styles.logoContainer}>
-                <TrekSpotLinear />
-              </View>
-              <View style={styles.signTitle}>
-                <Text style={styles.signTitleText}>
-                  Your travel hub awaits: Sign in to begin!
+          <View style={styles.topSide}>
+            <View style={styles.logoContainer}>
+              <TrekSpotLinear />
+            </View>
+            <View style={styles.signTitle}>
+              <Text style={styles.signTitleText}>
+                Your travel hub awaits: Sign in to begin!
+              </Text>
+            </View>
+
+            <View style={[styles.item]}>
+              <TInput
+                invalid={"Email" in formik.errors && "Email" in formik.touched}
+                keyboardType="email-address"
+                placeholder="Email"
+                autoCapitalize="none"
+                returnKeyType="next"
+                value={formik.values.email}
+                onChangeText={formik.handleChange("email")}
+                onBlur={formik.handleBlur("email")}
+              />
+            </View>
+
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={[
+                globalStyles.buttonItemPrimary,
+                "password" in formik.errors ||
+                "Email" in formik.errors ||
+                formik.isSubmitting
+                  ? globalStyles.buttonItemPrimaryDisabled
+                  : null,
+              ]}
+              onPress={formik.submitForm}
+              disabled={
+                "password" in formik.errors ||
+                "Email" in formik.errors ||
+                formik.isSubmitting
+              }
+            >
+              {formik.isSubmitting ? (
+                <ActivityIndicator size="small" color="#fff" />
+              ) : (
+                <Text style={globalStyles.buttonItemPrimaryText}>
+                  Reset password
                 </Text>
-              </View>
+              )}
+            </TouchableOpacity>
 
-              <View style={[styles.item]}>
-                <TInput
-                  invalid={
-                    "Email" in formik.errors && "Email" in formik.touched
-                  }
-                  keyboardType="email-address"
-                  placeholder="Email"
-                  autoCapitalize="none"
-                  returnKeyType="next"
-                  value={formik.values.email}
-                  onChangeText={formik.handleChange("email")}
-                  onBlur={formik.handleBlur("email")}
-                />
-              </View>
-
+            <View style={styles.textWithButtonWrapper}>
+              <Text style={styles.textWithButtonLabel}>Go to</Text>
               <TouchableOpacity
                 activeOpacity={0.7}
-                style={[
-                  globalStyles.buttonItemPrimary,
-                  "password" in formik.errors ||
-                  "Email" in formik.errors ||
-                  formik.isSubmitting
-                    ? globalStyles.buttonItemPrimaryDisabled
-                    : null,
-                ]}
-                onPress={formik.submitForm}
-                disabled={
-                  "password" in formik.errors ||
-                  "Email" in formik.errors ||
-                  formik.isSubmitting
-                }
+                style={styles.textWithButton}
+                onPress={() => navigation.navigate("SignIn")}
               >
-                {formik.isSubmitting ? (
-                  <ActivityIndicator size="small" color="#fff" />
-                ) : (
-                  <Text style={globalStyles.buttonItemPrimaryText}>
-                    Reset password
-                  </Text>
-                )}
+                <Text style={styles.textWithButtonText}>Sign in</Text>
               </TouchableOpacity>
-
-              <View style={styles.textWithButtonWrapper}>
-                <Text style={styles.textWithButtonLabel}>Go to</Text>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.textWithButton}
-                  onPress={() => navigation.navigate("SignIn")}
-                >
-                  <Text style={styles.textWithButtonText}>Sign in</Text>
-                </TouchableOpacity>
-              </View>
             </View>
-          </Animated.View>
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -168,6 +165,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#ffffff",
+    paddingTop: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 0,
   },
   topSide: {
     width: "100%",
@@ -192,8 +190,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
   },
   screen: {
     flex: 1,

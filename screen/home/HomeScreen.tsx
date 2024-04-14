@@ -415,7 +415,7 @@ const styles = StyleSheet.create({
   mapStatsPercentText: {
     color: "#fff",
     fontWeight: "bold",
-    fontSize: 30,
+    fontSize: 26,
   },
   leftSide: {
     flexDirection: "row",

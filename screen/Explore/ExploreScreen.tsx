@@ -1,7 +1,9 @@
 import React, { useCallback, useRef, useState } from "react";
 
 import {
+  Alert,
   Keyboard,
+  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -10,12 +12,20 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import Constants from "expo-constants";
 
 import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 
 import { COLORS, SIZES } from "../../styles/theme";
-import { Mark2, SearchIcon, XIcon } from "../../utilities/SvgIcons.utility";
+import {
+  DotsIcon,
+  FlightIcon,
+  Mark2,
+  SearchIcon,
+  VertDots,
+  XIcon,
+} from "../../utilities/SvgIcons.utility";
 
 import { CountrySelect } from "../../common/components/CountrySelect";
 import { CountrySearch } from "../../common/components/CountrySearch";
@@ -104,10 +114,48 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
                 onPress={() => onBucketlistOpen()}
                 style={styles.bucketListButton}
               >
-                <Mark2 color={COLORS.black} />
+                <Mark2 size={16} color={COLORS.black} />
               </TouchableOpacity>
             )}
           </View>
+        </View>
+
+        <View
+          style={{
+            paddingHorizontal: 15,
+          }}
+        >
+          <TouchableOpacity style={styles.currentTrip} activeOpacity={0.7}>
+            <View style={styles.currentTripLeft}>
+              <View style={styles.currentTripIcon}>
+                <FlightIcon color={COLORS.primary} />
+              </View>
+              <View>
+                <Text style={styles.currentTripTitle}>Dubai trip</Text>
+                <Text style={styles.currentTripTitleDate}>12 Feb - 20 Feb</Text>
+              </View>
+            </View>
+
+            <TouchableOpacity
+              style={styles.currentTripDotsButton}
+              onPress={() =>
+                Alert.alert("Do you want to hide trip?", "", [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  {
+                    text: "Hide",
+                    onPress: () => console.log("OK Pressed"),
+                    style: "destructive",
+                  },
+                ])
+              }
+            >
+              <VertDots color={COLORS.primaryDark} />
+            </TouchableOpacity>
+          </TouchableOpacity>
         </View>
 
         <ScrollView
@@ -211,6 +259,49 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#f8f8f8",
+    paddingTop: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 0,
+  },
+  currentTrip: {
+    backgroundColor: "#fef0ff",
+    borderRadius: 50,
+    flexDirection: "row",
+    paddingHorizontal: 18,
+    paddingLeft: 10,
+    paddingVertical: 10,
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: "#dac9dc",
+  },
+  currentTripLeft: {
+    flexDirection: "row",
+  },
+  currentTripDotsButton: {
+    width: 30,
+    height: 30,
+    alignItems: "flex-end",
+    justifyContent: "center",
+  },
+  currentTripTitle: {
+    fontSize: 18,
+    color: COLORS.primaryDark,
+    fontWeight: "bold",
+  },
+  currentTripTitleDate: {
+    fontSize: 12,
+    color: COLORS.primaryDark,
+    marginTop: 3,
+    opacity: 0.8,
+    fontWeight: "500",
+  },
+  currentTripIcon: {
+    height: 40,
+    width: 40,
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 10,
   },
   cancelButton: {
     height: 40,
@@ -231,8 +322,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   bucketListButton: {
-    minWidth: 40,
-    height: 40,
+    minWidth: 45,
+    height: 45,
     backgroundColor: "#fff",
     borderRadius: 50,
     display: "flex",
@@ -267,9 +358,9 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
   },
   searchInput: {
-    height: 40,
+    height: 45,
     paddingLeft: 10,
-    fontSize: 14,
+    fontSize: 16,
     width: "100%",
     color: "#000",
   },
