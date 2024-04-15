@@ -58,57 +58,62 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
     <>
       <View style={[styles.forYouRow, { marginTop: 25 }]}>
         <Text style={styles.forYouRowTitle}>Cities to visit </Text>
-        <View
-          style={[
-            styles.tabWrapper,
-            {
-              paddingBottom: 5,
-              marginBottom: 0,
-              flexWrap: "wrap",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              minHeight: 200,
-            },
-          ]}
-        >
-          <FlashList
-            renderItem={({ item }) => (
-              <ForYouCountryItem
-                key={`ForYouCountryItem-${item.id}`}
-                item={item}
-                onPlaceDetailOpen={onPlaceDetailOpen}
-              />
-            )}
-            numColumns={3}
-            estimatedItemSize={10}
-            showsVerticalScrollIndicator={false}
-            data={
-              data?.cities.slice(
-                0,
-                state.showMoreCities ? data.cities.length : 6
-              ) || []
-            }
-          />
-        </View>
         {!isCitiesLoading ? (
-          <View style={styles.showMoreButtonWrapper}>
-            <TouchableOpacity
-              activeOpacity={0.7}
-              style={styles.showMoreButton}
-              onPress={() =>
-                setState((prevState) => ({
-                  ...prevState,
-                  showMoreCities: !prevState.showMoreCities,
-                }))
-              }
+          <>
+            <View
+              style={[
+                styles.tabWrapper,
+                {
+                  paddingBottom: 5,
+                  marginBottom: 0,
+                  flexWrap: "wrap",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  minHeight: 200,
+                },
+              ]}
             >
-              <Text style={styles.showMoreButtonText}>
-                {state.showMoreCities ? `Show less` : `Show more`}
-              </Text>
-            </TouchableOpacity>
-          </View>
+              <FlashList
+                renderItem={({ item }) => (
+                  <ForYouCountryItem
+                    key={`ForYouCountryItem-${item.id}`}
+                    item={item}
+                    onPlaceDetailOpen={onPlaceDetailOpen}
+                  />
+                )}
+                numColumns={3}
+                estimatedItemSize={10}
+                showsVerticalScrollIndicator={false}
+                data={
+                  data?.cities.slice(
+                    0,
+                    state.showMoreCities ? data.cities.length : 6
+                  ) || []
+                }
+              />
+            </View>
+
+            <View style={styles.showMoreButtonWrapper}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={styles.showMoreButton}
+                onPress={() =>
+                  setState((prevState) => ({
+                    ...prevState,
+                    showMoreCities: !prevState.showMoreCities,
+                  }))
+                }
+              >
+                <Text style={styles.showMoreButtonText}>
+                  {state.showMoreCities ? `Show less` : `Show more`}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </>
         ) : (
-          <Loader isLoading />
+          <View style={{ height: 200 }}>
+            <Loader isLoading />
+          </View>
         )}
       </View>
 

@@ -14,11 +14,13 @@ import { CountryType } from "../../api/api.types";
 import { CountryItem } from "./CountryItem";
 import { CountryDetailModal } from "./destination/CountryDetailModal";
 import { useNavigation } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface DestinationContainerProps {
   title: string;
   countries: CountryType[];
   seeAllItems?: boolean;
+  popularCountriesLoading: boolean;
 }
 
 interface IState {
@@ -29,6 +31,7 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
   countries,
   title,
   seeAllItems = true,
+  popularCountriesLoading,
 }) => {
   const navigation = useNavigation();
   const [state, setState] = useState<IState>({ countryId: null });
@@ -55,21 +58,49 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
             </TouchableOpacity>
           )}
         </View>
-
-        <ScrollView
-          horizontal
-          style={styles.contentBox}
-          showsHorizontalScrollIndicator={false}
-        >
-          {countries.map((country, ind) => (
-            <CountryItem
-              key={`countries-${country.id}-${country.name}-${title}`}
-              item={country}
-              isWith={countries.length - 1 === ind}
-              openModal={handleDetailOfCountry}
-            />
-          ))}
-        </ScrollView>
+        {!popularCountriesLoading ? (
+          <ScrollView
+            horizontal
+            style={styles.contentBox}
+            showsHorizontalScrollIndicator={false}
+          >
+            {countries.map((country, ind) => (
+              <CountryItem
+                key={`countries-${country.id}-${country.name}-${title}`}
+                item={country}
+                isWith={countries.length - 1 === ind}
+                openModal={handleDetailOfCountry}
+              />
+            ))}
+          </ScrollView>
+        ) : (
+          <ScrollView
+            contentContainerStyle={{ paddingHorizontal: 15 }}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          >
+            {[0, 1, 2, 3].map((item, ind) => (
+              <View
+                style={{
+                  width: 160,
+                  height: 185,
+                  borderRadius: 10,
+                  marginRight: 10,
+                }}
+                key={ind}
+              >
+                <LinearGradient
+                  colors={["rgba(0,0,0,0.1)", "rgba(0,0,0,0.6)"]}
+                  style={{
+                    width: 160,
+                    height: 185,
+                    borderRadius: 10,
+                  }}
+                ></LinearGradient>
+              </View>
+            ))}
+          </ScrollView>
+        )}
       </View>
       {/** Country detail modal */}
       {/* {state.countryId && (

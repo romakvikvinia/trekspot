@@ -1,5 +1,5 @@
 import { Image } from "expo-image";
-import React from "react";
+import React, { useRef } from "react";
 import {
   Platform,
   SafeAreaView,
@@ -16,14 +16,21 @@ registerTranslation("en", enGB);
 
 import { useNavigation } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
-import { InnovationIcon } from "../../../utilities/SvgIcons.utility";
-import { COLORS } from "../../../styles/theme";
+import { InnovationIcon, XIcon } from "../../../utilities/SvgIcons.utility";
+import { COLORS, SIZES } from "../../../styles/theme";
+import { Portal } from "react-native-portalize";
+import { Modalize } from "react-native-modalize";
+import RenderHTML from "react-native-render-html";
 
 interface TripProps {}
 
 export const TripInsightTab: React.FC<TripProps> = ({}) => {
   const navigation = useNavigation();
+  const modalInsightDetailRef = useRef(null);
 
+  const onInsightDetailOpen = () => {
+    modalInsightDetailRef.current?.open();
+  };
   return (
     <>
       <View style={{ marginTop: 25 }}></View>
@@ -95,7 +102,7 @@ export const TripInsightTab: React.FC<TripProps> = ({}) => {
             ]}
             renderItem={({ item }) => (
               <TouchableOpacity
-                onPress={() => navigation.navigate("TripInsightDetailScreen")}
+                onPress={() => onInsightDetailOpen()}
                 activeOpacity={0.7}
                 style={styles.card}
               >
@@ -138,7 +145,7 @@ export const TripInsightTab: React.FC<TripProps> = ({}) => {
             ]}
             renderItem={({ item }) => (
               <TouchableOpacity
-                onPress={() => navigation.navigate("TripInsightDetailScreen")}
+                onPress={() => onInsightDetailOpen()}
                 activeOpacity={0.7}
                 style={styles.card}
               >
@@ -177,7 +184,7 @@ export const TripInsightTab: React.FC<TripProps> = ({}) => {
             ]}
             renderItem={({ item }) => (
               <TouchableOpacity
-                onPress={() => navigation.navigate("TripInsightDetailScreen")}
+                onPress={() => onInsightDetailOpen()}
                 activeOpacity={0.7}
                 style={styles.card}
               >
@@ -216,7 +223,7 @@ export const TripInsightTab: React.FC<TripProps> = ({}) => {
             ]}
             renderItem={({ item }) => (
               <TouchableOpacity
-                onPress={() => navigation.navigate("TripInsightDetailScreen")}
+                onPress={() => onInsightDetailOpen()}
                 activeOpacity={0.7}
                 style={styles.card}
               >
@@ -234,6 +241,101 @@ export const TripInsightTab: React.FC<TripProps> = ({}) => {
           />
         </View>
       </View>
+
+      <Portal>
+        <Modalize
+          ref={modalInsightDetailRef}
+          modalTopOffset={65}
+          // disableScrollIfPossible
+          // adjustToContentHeight
+          velocity={100000}
+          tapGestureEnabled={false}
+          closeSnapPointStraightEnabled={false}
+          modalStyle={{
+            backgroundColor: "#F2F2F7",
+            minHeight: "30%",
+          }}
+          HeaderComponent={
+            <View style={styles.rowItemHeader}>
+              <Text style={styles.h2}>Moving about</Text>
+
+              <TouchableOpacity
+                onPress={() => documentsRefModal?.current?.close()}
+                activeOpacity={0.5}
+                style={styles.closeButton}
+              >
+                <XIcon width="10" />
+              </TouchableOpacity>
+            </View>
+          }
+          scrollViewProps={{
+            showsVerticalScrollIndicator: false,
+          }}
+        >
+          <View style={{ paddingHorizontal: 15, paddingBottom: 50 }}>
+            <RenderHTML
+              key={"topic"}
+              contentWidth={SIZES.width}
+              source={{
+                html: `
+            <h2 style="color: green">Title item</h2>
+            <p style="font-sze: 18px; line-height: 22px">
+            The Foundry (v6) release is finally stable, and is now-on the recommended version. Check out the announcement blog post in our brand new website. We also have a migration guide for
+            </p>
+            <ul>
+                <li>
+                     Text item
+                </li>
+                <li>
+                    Text item
+                </li>
+            </ul>
+            <p style="font-sze: 18px; line-height: 22px">
+            The Foundry (v6) release is finally stable, and is now-on the recommended version. Check out the announcement blog post in our brand new website. We also have a migration guide for
+            </p>
+            <ul>
+                <li>
+                     Text item
+                </li>
+                <li>
+                    Text item
+                </li>
+            </ul>
+            <p style="font-sze: 18px; line-height: 22px">
+            The Foundry (v6) release is finally stable, and is now-on the recommended version. Check out the announcement blog post in our brand new website. We also have a migration guide for
+            </p>
+            <p style="font-sze: 18px; line-height: 22px">
+            The Foundry (v6) release is finally stable, and is now-on the recommended version. Check out the announcement blog post in our brand new website. We also have a migration guide for
+            </p>
+            <p style="font-sze: 18px; line-height: 22px">
+            The Foundry (v6) release is finally stable, and is now-on the recommended version. Check out the announcement blog post in our brand new website. We also have a migration guide for
+            </p>
+               <ul>
+                <li>
+                     Text item
+                </li>
+                <li>
+                    Text item
+                </li>
+            </ul>
+            <p style="font-sze: 18px; line-height: 22px">
+            The Foundry (v6) release is finally stable, and is now-on the recommended version. Check out the announcement blog post in our brand new website. We also have a migration guide for
+            </p>
+            <p style="font-sze: 18px; line-height: 22px">
+            The Foundry (v6) release is finally stable, and is now-on the recommended version. Check out the announcement blog post in our brand new website. We also have a migration guide for
+            </p>
+            <p style="font-sze: 18px; line-height: 22px">
+            The Foundry (v6) release is finally stable, and is now-on the recommended version. Check out the announcement blog post in our brand new website. We also have a migration guide for
+            </p>
+            `,
+              }}
+              defaultTextProps={{
+                selectable: true,
+              }}
+            />
+          </View>
+        </Modalize>
+      </Portal>
     </>
   );
 };
@@ -249,6 +351,27 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: COLORS.primary,
     maxWidth: "80%",
+  },
+  closeButton: {
+    backgroundColor: "#DBDBDB",
+    width: 30,
+    height: 30,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  rowItemHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 15,
+    paddingTop: 15,
+    paddingBottom: 25,
+  },
+  h2: {
+    fontSize: 22,
+    color: COLORS.black,
+    fontWeight: "bold",
   },
   noteCardDesc: {
     fontSize: 14,
@@ -307,8 +430,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   topicsRowTitle: {
-    fontSize: 22,
-    fontWeight: "500",
+    fontSize: 20,
+    fontWeight: "bold",
     color: COLORS.black,
     paddingHorizontal: 15,
     marginBottom: 15,

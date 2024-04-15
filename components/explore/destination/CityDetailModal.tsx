@@ -69,7 +69,7 @@ export const CityDetailModal: React.FC<CityDetailProps> = ({
             alwaysBounceVertical: false,
             showsVerticalScrollIndicator: false,
           }}
-          velocity={100000}
+          // velocity={100000}
           tapGestureEnabled={false}
           closeSnapPointStraightEnabled={false}
           onClose={closeCallBack}

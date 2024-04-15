@@ -42,6 +42,11 @@ import { BucketlistModal } from "../../common/components/BucketlistModal";
 import { DestinationContainer } from "../../components/explore/DestinationContainer";
 import { CitiesContainer } from "../../components/explore/CitiesContainer";
 import { ExploreSightListContainer } from "../../components/explore/ExploreSightListContainer";
+import {
+  SkeletonLoaderCountry,
+  SkeletonLoaderImage,
+} from "../../common/ui/Skeleton";
+import { LinearGradient } from "expo-linear-gradient";
 
 type ExploreProps = NativeStackScreenProps<
   ExploreRoutesStackParamList,
@@ -57,7 +62,7 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
   //data
   const {
     data: popularCountries,
-    isLoading,
+    isLoading: popularCountriesLoading,
     isSuccess,
   } = useCountriesQuery({ isPopular: true });
 
@@ -172,6 +177,7 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
             title="Popular Countries"
             countries={(popularCountries && popularCountries.countries) || []}
             seeAllItems={false}
+            popularCountriesLoading={popularCountriesLoading}
           />
 
           {/**
@@ -181,6 +187,7 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
             title="Top Cities"
             cities={cities}
             seeAllItems={false}
+            isCitiesLoading={isCitiesLoading}
           />
 
           {/**
@@ -190,6 +197,7 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
           <ExploreSightListContainer
             items={(randomSightsData && randomSightsData.randomSights) || []}
             title="Top sights"
+            isRandomSightsLoading={isRandomSightsLoading}
           />
 
           {/* <DestinationContainer title="South America" countries={[]} /> */}
