@@ -100,6 +100,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
           style={{ flex: 1 }}
           contentContainerStyle={styles.container}
           showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps={"handled"}
         >
           <View style={styles.topSide}>
             <View style={styles.logoContainer}>
@@ -121,6 +122,10 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
                 value={formik.values.email}
                 onChangeText={formik.handleChange("email")}
                 onBlur={formik.handleBlur("email")}
+                style={{
+                  borderWidth: 2,
+                  height: 55,
+                }}
               />
             </View>
             <View style={[styles.item]}>
@@ -135,6 +140,10 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
                 value={formik.values.firstName}
                 onChangeText={formik.handleChange("firstName")}
                 onBlur={formik.handleBlur("firstName")}
+                style={{
+                  borderWidth: 2,
+                  height: 55,
+                }}
               />
             </View>
             <View style={[styles.item]}>
@@ -149,6 +158,10 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
                 value={formik.values.lastName}
                 onChangeText={formik.handleChange("lastName")}
                 onBlur={formik.handleBlur("lastName")}
+                style={{
+                  borderWidth: 2,
+                  height: 55,
+                }}
               />
             </View>
 
@@ -173,6 +186,10 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
                   ) {
                     formik.submitForm();
                   }
+                }}
+                style={{
+                  borderWidth: 2,
+                  height: 55,
                 }}
               />
             </View>
@@ -259,7 +276,8 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: SIZES.padding * 2,
+    marginTop: 15,
+    marginBottom: 15,
   },
   textWithButtonLabel: {
     fontSize: SIZES.body2,

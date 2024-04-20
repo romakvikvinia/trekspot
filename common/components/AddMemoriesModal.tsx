@@ -81,7 +81,7 @@ export const AddMemoriesModal: React.FC<IAddMemoriesModalProps> = ({
             style={styles.noImageWrapper}
             activeOpacity={0.5}
           >
-            <ActivityIndicator />
+            <ActivityIndicator color={COLORS.primaryDark} />
 
             <View style={styles.selectImagesButton}>
               <Text style={styles.selectImagesButtonText}>Loading...</Text>

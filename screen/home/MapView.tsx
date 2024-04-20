@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
+  ActivityIndicator,
   StyleSheet,
   Text,
   TextInput,
@@ -22,7 +23,11 @@ import { COLORS, SIZES } from "../../styles/theme";
 import ShareModal from "../../common/components/ShareModal";
 import { BucketlistModal } from "../../common/components/BucketlistModal";
 import { CountryItem } from "../../components/home/CountryItem";
-import { useUpdateMeMutation, trekSpotApi } from "../../api/api.trekspot";
+import {
+  useUpdateMeMutation,
+  trekSpotApi,
+  useAnalyticsQuery,
+} from "../../api/api.trekspot";
 import {
   getCountries,
   storeInitialCountryCodes,
@@ -50,7 +55,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
     lived_countries: [],
     countries: CountriesList,
   });
-
+  const { data: analyticsData, isLoading, isSuccess } = useAnalyticsQuery();
   const [refetch, { data, isSuccess: isMeSuccess }] =
     trekSpotApi.endpoints.me.useLazyQuery();
 
@@ -158,8 +163,10 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
   // transform data
 
   let world =
-    analytic && analytic.achievedCountries
-      ? (analytic.achievedCountries / analytic.availableCountries) * 100
+    analyticsData?.analytics && analyticsData?.analytics.achievedCountries
+      ? (analyticsData?.analytics.achievedCountries /
+          analyticsData?.analytics.availableCountries) *
+        100
       : 0;
   world = formatPercentage(world);
 
@@ -188,6 +195,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
         )
       : state.countries;
 
+ 
   return (
     <>
       <View style={styles.mapContainer}>
@@ -242,73 +250,87 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
             </TouchableOpacity>
           </View>
         </View>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() => onOpen()}
-          style={{
-            padding: 15,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <MapSvg countries={countriesOnMap} />
-        </TouchableOpacity>
 
-        <View style={styles.row}>
-          <View style={[styles.rowBox]}>
-            <View
+        {isLoading ? (
+          <View style={{width: "100%", height: 300, justifyContent: "center", alignItems: "center"}}>
+            <ActivityIndicator color={COLORS.primaryDark} />
+          </View>
+        ) : (
+          <>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => onOpen()}
               style={{
-                flexDirection: "row",
+                padding: 15,
+                display: "flex",
+                justifyContent: "center",
                 alignItems: "center",
               }}
             >
-              <Text style={styles.lg}>{world}</Text>
-              <Text
-                style={[styles.sublabel, { marginLeft: 2, marginBottom: 2 }]}
-              >
-                %
-              </Text>
-            </View>
+              <MapSvg countries={countriesOnMap} />
+            </TouchableOpacity>
 
-            <Text style={styles.statLabel}>World</Text>
-          </View>
-          <View style={[styles.rowBox]}>
-            <View style={styles.amountView}>
-              <Text style={styles.lg}>
-                {analytic && analytic.achievedCountries
-                  ? analytic.achievedCountries
-                  : 0}
-              </Text>
-              <View style={styles.labelView}>
-                <Text style={styles.sublabel}>/</Text>
-                <Text style={[styles.sublabel, { marginTop: 2 }]}>
-                  {analytic && analytic.availableCountries
-                    ? analytic.availableCountries
-                    : 0}
-                </Text>
+            <View style={styles.row}>
+              <View style={[styles.rowBox]}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text style={styles.lg}>{world}</Text>
+                  <Text
+                    style={[
+                      styles.sublabel,
+                      { marginLeft: 2, marginBottom: 2 },
+                    ]}
+                  >
+                    %
+                  </Text>
+                </View>
+
+                <Text style={styles.statLabel}>World</Text>
+              </View>
+              <View style={[styles.rowBox]}>
+                <View style={styles.amountView}>
+                  <Text style={styles.lg}>
+                    {analyticsData?.analytics &&
+                    analyticsData?.analytics.achievedCountries
+                      ? analyticsData?.analytics.achievedCountries
+                      : 0}
+                  </Text>
+                  <View style={styles.labelView}>
+                    <Text style={styles.sublabel}>/</Text>
+                    <Text style={[styles.sublabel, { marginTop: 2 }]}>
+                      {analyticsData?.analytics &&
+                      analyticsData?.analytics.availableCountries
+                        ? analyticsData?.analytics.availableCountries
+                        : 0}
+                    </Text>
+                  </View>
+                </View>
+
+                <Text style={styles.statLabel}>Countries</Text>
+              </View>
+              <View style={[styles.rowBox]}>
+                <View style={styles.amountView}>
+                  <Text style={styles.lg}>
+                    {analyticsData?.analytics &&
+                    analyticsData?.analytics.territories &&
+                    analyticsData?.analytics.territories.quantity
+                      ? analyticsData?.analytics.territories.quantity
+                      : 0}
+                  </Text>
+                  <View style={styles.labelView}>
+                    <Text style={styles.sublabel}>/</Text>
+                    <Text style={[styles.sublabel, { marginTop: 2 }]}>6</Text>
+                  </View>
+                </View>
+                <Text style={styles.statLabel}>Territories</Text>
               </View>
             </View>
-
-            <Text style={styles.statLabel}>Countries</Text>
-          </View>
-          <View style={[styles.rowBox]}>
-            <View style={styles.amountView}>
-              <Text style={styles.lg}>
-                {analytic &&
-                analytic.territories &&
-                analytic.territories.quantity
-                  ? analytic.territories.quantity
-                  : 0}
-              </Text>
-              <View style={styles.labelView}>
-                <Text style={styles.sublabel}>/</Text>
-                <Text style={[styles.sublabel, { marginTop: 2 }]}>6</Text>
-              </View>
-            </View>
-            <Text style={styles.statLabel}>Territories</Text>
-          </View>
-        </View>
+          </>
+        )}
       </View>
 
       <Portal>
@@ -368,13 +390,16 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
             countries={countriesOnMap}
             world={world}
             achievedCountries={
-              analytic && analytic.achievedCountries
-                ? analytic.achievedCountries
+              analyticsData?.analytics &&
+              analyticsData?.analytics.achievedCountries
+                ? analyticsData?.analytics.achievedCountries
                 : 0
             }
             territories={
-              analytic && analytic.territories && analytic.territories.quantity
-                ? analytic.territories.quantity
+              analyticsData?.analytics &&
+              analyticsData?.analytics.territories &&
+              analyticsData?.analytics.territories.quantity
+                ? analyticsData?.analytics.territories.quantity
                 : 0
             }
           />

@@ -39,7 +39,9 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
   }, []);
 
   const handleClear = useCallback(() => {
-    setState((prevState) => ({ ...prevState, city: null }));
+    setTimeout(() => {
+      setState((prevState) => ({ ...prevState, city: null }))
+    }, 500);
   }, []);
 
   //   console.log("CitiesContainer", state);
@@ -86,7 +88,10 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
                     >
                       <View style={styles.labelItem}>
                         <Mark color="#fff" />
-                        <Text style={[styles.labelItemText, styles.titleSm]}>
+                        <Text
+                          numberOfLines={2}
+                          style={[styles.labelItemText, styles.titleSm]}
+                        >
                           {item.city}
                         </Text>
                       </View>
@@ -144,13 +149,14 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
             ))}
           </ScrollView>
         )}
-        {/**
+       
+      </View>
+       {/**
          * city detail modal
          */}
         {state.city && (
           <CityDetailModal city={state.city} closeCallBack={handleClear} />
         )}
-      </View>
     </>
   );
 };
@@ -169,6 +175,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "500",
     marginLeft: 5,
+    paddingRight: 10,
   },
   labelItem: {
     padding: 10,

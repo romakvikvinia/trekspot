@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View, TextInput } from "react-native";
 import { isInvalidColor } from "../../styles/colors";
 import { COLORS } from "../../styles/theme";
@@ -15,16 +15,27 @@ interface TInputProps {
   onBlur?: any;
   onSubmitEditing?: any;
   invalid: boolean;
+  style: any;
 }
 
 export const TInput: React.FC<TInputProps> = (props: any) => {
+  const [focused, setFocused] = useState();
   return (
     <View style={[styles.formControl]}>
       <TextInput
         keyboardType={props.keyboardType}
         {...props}
-        style={[styles.input, props.invalid ? styles.invalid : {}]}
+        style={[
+          styles.input,
+          props.style,
+          {
+            borderColor: focused && !props.invalid ? COLORS.primary : "#e9e9e9",
+          },
+          props.invalid ? styles.invalid : {},
+        ]}
         placeholderTextColor={COLORS.darkgray}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
       />
     </View>
   );
@@ -33,7 +44,7 @@ export const TInput: React.FC<TInputProps> = (props: any) => {
 const styles = StyleSheet.create({
   formControl: {
     width: "100%",
-    height: 50,
+    height: 55,
   },
   input: {
     paddingHorizontal: 2,

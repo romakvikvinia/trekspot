@@ -2,6 +2,7 @@ import React, { useContext, useRef } from "react";
 import {
   ActivityIndicator,
   Alert,
+  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -9,6 +10,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import Constants from "expo-constants";
+
 import { Image } from "expo-image";
 import { AuthContext } from "../../package/context/auth.context";
 import { deleteFromAsyncStorage } from "../../helpers/secure.storage";
@@ -22,6 +25,7 @@ import {
   PrivacyIcon,
   TermsIcon,
   UserCircleIcon,
+  UserIcon,
   UsersIcon,
   VersionIcon,
 } from "../../utilities/SvgIcons.utility";
@@ -51,24 +55,30 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
         >
           <View style={styles.profileHeader}>
             <View style={styles.profileLeft}>
-              <Image
-                style={{
-                  minWidth: 60,
-                  width: 60,
-                  maxWidth: 60,
-                  height: 60,
-                  minHeight: 60,
-                  flex: 1,
-                  borderRadius: "100%",
-                }}
-                source={{
-                  uri: "https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=20&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                }}
-                cachePolicy="memory"
-                contentFit="cover"
-                transition={0}
-                // placeholder={<ActivityIndicator />}
-              />
+              {true ? (
+                <View style={styles.avatar}>
+                  <UserIcon />
+                </View>
+              ) : (
+                <Image
+                  style={{
+                    minWidth: 60,
+                    width: 60,
+                    maxWidth: 60,
+                    height: 60,
+                    minHeight: 60,
+                    flex: 1,
+                    borderRadius: "100%",
+                  }}
+                  source={{
+                    uri: "https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=20&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                  }}
+                  cachePolicy="memory"
+                  contentFit="cover"
+                  transition={0}
+                  // placeholder={<ActivityIndicator />}
+                />
+              )}
               <View>
                 <Text style={styles.username}>Andria Shonia</Text>
                 <Text style={styles.subTxt}>Welcome</Text>
@@ -174,8 +184,16 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    // backgroundColor: "#fff",
     backgroundColor: "#f8f8f8",
+    paddingTop: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 0,
+  },
+  avatar: {
+    width: 60,
+    height: 60,
+    backgroundColor: "#f2f2f2",
+    borderRadius: 100,
+    justifyContent: "center",
+    alignItems: "center",
   },
   buttonsWrapper: {
     backgroundColor: "#fff",

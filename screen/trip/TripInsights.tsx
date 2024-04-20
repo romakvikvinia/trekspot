@@ -21,8 +21,18 @@ import { COLORS } from "../../styles/theme";
 
 interface TripProps {}
 
-export const TripInsights: React.FC<TripProps> = ({}) => {
+export const TripInsights: React.FC<TripProps> = ({route}) => {
   const navigation = useNavigation();
+
+   const handleNavigate = () => {
+    if(route?.params?.directVisit) {
+      navigation.navigate( "TripQuickInsightsDetail", {
+        directVisit: true
+      })
+    } else {
+      navigation.navigate("TripInsightDetailScreen")
+    }
+   }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -107,7 +117,7 @@ export const TripInsights: React.FC<TripProps> = ({}) => {
               ]}
               renderItem={({ item }) => (
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("TripInsightDetailScreen")}
+                  onPress={handleNavigate}
                   activeOpacity={0.7}
                   style={styles.card}
                 >
@@ -150,7 +160,7 @@ export const TripInsights: React.FC<TripProps> = ({}) => {
               ]}
               renderItem={({ item }) => (
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("TripInsightDetailScreen")}
+                  onPress={handleNavigate}
                   activeOpacity={0.7}
                   style={styles.card}
                 >
@@ -189,7 +199,7 @@ export const TripInsights: React.FC<TripProps> = ({}) => {
               ]}
               renderItem={({ item }) => (
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("TripInsightDetailScreen")}
+                  onPress={handleNavigate}
                   activeOpacity={0.7}
                   style={styles.card}
                 >
@@ -228,7 +238,7 @@ export const TripInsights: React.FC<TripProps> = ({}) => {
               ]}
               renderItem={({ item }) => (
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("TripInsightDetailScreen")}
+                  onPress={handleNavigate}
                   activeOpacity={0.7}
                   style={styles.card}
                 >

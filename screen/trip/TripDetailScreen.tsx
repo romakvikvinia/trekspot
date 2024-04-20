@@ -366,7 +366,9 @@ const DATA = [
 
 interface TripProps {}
 
-export const TripDetailScreen: React.FC<TripProps> = ({}) => {
+export const TripDetailScreen: React.FC<TripProps> = ({route}) => {
+
+  console.log("route",route?.params?.directVisit)
   const navigation = useNavigation();
 
   const [invitedUsers, setInvitedUsers] = useState([
@@ -531,6 +533,16 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
     }
   };
 
+  const handleNavigate = () => {
+    if(route?.params?.directVisit) {
+      navigation.navigate( "TripQuickInsights", {
+        directVisit: true
+      })
+    } else {
+      navigation.navigate("TripInsights")
+    }
+  }
+  
   useEffect(() => {
     mapRef.current?.animateToRegion({
       latitude: DATA[0].activities[0].coordinates?.lat,
@@ -558,7 +570,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
           mapType="standard"
           // onSnapToItem={() => alert("ss")}
         ></MapView>
-        <TouchableOpacity activeOpacity={0.7} style={styles.backButton}>
+        <TouchableOpacity  onPress={() => navigation.goBack()} activeOpacity={0.7} style={styles.backButton}>
           <BackIcon />
         </TouchableOpacity>
         <TouchableOpacity
@@ -645,7 +657,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({}) => {
               <TouchableOpacity
                 style={styles.bottomActionsButton}
                 activeOpacity={0.7}
-                onPress={() => navigation.navigate("TripInsights")}
+                onPress={handleNavigate}
               >
                 <InsightIcon size={12} color={COLORS.primaryDark} />
                 <Text style={styles.bottomActionsButtonlabel}>Insights</Text>

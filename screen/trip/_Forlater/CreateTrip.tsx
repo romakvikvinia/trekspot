@@ -3,6 +3,8 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRef, useState } from "react";
 import {
+  Modal,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -217,6 +219,8 @@ export const CreateTripContent = ({
           <Destination />
         </Modalize>
       </Portal>
+
+   
       {/* <Portal>
         <Modalize
           modalStyle={{

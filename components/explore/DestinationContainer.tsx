@@ -49,7 +49,7 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
 
   return (
     <>
-      <View style={[styles.rowItem]}>
+      <View style={[styles.rowItem]} style={{ marginTop: 0 }}>
         <View style={styles.rowItemHeader}>
           <Text style={styles.h2}>{title}</Text>
           {seeAllItems && (

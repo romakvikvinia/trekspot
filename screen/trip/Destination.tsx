@@ -20,22 +20,27 @@ import {
   SearchIcon,
 } from "../../utilities/SvgIcons.utility";
 
-export const Destination = () => {
+export const Destination = ({setWhereToModal}) => {
   const [search, setSearch] = useState("");
   return (
     <>
       <View style={styles.modalHeader}>
+        <View style={{flex: 1}}>
         <SearchComponent search={search} setSearch={setSearch} />
+        </View>
+        <TouchableOpacity style={styles.cancelButton} onPress={() => setWhereToModal(false)}>
+          <Text style={styles.cancelButtonText}>Cancel</Text>
+        </TouchableOpacity>
       </View>
       <View
-        style={{ flex: 1, height: SIZES.height - 200, paddingHorizontal: 20 }}
+        style={{ flex: 1, width: "100%", height: SIZES.height - 200, paddingHorizontal: 20 }}
       >
         <View
           style={{
             marginTop: 15,
           }}
         >
-          <ActivityIndicator />
+          <ActivityIndicator color={COLORS.primaryDark} />
         </View>
         <FlashList
           // keyExtractor={(item) =>
@@ -43,6 +48,7 @@ export const Destination = () => {
           // }
           // extraData={filteredCountries}
           data={["a", "2", "s"]}
+          showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <TouchableOpacity style={styles.destination} activeOpacity={0.5}>
               {/* If country show flag */}
@@ -105,6 +111,15 @@ const styles = StyleSheet.create({
   modalHeader: {
     width: "100%",
     padding: 15,
+    flexDirection: "row"
+  },
+  cancelButton: {
+    marginLeft: 10,
+    justifyContent: "center"
+  },
+  cancelButtonText: {
+    fontSize: 14,
+    color: COLORS.darkgray,
   },
   rowItemHeader: {
     flexDirection: "row",

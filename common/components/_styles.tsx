@@ -451,6 +451,7 @@ export const styles = StyleSheet.create({
     borderTopEndRadius: 0,
     borderTopLeftRadius: 0,
     overflow: "hidden",
+ 
   },
   keyValue: {
     display: "flex",

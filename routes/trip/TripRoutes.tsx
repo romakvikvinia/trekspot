@@ -8,6 +8,7 @@ import { TripDetailScreen } from "../../screen/trip/TripDetailScreen";
 import { TripInsights } from "../../screen/trip/TripInsights";
 import { TripInsightDetailScreen } from "../../screen/trip/TripInsightDetail";
 import { TripMapViewScreen } from "../../screen/trip/TripMapView";
+import { NewTripAndroid } from "../../screen/trip/NewTripAndroid";
 
 interface TripRouteProps {}
 
@@ -17,6 +18,7 @@ type TripRouteStackParamList = {
   TripInsights: undefined;
   TripInsightDetailScreen: undefined;
   TripMapViewScreen: undefined;
+  NewTripAndroidScreen: undefined
 };
 
 const Stack = createStackNavigator<TripRouteStackParamList>();
@@ -44,6 +46,14 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
           // ),
         })}
       />
+       <Stack.Screen
+        name="NewTripAndroidScreen"
+        component={NewTripAndroid}
+        options={({ route, navigation }) => ({
+          headerShown: false,
+        })}
+      />
+      
       <Stack.Screen
         name="TripDetailScreen"
         component={TripDetailScreen}

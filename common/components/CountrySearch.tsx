@@ -1,28 +1,20 @@
 import { FlashList } from "@shopify/flash-list";
 import {
-  ImageBackground,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import { Modalize } from "react-native-modalize";
-import { Portal } from "react-native-portalize";
-import { COLORS, SIZES } from "../../styles/theme";
+  import { COLORS } from "../../styles/theme";
 import { CountriesList } from "../../utilities/countryList";
-import { useCallback, useEffect, useRef } from "react";
-import { Flags } from "../../utilities/flags";
-import {
-  CheckCircleIcon,
-  Mark,
+  import {
+ 
   StarIcon,
 } from "../../utilities/SvgIcons.utility";
-import { LinearGradient } from "expo-linear-gradient";
 import { Image } from "expo-image";
 
-export const CountrySearch = ({ modalDestinationSearchRef }) => {
+export const CountrySearch = () => {
   const Item = ({ item }: any) => {
     return (
       <TouchableOpacity style={styles.countryItem} activeOpacity={0.7}>
@@ -63,39 +55,20 @@ export const CountrySearch = ({ modalDestinationSearchRef }) => {
         }}
         contentContainerStyle={{
           justifyContent: "center",
+          paddingBottom: 35,
         }}
       >
-        <Text style={styles.resultTitle}>Countries</Text>
+        <Text style={styles.resultTitle}>Search result</Text>
         <View style={{ minHeight: 100 }}>
           <FlashList
-            data={CountriesList.slice(0, 5)}
+            data={CountriesList.slice(0, 20)}
             renderItem={({ item }) => <Item item={item} />}
             estimatedItemSize={200}
             horizontal={false}
             showsVerticalScrollIndicator={false}
           />
         </View>
-
-        <Text style={styles.resultTitle}>Cities</Text>
-        <View style={{ minHeight: 100 }}>
-          <FlashList
-            data={CountriesList.slice(0, 5)}
-            renderItem={({ item }) => <Item item={item} />}
-            estimatedItemSize={200}
-            horizontal={false}
-            showsVerticalScrollIndicator={false}
-          />
-        </View>
-        <Text style={styles.resultTitle}>Top sights</Text>
-        <View style={{ minHeight: 100 }}>
-          <FlashList
-            data={CountriesList.slice(0, 5)}
-            renderItem={({ item }) => <Item item={item} />}
-            estimatedItemSize={200}
-            horizontal={false}
-            showsVerticalScrollIndicator={false}
-          />
-        </View>
+ 
       </ScrollView>
     </>
   );

@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -15,12 +15,15 @@ import {
 import { TInput } from "../../common/ui/TInput";
 import { globalStyles } from "../../styles/globalStyles";
 import { COLORS } from "../../styles/theme";
-import { BackIcon } from "../../utilities/SvgIcons.utility";
+import { BackIcon, EyeCrossicon, EyeNoCrossicon } from "../../utilities/SvgIcons.utility";
+import Constants from "expo-constants";
 
 interface SettingProps {}
 
 export const ResetPassword: React.FC<SettingProps> = ({}) => {
   const navigation = useNavigation();
+  const [isSecureType, setIsSecureType] = useState(true);
+  const [isNewPasswordSecureType, setIsNewPasswordSecureType] = useState(true);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -43,7 +46,7 @@ export const ResetPassword: React.FC<SettingProps> = ({}) => {
         </View>
 
         <ScrollView
-          style={{ flex: 1 }}
+          style={{ flex: 1, marginTop: 15 }}
           contentContainerStyle={{ paddingHorizontal: 15 }}
         >
           <View style={[styles.item]}>
@@ -52,27 +55,46 @@ export const ResetPassword: React.FC<SettingProps> = ({}) => {
               placeholder="New password"
               autoCapitalize="none"
               returnKeyType="next"
+              secureTextEntry={isNewPasswordSecureType}
+              style={{borderWidth: 2}}
               // value={formik.values.email}
               // onChangeText={formik.handleChange("email")}
               // onBlur={formik.handleBlur("email")}
             />
+                <TouchableOpacity
+                activeOpacity={0.5}
+                style={styles.passwordVisibleToggle}
+                onPress={() => setIsNewPasswordSecureType(!isNewPasswordSecureType)}
+              >
+                {isNewPasswordSecureType ? <EyeNoCrossicon /> : <EyeCrossicon />}
+              </TouchableOpacity>
           </View>
           <View style={[styles.item]}>
             <TInput
               // invalid={"email" in formik.errors && "email" in formik.touched}
               placeholder="Confirm password"
               autoCapitalize="none"
+              secureTextEntry={isSecureType}
               returnKeyType="next"
+              style={{borderWidth: 2}}
               // value={formik.values.email}
               // onChangeText={formik.handleChange("email")}
               // onBlur={formik.handleBlur("email")}
             />
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={styles.passwordVisibleToggle}
+                onPress={() => setIsSecureType(!isSecureType)}
+              >
+                {isSecureType ? <EyeNoCrossicon /> : <EyeCrossicon />}
+              </TouchableOpacity>
           </View>
 
           <TouchableOpacity
             activeOpacity={0.1}
             style={[
               globalStyles.buttonItemPrimary,
+              
               // "password" in formik.errors ||
               // "email" in formik.errors ||
               // formik.isSubmitting
@@ -105,6 +127,8 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#f8f8f8",
+    paddingTop: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 0,
+
   },
   header: {
     flexDirection: "row",
@@ -131,5 +155,15 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     width: "100%",
+  },
+  passwordVisibleToggle: {
+    position: "absolute",
+    width: 40,
+    height: 40,
+    backgroundColor: "#fdfdff",
+    right: 2,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingRight: 5,
   },
 });

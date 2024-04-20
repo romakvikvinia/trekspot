@@ -1,6 +1,6 @@
 import React from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import { ImageBackground, Platform, Text, TouchableOpacity, View } from "react-native";
 import Onboarding from "react-native-onboarding-swiper";
 
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
@@ -120,7 +120,7 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
           <ImageBackground
             resizeMode="cover"
             source={{
-              uri: "https://cdn-icons-png.flaticon.com/512/10490/10490235.png",
+              uri: "https://cdn-icons-png.flaticon.com/512/1946/1946767.png",
             }}
             style={{
               width: 50,
@@ -139,16 +139,18 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
               fontWeight: "bold",
             }}
           >
-            Pin Your Memories: Where Have You Been?
+            Explore Destinations
           </Text>
           <Text
             style={{
               fontSize: 14,
               marginTop: 5,
               color: COLORS.darkgray,
+              fontWeight: "500",
             }}
           >
-            Pin Your Memories: Where Have You Been?
+            Dive into a world of possibilities! From iconic landmarks to hidden
+            gems.
           </Text>
         </View>
       </View>
@@ -188,15 +190,17 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
               fontWeight: "bold",
             }}
           >
-            Wishlist Wonders: Collecting Dreams One Pin at a Time
+            Track Your Journey
           </Text>
           <Text
             style={{
               fontSize: 14,
               marginTop: 5,
+              color: COLORS.darkgray,
+              fontWeight: "500",
             }}
           >
-            Pin Your Memories: Where Have You Been?
+            Leave your mark on the map! Keep track of where you've been
           </Text>
         </View>
       </View>
@@ -236,15 +240,17 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
               fontWeight: "bold",
             }}
           >
-            Plan and Share Your Dream Trips
+            Create Your Ultimate Bucket List
           </Text>
           <Text
             style={{
               fontSize: 14,
               marginTop: 5,
+              color: COLORS.darkgray,
+              fontWeight: "500",
             }}
           >
-            Pin Your Memories: Where Have You Been?
+          Dream big and start ticking off your bucket list items.
           </Text>
         </View>
       </View>
@@ -284,15 +290,17 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
               fontWeight: "bold",
             }}
           >
-            Dare to Explore: Join Our Travel Challenges
+            Plan Your Next Adventure
           </Text>
           <Text
             style={{
               fontSize: 14,
               marginTop: 5,
+              color: COLORS.darkgray,
+              fontWeight: "500",
             }}
           >
-            Pin Your Memories: Where Have You Been?
+           Dream, plan, go! Seamlessly plan your next trip with AI planning feature. 
           </Text>
         </View>
       </View>
@@ -311,7 +319,7 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
           style={{
             backgroundColor: COLORS.primaryDark,
             paddingHorizontal: 50,
-            paddingVertical: 20,
+            paddingVertical: Platform.OS === "android" ? 15 : 20,
             borderRadius: 140,
             width: "100%",
             justifyContent: "center",

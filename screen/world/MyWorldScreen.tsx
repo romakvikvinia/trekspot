@@ -594,7 +594,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
                 style={styles.actionButton}
               >
                 {state.isSelectingImages ? (
-                  <ActivityIndicator />
+                  <ActivityIndicator color={COLORS.primaryDark} />
                 ) : (
                   <>
                     <ImagesIcon width="25" height="25" active={false} />

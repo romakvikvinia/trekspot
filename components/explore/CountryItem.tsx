@@ -54,7 +54,9 @@ export const CountryItem: React.FC<CountryItemProps> = ({
           >
             <View style={styles.labelItem}>
               <Mark color="#fff" size={15} />
-              <Text style={styles.labelItemText}>{item.name}</Text>
+              <Text style={styles.labelItemText} numberOfLines={2}>
+                {item.name}
+              </Text>
             </View>
             <View style={styles.ratingLabel}>
               <View
@@ -84,9 +86,10 @@ const styles = StyleSheet.create({
   },
   labelItemText: {
     color: "#fff",
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "bold",
     marginLeft: 5,
+    paddingRight: 10,
   },
   labelItem: {
     padding: 10,

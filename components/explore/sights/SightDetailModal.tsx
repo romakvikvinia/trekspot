@@ -97,9 +97,12 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
               <CloseCircleIcon size="30" color="#fff" />
             </TouchableOpacity>
           </View>
-          {console.log("data", data)}
           {/* @ts-ignore */}
-          <ScrollView style={styles.modalContent} ref={ref}>
+          <ScrollView
+            style={styles.modalContent}
+            ref={ref}
+            showsVerticalScrollIndicator={false}
+          >
             <Swiper
               activeDotColor="#fff"
               style={[styles.wrapper]}
@@ -227,7 +230,7 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
 };
 export const styles = StyleSheet.create({
   modalContent: {
-    maxHeight: 500,
+    maxHeight: 600,
     backgroundColor: "#fff",
     width: "95%",
     borderRadius: 15,

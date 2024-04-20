@@ -37,6 +37,8 @@ export const SearchComponent = ({ search, setSearch, withIcon = true }) => {
           <CloseCircleIcon size="17" />
         </TouchableOpacity>
       ) : null}
+
+   
     </View>
   );
 };

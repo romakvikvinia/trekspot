@@ -1,14 +1,13 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useRef } from "react";
 
 import {
   Alert,
-  Keyboard,
+  KeyboardAvoidingView,
   Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -18,17 +17,9 @@ import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 
 import { COLORS, SIZES } from "../../styles/theme";
-import {
-  DotsIcon,
-  FlightIcon,
-  Mark2,
-  SearchIcon,
-  VertDots,
-  XIcon,
-} from "../../utilities/SvgIcons.utility";
+import { FlightIcon, VertDots } from "../../utilities/SvgIcons.utility";
 
 import { CountrySelect } from "../../common/components/CountrySelect";
-import { CountrySearch } from "../../common/components/CountrySearch";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
@@ -38,15 +29,11 @@ import {
   useRandomSightQuery,
 } from "../../api/api.trekspot";
 
-import { BucketlistModal } from "../../common/components/BucketlistModal";
 import { DestinationContainer } from "../../components/explore/DestinationContainer";
 import { CitiesContainer } from "../../components/explore/CitiesContainer";
 import { ExploreSightListContainer } from "../../components/explore/ExploreSightListContainer";
-import {
-  SkeletonLoaderCountry,
-  SkeletonLoaderImage,
-} from "../../common/ui/Skeleton";
-import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation } from "@react-navigation/native";
+import { ExploreHeader } from "./Header";
 
 type ExploreProps = NativeStackScreenProps<
   ExploreRoutesStackParamList,
@@ -54,9 +41,8 @@ type ExploreProps = NativeStackScreenProps<
 >;
 
 export const ExploreScreen: React.FC<ExploreProps> = (props) => {
+  const navigation = useNavigation();
   // refs
-  const BucketListModalRef = useRef<Modalize>(null);
-  const modalDestinationSearchRef = useRef<Modalize>(null);
   const modalCountryPassportSelectRef = useRef<Modalize>(null);
 
   //data
@@ -75,12 +61,6 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
   const { data: randomSightsData, isLoading: isRandomSightsLoading } =
     useRandomSightQuery({ take: 10 });
 
-  const [searchActive, setSearchActive] = useState(false);
-
-  const onBucketlistOpen = useCallback(() => {
-    if (BucketListModalRef.current) BucketListModalRef.current.open();
-  }, []);
-
   /**
    * Transform data
    */
@@ -90,175 +70,108 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
   return (
     <>
       <SafeAreaView style={styles.safeArea}>
-        <View style={styles.screenHeader}>
-          <View style={styles.searchBox}>
-            <View style={styles.searchIcon}>
-              <SearchIcon width={15} />
-            </View>
-            <TextInput
-              placeholder="Search here"
-              placeholderTextColor="#333"
-              autoFocus={false}
-              style={styles.searchInput}
-              onFocus={() => setSearchActive(true)}
-            />
-          </View>
-          <View style={styles.right}>
-            {searchActive ? (
-              <TouchableOpacity
-                style={styles.cancelButton}
-                onPress={() => {
-                  setSearchActive(false);
-                  Keyboard.dismiss();
-                }}
-              >
-                <Text style={styles.cancelButtonText}>Cancel</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                onPress={() => onBucketlistOpen()}
-                style={styles.bucketListButton}
-              >
-                <Mark2 size={16} color={COLORS.black} />
-              </TouchableOpacity>
-            )}
-          </View>
-        </View>
-
-        <View
-          style={{
-            paddingHorizontal: 15,
-          }}
-        >
-          <TouchableOpacity style={styles.currentTrip} activeOpacity={0.7}>
-            <View style={styles.currentTripLeft}>
-              <View style={styles.currentTripIcon}>
-                <FlightIcon color={COLORS.primary} />
-              </View>
-              <View>
-                <Text style={styles.currentTripTitle}>Dubai trip</Text>
-                <Text style={styles.currentTripTitleDate}>12 Feb - 20 Feb</Text>
-              </View>
-            </View>
-
-            <TouchableOpacity
-              style={styles.currentTripDotsButton}
-              onPress={() =>
-                Alert.alert("Do you want to hide trip?", "", [
-                  {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel",
-                  },
-                  {
-                    text: "Hide",
-                    onPress: () => console.log("OK Pressed"),
-                    style: "destructive",
-                  },
-                ])
-              }
-            >
-              <VertDots color={COLORS.primaryDark} />
-            </TouchableOpacity>
-          </TouchableOpacity>
-        </View>
-
-        <ScrollView
+        <KeyboardAvoidingView
           style={{ flex: 1 }}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 25 }}
+          behavior={Platform.OS == "ios" ? "padding" : "height"}
         >
-          {/**
-           * Popular Countries
-           */}
+          <ExploreHeader />
 
-          <DestinationContainer
-            key={`DestinationContainer-Popular-Countries`}
-            title="Popular Countries"
-            countries={(popularCountries && popularCountries.countries) || []}
-            seeAllItems={false}
-            popularCountriesLoading={popularCountriesLoading}
-          />
-
-          {/**
-           * Top cities
-           */}
-          <CitiesContainer
-            title="Top Cities"
-            cities={cities}
-            seeAllItems={false}
-            isCitiesLoading={isCitiesLoading}
-          />
-
-          {/**
-           * Top sights
-           */}
-
-          <ExploreSightListContainer
-            items={(randomSightsData && randomSightsData.randomSights) || []}
-            title="Top sights"
-            isRandomSightsLoading={isRandomSightsLoading}
-          />
-
-          {/* <DestinationContainer title="South America" countries={[]} /> */}
-        </ScrollView>
-
-        <Portal>
-          <Modalize
-            ref={BucketListModalRef}
-            modalTopOffset={65}
-            disableScrollIfPossible
-            adjustToContentHeight
-            velocity={100000}
-            tapGestureEnabled={false}
-            closeSnapPointStraightEnabled={false}
-            HeaderComponent={
-              <View style={[styles.rowItemHeader, { paddingTop: 15 }]}>
-                <Text style={styles.h2}>Bucket List</Text>
-
-                <TouchableOpacity
-                  onPress={() => BucketListModalRef?.current?.close()}
-                  activeOpacity={0.7}
-                  style={styles.closeButton}
-                >
-                  <XIcon width="13" height="13" />
-                </TouchableOpacity>
-              </View>
-            }
-            modalStyle={{
-              backgroundColor: "#F2F2F7",
-              minHeight: "90%",
-            }}
-            scrollViewProps={{
-              showsVerticalScrollIndicator: false,
-            }}
-          >
-            <BucketlistModal />
-          </Modalize>
-        </Portal>
-        {searchActive ? (
           <View
             style={{
-              position: "absolute",
-              backgroundColor: "#fff",
-              top: 110,
-              left: 0,
-              width: "100%",
-              height: SIZES.height - 170,
+              paddingHorizontal: 15,
+              marginBottom: 15,
             }}
           >
-            <CountrySearch
-              modalDestinationSearchRef={modalDestinationSearchRef}
-            />
-          </View>
-        ) : null}
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("TripQuickDetailScreen", {
+                  directVisit: true,
+                })
+              }
+              style={styles.currentTrip}
+              activeOpacity={0.7}
+            >
+              <View style={styles.currentTripLeft}>
+                <View style={styles.currentTripIcon}>
+                  <FlightIcon color={COLORS.primary} />
+                </View>
+                <View>
+                  <Text style={styles.currentTripTitle}>Dubai trip</Text>
+                  <Text style={styles.currentTripTitleDate}>
+                    12 Feb - 20 Feb
+                  </Text>
+                </View>
+              </View>
 
-        <Portal>
-          <Modalize ref={modalCountryPassportSelectRef} modalTopOffset={65}>
-            <CountrySelect />
-          </Modalize>
-        </Portal>
+              <TouchableOpacity
+                style={styles.currentTripDotsButton}
+                onPress={() =>
+                  Alert.alert("Do you want to hide trip?", "", [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel",
+                    },
+                    {
+                      text: "Hide",
+                      onPress: () => console.log("OK Pressed"),
+                      style: "destructive",
+                    },
+                  ])
+                }
+              >
+                <VertDots color={COLORS.primaryDark} />
+              </TouchableOpacity>
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView
+            style={{ flex: 1 }}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 25 }}
+          >
+            {/**
+             * Popular Countries
+             */}
+
+            <DestinationContainer
+              key={`DestinationContainer-Popular-Countries`}
+              title="Popular Countries"
+              countries={(popularCountries && popularCountries.countries) || []}
+              seeAllItems={false}
+              popularCountriesLoading={popularCountriesLoading}
+            />
+
+            {/**
+             * Top cities
+             */}
+            <CitiesContainer
+              title="Top Cities"
+              cities={cities}
+              seeAllItems={false}
+              isCitiesLoading={isCitiesLoading}
+            />
+
+            {/**
+             * Top sights
+             */}
+
+            <ExploreSightListContainer
+              items={(randomSightsData && randomSightsData.randomSights) || []}
+              title="Top sights"
+              isRandomSightsLoading={isRandomSightsLoading}
+            />
+
+            {/* <DestinationContainer title="South America" countries={[]} /> */}
+          </ScrollView>
+        </KeyboardAvoidingView>
       </SafeAreaView>
+
+      <Portal>
+        <Modalize ref={modalCountryPassportSelectRef} modalTopOffset={65}>
+          <CountrySelect />
+        </Modalize>
+      </Portal>
     </>
   );
 };
@@ -323,8 +236,8 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     backgroundColor: "#DBDBDB",
-    width: 35,
-    height: 35,
+    width: 30,
+    height: 30,
     borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",

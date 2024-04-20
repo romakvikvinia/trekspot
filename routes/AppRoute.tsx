@@ -30,6 +30,7 @@ export const AppRoute: React.FC<AppRouteProps> = ({}) => {
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarActiveTintColor: "#000",
+          keyboardHidesTabBar: true,
           tabBarLabelStyle: {
             fontSize: 10,
           },
@@ -74,7 +75,8 @@ export const AppRoute: React.FC<AppRouteProps> = ({}) => {
             backgroundColor: "#fff",
           },
         })}
-        initialRouteName="Home"
+
+         initialRouteName="Home"
       >
         <Tab.Screen name="Explore" component={ExploreRoutesStack} />
         <Tab.Screen name="Trips" component={TripRouteStack} />

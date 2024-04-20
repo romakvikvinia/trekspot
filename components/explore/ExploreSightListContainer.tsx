@@ -46,11 +46,11 @@ export const ExploreSightListContainer: React.FC<
         <View style={styles.rowItemHeader}>
           <Text style={styles.h2}>{title}</Text>
 
-          {seeAllItems && (
+          {/* {seeAllItems && (
             <TouchableOpacity activeOpacity={0.7}>
               <Text style={styles.seeAllButtonTxt}>See all</Text>
             </TouchableOpacity>
-          )}
+          )} */}
         </View>
 
         {!isRandomSightsLoading ? (
@@ -81,8 +81,10 @@ export const ExploreSightListContainer: React.FC<
                       colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
                     >
                       <View style={styles.labelItem}>
-                        <Mark color="#fff" />
-                        <Text style={[styles.labelItemText, styles.titleSm]}>
+                        <Text
+                          numberOfLines={2}
+                          style={[styles.labelItemText, styles.titleSm]}
+                        >
                           {item.title}
                         </Text>
                       </View>
@@ -165,7 +167,8 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 22,
     fontWeight: "500",
-    marginLeft: 5,
+    marginLeft: 0,
+    paddingRight: 10,
   },
   labelItem: {
     padding: 10,

@@ -1,213 +1,35 @@
 import React from "react";
-import { Text, View, ScrollView, StyleSheet } from "react-native";
+import { Text, View, ScrollView, StyleSheet, SafeAreaView } from "react-native";
 
 import { MapView } from "./MapView";
 import { COLORS, SIZES } from "../../styles/theme";
-
-import { useAnalyticsQuery } from "../../api/api.trekspot";
-import { formatPercentage } from "../../helpers/number.helper";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+ 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { HomeRouteStackParamList } from "../../routes/home/HomeRoutes";
-import {
-  EuropeIcon,
-  AsiaIcon,
-  AfricaIcon,
-  NAmerica,
-  SAmerica,
-  Australia,
-} from "../../utilities/svg";
+ 
+import { Territories } from "./Territories";
 
 type HomeProps = NativeStackScreenProps<HomeRouteStackParamList, "Main">;
 
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
-  const insets = useSafeAreaInsets();
 
-  const { data, isLoading, isSuccess } = useAnalyticsQuery();
-  // transform data
-  const europeCountries =
-    data && data.analytics.territories.items["Europe"]
-      ? data.analytics.territories.items["Europe"]
-      : 0;
-  const asiaCountries =
-    data && data?.analytics.territories.items["Asia"]
-      ? data?.analytics.territories.items["Asia"]
-      : 0;
-  const africaCountries =
-    data && data.analytics.territories.items["Africa"]
-      ? data.analytics.territories.items["Africa"]
-      : 0;
-  const northAmericaCountries =
-    data && data.analytics.territories.items["North America"]
-      ? data.analytics.territories.items["North America"]
-      : 0;
-  const southAmericaCountries =
-    data && data.analytics.territories.items["South America"]
-      ? data.analytics.territories.items["South America"]
-      : 0;
-  const oceaniaCountries =
-    data && data.analytics.territories.items["Oceania"]
-      ? data.analytics.territories.items["Oceania"]
-      : 0;
+ 
 
   return (
-    <View
+    <SafeAreaView
       style={[
         styles.safeArea,
-        {
-          paddingTop: insets.top,
-          paddingBottom: 0,
-          paddingLeft: insets.left,
-          paddingRight: insets.right,
-        },
       ]}
     >
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <MapView analytic={data?.analytics} />
+        <MapView
+        //  analytic={data?.analytics} 
+         />
         <View style={styles.mapStats}>
           <Text style={{ fontSize: 24, fontWeight: "bold", color: "#000" }}>
             Territories
           </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              flexWrap: "wrap",
-              justifyContent: "space-between",
-              marginTop: 25,
-            }}
-          >
-            <View style={styles.mapStatRow}>
-              <View style={styles.leftSide}>
-                <EuropeIcon />
-                <View>
-                  <Text style={styles.mapStatsText}>Europe</Text>
-                  <Text
-                    style={[styles.mapStatsText, styles.countriesAmountText]}
-                  >
-                    44 countries
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.statWrapp}>
-                <Text style={styles.mapStatsPercentText}>
-                  {formatPercentage(
-                    europeCountries ? (europeCountries / 44) * 100 : 0
-                  )}
-                </Text>
-                <Text style={styles.percentText}>%</Text>
-              </View>
-            </View>
-            <View style={[styles.mapStatRow, { backgroundColor: "#A88955" }]}>
-              <View style={styles.leftSide}>
-                <AsiaIcon />
-                <View>
-                  <Text style={styles.mapStatsText}>Asia</Text>
-                  <Text
-                    style={[styles.mapStatsText, styles.countriesAmountText]}
-                  >
-                    48 countries
-                  </Text>
-                </View>
-              </View>
-
-              <View style={styles.statWrapp}>
-                <Text style={styles.mapStatsPercentText}>
-                  {formatPercentage(
-                    asiaCountries ? (asiaCountries / 48) * 100 : 0
-                  )}
-                </Text>
-                <Text style={styles.percentText}>%</Text>
-              </View>
-            </View>
-            <View style={[styles.mapStatRow, { backgroundColor: "#C68A4A" }]}>
-              <View style={styles.leftSide}>
-                <AfricaIcon />
-                <View>
-                  <Text style={styles.mapStatsText}>Africa</Text>
-                  <Text
-                    style={[styles.mapStatsText, styles.countriesAmountText]}
-                  >
-                    54 countries
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.statWrapp}>
-                <Text style={styles.mapStatsPercentText}>
-                  {formatPercentage(
-                    africaCountries ? (africaCountries / 54) * 100 : 0
-                  )}
-                </Text>
-                <Text style={styles.percentText}>%</Text>
-              </View>
-            </View>
-            <View style={[styles.mapStatRow, { backgroundColor: "#438E6A" }]}>
-              <View style={styles.leftSide}>
-                <NAmerica />
-                <View>
-                  <Text style={styles.mapStatsText}>N. America</Text>
-                  <Text
-                    style={[styles.mapStatsText, styles.countriesAmountText]}
-                  >
-                    2 countries
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.statWrapp}>
-                <Text style={styles.mapStatsPercentText}>
-                  {formatPercentage(
-                    northAmericaCountries
-                      ? (northAmericaCountries / 2) * 100
-                      : 0
-                  )}
-                </Text>
-                <Text style={styles.percentText}>%</Text>
-              </View>
-            </View>
-            <View style={[styles.mapStatRow, { backgroundColor: "#893B70" }]}>
-              <View style={styles.leftSide}>
-                <SAmerica />
-                <View>
-                  <Text style={styles.mapStatsText}>S. America</Text>
-                  <Text
-                    style={[styles.mapStatsText, styles.countriesAmountText]}
-                  >
-                    33 countries
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.statWrapp}>
-                <Text style={styles.mapStatsPercentText}>
-                  {formatPercentage(
-                    southAmericaCountries
-                      ? (southAmericaCountries / 33) * 100
-                      : 0
-                  )}
-                </Text>
-                <Text style={styles.percentText}>%</Text>
-              </View>
-            </View>
-            <View style={[styles.mapStatRow, { backgroundColor: "#4490AA" }]}>
-              <View style={styles.leftSide}>
-                <Australia />
-                <View>
-                  <Text style={styles.mapStatsText}>Oceania</Text>
-                  <Text
-                    style={[styles.mapStatsText, styles.countriesAmountText]}
-                  >
-                    14 countries
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.statWrapp}>
-                <Text style={styles.mapStatsPercentText}>
-                  {formatPercentage(
-                    oceaniaCountries ? (oceaniaCountries / 14) * 100 : 0
-                  )}
-                </Text>
-                <Text style={styles.percentText}>%</Text>
-              </View>
-            </View>
-          </View>
+           <Territories />
         </View>
         {/* <View
           style={[
@@ -346,7 +168,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
           </ScrollView>
         </View> */}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

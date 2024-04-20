@@ -6,6 +6,9 @@ import {
 import { ExploreScreen } from "../../screen/Explore/ExploreScreen";
 import SeeAllScreen from "../../screen/Explore/BucketListAll";
 import { CountryDetailModal } from "../../components/explore/destination/CountryDetailModal";
+import { TripDetailScreen } from "../../screen/trip/TripDetailScreen";
+import { TripInsightDetailScreen } from "../../screen/trip/TripInsightDetail";
+import { TripInsights } from "../../screen/trip/TripInsights";
 
 interface ExploreRoutesProps {}
 
@@ -13,6 +16,9 @@ export type ExploreRoutesStackParamList = {
   ExploreWorld: undefined;
   SeeAllScreen: undefined;
   CountryDetailScreen: undefined;
+  TripQuickDetailScreen: undefined;
+  TripQuickInsights: undefined
+  TripQuickInsightsDetail: undefined
 };
 
 const Stack = createStackNavigator<ExploreRoutesStackParamList>();
@@ -28,7 +34,7 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
         component={ExploreScreen}
         options={({ route, navigation }) => ({
           header: () => null,
-          // headerLeft: () => (
+           // headerLeft: () => (
           //   <HeaderButtons HeaderButtonComponent={THeaderButton}>
           //     <Item
           //       title="UndoSignature"
@@ -47,7 +53,28 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
           header: () => null,
         })}
       />
-      <Stack.Screen
+       <Stack.Screen
+        name="TripQuickDetailScreen"
+        component={TripDetailScreen}
+        options={({ route, navigation }) => ({
+          headerShown: false,
+        })}
+      />
+       <Stack.Screen
+        name="TripQuickInsights"
+        component={TripInsights}
+        options={({ route, navigation }) => ({
+          headerShown: false,
+        })}
+      />
+        <Stack.Screen
+        name="TripQuickInsightsDetail"
+        component={TripInsightDetailScreen}
+        options={({ route, navigation }) => ({
+          headerShown: false,
+        })}
+      />
+       <Stack.Screen
         name="CountryDetailScreen"
         component={CountryDetailModal}
         options={() => ({

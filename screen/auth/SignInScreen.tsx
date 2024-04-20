@@ -26,18 +26,22 @@ import { AuthLoginResponseType } from "../../api/api.types";
 import { storeToken } from "../../helpers/secure.storage";
 import {
   AppleIcon,
+  EmailIcon,
+  EyeCrossicon,
+  EyeIcon,
+  EyeNoCrossicon,
   FacebookIcon,
   GoogleIcon,
 } from "../../utilities/SvgIcons.utility";
 import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
 import { TrekSpotLinear } from "../../utilities/svg/TrekSpotLinear";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
+ 
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 
 export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   const dispatch = useDispatch();
+  const [isSecureType, setIsSecureType] = useState(true);
   const [fetchSignIn, { data, isLoading, error, isError, isSuccess }] =
     useSignInMutation();
 
@@ -119,6 +123,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
           style={{ flex: 1 }}
           contentContainerStyle={styles.container}
           showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps={"handled"}
         >
           <View style={styles.topSide}>
             <View style={styles.logoContainer}>
@@ -140,6 +145,11 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 value={formik.values.email}
                 onChangeText={formik.handleChange("email")}
                 onBlur={formik.handleBlur("email")}
+                style={{
+                  borderWidth: 2,
+                  height: 55,
+                  fontSize: 16,
+                }}
               />
             </View>
 
@@ -149,7 +159,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                   "password" in formik.errors && "password" in formik.touched
                 }
                 placeholder="Password"
-                secureTextEntry
+                secureTextEntry={isSecureType}
                 keyboardType="default"
                 autoCapitalize="none"
                 returnKeyType="go"
@@ -165,16 +175,28 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                     formik.submitForm();
                   }
                 }}
+                style={{
+                  borderWidth: 2,
+                  height: 55,
+                }}
               />
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={styles.passwordVisibleToggle}
+                onPress={() => setIsSecureType(!isSecureType)}
+              >
+                {isSecureType ? <EyeNoCrossicon /> : <EyeCrossicon />}
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              activeOpacity={0.1}
-              style={styles.forgotPassword}
-              onPress={() => navigation.navigate("ResetPassword")}
-            >
-              <Text style={styles.forgotPasswordText}>Forgot password?</Text>
-            </TouchableOpacity>
-
+            <View style={{ alignItems: "flex-end" }}>
+              <TouchableOpacity
+                activeOpacity={0.1}
+                style={styles.forgotPassword}
+                onPress={() => navigation.navigate("ResetPassword")}
+              >
+                <Text style={styles.forgotPasswordText}>Forgot password?</Text>
+              </TouchableOpacity>
+            </View>
             <TouchableOpacity
               activeOpacity={0.1}
               style={[
@@ -247,15 +269,12 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
               >
                 <FacebookIcon />
               </TouchableOpacity>
-            </View>
-            <View style={styles.textWithButtonWrapper}>
-              <Text style={styles.textWithButtonLabel}>New user?</Text>
               <TouchableOpacity
                 activeOpacity={0.1}
-                style={styles.textWithButton}
-                onPress={handleRedirect}
+                style={styles.continueWithButton}
+                onPress={() => navigation.navigate("SignUp")}
               >
-                <Text style={styles.textWithButtonText}>Sign up</Text>
+                <EmailIcon />
               </TouchableOpacity>
             </View>
           </View>
@@ -306,7 +325,8 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: SIZES.padding * 2,
+    marginTop: 15,
+    marginBottom: 15,
   },
   privacyPolicy: {
     fontSize: SIZES.body3,
@@ -357,17 +377,18 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "#fafafa",
-    paddingVertical: SIZES.padding * 1.5,
-    paddingHorizontal: SIZES.padding * 2,
+
     marginHorizontal: SIZES.padding,
     borderRadius: SIZES.radius * 5,
+    width: 50,
+    height: 50,
   },
   forgotPassword: {
     display: "flex",
     justifyContent: "flex-end",
     flexDirection: "row",
-    width: "100%",
   },
   forgotPasswordText: {
     fontSize: SIZES.font,
@@ -398,8 +419,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     overflow: "hidden",
     marginBottom: 15,
+    position: "relative",
   },
-
+  passwordVisibleToggle: {
+    position: "absolute",
+    width: 40,
+    height: 40,
+    backgroundColor: "#fdfdff",
+    right: 2,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingRight: 5,
+  },
   logoContainer: {
     marginVertical: 5,
     width: "100%",

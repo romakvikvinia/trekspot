@@ -62,7 +62,7 @@ export const PlaceSearch = ({ modalSearchAutocompleteRef, setPlace }) => {
             marginTop: 15,
           }}
         >
-          <ActivityIndicator />
+          <ActivityIndicator color={COLORS.primaryDark} />
         </View>
         <FlashList
           // keyExtractor={(item) =>

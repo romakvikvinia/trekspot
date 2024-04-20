@@ -260,7 +260,7 @@ export const TripInsightTab: React.FC<TripProps> = ({}) => {
               <Text style={styles.h2}>Moving about</Text>
 
               <TouchableOpacity
-                onPress={() => documentsRefModal?.current?.close()}
+                onPress={() => modalInsightDetailRef?.current?.close()}
                 activeOpacity={0.5}
                 style={styles.closeButton}
               >
@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 0,
   },
   noteCardTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "500",
     color: COLORS.primary,
     maxWidth: "80%",
@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 15,
     paddingTop: 15,
-    paddingBottom: 25,
+    paddingBottom: 15,
   },
   h2: {
     fontSize: 22,

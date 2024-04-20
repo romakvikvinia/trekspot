@@ -2,19 +2,17 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useRef, useState } from "react";
 import {
-  KeyboardAvoidingView,
-  Modal,
+  ImageBackground,
+  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from "react-native";
+import Constants from "expo-constants";
 import { COLORS, SIZES } from "../../styles/theme";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { DatePickerModal } from "react-native-paper-dates";
 import { enGB, registerTranslation } from "react-native-paper-dates";
 registerTranslation("en", enGB);
 
@@ -30,7 +28,6 @@ import {
   OneUserIcon,
   PlusIcon,
   PrivateIcon,
-  PublicLockIcon,
   SearchNotFound,
   TrashIcon,
   TripLocationIcon,
@@ -61,6 +58,7 @@ export const TripScreen: React.FC<TripProps> = ({}) => {
 
   const newTripModal = useRef<Modalize>(null);
   const tripActivitesModal = useRef<Modalize>(null);
+  
 
   return (
     <>
@@ -71,7 +69,7 @@ export const TripScreen: React.FC<TripProps> = ({}) => {
           <TouchableOpacity
             style={styles.newTripButton}
             activeOpacity={0.7}
-            onPress={() => newTripModal.current?.open()}
+            onPress={() => Platform.OS === "android" ? navigation.navigate("NewTripAndroidScreen") : newTripModal.current?.open()}
           >
             <PlusIcon color="" size="20" />
             <Text style={styles.newTripButtonText}>New trip</Text>
@@ -95,39 +93,73 @@ export const TripScreen: React.FC<TripProps> = ({}) => {
                   activeOpacity={0.7}
                   onPress={() => navigation.navigate("TripDetailScreen")}
                 >
-                  <Image
-                    source={{
-                      uri: "https://images.unsplash.com/photo-1550340499-a6c60fc8287c?q=20&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                    }}
-                    cachePolicy="memory"
-                    contentFit="cover"
-                    transition={0}
-                    style={styles.tripImage}
-                  >
-                    <LinearGradient
-                      style={styles.gradientWrapper}
-                      colors={["rgba(0,0,0,1)", "rgba(0,0,0,0.2)"]}
-                      start={{ x: -1, y: 1 }}
-                      end={{ x: 1, y: 0 }}
+                  {Platform.OS === "android" ? (
+                    <ImageBackground
+                      source={{
+                        uri: "https://images.unsplash.com/photo-1550340499-a6c60fc8287c?q=20&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                      }}
+                      resizeMode="cover"
+                      style={styles.tripImage}
                     >
-                      <View style={styles.tripInHeader}>
-                        <Text style={styles.tripDate}>14 Nov → 20 Nov</Text>
-                      </View>
-                      <Text style={styles.tripTitle}>Hangover Paris</Text>
+                      <LinearGradient
+                        style={styles.gradientWrapper}
+                        colors={["rgba(0,0,0,1)", "rgba(0,0,0,0.2)"]}
+                        start={{ x: -1, y: 1 }}
+                        end={{ x: 1, y: 0 }}
+                      >
+                        <View style={styles.tripInHeader}>
+                          <Text style={styles.tripDate}>14 Nov → 20 Nov</Text>
+                        </View>
+                        <Text style={styles.tripTitle}>Hangover Paris</Text>
 
-                      <View style={styles.otherDetailsBox}>
-                        {/* <OneUserIcon size="10" color="#fff" /> */}
-                        {/* <UsersIcon size="10" color="#fff" />
+                        <View style={styles.otherDetailsBox}>
+                          {/* <OneUserIcon size="10" color="#fff" /> */}
+                          {/* <UsersIcon size="10" color="#fff" />
                         <Text style={styles.otherDetailsBoxText}>Solo</Text> */}
-                        {/* <FamilyIcon /> */}
-                        {/* <CoupleIcon /> */}
-                        {/* 
+                          {/* <FamilyIcon /> */}
+                          {/* <CoupleIcon /> */}
+                          {/* 
                         TODO: Friends, Family, Couple
 
                         <Text style={styles.otherDetailsBoxText}>Solo</Text> */}
-                      </View>
-                    </LinearGradient>
-                  </Image>
+                        </View>
+                      </LinearGradient>
+                    </ImageBackground>
+                  ) : (
+                    <Image
+                      source={{
+                        uri: "https://images.unsplash.com/photo-1550340499-a6c60fc8287c?q=20&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                      }}
+                      cachePolicy="memory"
+                      contentFit="cover"
+                      transition={0}
+                      style={styles.tripImage}
+                    >
+                      <LinearGradient
+                        style={styles.gradientWrapper}
+                        colors={["rgba(0,0,0,1)", "rgba(0,0,0,0.2)"]}
+                        start={{ x: -1, y: 1 }}
+                        end={{ x: 1, y: 0 }}
+                      >
+                        <View style={styles.tripInHeader}>
+                          <Text style={styles.tripDate}>14 Nov → 20 Nov</Text>
+                        </View>
+                        <Text style={styles.tripTitle}>Hangover Paris</Text>
+
+                        <View style={styles.otherDetailsBox}>
+                          {/* <OneUserIcon size="10" color="#fff" /> */}
+                          {/* <UsersIcon size="10" color="#fff" />
+                      <Text style={styles.otherDetailsBoxText}>Solo</Text> */}
+                          {/* <FamilyIcon /> */}
+                          {/* <CoupleIcon /> */}
+                          {/* 
+                      TODO: Friends, Family, Couple
+
+                      <Text style={styles.otherDetailsBoxText}>Solo</Text> */}
+                        </View>
+                      </LinearGradient>
+                    </Image>
+                  )}
                 </TouchableOpacity>
               </View>
               <Text style={styles.headingTitle}>Past trips</Text>
@@ -136,28 +168,75 @@ export const TripScreen: React.FC<TripProps> = ({}) => {
                 <TouchableOpacity
                   style={styles.tripItemHeader}
                   activeOpacity={0.7}
+                  onPress={() => navigation.navigate("TripDetailScreen")}
                 >
-                  <Image
-                    source={{
-                      uri: "https://images.unsplash.com/photo-1550340499-a6c60fc8287c?q=20&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                    }}
-                    cachePolicy="memory"
-                    contentFit="cover"
-                    transition={0}
-                    style={styles.tripImage}
-                  >
-                    <LinearGradient
-                      style={styles.gradientWrapper}
-                      colors={["rgba(0,0,0,1)", "rgba(0,0,0,0.2)"]}
-                      start={{ x: -1, y: 1 }}
-                      end={{ x: 1, y: 0 }}
+                  {Platform.OS === "android" ? (
+                    <ImageBackground
+                      source={{
+                        uri: "https://images.unsplash.com/photo-1550340499-a6c60fc8287c?q=20&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                      }}
+                      resizeMode="cover"
+                      style={styles.tripImage}
                     >
-                      <View style={styles.tripInHeader}>
-                        <Text style={styles.tripDate}>14 Nov → 20 Nov</Text>
-                      </View>
-                      <Text style={styles.tripTitle}>Hangover Paris</Text>
-                    </LinearGradient>
-                  </Image>
+                      <LinearGradient
+                        style={styles.gradientWrapper}
+                        colors={["rgba(0,0,0,1)", "rgba(0,0,0,0.2)"]}
+                        start={{ x: -1, y: 1 }}
+                        end={{ x: 1, y: 0 }}
+                      >
+                        <View style={styles.tripInHeader}>
+                          <Text style={styles.tripDate}>14 Nov → 20 Nov</Text>
+                        </View>
+                        <Text style={styles.tripTitle}>Hangover Paris</Text>
+
+                        <View style={styles.otherDetailsBox}>
+                          {/* <OneUserIcon size="10" color="#fff" /> */}
+                          {/* <UsersIcon size="10" color="#fff" />
+                        <Text style={styles.otherDetailsBoxText}>Solo</Text> */}
+                          {/* <FamilyIcon /> */}
+                          {/* <CoupleIcon /> */}
+                          {/* 
+                        TODO: Friends, Family, Couple
+
+                        <Text style={styles.otherDetailsBoxText}>Solo</Text> */}
+                        </View>
+                      </LinearGradient>
+                    </ImageBackground>
+                  ) : (
+                    <Image
+                      source={{
+                        uri: "https://images.unsplash.com/photo-1550340499-a6c60fc8287c?q=20&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                      }}
+                      cachePolicy="memory"
+                      contentFit="cover"
+                      transition={0}
+                      style={styles.tripImage}
+                    >
+                      <LinearGradient
+                        style={styles.gradientWrapper}
+                        colors={["rgba(0,0,0,1)", "rgba(0,0,0,0.2)"]}
+                        start={{ x: -1, y: 1 }}
+                        end={{ x: 1, y: 0 }}
+                      >
+                        <View style={styles.tripInHeader}>
+                          <Text style={styles.tripDate}>14 Nov → 20 Nov</Text>
+                        </View>
+                        <Text style={styles.tripTitle}>Hangover Paris</Text>
+
+                        <View style={styles.otherDetailsBox}>
+                          {/* <OneUserIcon size="10" color="#fff" /> */}
+                          {/* <UsersIcon size="10" color="#fff" />
+                      <Text style={styles.otherDetailsBoxText}>Solo</Text> */}
+                          {/* <FamilyIcon /> */}
+                          {/* <CoupleIcon /> */}
+                          {/* 
+                      TODO: Friends, Family, Couple
+
+                      <Text style={styles.otherDetailsBoxText}>Solo</Text> */}
+                        </View>
+                      </LinearGradient>
+                    </Image>
+                  )}
                 </TouchableOpacity>
               </View>
 
@@ -407,14 +486,15 @@ export const TripScreen: React.FC<TripProps> = ({}) => {
           ref={newTripModal}
           modalTopOffset={0}
           withHandle={false}
-          disableScrollIfPossible
           scrollViewProps={{
             alwaysBounceVertical: false,
+            keyboardShouldPersistTaps: "handled",
           }}
           modalStyle={{
-            minHeight: "100%",
+            flex: 1,
           }}
-        >
+          modalHeight={SIZES.height}
+         >
           <NewTrip
             newTripModalRef={newTripModal}
             tripActivitesModal={tripActivitesModal}
@@ -429,6 +509,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#F2F2F7",
+    paddingTop: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 0,
   },
   cancelTripButton: {
     paddingVertical: 7,
@@ -877,8 +958,9 @@ const styles = StyleSheet.create({
   tripImage: {
     width: "100%",
     height: 150,
-    borderRadius: 25,
     position: "relative",
+    overflow: "hidden",
+    borderRadius: 25,
   },
   gradientWrapper: {
     position: "absolute",

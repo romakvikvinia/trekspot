@@ -94,17 +94,20 @@ export const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({
         // keyboardVerticalOffset={10}
         style={styles.screen}
       >
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView
+          contentContainerStyle={styles.container}
+          keyboardShouldPersistTaps={"handled"}
+        >
           <View style={styles.topSide}>
             <View style={styles.logoContainer}>
               <TrekSpotLinear />
             </View>
             <View style={styles.signTitle}>
               <Text style={styles.signTitleText}>
-                Your travel hub awaits: Sign in to begin!
+               Reset password
               </Text>
             </View>
-
+          
             <View style={[styles.item]}>
               <TInput
                 invalid={"Email" in formik.errors && "Email" in formik.touched}
@@ -115,6 +118,10 @@ export const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({
                 value={formik.values.email}
                 onChangeText={formik.handleChange("email")}
                 onBlur={formik.handleBlur("email")}
+                style={{
+                  borderWidth: 2,
+                  height: 55,
+                }}
               />
             </View>
 
@@ -122,7 +129,6 @@ export const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({
               activeOpacity={0.7}
               style={[
                 globalStyles.buttonItemPrimary,
-                "password" in formik.errors ||
                 "Email" in formik.errors ||
                 formik.isSubmitting
                   ? globalStyles.buttonItemPrimaryDisabled
@@ -130,7 +136,6 @@ export const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({
               ]}
               onPress={formik.submitForm}
               disabled={
-                "password" in formik.errors ||
                 "Email" in formik.errors ||
                 formik.isSubmitting
               }

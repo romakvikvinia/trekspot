@@ -4,6 +4,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Modal,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -29,6 +31,8 @@ import { Destination } from "./Destination";
 // import { TravelType } from "./TravelType";
 import { useNavigation } from "@react-navigation/native";
 import { TravelType } from "./TravelType";
+ 
+import Constants from "expo-constants";
 
 export const CreateTripContent = ({
   newTripModalRef,
@@ -65,6 +69,14 @@ export const CreateTripContent = ({
     newTripModalRef.current?.close();
   };
 
+  const handleCancelTrip = () => {
+    if(Platform.OS === "android") {
+      navigation.goBack()
+    } else {
+      newTripModalRef?.current?.close()
+    }
+  }
+
   return (
     <>
       <View style={styles.newTripWrapper}>
@@ -80,7 +92,7 @@ export const CreateTripContent = ({
           </Text>
           <TouchableOpacity
             style={styles.cancelTripButton}
-            onPress={() => newTripModalRef?.current?.close()}
+            onPress={() => handleCancelTrip()}
           >
             <Text style={styles.cancelTripButtonText}>Cancel</Text>
           </TouchableOpacity>
@@ -96,15 +108,16 @@ export const CreateTripContent = ({
           </TouchableOpacity> */}
         </View>
         {/* <BlurView intensity={100} style={styles.tripNameInputWrapper}> */}
-        <TextInput
-          placeholder="Enter trip name"
-          placeholderTextColor="rgba(0, 0, 0, 0.4)"
-          style={styles.tripNameInput}
-          selectionColor="#000"
-          autoFocus
-        />
+        
         {/* </BlurView> */}
-        <ScrollView style={{ flex: 1 }}>
+        <ScrollView style={{ flex: 1 }} keyboardShouldPersistTaps={"handled"}>
+          <TextInput
+            placeholder="Enter trip name"
+            placeholderTextColor="rgba(0, 0, 0, 0.4)"
+            style={styles.tripNameInput}
+            selectionColor="#000"
+            autoFocus
+          />
           <View style={styles.newTripBoxes}>
             <BlurView
               intensity={100}
@@ -275,10 +288,15 @@ export const NewTrip = ({ newTripModalRef, tripActivitesModal }) => {
     endDate: undefined,
   });
   const [open, setOpen] = useState(false);
+  const [whereToModal, setWhereToModal] = useState(false);
 
   const modalDestinationRef = useRef(null);
   const onDestinationModalOpen = () => {
-    modalDestinationRef.current?.open();
+    if(Platform.OS === "android") {
+      setWhereToModal(true)
+    } else {
+      modalDestinationRef.current?.open();
+    } 
   };
   return (
     <>
@@ -316,12 +334,25 @@ export const NewTrip = ({ newTripModalRef, tripActivitesModal }) => {
           }}
           modalStyle={{
             backgroundColor: "#F2F2F7",
-            minHeight: "80%",
           }}
         >
           <Destination />
         </Modalize>
       </Portal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={whereToModal}
+        onRequestClose={() => {
+          setWhereToModal(!whereToModal);
+        }}>
+        <View style={styles.modalViewWrapper}>
+          <View style={styles.modalViewCenter}> 
+              <Destination setWhereToModal={setWhereToModal}/> 
+           </View>
+        </View>
+      </Modal>
     </>
   );
 };
@@ -330,6 +361,21 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#F2F2F7",
+  },
+  modalViewWrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+    backgroundColor: "red"
+  },
+  modalViewCenter: {
+    backgroundColor: '#F2F2F7',
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    alignItems: 'center',
+    width: "100%",
+    height: "100%"
   },
   aiPlanButton: {
     width: "100%",
@@ -512,7 +558,7 @@ const styles = StyleSheet.create({
   tripModalGradient: {
     flex: 1,
     minHeight: SIZES.height,
-    paddingTop: 70,
+    paddingTop: Constants?.statusBarHeight + 10,
     paddingHorizontal: 20,
   },
   invitationStatus: {

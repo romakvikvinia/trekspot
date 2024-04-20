@@ -16,6 +16,7 @@ import { TInput } from "../../common/ui/TInput";
 import { globalStyles } from "../../styles/globalStyles";
 import { COLORS } from "../../styles/theme";
 import { BackIcon } from "../../utilities/SvgIcons.utility";
+import Constants from "expo-constants";
 
 interface SettingProps {}
 
@@ -44,7 +45,7 @@ export const EditoProfile: React.FC<SettingProps> = ({}) => {
           </View>
 
           <ScrollView
-            style={{ flex: 1 }}
+            style={{ flex: 1, marginTop: 15 }}
             contentContainerStyle={{ paddingHorizontal: 15 }}
           >
             <View style={[styles.item]}>
@@ -53,6 +54,7 @@ export const EditoProfile: React.FC<SettingProps> = ({}) => {
                 placeholder="Name"
                 autoCapitalize="none"
                 returnKeyType="next"
+                style={{borderWidth: 2}}
                 // value={formik.values.email}
                 // onChangeText={formik.handleChange("email")}
                 // onBlur={formik.handleBlur("email")}
@@ -64,6 +66,7 @@ export const EditoProfile: React.FC<SettingProps> = ({}) => {
                 placeholder="Sure name"
                 autoCapitalize="none"
                 returnKeyType="next"
+                style={{borderWidth: 2}}
                 // value={formik.values.email}
                 // onChangeText={formik.handleChange("email")}
                 // onBlur={formik.handleBlur("email")}
@@ -76,6 +79,7 @@ export const EditoProfile: React.FC<SettingProps> = ({}) => {
                 placeholder="Email"
                 autoCapitalize="none"
                 returnKeyType="next"
+                style={{borderWidth: 2}}
                 // value={formik.values.email}
                 // onChangeText={formik.handleChange("email")}
                 // onBlur={formik.handleBlur("email")}
@@ -118,6 +122,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#f8f8f8",
+    paddingTop: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 0,
   },
   header: {
     flexDirection: "row",
