@@ -1,5 +1,6 @@
-import {  StyleSheet, Text, View } from "react-native";
+import {  Platform, StyleSheet, Text, View } from "react-native";
 import { useAnalyticsQuery } from "../../api/api.trekspot";
+import { SkeletonLoaderImage } from "../../common/ui/Skeleton";
 import { formatPercentage } from "../../helpers/number.helper";
 import { COLORS, SIZES } from "../../styles/theme";
 import {
@@ -13,8 +14,7 @@ import {
 
 export const Territories = () => {
   const { data, isLoading, isSuccess } = useAnalyticsQuery();
-  if(isLoading) return;
-
+ 
 
   // transform data
   const europeCountries =
@@ -43,6 +43,7 @@ export const Territories = () => {
       : 0;
 
 
+    console.log("size", SIZES.width)
 
   return (
     <View
@@ -50,9 +51,25 @@ export const Territories = () => {
         flexDirection: "row",
         flexWrap: "wrap",
         justifyContent: "space-between",
-        marginTop: 25,
+        marginTop: 20,
       }}
     >
+      {
+        isLoading ? 
+        <>
+        <View style={[styles.mapStatRow, {backgroundColor: "#f2f2f2", height: 70}]}>
+        </View>
+       <View style={[styles.mapStatRow, {backgroundColor: "#f2f2f2"}]}>
+        </View>
+        <View style={[styles.mapStatRow, {backgroundColor: "#f2f2f2", height: 70}]}>
+        </View>
+       <View style={[styles.mapStatRow, {backgroundColor: "#f2f2f2"}]}>
+        </View>
+        <View style={[styles.mapStatRow, {backgroundColor: "#f2f2f2", height: 70}]}>
+        </View>
+       <View style={[styles.mapStatRow, {backgroundColor: "#f2f2f2"}]}>
+        </View></> :  
+    <>
       <View style={styles.mapStatRow}>
         <View style={styles.leftSide}>
           <EuropeIcon />
@@ -165,7 +182,7 @@ export const Territories = () => {
           </Text>
           <Text style={styles.percentText}>%</Text>
         </View>
-      </View>
+      </View></>   }
     </View>
   );
 };
@@ -175,8 +192,8 @@ const styles = StyleSheet.create({
       backgroundColor: "#f8f8f8",
     },
     countriesAmountText: {
-      fontSize: 8,
-      fontWeight: "normal",
+      fontSize: 10,
+      fontWeight: "400",
       marginTop: 2,
     },
     mapStats: {
@@ -199,7 +216,7 @@ const styles = StyleSheet.create({
     mapStatRow: {
       backgroundColor: "#4D3893",
       borderRadius: SIZES.radius * 2,
-      paddingVertical: 20,
+      paddingVertical: Platform.OS === "android" ? 12 : 20,
       paddingLeft: 15,
       paddingRight: 10,
       display: "flex",
@@ -216,7 +233,7 @@ const styles = StyleSheet.create({
     mapStatsText: {
       color: "#fff",
       fontWeight: "bold",
-      fontSize: 12,
+      fontSize: SIZES.width < 370 ? 12 : 14,
       marginLeft: 8,
     },
     rowItem: {
@@ -234,7 +251,7 @@ const styles = StyleSheet.create({
     mapStatsPercentText: {
       color: "#fff",
       fontWeight: "bold",
-      fontSize: 26,
+      fontSize: Platform.OS === "android" ? 20 : SIZES.width < 400 ? 20 : 26,
     },
     leftSide: {
       flexDirection: "row",

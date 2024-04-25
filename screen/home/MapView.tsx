@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -10,7 +11,6 @@ import {
 import {
   LivedIcon,
   Mark,
-  Mark2,
   Share,
   VisitedIcon,
 } from "../../utilities/SvgIcons.utility";
@@ -19,9 +19,9 @@ import { Portal } from "react-native-portalize";
 import { FlashList } from "@shopify/flash-list";
 import { CountriesList, ICountry } from "../../utilities/countryList";
 import { COLORS, SIZES } from "../../styles/theme";
+import Constants from "expo-constants";
 
 import ShareModal from "../../common/components/ShareModal";
-import { BucketlistModal } from "../../common/components/BucketlistModal";
 import { CountryItem } from "../../components/home/CountryItem";
 import {
   useUpdateMeMutation,
@@ -37,6 +37,7 @@ import { formatPercentage } from "../../helpers/number.helper";
 import { useDispatch } from "react-redux";
 import { debounce } from "../../helpers/debounce.helper";
 import { MapSvg } from "../../utilities/svg/map";
+import { SkeletonLoaderImage } from "../../common/ui/Skeleton";
 
 interface MapVIewProps {
   analytic?: AnalyticsType;
@@ -63,7 +64,6 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
     useUpdateMeMutation();
   const modalRef = useRef<Modalize>(null);
   const shareModalRef = useRef<Modalize>(null);
-  const BucketListModalRef = useRef<Modalize>(null);
 
   const onOpen = useCallback(() => {
     if (modalRef.current) modalRef.current.open();
@@ -71,10 +71,6 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
 
   const onShareModalOpen = useCallback(() => {
     if (shareModalRef.current) shareModalRef.current.open();
-  }, []);
-
-  const onBucketlistOpen = useCallback(() => {
-    if (BucketListModalRef.current) BucketListModalRef.current.open();
   }, []);
 
   const handleCountriesModalClose = useCallback(async () => {
@@ -195,43 +191,11 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
         )
       : state.countries;
 
- 
   return (
     <>
       <View style={styles.mapContainer}>
         <View style={styles.topActions}>
           <View style={styles.left}>
-            {/* <View
-              style={{
-                backgroundColor: "#fff",
-                height: 38,
-                width: "95%",
-                borderRadius: 30,
-                flexDirection: "row",
-                paddingLeft: 15,
-                alignItems: "center",
-                shadowColor: "#000",
-                shadowOffset: {
-                  width: 0,
-                  height: 2,
-                },
-                shadowOpacity: 0.05,
-                shadowRadius: 3.84,
-                elevation: 5,
-              }}
-            >
-              <SearchIcon width="15" />
-              <TextInput
-                placeholder="Search places"
-                placeholderTextColor="#333"
-                style={{
-                  height: 38,
-                  paddingLeft: 10,
-                  fontSize: 14,
-                  color: "#000",
-                }}
-              />
-            </View> */}
             <TouchableOpacity
               onPress={() => onOpen()}
               style={[styles.btn, { marginRight: 10 }]}
@@ -252,7 +216,14 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
         </View>
 
         {isLoading ? (
-          <View style={{width: "100%", height: 300, justifyContent: "center", alignItems: "center"}}>
+          <View
+            style={{
+              width: "100%",
+              height: 300,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <ActivityIndicator color={COLORS.primaryDark} />
           </View>
         ) : (
@@ -267,7 +238,10 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
                 alignItems: "center",
               }}
             >
-              <MapSvg countries={countriesOnMap} />
+              <MapSvg
+                width={SIZES.width < 370 ? 340 : 370}
+                countries={countriesOnMap}
+              />
             </TouchableOpacity>
 
             <View style={styles.row}>
@@ -340,12 +314,14 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
           onClosed={handleCountriesModalClose}
           HeaderComponent={
             <View style={styles.modalHeader}>
-              <TextInput
-                style={styles.searchInput}
-                placeholder="Search..."
-                placeholderTextColor={COLORS.darkgray}
-                onChangeText={handelSearch}
-              />
+              {Platform.OS === "ios" ? (
+                <TextInput
+                  style={styles.searchInput}
+                  placeholder="Search..."
+                  placeholderTextColor={COLORS.darkgray}
+                  onChangeText={handelSearch}
+                />
+              ) : null}
 
               <View style={styles.infoRow}>
                 <Text style={styles.countryAmount}>UN 195 Countries</Text>
@@ -362,6 +338,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
               </View>
             </View>
           }
+          modalStyle={{ flex: 1 }}
         >
           <View style={{ flex: 1, height: SIZES.height - 200 }}>
             <FlashList
@@ -451,7 +428,7 @@ const styles = StyleSheet.create({
   },
   mapContainer: {
     marginBottom: 15,
-  },
+   },
   map: {
     flex: 1,
   },
@@ -473,11 +450,11 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 0,
     },
     shadowOpacity: 0.05,
     shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 0.5,
   },
 
   amountView: {

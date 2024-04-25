@@ -112,7 +112,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <KeyboardAvoidingView
         // behavior="padding"
         behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -308,7 +308,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#ffffff",
-    paddingTop: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 0,
+    paddingTop: Constants?.statusBarHeight + 10,
   },
   topSide: {
     width: "100%",

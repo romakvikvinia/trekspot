@@ -24,7 +24,7 @@ export const TripInsightDetailScreen: React.FC<TripProps> = ({}) => {
   const navigation = useNavigation();
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -85,7 +85,7 @@ export const TripInsightDetailScreen: React.FC<TripProps> = ({}) => {
           }}
         />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#F2F2F7",
-    paddingTop: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 0,
+    paddingTop: Constants?.statusBarHeight + 10
   },
   header: {
     flexDirection: "row",

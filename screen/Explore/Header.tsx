@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     safeArea: {
       flex: 1,
       backgroundColor: "#f8f8f8",
-      paddingTop: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 0,
+      paddingTop: Constants?.statusBarHeight + 10,
     },
     clearButton: {
         position: "absolute",

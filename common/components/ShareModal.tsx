@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import * as Sharing from "expo-sharing";
 import ViewShot from "react-native-view-shot";
-import { COLORS } from "../../styles/theme";
+import { COLORS, SIZES } from "../../styles/theme";
 import {
   ImessageIcon,
   InstagramIcon,
@@ -52,8 +52,8 @@ const ShareModal: React.FC<ShareModalProps> = ({
     <View style={styles.shareWrapper}>
       <TouchableOpacity
         style={styles.middle}
-        onPress={() => handleNewImage()}
-        activeOpacity={0.95}
+        // onPress={() => handleNewImage()}
+        activeOpacity={1}
       >
         <ViewShot
           //@ts-ignore
@@ -81,15 +81,30 @@ const ShareModal: React.FC<ShareModalProps> = ({
             <View
               style={{
                 height: 430,
-                width: 360,
+                width: SIZES.width < 370 ? 340 : 360,
                 flex: 1,
                 alignItems: "center",
                 justifyContent: "center",
-                paddingBottom: 35,
+                paddingBottom: 0,
                 position: "relative",
                 backgroundColor: "#000",
+                paddingHorizontal: 15,
+                borderRadius: 15
               }}
             >
+                <Text
+                style={{
+                  color: "#fff",
+                  fontWeight: "bold",
+                  fontSize: 18,
+                  position: "absolute",
+                  top: 20,
+                  left: 95,
+                  zIndex: 2
+                }}
+              >
+                My Travel Triumphs
+              </Text>
               <MapSvg width={300} countries={countries} />
               <View style={styles.row}>
                 <View style={[styles.rowBox]}>
@@ -136,24 +151,13 @@ const ShareModal: React.FC<ShareModalProps> = ({
                   <Text style={styles.statLabel}>Territories</Text>
                 </View>
               </View>
-              <Text
-                style={{
-                  color: "#fff",
-                  fontWeight: "bold",
-                  fontSize: 18,
-                  position: "absolute",
-                  bottom: 15,
-                  left: 15,
-                }}
-              >
-                My Travel Triumphs
-              </Text>
+            
               <View style={{ position: "absolute", bottom: 15, right: 15 }}>
                 <TrekspotWhite width="70" />
               </View>
             </View>
           ) : null}
-          {state.index === 1 ? (
+          {/* {state.index === 1 ? (
             <ImageBackground
               style={{
                 height: 300,
@@ -164,26 +168,15 @@ const ShareModal: React.FC<ShareModalProps> = ({
             >
               <Text>...Something to rasterize.. skds mdslk</Text>
             </ImageBackground>
-          ) : null}
-          {state.index === 2 ? (
-            <ImageBackground
-              style={{
-                height: 300,
-              }}
-              source={{
-                uri: "https://img.freepik.com/premium-vector/world-map-with-location-pointers_115354-2.jpg",
-              }}
-            >
-              <Text>...Something to rasterize.. skds mdslk</Text>
-            </ImageBackground>
-          ) : null}
+          ) : null} */}
+         
         </ViewShot>
 
-        <View style={styles.generateNew}>
+        {/* <View style={styles.generateNew}>
           <View style={styles.generateNewButton}>
             <Text style={styles.generateNewButtonText}>Press for next</Text>
           </View>
-        </View>
+        </View> */}
       </TouchableOpacity>
       <View style={styles.sharing}>
         {/* <TouchableOpacity activeOpacity={0.7} style={styles.shareButton}>
@@ -243,9 +236,11 @@ const styles = StyleSheet.create({
   middle: {
     marginTop: 25,
     marginBottom: 100,
-    minHeight: 500,
+    // minHeight: 500,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#000",
+    borderRadius: 15,
   },
   generateNew: {
     flexDirection: "row",

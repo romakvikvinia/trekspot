@@ -23,6 +23,7 @@ import {
   DownIcon,
   EyeIcon,
   FamilyIcon,
+  GlobeIcon,
   ImageIcon,
   NoDestinationFoundIcon,
   OneUserIcon,
@@ -58,18 +59,21 @@ export const TripScreen: React.FC<TripProps> = ({}) => {
 
   const newTripModal = useRef<Modalize>(null);
   const tripActivitesModal = useRef<Modalize>(null);
-  
 
   return (
     <>
-      <SafeAreaView style={styles.safeArea}>
+      <View style={styles.safeArea}>
         <View style={styles.header}>
           <Text style={styles.myTripsText}>Trips</Text>
 
           <TouchableOpacity
             style={styles.newTripButton}
             activeOpacity={0.7}
-            onPress={() => Platform.OS === "android" ? navigation.navigate("NewTripAndroidScreen") : newTripModal.current?.open()}
+            onPress={() =>
+              Platform.OS === "android"
+                ? navigation.navigate("NewTripAndroidScreen")
+                : newTripModal.current?.open()
+            }
           >
             <PlusIcon color="" size="20" />
             <Text style={styles.newTripButtonText}>New trip</Text>
@@ -107,22 +111,59 @@ export const TripScreen: React.FC<TripProps> = ({}) => {
                         start={{ x: -1, y: 1 }}
                         end={{ x: 1, y: 0 }}
                       >
-                        <View style={styles.tripInHeader}>
-                          <Text style={styles.tripDate}>14 Nov → 20 Nov</Text>
+                        <View>
+                          <View style={styles.tripInHeader}>
+                            <Text style={styles.tripDate}>14 Nov → 20 Nov</Text>
+                          </View>
+                          <Text style={styles.tripTitle}>Hangover Paris</Text>
                         </View>
-                        <Text style={styles.tripTitle}>Hangover Paris</Text>
-
-                        <View style={styles.otherDetailsBox}>
-                          {/* <OneUserIcon size="10" color="#fff" /> */}
-                          {/* <UsersIcon size="10" color="#fff" />
-                        <Text style={styles.otherDetailsBoxText}>Solo</Text> */}
-                          {/* <FamilyIcon /> */}
-                          {/* <CoupleIcon /> */}
-                          {/* 
-                        TODO: Friends, Family, Couple
-
-                        <Text style={styles.otherDetailsBoxText}>Solo</Text> */}
-                        </View>
+                        <TouchableOpacity activeOpacity={0.7}  style={styles.tripDetails}>
+                          <View style={styles.invitationBox}>
+                            {invitedUsers?.length > 0 && (
+                              <Image
+                                cachePolicy="memory"
+                                contentFit="cover"
+                                transition={0}
+                                source={{
+                                  uri: invitedUsers?.[0],
+                                }}
+                                style={styles.inviteOne}
+                              />
+                            )}
+                            {invitedUsers?.length >= 2 && (
+                              <Image
+                                cachePolicy="memory"
+                                contentFit="cover"
+                                transition={0}
+                                source={{
+                                  uri: invitedUsers?.[1],
+                                }}
+                                style={styles.inviteTwo}
+                              />
+                            )}
+                            {invitedUsers?.length > 2 && (
+                              <View style={styles.otherUsers}>
+                                <Text style={styles.otherUsersText}>2+</Text>
+                              </View>
+                            )}
+                            <TouchableOpacity
+                              activeOpacity={0.7}
+                              style={[
+                                styles.addUserButton,
+                                {
+                                  left:
+                                    invitedUsers?.length === 2
+                                      ? -20
+                                      : invitedUsers?.length > 2
+                                      ? -28
+                                      : -10,
+                                },
+                              ]}
+                            >
+                              <AddUser />
+                            </TouchableOpacity>
+                          </View>
+                        </TouchableOpacity>
                       </LinearGradient>
                     </ImageBackground>
                   ) : (
@@ -141,22 +182,59 @@ export const TripScreen: React.FC<TripProps> = ({}) => {
                         start={{ x: -1, y: 1 }}
                         end={{ x: 1, y: 0 }}
                       >
-                        <View style={styles.tripInHeader}>
-                          <Text style={styles.tripDate}>14 Nov → 20 Nov</Text>
+                        <View>
+                          <View style={styles.tripInHeader}>
+                            <Text style={styles.tripDate}>14 Nov → 20 Nov</Text>
+                          </View>
+                          <Text style={styles.tripTitle}>Hangover Paris</Text>
                         </View>
-                        <Text style={styles.tripTitle}>Hangover Paris</Text>
-
-                        <View style={styles.otherDetailsBox}>
-                          {/* <OneUserIcon size="10" color="#fff" /> */}
-                          {/* <UsersIcon size="10" color="#fff" />
-                      <Text style={styles.otherDetailsBoxText}>Solo</Text> */}
-                          {/* <FamilyIcon /> */}
-                          {/* <CoupleIcon /> */}
-                          {/* 
-                      TODO: Friends, Family, Couple
-
-                      <Text style={styles.otherDetailsBoxText}>Solo</Text> */}
-                        </View>
+                        <TouchableOpacity activeOpacity={0.7} style={styles.tripDetails}>
+                          <View style={styles.invitationBox}>
+                            {invitedUsers?.length > 0 && (
+                              <Image
+                                cachePolicy="memory"
+                                contentFit="cover"
+                                transition={0}
+                                source={{
+                                  uri: invitedUsers?.[0],
+                                }}
+                                style={styles.inviteOne}
+                              />
+                            )}
+                            {invitedUsers?.length >= 2 && (
+                              <Image
+                                cachePolicy="memory"
+                                contentFit="cover"
+                                transition={0}
+                                source={{
+                                  uri: invitedUsers?.[1],
+                                }}
+                                style={styles.inviteTwo}
+                              />
+                            )}
+                            {invitedUsers?.length > 2 && (
+                              <View style={styles.otherUsers}>
+                                <Text style={styles.otherUsersText}>2+</Text>
+                              </View>
+                            )}
+                            <TouchableOpacity
+                              activeOpacity={0.7}
+                              style={[
+                                styles.addUserButton,
+                                {
+                                  left:
+                                    invitedUsers?.length === 2
+                                      ? -20
+                                      : invitedUsers?.length > 2
+                                      ? -28
+                                      : -10,
+                                },
+                              ]}
+                            >
+                              <AddUser />
+                            </TouchableOpacity>
+                          </View>
+                        </TouchableOpacity>
                       </LinearGradient>
                     </Image>
                   )}
@@ -184,22 +262,59 @@ export const TripScreen: React.FC<TripProps> = ({}) => {
                         start={{ x: -1, y: 1 }}
                         end={{ x: 1, y: 0 }}
                       >
-                        <View style={styles.tripInHeader}>
-                          <Text style={styles.tripDate}>14 Nov → 20 Nov</Text>
+                        <View>
+                          <View style={styles.tripInHeader}>
+                            <Text style={styles.tripDate}>14 Nov → 20 Nov</Text>
+                          </View>
+                          <Text style={styles.tripTitle}>Hangover Paris</Text>
                         </View>
-                        <Text style={styles.tripTitle}>Hangover Paris</Text>
-
-                        <View style={styles.otherDetailsBox}>
-                          {/* <OneUserIcon size="10" color="#fff" /> */}
-                          {/* <UsersIcon size="10" color="#fff" />
-                        <Text style={styles.otherDetailsBoxText}>Solo</Text> */}
-                          {/* <FamilyIcon /> */}
-                          {/* <CoupleIcon /> */}
-                          {/* 
-                        TODO: Friends, Family, Couple
-
-                        <Text style={styles.otherDetailsBoxText}>Solo</Text> */}
-                        </View>
+                        <TouchableOpacity activeOpacity={0.7}  style={styles.tripDetails}>
+                          <View style={styles.invitationBox}>
+                            {invitedUsers?.length > 0 && (
+                              <Image
+                                cachePolicy="memory"
+                                contentFit="cover"
+                                transition={0}
+                                source={{
+                                  uri: invitedUsers?.[0],
+                                }}
+                                style={styles.inviteOne}
+                              />
+                            )}
+                            {invitedUsers?.length >= 2 && (
+                              <Image
+                                cachePolicy="memory"
+                                contentFit="cover"
+                                transition={0}
+                                source={{
+                                  uri: invitedUsers?.[1],
+                                }}
+                                style={styles.inviteTwo}
+                              />
+                            )}
+                            {invitedUsers?.length > 2 && (
+                              <View style={styles.otherUsers}>
+                                <Text style={styles.otherUsersText}>2+</Text>
+                              </View>
+                            )}
+                            <TouchableOpacity
+                              activeOpacity={0.7}
+                              style={[
+                                styles.addUserButton,
+                                {
+                                  left:
+                                    invitedUsers?.length === 2
+                                      ? -20
+                                      : invitedUsers?.length > 2
+                                      ? -28
+                                      : -10,
+                                },
+                              ]}
+                            >
+                              <AddUser />
+                            </TouchableOpacity>
+                          </View>
+                        </TouchableOpacity>
                       </LinearGradient>
                     </ImageBackground>
                   ) : (
@@ -218,152 +333,68 @@ export const TripScreen: React.FC<TripProps> = ({}) => {
                         start={{ x: -1, y: 1 }}
                         end={{ x: 1, y: 0 }}
                       >
-                        <View style={styles.tripInHeader}>
-                          <Text style={styles.tripDate}>14 Nov → 20 Nov</Text>
+                        <View>
+                          <View style={styles.tripInHeader}>
+                            <Text style={styles.tripDate}>14 Nov → 20 Nov</Text>
+                          </View>
+                          <Text style={styles.tripTitle}>Hangover Paris</Text>
                         </View>
-                        <Text style={styles.tripTitle}>Hangover Paris</Text>
-
-                        <View style={styles.otherDetailsBox}>
-                          {/* <OneUserIcon size="10" color="#fff" /> */}
-                          {/* <UsersIcon size="10" color="#fff" />
-                      <Text style={styles.otherDetailsBoxText}>Solo</Text> */}
-                          {/* <FamilyIcon /> */}
-                          {/* <CoupleIcon /> */}
-                          {/* 
-                      TODO: Friends, Family, Couple
-
-                      <Text style={styles.otherDetailsBoxText}>Solo</Text> */}
-                        </View>
+                        <TouchableOpacity activeOpacity={0.7} style={styles.tripDetails}>
+                          <View style={styles.invitationBox}>
+                            {invitedUsers?.length > 0 && (
+                              <Image
+                                cachePolicy="memory"
+                                contentFit="cover"
+                                transition={0}
+                                source={{
+                                  uri: invitedUsers?.[0],
+                                }}
+                                style={styles.inviteOne}
+                              />
+                            )}
+                            {invitedUsers?.length >= 2 && (
+                              <Image
+                                cachePolicy="memory"
+                                contentFit="cover"
+                                transition={0}
+                                source={{
+                                  uri: invitedUsers?.[1],
+                                }}
+                                style={styles.inviteTwo}
+                              />
+                            )}
+                            {invitedUsers?.length > 2 && (
+                              <View style={styles.otherUsers}>
+                                <Text style={styles.otherUsersText}>2+</Text>
+                              </View>
+                            )}
+                            <TouchableOpacity
+                              activeOpacity={0.7}
+                              style={[
+                                styles.addUserButton,
+                                {
+                                  left:
+                                    invitedUsers?.length === 2
+                                      ? -20
+                                      : invitedUsers?.length > 2
+                                      ? -28
+                                      : -10,
+                                },
+                              ]}
+                            >
+                              <AddUser />
+                            </TouchableOpacity>
+                          </View>
+                        </TouchableOpacity>
                       </LinearGradient>
                     </Image>
                   )}
                 </TouchableOpacity>
               </View>
-
-              {/* <Text style={styles.headingTitle}>Past trips</Text>
-              <View style={styles.tripItem}>
-                <TouchableOpacity
-                  style={styles.tripItemHeader}
-                  activeOpacity={0.7}
-                >
-                  <Image
-                    source={{
-                      uri: "https://images.unsplash.com/photo-1533281808624-e9b07b4294ff?q=20&w=3426&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                    }}
-                    cachePolicy="memory"
-                    contentFit="cover"
-                    transition={0}
-                    style={styles.tripImage}
-                  >
-                    <LinearGradient
-                      style={styles.gradientWrapper}
-                      colors={["rgba(0,0,0,1)", "rgba(0,0,0,0.2)"]}
-                      start={{ x: -1, y: 1 }}
-                      end={{ x: 1, y: 0 }}
-                    >
-                      <View style={styles.tripInHeader}>
-                        <Text style={styles.tripDate}>14 Nov → 20 Nov</Text>
-                      </View>
-                      <Text style={styles.tripTitle}>Singapore holidays</Text>
-
-                      <Text style={styles.invitationByText}>
-                        Invited by{" "}
-                        <Text style={styles.invitationByUserText}>Miller</Text>
-                      </Text>
-                      <View style={styles.otherStats}>
-                        <TouchableOpacity
-                          activeOpacity={0.7}
-                          style={styles.statItem}
-                        >
-                          <EyeIcon />
-                          <Text style={styles.statItemText}>9</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          activeOpacity={0.7}
-                          style={styles.statItem}
-                        >
-                          <TryIcon />
-                          <Text style={styles.statItemText}>12</Text>
-                        </TouchableOpacity>
-                      </View>
-                    </LinearGradient>
-                  </Image>
-                </TouchableOpacity>
-
-                <View style={styles.tripDetails}>
-                  <View style={styles.invitationBox}>
-                    {invitedUsers?.length > 0 && (
-                      <Image
-                        cachePolicy="memory"
-                        contentFit="cover"
-                        transition={0}
-                        source={{
-                          uri: invitedUsers?.[0],
-                        }}
-                        style={styles.inviteOne}
-                      />
-                    )}
-                    {invitedUsers?.length >= 2 && (
-                      <Image
-                        cachePolicy="memory"
-                        contentFit="cover"
-                        transition={0}
-                        source={{
-                          uri: invitedUsers?.[1],
-                        }}
-                        style={styles.inviteTwo}
-                      />
-                    )}
-                    {invitedUsers?.length > 2 && (
-                      <View style={styles.otherUsers}>
-                        <Text style={styles.otherUsersText}>2+</Text>
-                      </View>
-                    )}
-                    <TouchableOpacity
-                      activeOpacity={0.7}
-                      style={[
-                        styles.addUserButton,
-                        {
-                          left:
-                            invitedUsers?.length === 2
-                              ? -20
-                              : invitedUsers?.length > 2
-                              ? -28
-                              : -10,
-                        },
-                      ]}
-                    >
-                      <AddUser />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.otherDetails}>
-                    <View style={styles.otherDetailsBox}>
-                      <PrivateIcon />
-                      <Text style={styles.otherDetailsBoxText}>Private</Text>
-
-                      <GlobeIcon />
-                       
-                <Text style={styles.otherDetailsBoxText}>Private</Text>
-                    </View>
-                    <View style={styles.otherDetailsBox}>
-                      <OneUserIcon size="10" />
-
-                      <Text style={styles.otherDetailsBoxText}>Solo</Text>
-
-                      <UsersIcon />  
-                      <FamilyIcon />
-                      <CoupleIcon />
-                  Friends, Family, Couple
-
-                <Text style={styles.otherDetailsBoxText}>Solo</Text>
-                    </View>
-                  </View>
-                </View>
-              </View> */}
             </>
           )}
         </ScrollView>
-      </SafeAreaView>
+      </View>
 
       <Portal>
         <Modalize
@@ -494,7 +525,7 @@ export const TripScreen: React.FC<TripProps> = ({}) => {
             flex: 1,
           }}
           modalHeight={SIZES.height}
-         >
+        >
           <NewTrip
             newTripModalRef={newTripModal}
             tripActivitesModal={tripActivitesModal}
@@ -509,7 +540,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#F2F2F7",
-    paddingTop: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 0,
+    paddingTop: Constants?.statusBarHeight + 10,
   },
   cancelTripButton: {
     paddingVertical: 7,
@@ -923,11 +954,8 @@ const styles = StyleSheet.create({
   },
   tripDetails: {
     width: "100%",
-    backgroundColor: "#fff",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -969,6 +997,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     padding: 20,
+    justifyContent: "space-between",
   },
   tripDate: {
     color: "#fff",

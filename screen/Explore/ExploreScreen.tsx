@@ -4,7 +4,6 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -69,7 +68,7 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
 
   return (
     <>
-      <SafeAreaView style={styles.safeArea}>
+      <View style={styles.safeArea}>
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -165,7 +164,7 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
             {/* <DestinationContainer title="South America" countries={[]} /> */}
           </ScrollView>
         </KeyboardAvoidingView>
-      </SafeAreaView>
+      </View>
 
       <Portal>
         <Modalize ref={modalCountryPassportSelectRef} modalTopOffset={65}>
@@ -180,7 +179,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#f8f8f8",
-    paddingTop: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 0,
+    paddingTop: Constants?.statusBarHeight + 10,
   },
   currentTrip: {
     backgroundColor: "#fef0ff",
@@ -191,7 +190,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 5,
     borderWidth: 1,
     borderColor: "#dac9dc",
   },

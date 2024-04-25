@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#F2F2F7",
-    paddingTop: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 0,
+    paddingTop: Constants?.statusBarHeight + 10
   },
   noteCardTitle: {
     fontSize: 18,

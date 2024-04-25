@@ -25,7 +25,7 @@ export const EditoProfile: React.FC<SettingProps> = ({}) => {
 
   return (
     <>
-      <SafeAreaView style={styles.safeArea}>
+      <View style={styles.safeArea}>
         <KeyboardAvoidingView
           // behavior="padding"
           behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -113,7 +113,7 @@ export const EditoProfile: React.FC<SettingProps> = ({}) => {
             </TouchableOpacity>
           </ScrollView>
         </KeyboardAvoidingView>
-      </SafeAreaView>
+      </View>
     </>
   );
 };
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#f8f8f8",
-    paddingTop: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 0,
+    paddingTop: Constants?.statusBarHeight + 10,
   },
   header: {
     flexDirection: "row",

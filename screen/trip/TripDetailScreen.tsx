@@ -366,9 +366,8 @@ const DATA = [
 
 interface TripProps {}
 
-export const TripDetailScreen: React.FC<TripProps> = ({route}) => {
-
-  console.log("route",route?.params?.directVisit)
+export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
+  console.log("route", route?.params?.directVisit);
   const navigation = useNavigation();
 
   const [invitedUsers, setInvitedUsers] = useState([
@@ -376,7 +375,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({route}) => {
     // "https://images.unsplash.com/photo-1704642408219-977150048504?q20&w=3325&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "https://images.unsplash.com/photo-1704642408219-977150048504?q20&w=3325&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   ]);
-
+ const [invitedUsersModalVisible, setInvitedUsersModalVisible] = useState(false);
   const mapRef = useRef(null);
 
   const [topSightVisible, setTopSightVisible] = useState(false);
@@ -412,7 +411,12 @@ export const TripDetailScreen: React.FC<TripProps> = ({route}) => {
   };
 
   const onInvitedUsersModalOpen = () => {
-    invitedUsersModal.current?.open();
+    if(Platform.OS === "android") {
+      setInvitedUsersModalVisible(true)
+    } else {
+      invitedUsersModal.current?.open();
+    }
+   
   };
   const onActivitiesModalOpen = () => {
     activitiesModal.current?.open();
@@ -534,15 +538,15 @@ export const TripDetailScreen: React.FC<TripProps> = ({route}) => {
   };
 
   const handleNavigate = () => {
-    if(route?.params?.directVisit) {
-      navigation.navigate( "TripQuickInsights", {
-        directVisit: true
-      })
+    if (route?.params?.directVisit) {
+      navigation.navigate("TripQuickInsights", {
+        directVisit: true,
+      });
     } else {
-      navigation.navigate("TripInsights")
+      navigation.navigate("TripInsights");
     }
-  }
-  
+  };
+
   useEffect(() => {
     mapRef.current?.animateToRegion({
       latitude: DATA[0].activities[0].coordinates?.lat,
@@ -560,17 +564,14 @@ export const TripDetailScreen: React.FC<TripProps> = ({route}) => {
           onPress={() => navigation.navigate("TripMapViewScreen")}
           provider={Platform.OS === "android" ? PROVIDER_GOOGLE : undefined}
           style={styles.map}
-          // onPress={handleMapPress}
-          zoomEnabled
-          // zoomControlEnabled
-          pitchEnabled
-          followsUserLocation={true}
-          // showsUserLocation={true}
-          customMapStyle={customMapStyle}
           mapType="standard"
-          // onSnapToItem={() => alert("ss")}
         ></MapView>
-        <TouchableOpacity  onPress={() => navigation.goBack()} activeOpacity={0.7} style={styles.backButton}>
+
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          activeOpacity={0.7}
+          style={styles.backButton}
+        >
           <BackIcon />
         </TouchableOpacity>
         <TouchableOpacity
@@ -926,7 +927,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({route}) => {
       <Portal>
         <Modalize
           ref={invitedUsersModal}
-          modalTopOffset={200}
+          modalTopOffset={65}
           HeaderComponent={
             <>
               <View style={styles.rowItemHeader}>
@@ -956,94 +957,446 @@ export const TripDetailScreen: React.FC<TripProps> = ({route}) => {
               </View>
             </>
           }
+          scrollViewProps={{
+            keyboardShouldPersistTaps: "handled",
+          }}
           modalStyle={{
             backgroundColor: "#F2F2F7",
-            minHeight: "80%",
+            flex: 1,
           }}
         >
-          {false ? (
-            <View style={styles.invitedList}>
-              <View style={styles.invitedListItem}>
-                <View style={styles.lfSide}>
-                  <Image
-                    cachePolicy="memory"
-                    contentFit="cover"
-                    transition={0}
-                    source={{
-                      uri: invitedUsers?.[0],
-                    }}
-                    style={styles.invitedUserImage}
-                  />
-                  <View style={styles.invitationBoxTexts}>
-                    <Text style={styles.invitedUserName}>Giorgi Bitsadze</Text>
-                    <Text style={styles.invitationStatus}>Accepted</Text>
+          <ScrollView style={{ flex: 1 }}>
+            {false ? (
+              <View style={styles.invitedList}>
+                <View style={styles.invitedListItem}>
+                  <View style={styles.lfSide}>
+                    <Image
+                      cachePolicy="memory"
+                      contentFit="cover"
+                      transition={0}
+                      source={{
+                        uri: invitedUsers?.[0],
+                      }}
+                      style={styles.invitedUserImage}
+                    />
+                    <View style={styles.invitationBoxTexts}>
+                      <Text style={styles.invitedUserName}>
+                        Giorgi Bitsadze
+                      </Text>
+                      <Text style={styles.invitationStatus}>Accepted</Text>
+                    </View>
                   </View>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.removeInvitedUser}
+                  >
+                    <TrashIcon color="#BBB" />
+                  </TouchableOpacity>
                 </View>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.removeInvitedUser}
-                >
-                  <TrashIcon color="#BBB" />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.invitedListItem}>
-                <View style={styles.lfSide}>
-                  <Image
-                    cachePolicy="memory"
-                    contentFit="cover"
-                    transition={0}
-                    source={{
-                      uri: invitedUsers?.[0],
-                    }}
-                    style={styles.invitedUserImage}
-                  />
-                  <View style={styles.invitationBoxTexts}>
-                    <Text style={styles.invitedUserName}>Beka Arabidze</Text>
-                    <Text style={styles.invitationStatus}>Pending</Text>
+                <View style={styles.invitedListItem}>
+                  <View style={styles.lfSide}>
+                    <Image
+                      cachePolicy="memory"
+                      contentFit="cover"
+                      transition={0}
+                      source={{
+                        uri: invitedUsers?.[0],
+                      }}
+                      style={styles.invitedUserImage}
+                    />
+                    <View style={styles.invitationBoxTexts}>
+                      <Text style={styles.invitedUserName}>Beka Arabidze</Text>
+                      <Text style={styles.invitationStatus}>Pending</Text>
+                    </View>
                   </View>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.removeInvitedUser}
+                  >
+                    <TrashIcon color="#BBB" />
+                  </TouchableOpacity>
                 </View>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.removeInvitedUser}
-                >
-                  <TrashIcon color="#BBB" />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.invitedListItem}>
-                <View style={styles.lfSide}>
-                  <Image
-                    cachePolicy="memory"
-                    contentFit="cover"
-                    transition={0}
-                    source={{
-                      uri: invitedUsers?.[0],
-                    }}
-                    style={styles.invitedUserImage}
-                  />
-                  <View style={styles.invitationBoxTexts}>
-                    <Text style={styles.invitedUserName}>Giorgi Bitsadze</Text>
-                    <Text style={styles.invitationStatus}>Accepted</Text>
+                <View style={styles.invitedListItem}>
+                  <View style={styles.lfSide}>
+                    <Image
+                      cachePolicy="memory"
+                      contentFit="cover"
+                      transition={0}
+                      source={{
+                        uri: invitedUsers?.[0],
+                      }}
+                      style={styles.invitedUserImage}
+                    />
+                    <View style={styles.invitationBoxTexts}>
+                      <Text style={styles.invitedUserName}>
+                        Giorgi Bitsadze
+                      </Text>
+                      <Text style={styles.invitationStatus}>Accepted</Text>
+                    </View>
                   </View>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.removeInvitedUser}
+                  >
+                    <TrashIcon color="#BBB" />
+                  </TouchableOpacity>
                 </View>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.removeInvitedUser}
-                >
-                  <TrashIcon color="#BBB" />
-                </TouchableOpacity>
               </View>
-            </View>
-          ) : (
-            <View style={styles.noResultWrapper}>
-              <SearchNotFound />
-              <Text style={styles.noResultWrapperText}>
-                You haven't added trip members yet, enter email and send
-                invitation
-              </Text>
-            </View>
-          )}
+            ) : (
+              <View style={styles.noResultWrapper}>
+                <SearchNotFound />
+                <Text style={styles.noResultWrapperText}>
+                  You haven't added trip members yet, enter email and send
+                  invitation
+                </Text>
+              </View>
+            )}
+          </ScrollView>
         </Modalize>
       </Portal>
+
+      {/* For android */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={invitedUsersModalVisible}
+        onRequestClose={() => {
+          setInvitedUsersModalVisible(false);
+        }}
+      >
+        <View style={styles.modalViewWrapper}>
+          <View style={styles.modalViewCenter}>
+            <View style={[styles.rowItemHeader, {width: "100%"}]}>
+              <Text style={styles.h2}>Trip members</Text>
+
+              <TouchableOpacity
+                onPress={() =>  setInvitedUsersModalVisible(false)}
+                activeOpacity={0.5}
+                style={styles.closeButton}
+              >
+                <XIcon width="10" />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.inviteBox}>
+              <TextInput
+                placeholder="Enter email"
+                style={styles.inviteBoxInput}
+                placeholderTextColor="#85858B"
+                inputMode="email"
+              />
+              <TouchableOpacity style={styles.inviteButton} activeOpacity={0.7}>
+                <Text style={styles.inviteButtonText}>Invite</Text>
+              </TouchableOpacity>
+            </View>
+             {true ? (
+              <ScrollView contentContainerStyle={{paddingHorizontal: 0}} style={[styles.invitedList]}>
+                <View style={[styles.invitedListItem, ]}>
+                  <View style={styles.lfSide}>
+                    <Image
+                      cachePolicy="memory"
+                      contentFit="cover"
+                      transition={0}
+                      source={{
+                        uri: invitedUsers?.[0],
+                      }}
+                      style={styles.invitedUserImage}
+                    />
+                    <View style={styles.invitationBoxTexts}>
+                      <Text style={styles.invitedUserName}>
+                        Giorgi Bitsadze
+                      </Text>
+                      <Text style={styles.invitationStatus}>Accepted</Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.removeInvitedUser}
+                  >
+                    <TrashIcon color="#BBB" />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.invitedListItem}>
+                  <View style={styles.lfSide}>
+                    <Image
+                      cachePolicy="memory"
+                      contentFit="cover"
+                      transition={0}
+                      source={{
+                        uri: invitedUsers?.[0],
+                      }}
+                      style={styles.invitedUserImage}
+                    />
+                    <View style={styles.invitationBoxTexts}>
+                      <Text style={styles.invitedUserName}>Beka Arabidze</Text>
+                      <Text style={styles.invitationStatus}>Pending</Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.removeInvitedUser}
+                  >
+                    <TrashIcon color="#BBB" />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.invitedListItem}>
+                  <View style={styles.lfSide}>
+                    <Image
+                      cachePolicy="memory"
+                      contentFit="cover"
+                      transition={0}
+                      source={{
+                        uri: invitedUsers?.[0],
+                      }}
+                      style={styles.invitedUserImage}
+                    />
+                    <View style={styles.invitationBoxTexts}>
+                      <Text style={styles.invitedUserName}>
+                        Giorgi Bitsadze
+                      </Text>
+                      <Text style={styles.invitationStatus}>Accepted</Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.removeInvitedUser}
+                  >
+                    <TrashIcon color="#BBB" />
+                  </TouchableOpacity>
+                </View>
+                <View style={[styles.invitedListItem, ]}>
+                  <View style={styles.lfSide}>
+                    <Image
+                      cachePolicy="memory"
+                      contentFit="cover"
+                      transition={0}
+                      source={{
+                        uri: invitedUsers?.[0],
+                      }}
+                      style={styles.invitedUserImage}
+                    />
+                    <View style={styles.invitationBoxTexts}>
+                      <Text style={styles.invitedUserName}>
+                        Giorgi Bitsadze
+                      </Text>
+                      <Text style={styles.invitationStatus}>Accepted</Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.removeInvitedUser}
+                  >
+                    <TrashIcon color="#BBB" />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.invitedListItem}>
+                  <View style={styles.lfSide}>
+                    <Image
+                      cachePolicy="memory"
+                      contentFit="cover"
+                      transition={0}
+                      source={{
+                        uri: invitedUsers?.[0],
+                      }}
+                      style={styles.invitedUserImage}
+                    />
+                    <View style={styles.invitationBoxTexts}>
+                      <Text style={styles.invitedUserName}>Beka Arabidze</Text>
+                      <Text style={styles.invitationStatus}>Pending</Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.removeInvitedUser}
+                  >
+                    <TrashIcon color="#BBB" />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.invitedListItem}>
+                  <View style={styles.lfSide}>
+                    <Image
+                      cachePolicy="memory"
+                      contentFit="cover"
+                      transition={0}
+                      source={{
+                        uri: invitedUsers?.[0],
+                      }}
+                      style={styles.invitedUserImage}
+                    />
+                    <View style={styles.invitationBoxTexts}>
+                      <Text style={styles.invitedUserName}>
+                        Giorgi Bitsadze
+                      </Text>
+                      <Text style={styles.invitationStatus}>Accepted</Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.removeInvitedUser}
+                  >
+                    <TrashIcon color="#BBB" />
+                  </TouchableOpacity>
+                </View>
+                <View style={[styles.invitedListItem, ]}>
+                  <View style={styles.lfSide}>
+                    <Image
+                      cachePolicy="memory"
+                      contentFit="cover"
+                      transition={0}
+                      source={{
+                        uri: invitedUsers?.[0],
+                      }}
+                      style={styles.invitedUserImage}
+                    />
+                    <View style={styles.invitationBoxTexts}>
+                      <Text style={styles.invitedUserName}>
+                        Giorgi Bitsadze
+                      </Text>
+                      <Text style={styles.invitationStatus}>Accepted</Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.removeInvitedUser}
+                  >
+                    <TrashIcon color="#BBB" />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.invitedListItem}>
+                  <View style={styles.lfSide}>
+                    <Image
+                      cachePolicy="memory"
+                      contentFit="cover"
+                      transition={0}
+                      source={{
+                        uri: invitedUsers?.[0],
+                      }}
+                      style={styles.invitedUserImage}
+                    />
+                    <View style={styles.invitationBoxTexts}>
+                      <Text style={styles.invitedUserName}>Beka Arabidze</Text>
+                      <Text style={styles.invitationStatus}>Pending</Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.removeInvitedUser}
+                  >
+                    <TrashIcon color="#BBB" />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.invitedListItem}>
+                  <View style={styles.lfSide}>
+                    <Image
+                      cachePolicy="memory"
+                      contentFit="cover"
+                      transition={0}
+                      source={{
+                        uri: invitedUsers?.[0],
+                      }}
+                      style={styles.invitedUserImage}
+                    />
+                    <View style={styles.invitationBoxTexts}>
+                      <Text style={styles.invitedUserName}>
+                        Giorgi Bitsadze
+                      </Text>
+                      <Text style={styles.invitationStatus}>Accepted</Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.removeInvitedUser}
+                  >
+                    <TrashIcon color="#BBB" />
+                  </TouchableOpacity>
+                </View>
+                <View style={[styles.invitedListItem, ]}>
+                  <View style={styles.lfSide}>
+                    <Image
+                      cachePolicy="memory"
+                      contentFit="cover"
+                      transition={0}
+                      source={{
+                        uri: invitedUsers?.[0],
+                      }}
+                      style={styles.invitedUserImage}
+                    />
+                    <View style={styles.invitationBoxTexts}>
+                      <Text style={styles.invitedUserName}>
+                        Giorgi Bitsadze
+                      </Text>
+                      <Text style={styles.invitationStatus}>Accepted</Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.removeInvitedUser}
+                  >
+                    <TrashIcon color="#BBB" />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.invitedListItem}>
+                  <View style={styles.lfSide}>
+                    <Image
+                      cachePolicy="memory"
+                      contentFit="cover"
+                      transition={0}
+                      source={{
+                        uri: invitedUsers?.[0],
+                      }}
+                      style={styles.invitedUserImage}
+                    />
+                    <View style={styles.invitationBoxTexts}>
+                      <Text style={styles.invitedUserName}>Beka Arabidze</Text>
+                      <Text style={styles.invitationStatus}>Pending</Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.removeInvitedUser}
+                  >
+                    <TrashIcon color="#BBB" />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.invitedListItem}>
+                  <View style={styles.lfSide}>
+                    <Image
+                      cachePolicy="memory"
+                      contentFit="cover"
+                      transition={0}
+                      source={{
+                        uri: invitedUsers?.[0],
+                      }}
+                      style={styles.invitedUserImage}
+                    />
+                    <View style={styles.invitationBoxTexts}>
+                      <Text style={styles.invitedUserName}>
+                        Giorgi Bitsadze
+                      </Text>
+                      <Text style={styles.invitationStatus}>Accepted</Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.removeInvitedUser}
+                  >
+                    <TrashIcon color="#BBB" />
+                  </TouchableOpacity>
+                </View>
+              </ScrollView>
+            ) : (
+              <View style={[styles.noResultWrapper, {
+                marginTop: 0,
+              }]}>
+                <SearchNotFound />
+                <Text style={styles.noResultWrapperText}>
+                  You haven't added trip members yet, enter email and send
+                  invitation
+                </Text>
+              </View>
+            )}
+           </View>
+        </View>
+      </Modal>
 
       <Portal>
         <Modalize
@@ -1558,6 +1911,19 @@ const styles = StyleSheet.create({
     marginTop: 25,
     height: 50,
   },
+  modalViewWrapper: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+  },
+  modalViewCenter: {
+    backgroundColor: '#F2F2F7',
+    borderRadius: 15,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    width: "100%",
+    height: "100%"
+  },
   uploadButtonText: {
     color: "#fff",
     fontSize: 16,
@@ -1631,7 +1997,7 @@ const styles = StyleSheet.create({
   },
   invitedList: {
     marginTop: 15,
-    flex: 1,
+    // flex: 1,
     paddingHorizontal: 15,
   },
   invitedListItem: {

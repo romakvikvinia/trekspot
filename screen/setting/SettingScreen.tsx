@@ -1,9 +1,7 @@
 import React, { useContext, useRef } from "react";
 import {
-  ActivityIndicator,
   Alert,
   Platform,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -18,15 +16,12 @@ import { deleteFromAsyncStorage } from "../../helpers/secure.storage";
 import { COLORS } from "../../styles/theme";
 import {
   DeleteIcon,
-  EditIcon,
   LockIcon,
   LogoutIcon,
-  OneUserIcon,
   PrivacyIcon,
   TermsIcon,
   UserCircleIcon,
   UserIcon,
-  UsersIcon,
   VersionIcon,
 } from "../../utilities/SvgIcons.utility";
 import { useNavigation } from "@react-navigation/native";
@@ -48,7 +43,7 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
 
   return (
     <>
-      <SafeAreaView style={styles.safeArea}>
+      <View style={styles.safeArea}>
         <ScrollView
           style={{ flex: 1 }}
           contentContainerStyle={{ paddingHorizontal: 15 }}
@@ -76,11 +71,12 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
                   cachePolicy="memory"
                   contentFit="cover"
                   transition={0}
-                  // placeholder={<ActivityIndicator />}
                 />
               )}
-              <View>
-                <Text style={styles.username}>Andria Shonia</Text>
+              <View style={{ maxWidth: "70%" }}>
+                <Text numberOfLines={1} style={styles.username}>
+                  Misha Gogiashvili
+                </Text>
                 <Text style={styles.subTxt}>Welcome</Text>
               </View>
             </View>
@@ -166,12 +162,12 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
             </TouchableOpacity>
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </View>
 
       <Portal>
         <Modalize ref={modalEmbedRef} modalTopOffset={65} adjustToContentHeight>
           <MapEmbedView
-            blogUrl="https://file-examples.com/wp-content/storage/2017/10/file-sample_150kB.pdf"
+            blogUrl="https://cdn.pixabay.com/photo/2017/12/19/18/09/flowers-3028429_1280.jpg?v=3"
             placeTitle="Tbilisi"
             modalEmbedRef={modalEmbedRef}
           />
@@ -185,7 +181,8 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#f8f8f8",
-    paddingTop: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 0,
+    paddingTop:
+    Constants?.statusBarHeight + 10
   },
   avatar: {
     width: 60,

@@ -47,15 +47,16 @@ export const MapEmbedView = ({ placeTitle, modalEmbedRef, blogUrl }) => {
               `,
             }}
             useWebKit={true}
-            style={{ flex: 1, margin: 0, padding: 0 }}
+            style={{ flex: 1, margin: 0, padding: 0,  }}
           />
         ) : (
           <WebView
             source={{
-              url: blogUrl,
+              uri: blogUrl,
             }}
             useWebKit={true}
-            style={{ flex: 1, margin: 0, padding: 0 }}
+            style={{ flex: 1, margin: 0, padding: 0, }}
+            onShouldStartLoadWithRequest={() => false}
           />
         )}
       </View>

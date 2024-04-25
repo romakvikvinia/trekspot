@@ -64,7 +64,7 @@ const BucketListAllScreen = () => {
     );
   };
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <View style={styles.screenHeader}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -95,7 +95,7 @@ const BucketListAllScreen = () => {
           contentContainerStyle={{ paddingBottom: 25 }}
         />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
