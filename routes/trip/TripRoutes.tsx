@@ -9,6 +9,7 @@ import { TripInsights } from "../../screen/trip/TripInsights";
 import { TripInsightDetailScreen } from "../../screen/trip/TripInsightDetail";
 import { TripMapViewScreen } from "../../screen/trip/TripMapView";
 import { NewTripAndroid } from "../../screen/trip/NewTripAndroid";
+import { SIZES } from "../../styles/theme";
 
 interface TripRouteProps {}
 
@@ -25,7 +26,7 @@ const Stack = createStackNavigator<TripRouteStackParamList>();
 
 export type TripRouteStackNavigationProp =
   StackNavigationProp<TripRouteStackParamList>;
-
+  
 export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
   return (
     <Stack.Navigator>
@@ -34,16 +35,6 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
         component={TripScreen}
         options={({ route, navigation }) => ({
           headerShown: false,
-          // headerLeft: () => (
-          //   <HeaderButtons HeaderButtonComponent={THeaderButton}>
-          //     <Item
-          //       title="UndoSignature"
-          //       iconName="md-menu"
-          //       color={PrimaryColor}
-          //       onPress={navigation.toggleDrawer}
-          //     />
-          //   </HeaderButtons>
-          // ),
         })}
       />
        <Stack.Screen
@@ -59,6 +50,8 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
         component={TripDetailScreen}
         options={({ route, navigation }) => ({
           headerShown: false,
+          gestureEnabled: true,
+          gestureResponseDistance: SIZES.width - 50
         })}
       />
       <Stack.Screen
@@ -66,6 +59,8 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
         component={TripInsights}
         options={({ route, navigation }) => ({
           headerShown: false,
+          gestureEnabled: true,
+          gestureResponseDistance: SIZES.width - 50
         })}
       />
       <Stack.Screen
@@ -73,6 +68,8 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
         component={TripInsightDetailScreen}
         options={({ route, navigation }) => ({
           headerShown: false,
+          gestureEnabled: true,
+          gestureResponseDistance: SIZES.width - 50, 
         })}
       />
       <Stack.Screen
@@ -80,6 +77,8 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
         component={TripMapViewScreen}
         options={({ route, navigation }) => ({
           headerShown: false,
+          gestureEnabled: true,
+          gestureResponseDistance: SIZES.width - 50,
         })}
       />
     </Stack.Navigator>

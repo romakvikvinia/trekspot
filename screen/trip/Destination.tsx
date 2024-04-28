@@ -20,15 +20,15 @@ import {
   SearchIcon,
 } from "../../utilities/SvgIcons.utility";
 
-export const Destination = ({setWhereToModal}) => {
+export const Destination = ({onDestinationModalClose}) => {
   const [search, setSearch] = useState("");
-  return (
+   return (
     <>
       <View style={styles.modalHeader}>
         <View style={{flex: 1}}>
         <SearchComponent search={search} setSearch={setSearch} />
         </View>
-        <TouchableOpacity style={styles.cancelButton} onPress={() => setWhereToModal(false)}>
+        <TouchableOpacity style={styles.cancelButton} onPress={() => onDestinationModalClose()}>
           <Text style={styles.cancelButtonText}>Cancel</Text>
         </TouchableOpacity>
       </View>

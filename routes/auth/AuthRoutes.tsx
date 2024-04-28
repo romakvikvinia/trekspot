@@ -8,6 +8,7 @@ import { SignUpScreen } from "../../screen/auth/SignUpScreen";
 import { GetStartedScreen } from "../../screen/auth/GetStartedScreen";
 import { ResetPasswordScreen } from "../../screen/auth/ResetPassword";
 import { useNavigation } from "@react-navigation/native";
+import { SIZES } from "../../styles/theme";
 
 interface AuthRouteProps {}
 
@@ -36,6 +37,8 @@ export const AuthRoute: React.FC<AuthRouteProps> = () => {
         component={SignInScreen}
         options={{
           header: () => null,
+          gestureEnabled: true,
+          gestureResponseDistance: SIZES.width - 50, 
         }}
       />
       <Stack.Group
@@ -48,6 +51,8 @@ export const AuthRoute: React.FC<AuthRouteProps> = () => {
         component={SignUpScreen}
         options={{
           header: () => null,
+          gestureEnabled: true,
+          gestureResponseDistance: SIZES.width - 50, 
         }}
       />
       <Stack.Screen
@@ -55,6 +60,8 @@ export const AuthRoute: React.FC<AuthRouteProps> = () => {
         component={ResetPasswordScreen}
         options={{
           header: () => null,
+          gestureEnabled: true,
+          gestureResponseDistance: SIZES.width - 50, 
         }}
       />
     </Stack.Navigator>

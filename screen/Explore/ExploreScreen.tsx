@@ -56,6 +56,7 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
     take: 15,
     isTop: true,
   });
+  console.log("popularCountries",popularCountries)
 
   const { data: randomSightsData, isLoading: isRandomSightsLoading } =
     useRandomSightQuery({ take: 10 });
@@ -105,7 +106,7 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
               <TouchableOpacity
                 style={styles.currentTripDotsButton}
                 onPress={() =>
-                  Alert.alert("Do you want to hide trip?", "", [
+                  Alert.alert("Do you want to hide current trip?", "", [
                     {
                       text: "Cancel",
                       onPress: () => console.log("Cancel Pressed"),
@@ -193,6 +194,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     borderWidth: 1,
     borderColor: "#dac9dc",
+    marginBottom: 5,
   },
   currentTripLeft: {
     flexDirection: "row",

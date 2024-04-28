@@ -278,6 +278,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 15,
     marginBottom: 15,
+    paddingBottom: 15
   },
   textWithButtonLabel: {
     fontSize: SIZES.body2,

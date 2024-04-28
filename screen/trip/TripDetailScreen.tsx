@@ -722,7 +722,9 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           <Tabs.Tab
             name={item?.date}
             label={(props) => (
-              <View style={styles.customTab} key={ind}>
+              <View style={[styles.customTab, {
+                width: DATA?.length < 4 ? (SIZES.width - 80 )/ DATA?.length : 'auto'
+              }]} key={ind}>
                 <Text
                   style={{
                     fontSize: 12,

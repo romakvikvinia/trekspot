@@ -9,6 +9,7 @@ import { CountryDetailModal } from "../../components/explore/destination/Country
 import { TripDetailScreen } from "../../screen/trip/TripDetailScreen";
 import { TripInsightDetailScreen } from "../../screen/trip/TripInsightDetail";
 import { TripInsights } from "../../screen/trip/TripInsights";
+import { SIZES } from "../../styles/theme";
 
 interface ExploreRoutesProps {}
 
@@ -51,6 +52,8 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
         component={SeeAllScreen}
         options={() => ({
           header: () => null,
+          gestureEnabled: true,
+          gestureResponseDistance: SIZES.width - 50, 
         })}
       />
        <Stack.Screen
@@ -58,6 +61,8 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
         component={TripDetailScreen}
         options={({ route, navigation }) => ({
           headerShown: false,
+          gestureEnabled: true,
+          gestureResponseDistance: SIZES.width - 50, 
         })}
       />
        <Stack.Screen
@@ -65,6 +70,8 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
         component={TripInsights}
         options={({ route, navigation }) => ({
           headerShown: false,
+          gestureEnabled: true,
+          gestureResponseDistance: SIZES.width - 50, 
         })}
       />
         <Stack.Screen
@@ -72,6 +79,8 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
         component={TripInsightDetailScreen}
         options={({ route, navigation }) => ({
           headerShown: false,
+          gestureEnabled: true,
+          gestureResponseDistance: SIZES.width - 50, 
         })}
       />
        <Stack.Screen
@@ -79,6 +88,8 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
         component={CountryDetailModal}
         options={() => ({
           header: () => null,
+          gestureEnabled: true,
+          gestureResponseDistance: SIZES.width - 50, 
         })}
       />
     </Stack.Navigator>

@@ -162,6 +162,7 @@ export const CreateTripContent = ({
             >
               <TouchableOpacity
                 activeOpacity={0.5}
+                style={styles.newTripBoxButton}
                 onPress={() => onDestinationModalOpen()}
               >
                 <TripLocationIcon />
@@ -298,6 +299,13 @@ export const NewTrip = ({ newTripModalRef, tripActivitesModal }) => {
       modalDestinationRef.current?.open();
     } 
   };
+  const onDestinationModalClose = () => {
+    if(Platform.OS === "android") {
+      setWhereToModal(false)
+    } else {
+      modalDestinationRef.current?.close();
+    } 
+  };
   return (
     <>
       <View
@@ -336,7 +344,7 @@ export const NewTrip = ({ newTripModalRef, tripActivitesModal }) => {
             backgroundColor: "#F2F2F7",
           }}
         >
-          <Destination />
+          <Destination onDestinationModalClose={onDestinationModalClose} />
         </Modalize>
       </Portal>
 
@@ -349,7 +357,7 @@ export const NewTrip = ({ newTripModalRef, tripActivitesModal }) => {
         }}>
         <View style={styles.modalViewWrapper}>
           <View style={styles.modalViewCenter}> 
-              <Destination setWhereToModal={setWhereToModal}/> 
+              <Destination onDestinationModalClose={onDestinationModalClose}/> 
            </View>
         </View>
       </Modal>
@@ -487,6 +495,7 @@ const styles = StyleSheet.create({
   newTripBoxButton: {
     height: "100%",
     justifyContent: "center",
+    padding: 15,
   },
   rowItemHeader: {
     flexDirection: "row",
@@ -520,7 +529,6 @@ const styles = StyleSheet.create({
   },
   halfBox: {
     width: "48%",
-    padding: 15,
     height: 120,
     justifyContent: "center",
   },

@@ -10,6 +10,7 @@ import { THeaderButton } from "../../common/ui/THeaderButton";
 import { PrimaryColor } from "../../styles/colors";
 import { EditoProfile } from "../../screen/setting/EditProfile";
 import { ResetPassword } from "../../screen/setting/ResetPassword";
+import { SIZES } from "../../styles/theme";
 
 interface SettingRouteProps {}
 
@@ -43,16 +44,8 @@ export const SettingRouteStack: React.FC<SettingRouteProps> = ({}) => {
         component={SettingScreen}
         options={({ route, navigation }) => ({
           headerShown: false,
-          // headerLeft: () => (
-          //   <HeaderButtons HeaderButtonComponent={THeaderButton}>
-          //     <Item
-          //       title="UndoSignature"
-          //       iconName="md-menu"
-          //       color={PrimaryColor}
-          //       onPress={navigation.toggleDrawer}
-          //     />
-          //   </HeaderButtons>
-          // ),
+          gestureEnabled: true,
+          gestureResponseDistance: SIZES.width - 50
         })}
       />
       <Stack.Screen
@@ -60,16 +53,8 @@ export const SettingRouteStack: React.FC<SettingRouteProps> = ({}) => {
         component={EditoProfile}
         options={({ route, navigation }) => ({
           headerShown: false,
-          // headerLeft: () => (
-          //   <HeaderButtons HeaderButtonComponent={THeaderButton}>
-          //     <Item
-          //       title="UndoSignature"
-          //       iconName="md-menu"
-          //       color={PrimaryColor}
-          //       onPress={navigation.toggleDrawer}
-          //     />
-          //   </HeaderButtons>
-          // ),
+          gestureEnabled: true,
+          gestureResponseDistance: SIZES.width - 50
         })}
       />
       <Stack.Screen
@@ -77,16 +62,8 @@ export const SettingRouteStack: React.FC<SettingRouteProps> = ({}) => {
         component={ResetPassword}
         options={({ route, navigation }) => ({
           headerShown: false,
-          // headerLeft: () => (
-          //   <HeaderButtons HeaderButtonComponent={THeaderButton}>
-          //     <Item
-          //       title="UndoSignature"
-          //       iconName="md-menu"
-          //       color={PrimaryColor}
-          //       onPress={navigation.toggleDrawer}
-          //     />
-          //   </HeaderButtons>
-          // ),
+          gestureEnabled: true,
+          gestureResponseDistance: SIZES.width - 50
         })}
       />
     </Stack.Navigator>

@@ -16,9 +16,14 @@ import { deleteFromAsyncStorage } from "../../helpers/secure.storage";
 import { COLORS } from "../../styles/theme";
 import {
   DeleteIcon,
+  Email,
+  Facebook,
+  Instagram,
   LockIcon,
   LogoutIcon,
   PrivacyIcon,
+  StarIcon,
+  StarsIcon,
   TermsIcon,
   UserCircleIcon,
   UserIcon,
@@ -100,7 +105,7 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
               <Text style={styles.buttonText}>Reset password</Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.buttonsWrapperTitle}>About</Text>
+          <Text style={styles.buttonsWrapperTitle}>Legal</Text>
           <View style={styles.buttonsWrapper}>
             <TouchableOpacity
               onPress={() => onModalEmbedOpen()}
@@ -110,16 +115,10 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
               <PrivacyIcon />
               <Text style={styles.buttonText}>Privacy Policy</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.button]} activeOpacity={0.7}>
+            <TouchableOpacity  style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]} activeOpacity={0.7}>
               <TermsIcon />
               <Text style={styles.buttonText}>Terms of Service</Text>
             </TouchableOpacity>
-            <View
-              style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]}
-            >
-              <VersionIcon />
-              <Text style={styles.buttonText}>Version: 1.0.0</Text>
-            </View>
           </View>
           <Text style={styles.buttonsWrapperTitle}>Manage</Text>
           <View style={styles.buttonsWrapper}>
@@ -161,6 +160,22 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
               </Text>
             </TouchableOpacity>
           </View>
+          <View style={styles.socials}>
+              <TouchableOpacity activeOpacity={0.7} style={styles.socialButton}>
+                 <Facebook />
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.7} style={styles.socialButton}>
+                 <Instagram />
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.7} style={styles.socialButton}>
+                 <Email />
+              </TouchableOpacity>
+          </View>
+          <View style={styles.version}>
+            <Text style={styles.versionText}>
+              Version: 1.0.0
+            </Text>
+          </View>
         </ScrollView>
       </View>
 
@@ -183,6 +198,28 @@ const styles = StyleSheet.create({
     backgroundColor: "#f8f8f8",
     paddingTop:
     Constants?.statusBarHeight + 10
+  },
+  version: {
+    width: "100%",
+    alignItems: "center",
+    marginTop: 10
+  },
+  versionText: {
+    color: "#bbb",
+    fontSize: 14,
+  },
+  socials: {
+    flexDirection: 'row',
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 15
+  },
+  socialButton: {
+    width: 35,
+    height: 35,
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: 3
   },
   avatar: {
     width: 60,

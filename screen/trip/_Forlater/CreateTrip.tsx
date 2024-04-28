@@ -55,6 +55,9 @@ export const CreateTripContent = ({
   const onDestinationModalOpen = () => {
     modalDestinationRef.current?.open();
   };
+  const onDestinationModalClose = () => {
+    modalDestinationRef.current?.close();
+  };
   const onAccessibilityModalOpen = () => {
     modalAccessibilityRef.current?.open();
   };
@@ -216,7 +219,7 @@ export const CreateTripContent = ({
             minHeight: "80%",
           }}
         >
-          <Destination />
+          <Destination onDestinationModalClose={onDestinationModalClose} />
         </Modalize>
       </Portal>
 

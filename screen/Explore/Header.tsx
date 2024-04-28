@@ -13,7 +13,7 @@ import { Portal } from "react-native-portalize";
 import { BucketlistModal } from "../../common/components/BucketlistModal";
 import { CountrySearch } from "../../common/components/CountrySearch";
 import { COLORS, SIZES } from "../../styles/theme";
-import { ClearIcon, Mark2, SearchIcon, XIcon } from "../../utilities/SvgIcons.utility";
+import { ClearIcon, FlightIcon, Mark2, SearchIcon, XIcon } from "../../utilities/SvgIcons.utility";
 import Constants from "expo-constants";
 
 export const ExploreHeader = () => {
@@ -36,17 +36,19 @@ export const ExploreHeader = () => {
             placeholderTextColor="#333"
             autoFocus={false}
             style={styles.searchInput}
-            onChangeText={e=> setSearchValue(e)}
+            onChangeText={(e) => setSearchValue(e)}
             onFocus={() => setSearchActive(true)}
             value={searchValue}
-           />
-           {
-            searchValue  ? 
-            <TouchableOpacity onPress={() => setSearchValue('')} style={styles.clearButton} activeOpacity={0.7}>
-            <ClearIcon />
-           </TouchableOpacity> :null
-           }
-         
+          />
+          {searchValue ? (
+            <TouchableOpacity
+              onPress={() => setSearchValue("")}
+              style={styles.clearButton}
+              activeOpacity={0.7}
+            >
+              <ClearIcon />
+            </TouchableOpacity>
+          ) : null}
         </View>
         <View style={styles.right}>
           {searchActive ? (
@@ -60,33 +62,41 @@ export const ExploreHeader = () => {
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity
-              onPress={() => onBucketlistOpen()}
-              style={styles.bucketListButton}
-            >
-              <Mark2 size={16} color={COLORS.black} />
-            </TouchableOpacity>
+            <>
+              <TouchableOpacity
+                onPress={() => onBucketlistOpen()}
+                style={styles.bucketListButton}
+              >
+                <FlightIcon color={COLORS.primary} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => onBucketlistOpen()}
+                style={styles.bucketListButton}
+              >
+                <Mark2 size={16} color={COLORS.black} />
+              </TouchableOpacity>
+            </>
           )}
         </View>
-
-      
       </View>
       {searchActive ? (
-          <View
-            style={{
-              position: "absolute",
-              backgroundColor: "#fff",
-               top: 50,
-              left: 0,
-              width: SIZES.width,
-              height: Platform.OS === "android" ? SIZES.height - 109 : SIZES.height - 170,
-              zIndex: 999
-            }}
-          >
-            <CountrySearch
-            />
-          </View>
-        ) : null}
+        <View
+          style={{
+            position: "absolute",
+            backgroundColor: "#fff",
+            top: 50,
+            left: 0,
+            width: SIZES.width,
+            height:
+              Platform.OS === "android"
+                ? SIZES.height - 109
+                : SIZES.height - 170,
+            zIndex: 999,
+          }}
+        >
+          <CountrySearch />
+        </View>
+      ) : null}
       <Portal>
         <Modalize
           ref={BucketListModalRef}
