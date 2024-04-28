@@ -328,7 +328,7 @@ export const trekSpotApi = createApi({
               name
               rate
               visitors
-              continent
+              continents
               image {
                 url
               }
@@ -355,7 +355,7 @@ export const trekSpotApi = createApi({
               name
               iso2
               capital
-              continent
+              continents
               isPopular
               coordinates {
                 latitude
@@ -592,7 +592,7 @@ export const trekSpotApi = createApi({
             name
             rate
             visitors
-            continent
+            continents
             image {
               url
             }

@@ -126,7 +126,10 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
                 }}
               >
                 <ImageBackground
-                  style={[styles.box, {flex: 1, height: "100%", width: "100%"}]}
+                  style={[
+                    styles.box,
+                    { flex: 1, height: "100%", width: "100%" },
+                  ]}
                   resizeMode="cover"
                   source={{
                     uri: "https://cdn.pixabay.com/photo/2016/11/23/15/32/pedestrians-1853552_1280.jpg",
