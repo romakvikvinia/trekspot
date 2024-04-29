@@ -332,9 +332,6 @@ export const trekSpotApi = createApi({
               image {
                 url
               }
-              images {
-                url
-              }
             }
           }
         `,
