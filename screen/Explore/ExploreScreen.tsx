@@ -56,7 +56,7 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
     take: 15,
     isTop: true,
   });
-  console.log("popularCountries",popularCountries)
+ 
 
   const { data: randomSightsData, isLoading: isRandomSightsLoading } =
     useRandomSightQuery({ take: 10 });

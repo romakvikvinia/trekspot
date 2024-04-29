@@ -50,6 +50,7 @@ export const CountryDetailModal: React.FC<CountryDetailModalProps> = ({
   route,
 }) => {
   const { countryId } = route?.params;
+  console.log("countryId",countryId)
   const navigation = useNavigation();
   const [getCountry, { isLoading, data, isError }] = useLazyCountryQuery();
   const modalCountryPassportSelectRef = useRef<Modalize>(null);
@@ -72,6 +73,8 @@ export const CountryDetailModal: React.FC<CountryDetailModalProps> = ({
       });
     };
   }, []);
+
+  console.log("data", data)
 
   return (
     <>
@@ -122,8 +125,7 @@ export const CountryDetailModal: React.FC<CountryDetailModalProps> = ({
                       style={styles.box}
                       resizeMode="cover"
                       source={{
-                        uri: "https://cdn.pixabay.com/photo/2017/12/16/16/37/great-wall-of-china-3022907_1280.jpg",
-                        // item.url,
+                        uri: item.url,
                       }}
                       key={`slide-${ind}`}
                     >

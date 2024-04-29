@@ -39,6 +39,7 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
 
   const handleDetailOfCountry = useCallback((countryId: string) => {
     // setState((prevState) => ({ ...prevState, countryId }));
+    console.log('countryId',countryId)
     navigation.navigate("CountryDetailScreen", {
       countryId: countryId,
     });
@@ -102,43 +103,7 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
             ))}
           </ScrollView>
         )}
-        <ScrollView
-          contentContainerStyle={{ paddingHorizontal: 15 }}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-        >
-          {[0, 1, 2, 3].map((item, ind) => (
-            <View
-              style={{
-                width: 160,
-                height: 185,
-                borderRadius: 10,
-                marginRight: 10,
-              }}
-              key={ind}
-            >
-              <LinearGradient
-                colors={["rgba(0,0,0,0.1)", "rgba(0,0,0,0.6)"]}
-                style={{
-                  width: 160,
-                  height: 185,
-                  borderRadius: 10,
-                }}
-              >
-                <ImageBackground
-                  style={[
-                    styles.box,
-                    { flex: 1, height: "100%", width: "100%" },
-                  ]}
-                  resizeMode="cover"
-                  source={{
-                    uri: "https://cdn.pixabay.com/photo/2016/11/23/15/32/pedestrians-1853552_1280.jpg",
-                  }}
-                ></ImageBackground>
-              </LinearGradient>
-            </View>
-          ))}
-        </ScrollView>
+        
       </View>
       {/** Country detail modal */}
       {/* {state.countryId && (

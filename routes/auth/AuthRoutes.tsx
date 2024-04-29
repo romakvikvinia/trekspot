@@ -9,6 +9,7 @@ import { GetStartedScreen } from "../../screen/auth/GetStartedScreen";
 import { ResetPasswordScreen } from "../../screen/auth/ResetPassword";
 import { useNavigation } from "@react-navigation/native";
 import { SIZES } from "../../styles/theme";
+import { Platform } from "react-native";
 
 interface AuthRouteProps {}
 
@@ -38,7 +39,7 @@ export const AuthRoute: React.FC<AuthRouteProps> = () => {
         options={{
           header: () => null,
           gestureEnabled: true,
-          gestureResponseDistance: SIZES.width - 50, 
+          gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50, 
         }}
       />
       <Stack.Group
@@ -52,7 +53,7 @@ export const AuthRoute: React.FC<AuthRouteProps> = () => {
         options={{
           header: () => null,
           gestureEnabled: true,
-          gestureResponseDistance: SIZES.width - 50, 
+          gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50, 
         }}
       />
       <Stack.Screen
@@ -61,7 +62,7 @@ export const AuthRoute: React.FC<AuthRouteProps> = () => {
         options={{
           header: () => null,
           gestureEnabled: true,
-          gestureResponseDistance: SIZES.width - 50, 
+          gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50, 
         }}
       />
     </Stack.Navigator>
