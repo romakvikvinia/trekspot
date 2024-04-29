@@ -363,7 +363,6 @@ export const trekSpotApi = createApi({
               }
               rate
               visitors
-              gallery
               domain
               independent
               unMember
@@ -420,6 +419,10 @@ export const trekSpotApi = createApi({
                 seasonalConsiderations
               }
               images {
+                id
+                url
+              }
+              image {
                 url
               }
             }

@@ -39,7 +39,7 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
 
   const handleDetailOfCountry = useCallback((countryId: string) => {
     // setState((prevState) => ({ ...prevState, countryId }));
-    console.log('countryId',countryId)
+
     navigation.navigate("CountryDetailScreen", {
       countryId: countryId,
     });
@@ -48,7 +48,7 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
   // const handleClearState = useCallback(() => {
   //   setState((prevState) => ({ ...prevState, countryId: null }));
   // }, []);
-
+  console.log("countries", countries[0]);
   return (
     <>
       <View style={[styles.rowItem]} style={{ marginTop: 0 }}>
@@ -103,7 +103,6 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
             ))}
           </ScrollView>
         )}
-        
       </View>
       {/** Country detail modal */}
       {/* {state.countryId && (

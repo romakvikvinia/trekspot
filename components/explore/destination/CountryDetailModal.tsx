@@ -50,7 +50,7 @@ export const CountryDetailModal: React.FC<CountryDetailModalProps> = ({
   route,
 }) => {
   const { countryId } = route?.params;
-  console.log("countryId",countryId)
+
   const navigation = useNavigation();
   const [getCountry, { isLoading, data, isError }] = useLazyCountryQuery();
   const modalCountryPassportSelectRef = useRef<Modalize>(null);
@@ -73,8 +73,6 @@ export const CountryDetailModal: React.FC<CountryDetailModalProps> = ({
       });
     };
   }, []);
-
-  console.log("data", data)
 
   return (
     <>

@@ -333,7 +333,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
 
   const handleTrashImage = useCallback(async () => {
     let { activeSliderIndex, story } = state;
-    console.log("gre", activeSliderIndex);
+
     if (!story || !story.images.length) return;
 
     activeSliderIndex = activeSliderIndex == -1 ? 0 : activeSliderIndex;

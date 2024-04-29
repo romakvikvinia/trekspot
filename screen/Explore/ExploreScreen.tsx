@@ -56,7 +56,6 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
     take: 15,
     isTop: true,
   });
- 
 
   const { data: randomSightsData, isLoading: isRandomSightsLoading } =
     useRandomSightQuery({ take: 10 });
@@ -66,7 +65,7 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
    */
 
   const cities = data && data.cities ? data.cities : [];
-
+  console.log("popularCountries", popularCountries);
   return (
     <>
       <View style={styles.safeArea}>

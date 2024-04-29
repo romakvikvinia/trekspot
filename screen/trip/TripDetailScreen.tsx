@@ -367,7 +367,7 @@ const DATA = [
 interface TripProps {}
 
 export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
-  console.log("route", route?.params?.directVisit);
+  // console.log("route", route?.params?.directVisit);
   const navigation = useNavigation();
 
   const [invitedUsers, setInvitedUsers] = useState([
@@ -375,7 +375,8 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     // "https://images.unsplash.com/photo-1704642408219-977150048504?q20&w=3325&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "https://images.unsplash.com/photo-1704642408219-977150048504?q20&w=3325&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   ]);
- const [invitedUsersModalVisible, setInvitedUsersModalVisible] = useState(false);
+  const [invitedUsersModalVisible, setInvitedUsersModalVisible] =
+    useState(false);
   const mapRef = useRef(null);
 
   const [topSightVisible, setTopSightVisible] = useState(false);
@@ -411,12 +412,11 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   };
 
   const onInvitedUsersModalOpen = () => {
-    if(Platform.OS === "android") {
-      setInvitedUsersModalVisible(true)
+    if (Platform.OS === "android") {
+      setInvitedUsersModalVisible(true);
     } else {
       invitedUsersModal.current?.open();
     }
-   
   };
   const onActivitiesModalOpen = () => {
     activitiesModal.current?.open();
@@ -486,8 +486,6 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
       quality: 1,
     });
 
-    console.log("image result", result);
-
     if (!result.canceled) {
       const formData = new FormData();
 
@@ -498,10 +496,9 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           result?.assets[0]?.fileName ||
           result?.assets[0]?.uri.split("/").pop(),
       });
-      console.log("image - formData", formData);
 
       // const response = await send(formData);
-      console.log("image - response", response);
+
       if (response) {
         // Toast.show(t("carmatebit.ganaxlda"), {
         //   position: 70,
@@ -722,9 +719,18 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           <Tabs.Tab
             name={item?.date}
             label={(props) => (
-              <View style={[styles.customTab, {
-                width: DATA?.length < 4 ? (SIZES.width - 80 )/ DATA?.length : 'auto'
-              }]} key={ind}>
+              <View
+                style={[
+                  styles.customTab,
+                  {
+                    width:
+                      DATA?.length < 4
+                        ? (SIZES.width - 80) / DATA?.length
+                        : "auto",
+                  },
+                ]}
+                key={ind}
+              >
                 <Text
                   style={{
                     fontSize: 12,
@@ -1068,11 +1074,11 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
       >
         <View style={styles.modalViewWrapper}>
           <View style={styles.modalViewCenter}>
-            <View style={[styles.rowItemHeader, {width: "100%"}]}>
+            <View style={[styles.rowItemHeader, { width: "100%" }]}>
               <Text style={styles.h2}>Trip members</Text>
 
               <TouchableOpacity
-                onPress={() =>  setInvitedUsersModalVisible(false)}
+                onPress={() => setInvitedUsersModalVisible(false)}
                 activeOpacity={0.5}
                 style={styles.closeButton}
               >
@@ -1090,9 +1096,12 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                 <Text style={styles.inviteButtonText}>Invite</Text>
               </TouchableOpacity>
             </View>
-             {true ? (
-              <ScrollView contentContainerStyle={{paddingHorizontal: 0}} style={[styles.invitedList]}>
-                <View style={[styles.invitedListItem, ]}>
+            {true ? (
+              <ScrollView
+                contentContainerStyle={{ paddingHorizontal: 0 }}
+                style={[styles.invitedList]}
+              >
+                <View style={[styles.invitedListItem]}>
                   <View style={styles.lfSide}>
                     <Image
                       cachePolicy="memory"
@@ -1165,7 +1174,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                     <TrashIcon color="#BBB" />
                   </TouchableOpacity>
                 </View>
-                <View style={[styles.invitedListItem, ]}>
+                <View style={[styles.invitedListItem]}>
                   <View style={styles.lfSide}>
                     <Image
                       cachePolicy="memory"
@@ -1238,7 +1247,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                     <TrashIcon color="#BBB" />
                   </TouchableOpacity>
                 </View>
-                <View style={[styles.invitedListItem, ]}>
+                <View style={[styles.invitedListItem]}>
                   <View style={styles.lfSide}>
                     <Image
                       cachePolicy="memory"
@@ -1311,7 +1320,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                     <TrashIcon color="#BBB" />
                   </TouchableOpacity>
                 </View>
-                <View style={[styles.invitedListItem, ]}>
+                <View style={[styles.invitedListItem]}>
                   <View style={styles.lfSide}>
                     <Image
                       cachePolicy="memory"
@@ -1386,9 +1395,14 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                 </View>
               </ScrollView>
             ) : (
-              <View style={[styles.noResultWrapper, {
-                marginTop: 0,
-              }]}>
+              <View
+                style={[
+                  styles.noResultWrapper,
+                  {
+                    marginTop: 0,
+                  },
+                ]}
+              >
                 <SearchNotFound />
                 <Text style={styles.noResultWrapperText}>
                   You haven't added trip members yet, enter email and send
@@ -1396,7 +1410,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                 </Text>
               </View>
             )}
-           </View>
+          </View>
         </View>
       </Modal>
 
@@ -1915,16 +1929,16 @@ const styles = StyleSheet.create({
   },
   modalViewWrapper: {
     flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
   },
   modalViewCenter: {
-    backgroundColor: '#F2F2F7',
+    backgroundColor: "#F2F2F7",
     borderRadius: 15,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     width: "100%",
-    height: "100%"
+    height: "100%",
   },
   uploadButtonText: {
     color: "#fff",
