@@ -65,7 +65,7 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
    */
 
   const cities = data && data.cities ? data.cities : [];
-  console.log("popularCountries", popularCountries);
+  // console.log("popularCountries");
   return (
     <>
       <View style={styles.safeArea}>
