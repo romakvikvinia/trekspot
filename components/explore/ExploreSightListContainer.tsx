@@ -67,8 +67,8 @@ export const ExploreSightListContainer: React.FC<
                   style={styles.box}
                   resizeMode="cover"
                   source={{
-                    uri: "https://cdn.pixabay.com/photo/2016/11/22/19/17/buildings-1850129_1280.jpg",
-                    // item.image?.url,
+                    // uri: "https://cdn.pixabay.com/photo/2016/11/22/19/17/buildings-1850129_1280.jpg",
+                    uri: item.image?.url,
                   }}
                 >
                   <TouchableOpacity
