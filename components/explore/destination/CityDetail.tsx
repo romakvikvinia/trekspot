@@ -1,0 +1,266 @@
+import { useCallback, useEffect, useState } from "react";
+import { Text } from "react-native";
+import { ImageBackground, Platform, TouchableOpacity } from "react-native";
+import { ScrollView, View } from "react-native";
+import { LinearGradient } from "react-native-svg";
+import Swiper from "react-native-swiper";
+import { useLazyGetSightsQuery } from "../../../api/api.trekspot";
+import { CityType, SightType } from "../../../api/api.types";
+import { Loader } from "../../../common/ui/Loader";
+import { BackIcon, DownIcon, Mark2, StarIcon } from "../../../utilities/SvgIcons.utility";
+import { SightDetailModal } from "../sights/SightDetailModal";
+import { SightsContainer } from "../sights/SightsContainer";
+import { exploreStyles } from "../sights/_exploreStyles";
+import { styles } from "../../../common/components/_styles";
+import { SightItem } from "../sights/SightItem";
+import { SIZES } from "../../../styles/theme";
+import { useNavigation } from "@react-navigation/native";
+import Constants from "expo-constants";
+
+type CityDetailProps = {
+  city: CityType;
+};
+
+interface IState {
+  sight: SightType | null;
+}
+
+export const CityDetail: React.FC<CityDetailProps> = ({
+  route
+}) => {
+  const navigation = useNavigation();
+  const { city } = route?.params;
+  const [state, setState] = useState<IState>({ sight: null });
+  const [getSights, { data, isLoading }] = useLazyGetSightsQuery();
+
+  useEffect(() => {
+    getSights({ iso2: city.iso2, city: city.city });
+  }, [city]);
+
+  const handleSetSightItem = useCallback((sight: SightType) => {
+    setState((prevState) => ({ ...prevState, sight }));
+  }, []);
+
+  // transform data
+
+  const topSights = (data && "Top Sights" in data && data["Top Sights"]) || [];
+  let sights = data && { ...data };
+  if (sights && data && "Top Sights" in data && data["Top Sights"]) {
+    delete sights["Top Sights"];
+  }
+  return (
+    <View style={{ flex: 1, backgroundColor: "#f8f8f8" }}>
+      <ScrollView style={{ flex: 1 }}>
+        {isLoading && (
+          <View style={{ minHeight: SIZES.height }}>
+            <View
+              style={{
+                backgroundColor: "#eee",
+                width: "100%",
+                height: 300,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <View style={{ width: 35, height: 35 }}>
+                <Loader isLoading={isLoading} background="#eee" />
+              </View>
+            </View>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingHorizontal: 15,
+              }}
+            >
+              {[0, 1, 2].map((_, i) => (
+                <View
+                  key={`item-${i}`}
+                  style={{
+                    backgroundColor: "#eee",
+                    width: 200,
+                    marginRight: 15,
+                    minHeight: 190,
+                    marginTop: 25,
+                    borderRadius: 15,
+                  }}
+                ></View>
+              ))}
+            </ScrollView>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingHorizontal: 15,
+              }}
+            >
+              {[0, 1, 2].map((_, i) => (
+                <View
+                  key={`item-${i}`}
+                  style={{
+                    backgroundColor: "#eee",
+                    width: 200,
+                    marginRight: 15,
+                    height: 190,
+                    marginTop: 15,
+                    borderRadius: 15,
+                  }}
+                ></View>
+              ))}
+            </ScrollView>
+          </View>
+        )}
+
+        {!isLoading ? (
+          <>
+            <View
+              style={[
+                styles.swiperWrapper,
+                {
+                  borderTopLeftRadius: 10,
+                  borderTopRightRadius: 10,
+                  overflow: "hidden",
+                },
+              ]}
+            >
+              <TouchableOpacity
+                onPress={() => navigation.goBack()}
+                activeOpacity={0.7}
+                style={[
+                  styles.backButton,
+                  {
+                    top: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 55,
+                  },
+                ]}
+              >
+                <BackIcon color="#fff" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.addToBucketButton,
+                  { top: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 55,},
+                ]}
+                activeOpacity={0.7}
+              >
+                <Mark2 color="#fff" />
+              </TouchableOpacity>
+
+              <Swiper
+                activeDotColor="#fff"
+                showsButtons={false}
+                loop={false}
+                dotColor="#949494"
+                automaticallyAdjustContentInsets
+                paginationStyle={{
+                  position: "absolute",
+                  justifyContent: "flex-end",
+                  paddingRight: 15,
+                  bottom: 16,
+                }}
+              >
+                {/* {city.images.map((item,i) => (
+                <ImageBackground
+                  style={[styles.box]}
+                  resizeMode="cover"
+                  source={{
+                    uri: item.url,
+                  }}
+                  key={`slide-${item.id}-${city.id}`}
+                >
+                  <LinearGradient
+                    style={styles.gradientWrapper}
+                    colors={["rgba(0,0,0,0.1)", "rgba(0,0,0,0.6)"]}
+                  ></LinearGradient>
+                </ImageBackground>
+              ))} */}
+                <ImageBackground
+                  style={[styles.box]}
+                  resizeMode="cover"
+                  source={{
+                    uri: "https://cdn.pixabay.com/photo/2021/07/24/15/47/venice-6489813_1280.jpg",
+                  }}
+                >
+                  <LinearGradient
+                    style={styles.gradientWrapper}
+                    colors={["rgba(0,0,0,0.1)", "rgba(0,0,0,0.6)"]}
+                  ></LinearGradient>
+                </ImageBackground>
+                <ImageBackground
+                  style={[styles.box]}
+                  resizeMode="cover"
+                  source={{
+                    uri: "https://cdn.pixabay.com/photo/2021/07/24/15/47/venice-6489813_1280.jpg",
+                  }}
+                >
+                  <LinearGradient
+                    style={styles.gradientWrapper}
+                    colors={["rgba(0,0,0,0.1)", "rgba(0,0,0,0.6)"]}
+                  ></LinearGradient>
+                </ImageBackground>
+              </Swiper>
+
+              <View style={styles.otherInfo}>
+                <View style={styles.labelItem}>
+                  <Text style={styles.labelItemText}>{city.city}</Text>
+                </View>
+                <View style={styles.ratingLabel}>
+                  <View
+                    style={{
+                      position: "relative",
+                      top: -1,
+                      opacity: 0.8,
+                    }}
+                  >
+                    <StarIcon size={15} color="#FFBC3E" />
+                  </View>
+                  <Text style={styles.ratingText}>{city.rate} /</Text>
+                  <Text style={styles.ratingText}>
+                    {city.visitors} visitors
+                  </Text>
+                </View>
+              </View>
+            </View>
+            <View
+              style={[
+                exploreStyles.placeSpotsRow,
+                {
+                  borderTopWidth: 0,
+                },
+              ]}
+            >
+              <Text
+                style={[
+                  exploreStyles.placeSpotsRowTitle,
+                  { fontSize: 20, fontWeight: "bold" },
+                ]}
+              >
+                Top sights
+              </Text>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{
+                  paddingHorizontal: 15,
+                }}
+              >
+                {topSights.map((item) => (
+                  <SightItem
+                    key={`top-sights-${item.id}-${item.title}`}
+                    item={item}
+                    onHandleItem={handleSetSightItem}
+                  />
+                ))}
+              </ScrollView>
+            </View>
+
+            {sights && Object.keys(sights).length ? (
+              <SightsContainer items={sights} />
+            ) : null}
+
+            {state.sight && <SightDetailModal data={state.sight} />}
+          </>
+        ) : null}
+      </ScrollView>
+    </View>
+  );
+};

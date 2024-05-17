@@ -12,6 +12,7 @@ import { CityType, CountryType } from "../../../api/api.types";
 import { useLazyGetCitiesQuery } from "../../../api/api.trekspot";
 import { Loader } from "../../ui/Loader";
 import { ForYouCountryItem } from "../../../components/explore/ForYouCountryItem";
+import { useNavigation } from "@react-navigation/native";
 
 type ForYouPros = {
   DATA: any;
@@ -24,6 +25,8 @@ interface IState {
 }
 
 export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
+  const navigation = useNavigation();
+
   const modalEmbedRef = useRef(null);
 
   const [state, setState] = useState<IState>({
@@ -39,10 +42,9 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
   };
 
   const onPlaceDetailOpen = useCallback((city: CityType) => {
-    setState((prevState) => ({
-      ...prevState,
-      city,
-    }));
+     navigation.navigate("CityDetail", {
+      city
+     })
   }, []);
 
   useEffect(() => {
@@ -52,7 +54,6 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
     });
   }, [fetchCountryCities, country]);
 
-  // console.log("data for you", data);
 
   return (
     <>

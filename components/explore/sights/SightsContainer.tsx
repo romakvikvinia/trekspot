@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { Image } from "expo-image";
-import { View, TouchableOpacity, ScrollView, Text } from "react-native";
+import { View, TouchableOpacity, ScrollView, Text, ImageBackground } from "react-native";
 import { exploreStyles } from "./_exploreStyles";
 import { styles } from "../../../common/components/_styles";
 import { COLORS } from "../../../styles/theme";
@@ -12,114 +12,115 @@ import {
 } from "../../../utilities/SvgIcons.utility";
 import { SightType } from "../../../api/api.types";
 import { SightDetailModal } from "./SightDetailModal";
+const noImage = require("../../../assets/no-image.png");
 
 type SightsContainerProps = {
   items: Record<string, SightType[]>;
 };
 
 interface IState {
-  isOpen: Record<string, boolean>;
   item: SightType | null;
 }
 
-export const SightsContainer: React.FC<SightsContainerProps> = ({ items }) => {
-  const [state, setState] = useState<IState>({ isOpen: {}, item: null });
-
-  const handleOpenSightDetail = useCallback((item: SightType) => {
-    setState((prevState) => ({ ...prevState, item }));
-  }, []);
+export const SightsRow = ({ rowKey, handleOpenSightDetail, items }) => {
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <>
-      {Object.keys(items).map((key) => (
-        <View
-          key={`SightsContainer-item-${key}`}
-          style={[exploreStyles.placeSpotsRow, { marginTop: 10 }]}
-        >
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={exploreStyles.placeSpotsRowTrigger}
-            onPress={() =>
-              setState((prevState) => ({
-                ...prevState,
-                isOpen: {
-                  [key]: prevState.isOpen[key] ? false : true,
-                },
-              }))
-            }
+    <View
+      key={`SightsContainer-item-${rowKey}`}
+      style={[exploreStyles.placeSpotsRow, { marginTop: 10 }]}
+    >
+      <TouchableOpacity
+        activeOpacity={0.7}
+        style={exploreStyles.placeSpotsRowTrigger}
+        onPress={() => setIsOpen(!isOpen)}
+      >
+        <View style={exploreStyles.placeSpotsRowLeft}>
+          <Text
+            style={[
+              exploreStyles.placeSpotsRowTitle,
+              {
+                paddingHorizontal: 0,
+                marginBottom: 5,
+                fontWeight: "bold",
+                fontSize: 20,
+              },
+            ]}
           >
-            <View style={exploreStyles.placeSpotsRowLeft}>
-              <Text
-                style={[
-                  exploreStyles.placeSpotsRowTitle,
-                  { paddingHorizontal: 0, marginBottom: 5 },
-                ]}
-              >
-                {key}
-              </Text>
-              {!state.isOpen[key] ? (
-                <Text
-                  style={exploreStyles.placeSpotsRowSubTitle}
-                  numberOfLines={1}
-                >
-                  {items &&
-                    items[key] &&
-                    items[key]
-                      .slice(0, 3)
-                      .map((i) => i.title)
-                      .join(", ")}
-                </Text>
-              ) : null}
-            </View>
-            {!state.isOpen[key] ? <DownCircleIcon /> : <UpCircleIcon />}
-          </TouchableOpacity>
-          {state.isOpen[key] ? (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingHorizontal: 15,
-                paddingBottom: 10,
-              }}
-            >
+            {rowKey}
+          </Text>
+          {!isOpen ? (
+            <Text style={exploreStyles.placeSpotsRowSubTitle} numberOfLines={1}>
               {items &&
-                items[key].map((item, ind) => (
-                  <TouchableOpacity
-                    activeOpacity={0.7}
+                items[rowKey] &&
+                items[rowKey]
+                  .slice(0, 3)
+                  .map((i) => i.title)
+                  .join(", ")}
+            </Text>
+          ) : null}
+        </View>
+        {!isOpen ? <DownCircleIcon /> : <UpCircleIcon />}
+      </TouchableOpacity>
+      {isOpen ? (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingHorizontal: 15,
+            paddingBottom: 0,
+          }}
+        >
+          {items &&
+            items[rowKey]?.map((item, ind) => (
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={[
+                  styles.thingsTodoItem,
+                  {
+                    width: 200,
+                    marginRight: 15,
+                    height: "auto",
+                  },
+                ]}
+                key={ind}
+                onPress={() => handleOpenSightDetail(item)}
+              >
+               {
+                item?.image?.url ?
+                  <Image
                     style={[
-                      styles.thingsTodoItem,
+                      styles.thingsTodoItemImage,
                       {
-                        width: 170,
-                        marginRight: 5,
-                        height: "auto",
+                        minHeight: 190,
+                        minWidth: 200,
                       },
                     ]}
-                    key={ind}
-                    onPress={() => handleOpenSightDetail(item)}
-                  >
-                    {item.image && (
-                      <Image
-                        style={[
-                          styles.thingsTodoItemImage,
-                          {
-                            minHeight: 140,
-                          },
-                        ]}
-                        cachePolicy="memory"
-                        contentFit="cover"
-                        transition={0}
-                        source={{
-                          uri: item.image.url,
-                        }}
-                      ></Image>
-                    )}
+                    cachePolicy="memory"
+                    contentFit="cover"
+                    transition={0}
+                    source={{
+                      uri: item?.image?.url,
+                    }}
+                  ></Image> :
 
-                    <View style={styles.thingsTodoItemDetails}>
-                      <Text style={styles.thingsTodoItemTitle}>
-                        {item.title}
-                      </Text>
+                    <ImageBackground
+                      source={require("../../../assets/no-image.png")}
+                      resizeMode="cover"
+                      style={{
+                        width: "100%",
+                        minHeight: 190,
+                        borderRadius: 10,
+                        overflow: "hidden"
+                      }}
+                    ></ImageBackground>
+                }
+              
 
-                      <View style={styles.thingsTodoItemiIn}>
+                <View style={styles.thingsTodoItemDetails}>
+                  <Text style={styles.thingsTodoItemTitle}>{item.title}</Text>
+
+                  {/* <View style={styles.thingsTodoItemiIn}>
                         {item.price ? (
                           <Text
                             style={[
@@ -144,11 +145,11 @@ export const SightsContainer: React.FC<SightsContainerProps> = ({ items }) => {
                             {item.category}
                           </Text>
                         ) : null}
-                      </View>
+                      </View> */}
 
-                      {/* event type style  */}
+                  {/* event type style  */}
 
-                      {/* <View style={styles.thingsTodoItemiIn}>
+                  {/* <View style={styles.thingsTodoItemiIn}>
                         <Text
                           style={[
                             styles.thingsTodoItemiIntypeText,
@@ -190,12 +191,30 @@ export const SightsContainer: React.FC<SightsContainerProps> = ({ items }) => {
                           </Text>
                         </TouchableOpacity>
                       </View> */}
-                    </View>
-                  </TouchableOpacity>
-                ))}
-            </ScrollView>
-          ) : null}
-        </View>
+                </View>
+              </TouchableOpacity>
+            ))}
+        </ScrollView>
+      ) : null}
+    </View>
+  );
+};
+
+export const SightsContainer: React.FC<SightsContainerProps> = ({ items }) => {
+  const [state, setState] = useState<IState>({ item: null });
+
+  const handleOpenSightDetail = useCallback((item: SightType) => {
+    setState((prevState) => ({ ...prevState, item }));
+  }, []);
+
+  return (
+    <>
+      {Object.keys(items).map((key) => (
+        <SightsRow
+          rowKey={key}
+          handleOpenSightDetail={handleOpenSightDetail}
+          items={items}
+        />
       ))}
       <SightDetailModal data={state.item!} />
     </>

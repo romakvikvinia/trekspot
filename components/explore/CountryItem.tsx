@@ -9,6 +9,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { CountryType } from "../../api/api.types";
 import { Mark, Mark2, StarIcon } from "../../utilities/SvgIcons.utility";
+import * as Haptics from "expo-haptics";
 
 type CountryItemProps = {
   item: CountryType;
@@ -48,7 +49,7 @@ export const CountryItem: React.FC<CountryItemProps> = ({
         <TouchableOpacity
           style={styles.gradientWrapper}
           activeOpacity={0.7}
-          onPress={() => openModal(item.id!)}
+          onPress={() => {openModal(item.id!), Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}}
         >
           <LinearGradient
             style={styles.gradientWrapper}

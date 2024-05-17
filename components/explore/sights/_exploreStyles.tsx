@@ -5,7 +5,7 @@ export const exploreStyles = StyleSheet.create({
   placeSpotsRow: {
     marginTop: 25,
     borderTopColor: "#ddd",
-    borderTopWidth: 1,
+    borderTopWidth: 5,
   },
   placeSpotsRowTitle: {
     fontSize: 18,

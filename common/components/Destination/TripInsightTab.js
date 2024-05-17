@@ -33,50 +33,6 @@ export const TripInsightTab: React.FC<TripProps> = ({}) => {
   };
   return (
     <>
-      <View style={{ marginTop: 25 }}></View>
-
-      <FlashList
-        horizontal
-        contentContainerStyle={{
-          paddingHorizontal: 15,
-        }}
-        showsHorizontalScrollIndicator={false}
-        data={[
-          {
-            title: "title long title item goes here",
-          },
-          {
-            title: "title2",
-          },
-          {
-            title: "title2",
-          },
-        ]}
-        renderItem={({ item }) => (
-          // styles.dangerType
-          <View style={[styles.noteCard]}>
-            <View style={styles.innovationIcon}>
-              <InnovationIcon color={COLORS.primary} />
-            </View>
-            <Text
-              style={[
-                styles.noteCardTitle,
-                // {
-                //   color: COLORS.red,
-                // },
-              ]}
-            >
-              {item?.title}
-            </Text>
-            <Text style={styles.noteCardDesc}>
-              Digital solutions have revolutionized numerous industries.
-              Personal safety solutions, on the contrary, have remained
-            </Text>
-          </View>
-        )}
-        estimatedItemSize={10}
-      />
-
       <View style={[styles.topicsRow, { marginTop: 25 }]}>
         <Text style={styles.topicsRowTitle}>Moving about</Text>
         <View style={{ flexGrow: 1 }}>

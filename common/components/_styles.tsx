@@ -472,6 +472,7 @@ export const styles = StyleSheet.create({
   },
   multiValues: {
     flexDirection: "row",
+    flexWrap: "wrap"
   },
   visaTabHeader: {
     flexDirection: "row",
@@ -486,7 +487,7 @@ export const styles = StyleSheet.create({
   backButton: {
     width: Platform.OS === "android" ? 30 : 40,
     height: Platform.OS === "android" ? 30 : 40,
-    backgroundColor: Platform.OS === "android" ? "#000" : "rgba(0,0,0, 0.2)",
+    backgroundColor: Platform.OS === "android" ? "#000" : "rgba(0,0,0, 0.4)",
     borderRadius: 100,
     display: "flex",
     alignItems: "center",
@@ -529,7 +530,7 @@ export const styles = StyleSheet.create({
     width: Platform.OS === "android" ? 30 : 40,
     height: Platform.OS === "android" ? 30 : 40,
     borderRadius: 50,
-    backgroundColor: Platform.OS === "android" ? "#000" : "rgba(0,0,0, 0.2)",
+    backgroundColor: Platform.OS === "android" ? "#000" : "rgba(0,0,0, 0.4)",
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",

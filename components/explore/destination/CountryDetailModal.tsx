@@ -136,7 +136,7 @@ export const CountryDetailModal: React.FC<CountryDetailModalProps> = ({
                 ) : (
                   <LinearGradient
                     style={styles.gradientWrapper}
-                    colors={["rgba(147, 21, 21, 0.1)", "rgba(9, 21, 135, 0.9)"]}
+                    colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.4)"]}
                   ></LinearGradient>
                 )}
               </Swiper>

@@ -11,6 +11,7 @@ import { TripInsightDetailScreen } from "../../screen/trip/TripInsightDetail";
 import { TripInsights } from "../../screen/trip/TripInsights";
 import { SIZES } from "../../styles/theme";
 import { Platform } from "react-native";
+import { CityDetail } from "../../components/explore/destination/CityDetail";
 
 interface ExploreRoutesProps {}
 
@@ -19,8 +20,9 @@ export type ExploreRoutesStackParamList = {
   SeeAllScreen: undefined;
   CountryDetailScreen: undefined;
   TripQuickDetailScreen: undefined;
-  TripQuickInsights: undefined
-  TripQuickInsightsDetail: undefined
+  TripQuickInsights: undefined;
+  TripQuickInsightsDetail: undefined;
+  CityDetail: undefined
 };
 
 const Stack = createStackNavigator<ExploreRoutesStackParamList>();
@@ -53,7 +55,7 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
         component={SeeAllScreen}
         options={() => ({
           header: () => null,
-          gestureEnabled: true,
+          gestureEnabled: Platform.OS === 'ios',
           gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50, 
         })}
       />
@@ -62,7 +64,7 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
         component={TripDetailScreen}
         options={({ route, navigation }) => ({
           headerShown: false,
-          gestureEnabled: true,
+          gestureEnabled: Platform.OS === 'ios',
           gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50, 
         })}
       />
@@ -71,7 +73,7 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
         component={TripInsights}
         options={({ route, navigation }) => ({
           headerShown: false,
-          gestureEnabled: true,
+          gestureEnabled: Platform.OS === 'ios',
           gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50, 
         })}
       />
@@ -80,7 +82,7 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
         component={TripInsightDetailScreen}
         options={({ route, navigation }) => ({
           headerShown: false,
-          gestureEnabled: true,
+          gestureEnabled: Platform.OS === 'ios',
           gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50, 
         })}
       />
@@ -89,7 +91,16 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
         component={CountryDetailModal}
         options={() => ({
           header: () => null,
-          gestureEnabled: true,
+          gestureEnabled: Platform.OS === 'ios',
+          gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50, 
+        })}
+      />
+      <Stack.Screen
+        name="CityDetail"
+        component={CityDetail}
+        options={() => ({
+          header: () => null,
+          gestureEnabled: Platform.OS === 'ios',
           gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50, 
         })}
       />

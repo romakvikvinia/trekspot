@@ -75,7 +75,7 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
         >
           <ExploreHeader />
 
-          <View
+          {/* <View
             style={{
               paddingHorizontal: 15,
               marginBottom: 15,
@@ -122,7 +122,7 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
                 <VertDots color={COLORS.primaryDark} />
               </TouchableOpacity>
             </TouchableOpacity>
-          </View>
+          </View> */}
 
           <ScrollView
             style={{ flex: 1 }}
@@ -140,6 +140,27 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
               seeAllItems={false}
               popularCountriesLoading={popularCountriesLoading}
             />
+
+            {/**
+             * Top cities
+             */}
+            <CitiesContainer
+              title="Top Cities"
+              cities={cities}
+              seeAllItems={false}
+              isCitiesLoading={isCitiesLoading}
+            />
+
+            {/**
+             * Top sights
+             */}
+
+            <ExploreSightListContainer
+              items={(randomSightsData && randomSightsData.randomSights) || []}
+              title="Top sights"
+              isRandomSightsLoading={isRandomSightsLoading}
+            />
+
 
             {/**
              * Top cities

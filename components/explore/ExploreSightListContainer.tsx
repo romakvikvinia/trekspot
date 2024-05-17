@@ -15,6 +15,7 @@ import { Mark, StarIcon } from "../../utilities/SvgIcons.utility";
 
 import { SightType } from "../../api/api.types";
 import { SightDetailModal } from "./sights/SightDetailModal";
+import * as Haptics from "expo-haptics";
 
 interface ExploreSightListContainerProps {
   title: string;
@@ -74,7 +75,8 @@ export const ExploreSightListContainer: React.FC<
                   <TouchableOpacity
                     style={styles.gradientWrapper}
                     activeOpacity={0.7}
-                    onPress={() => handleItem(item)}
+                    onPress={() =>
+                      { handleItem(item);  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}}
                   >
                     <LinearGradient
                       style={styles.gradientWrapper}
@@ -222,7 +224,8 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
   },
   box: {
-    width: 130,
+    width: 170,
+    minWidth: 160,
     height: 130,
     backgroundColor: "#fafafa",
     borderRadius: 15,

@@ -48,10 +48,10 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
   // const handleClearState = useCallback(() => {
   //   setState((prevState) => ({ ...prevState, countryId: null }));
   // }, []);
-  console.log("countries", countries[0]);
+ 
   return (
     <>
-      <View style={[styles.rowItem]} style={{ marginTop: 0 }}>
+      <View style={[styles.rowItem]} style={{ paddingTop: 15 }}>
         <View style={styles.rowItemHeader}>
           <Text style={styles.h2}>{title}</Text>
           {seeAllItems && (

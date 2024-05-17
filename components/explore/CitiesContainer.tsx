@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 
 import {
   ImageBackground,
@@ -13,7 +13,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { COLORS, SIZES } from "../../styles/theme";
 import { Mark, StarIcon } from "../../utilities/SvgIcons.utility";
 import { CityType } from "../../api/api.types";
-import { CityDetailModal } from "./destination/CityDetailModal";
+import * as Haptics from "expo-haptics";
+import { useNavigation } from "@react-navigation/native";
 
 interface CitiesContainerProps {
   title: string;
@@ -22,29 +23,19 @@ interface CitiesContainerProps {
   isCitiesLoading: boolean;
 }
 
-interface IState {
-  city: CityType | null;
-}
-
 export const CitiesContainer: React.FC<CitiesContainerProps> = ({
   cities,
   title,
   seeAllItems = true,
   isCitiesLoading,
 }) => {
-  const [state, setState] = useState<IState>({ city: null });
-
+  const navigation = useNavigation()
+ 
   const handleCity = useCallback((city: CityType) => {
-    setState((prevState) => ({ ...prevState, city }));
-  }, []);
-
-  const handleClear = useCallback(() => {
-    setTimeout(() => {
-      setState((prevState) => ({ ...prevState, city: null }))
-    }, 500);
-  }, []);
-
-  //   console.log("CitiesContainer", state);
+    navigation.navigate("CityDetail", {
+      city
+    })
+  }, []); 
 
   return (
     <>
@@ -80,7 +71,7 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
                   <TouchableOpacity
                     style={styles.gradientWrapper}
                     activeOpacity={0.7}
-                    onPress={() => handleCity(item)}
+                    onPress={() => {handleCity(item); Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}}
                   >
                     <LinearGradient
                       style={styles.gradientWrapper}
@@ -130,18 +121,20 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
             {[0, 1, 2, 3].map((item, ind) => (
               <View
                 style={{
-                  width: 130,
-                  height: 135,
+                  width: 170,
+                  minWidth: 160,
+                  height: 130,
                   borderRadius: 10,
                   marginRight: 10,
                 }}
-                key={ind}
+                key={`ind-${ind}`}
               >
                 <LinearGradient
                   colors={["rgba(0,0,0,0.1)", "rgba(0,0,0,0.6)"]}
                   style={{
-                    width: 130,
-                    height: 135,
+                    width: 170,
+                    minWidth: 160,
+                    height: 130,
                     borderRadius: 10,
                   }}
                 ></LinearGradient>
@@ -154,9 +147,9 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
        {/**
          * city detail modal
          */}
-        {state.city && (
+        {/* {state.city && (
           <CityDetailModal city={state.city} closeCallBack={handleClear} />
-        )}
+        )} */}
     </>
   );
 };
@@ -229,7 +222,8 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
   },
   box: {
-    width: 130,
+    width: 170,
+    minWidth: 160,
     height: 130,
     backgroundColor: "#fafafa",
     borderRadius: 15,

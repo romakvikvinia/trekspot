@@ -1,0 +1,12 @@
+diff --git a/node_modules/react-native-modalize/lib/index.js b/node_modules/react-native-modalize/lib/index.js
+index 5d5edac..2be3079 100644
+--- a/node_modules/react-native-modalize/lib/index.js
++++ b/node_modules/react-native-modalize/lib/index.js
+@@ -147,6 +147,7 @@ onOpen, onOpened, onClose, onClosed, onBackButtonPress, onPositionChange, onOver
+         setKeyboardHeight(0);
+     };
+     const handleAnimateOpen = (alwaysOpenValue, dest = 'default') => {
++        dragY.setValue(0);
+         const { timing, spring } = openAnimationConfig;
+         backButtonListenerRef.current = react_native_1.BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+         let toValue = 0;

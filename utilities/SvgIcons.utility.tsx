@@ -1,5 +1,6 @@
 import React from "react";
 import { SvgXml } from "react-native-svg";
+import { COLORS } from "../styles/theme";
 
 export const Chart = () => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 16.933 16.933" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><linearGradient id="a" x1=".592" x2="16.603" y1="288.743" y2="288.743" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ff7043"></stop><stop offset="1" stop-color="#ffca28"></stop></linearGradient><path fill="url(#a)" d="M8.463 296.527a7.999 7.999 0 0 0 7.994-7.994c0-4.322-3.439-7.844-7.726-7.99-.177-.004-.355-.001-.532 0a8.004 8.004 0 0 0-7.725 7.726c-.005.177-.002.353 0 .53.144 4.288 3.667 7.728 7.989 7.728zm-.265-13.297a5.304 5.304 0 0 0-5.038 5.04H1.053a7.401 7.401 0 0 1 7.146-7.148zm5.091 5.303a4.822 4.822 0 0 1-4.826 4.826 4.825 4.825 0 0 1-.02-9.65 4.823 4.823 0 0 1 4.846 4.824z" transform="translate(0 -280.067)" opacity="1" data-original="url(#a)" class=""></path></g></svg>`;
@@ -1581,5 +1582,10 @@ export const Instagram = () => {
 export const Email = () => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path fill-rule="evenodd" d="M256 512C114.841 512 0 397.159 0 256S114.841 0 256 0s256 114.841 256 256-114.841 256-256 256zm132.758-166.069a5.732 5.732 0 0 0 5.725-5.725V179.489l-130.25 103.432c-2.41 1.915-5.323 2.872-8.234 2.872s-5.823-.958-8.234-2.872L117.516 179.489v160.717a5.732 5.732 0 0 0 5.725 5.725zm-19.96-179.862L256 255.644l-112.799-89.575zm52.168 5.725v168.414c0 17.759-14.449 32.208-32.208 32.208H123.241c-17.76 0-32.207-14.449-32.207-32.208V171.794c0-17.759 14.448-32.207 32.207-32.207h265.517c17.759-.001 32.208 14.448 32.208 32.207z" clip-rule="evenodd" fill="#bbb" opacity="1" data-original="#000000" class=""></path></g></svg>`;
   const SvgImage = () => <SvgXml xml={svgMarkup} width={30} height={30} />;
+  return <SvgImage />;
+};
+export const ClockIcon = () => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M12 0C5.383 0 0 5.383 0 12s5.383 12 12 12 12-5.383 12-12S18.617 0 12 0Zm2.5 16.33a.998.998 0 0 1-1.366-.366l-2-3.464A.996.996 0 0 1 11 12V6a1 1 0 1 1 2 0v5.732l1.866 3.232a1 1 0 0 1-.366 1.366Z" fill=${COLORS.primaryDark} opacity="1" data-original="#000000" class=""></path></g></svg>`;
+  const SvgImage = () => <SvgXml xml={svgMarkup} width={16} height={16} />;
   return <SvgImage />;
 };

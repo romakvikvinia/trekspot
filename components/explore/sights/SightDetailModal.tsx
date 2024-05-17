@@ -17,7 +17,10 @@ import {
 import Swiper from "react-native-swiper";
 import { COLORS, SIZES } from "../../../styles/theme";
 import {
+  ClockIcon,
   CloseCircleIcon,
+  DownIcon,
+  DownLongArrow,
   Mark2,
   StarIcon,
   TripLocationIcon,
@@ -29,12 +32,82 @@ type SightDetailModalProps = {
   closeCallBack?: () => void;
 };
 
+export const HoursRow = ({data}) => {
+  const [hoursVisible, setHoursVisible] = useState(false);
+
+  return (
+    <View
+      style={{
+        backgroundColor: "#f2f2f2",
+        padding: 15,
+        justifyContent: "center",
+        marginBottom: 15,
+        borderRadius: 10,
+      }}
+    >
+      {data?.workingHours?.length ? (
+        <TouchableOpacity
+          onPress={() => setHoursVisible(!hoursVisible)}
+          style={{
+            marginTop: 0,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+          activeOpacity={0.7}
+        >
+          <View style={{ flexDirection: "row" }}>
+            <ClockIcon />
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: "500",
+                color: COLORS.gray,
+                marginLeft: 5,
+              }}
+            >
+              Working hours
+            </Text>
+          </View>
+          <DownIcon />
+        </TouchableOpacity>
+      ) : null}
+      {hoursVisible &&
+        data.workingHours?.map((item, i) => (
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginTop: i === 0 ? 15 : 8
+            }}
+            key={`hour${i}`}
+          >
+            <Text
+              style={{
+                fontWeight: "500",
+                width: 80,
+                color: COLORS.gray,
+              }}
+            >
+              {item.day}
+            </Text>
+
+            <Text
+              style={{
+                fontSize: 12,
+              }}
+            >{` ${item.hours}`}</Text>
+          </View>
+        ))}
+    </View>
+  );
+}
+
 export const SightDetailModal: React.FC<SightDetailModalProps> = ({
   data,
   closeCallBack = () => {},
 }) => {
   const [state, setState] = useState({ isOpen: false });
-
   const openMap = (address: string) => {
     const scheme = Platform.select({
       ios: "maps://0,0?q=",
@@ -171,56 +244,33 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                   <StarIcon size={15} color="#FFBC3E" />
                 </View>
               </View>
-              <Text style={styles.sightDetailsDescription}>
-                {data?.description}
-              </Text>
 
-              {data.address && (
-                <TouchableOpacity onPress={() => openMap(data.address)}>
-                  <Text style={styles.address}>
-                    <TripLocationIcon color={COLORS.gray} size="12" />{" "}
-                    {data.address}
-                  </Text>
-                </TouchableOpacity>
-              )}
-              {data?.workingHours?.length ? (
-                <Text
-                  style={{
-                    fontSize: 18,
-                    marginBottom: 8,
-                    marginTop: 15,
-                    fontWeight: "500",
-                  }}
-                >
-                  Working hours
+              {data?.description ? (
+                <Text style={styles.sightDetailsDescription}>
+                  {data?.description}
                 </Text>
               ) : null}
 
-              {data.workingHours?.map((i) => (
-                <View
+              {data.address ? (
+                <TouchableOpacity
+                  activeOpacity={0.7}
                   style={{
                     flexDirection: "row",
-                    alignItems: "center",
-                    marginBottom: 8,
+                    marginBottom: 15,
+                    backgroundColor: "#f2f2f2",
+                    padding: 15,
                   }}
+                  onPress={() => openMap(data.address)}
                 >
-                  <Text
-                    style={{
-                      fontWeight: "500",
-                      width: 80,
-                      color: COLORS.gray,
-                    }}
-                  >
-                    {i.day}
-                  </Text>
+                  <TripLocationIcon color={COLORS.primaryDark} size="16" />
+                  <Text style={styles.address}>{data.address}</Text>
+                </TouchableOpacity>
+              ) : null}
 
-                  <Text
-                    style={{
-                      fontSize: 12,
-                    }}
-                  >{` ${i.hours}`}</Text>
-                </View>
-              ))}
+              {
+                 data.workingHours.length > 0 &&  <HoursRow data={data} />
+              }
+             
             </View>
           </ScrollView>
         </View>
@@ -258,7 +308,7 @@ export const styles = StyleSheet.create({
   address: {
     fontSize: 14,
     color: COLORS.gray,
-    marginTop: 15,
+    marginLeft: 5
   },
   sightDetailsTitle: {
     fontSize: 24,
@@ -275,7 +325,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 5,
-    marginBottom: 10,
+    marginBottom: 15,
   },
   ratingText: {
     fontSize: 14,
@@ -285,6 +335,7 @@ export const styles = StyleSheet.create({
   sightDetailsDescription: {
     fontSize: 14,
     color: COLORS.black,
+    marginBottom: 15
   },
   sightDetails: {
     padding: 15,

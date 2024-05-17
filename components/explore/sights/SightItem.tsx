@@ -1,6 +1,6 @@
 import React from "react";
 import { Image } from "expo-image";
-import { Text, TouchableOpacity, View } from "react-native";
+import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "../../../common/components/_styles";
 import { SightType } from "../../../api/api.types";
 import { exploreStyles } from "./_exploreStyles";
@@ -18,7 +18,8 @@ export const SightItem: React.FC<SightItemProps> = ({ item, onHandleItem }) => {
       style={[
         styles.thingsTodoItem,
         {
-          width: 170,
+          minHeight: 190,
+          width: 200,
           marginRight: 5,
           height: "auto",
         },
@@ -28,12 +29,12 @@ export const SightItem: React.FC<SightItemProps> = ({ item, onHandleItem }) => {
         if (onHandleItem) onHandleItem(item);
       }}
     >
-      {item.image && (
+      {item.image ? (
         <Image
           style={[
             styles.thingsTodoItemImage,
             {
-              minHeight: 140,
+              minHeight: 190,
             },
           ]}
           cachePolicy="memory"
@@ -43,13 +44,24 @@ export const SightItem: React.FC<SightItemProps> = ({ item, onHandleItem }) => {
             uri: item.image.url,
           }}
         ></Image>
+      ) : (
+        <ImageBackground
+          source={require("../../../assets/no-image.png")}
+          resizeMode="cover"
+          style={{
+            width: "100%",
+            minHeight: 190,
+            borderRadius: 10,
+            overflow: "hidden"
+          }}
+        ></ImageBackground>
       )}
 
       <View style={styles.thingsTodoItemDetails}>
         <Text style={styles.thingsTodoItemTitle}>{item.title}</Text>
 
         <View style={styles.thingsTodoItemiIn}>
-          {item.price ? (
+          {/* {item.price ? (
             <Text
               style={[
                 styles.thingsTodoItemiInprice,
@@ -60,7 +72,7 @@ export const SightItem: React.FC<SightItemProps> = ({ item, onHandleItem }) => {
             >
               {item?.price}
             </Text>
-          ) : null}
+          ) : null} */}
           {item.category ? (
             <Text
               style={[

@@ -15,6 +15,7 @@ export const globalStyles = StyleSheet.create({
     buttonItemPrimaryText: {
         color: "#fff",
         fontSize: SIZES.body3,
+        fontWeight: "500"
     },
     buttonItemPrimaryDisabled: {
         opacity: 0.7

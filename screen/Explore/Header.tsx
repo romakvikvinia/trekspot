@@ -32,8 +32,8 @@ export const ExploreHeader = () => {
             <SearchIcon width={15} />
           </View>
           <TextInput
-            placeholder="Search here"
-            placeholderTextColor="#333"
+            placeholder="Search here..."
+            placeholderTextColor="#7f7f7f"
             autoFocus={false}
             style={styles.searchInput}
             onChangeText={(e) => setSearchValue(e)}
