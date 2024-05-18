@@ -40,6 +40,7 @@ import { Emergency } from "../../../common/components/Destination/Emergency";
 import { useLazyCountryQuery } from "../../../api/api.trekspot";
 import { useNavigation } from "@react-navigation/native";
 import { TripInsightTab } from "../../../common/components/Destination/TripInsightTab";
+import { Loader } from "../../../common/ui/Loader";
 
 type CountryDetailModalProps = {
   countryId: string;
@@ -117,48 +118,86 @@ export const CountryDetailModal: React.FC<CountryDetailModalProps> = ({
                   bottom: 16,
                 }}
               >
-                {data ? (
-                  data.country.images.map((item, ind) => (
+                {isLoading && (
+                  <LinearGradient
+                    style={[
+                      {
+                        height: 300,
+                        width: "100%", 
+                        alignItems: "center",
+                        justifyContent: "center",
+                      },
+                    ]}
+                    colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.5)"]}
+                  >
+                    <View style={{ height: 30, width: 30 }}>
+                      <Loader isLoading={LinearGradient} background="none" />
+                    </View>
+                  </LinearGradient>
+                )}
+                {!isLoading && data?.country?.images?.length > 0 ? (
+                  data?.country?.images?.map((item, ind) => (
                     <ImageBackground
                       style={styles.box}
                       resizeMode="cover"
                       source={{
-                        uri: item.url,
+                         uri: item.url,
                       }}
                       key={`slide-${ind}`}
                     >
                       <LinearGradient
                         style={styles.gradientWrapper}
-                        colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.4)"]}
+                        colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.5)"]}
                       ></LinearGradient>
                     </ImageBackground>
                   ))
-                ) : (
-                  <LinearGradient
-                    style={styles.gradientWrapper}
-                    colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.4)"]}
-                  ></LinearGradient>
-                )}
+                )  : !isLoading && (
+                  <ImageBackground
+                      style={styles.box}
+                      resizeMode="cover"
+                      source={require("../../../assets/no-image.png")}
+                    >
+                    <LinearGradient
+                      style={styles.gradientWrapper}
+                      colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.5)"]}
+                    >
+                    </LinearGradient>
+                  </ImageBackground>
+                )
+              }
               </Swiper>
 
               <View style={styles.otherInfo}>
-                <View style={styles.labelItem}>
-                  <Text style={styles.labelItemText}>{data?.country.name}</Text>
-                </View>
-                <View style={styles.ratingLabel}>
-                  <View
-                    style={{
-                      position: "relative",
-                      top: -1,
-                      opacity: 0.8,
-                    }}
-                  >
-                    <StarIcon size={15} color="#FFBC3E" />
+                {data?.country.name && (
+                  <View style={styles.labelItem}>
+                    <Text style={styles.labelItemText}>
+                      {data?.country.name}
+                    </Text>
                   </View>
-                  <Text style={styles.ratingText}>{data?.country.rate} /</Text>
-                  <Text style={styles.ratingText}>
-                    {data?.country.visitors} visitors
-                  </Text>
+                )}
+
+                <View style={styles.ratingLabel}>
+                  {data?.country.rate && (
+                    <>
+                      <View
+                        style={{
+                          position: "relative",
+                          top: -1,
+                          opacity: 0.8,
+                        }}
+                      >
+                        <StarIcon size={15} color="#FFBC3E" />
+                      </View>
+                      <Text style={styles.ratingText}>
+                        {data?.country.rate} /
+                      </Text>
+                    </>
+                  )}
+                  {data?.country.visitors && (
+                    <Text style={styles.ratingText}>
+                      {data?.country.visitors} visitors
+                    </Text>
+                  )}
                 </View>
               </View>
             </View>

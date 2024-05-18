@@ -149,6 +149,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                   borderWidth: 2,
                   height: 55,
                   fontSize: 16,
+                  fontWeight: "500"
                 }}
               />
             </View>
@@ -177,6 +178,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 }}
                 style={{
                   borderWidth: 2,
+                  fontWeight: "500",
                   height: 55,
                 }}
               />

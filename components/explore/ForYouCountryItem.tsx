@@ -42,8 +42,9 @@ export const ForYouCountryItem: React.FC<ForYouCountryItemProps> = ({
         contentFit="cover"
         transition={0}
         source={{
-          uri: "https://cdn.pixabay.com/photo/2020/11/24/10/00/city-5772040_1280.jpg",
-          // item?.image?.url,
+          uri:  item?.image?.url,
+          // "https://cdn.pixabay.com/photo/2020/11/24/10/00/city-5772040_1280.jpg",
+         
         }}
       >
         <LinearGradient
@@ -56,9 +57,9 @@ export const ForYouCountryItem: React.FC<ForYouCountryItemProps> = ({
               justifyContent: "flex-end",
             },
           ]}
-          colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.1)"]}
+          colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.7)"]}
         >
-          <Text style={[styles.thingsTodoItemTitle, { color: "#fff" }]}>
+          <Text style={[styles.thingsTodoItemTitle, { color: "#fff", fontWeight: "bold" }]}>
             {item.city}
           </Text>
         </LinearGradient>

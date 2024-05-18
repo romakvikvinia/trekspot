@@ -2,12 +2,16 @@ import { useCallback, useEffect, useState } from "react";
 import { Text } from "react-native";
 import { ImageBackground, Platform, TouchableOpacity } from "react-native";
 import { ScrollView, View } from "react-native";
-import { LinearGradient } from "react-native-svg";
 import Swiper from "react-native-swiper";
 import { useLazyGetSightsQuery } from "../../../api/api.trekspot";
 import { CityType, SightType } from "../../../api/api.types";
 import { Loader } from "../../../common/ui/Loader";
-import { BackIcon, DownIcon, Mark2, StarIcon } from "../../../utilities/SvgIcons.utility";
+import {
+  BackIcon,
+  DownIcon,
+  Mark2,
+  StarIcon,
+} from "../../../utilities/SvgIcons.utility";
 import { SightDetailModal } from "../sights/SightDetailModal";
 import { SightsContainer } from "../sights/SightsContainer";
 import { exploreStyles } from "../sights/_exploreStyles";
@@ -16,6 +20,8 @@ import { SightItem } from "../sights/SightItem";
 import { SIZES } from "../../../styles/theme";
 import { useNavigation } from "@react-navigation/native";
 import Constants from "expo-constants";
+import { Image } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
 
 type CityDetailProps = {
   city: CityType;
@@ -25,9 +31,7 @@ interface IState {
   sight: SightType | null;
 }
 
-export const CityDetail: React.FC<CityDetailProps> = ({
-  route
-}) => {
+export const CityDetail: React.FC<CityDetailProps> = ({ route }) => {
   const navigation = useNavigation();
   const { city } = route?.params;
   const [state, setState] = useState<IState>({ sight: null });
@@ -51,6 +55,7 @@ export const CityDetail: React.FC<CityDetailProps> = ({
   return (
     <View style={{ flex: 1, backgroundColor: "#f8f8f8" }}>
       <ScrollView style={{ flex: 1 }}>
+        {/* Loading State */}
         {isLoading && (
           <View style={{ minHeight: SIZES.height }}>
             <View
@@ -111,8 +116,12 @@ export const CityDetail: React.FC<CityDetailProps> = ({
           </View>
         )}
 
+        {/* Content */}
+
         {!isLoading ? (
           <>
+            {/* Swiper */}
+
             <View
               style={[
                 styles.swiperWrapper,
@@ -129,7 +138,10 @@ export const CityDetail: React.FC<CityDetailProps> = ({
                 style={[
                   styles.backButton,
                   {
-                    top: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 55,
+                    top:
+                      Platform.OS === "android"
+                        ? Constants?.statusBarHeight + 10
+                        : 55,
                   },
                 ]}
               >
@@ -138,7 +150,12 @@ export const CityDetail: React.FC<CityDetailProps> = ({
               <TouchableOpacity
                 style={[
                   styles.addToBucketButton,
-                  { top: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 55,},
+                  {
+                    top:
+                      Platform.OS === "android"
+                        ? Constants?.statusBarHeight + 10
+                        : 55,
+                  },
                 ]}
                 activeOpacity={0.7}
               >
@@ -156,70 +173,75 @@ export const CityDetail: React.FC<CityDetailProps> = ({
                   justifyContent: "flex-end",
                   paddingRight: 15,
                   bottom: 16,
+                  zIndex: 2,
                 }}
               >
-                {/* {city.images.map((item,i) => (
-                <ImageBackground
-                  style={[styles.box]}
-                  resizeMode="cover"
-                  source={{
-                    uri: item.url,
-                  }}
-                  key={`slide-${item.id}-${city.id}`}
-                >
-                  <LinearGradient
-                    style={styles.gradientWrapper}
-                    colors={["rgba(0,0,0,0.1)", "rgba(0,0,0,0.6)"]}
-                  ></LinearGradient>
-                </ImageBackground>
-              ))} */}
-                <ImageBackground
-                  style={[styles.box]}
-                  resizeMode="cover"
-                  source={{
-                    uri: "https://cdn.pixabay.com/photo/2021/07/24/15/47/venice-6489813_1280.jpg",
-                  }}
-                >
-                  <LinearGradient
-                    style={styles.gradientWrapper}
-                    colors={["rgba(0,0,0,0.1)", "rgba(0,0,0,0.6)"]}
-                  ></LinearGradient>
-                </ImageBackground>
-                <ImageBackground
-                  style={[styles.box]}
-                  resizeMode="cover"
-                  source={{
-                    uri: "https://cdn.pixabay.com/photo/2021/07/24/15/47/venice-6489813_1280.jpg",
-                  }}
-                >
-                  <LinearGradient
-                    style={styles.gradientWrapper}
-                    colors={["rgba(0,0,0,0.1)", "rgba(0,0,0,0.6)"]}
-                  ></LinearGradient>
-                </ImageBackground>
-              </Swiper>
-
-              <View style={styles.otherInfo}>
-                <View style={styles.labelItem}>
-                  <Text style={styles.labelItemText}>{city.city}</Text>
-                </View>
-                <View style={styles.ratingLabel}>
-                  <View
-                    style={{
-                      position: "relative",
-                      top: -1,
-                      opacity: 0.8,
+                {city?.images?.length ? city.images.map((item, i) =>
+                  <ImageBackground
+                    style={styles.box}
+                    resizeMode="cover"
+                    source={{
+                       uri: item.url,
                     }}
+                    key={`slide-${item.id}-${city.id}`}
                   >
-                    <StarIcon size={15} color="#FFBC3E" />
+                    <LinearGradient
+                      style={styles.gradientWrapper}
+                      colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.5)"]}
+                    ></LinearGradient>
+                  </ImageBackground>
+                ) :
+                <ImageBackground
+                  style={styles.box}
+                  resizeMode="cover"
+                  source={require("../../../assets/no-image.png")}
+                >
+                <LinearGradient
+                  style={styles.gradientWrapper}
+                  colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.5)"]}
+                >
+                </LinearGradient>
+                </ImageBackground> 
+              }
+              </Swiper>
+              
+              <View style={styles.otherInfo}>
+                {city?.city && (
+                  <View style={styles.labelItem}>
+                    <Text style={styles.labelItemText}>
+                      {city.city}
+                    </Text>
                   </View>
-                  <Text style={styles.ratingText}>{city.rate} /</Text>
-                  <Text style={styles.ratingText}>
-                    {city.visitors} visitors
-                  </Text>
+                )}
+
+                <View style={styles.ratingLabel}>
+                  {city?.rate && (
+                    <>
+                      <View
+                        style={{
+                          position: "relative",
+                          top: -1,
+                          opacity: 0.8,
+                        }}
+                      >
+                        <StarIcon size={15} color="#FFBC3E" />
+                      </View>
+                      <Text style={styles.ratingText}>
+                        {city.rate} /
+                      </Text>
+                    </>
+                  )}
+                  {city?.visitors && (
+                    <Text style={styles.ratingText}>
+                      {city?.visitors} visitors
+                    </Text>
+                  )}
                 </View>
               </View>
+            
             </View>
+
+            {/* Top sights */}
             <View
               style={[
                 exploreStyles.placeSpotsRow,
@@ -252,6 +274,7 @@ export const CityDetail: React.FC<CityDetailProps> = ({
                 ))}
               </ScrollView>
             </View>
+            {/* Top sights */}
 
             {sights && Object.keys(sights).length ? (
               <SightsContainer items={sights} />

@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     borderRadius: 8,
     paddingLeft: 10,
+    fontWeight: "500"
   },
   invalid: {
     borderColor: isInvalidColor,

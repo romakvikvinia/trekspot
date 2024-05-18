@@ -145,7 +145,8 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
     <Modal
       animationType={"none"}
       transparent={true}
-      visible={state.isOpen}
+      statusBarTranslucent={true} 
+      visible={state.isOpen}  
       // onRequestClose={closeCallBack}
     >
       <ClickOutsideProvider>
@@ -155,7 +156,7 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
             justifyContent: "center",
             alignItems: "center",
             backgroundColor: "rgba(0, 0, 0, 0.5)",
-            height: "100%",
+            height: SIZES.height,
           }}
         >
           <View

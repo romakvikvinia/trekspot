@@ -126,7 +126,8 @@ export const ExploreSightListContainer: React.FC<
             {[0, 1, 2, 3].map((item, ind) => (
               <View
                 style={{
-                  width: 130,
+                  width: 170,
+                  minWidth: 160,
                   height: 130,
                   borderRadius: 10,
                   marginRight: 10,
@@ -145,13 +146,13 @@ export const ExploreSightListContainer: React.FC<
             ))}
           </ScrollView>
         )}
-        {/**
+      </View>
+      {/**
          * city detail modal
          */}
         {state.item && (
           <SightDetailModal data={state.item!} closeCallBack={handleClear} />
         )}
-      </View>
     </>
   );
 };
