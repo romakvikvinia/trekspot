@@ -13,9 +13,10 @@ import { COLORS, SIZES } from "../../styles/theme";
 
 import { CountryType } from "../../api/api.types";
 import { CountryItem } from "./CountryItem";
-import { CountryDetailModal } from "./destination/CountryDetailModal";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
 
 interface DestinationContainerProps {
   title: string;
@@ -28,27 +29,27 @@ interface IState {
   countryId: string | null;
 }
 
+type ExploreStackNavigationProp =
+  StackNavigationProp<ExploreRoutesStackParamList>;
+
 export const DestinationContainer: React.FC<DestinationContainerProps> = ({
   countries,
   title,
   seeAllItems = true,
   popularCountriesLoading,
 }) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<ExploreStackNavigationProp>();
   const [state, setState] = useState<IState>({ countryId: null });
 
   const handleDetailOfCountry = useCallback((countryId: string) => {
     // setState((prevState) => ({ ...prevState, countryId }));
-
-    navigation.navigate("CountryDetailScreen", {
-      countryId: countryId,
-    });
+    navigation.navigate("CountryDetailScreen", { countryId });
   }, []);
 
   // const handleClearState = useCallback(() => {
   //   setState((prevState) => ({ ...prevState, countryId: null }));
   // }, []);
- 
+
   return (
     <>
       <View style={[styles.rowItem]} style={{ paddingTop: 20 }}>
@@ -104,13 +105,6 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
           </ScrollView>
         )}
       </View>
-      {/** Country detail modal */}
-      {/* {state.countryId && (
-        <CountryDetailModal
-          id={state.countryId}
-          closeCallBack={handleClearState}
-        />
-      )} */}
     </>
   );
 };

@@ -5,24 +5,26 @@ import {
 } from "@react-navigation/stack";
 import { ExploreScreen } from "../../screen/Explore/ExploreScreen";
 import SeeAllScreen from "../../screen/Explore/BucketListAll";
-import { CountryDetailModal } from "../../components/explore/destination/CountryDetailModal";
 import { TripDetailScreen } from "../../screen/trip/TripDetailScreen";
 import { TripInsightDetailScreen } from "../../screen/trip/TripInsightDetail";
 import { TripInsights } from "../../screen/trip/TripInsights";
 import { SIZES } from "../../styles/theme";
 import { Platform } from "react-native";
 import { CityDetail } from "../../components/explore/destination/CityDetail";
+import { CountryDetailScreen } from "../../screen/Explore/Country/CountryDetailScreen";
 
 interface ExploreRoutesProps {}
 
 export type ExploreRoutesStackParamList = {
   ExploreWorld: undefined;
   SeeAllScreen: undefined;
-  CountryDetailScreen: undefined;
+  CountryDetailScreen: {
+    countryId: string;
+  };
   TripQuickDetailScreen: undefined;
   TripQuickInsights: undefined;
   TripQuickInsightsDetail: undefined;
-  CityDetail: undefined
+  CityDetail: undefined;
 };
 
 const Stack = createStackNavigator<ExploreRoutesStackParamList>();
@@ -38,7 +40,7 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
         component={ExploreScreen}
         options={({ route, navigation }) => ({
           header: () => null,
-           // headerLeft: () => (
+          // headerLeft: () => (
           //   <HeaderButtons HeaderButtonComponent={THeaderButton}>
           //     <Item
           //       title="UndoSignature"
@@ -55,44 +57,49 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
         component={SeeAllScreen}
         options={() => ({
           header: () => null,
-          gestureEnabled: Platform.OS === 'ios',
-          gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50, 
+          gestureEnabled: Platform.OS === "ios",
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="TripQuickDetailScreen"
         component={TripDetailScreen}
         options={({ route, navigation }) => ({
           headerShown: false,
-          gestureEnabled: Platform.OS === 'ios',
-          gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50, 
+          gestureEnabled: Platform.OS === "ios",
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="TripQuickInsights"
         component={TripInsights}
         options={({ route, navigation }) => ({
           headerShown: false,
-          gestureEnabled: Platform.OS === 'ios',
-          gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50, 
+          gestureEnabled: Platform.OS === "ios",
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
-        <Stack.Screen
+      <Stack.Screen
         name="TripQuickInsightsDetail"
         component={TripInsightDetailScreen}
         options={({ route, navigation }) => ({
           headerShown: false,
-          gestureEnabled: Platform.OS === 'ios',
-          gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50, 
+          gestureEnabled: Platform.OS === "ios",
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="CountryDetailScreen"
-        component={CountryDetailModal}
+        component={CountryDetailScreen}
         options={() => ({
           header: () => null,
-          gestureEnabled: Platform.OS === 'ios',
-          gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50, 
+          gestureEnabled: Platform.OS === "ios",
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
       <Stack.Screen
@@ -100,8 +107,9 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
         component={CityDetail}
         options={() => ({
           header: () => null,
-          gestureEnabled: Platform.OS === 'ios',
-          gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50, 
+          gestureEnabled: Platform.OS === "ios",
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
     </Stack.Navigator>

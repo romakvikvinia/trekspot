@@ -1,32 +1,28 @@
+import React, { useEffect, useRef } from "react";
 import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-import { Modalize, useModalize } from "react-native-modalize";
-import { Portal } from "react-native-portalize";
+import { Modalize } from "react-native-modalize";
+// import { Portal } from "react-native-portalize";
 import { COLORS } from "../../../styles/theme";
 import Swiper from "react-native-swiper";
 import { styles } from "../../../common/components/_styles";
 import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
 
-import React, { useEffect, useRef, useState } from "react";
 import {
   BackIcon,
   BinocularsIcon,
   DiningIcon,
-  DownIcon,
   EmergencyIcon,
-  ForYouIcon,
   InfoIcon,
-  InsightIcon,
   InsightsFilled,
-  LeftArrowLong,
   // LanguageIcon,
   Mark2,
   PassportIcon,
   StarIcon,
   TransportIcon,
 } from "../../../utilities/SvgIcons.utility";
-import { CountrySelect } from "../../../common/components/CountrySelect";
+// import { CountrySelect } from "../../../common/components/CountrySelect";
 import { ForYou } from "../../../common/components/Destination/ForYou";
 import Overview from "../../../common/components/Destination/Overview";
 import { Visa } from "../../../common/components/Destination/Visa";
@@ -38,21 +34,23 @@ import { Dining } from "../../../common/components/Destination/Dining";
 
 import { Emergency } from "../../../common/components/Destination/Emergency";
 import { useLazyCountryQuery } from "../../../api/api.trekspot";
-import { useNavigation } from "@react-navigation/native";
+
 import { TripInsightTab } from "../../../common/components/Destination/TripInsightTab";
-import { Loader } from "../../../common/ui/Loader";
+// import { Loader } from "../../../common/ui/Loader";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { ExploreRoutesStackParamList } from "../../../routes/explore/ExploreRoutes";
 
-type CountryDetailModalProps = {
-  countryId: string;
-  route: object;
-};
+type CountryDetailScreenProps = NativeStackScreenProps<
+  ExploreRoutesStackParamList,
+  "CountryDetailScreen"
+>;
 
-export const CountryDetailModal: React.FC<CountryDetailModalProps> = ({
+export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
   route,
+  navigation,
 }) => {
-  const { countryId } = route?.params;
+  const { countryId } = route.params;
 
-  const navigation = useNavigation();
   const [getCountry, { isLoading, data, isError }] = useLazyCountryQuery();
   const modalCountryPassportSelectRef = useRef<Modalize>(null);
 
@@ -118,12 +116,12 @@ export const CountryDetailModal: React.FC<CountryDetailModalProps> = ({
                   bottom: 16,
                 }}
               >
-                {isLoading && (
+                {/* {isLoading && (
                   <LinearGradient
                     style={[
                       {
                         height: 300,
-                        width: "100%", 
+                        width: "100%",
                         alignItems: "center",
                         justifyContent: "center",
                       },
@@ -134,37 +132,35 @@ export const CountryDetailModal: React.FC<CountryDetailModalProps> = ({
                       <Loader isLoading={LinearGradient} background="none" />
                     </View>
                   </LinearGradient>
-                )}
-                {!isLoading && data?.country?.images?.length > 0 ? (
-                  data?.country?.images?.map((item, ind) => (
-                    <ImageBackground
-                      style={styles.box}
-                      resizeMode="cover"
-                      source={{
-                         uri: item.url,
-                      }}
-                      key={`slide-${ind}`}
-                    >
-                      <LinearGradient
-                        style={styles.gradientWrapper}
-                        colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.5)"]}
-                      ></LinearGradient>
-                    </ImageBackground>
-                  ))
-                )  : !isLoading && (
-                  <ImageBackground
-                      style={styles.box}
-                      resizeMode="cover"
-                      source={require("../../../assets/no-image.png")}
-                    >
-                    <LinearGradient
-                      style={styles.gradientWrapper}
-                      colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.5)"]}
-                    >
-                    </LinearGradient>
-                  </ImageBackground>
-                )
-              }
+                )} */}
+                {!isLoading && !!data?.country.images.length
+                  ? data?.country?.images?.map((item, ind) => (
+                      <ImageBackground
+                        style={styles.box}
+                        resizeMode="cover"
+                        source={{
+                          uri: item.url,
+                        }}
+                        key={`slide-${ind}`}
+                      >
+                        <LinearGradient
+                          style={styles.gradientWrapper}
+                          colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.5)"]}
+                        ></LinearGradient>
+                      </ImageBackground>
+                    ))
+                  : !isLoading && (
+                      <ImageBackground
+                        style={styles.box}
+                        resizeMode="cover"
+                        source={require("../../../assets/no-image.png")}
+                      >
+                        <LinearGradient
+                          style={styles.gradientWrapper}
+                          colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.5)"]}
+                        ></LinearGradient>
+                      </ImageBackground>
+                    )}
               </Swiper>
 
               <View style={styles.otherInfo}>

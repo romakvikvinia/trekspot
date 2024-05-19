@@ -283,3 +283,12 @@ export type RandomSightsArgsType = {
   category?: string;
   take?: number;
 };
+
+export type CountryDishesResponseType = {
+  dishes: SightType[];
+};
+export type CountryDishesArgsType = {
+  skip?: number;
+  take?: number;
+  iso2: string;
+};
