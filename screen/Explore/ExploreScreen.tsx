@@ -1,13 +1,13 @@
 import React, { useRef } from "react";
 
 import {
-  Alert,
+  // Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
-  TouchableOpacity,
+  // Text,
+  // TouchableOpacity,
   View,
 } from "react-native";
 import Constants from "expo-constants";
@@ -16,7 +16,7 @@ import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 
 import { COLORS, SIZES } from "../../styles/theme";
-import { FlightIcon, VertDots } from "../../utilities/SvgIcons.utility";
+// import { FlightIcon, VertDots } from "../../utilities/SvgIcons.utility";
 
 import { CountrySelect } from "../../common/components/CountrySelect";
 
@@ -31,7 +31,7 @@ import {
 import { DestinationContainer } from "../../components/explore/DestinationContainer";
 import { CitiesContainer } from "../../components/explore/CitiesContainer";
 import { ExploreSightListContainer } from "../../components/explore/ExploreSightListContainer";
-import { useNavigation } from "@react-navigation/native";
+
 import { ExploreHeader } from "./Header";
 
 type ExploreProps = NativeStackScreenProps<
@@ -39,8 +39,7 @@ type ExploreProps = NativeStackScreenProps<
   "ExploreWorld"
 >;
 
-export const ExploreScreen: React.FC<ExploreProps> = (props) => {
-  const navigation = useNavigation();
+export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
   // refs
   const modalCountryPassportSelectRef = useRef<Modalize>(null);
 
@@ -161,8 +160,6 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
               isRandomSightsLoading={isRandomSightsLoading}
             />
 
-
-            
             {/* <DestinationContainer title="South America" countries={[]} /> */}
           </ScrollView>
         </KeyboardAvoidingView>

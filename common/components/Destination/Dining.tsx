@@ -10,12 +10,16 @@ import { StarIcon } from "../../../utilities/SvgIcons.utility";
 import { styles } from "../_styles";
 import { CountryType } from "../../../api/api.types";
 import { FlashList } from "@shopify/flash-list";
+import { useDishesByISO2Query } from "../../../api/api.trekspot";
 
 type DiningProps = {
   country: CountryType;
 };
 
 export const Dining: React.FC<DiningProps> = ({ country }) => {
+  const { isLoading, data, isError } = useDishesByISO2Query({
+    iso2: country.iso2,
+  });
   const dishes = [
     {
       src: "https://cdn.tasteatlas.com//images/dishes/b075a8fbe7224ef787272cf4d979e388.jpg?mw=660",
@@ -210,6 +214,8 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
       restaurant: "Aux Lyonnais",
     },
   ];
+
+  console.log("dishes", data, country.iso2);
   return (
     <>
       <View style={styles.tabContentHeader}>
