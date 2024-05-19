@@ -69,7 +69,9 @@ export const styles = StyleSheet.create({
     marginTop: 25,
     padding: 15,
     borderRadius: 8,
-    backgroundColor: "#fff",
+    backgroundColor: "#f9fafb",
+    borderWidth: 1,
+    borderColor: "#dbe9fe"
   },
   weatherRow: {
     flexDirection: "row",
@@ -354,23 +356,26 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 5,
     flexWrap: "wrap",
+    justifyContent: "space-between"
   },
   transportItem: {
-    backgroundColor: "#fafafa",
+    backgroundColor: "#f2f2f2",
     flexDirection: "row",
     alignItems: "center",
     borderRadius: 5,
     overflow: "hidden",
-    marginRight: 15,
     marginVertical: 5,
+    width: "48%"
   },
   transportItemIcon: {
-    backgroundColor: "#f6f6f6",
+    backgroundColor: "#eee",
     padding: 10,
+    width: 50,
+    alignItems: "center"
   },
   transportText: {
-    fontSize: 12,
-    fontWeight: "normal",
+    fontSize: 14,
+    fontWeight: "bold",
     paddingHorizontal: 10,
   },
   textContentWrapper: {
@@ -417,8 +422,9 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   visaTypeCard: {
-    borderWidth: 2,
-    borderColor: "#f8f8f8",
+    borderWidth: 1,
+    backgroundColor: "#f9fafb",
+    borderColor: "#dbe9fe",
     marginTop: 20,
     padding: 15,
     borderRadius: 10,

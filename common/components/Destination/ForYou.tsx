@@ -118,7 +118,7 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
         )}
       </View>
 
-      <View style={[styles.forYouRow]}>
+      {/* <View style={[styles.forYouRow]}>
         <Text style={styles.forYouRowTitle}>Top spots</Text>
         <View
           style={[
@@ -208,9 +208,9 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
             <Text style={styles.showMoreButtonText}>Show more</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </View> */}
 
-      <View style={[styles.forYouRow]}>
+      {/* <View style={[styles.forYouRow]}>
         <Text style={styles.forYouRowTitle}>Historical places</Text>
         <View
           style={[
@@ -300,7 +300,7 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
             <Text style={styles.showMoreButtonText}>Show more</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </View> */}
 
       <View style={[styles.forYouRow]}>
         <Text style={styles.forYouRowTitle}>Blogs</Text>
@@ -331,7 +331,6 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
                   key={ind}
                   onPress={() => {
                     onEmbedModalOpen();
-
                     setBlogUrl(item?.url);
                   }}
                 >

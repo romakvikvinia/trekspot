@@ -75,14 +75,16 @@ export const ExploreSightListContainer: React.FC<
                   <TouchableOpacity
                     style={styles.gradientWrapper}
                     activeOpacity={0.7}
-                    onPress={() =>
-                      { handleItem(item);  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}}
+                    onPress={() => {
+                      handleItem(item);
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    }}
                   >
                     <LinearGradient
                       style={styles.gradientWrapper}
                       colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
                     >
-                      <View style={styles.labelItem}>
+                      <View style={[styles.labelItem, {paddingBottom: !item?.rate ? 10 : 0}]}>
                         <Text
                           numberOfLines={2}
                           style={[styles.labelItemText, styles.titleSm]}
@@ -90,23 +92,27 @@ export const ExploreSightListContainer: React.FC<
                           {item.title}
                         </Text>
                       </View>
-                      <View style={styles.ratingLabel}>
-                        <View
-                          style={{
-                            position: "relative",
-                            top: -1,
-                            opacity: 0.8,
-                          }}
-                        >
-                          <StarIcon color="#FFBC3E" />
-                        </View>
-                        <Text style={[styles.ratingText, styles.ratingTextXs]}>
-                          {item.rate}
-                        </Text>
-                        {/* <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                      {item?.rate ? (
+                        <View style={styles.ratingLabel}>
+                          <View
+                            style={{
+                              position: "relative",
+                              top: -1,
+                              opacity: 0.8,
+                            }}
+                          >
+                            <StarIcon color="#FFBC3E" />
+                          </View>
+                          <Text
+                            style={[styles.ratingText, styles.ratingTextXs]}
+                          >
+                            {item.rate}
+                          </Text>
+                          {/* <Text style={[styles.ratingText, styles.ratingTextXs]}>
                         {item.reviews} reviews
                       </Text> */}
-                      </View>
+                        </View>
+                      ) : null}
                     </LinearGradient>
                   </TouchableOpacity>
                 </ImageBackground>
@@ -137,7 +143,8 @@ export const ExploreSightListContainer: React.FC<
                 <LinearGradient
                   colors={["rgba(0,0,0,0.1)", "rgba(0,0,0,0.6)"]}
                   style={{
-                    width: 130,
+                    width: 170,
+                    minWidth: 160,
                     height: 130,
                     borderRadius: 10,
                   }}
@@ -148,11 +155,11 @@ export const ExploreSightListContainer: React.FC<
         )}
       </View>
       {/**
-         * city detail modal
-         */}
-        {state.item && (
-          <SightDetailModal data={state.item!} closeCallBack={handleClear} />
-        )}
+       * city detail modal
+       */}
+      {state.item && (
+        <SightDetailModal data={state.item!} closeCallBack={handleClear} />
+      )}
     </>
   );
 };
@@ -169,7 +176,7 @@ const styles = StyleSheet.create({
   labelItemText: {
     color: "#fff",
     fontSize: 22,
-    fontWeight: "500",
+    fontWeight: "bold",
     marginLeft: 0,
     paddingRight: 10,
   },

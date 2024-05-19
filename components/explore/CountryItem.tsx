@@ -30,8 +30,7 @@ export const CountryItem: React.FC<CountryItemProps> = ({
         resizeMode="cover"
         source={{
           uri:
-            item?.image?.url ||
-            "https://cdn.pixabay.com/photo/2016/11/23/15/32/pedestrians-1853552_1280.jpg",
+            item?.image?.url
         }}
         // key={ind}
       >
@@ -137,7 +136,7 @@ const styles = StyleSheet.create({
   typeMd: {
     width: 160,
     height: 180,
-    borderRadius: 10,
+    borderRadius: 15,
     overflow: "hidden",
   },
 });

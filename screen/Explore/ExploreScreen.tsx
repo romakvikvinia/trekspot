@@ -162,26 +162,7 @@ export const ExploreScreen: React.FC<ExploreProps> = (props) => {
             />
 
 
-            {/**
-             * Top cities
-             */}
-            <CitiesContainer
-              title="Top Cities"
-              cities={cities}
-              seeAllItems={false}
-              isCitiesLoading={isCitiesLoading}
-            />
-
-            {/**
-             * Top sights
-             */}
-
-            <ExploreSightListContainer
-              items={(randomSightsData && randomSightsData.randomSights) || []}
-              title="Top sights"
-              isRandomSightsLoading={isRandomSightsLoading}
-            />
-
+            
             {/* <DestinationContainer title="South America" countries={[]} /> */}
           </ScrollView>
         </KeyboardAvoidingView>

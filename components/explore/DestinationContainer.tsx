@@ -51,7 +51,7 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
  
   return (
     <>
-      <View style={[styles.rowItem]} style={{ paddingTop: 15 }}>
+      <View style={[styles.rowItem]} style={{ paddingTop: 20 }}>
         <View style={styles.rowItemHeader}>
           <Text style={styles.h2}>{title}</Text>
           {seeAllItems && (
@@ -86,7 +86,7 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
                 style={{
                   width: 160,
                   height: 185,
-                  borderRadius: 10,
+                  borderRadius: 15,
                   marginRight: 10,
                 }}
                 key={ind}

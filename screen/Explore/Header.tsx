@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
       justifyContent: "space-between",
       alignItems: "center",
       paddingHorizontal: 15,
-      paddingBottom: 15,
+      paddingBottom: 0,
     },
     rowItem: {
       width: "100%",

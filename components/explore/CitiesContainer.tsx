@@ -64,8 +64,7 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
                   style={styles.box}
                   resizeMode="cover"
                   source={{
-                    uri: "https://cdn.pixabay.com/photo/2023/09/25/19/58/piran-8275931_1280.jpg",
-                    //item.image?.url,
+                    uri: item.image?.url
                   }}
                 >
                   <TouchableOpacity
@@ -87,7 +86,10 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
                         </Text>
                       </View>
                       <View style={styles.ratingLabel}>
-                        <View
+                        {
+                          item?.rate ?
+                          <>
+                           <View
                           style={{
                             position: "relative",
                             top: -1,
@@ -99,9 +101,15 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
                         <Text style={[styles.ratingText, styles.ratingTextXs]}>
                           {item.rate} /
                         </Text>
+                        </> : null
+                        }
+                       {
+                        item?.visitors ? 
                         <Text style={[styles.ratingText, styles.ratingTextXs]}>
-                          {item.visitors} visitors
-                        </Text>
+                        {item.visitors} visitors
+                      </Text> : null
+                       }
+                       
                       </View>
                     </LinearGradient>
                   </TouchableOpacity>
@@ -160,13 +168,14 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   titleSm: {
-    fontSize: 14,
+    fontSize: 16,
     marginLeft: 2,
+    marginTop: -1
   },
   labelItemText: {
     color: "#fff",
     fontSize: 22,
-    fontWeight: "500",
+    fontWeight: "bold",
     marginLeft: 5,
     paddingRight: 10,
   },

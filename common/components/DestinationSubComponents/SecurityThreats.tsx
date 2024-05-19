@@ -28,9 +28,11 @@ export const SecurityThreats: React.FC<SecurityThreatsProps> = ({ type }) => {
             marginRight: 15,
             flexDirection: "row",
             alignItems: "center",
-            backgroundColor: "#fff",
+            backgroundColor: "#f9fafb",
             padding: 15,
             width: "100%",
+            borderWidth: 1,
+            borderColor: "#dbe9fe"
           }}
         >
           {type === "secure" ? (
