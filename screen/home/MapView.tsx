@@ -9,8 +9,10 @@ import {
   View,
 } from "react-native";
 import {
+  ClearIcon,
   LivedIcon,
   Mark,
+  SearchIcon,
   Share,
   VisitedIcon,
 } from "../../utilities/SvgIcons.utility";
@@ -38,6 +40,7 @@ import { useDispatch } from "react-redux";
 import { debounce } from "../../helpers/debounce.helper";
 import { MapSvg } from "../../utilities/svg/map";
 import { SkeletonLoaderImage } from "../../common/ui/Skeleton";
+import { NotFound } from "../../components/common/NotFound";
 
 interface MapVIewProps {
   analytic?: AnalyticsType;
@@ -45,13 +48,12 @@ interface MapVIewProps {
 
 export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
   const dispatch = useDispatch();
+  const [searchValue, setSearchValue] = useState("");
   const [state, setState] = useState<{
     countries: ICountry[];
     visited_countries: string[];
     lived_countries: string[];
-    search: string;
   }>({
-    search: "",
     visited_countries: [],
     lived_countries: [],
     countries: CountriesList,
@@ -144,15 +146,9 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
     if (refetch) refetch();
   }, [refetch]);
 
-  const handelSearch = debounce(
-    useCallback((search: string) => {
-      setState((prevState) => ({
-        ...prevState,
-        search,
-      }));
-    }, []),
-    1000
-  );
+  const handelSearch = (search: string) => {
+    setSearchValue(search);
+  };
 
   //
 
@@ -185,11 +181,15 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
   }
 
   const filteredCountries =
-    state.search && state.search.length > 1
+    searchValue && searchValue.length > 1
       ? state.countries.filter((i) =>
-          i.name.toLowerCase().includes(state.search.toLowerCase())
+          i.name.toLowerCase().includes(searchValue.toLowerCase())
         )
       : state.countries;
+
+  const resetSearch = () => {
+    setSearchValue("");
+  };
 
   return (
     <>
@@ -315,12 +315,29 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
           HeaderComponent={
             <View style={styles.modalHeader}>
               {Platform.OS === "ios" ? (
-                <TextInput
-                  style={styles.searchInput}
-                  placeholder="Search..."
-                  placeholderTextColor={COLORS.darkgray}
-                  onChangeText={handelSearch}
-                />
+                <View style={styles.searchBox}>
+                  <View style={styles.searchIcon}>
+                    <SearchIcon width={15} />
+                  </View>
+                  <TextInput
+                    autoCorrect={false}
+                    style={styles.searchInput}
+                    placeholder="Search..."
+                    placeholderTextColor={COLORS.darkgray}
+                    onChangeText={handelSearch}
+                    value={searchValue}
+                  />
+
+                  {searchValue ? (
+                    <TouchableOpacity
+                      onPress={resetSearch}
+                      style={styles.clearButton}
+                      activeOpacity={0.7}
+                    >
+                      <ClearIcon />
+                    </TouchableOpacity>
+                  ) : null}
+                </View>
               ) : null}
 
               <View style={styles.infoRow}>
@@ -340,7 +357,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
           }
           modalStyle={{ flex: 1 }}
         >
-          <View style={{ flex: 1, height: SIZES.height - 200 }}>
+          <View style={{ flex: 1, height: SIZES.height - 200 }}> 
             <FlashList
               // keyExtractor={(item) =>
               //   `${item.iso2}-${item.name}-${item.capital}`
@@ -354,8 +371,8 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
                   lived_countries={state.lived_countries}
                 />
               )}
-              estimatedItemSize={200}
-            />
+              estimatedItemSize={100}
+            />    
           </View>
         </Modalize>
       </Portal>
@@ -390,8 +407,41 @@ const styles = StyleSheet.create({
   modalHeader: {
     width: "100%",
     padding: 15,
+    flexWrap: "wrap",
+    paddingVertical: 15,
+    height: 100,
   },
-
+  searchBox: {
+    flex: 1,
+    backgroundColor: "#fff",
+    flexDirection: "row",
+    borderRadius: 30,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 2,
+    position: "relative",
+    width: "100%",
+  },
+  searchIcon: {
+    paddingLeft: 15,
+    position: "absolute",
+    zIndex: 1,
+  },
+  clearButton: {
+    position: "absolute",
+    width: 25,
+    height: 25,
+    top: 1,
+    right: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   infoRow: {
     width: "100%",
     flexDirection: "row",
@@ -422,13 +472,14 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: "#ececec",
     borderRadius: SIZES.radius * 5,
-    paddingLeft: 20,
+    paddingLeft: 40,
     fontSize: 16,
     color: COLORS.black,
+    flex: 1,
   },
   mapContainer: {
     marginBottom: 15,
-   },
+  },
   map: {
     flex: 1,
   },

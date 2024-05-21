@@ -32,7 +32,7 @@ export const SecurityThreats: React.FC<SecurityThreatsProps> = ({ type }) => {
             padding: 15,
             width: "100%",
             borderWidth: 1,
-            borderColor: "#dbe9fe"
+            borderColor: "#eee"
           }}
         >
           {type === "secure" ? (

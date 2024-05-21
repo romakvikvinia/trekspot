@@ -12,7 +12,6 @@ import {
 } from "../../../utilities/SvgIcons.utility";
 import { SightType } from "../../../api/api.types";
 import { SightDetailModal } from "./SightDetailModal";
-const noImage = require("../../../assets/no-image.png");
 
 type SightsContainerProps = {
   items: Record<string, SightType[]>;

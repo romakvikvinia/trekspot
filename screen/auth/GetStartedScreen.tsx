@@ -319,7 +319,7 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
           style={{
             backgroundColor: COLORS.primaryDark,
             paddingHorizontal: 50,
-            paddingVertical: Platform.OS === "android" ? 15 : 20,
+            paddingVertical: Platform.OS === "android" ? 15 : 17,
             borderRadius: 140,
             width: "100%",
             justifyContent: "center",
@@ -331,7 +331,7 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
             style={{
               fontSize: 18,
               color: "#fff",
-              fontWeight: "bold",
+              fontWeight: "600",
               textAlign: "center",
             }}
           >

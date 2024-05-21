@@ -71,7 +71,7 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: "#f9fafb",
     borderWidth: 1,
-    borderColor: "#dbe9fe"
+    borderColor: "#eee"
   },
   weatherRow: {
     flexDirection: "row",
@@ -424,7 +424,7 @@ export const styles = StyleSheet.create({
   visaTypeCard: {
     borderWidth: 1,
     backgroundColor: "#f9fafb",
-    borderColor: "#dbe9fe",
+    borderColor: "#eee",
     marginTop: 20,
     padding: 15,
     borderRadius: 10,

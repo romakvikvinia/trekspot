@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 
 import {
   // Alert,
@@ -12,13 +12,13 @@ import {
 } from "react-native";
 import Constants from "expo-constants";
 
-import { Portal } from "react-native-portalize";
-import { Modalize } from "react-native-modalize";
+// import { Portal } from "react-native-portalize";
+// import { Modalize } from "react-native-modalize";
 
 import { COLORS, SIZES } from "../../styles/theme";
 // import { FlightIcon, VertDots } from "../../utilities/SvgIcons.utility";
 
-import { CountrySelect } from "../../common/components/CountrySelect";
+// import { CountrySelect } from "../../common/components/CountrySelect";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
@@ -33,6 +33,7 @@ import { CitiesContainer } from "../../components/explore/CitiesContainer";
 import { ExploreSightListContainer } from "../../components/explore/ExploreSightListContainer";
 
 import { ExploreHeader } from "./Header";
+import { VisaChecker } from "./VisaChecker";
 
 type ExploreProps = NativeStackScreenProps<
   ExploreRoutesStackParamList,
@@ -41,7 +42,7 @@ type ExploreProps = NativeStackScreenProps<
 
 export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
   // refs
-  const modalCountryPassportSelectRef = useRef<Modalize>(null);
+  // const modalCountryPassportSelectRef = useRef<Modalize>(null);
 
   //data
   const {
@@ -150,6 +151,12 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
               isCitiesLoading={isCitiesLoading}
             />
 
+          
+            <View style={{paddingHorizontal: 15, marginTop: 25, zIndex: 1}}>
+               <VisaChecker />
+            </View>
+             
+
             {/**
              * Top sights
              */}
@@ -159,17 +166,18 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
               title="Top sights"
               isRandomSightsLoading={isRandomSightsLoading}
             />
+            
 
             {/* <DestinationContainer title="South America" countries={[]} /> */}
           </ScrollView>
         </KeyboardAvoidingView>
       </View>
 
-      <Portal>
+      {/* <Portal>
         <Modalize ref={modalCountryPassportSelectRef} modalTopOffset={65}>
           <CountrySelect />
         </Modalize>
-      </Portal>
+      </Portal> */}
     </>
   );
 };

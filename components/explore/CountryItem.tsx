@@ -10,6 +10,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { CountryType } from "../../api/api.types";
 import { Mark, Mark2, StarIcon } from "../../utilities/SvgIcons.utility";
 import * as Haptics from "expo-haptics";
+import { Image } from "expo-image";
 
 type CountryItemProps = {
   item: CountryType;
@@ -25,14 +26,15 @@ export const CountryItem: React.FC<CountryItemProps> = ({
   // console.log('item,',item)
   return (
     <>
-      <ImageBackground
+      <Image
         style={[styles.box, styles.typeMd]}
-        resizeMode="cover"
-        source={{
+        contentFit="cover"
+        source={item?.image?.url ? {
           uri:
             item?.image?.url
-        }}
-        // key={ind}
+        } :  require("../../assets/no-image.png")
+      }
+      cachePolicy="memory-disk"
       >
         <TouchableOpacity
           style={[
@@ -75,7 +77,7 @@ export const CountryItem: React.FC<CountryItemProps> = ({
             </View>
           </LinearGradient>
         </TouchableOpacity>
-      </ImageBackground>
+      </Image>
       {isWith && <View style={{ width: 20 }}></View>}
     </>
   );

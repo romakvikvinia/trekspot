@@ -11,21 +11,22 @@ import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
 import { COLORS, SIZES } from "../../styles/theme";
 import { CountriesList } from "../../utilities/countryList";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Flags } from "../../utilities/flags";
 import { CheckCircleIcon } from "../../utilities/SvgIcons.utility";
 
-export const CountrySelect = () => {
+export const CountrySelect = ({search = true, onSelect}) => {
   const modalRef = useRef<Modalize>(null);
 
   const Country = ({ item }: any) => {
     const countryCode = item.iso2 as string;
+    const [selected, setSelected] = useState(null);
 
     // @ts-ignore
     const imagePath = Flags[countryCode];
 
     return (
-      <TouchableOpacity style={styles.countryItem} activeOpacity={0.7}>
+      <TouchableOpacity onPress={() => {setSelected(item.iso2); onSelect(item)}} style={styles.countryItem} activeOpacity={0.7}>
         <View style={styles.countryItemLeft}>
           <View
             style={{
@@ -50,8 +51,9 @@ export const CountrySelect = () => {
           <Text style={styles.itemTitle}>{item.name}</Text>
         </View>
         <View style={styles.checkIcon}>
-          {/* This should be visible when checked */}
-          {/* <CheckCircleIcon color={COLORS.primaryDark} /> */}
+          {
+            selected === item.iso2 ? <CheckCircleIcon color={COLORS.primaryDark} /> : null
+          }
         </View>
       </TouchableOpacity>
     );
@@ -59,13 +61,16 @@ export const CountrySelect = () => {
 
   return (
     <>
-      <View style={styles.modalHeader}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search..."
-          placeholderTextColor={COLORS.darkgray}
-        />
-      </View>
+    {
+      search ? <View style={styles.modalHeader}>
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Search..."
+        placeholderTextColor={COLORS.darkgray}
+      />
+    </View> : null
+    }
+      
       <View style={{ flex: 1, height: SIZES.height - 155 }}>
         <FlashList
           data={CountriesList}

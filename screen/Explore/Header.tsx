@@ -39,6 +39,7 @@ export const ExploreHeader = () => {
             onChangeText={(e) => setSearchValue(e)}
             onFocus={() => setSearchActive(true)}
             value={searchValue}
+            autoCorrect={false}
           />
           {searchValue ? (
             <TouchableOpacity
@@ -262,7 +263,7 @@ const styles = StyleSheet.create({
       justifyContent: "space-between",
       alignItems: "center",
       paddingHorizontal: 15,
-      paddingBottom: 0,
+      paddingBottom: 15,
     },
     rowItem: {
       width: "100%",

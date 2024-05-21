@@ -1,18 +1,19 @@
 import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import { Modalize } from "react-native-modalize";
-import { Portal } from "react-native-portalize";
-import { CityDetailModal } from "../../../components/explore/destination/CityDetailModal";
-import { MarkerFillIcon } from "../../../utilities/SvgIcons.utility";
-import { MapEmbedView } from "../MapEmbedView";
+import { Text, Touchable, TouchableOpacity, View } from "react-native";
+// import { Modalize } from "react-native-modalize";
+// import { Portal } from "react-native-portalize";
+// import { CityDetailModal } from "../../../components/explore/destination/CityDetailModal";
+// import { MarkerFillIcon } from "../../../utilities/SvgIcons.utility";
+// import { MapEmbedView } from "../MapEmbedView";
 import { styles } from "../_styles";
 import { CityType, CountryType } from "../../../api/api.types";
 import { useLazyGetCitiesQuery } from "../../../api/api.trekspot";
 import { Loader } from "../../ui/Loader";
 import { ForYouCountryItem } from "../../../components/explore/ForYouCountryItem";
 import { useNavigation } from "@react-navigation/native";
+import { FaqItem } from "./_FaqItem";
 
 type ForYouPros = {
   DATA: any;
@@ -27,7 +28,7 @@ interface IState {
 export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
   const navigation = useNavigation();
 
-  const modalEmbedRef = useRef(null);
+  // const modalEmbedRef = useRef(null);
 
   const [state, setState] = useState<IState>({
     showMoreCities: false,
@@ -37,14 +38,14 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
     useLazyGetCitiesQuery();
   const [blogUrl, setBlogUrl] = useState("");
 
-  const onEmbedModalOpen = () => {
-    modalEmbedRef.current?.open();
-  };
+  // const onEmbedModalOpen = () => {
+  //   modalEmbedRef.current?.open();
+  // };
 
   const onPlaceDetailOpen = useCallback((city: CityType) => {
-     navigation.navigate("CityDetail", {
-      city
-     })
+    navigation.navigate("CityDetail", {
+      city,
+    });
   }, []);
 
   useEffect(() => {
@@ -54,6 +55,29 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
     });
   }, [fetchCountryCities, country]);
 
+
+  const faqData = [
+    {
+      question: "When is the best time to visit France?",
+      answer: "<ul><li><strong>Spring (April to June):</strong> Mild weather and blooming flowers make this a great time to visit.</li><li><strong>Summer (July to August):</strong> Warm weather and long days, but it's also the peak tourist season.</li><li><strong>Autumn (September to November):</strong> Pleasant weather and fewer tourists.</li><li><strong>Winter (December to February):</strong> Best for visiting ski resorts in the Alps or experiencing Paris without the crowds.</li></ul>"
+    },
+    {
+      question: "Do I need a visa to visit France?",
+      answer: "<ul><li><strong>EU Citizens:</strong> No visa is required for EU citizens.</li><li><strong>US Citizens:</strong> No visa is required for stays up to 90 days within a 180-day period.</li><li><strong>Other Nationalities:</strong> Check the French consulate website for specific visa requirements.</li></ul>"
+    },
+    {
+      question: "What is the currency in France?",
+      answer: "<ul><li>The currency in France is the Euro (€).</li></ul>"
+    },
+    {
+      question: "What language is spoken in France?",
+      answer: "<ul><li>The official language is French. In tourist areas, many people speak English, but learning a few basic French phrases is appreciated.</li></ul>"
+    },
+    {
+      question: "What is the time zone in France?",
+      answer: "France is in the Central European Time (CET) zone, which is UTC+1. During daylight saving time (late March to late October), it is UTC+2."
+    }
+  ]
 
   return (
     <>
@@ -117,6 +141,29 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
           </View>
         )}
       </View>
+
+      <View style={[styles.forYouRow, { marginBottom: 50 }]}>
+        <Text style={styles.forYouRowTitle}>FAQ</Text>
+        <FlashList
+          contentContainerStyle={{ paddingHorizontal: 15 }}
+          renderItem={({ item, ind }) => {
+            return <FaqItem item={item}/>;
+          }}
+          // numColumns={3}
+          estimatedItemSize={20}
+          data={faqData}
+        />
+      </View>
+
+      {/* <Portal>
+        <Modalize ref={modalEmbedRef} modalTopOffset={65} adjustToContentHeight>
+          <MapEmbedView
+            blogUrl={blogUrl}
+            placeTitle={state.city && state.city.city}
+            modalEmbedRef={modalEmbedRef}
+          />
+        </Modalize>
+      </Portal> */}
 
       {/* <View style={[styles.forYouRow]}>
         <Text style={styles.forYouRowTitle}>Top spots</Text>
@@ -302,6 +349,7 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
         </View>
       </View> */}
 
+      {/* 
       <View style={[styles.forYouRow]}>
         <Text style={styles.forYouRowTitle}>Blogs</Text>
         <View
@@ -374,19 +422,9 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
             <Text style={styles.showMoreButtonText}>Show more</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </View> */}
 
-      {state.city && <CityDetailModal city={state.city} />}
-
-      <Portal>
-        <Modalize ref={modalEmbedRef} modalTopOffset={65} adjustToContentHeight>
-          <MapEmbedView
-            blogUrl={blogUrl}
-            placeTitle={state.city && state.city.city}
-            modalEmbedRef={modalEmbedRef}
-          />
-        </Modalize>
-      </Portal>
+      {/* {state.city && <CityDetailModal city={state.city} />} */}
     </>
   );
 };
