@@ -1,7 +1,6 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ImageBackground,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -9,8 +8,11 @@ import {
 } from "react-native";
 import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
+import { useLazyGetPassportIndexesQuery } from "../../api/api.trekspot";
 import { CountrySelect } from "../../common/components/CountrySelect";
 import { Loader } from "../../common/ui/Loader";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NotFound } from "../../components/common/NotFound";
 import { COLORS } from "../../styles/theme";
 import { Flags } from "../../utilities/flags";
 import {
@@ -22,13 +24,16 @@ import {
 } from "../../utilities/SvgIcons.utility";
 
 export const VisaChecker = () => {
+  const [fetchVisaInfo, { data, isLoading, isError }] =
+    useLazyGetPassportIndexesQuery();
+
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-  const modalCountryPassportSelectRef = useRef(null);
   const [selectingFor, setSelectingFor] = useState(null);
 
+  const modalCountryPassportSelectRef = useRef(null);
+
   const handleCountrySelect = (country) => {
-    console.log("ci", country);
     if (selectingFor === "from") {
       setFrom(country);
     } else if (selectingFor === "to") {
@@ -44,8 +49,37 @@ export const VisaChecker = () => {
 
   const resetHandler = () => {
     setFrom("");
-    setTo("")
-  }
+    setTo("");
+  };
+
+  const onDestinationModalClose = () => {
+    modalCountryPassportSelectRef.current?.close();
+  };
+
+  useEffect(() => {
+    if (from && to) {
+      fetchVisaInfo({ from: from?.iso2 || "", to: to?.iso2 || "" });
+    }
+  }, [from, to]);
+
+  const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem('my-key', value);
+    } catch (e) {
+      // saving error
+    }
+  };
+  
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('my-key');
+      if (value !== null) {
+        // value previously stored
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
 
   return (
     <>
@@ -115,51 +149,83 @@ export const VisaChecker = () => {
           </TouchableOpacity>
         </View>
 
-        <View style={{ marginTop: 15 }}>
-          <Loader size="small" background="#f9fafb" isLoading={true} />
-        </View>
+        {isLoading ? (
+          <View style={{ marginTop: 15 }}>
+            <Loader size="small" background="#f9fafb" isLoading={isLoading} />
+          </View>
+        ) : null}
 
-        <View style={[styles.textContentWrapper, styles.successBg]}>
-          <CheckCircleIcon color="#1a806b" />
-          <Text style={[styles.headingText, styles.success]}>
-            Georgian passport holders don't need visa to travel to China
-          </Text>
-        </View>
+        {!data && from?.name && to?.name && !isLoading && (
+          <NotFound text="Data not found! Please select the country that issued your passport." />
+        )}
 
-        <View style={[styles.textContentWrapper, styles.dangerBg]}>
-          <CloseCircleIcon color="#D74E4E" />
-          <Text style={[styles.headingText, styles.danger]}>
-            Georgian passport holders need visa to travel to Georgia
-          </Text>
-        </View>
-
-        <Text style={styles.secondaryTitle}>Options</Text>
-        <View style={styles.visaTypes}>
-          <View style={styles.visaTypeCard}>
-            <Text style={styles.visaTypeCardTitle}>Visitor visa</Text>
-            <View style={styles.staysNtype}>
-              <View style={styles.staysNtypeRow}>
-                <Text style={styles.staysNtypeRowKey}>Allowed stay:</Text>
-                <Text style={styles.staysNtypeRowValue}>15 Days</Text>
+        {!isLoading && data && from?.name && to?.name && data.passportIndex && (
+          <>
+            {data.passportIndex.requirement !== "visa required" ? (
+              <View style={[styles.textContentWrapper, styles.successBg]}>
+                <CheckCircleIcon color="#1a806b" />
+                <Text style={[styles.headingText, styles.success]}>
+                  {from?.name} passport holders don't need visa to travel to{" "}
+                  {to?.name}.
+                </Text>
               </View>
-              <View style={styles.staysNtypeRow}>
-                <Text style={styles.staysNtypeRowKey}>Type:</Text>
-                <Text style={styles.staysNtypeRowValue}>Tourism, business</Text>
+            ) : (
+              <View style={[styles.textContentWrapper, styles.dangerBg]}>
+                <CloseCircleIcon color="#D74E4E" />
+                <Text style={[styles.headingText, styles.danger]}>
+                  {from?.name} passport holders need visa to travel to {to.name}
+                </Text>
+              </View>
+            )}
+
+            <Text style={styles.secondaryTitle}>Options</Text>
+            <View style={styles.visaTypes}>
+              <View style={styles.visaTypeCard}>
+                <Text style={styles.visaTypeCardTitle}>Visitor visa</Text>
+
+                <View style={styles.staysNtype}>
+                  <View style={styles.staysNtypeRow}>
+                    <Text style={styles.staysNtypeRowKey}>Allowed stay:</Text>
+                    <Text style={styles.staysNtypeRowValue}>
+                      {!isNaN(parseFloat(data.passportIndex.requirement))
+                        ? `${data.passportIndex.requirement} Days`
+                        : data.passportIndex.requirement}
+                    </Text>
+                  </View>
+                  <View style={styles.staysNtypeRow}>
+                    <Text style={styles.staysNtypeRowKey}>Type:</Text>
+                    <Text style={styles.staysNtypeRowValue}>
+                      Tourism, business
+                    </Text>
+                  </View>
+                </View>
               </View>
             </View>
-          </View>
-        </View>
 
-        <View style={styles.resetButtonWrapper}>
-          <TouchableOpacity onPress={resetHandler} activeOpacity={0.7} style={styles.resetButton}>
-            <Text style={styles.resetButtonText}>Reset</Text>
-          </TouchableOpacity>
-        </View>
+            <Text style={styles.infoText}>
+              We are working to provide the latest updates, but please verify
+              visa info accuracy with the embassy.
+            </Text>
+
+            <View style={styles.resetButtonWrapper}>
+              <TouchableOpacity
+                onPress={resetHandler}
+                activeOpacity={0.7}
+                style={styles.resetButton}
+              >
+                <Text style={styles.resetButtonText}>Reset</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
       </View>
 
       <Portal>
         <Modalize ref={modalCountryPassportSelectRef} modalTopOffset={65}>
-          <CountrySelect onSelect={handleCountrySelect} />
+          <CountrySelect
+            onSelect={handleCountrySelect}
+            onDestinationModalClose={onDestinationModalClose}
+          />
         </Modalize>
       </Portal>
     </>
@@ -172,6 +238,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 25,
+  },
+  infoText: {
+    marginTop: 15,
+    lineHeight: 13,
+    fontSize: 10,
+    textAlign: "center",
+    maxWidth: 300,
+    color: "#000",
+    opacity: 0.6,
   },
   resetButton: {
     backgroundColor: "#f2f2f2",
@@ -238,6 +313,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "bold",
     color: "#000",
+    textTransform: "capitalize",
   },
   box: {
     height: 300,
@@ -276,7 +352,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   visaTypeCard: {
-    backgroundColor: "#fff",
+    backgroundColor: "#f3f3f3",
     marginTop: 20,
     padding: 15,
     borderRadius: 10,
@@ -288,7 +364,7 @@ const styles = StyleSheet.create({
   },
   visaCheckerCard: {
     borderWidth: 1,
-    backgroundColor: "#f9fafb",
+    backgroundColor: "#fff",
     borderColor: "#eee",
     padding: 15,
     borderRadius: 10,
@@ -308,7 +384,7 @@ const styles = StyleSheet.create({
   },
   visaCheckerCardSub: {
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: "400",
     color: COLORS.gray,
     marginTop: 5,
@@ -319,8 +395,9 @@ const styles = StyleSheet.create({
     flex: 1,
     maxWidth: 140,
     backgroundColor: "#f2f2f2",
-    padding: 8,
-    borderRadius: 5,
+    paddingHorizontal: 8,
+    paddingVertical: 10,
+    borderRadius: 8,
     position: "relative",
     justifyContent: "space-between",
   },

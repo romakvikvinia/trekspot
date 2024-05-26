@@ -50,7 +50,7 @@ const Overview: React.FC<OverviewProps> = memo(function ({ country }) {
         <SecurityThreats type={country?.security} />
         <View style={styles.keyValue}>
           <Text style={styles.key}>National Language(s)</Text>
-          <Text style={styles.value}>French</Text>
+          <Text style={styles.value}>{country.languages && Object.values(country.languages)[0]}</Text>
         </View>
         <View style={styles.keyValue}>
           <Text style={styles.key}>Currency</Text>

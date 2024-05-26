@@ -11,12 +11,12 @@ export const SearchComponent = ({ search, setSearch, withIcon = true }) => {
     <View style={searchComponentStyles.searchComponent}>
       {withIcon ? (
         <View style={searchComponentStyles.searchComponentIcon}>
-          <SearchBoldIcon width="15" />
+          <SearchBoldIcon width={15} />
         </View>
       ) : null}
 
       <TextInput
-        autoFocus={true}
+        autoFocus={false}
         style={[
           searchComponentStyles.searchComponentInput,
           {

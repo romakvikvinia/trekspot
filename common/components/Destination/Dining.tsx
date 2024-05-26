@@ -15,6 +15,7 @@ import { FlashList } from "@shopify/flash-list";
 import { useDishesByISO2Query } from "../../../api/api.trekspot";
 import { Loader } from "../../ui/Loader";
 import { NotFound } from "../../../components/common/NotFound";
+import { Image } from "expo-image";
 
 type DiningProps = {
   country: CountryType;
@@ -55,12 +56,16 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
             numColumns={2}
             renderItem={({ item }) => (
               <View style={styles.thingsTodoItem} key={item.score}>
-                <ImageBackground
+                <Image
                   style={styles.thingsTodoItemImage}
-                  source={{
+                  source={
+                    item?.url ? {
                     uri: item?.url,
-                  }}
-                ></ImageBackground>
+                  } : require("../../../assets/no-image.png")
+                }
+                  contentFit="cover"
+                  cachePolicy="memory-disk"
+                ></Image>
 
                 <View style={styles.thingsTodoItemDetails}>
                   <Text style={styles.thingsTodoItemTitle} selectable={true}>
@@ -74,14 +79,14 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
                       ]}
                     >
                       <View
-                        style={{ position: "relative", top: -1, opacity: 0.8 }}
+                        style={{ position: "relative", top: -1, opacity: 0.8, marginRight: 3 }}
                       >
                         <StarIcon color="#FFBC3E" />
                       </View>
                       <Text
                         style={[
                           styles.ratingText,
-                          { color: "#000", marginLeft: 0 },
+                          { color: "#000", marginLeft: 0, fontWeight: "500" },
                         ]}
                       >
                         {item?.rate}

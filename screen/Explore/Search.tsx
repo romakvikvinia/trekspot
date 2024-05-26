@@ -1,0 +1,125 @@
+import { useCallback, useState } from "react";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { SearchResult } from "../../common/components/SearchResult";
+import { COLORS } from "../../styles/theme";
+import { BackIcon, ClearIcon } from "../../utilities/SvgIcons.utility";
+import Constants from "expo-constants";
+import { Loader } from "../../common/ui/Loader";
+import { useNavigation } from "@react-navigation/native";
+import { CountriesList } from "../../utilities/countryList";
+import { NotFound } from "../../components/common/NotFound";
+
+export const Search = () => {
+  const navigation = useNavigation();
+  const [searchValue, setSearchValue] = useState("");
+
+  const handleSearch = useCallback((e: string) => {
+    setSearchValue(e);
+  }, []);
+  
+  const clearSearch = useCallback(() => {
+    setSearchValue("");
+  }, []);
+ 
+
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1, paddingHorizontal: 15 }}
+      >
+        <View style={styles.searchBox}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <BackIcon size="30" />
+          </TouchableOpacity>
+          <TextInput
+            placeholder="Search here..."
+            placeholderTextColor="#7f7f7f"
+            autoFocus={true}
+            style={styles.searchInput}
+            onChangeText={handleSearch}
+            value={searchValue}
+            autoCorrect={false}
+          />
+          {searchValue ? (
+            <TouchableOpacity
+              onPress={clearSearch}
+              style={styles.clearButton}
+              activeOpacity={0.7}
+            >
+              <ClearIcon />
+            </TouchableOpacity>
+          ) : null}
+        </View>
+        {/* <View style={{marginTop: 50}}>
+            <Loader background="" isLoading={true} size="small" />
+        </View> */}
+        <SearchResult data={CountriesList} />
+
+        {/* <NotFound /> */}
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
+};
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#f8f8f8",
+    paddingTop: Constants?.statusBarHeight + 10,
+  },
+  searchBox: {
+    height: 55,
+    backgroundColor: "#fff",
+    flexDirection: "row",
+    borderRadius: 30,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 2,
+    borderWidth: 2,
+    borderStyle: "solid",
+    borderColor: COLORS.primary,
+  },
+  searchInput: {
+    paddingLeft: 0,
+    fontSize: 16,
+    flex: 1,
+    color: "#000",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    fontWeight: "500",
+    paddingRight: 40
+  },
+  backButton: {
+    width: 45,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 30,
+    height: 55,
+  },
+  clearButton: {
+    position: "absolute",
+    width: 40,
+    height: 51,
+    top: 0,
+    right: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 30
+},
+});

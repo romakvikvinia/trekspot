@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     borderColor: "#eee",
     padding: 0,
     borderRadius: 10,
-    marginBottom: 15
+    marginBottom: 8
   },
   faqHeader: {
     flexDirection: "row",

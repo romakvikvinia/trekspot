@@ -1,7 +1,6 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 
 import {
-  ImageBackground,
   ScrollView,
   StyleSheet,
   Text,
@@ -39,16 +38,10 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
   popularCountriesLoading,
 }) => {
   const navigation = useNavigation<ExploreStackNavigationProp>();
-  const [state, setState] = useState<IState>({ countryId: null });
 
   const handleDetailOfCountry = useCallback((countryId: string) => {
-    // setState((prevState) => ({ ...prevState, countryId }));
     navigation.navigate("CountryDetailScreen", { countryId });
   }, []);
-
-  // const handleClearState = useCallback(() => {
-  //   setState((prevState) => ({ ...prevState, countryId: null }));
-  // }, []);
 
   return (
     <>

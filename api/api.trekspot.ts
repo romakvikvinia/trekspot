@@ -658,7 +658,7 @@ export const trekSpotApi = createApi({
       CountryDishesResponseType,
       CountryDishesArgsType
     >({
-      query: ({ skip = 0, take = 10, iso2 }) => ({
+      query: ({ skip = 0, take = 100, iso2 }) => ({
         variables: { skip, take, iso2 },
         document: gql`
           query ($skip: Int!, $take: Int!, $iso2: String!) {

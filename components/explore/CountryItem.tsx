@@ -1,6 +1,7 @@
 import React from "react";
 import {
   ImageBackground,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -23,61 +24,124 @@ export const CountryItem: React.FC<CountryItemProps> = ({
   isWith,
   openModal,
 }) => {
-  // console.log('item,',item)
   return (
     <>
-      <Image
-        style={[styles.box, styles.typeMd]}
-        contentFit="cover"
-        source={item?.image?.url ? {
-          uri:
+      {Platform.OS === "ios" ? (
+        <Image
+          style={[styles.box, styles.typeMd]}
+          contentFit="cover"
+          source={
             item?.image?.url
-        } :  require("../../assets/no-image.png")
-      }
-      cachePolicy="memory-disk"
-      >
-        <TouchableOpacity
-          style={[
-            styles.addToBucketButton,
-            {
-              //   backgroundColor:  == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)",
-            },
-          ]}
-          activeOpacity={0.7}
+              ? {
+                  uri: item?.image?.url,
+                }
+              : require("../../assets/no-image.png")
+          }
+          cachePolicy="memory-disk"
         >
-          <Mark2 color="#fff" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.gradientWrapper}
-          activeOpacity={0.7}
-          onPress={() => {openModal(item.id!), Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}}
-        >
-          <LinearGradient
-            style={styles.gradientWrapper}
-            colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+          <TouchableOpacity
+            style={[
+              styles.addToBucketButton,
+              {
+                //   backgroundColor:  == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)",
+              },
+            ]}
+            activeOpacity={0.7}
           >
-            <View style={styles.labelItem}>
-              <Mark color="#fff" size={15} />
-              <Text style={styles.labelItemText} numberOfLines={2}>
-                {item.name}
-              </Text>
-            </View>
-            <View style={styles.ratingLabel}>
-              <View
-                style={{
-                  position: "relative",
-                  top: -1,
-                  opacity: 0.8,
-                }}
-              >
-                <StarIcon color="#FFBC3E" />
+            <Mark2 color="#fff" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.gradientWrapper}
+            activeOpacity={0.7}
+            onPress={() => {
+              openModal(item.id!),
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
+          >
+            <LinearGradient
+              style={styles.gradientWrapper}
+              colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+            >
+              <View style={styles.labelItem}>
+                <Mark color="#fff" size={15} />
+                <Text style={styles.labelItemText} numberOfLines={2}>
+                  {item.name}
+                </Text>
               </View>
-              <Text style={styles.ratingText}>{item.rate} /</Text>
-              <Text style={styles.ratingText}>{item.visitors} visitors</Text>
-            </View>
-          </LinearGradient>
-        </TouchableOpacity>
-      </Image>
+              <View style={styles.ratingLabel}>
+                <View
+                  style={{
+                    position: "relative",
+                    top: -1,
+                    opacity: 0.8,
+                  }}
+                >
+                  <StarIcon color="#FFBC3E" />
+                </View>
+                <Text style={styles.ratingText}>{item.rate} /</Text>
+                <Text style={styles.ratingText}>{item.visitors} visitors</Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+        </Image>
+      ) : (
+        <ImageBackground
+          style={[styles.box, styles.typeMd]}
+          resizeMode="cover"
+          source={
+            item?.image?.url
+              ? {
+                  uri: item?.image?.url,
+                }
+              : require("../../assets/no-image.png")
+          }
+        >
+          <TouchableOpacity
+            style={[
+              styles.addToBucketButton,
+              {
+                //   backgroundColor:  == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)",
+              },
+            ]}
+            activeOpacity={0.7}
+          >
+            <Mark2 color="#fff" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.gradientWrapper}
+            activeOpacity={0.7}
+            onPress={() => {
+              openModal(item.id!),
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
+          >
+            <LinearGradient
+              style={styles.gradientWrapper}
+              colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+            >
+              <View style={styles.labelItem}>
+                <Mark color="#fff" size={15} />
+                <Text style={styles.labelItemText} numberOfLines={2}>
+                  {item.name}
+                </Text>
+              </View>
+              <View style={styles.ratingLabel}>
+                <View
+                  style={{
+                    position: "relative",
+                    top: -1,
+                    opacity: 0.8,
+                  }}
+                >
+                  <StarIcon color="#FFBC3E" />
+                </View>
+                <Text style={styles.ratingText}>{item.rate} /</Text>
+                <Text style={styles.ratingText}>{item.visitors} visitors</Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+        </ImageBackground>
+      )}
       {isWith && <View style={{ width: 20 }}></View>}
     </>
   );

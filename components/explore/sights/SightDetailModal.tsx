@@ -20,7 +20,6 @@ import {
   ClockIcon,
   CloseCircleIcon,
   DownIcon,
-  DownLongArrow,
   Mark2,
   StarIcon,
   TripLocationIcon,
@@ -32,11 +31,11 @@ type SightDetailModalProps = {
   closeCallBack?: () => void;
 };
 
-export const HoursRow = ({data}) => {
+export const HoursRow = ({ data }) => {
   const [hoursVisible, setHoursVisible] = useState(false);
 
   return (
-    <View
+    <TouchableOpacity
       style={{
         backgroundColor: "#f2f2f2",
         padding: 15,
@@ -44,17 +43,17 @@ export const HoursRow = ({data}) => {
         marginBottom: 15,
         borderRadius: 10,
       }}
+      onPress={() => setHoursVisible(!hoursVisible)}
+      activeOpacity={0.7}
     >
       {data?.workingHours?.length ? (
-        <TouchableOpacity
-          onPress={() => setHoursVisible(!hoursVisible)}
+        <View
           style={{
             marginTop: 0,
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
           }}
-          activeOpacity={0.7}
         >
           <View style={{ flexDirection: "row" }}>
             <ClockIcon />
@@ -70,7 +69,7 @@ export const HoursRow = ({data}) => {
             </Text>
           </View>
           <DownIcon />
-        </TouchableOpacity>
+        </View>
       ) : null}
       {hoursVisible &&
         data.workingHours?.map((item, i) => (
@@ -78,7 +77,7 @@ export const HoursRow = ({data}) => {
             style={{
               flexDirection: "row",
               alignItems: "center",
-              marginTop: i === 0 ? 15 : 8
+              marginTop: i === 0 ? 15 : 8,
             }}
             key={`hour${i}`}
           >
@@ -99,9 +98,9 @@ export const HoursRow = ({data}) => {
             >{` ${item.hours}`}</Text>
           </View>
         ))}
-    </View>
+    </TouchableOpacity>
   );
-}
+};
 
 export const SightDetailModal: React.FC<SightDetailModalProps> = ({
   data,
@@ -145,8 +144,8 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
     <Modal
       animationType={"none"}
       transparent={true}
-      statusBarTranslucent={true} 
-      visible={state.isOpen}  
+      statusBarTranslucent={true}
+      visible={state.isOpen}
       // onRequestClose={closeCallBack}
     >
       <ClickOutsideProvider>
@@ -206,10 +205,14 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
               {data.images?.map((item, ind) => (
                 <Image
                   style={[styles.box]}
-                  resizeMode="cover"
-                  source={{
-                    uri: item.url,
-                  }}
+                  contentFit="cover"
+                  source={
+                    item?.url
+                      ? {
+                          uri: item?.url,
+                        }
+                      : require("../../../assets/no-image.png")
+                  }
                   key={`slide-${ind}`}
                 ></Image>
               ))}
@@ -234,16 +237,18 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
               </View>
               <View style={styles.ratingWrapper}>
                 <Text style={styles.type}>{data.category}</Text>
-                <Text style={styles.ratingText}>{data.rate}</Text>
                 <View
                   style={{
                     position: "relative",
                     top: -1,
                     opacity: 0.8,
+                    marginLeft: 5
                   }}
                 >
                   <StarIcon size={15} color="#FFBC3E" />
                 </View>
+                <Text style={styles.ratingText}>{data.rate}</Text>
+               
               </View>
 
               {data?.description ? (
@@ -268,10 +273,7 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                 </TouchableOpacity>
               ) : null}
 
-              {
-                 data.workingHours.length > 0 &&  <HoursRow data={data} />
-              }
-             
+              {data.workingHours.length > 0 && <HoursRow data={data} />}
             </View>
           </ScrollView>
         </View>
@@ -309,7 +311,7 @@ export const styles = StyleSheet.create({
   address: {
     fontSize: 14,
     color: COLORS.gray,
-    marginLeft: 5
+    marginLeft: 5,
   },
   sightDetailsTitle: {
     fontSize: 24,
@@ -330,13 +332,13 @@ export const styles = StyleSheet.create({
   },
   ratingText: {
     fontSize: 14,
-    marginLeft: 5,
+    marginLeft: 2,
     color: COLORS.gray,
   },
   sightDetailsDescription: {
     fontSize: 14,
     color: COLORS.black,
-    marginBottom: 15
+    marginBottom: 15,
   },
   sightDetails: {
     padding: 15,

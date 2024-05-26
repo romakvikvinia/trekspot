@@ -144,6 +144,19 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
 
       <View style={[styles.forYouRow, { marginBottom: 50 }]}>
         <Text style={styles.forYouRowTitle}>FAQ</Text>
+
+        <Text style={styles.forYouRowTitleSub}>General Travel Questions</Text>
+        <FlashList
+          contentContainerStyle={{ paddingHorizontal: 15 }}
+          renderItem={({ item, ind }) => {
+            return <FaqItem item={item}/>;
+          }}
+          // numColumns={3}
+          estimatedItemSize={20}
+          data={faqData}
+        />
+
+      <Text style={[styles.forYouRowTitleSub, {marginTop: 15}]}>Accommodation and Food</Text>
         <FlashList
           contentContainerStyle={{ paddingHorizontal: 15 }}
           renderItem={({ item, ind }) => {

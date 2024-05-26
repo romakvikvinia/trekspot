@@ -1,24 +1,15 @@
 import React from "react";
 
 import {
-  // Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
-  // Text,
-  // TouchableOpacity,
   View,
 } from "react-native";
 import Constants from "expo-constants";
 
-// import { Portal } from "react-native-portalize";
-// import { Modalize } from "react-native-modalize";
-
 import { COLORS, SIZES } from "../../styles/theme";
-// import { FlightIcon, VertDots } from "../../utilities/SvgIcons.utility";
-
-// import { CountrySelect } from "../../common/components/CountrySelect";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
@@ -41,9 +32,6 @@ type ExploreProps = NativeStackScreenProps<
 >;
 
 export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
-  // refs
-  // const modalCountryPassportSelectRef = useRef<Modalize>(null);
-
   //data
   const {
     data: popularCountries,
@@ -65,7 +53,6 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
    */
 
   const cities = data && data.cities ? data.cities : [];
-  // console.log("popularCountries");
   return (
     <>
       <View style={styles.safeArea}>
@@ -151,11 +138,9 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
               isCitiesLoading={isCitiesLoading}
             />
 
-          
-            <View style={{paddingHorizontal: 15, marginTop: 25, zIndex: 1}}>
-               <VisaChecker />
+            <View style={{ paddingHorizontal: 15, marginTop: 25, zIndex: 1 }}>
+              <VisaChecker />
             </View>
-             
 
             {/**
              * Top sights
@@ -166,18 +151,11 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
               title="Top sights"
               isRandomSightsLoading={isRandomSightsLoading}
             />
-            
 
             {/* <DestinationContainer title="South America" countries={[]} /> */}
           </ScrollView>
         </KeyboardAvoidingView>
       </View>
-
-      {/* <Portal>
-        <Modalize ref={modalCountryPassportSelectRef} modalTopOffset={65}>
-          <CountrySelect />
-        </Modalize>
-      </Portal> */}
     </>
   );
 };

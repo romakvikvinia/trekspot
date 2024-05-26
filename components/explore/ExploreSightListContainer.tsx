@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 
 import {
   ImageBackground,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -16,6 +17,7 @@ import { Mark, StarIcon } from "../../utilities/SvgIcons.utility";
 import { SightType } from "../../api/api.types";
 import { SightDetailModal } from "./sights/SightDetailModal";
 import * as Haptics from "expo-haptics";
+import { Image } from "expo-image";
 
 interface ExploreSightListContainerProps {
   title: string;
@@ -64,58 +66,130 @@ export const ExploreSightListContainer: React.FC<
               <React.Fragment
                 key={`${title}-items-${item.id}-${item.city}-${ind}`}
               >
-                <ImageBackground
-                  style={styles.box}
-                  resizeMode="cover"
-                  source={{
-                    // uri: "https://cdn.pixabay.com/photo/2016/11/22/19/17/buildings-1850129_1280.jpg",
-                    uri: item.image?.url,
-                  }}
-                >
-                  <TouchableOpacity
-                    style={styles.gradientWrapper}
-                    activeOpacity={0.7}
-                    onPress={() => {
-                      handleItem(item);
-                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    }}
+                {Platform.OS === "ios" ? (
+                  <Image
+                    style={styles.box}
+                    contentFit="cover"
+                    source={
+                      item?.image?.url
+                        ? {
+                            uri: item?.image?.url,
+                          }
+                        : require("../../assets/no-image.png")
+                    }
+                    cachePolicy="memory-disk"
                   >
-                    <LinearGradient
+                    <TouchableOpacity
                       style={styles.gradientWrapper}
-                      colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                      activeOpacity={0.7}
+                      onPress={() => {
+                        handleItem(item);
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      }}
                     >
-                      <View style={[styles.labelItem, {paddingBottom: !item?.rate ? 10 : 0}]}>
-                        <Text
-                          numberOfLines={2}
-                          style={[styles.labelItemText, styles.titleSm]}
+                      <LinearGradient
+                        style={styles.gradientWrapper}
+                        colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                      >
+                        <View
+                          style={[
+                            styles.labelItem,
+                            { paddingBottom: !item?.rate ? 10 : 0 },
+                          ]}
                         >
-                          {item.title}
-                        </Text>
-                      </View>
-                      {item?.rate ? (
-                        <View style={styles.ratingLabel}>
-                          <View
-                            style={{
-                              position: "relative",
-                              top: -1,
-                              opacity: 0.8,
-                            }}
-                          >
-                            <StarIcon color="#FFBC3E" />
-                          </View>
                           <Text
-                            style={[styles.ratingText, styles.ratingTextXs]}
+                            numberOfLines={2}
+                            style={[styles.labelItemText, styles.titleSm]}
                           >
-                            {item.rate}
+                            {item.title}
                           </Text>
-                          {/* <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                        </View>
+                        {item?.rate ? (
+                          <View style={styles.ratingLabel}>
+                            <View
+                              style={{
+                                position: "relative",
+                                top: -1,
+                                opacity: 0.8,
+                              }}
+                            >
+                              <StarIcon color="#FFBC3E" />
+                            </View>
+                            <Text
+                              style={[styles.ratingText, styles.ratingTextXs]}
+                            >
+                              {item.rate}
+                            </Text>
+                            {/* <Text style={[styles.ratingText, styles.ratingTextXs]}>
                         {item.reviews} reviews
                       </Text> */}
+                          </View>
+                        ) : null}
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  </Image>
+                ) : (
+                  <ImageBackground
+                    style={styles.box}
+                    resizeMode="cover"
+                    source={
+                      item?.image?.url
+                        ? {
+                            uri: item?.image?.url,
+                          }
+                        : require("../../assets/no-image.png")
+                    }
+                  >
+                    <TouchableOpacity
+                      style={styles.gradientWrapper}
+                      activeOpacity={0.7}
+                      onPress={() => {
+                        handleItem(item);
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      }}
+                    >
+                      <LinearGradient
+                        style={styles.gradientWrapper}
+                        colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                      >
+                        <View
+                          style={[
+                            styles.labelItem,
+                            { paddingBottom: !item?.rate ? 10 : 0 },
+                          ]}
+                        >
+                          <Text
+                            numberOfLines={2}
+                            style={[styles.labelItemText, styles.titleSm]}
+                          >
+                            {item.title}
+                          </Text>
                         </View>
-                      ) : null}
-                    </LinearGradient>
-                  </TouchableOpacity>
-                </ImageBackground>
+                        {item?.rate ? (
+                          <View style={styles.ratingLabel}>
+                            <View
+                              style={{
+                                position: "relative",
+                                top: -1,
+                                opacity: 0.8,
+                              }}
+                            >
+                              <StarIcon color="#FFBC3E" />
+                            </View>
+                            <Text
+                              style={[styles.ratingText, styles.ratingTextXs]}
+                            >
+                              {item.rate}
+                            </Text>
+                            {/* <Text style={[styles.ratingText, styles.ratingTextXs]}>
+                        {item.reviews} reviews
+                      </Text> */}
+                          </View>
+                        ) : null}
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  </ImageBackground>
+                )}
                 {items.length === ind + 1 && (
                   <View style={{ width: 20 }}></View>
                 )}

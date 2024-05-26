@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from "react";
-import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import { ImageBackground, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { Modalize } from "react-native-modalize";
 // import { Portal } from "react-native-portalize";
-import { COLORS } from "../../../styles/theme";
+import { COLORS, SIZES } from "../../../styles/theme";
 import Swiper from "react-native-swiper";
 import { styles } from "../../../common/components/_styles";
 import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
@@ -39,6 +39,7 @@ import { TripInsightTab } from "../../../common/components/Destination/TripInsig
 // import { Loader } from "../../../common/ui/Loader";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ExploreRoutesStackParamList } from "../../../routes/explore/ExploreRoutes";
+import { Loader } from "../../../common/ui/Loader";
 
 type CountryDetailScreenProps = NativeStackScreenProps<
   ExploreRoutesStackParamList,
@@ -103,6 +104,23 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
               >
                 <Mark2 color="#fff" />
               </TouchableOpacity>
+              {isLoading && (
+                <View style={{ minHeight: SIZES.height }}>
+                  <View
+                    style={{
+                      backgroundColor: "#eee",
+                      width: "100%",
+                      height: 300,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <View style={{ width: 35, height: 35 }}>
+                      <Loader isLoading={isLoading} background="#eee" />
+                    </View>
+                  </View>
+                </View>
+              )}
               <Swiper
                 activeDotColor="#fff"
                 showsButtons={false}
@@ -116,23 +134,6 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
                   bottom: 16,
                 }}
               >
-                {/* {isLoading && (
-                  <LinearGradient
-                    style={[
-                      {
-                        height: 300,
-                        width: "100%",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      },
-                    ]}
-                    colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.5)"]}
-                  >
-                    <View style={{ height: 30, width: 30 }}>
-                      <Loader isLoading={LinearGradient} background="none" />
-                    </View>
-                  </LinearGradient>
-                )} */}
                 {!isLoading && !!data?.country.images.length
                   ? data?.country?.images?.map((item, ind) => (
                       <ImageBackground

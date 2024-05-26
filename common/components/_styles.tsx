@@ -9,6 +9,15 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: 35,
   },
+  infoText: {
+    marginTop: 15, 
+    lineHeight: 15, 
+    fontSize: 12, 
+    textAlign: 'center', 
+    maxWidth: "100%", 
+    color: "#000", 
+    opacity: 0.6
+  },
   showMoreButton: {
     width: 150,
     height: 35,
@@ -336,6 +345,13 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 15,
   },
+  forYouRowTitleSub: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: COLORS.black,
+    paddingHorizontal: 15,
+    marginBottom: 15,
+  },
   thingsTodoItemiIntypeText: {
     fontSize: 12,
     color: COLORS.darkgray,
@@ -451,6 +467,7 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "bold",
     color: "#000",
+    textTransform: "capitalize"
   },
   box: {
     height: 300,
@@ -584,7 +601,7 @@ export const styles = StyleSheet.create({
     borderRadius: 6,
     ...COLORS.shadow,
     marginLeft: 0,
-    width: 90,
+    width: 110,
   },
   passportTexts: {
     marginLeft: 5,
@@ -598,5 +615,6 @@ export const styles = StyleSheet.create({
     fontSize: 10,
     color: "#000",
     fontWeight: "bold",
+    maxWidth: 60
   },
 });

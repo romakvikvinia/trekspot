@@ -14,68 +14,82 @@ import { CountriesList } from "../../utilities/countryList";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Flags } from "../../utilities/flags";
 import { CheckCircleIcon } from "../../utilities/SvgIcons.utility";
+import { SearchComponent } from "../ui/SearchComponent";
 
-export const CountrySelect = ({search = true, onSelect}) => {
-  const modalRef = useRef<Modalize>(null);
+export const Country = ({ item, onSelect }: any) => {
+  const countryCode = item.iso2 as string;
 
-  const Country = ({ item }: any) => {
-    const countryCode = item.iso2 as string;
-    const [selected, setSelected] = useState(null);
-
-    // @ts-ignore
-    const imagePath = Flags[countryCode];
-
-    return (
-      <TouchableOpacity onPress={() => {setSelected(item.iso2); onSelect(item)}} style={styles.countryItem} activeOpacity={0.7}>
-        <View style={styles.countryItemLeft}>
-          <View
-            style={{
-              width: 31,
-              height: 21,
-              borderRadius: 3,
-              overflow: "hidden",
-              borderWidth: 1,
-              borderColor: "#fafafa",
-            }}
-          >
-            <ImageBackground
-              resizeMode="cover"
-              style={{
-                width: 30,
-                height: 20,
-                backgroundColor: "#ddd",
-              }}
-              source={imagePath ? imagePath : null} // Set the image source
-            />
-          </View>
-          <Text style={styles.itemTitle}>{item.name}</Text>
-        </View>
-        <View style={styles.checkIcon}>
-          {
-            selected === item.iso2 ? <CheckCircleIcon color={COLORS.primaryDark} /> : null
-          }
-        </View>
-      </TouchableOpacity>
-    );
-  };
+ 
+  // @ts-ignore
+  const imagePath = Flags[countryCode];
 
   return (
+    <TouchableOpacity onPress={() => onSelect(item)} style={styles.countryItem} activeOpacity={0.7}>
+      <View style={styles.countryItemLeft}>
+        <View
+          style={{
+            width: 31,
+            height: 21,
+            borderRadius: 3,
+            overflow: "hidden",
+            borderWidth: 1,
+            borderColor: "#fafafa",
+          }}
+        >
+          <ImageBackground
+            resizeMode="cover"
+            style={{
+              width: 30,
+              height: 20,
+              backgroundColor: "#ddd",
+            }}
+            source={imagePath ? imagePath : null} // Set the image source
+          />
+        </View>
+        <Text style={styles.itemTitle}>{item.name}</Text>
+      </View>
+      {/* <View style={styles.checkIcon}>
+        {
+          selected === item.iso2 ? <CheckCircleIcon color={COLORS.primaryDark} /> : null
+        }
+      </View> */}
+    </TouchableOpacity>
+  );
+};
+
+export const CountrySelect = ({search = true, onSelect, onDestinationModalClose}) => {
+ 
+  const [searchValue, setSearchValue] = useState("");
+  const [countries, setCountries] = useState(CountriesList)
+  const filteredCountries =
+  searchValue && searchValue.length > 1
+    ? countries.filter((i) =>
+        i.name.toLowerCase().includes(searchValue.toLowerCase())
+      )
+    :  countries;
+  return (
     <>
-    {
-      search ? <View style={styles.modalHeader}>
-      <TextInput
-        style={styles.searchInput}
-        placeholder="Search..."
-        placeholderTextColor={COLORS.darkgray}
-      />
-    </View> : null
-    }
-      
+      {search ? (
+        <View style={styles.searchBox}>
+          <View style={{ flex: 1 }}>
+            <SearchComponent search={searchValue} setSearch={setSearchValue} />
+          </View>
+          <TouchableOpacity
+            style={styles.cancelButton}
+            onPress={() => onDestinationModalClose()}
+          >
+            <Text style={styles.cancelButtonText}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
+      ) : null}
+
       <View style={{ flex: 1, height: SIZES.height - 155 }}>
         <FlashList
-          data={CountriesList}
-          renderItem={({ item }) => <Country item={item} />}
+          extraData={filteredCountries}
+          data={filteredCountries}
+          renderItem={({ item }) => <Country item={item} onSelect={onSelect} />}
           estimatedItemSize={200}
+          keyboardShouldPersistTaps={"handled"}
         />
       </View>
     </>
@@ -83,9 +97,18 @@ export const CountrySelect = ({search = true, onSelect}) => {
 };
 
 const styles = StyleSheet.create({
-  modalHeader: {
+  searchBox: {
     width: "100%",
     padding: 15,
+    flexDirection: "row"
+  },
+  cancelButton: {
+    marginLeft: 10,
+    justifyContent: "center"
+  },
+  cancelButtonText: {
+    fontSize: 14,
+    color: COLORS.darkgray,
   },
   searchInput: {
     height: 40,

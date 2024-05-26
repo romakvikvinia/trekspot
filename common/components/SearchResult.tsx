@@ -1,26 +1,21 @@
 import { FlashList } from "@shopify/flash-list";
 import {
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-  import { COLORS } from "../../styles/theme";
-import { CountriesList } from "../../utilities/countryList";
-  import {
- 
-  StarIcon,
-} from "../../utilities/SvgIcons.utility";
+import { COLORS } from "../../styles/theme";
+import { StarIcon } from "../../utilities/SvgIcons.utility";
 import { Image } from "expo-image";
 
-export const CountrySearch = () => {
+export const SearchResult = ({data}) => {
   const Item = ({ item }: any) => {
     return (
       <TouchableOpacity style={styles.countryItem} activeOpacity={0.7}>
         <Image
           style={styles.box}
-          resizeMode="cover"
+          contentFit="cover"
           source={{
             uri: "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=10&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
           }}
@@ -42,34 +37,19 @@ export const CountrySearch = () => {
       </TouchableOpacity>
     );
   };
-
   return (
     <>
-      <ScrollView
-        style={{
-          flex: 1,
-          height: "100%",
-          paddingHorizontal: 15,
-          paddingBottom: 25,
-          backgroundColor: "#f8f8f8",
-        }}
-        contentContainerStyle={{
-          justifyContent: "center",
-          paddingBottom: 35,
-        }}
-      >
-        <Text style={styles.resultTitle}>Search result</Text>
-        <View style={{ minHeight: 100 }}>
-          <FlashList
-            data={CountriesList.slice(0, 20)}
-            renderItem={({ item }) => <Item item={item} />}
-            estimatedItemSize={200}
-            horizontal={false}
-            showsVerticalScrollIndicator={false}
-          />
-        </View>
- 
-      </ScrollView>
+      <Text style={styles.resultTitle}>Search result</Text>
+      <View style={{ minHeight: 100, flex: 1 }}>
+        <FlashList
+          data={data.slice(0, 20)}
+          renderItem={({ item }) => <Item item={item} />}
+          estimatedItemSize={200}
+          horizontal={false}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps={"handled"}
+        />
+      </View>
     </>
   );
 };

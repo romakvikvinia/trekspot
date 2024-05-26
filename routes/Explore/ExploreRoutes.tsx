@@ -12,6 +12,7 @@ import { SIZES } from "../../styles/theme";
 import { Platform } from "react-native";
 import { CityDetail } from "../../components/explore/destination/CityDetail";
 import { CountryDetailScreen } from "../../screen/Explore/Country/CountryDetailScreen";
+import { Search } from "../../screen/Explore/Search";
 
 interface ExploreRoutesProps {}
 
@@ -25,6 +26,7 @@ export type ExploreRoutesStackParamList = {
   TripQuickInsights: undefined;
   TripQuickInsightsDetail: undefined;
   CityDetail: undefined;
+  Search: undefined
 };
 
 const Stack = createStackNavigator<ExploreRoutesStackParamList>();
@@ -105,6 +107,16 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
       <Stack.Screen
         name="CityDetail"
         component={CityDetail}
+        options={() => ({
+          header: () => null,
+          gestureEnabled: Platform.OS === "ios",
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
+        })}
+      />
+      <Stack.Screen
+        name="Search"
+        component={Search}
         options={() => ({
           header: () => null,
           gestureEnabled: Platform.OS === "ios",

@@ -2,6 +2,7 @@ import React, { useCallback } from "react";
 
 import {
   ImageBackground,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -15,6 +16,7 @@ import { Mark, StarIcon } from "../../utilities/SvgIcons.utility";
 import { CityType } from "../../api/api.types";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "@react-navigation/native";
+import { Image } from "expo-image";
 
 interface CitiesContainerProps {
   title: string;
@@ -60,60 +62,134 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
               <React.Fragment
                 key={`${title}-cities-${item.id}-${item.city}-${ind}`}
               >
-                <ImageBackground
-                  style={styles.box}
-                  resizeMode="cover"
-                  source={{
-                    uri: item.image?.url
-                  }}
-                >
-                  <TouchableOpacity
-                    style={styles.gradientWrapper}
-                    activeOpacity={0.7}
-                    onPress={() => {handleCity(item); Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}}
+                {Platform.OS === "ios" ? (
+                  <Image
+                    style={styles.box}
+                    contentFit="cover"
+                    source={
+                      item?.image?.url
+                        ? {
+                            uri: item?.image?.url,
+                          }
+                        : require("../../assets/no-image.png")
+                    }
+                    cachePolicy="memory-disk"
                   >
-                    <LinearGradient
+                    <TouchableOpacity
                       style={styles.gradientWrapper}
-                      colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                      activeOpacity={0.7}
+                      onPress={() => {
+                        handleCity(item);
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      }}
                     >
-                      <View style={styles.labelItem}>
-                        <Mark color="#fff" />
-                        <Text
-                          numberOfLines={2}
-                          style={[styles.labelItemText, styles.titleSm]}
-                        >
-                          {item.city}
-                        </Text>
-                      </View>
-                      <View style={styles.ratingLabel}>
-                        {
-                          item?.rate ?
-                          <>
-                           <View
-                          style={{
-                            position: "relative",
-                            top: -1,
-                            opacity: 0.8,
-                          }}
-                        >
-                          <StarIcon color="#FFBC3E" />
+                      <LinearGradient
+                        style={styles.gradientWrapper}
+                        colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                      >
+                        <View style={styles.labelItem}>
+                          <Mark color="#fff" />
+                          <Text
+                            numberOfLines={2}
+                            style={[styles.labelItemText, styles.titleSm]}
+                          >
+                            {item.city}
+                          </Text>
                         </View>
-                        <Text style={[styles.ratingText, styles.ratingTextXs]}>
-                          {item.rate} /
-                        </Text>
-                        </> : null
-                        }
-                       {
-                        item?.visitors ? 
-                        <Text style={[styles.ratingText, styles.ratingTextXs]}>
-                        {item.visitors} visitors
-                      </Text> : null
-                       }
-                       
-                      </View>
-                    </LinearGradient>
-                  </TouchableOpacity>
-                </ImageBackground>
+                        <View style={styles.ratingLabel}>
+                          {item?.rate ? (
+                            <>
+                              <View
+                                style={{
+                                  position: "relative",
+                                  top: -1,
+                                  opacity: 0.8,
+                                }}
+                              >
+                                <StarIcon color="#FFBC3E" />
+                              </View>
+                              <Text
+                                style={[styles.ratingText, styles.ratingTextXs]}
+                              >
+                                {item.rate} /
+                              </Text>
+                            </>
+                          ) : null}
+                          {item?.visitors ? (
+                            <Text
+                              style={[styles.ratingText, styles.ratingTextXs]}
+                            >
+                              {item.visitors} visitors
+                            </Text>
+                          ) : null}
+                        </View>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  </Image>
+                ) : (
+                  <ImageBackground
+                    style={styles.box}
+                    resizeMode="cover"
+                    source={
+                      item?.image?.url
+                        ? {
+                            uri: item?.image?.url,
+                          }
+                        : require("../../assets/no-image.png")
+                    }
+                  >
+                    <TouchableOpacity
+                      style={styles.gradientWrapper}
+                      activeOpacity={0.7}
+                      onPress={() => {
+                        handleCity(item);
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      }}
+                    >
+                      <LinearGradient
+                        style={styles.gradientWrapper}
+                        colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                      >
+                        <View style={styles.labelItem}>
+                          <Mark color="#fff" />
+                          <Text
+                            numberOfLines={2}
+                            style={[styles.labelItemText, styles.titleSm]}
+                          >
+                            {item.city}
+                          </Text>
+                        </View>
+                        <View style={styles.ratingLabel}>
+                          {item?.rate ? (
+                            <>
+                              <View
+                                style={{
+                                  position: "relative",
+                                  top: -1,
+                                  opacity: 0.8,
+                                }}
+                              >
+                                <StarIcon color="#FFBC3E" />
+                              </View>
+                              <Text
+                                style={[styles.ratingText, styles.ratingTextXs]}
+                              >
+                                {item.rate} /
+                              </Text>
+                            </>
+                          ) : null}
+                          {item?.visitors ? (
+                            <Text
+                              style={[styles.ratingText, styles.ratingTextXs]}
+                            >
+                              {item.visitors} visitors
+                            </Text>
+                          ) : null}
+                        </View>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  </ImageBackground>
+                )}
                 {cities.length === ind + 1 && (
                   <View style={{ width: 20 }}></View>
                 )}
@@ -150,12 +226,11 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
             ))}
           </ScrollView>
         )}
-       
       </View>
-       {/**
-         * city detail modal
-         */}
-        {/* {state.city && (
+      {/**
+       * city detail modal
+       */}
+      {/* {state.city && (
           <CityDetailModal city={state.city} closeCallBack={handleClear} />
         )} */}
     </>

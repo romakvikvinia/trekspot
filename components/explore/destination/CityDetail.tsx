@@ -36,7 +36,8 @@ export const CityDetail: React.FC<CityDetailProps> = ({ route }) => {
   const { city } = route?.params;
   const [state, setState] = useState<IState>({ sight: null });
   const [getSights, { data, isLoading }] = useLazyGetSightsQuery();
-
+  console.log("city",city)
+ 
   useEffect(() => {
     getSights({ iso2: city.iso2, city: city.city });
   }, [city]);

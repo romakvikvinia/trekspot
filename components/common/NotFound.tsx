@@ -1,14 +1,15 @@
 import { StyleSheet, Text, View } from "react-native";
 import { COLORS } from "../../styles/theme";
-import { SearchIcon } from "../../utilities/SvgIcons.utility";
+import { SearchLargeIcon } from "../../utilities/SvgIcons.utility";
 
-export const NotFound = () => {
+export const NotFound = ({text = ""}) => {
   return (
     <View style={styles.notFoundWrapper}>
-      <SearchIcon width="40" height="40" />
+      <SearchLargeIcon width={60} height={60} />
       <Text style={styles.notFoundText}>
-        Data not found! We're actively working to acquire the data for your
-        query.
+        {
+          text || "Data not found! We're actively working to acquire the data for your query."
+        }
       </Text>
     </View>
   );
