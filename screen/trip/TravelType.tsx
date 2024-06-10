@@ -11,8 +11,7 @@ import {
 
 export const TravelType = ({
   modalTravelTypeRef,
-  travelType,
-  setTravelType,
+  formik
 }) => {
   return (
     <View style={styles.wrapper}>
@@ -34,19 +33,19 @@ export const TravelType = ({
         <TouchableOpacity
           style={[
             styles.switcher,
-            travelType === "solo" ? styles.active : null,
+            formik?.values?.travelType === "Solo" ? styles.active : null,
           ]}
           activeOpacity={0.5}
-          onPress={() => setTravelType("solo")}
+          onPress={() => formik.setFieldValue("travelType","Solo")}
         >
           <OneUserIcon
             size="15"
-            color={travelType === "solo" ? "#fff" : "#000"}
+            color={formik?.values?.travelType === "Solo" ? "#fff" : "#000"}
           />
           <Text
             style={[
               styles.switcherLabel,
-              travelType === "solo" ? styles.activeText : null,
+              formik?.values?.travelType === "Solo" ? styles.activeText : null,
             ]}
           >
             Solo
@@ -55,19 +54,19 @@ export const TravelType = ({
         <TouchableOpacity
           style={[
             styles.switcher,
-            travelType === "couple" ? styles.active : null,
+            formik?.values?.travelType === "Couple" ? styles.active : null,
           ]}
           activeOpacity={0.5}
-          onPress={() => setTravelType("couple")}
+          onPress={() => formik.setFieldValue("travelType","Couple")}
         >
           <CoupleIcon
             size="15"
-            color={travelType === "couple" ? "#fff" : "#000"}
+            color={formik?.values?.travelType === "Couple" ? "#fff" : "#000"}
           />
           <Text
             style={[
               styles.switcherLabel,
-              travelType === "couple" ? styles.activeText : null,
+              formik?.values?.travelType === "Couple" ? styles.activeText : null,
             ]}
           >
             Couple
@@ -76,19 +75,19 @@ export const TravelType = ({
         <TouchableOpacity
           style={[
             styles.switcher,
-            travelType === "family" ? styles.active : null,
+            formik?.values?.travelType === "Family" ? styles.active : null,
           ]}
           activeOpacity={0.5}
-          onPress={() => setTravelType("family")}
+          onPress={() => formik.setFieldValue("travelType","Family")}
         >
           <FamilyIcon
             size="15"
-            color={travelType === "family" ? "#fff" : "#000"}
+            color={formik?.values?.travelType === "Family" ? "#fff" : "#000"}
           />
           <Text
             style={[
               styles.switcherLabel,
-              travelType === "family" ? styles.activeText : null,
+              formik?.values?.travelType === "Family" ? styles.activeText : null,
             ]}
           >
             Family
@@ -97,19 +96,19 @@ export const TravelType = ({
         <TouchableOpacity
           style={[
             styles.switcher,
-            travelType === "friends" ? styles.active : null,
+            formik?.values?.travelType === "Friends" ? styles.active : null,
           ]}
           activeOpacity={0.5}
-          onPress={() => setTravelType("friends")}
+          onPress={() => formik.setFieldValue("travelType", "Friends")}
         >
           <UsersIcon
             size="15"
-            color={travelType === "friends" ? "#fff" : "#000"}
+            color={formik?.values?.travelType === "Friends" ? "#fff" : "#000"}
           />
           <Text
             style={[
               styles.switcherLabel,
-              travelType === "friends" ? styles.activeText : null,
+              formik?.values?.travelType === "Friends" ? styles.activeText : null,
             ]}
           >
             Friends

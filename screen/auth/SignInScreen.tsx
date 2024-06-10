@@ -12,7 +12,6 @@ import {
   ActivityIndicator,
   Animated,
   Platform,
-  SafeAreaView,
   Alert,
 } from "react-native";
 import Constants from "expo-constants";
@@ -28,7 +27,6 @@ import {
   AppleIcon,
   EmailIcon,
   EyeCrossicon,
-  EyeIcon,
   EyeNoCrossicon,
   FacebookIcon,
   GoogleIcon,
@@ -36,7 +34,7 @@ import {
 import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
 import { TrekSpotLinear } from "../../utilities/svg/TrekSpotLinear";
- 
+
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 
 export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
@@ -79,11 +77,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
     },
     []
   );
-
-  const handleRedirect = useCallback(() => {
-    formik.resetForm();
-    navigation.navigate("SignUp");
-  }, []);
+ 
   //animations
   useEffect(() => {
     Animated.timing(fadeValue, {
@@ -114,9 +108,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   return (
     <View style={styles.safeArea}>
       <KeyboardAvoidingView
-        // behavior="padding"
         behavior={Platform.OS == "ios" ? "padding" : "height"}
-        // keyboardVerticalOffset={10}
         style={styles.screen}
       >
         <ScrollView
@@ -149,7 +141,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                   borderWidth: 2,
                   height: 55,
                   fontSize: 16,
-                  fontWeight: "500"
+                  fontWeight: "500",
                 }}
               />
             </View>
@@ -248,7 +240,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
             <View style={styles.continueWithDivider}>
               <View style={styles.borderRow}></View>
               <Text style={styles.continueWithDividerText}>
-                Or sign in with
+                Or sign in/up with
               </Text>
             </View>
 
@@ -280,8 +272,8 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
               </TouchableOpacity>
             </View>
           </View>
-        </ScrollView>
-        <View style={[styles.textWithButtonWrapper]}>
+
+          <View style={[styles.textWithButtonWrapper]}>
           <Text
             style={[
               styles.textWithButtonLabel,
@@ -291,9 +283,13 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
               },
             ]}
           >
-            By sign in / sign up you agree our
+            By sign in you agree our
           </Text>
-          <TouchableOpacity activeOpacity={0.1} style={styles.textWithButton}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Agreement")}
+            activeOpacity={0.1}
+            style={styles.textWithButton}
+          >
             <Text
               style={[
                 styles.textWithButtonText,
@@ -301,14 +297,15 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                   fontSize: SIZES.body5,
                   fontWeight: "normal",
                   color: COLORS.primaryDark,
-                  // textDecorationLine: "underline",
                 },
               ]}
             >
-              privacy policy
+              Privacy policy
             </Text>
           </TouchableOpacity>
         </View>
+        </ScrollView>
+      
       </KeyboardAvoidingView>
     </View>
   );
@@ -327,9 +324,9 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 15,
+    marginTop: 25,
     marginBottom: 15,
-    paddingBottom: 15
+    paddingBottom: 15,
   },
   privacyPolicy: {
     fontSize: SIZES.body3,
@@ -408,7 +405,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   signTitle: {
-    marginTop: 15,
+    marginTop: 0,
     width: "100%",
     marginBottom: 45,
   },

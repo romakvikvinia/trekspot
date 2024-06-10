@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { DatePickerModal } from "react-native-paper-dates";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-export const RangePicker = ({ setOpen, open, range, setRange }) => {
+export const RangePicker = ({ setOpen, open, formik }) => {
   const onDismiss = React.useCallback(() => {
     setOpen(false);
   }, [setOpen]);
@@ -11,11 +11,14 @@ export const RangePicker = ({ setOpen, open, range, setRange }) => {
   const onConfirm = React.useCallback(
     ({ startDate, endDate }) => {
       setOpen(false);
-      setRange({ startDate, endDate });
+      formik.setFieldValue("range", {
+        startDate, endDate
+      })
+      
     },
-    [setOpen, setRange]
+    [setOpen]
   );
-
+ 
   return (
     <SafeAreaProvider>
       <View
@@ -30,8 +33,8 @@ export const RangePicker = ({ setOpen, open, range, setRange }) => {
           mode="range"
           visible={open}
           onDismiss={onDismiss}
-          startDate={range.startDate}
-          endDate={range.endDate}
+          startDate={formik?.values?.range?.startDate}
+          endDate={formik?.values?.range?.endDate}
           onConfirm={onConfirm}
           presentationStyle={"pageSheet"}
           disableStatusBarPadding={false}

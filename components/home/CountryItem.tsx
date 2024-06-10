@@ -10,6 +10,7 @@ import { Flags } from "../../utilities/flags";
 import { LivedIcon, VisitedIcon } from "../../utilities/SvgIcons.utility";
 import { COLORS } from "../../styles/theme";
 import { storeCountries } from "../../helpers/secure.storage";
+import * as Haptics from "expo-haptics";
 
 interface HomeProps {
   name: string;
@@ -31,6 +32,7 @@ export const CountryItem: React.FC<HomeProps> = ({
   });
 
   const handleVisited = useCallback((code: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     storeCountries(code);
     setState((prevState) => ({
       ...prevState,
@@ -39,6 +41,7 @@ export const CountryItem: React.FC<HomeProps> = ({
   }, []);
 
   const handleLived = useCallback((code: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     storeCountries(code, "lived_countries");
     setState((prevState) => ({
       ...prevState,
@@ -98,7 +101,7 @@ export const CountryItem: React.FC<HomeProps> = ({
         >
           <VisitedIcon active={state.isVisited} />
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={[
             styles.countryItemActionButton,
             state.isLived ? styles.countryLived : null,
@@ -106,7 +109,7 @@ export const CountryItem: React.FC<HomeProps> = ({
           onPress={() => handleLived(iso2)}
         >
           <LivedIcon active={state.isLived} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );

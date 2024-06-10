@@ -20,7 +20,9 @@ import {
   ClockIcon,
   CloseCircleIcon,
   DownIcon,
+  Mark,
   Mark2,
+  PinIcon,
   StarIcon,
   TripLocationIcon,
 } from "../../../utilities/SvgIcons.utility";
@@ -106,6 +108,7 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
   data,
   closeCallBack = () => {},
 }) => {
+
   const [state, setState] = useState({ isOpen: false });
   const openMap = (address: string) => {
     const scheme = Platform.select({
@@ -235,6 +238,10 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                   <Mark2 color="#fff" />
                 </TouchableOpacity>
               </View>
+              <View style={styles.locationCity}>
+                <Mark size="15" color={COLORS.gray} />
+                <Text style={styles.locationCityText}>{data?.city}</Text>
+              </View>
               <View style={styles.ratingWrapper}>
                 <Text style={styles.type}>{data.category}</Text>
                 <View
@@ -242,13 +249,12 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                     position: "relative",
                     top: -1,
                     opacity: 0.8,
-                    marginLeft: 5
+                    marginLeft: 5,
                   }}
                 >
                   <StarIcon size={15} color="#FFBC3E" />
                 </View>
                 <Text style={styles.ratingText}>{data.rate}</Text>
-               
               </View>
 
               {data?.description ? (
@@ -265,6 +271,7 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                     marginBottom: 15,
                     backgroundColor: "#f2f2f2",
                     padding: 15,
+                    borderRadius: 10,
                   }}
                   onPress={() => openMap(data.address)}
                 >
@@ -273,7 +280,7 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                 </TouchableOpacity>
               ) : null}
 
-              {data.workingHours.length > 0 && <HoursRow data={data} />}
+              {data?.workingHours?.length > 0 && <HoursRow data={data} />}
             </View>
           </ScrollView>
         </View>
@@ -293,6 +300,18 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 0,
+  },
+  locationCity: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 8,
+    marginBottom: 5
+  },
+  locationCityText: {
+    marginLeft: 5,
+    fontSize: 16,
+    color:COLORS.gray,
+    fontWeight: "500"
   },
   addToBucketButton: {
     width: 30,

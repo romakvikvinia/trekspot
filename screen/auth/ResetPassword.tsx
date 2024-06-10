@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   },
   textWithButtonText: {
     fontSize: SIZES.body2,
-    color: COLORS.secondary,
+    color: COLORS.primary,
     fontWeight: "bold",
   },
   container: {

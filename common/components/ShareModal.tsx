@@ -16,6 +16,8 @@ import {
   TrekspotWhite,
 } from "../../utilities/SvgIcons.utility";
 import { MapSvg } from "../../utilities/svg/map";
+import * as Haptics from "expo-haptics";
+
 interface ShareModalProps {
   world: number;
   territories: number;
@@ -30,13 +32,14 @@ const ShareModal: React.FC<ShareModalProps> = ({
 }) => {
   const ref = useRef();
   const [state, setState] = useState({ index: 0 });
+  const [color, setColor] = useState("#000");
 
-  const handleNewImage = useCallback(() => {
-    setState((prevState) => ({
-      ...prevState,
-      index: prevState.index !== 2 ? prevState.index + 1 : 0,
-    }));
-  }, []);
+  // const handleNewImage = useCallback(() => {
+  //   setState((prevState) => ({
+  //     ...prevState,
+  //     index: prevState.index !== 2 ? prevState.index + 1 : 0,
+  //   }));
+  // }, []);
 
   const ShareItem = useCallback(async () => {
     //@ts-ignore
@@ -59,13 +62,13 @@ const ShareModal: React.FC<ShareModalProps> = ({
           //@ts-ignore
           ref={ref}
           options={{
-            fileName: "Your-File-Name",
+            fileName: "Trekspot-triump",
             format: "jpg",
             quality: 0.9,
           }}
           style={{
             alignItems: "center",
-            shadowColor: "#000",
+            shadowColor: "#fff",
             shadowOffset: {
               width: 0,
               height: 3,
@@ -87,25 +90,25 @@ const ShareModal: React.FC<ShareModalProps> = ({
                 justifyContent: "center",
                 paddingBottom: 0,
                 position: "relative",
-                backgroundColor: "#000",
+                backgroundColor: "#f1f1f1",
                 paddingHorizontal: 15,
-                borderRadius: 15
+                borderRadius: 15,
               }}
             >
-                <Text
+              <Text
                 style={{
-                  color: "#fff",
+                  color: "#000",
                   fontWeight: "bold",
                   fontSize: 18,
                   position: "absolute",
                   top: 20,
                   left: 95,
-                  zIndex: 2
+                  zIndex: 2,
                 }}
               >
                 My Travel Triumphs
               </Text>
-              <MapSvg width={300} countries={countries} />
+              <MapSvg width={300} countries={countries} color={color} />
               <View style={styles.row}>
                 <View style={[styles.rowBox]}>
                   <View
@@ -114,7 +117,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
                       alignItems: "center",
                     }}
                   >
-                    <Text style={styles.lg}>{world}</Text>
+                    <Text style={[styles.lg, { color }]}>{world}</Text>
                     <Text
                       style={[
                         styles.sublabel,
@@ -129,7 +132,9 @@ const ShareModal: React.FC<ShareModalProps> = ({
                 </View>
                 <View style={[styles.rowBox]}>
                   <View style={styles.amountView}>
-                    <Text style={styles.lg}>{achievedCountries}</Text>
+                    <Text style={[styles.lg, { color }]}>
+                      {achievedCountries}
+                    </Text>
                     <View style={styles.labelView}>
                       <Text style={styles.sublabel}>/</Text>
                       <Text style={[styles.sublabel, { marginTop: 2 }]}>
@@ -142,7 +147,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
                 </View>
                 <View style={[styles.rowBox]}>
                   <View style={styles.amountView}>
-                    <Text style={styles.lg}>{territories}</Text>
+                    <Text style={[styles.lg, { color }]}>{territories}</Text>
                     <View style={styles.labelView}>
                       <Text style={styles.sublabel}>/</Text>
                       <Text style={[styles.sublabel, { marginTop: 2 }]}>6</Text>
@@ -151,52 +156,83 @@ const ShareModal: React.FC<ShareModalProps> = ({
                   <Text style={styles.statLabel}>Territories</Text>
                 </View>
               </View>
-            
+
               <View style={{ position: "absolute", bottom: 15, right: 15 }}>
-                <TrekspotWhite width="70" />
+                <TrekspotWhite width="70" color="#000" />
               </View>
             </View>
           ) : null}
-          {/* {state.index === 1 ? (
-            <ImageBackground
-              style={{
-                height: 300,
-              }}
-              source={{
-                uri: "https://i.ibb.co/C2r6Hxp/Screenshot-2023-12-07-at-00-00-22.png",
-              }}
-            >
-              <Text>...Something to rasterize.. skds mdslk</Text>
-            </ImageBackground>
-          ) : null} */}
-         
         </ViewShot>
-
-        {/* <View style={styles.generateNew}>
-          <View style={styles.generateNewButton}>
-            <Text style={styles.generateNewButtonText}>Press for next</Text>
-          </View>
-        </View> */}
       </TouchableOpacity>
+
+      <View style={styles.colors}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => {
+            setColor("#000");
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          }}
+          style={[styles.colorItem, color === "#000" ? styles.colorActive : null,]}
+        ></TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => {
+            setColor("#31a24c");
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          }}
+          style={[
+            styles.colorItem,
+            color === "#31a24c" ? styles.colorActive : null,
+            {
+              backgroundColor: "#31a24c",
+            },
+          ]}
+        ></TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => {
+            setColor("#007aff");
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          }}
+          style={[
+            styles.colorItem,
+            color === "#007aff" ? styles.colorActive : null,
+            {
+              backgroundColor: "#007aff",
+            },
+          ]}
+        ></TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => {
+            setColor("#f0284a");
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          }}
+          style={[
+            styles.colorItem,
+            color === "#f0284a" ? styles.colorActive : null,
+            {
+              backgroundColor: "#f0284a",
+            },
+          ]}
+        ></TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => {
+            setColor("#de9502");
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          }}
+          style={[
+            styles.colorItem,
+            color === "#de9502" ? styles.colorActive : null,
+            {
+              backgroundColor: "#de9502",
+            },
+          ]}
+        ></TouchableOpacity>
+      </View>
+
       <View style={styles.sharing}>
-        {/* <TouchableOpacity activeOpacity={0.7} style={styles.shareButton}>
-          <View style={styles.icon}>
-            <MessageIcon />
-          </View>
-          <Text style={styles.shareButtonText}>Message</Text>
-        </TouchableOpacity> */}
-        {/* <TouchableOpacity activeOpacity={0.7} style={styles.shareButton}>
-          <View style={styles.icon}>
-            <InstagramIcon />
-          </View>
-          <Text style={styles.shareButtonText}>Instagram</Text>
-        </TouchableOpacity> */}
-        {/* <TouchableOpacity activeOpacity={0.7} style={styles.shareButton}>
-          <View style={styles.icon}>
-            <CopyIcon />
-          </View>
-          <Text style={styles.shareButtonText}>Copy</Text>
-        </TouchableOpacity> */}
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.shareButton}
@@ -222,24 +258,41 @@ const ShareModal: React.FC<ShareModalProps> = ({
 export default ShareModal;
 
 const styles = StyleSheet.create({
+  colors: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: 50,
+  },
+  colorItem: {
+    width: 25,
+    height: 25,
+    borderRadius: 50,
+    backgroundColor: "#000",
+    marginHorizontal: 5,
+  },
+  colorActive: {
+    borderWidth: 2,
+    borderColor: "#ccc"
+  },
   shareWrapper: {
     justifyContent: "space-between",
     flex: 1,
     padding: 15,
+    backgroundColor: "#fff"
   },
   shareTextWrapper: {
-    backgroundColor: "#40264d",
+    backgroundColor: "#000",
     paddingVertical: 15,
     paddingHorizontal: 15,
     marginRight: 15,
   },
   middle: {
     marginTop: 25,
-    marginBottom: 100,
+    marginBottom: 30,
     // minHeight: 500,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
     borderRadius: 15,
   },
   generateNew: {
@@ -272,7 +325,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginHorizontal: 8,
     flexDirection: "row",
-    backgroundColor: "#9164a6",
+    backgroundColor: "#363636",
     borderRadius: 30,
     overflow: "hidden",
   },
@@ -304,15 +357,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 15,
-    borderWidth: 2,
-    borderStyle: "solid",
+    // borderWidth: 2,
+    // borderStyle: "solid",
+    // borderColor: "#fff"
   },
   lg: {
     fontSize: 24,
     marginBottom: 8,
     fontWeight: "bold",
     position: "relative",
-    color: COLORS.primary,
+    color: COLORS.primaryDark,
   },
   statLabel: {
     fontSize: 12,
@@ -324,7 +378,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     lineHeight: 25,
-    color: COLORS.white,
+    color: COLORS.gray,
   },
   amountView: {
     flexDirection: "row",

@@ -13,7 +13,7 @@ export const questionModaStyles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
+    borderBottomColor: "#f2f2f2",
   },
   buttonText: {
     fontSize: 16,

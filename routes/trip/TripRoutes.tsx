@@ -11,6 +11,10 @@ import { TripMapViewScreen } from "../../screen/trip/TripMapView";
 import { NewTripAndroid } from "../../screen/trip/NewTripAndroid";
 import { SIZES } from "../../styles/theme";
 import { Platform } from "react-native";
+import { TripFAQ } from "../../screen/trip/TripFAQ";
+import { TripDishes } from "../../screen/trip/TripDishes";
+import { TripTransport } from "../../screen/trip/TripTransport";
+import { TripEmergency } from "../../screen/trip/TripEmergency";
 
 interface TripRouteProps {}
 
@@ -20,7 +24,11 @@ type TripRouteStackParamList = {
   TripInsights: undefined;
   TripInsightDetailScreen: undefined;
   TripMapViewScreen: undefined;
-  NewTripAndroidScreen: undefined
+  NewTripAndroidScreen: undefined;
+  TripFAQ: undefined,
+  TripDishes: undefined,
+  TripTransport: undefined,
+  TripTransportation: undefined
 };
 
 const Stack = createStackNavigator<TripRouteStackParamList>();
@@ -82,6 +90,47 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
           gestureResponseDistance:  Platform.OS === 'android' ? 10 : SIZES.width - 50,
         })}
       />
+      <Stack.Screen
+        name="TripFAQ"
+        component={TripFAQ}
+        options={() => ({
+          header: () => null,
+          gestureEnabled: Platform.OS === "ios",
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
+        })}
+      />
+       <Stack.Screen
+        name="TripDishes"
+        component={TripDishes}
+        options={() => ({
+          header: () => null,
+          gestureEnabled: Platform.OS === "ios",
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
+        })}
+      />
+     <Stack.Screen
+        name="TripTransport"
+        component={TripTransport}
+        options={() => ({
+          header: () => null,
+          gestureEnabled: Platform.OS === "ios",
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
+        })}
+      />
+       <Stack.Screen
+        name="TripTransportation"
+        component={TripEmergency}
+        options={() => ({
+          header: () => null,
+          gestureEnabled: Platform.OS === "ios",
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
+        })}
+      />
+
     </Stack.Navigator>
   );
 };

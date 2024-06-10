@@ -59,7 +59,7 @@ const TransportationActivities = ({ modalTransportationActivitiesRef }) => {
           <View style={styles.activityListItemLeft}>
             <Text style={styles.activityListItemTitle}>To Bali</Text>
             <View style={styles.fromToElement}>
-              <CirclePin width="12" />
+              <CirclePin color="" width="12" />
               <Text style={styles.fromToLabel}> Tbilisi - </Text>
               <LocationPin color="#666361" width="12" />
               <Text style={styles.fromToLabel}>Bali</Text>
@@ -71,14 +71,14 @@ const TransportationActivities = ({ modalTransportationActivitiesRef }) => {
             activeOpacity={0.7}
             style={styles.optionButton}
           >
-            <DotsIcon />
+            <DotsIcon color="" />
           </TouchableOpacity>
         </View>
         <View style={styles.activityListItem}>
           <View style={styles.activityListItemLeft}>
             <Text style={styles.activityListItemTitle}>Batumi</Text>
             <View style={styles.fromToElement}>
-              <CirclePin width="12" />
+              <CirclePin color="" width="12" />
               <Text style={styles.fromToLabel}> Tbilisi - </Text>
               <LocationPin color="#666361" width="12" />
               <Text style={styles.fromToLabel}>Bali</Text>
@@ -86,14 +86,14 @@ const TransportationActivities = ({ modalTransportationActivitiesRef }) => {
             <Text style={styles.dateLabel}>Tue, 05 Feb - Tue, 05 Feb</Text>
           </View>
           <TouchableOpacity activeOpacity={0.7} style={styles.optionButton}>
-            <DotsIcon />
+            <DotsIcon color="" />
           </TouchableOpacity>
         </View>
         <View style={styles.activityListItem}>
           <View style={styles.activityListItemLeft}>
             <Text style={styles.activityListItemTitle}>To Bali</Text>
             <View style={styles.fromToElement}>
-              <CirclePin width="12" />
+              <CirclePin color="" width="12" />
               <Text style={styles.fromToLabel}> Tbilisi - </Text>
               <LocationPin color="#666361" width="12" />
               <Text style={styles.fromToLabel}>Bali</Text>
@@ -101,7 +101,7 @@ const TransportationActivities = ({ modalTransportationActivitiesRef }) => {
             <Text style={styles.dateLabel}>Tue, 05 Feb - Tue, 05 Feb</Text>
           </View>
           <TouchableOpacity activeOpacity={0.7} style={styles.optionButton}>
-            <DotsIcon />
+            <DotsIcon color=""/>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -130,7 +130,7 @@ const TransportationActivities = ({ modalTransportationActivitiesRef }) => {
                 style={[questionModaStyles.button]}
               >
                 <Text style={questionModaStyles.buttonText}>Edit</Text>
-                <EditIcon size="15" />
+                <EditIcon size="15" color=""/>
               </TouchableOpacity>
               <TouchableOpacity
                 activeOpacity={0.7}
@@ -139,7 +139,7 @@ const TransportationActivities = ({ modalTransportationActivitiesRef }) => {
                 <Text style={[questionModaStyles.buttonText, { color: "red" }]}>
                   Delete
                 </Text>
-                <TrashIcon size="15" />
+                <TrashIcon width={15} color=""/>
               </TouchableOpacity>
             </View>
           </QuestionModal>

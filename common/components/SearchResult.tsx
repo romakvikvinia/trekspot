@@ -1,56 +1,73 @@
 import { FlashList } from "@shopify/flash-list";
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORS } from "../../styles/theme";
-import { StarIcon } from "../../utilities/SvgIcons.utility";
-import { Image } from "expo-image";
+import { LocationLinearIcon } from "../../utilities/SvgIcons.utility";
+import { useNavigation } from "@react-navigation/native";
 
-export const SearchResult = ({data}) => {
-  const Item = ({ item }: any) => {
-    return (
-      <TouchableOpacity style={styles.countryItem} activeOpacity={0.7}>
-        <Image
-          style={styles.box}
-          contentFit="cover"
-          source={{
-            uri: "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=10&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          }}
-        ></Image>
-        <TouchableOpacity style={styles.gradientWrapper} activeOpacity={0.7}>
-          <View style={styles.labelItem}>
-            <Text style={[styles.labelItemText]}>{item.name}</Text>
-          </View>
-          <View style={styles.ratingLabel}>
-            <View style={{ position: "relative", top: -1, opacity: 0.8 }}>
-              <StarIcon color="#FFBC3E" />
-            </View>
-            <Text style={[styles.ratingText, styles.ratingTextXs]}>4.5 /</Text>
-            <Text style={[styles.ratingText, styles.ratingTextXs]}>
-              33k visitors
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </TouchableOpacity>
-    );
-  };
+export const Item = ({ item, handleDetailOfCountry, boxBg }) => {
   return (
-    <>
-      <Text style={styles.resultTitle}>Search result</Text>
-      <View style={{ minHeight: 100, flex: 1 }}>
-        <FlashList
-          data={data.slice(0, 20)}
-          renderItem={({ item }) => <Item item={item} />}
-          estimatedItemSize={200}
-          horizontal={false}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps={"handled"}
-        />
+    <TouchableOpacity
+      onPress={() => handleDetailOfCountry(item?.iso2)}
+      style={styles.countryItem}
+      activeOpacity={0.7}
+    >
+    <View style={styles.box}>
+        <LocationLinearIcon color="" size="" />
       </View>
-    </>
+      <View style={styles.gradientWrapper}>
+        <View
+          style={[
+            styles.labelItem,
+            {
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              alignItems: "flex-start",
+            },
+          ]}
+        >
+          <Text style={[styles.labelItemText]}>{item.name}</Text>
+          <Text
+            style={[
+              styles.labelItemText,
+              {
+                fontSize: 12,
+                fontWeight: "400",
+                marginTop: 5,
+              },
+            ]}
+          >
+            {item?.capital}
+          </Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+};
+export const SearchResult = ({ data, handleChange }) => {
+  const navigation = useNavigation();
+
+  const handleDetailOfCountry = (countryId) => {
+    if (handleChange) {
+      handleChange(countryId);
+    } else {
+      navigation.navigate("CountryDetailScreen", { countryId });
+    }
+  };
+
+  return (
+    <View style={{ minHeight: 20, flex: 1, paddingTop: 8 }}>
+      <FlashList
+        data={data.slice(0, 8)}
+        renderItem={({ item }) => (
+          <Item  item={item} handleDetailOfCountry={handleDetailOfCountry} />
+        )}
+        estimatedItemSize={200}
+        horizontal={false}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps={"handled"}
+        contentContainerStyle={{paddingTop: 10}}
+      />
+    </View>
   );
 };
 
@@ -104,10 +121,13 @@ const styles = StyleSheet.create({
   },
   box: {
     height: 50,
-    backgroundColor: "#f8f8f8",
-    borderRadius: 15,
+    backgroundColor: "#f2f2f2",
+    borderRadius: 8,
     overflow: "hidden",
     width: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 5,
   },
   countryItem: {
     paddingVertical: 5,

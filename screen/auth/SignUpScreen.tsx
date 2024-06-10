@@ -230,8 +230,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
               </TouchableOpacity>
             </View>
           </View>
-        </ScrollView>
-        <View style={[styles.textWithButtonWrapper]}>
+          <View style={[styles.textWithButtonWrapper, {marginTop: 0}]}>
           <Text
             style={[
               styles.textWithButtonLabel,
@@ -241,9 +240,9 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
               },
             ]}
           >
-            By sign in / sign up you agree our
+            By sign up you agree our
           </Text>
-          <TouchableOpacity activeOpacity={0.7} style={styles.textWithButton}>
+          <TouchableOpacity onPress={() => navigation.navigate("Agreement")} activeOpacity={0.7} style={styles.textWithButton}>
             <Text
               style={[
                 styles.textWithButtonText,
@@ -251,14 +250,15 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
                   fontSize: SIZES.body5,
                   fontWeight: "normal",
                   color: COLORS.primaryDark,
-                  // textDecorationLine: "underline",
                 },
               ]}
             >
-              privacy policy
+              Privacy policy
             </Text>
           </TouchableOpacity>
         </View>
+        </ScrollView>
+       
       </KeyboardAvoidingView>
     </View>
   );
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 15,
+    marginTop: 25,
     marginBottom: 15,
     paddingBottom: 15
   },
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
   },
   textWithButtonText: {
     fontSize: SIZES.body2,
-    color: COLORS.secondary,
+    color: COLORS.primary,
     fontWeight: "bold",
   },
   container: {
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   signTitle: {
-    marginTop: 15,
+    marginTop: 0,
     width: "100%",
     marginBottom: 45,
   },

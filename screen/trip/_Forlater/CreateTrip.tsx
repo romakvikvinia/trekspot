@@ -47,7 +47,6 @@ export const CreateTripContent = ({
     startDate: undefined,
     endDate: undefined,
   });
-  const [tripAccess, setTripAccess] = useState(false);
   const [destination, setDestination] = useState();
   const [travelType, setTravelType] = useState(false);
 
@@ -58,20 +57,12 @@ export const CreateTripContent = ({
   const onDestinationModalClose = () => {
     modalDestinationRef.current?.close();
   };
-  const onAccessibilityModalOpen = () => {
-    modalAccessibilityRef.current?.open();
-  };
+ 
   const onTravelTypeModalOpen = () => {
     modalTravelTypeRef.current?.open();
   };
-  const onBackgroundModalOpen = () => {
-    modalBackgroundRef.current?.open();
-  };
-
-  const handleCreateNewTrip = () => {
-    tripActivitesModal.current?.open();
-    newTripModalRef.current?.close();
-  };
+ 
+ 
 
   return (
     <>
@@ -93,8 +84,7 @@ export const CreateTripContent = ({
             <Text style={styles.createTripButtonText}>Create</Text>
           </TouchableOpacity>
         </View>
-        {/* <BlurView intensity={100} style={styles.tripNameInputWrapper}> */}
-        <TextInput
+         <TextInput
           placeholder="Enter trip name"
           placeholderTextColor="rgba(0, 0, 0, 0.4)"
           style={styles.tripNameInput}
@@ -155,20 +145,7 @@ export const CreateTripContent = ({
                 ) : null}
               </TouchableOpacity>
             </BlurView>
-            {/* <BlurView
-              intensity={100}
-              style={[styles.newTripBox, styles.halfBox]}
-            >
-              <TouchableOpacity
-                activeOpacity={0.5}
-                style={styles.newTripBoxButton}
-                onPress={() => onAccessibilityModalOpen()}
-              >
-                <PrivateIcon size="20" />
-                <Text style={styles.halfBoxLabelText}>Accessibility</Text>
-                <Text style={styles.halfBoxValueText}>Private</Text>
-              </TouchableOpacity>
-            </BlurView> */}
+          
             <BlurView
               intensity={100}
               style={[styles.newTripBox, styles.halfBox]}
@@ -183,19 +160,7 @@ export const CreateTripContent = ({
                 <Text style={styles.halfBoxValueText}>Solo</Text>
               </TouchableOpacity>
             </BlurView>
-            {/* <BlurView
-              intensity={100}
-              style={[styles.newTripBox, styles.halfBox]}
-            >
-              <TouchableOpacity
-                activeOpacity={0.5}
-                style={styles.newTripBoxButton}
-                onPress={() => onBackgroundModalOpen()}
-              >
-                <ImageIcon size="20" />
-                <Text style={styles.halfBoxLabelText}>Background image</Text>
-              </TouchableOpacity>
-            </BlurView> */}
+          
           </View>
         </ScrollView>
       </View>
@@ -224,59 +189,7 @@ export const CreateTripContent = ({
       </Portal>
 
    
-      {/* <Portal>
-        <Modalize
-          modalStyle={{
-            backgroundColor: "#F2F2F7",
-            minHeight: "70%",
-          }}
-          ref={modalAccessibilityRef}
-          modalTopOffset={65}
-          adjustToContentHeight
-          scrollViewProps={{
-            alwaysBounceVertical: false,
-            showsVerticalScrollIndicator: false,
-          }}
-        >
-          <Accessibility
-            tripAccess={tripAccess}
-            setTripAccess={setTripAccess}
-          />
-        </Modalize>
-      </Portal>
-      <Portal>
-        <Modalize
-          ref={modalTravelTypeRef}
-          modalTopOffset={65}
-          scrollViewProps={{
-            alwaysBounceVertical: false,
-            showsVerticalScrollIndicator: false,
-          }}
-          modalStyle={{
-            backgroundColor: "#F2F2F7",
-            minHeight: "70%",
-          }}
-          adjustToContentHeight
-        >
-          <TravelType travelType={travelType} setTravelType={setTravelType} />
-        </Modalize>
-      </Portal> */}
-      {/* <Portal>
-        <Modalize
-          ref={modalBackgroundRef}
-          modalTopOffset={65}
-          scrollViewProps={{
-            alwaysBounceVertical: false,
-            showsVerticalScrollIndicator: false,
-          }}
-          adjustToContentHeight
-          modalStyle={{
-            backgroundColor: "#F2F2F7",
-          }}
-        >
-          <Background gradient={gradient} setGradient={setGradient} />
-        </Modalize>
-      </Portal> */}
+    
     </>
   );
 };
@@ -819,3 +732,85 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
+
+  {/* <BlurView
+              intensity={100}
+              style={[styles.newTripBox, styles.halfBox]}
+            >
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={styles.newTripBoxButton}
+                onPress={() => onBackgroundModalOpen()}
+              >
+                <ImageIcon size="20" />
+                <Text style={styles.halfBoxLabelText}>Background image</Text>
+              </TouchableOpacity>
+            </BlurView> */}
+  {/* <BlurView
+              intensity={100}
+              style={[styles.newTripBox, styles.halfBox]}
+            >
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={styles.newTripBoxButton}
+                onPress={() => onAccessibilityModalOpen()}
+              >
+                <PrivateIcon size="20" />
+                <Text style={styles.halfBoxLabelText}>Accessibility</Text>
+                <Text style={styles.halfBoxValueText}>Private</Text>
+              </TouchableOpacity>
+            </BlurView> */}
+
+  {/* <Portal>
+        <Modalize
+          modalStyle={{
+            backgroundColor: "#F2F2F7",
+            minHeight: "70%",
+          }}
+          ref={modalAccessibilityRef}
+          modalTopOffset={65}
+          adjustToContentHeight
+          scrollViewProps={{
+            alwaysBounceVertical: false,
+            showsVerticalScrollIndicator: false,
+          }}
+        >
+          <Accessibility
+            tripAccess={tripAccess}
+            setTripAccess={setTripAccess}
+          />
+        </Modalize>
+      </Portal>
+      <Portal>
+        <Modalize
+          ref={modalTravelTypeRef}
+          modalTopOffset={65}
+          scrollViewProps={{
+            alwaysBounceVertical: false,
+            showsVerticalScrollIndicator: false,
+          }}
+          modalStyle={{
+            backgroundColor: "#F2F2F7",
+            minHeight: "70%",
+          }}
+          adjustToContentHeight
+        >
+          <TravelType travelType={travelType} setTravelType={setTravelType} />
+        </Modalize>
+      </Portal> */}
+      {/* <Portal>
+        <Modalize
+          ref={modalBackgroundRef}
+          modalTopOffset={65}
+          scrollViewProps={{
+            alwaysBounceVertical: false,
+            showsVerticalScrollIndicator: false,
+          }}
+          adjustToContentHeight
+          modalStyle={{
+            backgroundColor: "#F2F2F7",
+          }}
+        >
+          <Background gradient={gradient} setGradient={setGradient} />
+        </Modalize>
+      </Portal> */}

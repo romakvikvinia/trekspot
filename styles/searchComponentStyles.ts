@@ -4,7 +4,7 @@ import { COLORS, SIZES } from "./theme";
 export const searchComponentStyles = StyleSheet.create({
   searchComponentInput: {
     height: 45,
-    backgroundColor: "#ebebeb",
+    backgroundColor: "#ececeb",
     borderRadius: SIZES.radius * 5,
     paddingLeft: 20,
     fontSize: 16,

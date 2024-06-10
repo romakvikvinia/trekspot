@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  Alert,
   ImageBackground,
   StyleSheet,
   Text,
@@ -11,7 +12,6 @@ import { Portal } from "react-native-portalize";
 import { useLazyGetPassportIndexesQuery } from "../../api/api.trekspot";
 import { CountrySelect } from "../../common/components/CountrySelect";
 import { Loader } from "../../common/ui/Loader";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NotFound } from "../../components/common/NotFound";
 import { COLORS } from "../../styles/theme";
 import { Flags } from "../../utilities/flags";
@@ -22,18 +22,39 @@ import {
   FlightIcon,
   GlobeIcon,
 } from "../../utilities/SvgIcons.utility";
+import * as Haptics from "expo-haptics";
 
 export const VisaChecker = () => {
   const [fetchVisaInfo, { data, isLoading, isError }] =
     useLazyGetPassportIndexesQuery();
 
-  const [from, setFrom] = useState("");
-  const [to, setTo] = useState("");
+  const [from, setFrom] = useState(null);
+  const [to, setTo] = useState(null);
   const [selectingFor, setSelectingFor] = useState(null);
 
   const modalCountryPassportSelectRef = useRef(null);
+  const openCountrySelectModal = (type) => {
+    setSelectingFor(type);
+    modalCountryPassportSelectRef.current?.open();
+  };
+  const resetHandler = () => {
+    setFrom(null);
+    setTo(null);
+  };
+  const showAlert = () => {
+    Alert.alert(
+      "Warning",
+      "Your 'From' and 'To' destinations can't be the same. Please choose different locations.",
+      [{ text: "Got it!" }]
+    );
+  };
 
   const handleCountrySelect = (country) => {
+    if ((from && from === country) || (to && to === country)) {
+      showAlert();
+      return;
+    }
+
     if (selectingFor === "from") {
       setFrom(country);
     } else if (selectingFor === "to") {
@@ -42,44 +63,15 @@ export const VisaChecker = () => {
     modalCountryPassportSelectRef.current?.close();
   };
 
-  const openCountrySelectModal = (type) => {
-    setSelectingFor(type);
-    modalCountryPassportSelectRef.current?.open();
-  };
-
-  const resetHandler = () => {
-    setFrom("");
-    setTo("");
-  };
-
   const onDestinationModalClose = () => {
     modalCountryPassportSelectRef.current?.close();
   };
 
   useEffect(() => {
-    if (from && to) {
+    if (from && to && from !== to) {
       fetchVisaInfo({ from: from?.iso2 || "", to: to?.iso2 || "" });
     }
   }, [from, to]);
-
-  const storeData = async (value) => {
-    try {
-      await AsyncStorage.setItem('my-key', value);
-    } catch (e) {
-      // saving error
-    }
-  };
-  
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('my-key');
-      if (value !== null) {
-        // value previously stored
-      }
-    } catch (e) {
-      // error reading value
-    }
-  };
 
   return (
     <>
@@ -91,12 +83,15 @@ export const VisaChecker = () => {
 
         <View style={styles.countrySelects}>
           <TouchableOpacity
-            onPress={() => openCountrySelectModal("from")}
+            onPress={() => {
+              openCountrySelectModal("from");
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
             activeOpacity={0.7}
             style={styles.fromTo}
           >
             <View style={styles.lf}>
-              {Flags[from.iso2] ? (
+              {Flags[from?.iso2] ? (
                 <ImageBackground
                   resizeMode="cover"
                   style={{
@@ -122,12 +117,15 @@ export const VisaChecker = () => {
             <FlightIcon color={COLORS.primary} />
           </View>
           <TouchableOpacity
-            onPress={() => openCountrySelectModal("to")}
+            onPress={() => {
+              openCountrySelectModal("to");
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
             activeOpacity={0.7}
             style={styles.fromTo}
           >
             <View style={styles.lf}>
-              {Flags[to.iso2] ? (
+              {Flags[to?.iso2] ? (
                 <ImageBackground
                   resizeMode="cover"
                   style={{
@@ -135,7 +133,7 @@ export const VisaChecker = () => {
                     height: 15,
                     backgroundColor: "#ddd",
                   }}
-                  source={Flags[to.iso2] || null}
+                  source={Flags[to?.iso2] || null}
                 />
               ) : (
                 <GlobeIcon size={15} />
@@ -221,7 +219,13 @@ export const VisaChecker = () => {
       </View>
 
       <Portal>
-        <Modalize ref={modalCountryPassportSelectRef} modalTopOffset={65}>
+        <Modalize
+          ref={modalCountryPassportSelectRef}
+          modalTopOffset={65}
+          scrollViewProps={{
+            keyboardShouldPersistTaps: "handled",
+          }}
+        >
           <CountrySelect
             onSelect={handleCountrySelect}
             onDestinationModalClose={onDestinationModalClose}

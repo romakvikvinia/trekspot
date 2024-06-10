@@ -53,6 +53,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
    */
 
   const cities = data && data.cities ? data.cities : [];
+
   return (
     <>
       <View style={styles.safeArea}>

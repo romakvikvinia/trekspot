@@ -1,97 +1,49 @@
-import { useCallback, useRef, useState } from "react";
 import {
-  Keyboard,
-  Platform,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import { Modalize } from "react-native-modalize";
-import { Portal } from "react-native-portalize";
-import { BucketlistModal } from "../../common/components/BucketlistModal";
+ 
 import { COLORS, SIZES } from "../../styles/theme";
 import {
   FlightIcon,
   Mark2,
   SearchIcon,
-  XIcon,
 } from "../../utilities/SvgIcons.utility";
 import Constants from "expo-constants";
 import { useNavigation } from "@react-navigation/native";
 
 export const ExploreHeader = () => {
   const navigation = useNavigation();
-  const BucketListModalRef = useRef<Modalize>(null);
 
-  const onBucketlistOpen = useCallback(() => {
-    if (BucketListModalRef.current) BucketListModalRef.current.open();
-  }, []);
   return (
-    <>
-      <View style={styles.screenHeader}>
-        <TouchableOpacity
-          style={styles.searchBox}
-          activeOpacity={1}
-          onPress={() => navigation.navigate("Search")}
-        >
-          <View style={styles.searchIcon}>
-            <SearchIcon width={15} />
-          </View>
-          <Text style={styles.searchInput}>Search here...</Text>
-        </TouchableOpacity>
-        <View style={styles.right}>
-          <TouchableOpacity
-            onPress={() => onBucketlistOpen()}
-            style={styles.bucketListButton}
-          >
-            <FlightIcon color={COLORS.primary} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => onBucketlistOpen()}
-            style={styles.bucketListButton}
-          >
-            <Mark2 size={16} color={COLORS.black} />
-          </TouchableOpacity>
+    <View style={styles.screenHeader}>
+      <TouchableOpacity
+        style={styles.searchBox}
+        activeOpacity={1}
+        onPress={() => navigation.navigate("Search")}
+      >
+        <View style={styles.searchIcon}>
+          <SearchIcon width={15} />
         </View>
-      </View>
-
-      <Portal>
-        <Modalize
-          ref={BucketListModalRef}
-          modalTopOffset={65}
-          disableScrollIfPossible
-          avoidKeyboardLikeIOS={true}
-          velocity={100000}
-          tapGestureEnabled={false}
-          closeSnapPointStraightEnabled={false}
-          HeaderComponent={
-            <View style={[styles.rowItemHeader, { paddingTop: 15 }]}>
-              <Text style={styles.h2}>Bucket List</Text>
-
-              <TouchableOpacity
-                onPress={() => BucketListModalRef?.current?.close()}
-                activeOpacity={0.7}
-                style={styles.closeButton}
-              >
-                <XIcon width="10" height="10" />
-              </TouchableOpacity>
-            </View>
-          }
-          modalStyle={{
-            backgroundColor: "#F2F2F7",
-            // minHeight: "90%",
-          }}
-          modalHeight={SIZES.height - 100}
-          scrollViewProps={{
-            showsVerticalScrollIndicator: false,
-          }}
+        <Text style={styles.searchInput}>Search here...</Text>
+      </TouchableOpacity>
+      <View style={styles.right}>
+        <TouchableOpacity
+          onPress={() => onBucketlistOpen()}
+          style={styles.bucketListButton}
         >
-          <BucketlistModal />
-        </Modalize>
-      </Portal>
-    </>
+          <FlightIcon color={COLORS.primary} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("WishlistScreen")}
+          style={styles.bucketListButton}
+        >
+          <Mark2 size={16} color={COLORS.black} />
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 };
 

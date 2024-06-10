@@ -190,7 +190,7 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
               fontWeight: "bold",
             }}
           >
-            Track Your Journey
+            Travel statistics
           </Text>
           <Text
             style={{
@@ -200,7 +200,7 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
               fontWeight: "500",
             }}
           >
-            Leave your mark on the map! Keep track of where you've been
+            Keep track of where you've been
           </Text>
         </View>
       </View>

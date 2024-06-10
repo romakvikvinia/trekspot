@@ -29,7 +29,7 @@ export const TInput: React.FC<TInputProps> = (props: any) => {
           styles.input,
           props.style,
           {
-            borderColor: focused && !props.invalid ? COLORS.primary : "#e9e9e9",
+            borderColor: focused && !props.invalid ? COLORS.black : "#e9e9e9",
           },
           props.invalid ? styles.invalid : {},
         ]}

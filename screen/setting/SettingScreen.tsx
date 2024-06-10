@@ -18,13 +18,17 @@ import {
   DeleteIcon,
   Email,
   Facebook,
+  FacebookLinear,
   Instagram,
+  InstagramLinear,
   LockIcon,
   LogoutIcon,
   PrivacyIcon,
   StarIcon,
   StarsIcon,
   TermsIcon,
+  ThreadsLinear,
+  TiktokLinear,
   UserCircleIcon,
   UserIcon,
   VersionIcon,
@@ -160,17 +164,35 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.socials}>
-              <TouchableOpacity activeOpacity={0.7} style={styles.socialButton}>
-                 <Facebook />
-              </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.7} style={styles.socialButton}>
-                 <Instagram />
-              </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.7} style={styles.socialButton}>
-                 <Email />
-              </TouchableOpacity>
+          <Text style={styles.buttonsWrapperTitle}>Socials</Text>
+          <View style={styles.buttonsWrapper}>
+            <TouchableOpacity
+              style={styles.button}
+              activeOpacity={0.7}
+            >
+              <FacebookLinear color="" size="" />
+              <Text style={styles.buttonText}>Like us on Facebook</Text>
+            </TouchableOpacity>
+            <TouchableOpacity  style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]} activeOpacity={0.7}>
+              <InstagramLinear color="" size="" />
+              <Text style={styles.buttonText}>
+                Follow us on Instagram
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity  style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]} activeOpacity={0.7}>
+              <ThreadsLinear color="" size="" />
+              <Text style={styles.buttonText}>
+                Follow us on Threads
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity  style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]} activeOpacity={0.7}>
+              <TiktokLinear color="" size="" />
+              <Text style={styles.buttonText}>
+                Follow us on Tiktok
+              </Text>
+            </TouchableOpacity>
           </View>
+       
           <View style={styles.version}>
             <Text style={styles.versionText}>
               Version: 1.0.0
@@ -202,7 +224,8 @@ const styles = StyleSheet.create({
   version: {
     width: "100%",
     alignItems: "center",
-    marginTop: 10
+    marginTop: 10,
+    marginBottom: 30
   },
   versionText: {
     color: "#bbb",

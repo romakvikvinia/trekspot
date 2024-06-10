@@ -12,6 +12,7 @@ import {
   ClearIcon,
   LivedIcon,
   Mark,
+  MarkLinear,
   SearchIcon,
   Share,
   VisitedIcon,
@@ -190,6 +191,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
   const resetSearch = () => {
     setSearchValue("");
   };
+ 
 
   return (
     <>
@@ -200,7 +202,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
               onPress={() => onOpen()}
               style={[styles.btn, { marginRight: 10 }]}
             >
-              <Mark size="15" />
+              <MarkLinear size="15" color={COLORS.black} />
               <Text style={styles.txt}>Add Visit</Text>
             </TouchableOpacity>
           </View>
@@ -241,6 +243,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
               <MapSvg
                 width={SIZES.width < 370 ? 340 : 370}
                 countries={countriesOnMap}
+                color={COLORS.primary}
               />
             </TouchableOpacity>
 
@@ -315,6 +318,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
           HeaderComponent={
             <View style={styles.modalHeader}>
               {Platform.OS === "ios" ? (
+                <View style={{flexDirection: "row", flex: 1, justifyContent: "center", alignItems:"center"}}>
                 <View style={styles.searchBox}>
                   <View style={styles.searchIcon}>
                     <SearchIcon width={15} />
@@ -338,6 +342,13 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
                     </TouchableOpacity>
                   ) : null}
                 </View>
+                <TouchableOpacity
+                  style={styles.cancelButton}
+                  onPress={() => modalRef?.current?.close()}
+                >
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                </TouchableOpacity>
+                </View>
               ) : null}
 
               <View style={styles.infoRow}>
@@ -347,10 +358,10 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
                     <VisitedIcon />
                     <Text style={styles.legendItemText}>Visited</Text>
                   </View>
-                  <View style={styles.legendItem}>
+                  {/* <View style={styles.legendItem}>
                     <LivedIcon />
                     <Text style={styles.legendItemText}>Lived</Text>
-                  </View>
+                  </View> */}
                 </View>
               </View>
             </View>
@@ -372,6 +383,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
                 />
               )}
               estimatedItemSize={100}
+              contentContainerStyle={{paddingTop: 15}}
             />    
           </View>
         </Modalize>
@@ -406,9 +418,9 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
 const styles = StyleSheet.create({
   modalHeader: {
     width: "100%",
-    padding: 15,
+    paddingHorizontal: 15,
     flexWrap: "wrap",
-    paddingVertical: 15,
+    paddingVertical: 0,
     height: 100,
   },
   searchBox: {
@@ -417,14 +429,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderRadius: 30,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 2,
     position: "relative",
     width: "100%",
   },
@@ -446,10 +450,18 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 15,
+    marginTop: 5,
     borderBottomWidth: 1,
     paddingBottom: 10,
     borderColor: "#efefef",
+  },
+  cancelButton: {
+    marginLeft: 10,
+    justifyContent: "center",
+  },
+  cancelButtonText: {
+    fontSize: 14,
+    color: COLORS.darkgray,
   },
   countryAmount: {
     color: COLORS.darkgray,

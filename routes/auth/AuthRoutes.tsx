@@ -9,7 +9,8 @@ import { GetStartedScreen } from "../../screen/auth/GetStartedScreen";
 import { ResetPasswordScreen } from "../../screen/auth/ResetPassword";
 import { useNavigation } from "@react-navigation/native";
 import { SIZES } from "../../styles/theme";
-import { Platform } from "react-native";
+import { Platform, Text, TouchableOpacity } from "react-native";
+import Agreement from "../../screen/auth/Agreement";
 
 interface AuthRouteProps {}
 
@@ -18,6 +19,7 @@ export type AuthStackParamList = {
   SignUp: undefined;
   GetStarted: undefined;
   ResetPassword: undefined;
+  Agreement: undefined
 };
 
 const Stack = createStackNavigator<AuthStackParamList>();
@@ -39,7 +41,8 @@ export const AuthRoute: React.FC<AuthRouteProps> = () => {
         options={{
           header: () => null,
           gestureEnabled: true,
-          gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50, 
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
         }}
       />
       <Stack.Group
@@ -53,7 +56,8 @@ export const AuthRoute: React.FC<AuthRouteProps> = () => {
         options={{
           header: () => null,
           gestureEnabled: true,
-          gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50, 
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
         }}
       />
       <Stack.Screen
@@ -62,9 +66,27 @@ export const AuthRoute: React.FC<AuthRouteProps> = () => {
         options={{
           header: () => null,
           gestureEnabled: true,
-          gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50, 
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
         }}
       />
+      <Stack.Group
+        screenOptions={{ presentation: "modal",   headerShown: true,
+        headerLeft: () => null,
+        headerTitle: "Privacy policy",
+        headerRight: () => (
+          <TouchableOpacity
+            onPress={() => navigation.goBack()} 
+            style={{
+              paddingHorizontal: 15
+            }}
+           >
+              <Text>Done</Text>
+            </TouchableOpacity>
+        ), }}
+      >
+        <Stack.Screen name="Agreement" component={Agreement} />
+      </Stack.Group>
     </Stack.Navigator>
   );
 };

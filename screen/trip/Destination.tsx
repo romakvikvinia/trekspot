@@ -1,109 +1,62 @@
-import { FlashList } from "@shopify/flash-list";
-import { Image } from "expo-image";
 import { useState } from "react";
-import {
-  ActivityIndicator,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native";
+import { useLazyGetCitiesQuery } from "../../api/api.trekspot";
+import { SearchResult } from "../../common/components/SearchResult";
 import { SearchComponent } from "../../common/ui/SearchComponent";
 import { NotFound } from "../../components/common/NotFound";
-import { searchComponentStyles } from "../../styles/searchComponentStyles";
-import { COLORS, SIZES } from "../../styles/theme";
-import {
-  CloseCircleIcon,
-  LeftArrowLong,
-  Mark,
-  SearchIcon,
-} from "../../utilities/SvgIcons.utility";
 
-export const Destination = ({onDestinationModalClose}) => {
+import { COLORS, SIZES } from "../../styles/theme";
+import { CountriesList } from "../../utilities/countryList";
+
+export const Destination = ({ onDestinationModalClose }) => {
   const [search, setSearch] = useState("");
-   return (
+  const [destinationSelected, setDestinationSelected] = useState(null);
+
+  const handleChange = (dest) => {
+    setDestinationSelected(dest);
+    console.log("des", dest);
+  };
+
+  const filteredCountries =
+    search && search.length > 1
+      ? CountriesList.filter(
+          (i) =>
+            i.name.toLowerCase().includes(search.toLowerCase()) ||
+            i.capital.toLowerCase().includes(search.toLowerCase())
+        )
+      : CountriesList;
+
+  return (
     <>
       <View style={styles.modalHeader}>
-        <View style={{flex: 1}}>
-        <SearchComponent search={search} setSearch={setSearch} />
+        <View style={{ flex: 1 }}>
+          <SearchComponent search={search} setSearch={setSearch} />
         </View>
-        <TouchableOpacity style={styles.cancelButton} onPress={() => onDestinationModalClose()}>
+        <TouchableOpacity
+          style={styles.cancelButton}
+          onPress={() => onDestinationModalClose()}
+        >
           <Text style={styles.cancelButtonText}>Cancel</Text>
         </TouchableOpacity>
       </View>
-      <View
-        style={{ flex: 1, width: "100%", height: SIZES.height - 200, paddingHorizontal: 20 }}
-      >
-        <View
-          style={{
-            marginTop: 15,
-          }}
-        >
-          <ActivityIndicator color={COLORS.primaryDark} />
+      {/* <View style={{marginTop: 25}}>
+            <Loader background="#F2F2F7" isLoading={true} size="small" />
+        </View> */}
+        
+      {filteredCountries?.length > 0 && (
+        <View style={{ paddingHorizontal: 10,  flex: 1}}>
+          <SearchResult data={filteredCountries} handleChange={handleChange} />
         </View>
-        <FlashList
-          // keyExtractor={(item) =>
-          //   `${item.iso2}-${item.name}-${item.capital}`
-          // }
-          // extraData={filteredCountries}
-          data={["a", "2", "s"]}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <TouchableOpacity style={styles.destination} activeOpacity={0.5}>
-              {/* If country show flag */}
-              {/* <Image
-                cachePolicy="memory"
-                contentFit="cover"
-                transition={0}
-                source={{
-                  uri: "https://cdn-icons-png.flaticon.com/512/206/206657.png",
-                }}
-                style={{
-                  width: 20,
-                  height: 20,
-                  borderRadius: 5,
-                }}
-              /> */}
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <View
-                  style={{
-                    backgroundColor: "#fafafa",
-                    width: 30,
-                    height: 30,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderRadius: 50,
-                    marginRight: 5,
-                  }}
-                >
-                  <Mark color="black" size="15" />
-                </View>
-                <View>
-                  <Text style={styles.destinationText}>Paris</Text>
-                  <Text
-                    style={[
-                      styles.destinationText,
-                      { fontSize: 12, opacity: 0.7, marginTop: 2 },
-                    ]}
-                  >
-                    France
-                  </Text>
-                </View>
-              </View>
-              <LeftArrowLong width="12" />
-            </TouchableOpacity>
-          )}
-          estimatedItemSize={200}
-        />
-        {/* <NotFound /> */}
-      </View>
+      )}
+
+      {!filteredCountries?.length && (
+        <View style={styles.notesWarning}>
+          <NotFound
+            text="Can't find destination? No worries! We're adding new ones every day, so check back soon"
+          />
+        </View>
+      )}
     </>
   );
 };
@@ -111,11 +64,12 @@ const styles = StyleSheet.create({
   modalHeader: {
     width: "100%",
     padding: 15,
-    flexDirection: "row"
+    flexDirection: "row",
+    paddingBottom: 0,
   },
   cancelButton: {
     marginLeft: 10,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   cancelButtonText: {
     fontSize: 14,
@@ -127,6 +81,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 15,
     paddingVertical: 15,
+  },
+  notesWarning: {
+    padding: 15,
+  },
+  noteText: {
+    fontSize: 12,
+    textAlign: "center",
+    opacity: 0.7,
   },
   searchInput: {
     height: 45,

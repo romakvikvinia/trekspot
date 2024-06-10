@@ -4,6 +4,7 @@ import {
   Platform,
   SafeAreaView,
   StyleSheet,
+  Text,
   TextInput,
   TouchableOpacity,
   View,
@@ -16,6 +17,7 @@ import { Loader } from "../../common/ui/Loader";
 import { useNavigation } from "@react-navigation/native";
 import { CountriesList } from "../../utilities/countryList";
 import { NotFound } from "../../components/common/NotFound";
+import { useGetCitiesQuery } from "../../api/api.trekspot";
 
 export const Search = () => {
   const navigation = useNavigation();
@@ -24,11 +26,23 @@ export const Search = () => {
   const handleSearch = useCallback((e: string) => {
     setSearchValue(e);
   }, []);
-  
+
   const clearSearch = useCallback(() => {
     setSearchValue("");
   }, []);
- 
+
+  const handleSelectDestination = (cId) => {
+    console.log("cid", cId)
+  }
+
+  const filteredCountries =
+    searchValue && searchValue.length > 1
+      ? CountriesList.filter(
+          (i) =>
+            i.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+            i.capital.toLowerCase().includes(searchValue.toLowerCase())
+        )
+      : CountriesList;
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -37,7 +51,10 @@ export const Search = () => {
         style={{ flex: 1, paddingHorizontal: 15 }}
       >
         <View style={styles.searchBox}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
             <BackIcon size="30" />
           </TouchableOpacity>
           <TextInput
@@ -62,10 +79,16 @@ export const Search = () => {
         {/* <View style={{marginTop: 50}}>
             <Loader background="" isLoading={true} size="small" />
         </View> */}
-        <SearchResult data={CountriesList} />
+        <SearchResult data={filteredCountries} handleChange={handleSelectDestination} />
 
-        {/* <NotFound /> */}
-      </KeyboardAvoidingView>
+        {/* <View style={styles.notesWarning}>
+          <Text style={styles.noteText}>
+            Can't find destination? No worries! We're adding new ones every day,
+            so check back soon
+          </Text>
+        </View> */}
+
+       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -74,6 +97,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f8f8f8",
     paddingTop: Constants?.statusBarHeight + 10,
+  },
+  notesWarning: {
+    padding: 15
+  },
+  noteText: {
+    fontSize: 12,
+    textAlign: 'center',
+    opacity: 0.7
   },
   searchBox: {
     height: 55,
@@ -103,7 +134,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     fontWeight: "500",
-    paddingRight: 40
+    paddingRight: 40,
   },
   backButton: {
     width: 45,
@@ -120,6 +151,6 @@ const styles = StyleSheet.create({
     right: 5,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 30
-},
+    borderRadius: 30,
+  },
 });

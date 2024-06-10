@@ -10,6 +10,7 @@ interface MapSVGProps {
 export const MapSvg: React.FC<MapSVGProps> = ({
   width = 0,
   countries = [],
+  color
 }) => {
   let svgMarkup = `<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 370 244" width="370" height="244">
 <path stroke="#fff" stroke-width="0.2" fill="#ddd" id="AD"  d="m175.7 121.5l-0.1 0.1h-0.1-0.1v-0.1-0.1l0.1-0.1h0.1l0.1 0.1h0.1l-0.1 0.1z"/>
@@ -274,7 +275,7 @@ export const MapSvg: React.FC<MapSVGProps> = ({
   countries.forEach((id) => {
     svgMarkup = svgMarkup.replace(
       `fill="#ddd" id="${id}"`,
-      `fill=${COLORS.primary} id="${id}"`
+      `fill=${color || COLORS.primaryDark} id="${id}"`
     );
   });
   const SvgImage = () => (
