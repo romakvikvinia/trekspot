@@ -11,22 +11,23 @@ import Constants from "expo-constants";
 import { COLORS } from "../../styles/theme";
 import { useNavigation } from "@react-navigation/native";
 import { Emergency } from "../../common/components/Destination/Emergency";
+import { globalStyles } from "../../styles/globalStyles";
 
 export const TripEmergency = () => {
   const navigation = useNavigation();
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.header}>
+      <View style={globalStyles.screenHeader}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
-          style={styles.backButton}
+          style={globalStyles.screenHeaderBackButton}
         >
           <BackIcon size="30" />
         </TouchableOpacity>
 
-        <Text style={styles.destination}>Emergency</Text>
-        <TouchableOpacity style={styles.backButton}></TouchableOpacity>
+        <Text style={globalStyles.screenTitle}>Emergency</Text>
+        <TouchableOpacity style={globalStyles.screenHeaderBackButton}></TouchableOpacity>
       </View>
 
       <ScrollView

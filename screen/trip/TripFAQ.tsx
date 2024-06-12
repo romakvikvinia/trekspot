@@ -80,7 +80,7 @@ export const TripFAQ = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-    <View style={globalStyles.screenHeader}>
+      <View style={globalStyles.screenHeader}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={globalStyles.screenHeaderBackButton}
@@ -89,10 +89,10 @@ export const TripFAQ = () => {
         </TouchableOpacity>
 
         <Text style={globalStyles.screenTitle}>FAQ</Text>
-        <TouchableOpacity style={styles.backButton}></TouchableOpacity>
+        <TouchableOpacity style={globalStyles.screenHeaderBackButton}></TouchableOpacity>
       </View>
 
-      <View style={{ paddingHorizontal: 15}}>
+      <View style={{ paddingHorizontal: 20}}>
         <SectionList
           sections={faqData2}
           renderItem={({ item }) => {
@@ -100,7 +100,7 @@ export const TripFAQ = () => {
           }}
          showsVerticalScrollIndicator={false}
           renderSectionHeader={({ section: { title } }) => (
-            <Text style={[styles.forYouRowTitleSub, { marginTop: 15 }]}>
+            <Text style={[styles.forYouRowTitleSub, { marginTop: 25 }]}>
               {title}
             </Text>
           )}
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     width: 30,
   },
   forYouRowTitleSub: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
     color: COLORS.black,
     paddingHorizontal: 0,

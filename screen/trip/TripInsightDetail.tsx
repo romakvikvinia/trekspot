@@ -17,6 +17,7 @@ import RenderHtml from "react-native-render-html";
 import { useNavigation } from "@react-navigation/native";
 import { BackIcon } from "../../utilities/SvgIcons.utility";
 import { SIZES } from "../../styles/theme";
+import { globalStyles } from "../../styles/globalStyles";
 
 interface TripProps {}
 
@@ -25,16 +26,18 @@ export const TripInsightDetailScreen: React.FC<TripProps> = ({}) => {
 
   return (
     <View style={styles.safeArea}>
-      <View style={styles.header}>
+      <View style={globalStyles.screenHeader}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
-          style={styles.backButton}
+          style={globalStyles.screenHeaderBackButton}
         >
           <BackIcon size="30" />
         </TouchableOpacity>
 
-        <Text style={styles.destination}>Title item</Text>
-        <TouchableOpacity style={styles.backButton}></TouchableOpacity>
+        <Text style={globalStyles.screenTitle}>Title item</Text>
+        <TouchableOpacity
+          style={globalStyles.screenHeaderBackButton}
+        ></TouchableOpacity>
       </View>
       <ScrollView
         style={{ flex: 1, flexGrow: 1 }}
@@ -82,6 +85,12 @@ export const TripInsightDetailScreen: React.FC<TripProps> = ({}) => {
           }}
           defaultTextProps={{
             selectable: true,
+          }}
+          baseStyle={{
+            fontSize: 16,
+            lineHeight: 22,
+            paddingBottom: 30,
+            paddingTop: 15
           }}
         />
       </ScrollView>

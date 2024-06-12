@@ -33,7 +33,7 @@ export const Emergency: React.FC<EmergencyProps> = ({ country }) => {
           >
             <CallIcon />
             <Text style={styles.emergencyButtonItemText}>
-              EU Emergency - {country?.emergency?.emergency}
+              Emergency - {country?.emergency?.emergency}
             </Text>
           </TouchableOpacity>
         ) : null}

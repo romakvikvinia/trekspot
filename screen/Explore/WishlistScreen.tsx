@@ -226,7 +226,7 @@ export const WishlistScreen = () => {
                       showsHorizontalScrollIndicator={false}
                       showsVerticalScrollIndicator={false}
                       contentContainerStyle={{
-                        paddingHorizontal: 15,
+                        paddingHorizontal: 20,
                         paddingTop: 15,
                         paddingBottom: 0,
                       }}
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     color: COLORS.primaryDark,
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
   },
   countryItemActionButton: {
     width: 30,

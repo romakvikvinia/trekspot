@@ -28,6 +28,7 @@ import { Loader } from "../../common/ui/Loader";
 import { NotFound } from "../../components/common/NotFound";
 import { styles } from "../../common/components/_styles";
 import { COLORS, SIZES } from "../../styles/theme";
+import { globalStyles } from "../../styles/globalStyles";
 
 export const TripDishes = () => {
   const navigation = useNavigation();
@@ -51,21 +52,21 @@ export const TripDishes = () => {
 
   return (
     <SafeAreaView style={dishStyles.safeArea}>
-      <View style={dishStyles.header}>
+      <View style={globalStyles.screenHeader}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
-          style={dishStyles.backButton}
+          style={globalStyles.screenHeaderBackButton}
         >
           <BackIcon size="30" />
         </TouchableOpacity>
 
-        <Text style={dishStyles.destination}>National dishes</Text>
-        <TouchableOpacity style={dishStyles.backButton}></TouchableOpacity>
+        <Text style={globalStyles.screenTitle}>National dishes</Text>
+        <TouchableOpacity style={globalStyles.screenHeaderBackButton}></TouchableOpacity>
       </View>
 
       {!isLoading && !data?.dishes && <NotFound />}
 
-      {isLoading && <Loader isLoading={isLoading} background="#F2F2F7" />}
+      {isLoading && <Loader isLoading={isLoading} size="small" background="#F2F2F7" />}
       {!isLoading && (
         <View
           style={{
@@ -85,7 +86,9 @@ export const TripDishes = () => {
                     backgroundColor: "#fafafa",
                     marginRight: index % 2 === 0 ? "auto" : undefined,
                     marginLeft: index % 2 === 1 ? "auto" : undefined,
-                  },
+                    marginTop: 0,
+                    marginBottom: 15
+                   },
                 ]}
                 key={item.score}
               >
@@ -165,7 +168,7 @@ export const TripDishes = () => {
             estimatedItemSize={50}
             contentContainerStyle={{
               paddingHorizontal: 15,
-              paddingTop: 15,
+              paddingTop: 25,
             }}
             showsVerticalScrollIndicator={false}
           />

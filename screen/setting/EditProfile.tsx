@@ -27,25 +27,25 @@ export const EditoProfile: React.FC<SettingProps> = ({}) => {
     <>
       <View style={styles.safeArea}>
         <KeyboardAvoidingView
-          // behavior="padding"
           behavior={Platform.OS == "ios" ? "padding" : "height"}
-          // keyboardVerticalOffset={10}
           style={styles.screen}
         >
-          <View style={styles.header}>
+          <View style={globalStyles.screenHeader}>
             <TouchableOpacity
               onPress={() => navigation.goBack()}
-              style={styles.backButton}
+              style={globalStyles.screenHeaderBackButton}
             >
               <BackIcon size="30" />
             </TouchableOpacity>
 
-            <Text style={styles.title}>Edit profile</Text>
-            <TouchableOpacity style={styles.backButton}></TouchableOpacity>
+            <Text style={globalStyles.screenTitle}>National dishes</Text>
+            <TouchableOpacity
+              style={globalStyles.screenHeaderBackButton}
+            ></TouchableOpacity>
           </View>
 
           <ScrollView
-            style={{ flex: 1, marginTop: 15 }}
+            style={{ flex: 1, paddingTop: 25 }}
             contentContainerStyle={{ paddingHorizontal: 15 }}
           >
             <View style={[styles.item]}>
@@ -54,7 +54,7 @@ export const EditoProfile: React.FC<SettingProps> = ({}) => {
                 placeholder="Name"
                 autoCapitalize="none"
                 returnKeyType="next"
-                style={{borderWidth: 2}}
+                style={{ borderWidth: 2 }}
                 // value={formik.values.email}
                 // onChangeText={formik.handleChange("email")}
                 // onBlur={formik.handleBlur("email")}
@@ -66,7 +66,7 @@ export const EditoProfile: React.FC<SettingProps> = ({}) => {
                 placeholder="Sure name"
                 autoCapitalize="none"
                 returnKeyType="next"
-                style={{borderWidth: 2}}
+                style={{ borderWidth: 2 }}
                 // value={formik.values.email}
                 // onChangeText={formik.handleChange("email")}
                 // onBlur={formik.handleBlur("email")}
@@ -79,7 +79,7 @@ export const EditoProfile: React.FC<SettingProps> = ({}) => {
                 placeholder="Email"
                 autoCapitalize="none"
                 returnKeyType="next"
-                style={{borderWidth: 2}}
+                style={{ borderWidth: 2 }}
                 // value={formik.values.email}
                 // onChangeText={formik.handleChange("email")}
                 // onBlur={formik.handleBlur("email")}

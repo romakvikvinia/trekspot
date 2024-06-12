@@ -33,20 +33,21 @@ export const ResetPassword: React.FC<SettingProps> = ({}) => {
         // keyboardVerticalOffset={10}
         style={styles.screen}
       >
-        <View style={styles.header}>
+        <View style={globalStyles.screenHeader}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
-            style={styles.backButton}
+            style={globalStyles.screenHeaderBackButton}
           >
             <BackIcon size="30" />
           </TouchableOpacity>
 
-          <Text style={styles.title}>Reset password</Text>
-          <TouchableOpacity style={styles.backButton}></TouchableOpacity>
+          <Text style={globalStyles.screenTitle}>Reset password</Text>
+          <TouchableOpacity
+            style={globalStyles.screenHeaderBackButton}
+          ></TouchableOpacity>
         </View>
-
         <ScrollView
-          style={{ flex: 1, marginTop: 15 }}
+          style={{ flex: 1, paddingTop: 25 }}
           contentContainerStyle={{ paddingHorizontal: 15 }}
         >
           <View style={[styles.item]}>
@@ -56,18 +57,20 @@ export const ResetPassword: React.FC<SettingProps> = ({}) => {
               autoCapitalize="none"
               returnKeyType="next"
               secureTextEntry={isNewPasswordSecureType}
-              style={{borderWidth: 2}}
+              style={{ borderWidth: 2 }}
               // value={formik.values.email}
               // onChangeText={formik.handleChange("email")}
               // onBlur={formik.handleBlur("email")}
             />
-                <TouchableOpacity
-                activeOpacity={0.5}
-                style={styles.passwordVisibleToggle}
-                onPress={() => setIsNewPasswordSecureType(!isNewPasswordSecureType)}
-              >
-                {isNewPasswordSecureType ? <EyeNoCrossicon /> : <EyeCrossicon />}
-              </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              style={styles.passwordVisibleToggle}
+              onPress={() =>
+                setIsNewPasswordSecureType(!isNewPasswordSecureType)
+              }
+            >
+              {isNewPasswordSecureType ? <EyeNoCrossicon /> : <EyeCrossicon />}
+            </TouchableOpacity>
           </View>
           <View style={[styles.item]}>
             <TInput
@@ -76,25 +79,25 @@ export const ResetPassword: React.FC<SettingProps> = ({}) => {
               autoCapitalize="none"
               secureTextEntry={isSecureType}
               returnKeyType="next"
-              style={{borderWidth: 2}}
+              style={{ borderWidth: 2 }}
               // value={formik.values.email}
               // onChangeText={formik.handleChange("email")}
               // onBlur={formik.handleBlur("email")}
             />
-              <TouchableOpacity
-                activeOpacity={0.5}
-                style={styles.passwordVisibleToggle}
-                onPress={() => setIsSecureType(!isSecureType)}
-              >
-                {isSecureType ? <EyeNoCrossicon /> : <EyeCrossicon />}
-              </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              style={styles.passwordVisibleToggle}
+              onPress={() => setIsSecureType(!isSecureType)}
+            >
+              {isSecureType ? <EyeNoCrossicon /> : <EyeCrossicon />}
+            </TouchableOpacity>
           </View>
 
           <TouchableOpacity
             activeOpacity={0.1}
             style={[
               globalStyles.buttonItemPrimary,
-              
+
               // "password" in formik.errors ||
               // "email" in formik.errors ||
               // formik.isSubmitting

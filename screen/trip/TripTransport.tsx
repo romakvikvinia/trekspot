@@ -30,7 +30,7 @@ export const TripTransport = () => {
         </TouchableOpacity>
 
         <Text style={globalStyles.screenTitle}>Transport</Text>
-        <TouchableOpacity style={styles.backButton}></TouchableOpacity>
+        <TouchableOpacity style={globalStyles.screenHeaderBackButton}></TouchableOpacity>
       </View>
 
       <ScrollView
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 20,
-    fontWeight: "600",
+    fontWeight: "bold",
     color: COLORS.black,
     marginTop: 25,
      marginBottom: 10

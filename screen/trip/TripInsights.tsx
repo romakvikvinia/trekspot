@@ -46,7 +46,7 @@ export const TripInsights: React.FC<TripProps> = ({ route }) => {
         </TouchableOpacity>
 
         <Text style={globalStyles.screenTitle}>Dubai</Text>
-        <TouchableOpacity style={styles.backButton}></TouchableOpacity>
+        <TouchableOpacity style={globalStyles.screenHeaderBackButton}></TouchableOpacity>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ marginTop: 25 }}></View>
@@ -62,7 +62,7 @@ export const TripInsights: React.FC<TripProps> = ({ route }) => {
             <FlashList
               horizontal
               contentContainerStyle={{
-                paddingHorizontal: 15,
+                paddingHorizontal: 20,
               }}
               showsHorizontalScrollIndicator={false}
               data={[
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
   },
   headingItem: {
     position: "relative",
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
   },
   shapeBg: {
     position: "absolute",
