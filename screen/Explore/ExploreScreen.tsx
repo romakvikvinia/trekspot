@@ -16,6 +16,7 @@ import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes"
 import {
   useCountriesQuery,
   useGetCitiesQuery,
+  useGetRandomCountriesGroupedByContinentQuery,
   useRandomSightQuery,
 } from "../../api/api.trekspot";
 
@@ -47,6 +48,11 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
 
   const { data: randomSightsData, isLoading: isRandomSightsLoading } =
     useRandomSightQuery({ take: 10 });
+
+  const {
+    data: randomCountriesByContinent,
+    isLoading: isRandomCountriesByContinentLoading,
+  } = useGetRandomCountriesGroupedByContinentQuery();
 
   /**
    * Transform data
@@ -126,7 +132,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
               title="Popular Countries"
               countries={(popularCountries && popularCountries.countries) || []}
               seeAllItems={false}
-              popularCountriesLoading={popularCountriesLoading}
+              isLoading={popularCountriesLoading}
             />
 
             {/**
@@ -151,9 +157,53 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
               items={(randomSightsData && randomSightsData.randomSights) || []}
               title="Top sights"
               isRandomSightsLoading={isRandomSightsLoading}
+              seeAllItems
             />
-
-            {/* <DestinationContainer title="South America" countries={[]} /> */}
+            {/*
+             * Countries by Continent with random
+             *
+             */}
+            <DestinationContainer
+              isLoading={isRandomCountriesByContinentLoading}
+              title="Asia"
+              countries={randomCountriesByContinent?.groupedCountry.asia || []}
+              seeAllItems={false}
+            />
+            <DestinationContainer
+              isLoading={isRandomCountriesByContinentLoading}
+              title="Africa"
+              countries={
+                randomCountriesByContinent?.groupedCountry.africa || []
+              }
+            />
+            <DestinationContainer
+              isLoading={isRandomCountriesByContinentLoading}
+              title="Europe"
+              countries={
+                randomCountriesByContinent?.groupedCountry.europe || []
+              }
+            />
+            <DestinationContainer
+              isLoading={isRandomCountriesByContinentLoading}
+              title="Oceania"
+              countries={
+                randomCountriesByContinent?.groupedCountry.oceania || []
+              }
+            />
+            <DestinationContainer
+              isLoading={isRandomCountriesByContinentLoading}
+              title="South America"
+              countries={
+                randomCountriesByContinent?.groupedCountry.southAmerica || []
+              }
+            />
+            <DestinationContainer
+              isLoading={isRandomCountriesByContinentLoading}
+              title="North America"
+              countries={
+                randomCountriesByContinent?.groupedCountry.northAmerica || []
+              }
+            />
           </ScrollView>
         </KeyboardAvoidingView>
       </View>
