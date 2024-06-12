@@ -21,7 +21,7 @@ interface DestinationContainerProps {
   title: string;
   countries: CountryType[];
   seeAllItems?: boolean;
-  popularCountriesLoading: boolean;
+  isLoading: boolean;
 }
 
 interface IState {
@@ -34,8 +34,8 @@ type ExploreStackNavigationProp =
 export const DestinationContainer: React.FC<DestinationContainerProps> = ({
   countries,
   title,
-  seeAllItems = true,
-  popularCountriesLoading,
+  seeAllItems = false,
+  isLoading,
 }) => {
   const navigation = useNavigation<ExploreStackNavigationProp>();
 
@@ -54,7 +54,7 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
             </TouchableOpacity>
           )}
         </View>
-        {!popularCountriesLoading ? (
+        {!isLoading ? (
           <ScrollView
             horizontal
             style={styles.contentBox}
