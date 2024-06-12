@@ -36,7 +36,7 @@ export const Item = ({ item, handleDetailOfCountry, boxBg }) => {
               },
             ]}
           >
-            {item?.capital}
+            {item?.type}
           </Text>
         </View>
       </View>
@@ -59,7 +59,7 @@ export const SearchResult = ({ data, handleChange }) => {
       <FlashList
         data={data.slice(0, 8)}
         renderItem={({ item }) => (
-          <Item  item={item} handleDetailOfCountry={handleDetailOfCountry} />
+          <Item item={item} handleDetailOfCountry={handleDetailOfCountry} />
         )}
         estimatedItemSize={200}
         horizontal={false}

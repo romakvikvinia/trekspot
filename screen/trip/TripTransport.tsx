@@ -14,21 +14,22 @@ import Constants from "expo-constants";
 import { COLORS, SIZES } from "../../styles/theme";
 import { useNavigation } from "@react-navigation/native";
 import RenderHTML from "react-native-render-html";
+import { globalStyles } from "../../styles/globalStyles";
 
 export const TripTransport = () => {
   const navigation = useNavigation();
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.header}>
+     <View style={globalStyles.screenHeader}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
-          style={styles.backButton}
+          style={globalStyles.screenHeaderBackButton}
         >
           <BackIcon size="30" />
         </TouchableOpacity>
 
-        <Text style={styles.destination}>Transport</Text>
+        <Text style={globalStyles.screenTitle}>Transport</Text>
         <TouchableOpacity style={styles.backButton}></TouchableOpacity>
       </View>
 
@@ -37,6 +38,9 @@ export const TripTransport = () => {
         contentContainerStyle={{ paddingHorizontal: 20 }}
         selectable
       >
+        <Text style={styles.heading}>
+           General info
+        </Text>
         <RenderHTML
           key={"topic"}
           contentWidth={SIZES.width}

@@ -37,7 +37,6 @@ export const TripActivitiesSelect = ({
   }, [data, trip]);
 
   const showTopSight = (sight:object) => {
-    console.log("cat", sight)
     setTopSightDetail(sight)
   }
 

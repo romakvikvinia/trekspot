@@ -1,9 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
+import * as Haptics from "expo-haptics";
 import {
-    Platform,
+  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -13,163 +14,277 @@ import {
 } from "react-native";
 import { useLazyGetSightsQuery } from "../../api/api.trekspot";
 import { Loader } from "../../common/ui/Loader";
+import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
 import { globalStyles } from "../../styles/globalStyles";
 import { COLORS } from "../../styles/theme";
-import { BackIcon, Mark2, PinIcon, StarIcon, VisitedIcon } from "../../utilities/SvgIcons.utility";
+import {
+  BackIcon,
+  Mark2,
+  PinIcon,
+  StarIcon,
+  VisitedIcon,
+} from "../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "../trip/_tripDetailStyles";
+import { NotFound } from "../../components/common/NotFound";
 
 export const WishlistScreen = () => {
   const navigation = useNavigation();
 
+  const [topSightDetail, setTopSightDetail] = useState(null);
   const [getSights, { data, isLoading }] = useLazyGetSightsQuery();
 
   useEffect(() => {
     getSights({ iso2: "DE", city: "Berlin" });
   }, []);
 
+  const handleTopSightClick = (sight) => {
+    setTopSightDetail(sight);
+  };
+
+  const handleClear = useCallback(() => {
+    setTopSightDetail(null);
+  }, []);
+  
+
   return (
-    <SafeAreaView style={globalStyles.safeArea}>
-      <View style={globalStyles.screenHeader}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={globalStyles.screenHeaderBackButton}
+    <>
+      <SafeAreaView style={globalStyles.safeArea}>
+        <View style={globalStyles.screenHeader}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={globalStyles.screenHeaderBackButton}
+          >
+            <BackIcon size="30" />
+          </TouchableOpacity>
+
+          <Text style={globalStyles.screenTitle}>Bucket list</Text>
+          <TouchableOpacity
+            style={globalStyles.screenHeaderBackButton}
+          ></TouchableOpacity>
+        </View>
+
+        {isLoading ? (
+          <Loader isLoading={isLoading} size="small" background="#F2F2F7" />
+        ) : null}
+        
+        {/* In case no data */}
+        {/* <View style={{minHeight: 300, justifyContent: "center"}}> 
+          <NotFound text="Your bucket list is looking a little empty! Let's find an amazing adventure to add to it." />
+        </View> */}
+
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 30 }}
         >
-          <BackIcon size="30" />
-        </TouchableOpacity>
-
-        <Text style={globalStyles.screenTitle}>Bucketlist</Text>
-        <TouchableOpacity
-          style={globalStyles.screenHeaderBackButton}
-        ></TouchableOpacity>
-      </View>
-
-      {isLoading ? <Loader isLoading={isLoading} size="large" background="" /> : null}
-
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom: 30}}>
-        {!isLoading &&
-          data &&
-          Object.keys(data).map((category) => {
-            return (
-              <View style={styles.wishlistRow}>
-                <Text style={styles.wishlistRowTitle}>{category}</Text>
-                <View style={{ minHeight: 10 }}>
-                  <FlashList
-                    horizontal
-                    data={data?.[category]}
-                    keyExtractor={(item, index) => `${item.title}-${index}`}
-                    renderItem={({ item, index }) => (
-                      <TouchableOpacity
-                        activeOpacity={0.7}
-                        style={[
-                          tripDetailStyles.sightItem,
-                          { padding: 0, width: 200, marginLeft: 0, marginBottom: 0, marginRight: 15 },
-                        ]}
-                        // onPress={() => handleTopSightClick(item)}
-                      >
-                         <TouchableOpacity
+          {!isLoading &&
+            data &&
+            Object.keys(data).map((category) => {
+              return (
+                <View style={styles.wishlistRow}>
+                  <Text style={styles.wishlistRowTitle}>Brazil</Text>
+                  <View style={{ minHeight: 10 }}>
+                    <FlashList
+                      horizontal
+                      data={data?.[category]}
+                      keyExtractor={(item, index) => `${item.title}-${index}`}
+                      renderItem={({ item, index }) => (
+                        <>
+                          <TouchableOpacity
+                            activeOpacity={0.7}
                             style={[
+                              tripDetailStyles.sightItem,
+                              {
+                                padding: 0,
+                                width: 200,
+                                marginLeft: 0,
+                                marginBottom: 0,
+                                marginRight: 15,
+                              },
+                            ]}
+                            onPress={() => {
+                              handleTopSightClick(item);
+                              Haptics.impactAsync(
+                                Haptics.ImpactFeedbackStyle.Light
+                              );
+                            }}
+                          >
+                      
+                            <TouchableOpacity
+                              style={[
                                 styles.countryItemActionButton,
                                 // state.isVisited ? styles.countryActive : null,
-                            ]}
-                            // onPress={() => handleVisited(iso2)}
+                              ]}
+                              onPress={() =>
+                                Haptics.impactAsync(
+                                  Haptics.ImpactFeedbackStyle.Light
+                                )
+                              }
                             >
-                               <Mark2 color="#fff" />
+                              <Mark2 color={COLORS.white} />
                             </TouchableOpacity>
-                        <Image
-                          style={{
-                            width: 200,
-                            height: 140,
-                            borderRadius: 10,
-                            borderBottomLeftRadius: 0,
-                            borderBottomRightRadius: 0,
-                          }}
-                          resizeMode="cover"
-                          cachePolicy="memory-disk"
-                          source={
-                            item?.image?.url
-                              ? {
-                                  uri: item?.image?.url,
-                                }
-                              : require("../../assets/no-image.png")
-                          }
-                          key={`img-${item?.title}`}
-                        ></Image>
+                            <Image
+                              style={{
+                                width: 200,
+                                height: 140,
+                                borderRadius: 10,
+                                borderBottomLeftRadius: 0,
+                                borderBottomRightRadius: 0,
+                              }}
+                              contentFit="cover"
+                              cachePolicy="memory-disk"
+                              source={
+                                item?.image?.url
+                                  ? {
+                                      uri: item?.image?.url,
+                                    }
+                                  : require("../../assets/no-image.png")
+                              }
+                              key={`img-${item?.title}`}
+                            ></Image>
 
-                        <View
-                          style={[
-                            tripDetailStyles.sightDetails,
-                            {
-                              flexDirection: "column",
-                              marginTop: 10,
-                              paddingHorizontal: 15,
-                              paddingBottom: 10,
-                              marginBottom: 0
-                            },
-                          ]}
-                        >
-                          <Text style={tripDetailStyles.sightTitle} numberOfLines={1}>
-                            {item?.title}
-                          </Text>
-                          <View style={tripDetailStyles.ratingLabel}>
-                            {item?.rate ? (
-                              <>
-                                <View
-                                  style={{
-                                    position: "relative",
-                                    top: -1,
-                                    opacity: 0.8,
-                                    marginRight: 3,
-                                  }}
-                                >
-                                  <StarIcon color="#FFBC3E" />
-                                </View>
-                                <Text style={[tripDetailStyles.ratingText]}>
-                                  {item?.rate}
+                            <View
+                              style={[
+                                tripDetailStyles.sightDetails,
+                                {
+                                  flexDirection: "column",
+                                  marginTop: 10,
+                                  paddingHorizontal: 15,
+                                  paddingBottom: 10,
+                                  marginBottom: 0,
+                                },
+                              ]}
+                            >
+                            
+                              <Text
+                                style={tripDetailStyles.sightTitle}
+                                numberOfLines={1}
+                              >
+                                {item?.title}
+                              </Text>
+                              <Text
+                                style={[tripDetailStyles.sightTitle, {fontSize:14,color: COLORS.gray, marginTop: 5}]}
+                                numberOfLines={1}
+                              >
+                                {item?.city}
+                              </Text>
+                              <View style={tripDetailStyles.ratingLabel}>
+                                <Text style={{fontSize: 12, color: COLORS.gray, marginRight: 5}}>
+                                  {item?.category}
                                 </Text>
-                              </>
-                            ) : null}
-                          </View>
-                        </View>
-                      </TouchableOpacity>
-                    )}
-                    estimatedItemSize={200}
-                    showsHorizontalScrollIndicator={false}
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{
-                      paddingHorizontal: 15,
-                      paddingTop: 15,
-                      paddingBottom: 0,
-                    }}
-                  />
+                                {item?.rate ? (
+                                  <>
+                                    <View
+                                      style={{
+                                        position: "relative",
+                                        top: -1,
+                                        opacity: 0.8,
+                                        marginRight: 3,
+                                      }}
+                                    >
+                                      <StarIcon color="#FFBC3E" />
+                                    </View>
+                                    <Text style={[tripDetailStyles.ratingText]}>
+                                      {item?.rate}
+                                    </Text>
+                                  </>
+                                ) : null}
+                              </View>
+                            </View>
+                            <View style={styles.actionButtons}>
+                              <TouchableOpacity
+                                onPress={() => handleTopSightClick(item)}
+                                activeOpacity={0.7}
+                                style={[
+                                  styles.buttonItem,
+                                  { borderBottomLeftRadius: 10 },
+                                ]}
+                              >
+                                <Text style={styles.buttonItemText}>
+                                  Details
+                                </Text>
+                              </TouchableOpacity>
+
+                              <TouchableOpacity
+                                style={[
+                                  styles.buttonItem,
+                                  {
+                                    backgroundColor: "#ffdbdb",
+                                    borderBottomRightRadius: 10,
+                                  },
+                                ]}
+                                // onPress={() => handleAddToTrip(item)}
+                              >
+                                <Text style={styles.buttonItemText}>
+                                  Remove
+                                </Text>
+                              </TouchableOpacity>
+                            </View>
+                          </TouchableOpacity>
+                        </>
+                      )}
+                      estimatedItemSize={200}
+                      showsHorizontalScrollIndicator={false}
+                      showsVerticalScrollIndicator={false}
+                      contentContainerStyle={{
+                        paddingHorizontal: 15,
+                        paddingTop: 15,
+                        paddingBottom: 0,
+                      }}
+                    />
+                  </View>
                 </View>
-              </View>
-            );
-          })}
-      </ScrollView>
-    </SafeAreaView>
+              );
+            })}
+        </ScrollView>
+      </SafeAreaView>
+
+      {topSightDetail ? (
+        <SightDetailModal data={topSightDetail} closeCallBack={handleClear} />
+      ) : null}
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   wishlistRow: {
-    marginTop: 25
+    marginTop: 25,
   },
   wishlistRowTitle: {
     fontSize: 18,
     fontWeight: "600",
     color: COLORS.primaryDark,
-    paddingHorizontal: 15
+    paddingHorizontal: 15,
   },
   countryItemActionButton: {
     width: 30,
     height: 30,
     borderRadius: 50,
-    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    backgroundColor: COLORS.primary,
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
     right: 10,
     top: 10,
     zIndex: 3,
+  },
+  actionButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 0,
+    width: 200,
+  },
+  buttonItem: {
+    backgroundColor: COLORS.lightGray,
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    flex: 1,
+    textAlign: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  buttonItemText: {
+    color: COLORS.black,
+    fontSize: 12,
+    fontWeight: "500",
   },
 });

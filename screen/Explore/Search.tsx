@@ -15,10 +15,7 @@ import { BackIcon, ClearIcon } from "../../utilities/SvgIcons.utility";
 import Constants from "expo-constants";
 import { Loader } from "../../common/ui/Loader";
 import { useNavigation } from "@react-navigation/native";
-import { CountriesList } from "../../utilities/countryList";
-import { NotFound } from "../../components/common/NotFound";
-import { useGetCitiesQuery } from "../../api/api.trekspot";
-
+ 
 export const Search = () => {
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState("");
@@ -35,15 +32,26 @@ export const Search = () => {
     console.log("cid", cId)
   }
 
-  const filteredCountries =
-    searchValue && searchValue.length > 1
-      ? CountriesList.filter(
-          (i) =>
-            i.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-            i.capital.toLowerCase().includes(searchValue.toLowerCase())
-        )
-      : CountriesList;
+  const list = [
+    {
+      id: 0,
+      name: "Georgia",
+      type: "Country"
+    },
+    {
+      id: 1,
+      name: "Berlin",
+      type: "City in Germany",
+    },
+    {
+      id: 2,
+      name: "Mtatsminda",
+      type: "Sight in Tbilisi",
+    }
+  ]
+ 
 
+ 
   return (
     <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView
@@ -79,7 +87,7 @@ export const Search = () => {
         {/* <View style={{marginTop: 50}}>
             <Loader background="" isLoading={true} size="small" />
         </View> */}
-        <SearchResult data={filteredCountries} handleChange={handleSelectDestination} />
+        <SearchResult data={list} handleChange={handleSelectDestination} />
 
         {/* <View style={styles.notesWarning}>
           <Text style={styles.noteText}>

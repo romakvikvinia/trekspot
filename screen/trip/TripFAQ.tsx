@@ -8,10 +8,10 @@ import {
 } from "react-native";
 import { BackIcon } from "../../utilities/SvgIcons.utility";
 import Constants from "expo-constants";
-import { FlashList } from "@shopify/flash-list";
 import { FaqItem } from "../../common/components/Destination/_FaqItem";
 import { COLORS } from "../../styles/theme";
 import { useNavigation } from "@react-navigation/native";
+import { globalStyles } from "../../styles/globalStyles";
 
 export const TripFAQ = () => {
   const navigation = useNavigation();
@@ -80,15 +80,15 @@ export const TripFAQ = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.header}>
+    <View style={globalStyles.screenHeader}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
-          style={styles.backButton}
+          style={globalStyles.screenHeaderBackButton}
         >
           <BackIcon size="30" />
         </TouchableOpacity>
 
-        <Text style={styles.destination}>FAQ</Text>
+        <Text style={globalStyles.screenTitle}>FAQ</Text>
         <TouchableOpacity style={styles.backButton}></TouchableOpacity>
       </View>
 

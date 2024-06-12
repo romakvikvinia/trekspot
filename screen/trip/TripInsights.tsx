@@ -18,6 +18,7 @@ import { useNavigation } from "@react-navigation/native";
 import { BackIcon } from "../../utilities/SvgIcons.utility";
 import { FlashList } from "@shopify/flash-list";
 import { COLORS } from "../../styles/theme";
+import { globalStyles } from "../../styles/globalStyles";
 
 interface TripProps {}
 
@@ -36,19 +37,19 @@ export const TripInsights: React.FC<TripProps> = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.header}>
+      <View style={globalStyles.screenHeader}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
-          style={styles.backButton}
+          style={globalStyles.screenHeaderBackButton}
         >
           <BackIcon size="30" />
         </TouchableOpacity>
 
-        <Text style={styles.destination}>Germany</Text>
+        <Text style={globalStyles.screenTitle}>Dubai</Text>
         <TouchableOpacity style={styles.backButton}></TouchableOpacity>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{ marginTop: 15 }}></View>
+        <View style={{ marginTop: 25 }}></View>
 
         <View style={[styles.topicsRow, { marginTop: 0 }]}>
           <View style={styles.headingItem}>
@@ -251,7 +252,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 10,
     left: 15,
-    bottom: 12,
+    bottom: 15,
     borderRadius: 10,
     opacity: 0.6
   },

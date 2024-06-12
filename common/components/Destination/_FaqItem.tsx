@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   faqHeaderText: {
     color: "#444444",
     fontSize: 15,
-    fontWeight: "500",
+    fontWeight: "600",
   },
   faqBody: {
     paddingHorizontal: 15,
