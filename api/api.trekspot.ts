@@ -29,6 +29,8 @@ import {
   RandomSightsArgsType,
   CountryDishesResponseType,
   CountryDishesArgsType,
+  SearchResponseType,
+  SearchArgsType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -678,6 +680,40 @@ export const trekSpotApi = createApi({
       }),
     }),
 
+    /**
+     * Get dishes by ISO2 code
+     */
+
+    search: builder.query<SearchResponseType, SearchArgsType>({
+      query: ({ skip = 0, take = 100, search = "" }) => ({
+        variables: { skip, take, search },
+        document: gql`
+          query ($search: String) {
+            search(input: { search: $search }) {
+              __typename
+              ... on City {
+                id
+                city
+                country
+                iso2
+                image {
+                  url
+                }
+              }
+              ... on Country {
+                id
+                name
+                iso2
+                image {
+                  url
+                }
+              }
+            }
+          }
+        `,
+      }),
+    }),
+
     //
   }),
 });
@@ -701,4 +737,5 @@ export const {
   useGetRandomCountriesGroupedByContinentQuery,
   useRandomSightQuery,
   useDishesByISO2Query,
+  useLazySearchQuery,
 } = trekSpotApi;

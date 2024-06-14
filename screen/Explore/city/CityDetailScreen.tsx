@@ -12,35 +12,36 @@ import {
   Mark2,
   StarIcon,
 } from "../../../utilities/SvgIcons.utility";
-import { SightDetailModal } from "../sights/SightDetailModal";
-import { SightsContainer } from "../sights/SightsContainer";
-import { exploreStyles } from "../sights/_exploreStyles";
-import { styles } from "../../../common/components/_styles";
-import { SightItem } from "../sights/SightItem";
+
 import { SIZES } from "../../../styles/theme";
-import { useNavigation } from "@react-navigation/native";
+
 import Constants from "expo-constants";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
+import { exploreStyles } from "../../../components/explore/sights/_exploreStyles";
+import { SightDetailModal } from "../../../components/explore/sights/SightDetailModal";
+import { SightItem } from "../../../components/explore/sights/SightItem";
+import { SightsContainer } from "../../../components/explore/sights/SightsContainer";
 
-type CityDetailProps = {
-  city: CityType;
-};
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { ExploreRoutesStackParamList } from "../../../routes/explore/ExploreRoutes";
+import { styles } from "../../../common/components/_styles";
+
+type Props = NativeStackScreenProps<ExploreRoutesStackParamList, "CityDetail">;
 
 interface IState {
   sight: SightType | null;
 }
 
-export const CityDetail: React.FC<CityDetailProps> = ({ route }) => {
-  const navigation = useNavigation();
-  const { city } = route?.params;
+export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
+  const { city, iso2, cityName } = route?.params;
   const [state, setState] = useState<IState>({ sight: null });
-  const [getSights, { data, isLoading }] = useLazyGetSightsQuery();
-  console.log("city",city)
- 
+  const [getSights, { data, isLoading, isError }] = useLazyGetSightsQuery();
+  console.log("city", city);
+
   useEffect(() => {
-    getSights({ iso2: city.iso2, city: city.city });
-  }, [city]);
+    if (iso2) getSights({ iso2, city: cityName || city?.city });
+  }, [city, iso2]);
 
   const handleSetSightItem = useCallback((sight: SightType) => {
     setState((prevState) => ({ ...prevState, sight }));
@@ -53,6 +54,8 @@ export const CityDetail: React.FC<CityDetailProps> = ({ route }) => {
   if (sights && data && "Top Sights" in data && data["Top Sights"]) {
     delete sights["Top Sights"];
   }
+
+  console.log("topSights", isLoading, isError);
   return (
     <View style={{ flex: 1, backgroundColor: "#f8f8f8" }}>
       <ScrollView style={{ flex: 1 }}>
@@ -177,41 +180,40 @@ export const CityDetail: React.FC<CityDetailProps> = ({ route }) => {
                   zIndex: 2,
                 }}
               >
-                {city?.images?.length ? city.images.map((item, i) =>
+                {city?.images?.length ? (
+                  city.images.map((item, i) => (
+                    <ImageBackground
+                      style={styles.box}
+                      resizeMode="cover"
+                      source={{
+                        uri: item.url,
+                      }}
+                      key={`slide-${item.id}-${city.id}`}
+                    >
+                      <LinearGradient
+                        style={styles.gradientWrapper}
+                        colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.5)"]}
+                      ></LinearGradient>
+                    </ImageBackground>
+                  ))
+                ) : (
                   <ImageBackground
                     style={styles.box}
                     resizeMode="cover"
-                    source={{
-                       uri: item.url,
-                    }}
-                    key={`slide-${item.id}-${city.id}`}
+                    source={require("../../../assets/no-image.png")}
                   >
                     <LinearGradient
                       style={styles.gradientWrapper}
                       colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.5)"]}
                     ></LinearGradient>
                   </ImageBackground>
-                ) :
-                <ImageBackground
-                  style={styles.box}
-                  resizeMode="cover"
-                  source={require("../../../assets/no-image.png")}
-                >
-                <LinearGradient
-                  style={styles.gradientWrapper}
-                  colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.5)"]}
-                >
-                </LinearGradient>
-                </ImageBackground> 
-              }
+                )}
               </Swiper>
-              
+
               <View style={styles.otherInfo}>
                 {city?.city && (
                   <View style={styles.labelItem}>
-                    <Text style={styles.labelItemText}>
-                      {city.city}
-                    </Text>
+                    <Text style={styles.labelItemText}>{city.city}</Text>
                   </View>
                 )}
 
@@ -227,9 +229,7 @@ export const CityDetail: React.FC<CityDetailProps> = ({ route }) => {
                       >
                         <StarIcon size={15} color="#FFBC3E" />
                       </View>
-                      <Text style={styles.ratingText}>
-                        {city.rate} /
-                      </Text>
+                      <Text style={styles.ratingText}>{city.rate} /</Text>
                     </>
                   )}
                   {city?.visitors && (
@@ -239,7 +239,6 @@ export const CityDetail: React.FC<CityDetailProps> = ({ route }) => {
                   )}
                 </View>
               </View>
-            
             </View>
 
             {/* Top sights */}

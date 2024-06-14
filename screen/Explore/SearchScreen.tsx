@@ -1,23 +1,27 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
   StyleSheet,
-  Text,
   TextInput,
   TouchableOpacity,
   View,
+  Text,
 } from "react-native";
 import { SearchResult } from "../../common/components/SearchResult";
 import { COLORS } from "../../styles/theme";
 import { BackIcon, ClearIcon } from "../../utilities/SvgIcons.utility";
 import Constants from "expo-constants";
 import { Loader } from "../../common/ui/Loader";
-import { useNavigation } from "@react-navigation/native";
- 
-export const Search = () => {
-  const navigation = useNavigation();
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
+import { useLazySearchQuery } from "../../api/api.trekspot";
+
+type Props = NativeStackScreenProps<ExploreRoutesStackParamList, "Search">;
+
+export const SearchScreen = ({ navigation }: Props) => {
+  const [fetchData, { data, isLoading, isError }] = useLazySearchQuery();
   const [searchValue, setSearchValue] = useState("");
 
   const handleSearch = useCallback((e: string) => {
@@ -28,30 +32,28 @@ export const Search = () => {
     setSearchValue("");
   }, []);
 
-  const handleSelectDestination = (cId) => {
-    console.log("cid", cId)
-  }
-
-  const list = [
-    {
-      id: 0,
-      name: "Georgia",
-      type: "Country"
-    },
-    {
-      id: 1,
-      name: "Berlin",
-      type: "City in Germany",
-    },
-    {
-      id: 2,
-      name: "Mtatsminda",
-      type: "Sight in Tbilisi",
+  const handleSelectDestination = ({
+    countryId,
+    iso2,
+    city,
+  }: Partial<{
+    countryId: string;
+    iso2: string;
+    city: string;
+  }>) => {
+    if (countryId) {
+      navigation.navigate("CountryDetailScreen", { countryId });
+    } else if (city && iso2) {
+      navigation.navigate("CityDetail", { cityName: city, iso2 });
     }
-  ]
- 
+  };
 
- 
+  useEffect(() => {
+    if (searchValue && searchValue.length >= 3) {
+      fetchData({ search: searchValue });
+    }
+  }, [searchValue]);
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView
@@ -84,19 +86,28 @@ export const Search = () => {
             </TouchableOpacity>
           ) : null}
         </View>
-        {/* <View style={{marginTop: 50}}>
+        {isLoading && (
+          <View style={{ marginTop: 50 }}>
             <Loader background="" isLoading={true} size="small" />
-        </View> */}
-        <SearchResult data={list} handleChange={handleSelectDestination} />
+          </View>
+        )}
 
-        {/* <View style={styles.notesWarning}>
-          <Text style={styles.noteText}>
-            Can't find destination? No worries! We're adding new ones every day,
-            so check back soon
-          </Text>
-        </View> */}
+        {!isLoading && !!data?.search.length && !!searchValue.length && (
+          <SearchResult
+            items={data?.search || []}
+            handleChange={handleSelectDestination}
+          />
+        )}
 
-       </KeyboardAvoidingView>
+        {!isLoading && data?.search.length === 0 && (
+          <View style={styles.notesWarning}>
+            <Text style={styles.noteText}>
+              Can't find destination? No worries! We're adding new ones every
+              day, so check back soon
+            </Text>
+          </View>
+        )}
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -107,12 +118,12 @@ const styles = StyleSheet.create({
     paddingTop: Constants?.statusBarHeight + 10,
   },
   notesWarning: {
-    padding: 15
+    padding: 15,
   },
   noteText: {
     fontSize: 12,
-    textAlign: 'center',
-    opacity: 0.7
+    textAlign: "center",
+    opacity: 0.7,
   },
   searchBox: {
     height: 55,

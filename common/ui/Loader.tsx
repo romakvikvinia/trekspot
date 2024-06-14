@@ -5,14 +5,22 @@ import { Center } from "./Center";
 
 interface LoaderProps {
   isLoading: boolean;
-  background: string,
-  size: string
+  background: string;
+  size?: number | "small" | "large" | undefined;
 }
 
-export const Loader: React.FC<LoaderProps> = ({ isLoading = false, background , size}) => {
+export const Loader: React.FC<LoaderProps> = ({
+  isLoading = false,
+  background,
+  size = "small",
+}) => {
   return isLoading ? (
     <Center>
-      <ActivityIndicator  size={size || "large"} color={COLORS.black} style={{backgroundColor: background || "#fff"}}  />
+      <ActivityIndicator
+        size={size || "large"}
+        color={COLORS.black}
+        style={{ backgroundColor: background || "#fff" }}
+      />
     </Center>
   ) : null;
 };
