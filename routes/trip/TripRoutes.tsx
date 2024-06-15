@@ -25,17 +25,17 @@ type TripRouteStackParamList = {
   TripInsightDetailScreen: undefined;
   TripMapViewScreen: undefined;
   NewTripAndroidScreen: undefined;
-  TripFAQ: undefined,
-  TripDishes: undefined,
-  TripTransport: undefined,
-  TripTransportation: undefined
+  TripFAQ: undefined;
+  TripDishes: undefined;
+  TripTransport: undefined;
+  TripTransportation: undefined;
 };
 
 const Stack = createStackNavigator<TripRouteStackParamList>();
 
 export type TripRouteStackNavigationProp =
   StackNavigationProp<TripRouteStackParamList>;
-  
+
 export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
   return (
     <Stack.Navigator>
@@ -46,21 +46,22 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
           headerShown: false,
         })}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="NewTripAndroidScreen"
         component={NewTripAndroid}
         options={({ route, navigation }) => ({
           headerShown: false,
         })}
       />
-      
+
       <Stack.Screen
         name="TripDetailScreen"
         component={TripDetailScreen}
         options={({ route, navigation }) => ({
           headerShown: false,
           gestureEnabled: true,
-          gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
       <Stack.Screen
@@ -69,7 +70,8 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
         options={({ route, navigation }) => ({
           headerShown: false,
           gestureEnabled: true,
-          gestureResponseDistance:  Platform.OS === 'android' ? 10 : SIZES.width - 50
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
       <Stack.Screen
@@ -78,7 +80,8 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
         options={({ route, navigation }) => ({
           headerShown: false,
           gestureEnabled: true,
-          gestureResponseDistance:  Platform.OS === 'android' ? 10 : SIZES.width - 50, 
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
       <Stack.Screen
@@ -87,7 +90,8 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
         options={({ route, navigation }) => ({
           headerShown: false,
           gestureEnabled: true,
-          gestureResponseDistance:  Platform.OS === 'android' ? 10 : SIZES.width - 50,
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
       <Stack.Screen
@@ -100,7 +104,7 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
             Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="TripDishes"
         component={TripDishes}
         options={() => ({
@@ -110,7 +114,7 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
             Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
-     <Stack.Screen
+      <Stack.Screen
         name="TripTransport"
         component={TripTransport}
         options={() => ({
@@ -120,7 +124,7 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
             Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="TripTransportation"
         component={TripEmergency}
         options={() => ({
@@ -130,7 +134,6 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
             Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
-
     </Stack.Navigator>
   );
 };

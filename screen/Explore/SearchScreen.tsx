@@ -17,6 +17,7 @@ import { Loader } from "../../common/ui/Loader";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
 import { useLazySearchQuery } from "../../api/api.trekspot";
+import { CityType } from "../../api/api.types";
 
 type Props = NativeStackScreenProps<ExploreRoutesStackParamList, "Search">;
 
@@ -34,23 +35,21 @@ export const SearchScreen = ({ navigation }: Props) => {
 
   const handleSelectDestination = ({
     countryId,
-    iso2,
     city,
   }: Partial<{
     countryId: string;
-    iso2: string;
-    city: string;
+    city: CityType;
   }>) => {
     if (countryId) {
       navigation.navigate("CountryDetailScreen", { countryId });
-    } else if (city && iso2) {
-      navigation.navigate("CityDetail", { cityName: city, iso2 });
+    } else if (city) {
+      navigation.navigate("CityDetail", { city });
     }
   };
 
   useEffect(() => {
     if (searchValue && searchValue.length >= 3) {
-      fetchData({ search: searchValue });
+      fetchData({ search: searchValue, skip: 0, take: 3 });
     }
   }, [searchValue]);
 

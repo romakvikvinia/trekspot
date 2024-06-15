@@ -34,14 +34,14 @@ interface IState {
 }
 
 export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
-  const { city, iso2, cityName } = route?.params;
+  const { city } = route?.params;
   const [state, setState] = useState<IState>({ sight: null });
   const [getSights, { data, isLoading, isError }] = useLazyGetSightsQuery();
   console.log("city", city);
 
   useEffect(() => {
-    if (iso2) getSights({ iso2, city: cityName || city?.city });
-  }, [city, iso2]);
+    if (city) getSights({ iso2: city.iso2, city: city.city });
+  }, [city]);
 
   const handleSetSightItem = useCallback((sight: SightType) => {
     setState((prevState) => ({ ...prevState, sight }));

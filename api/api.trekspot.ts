@@ -681,22 +681,28 @@ export const trekSpotApi = createApi({
     }),
 
     /**
-     * Get dishes by ISO2 code
+     * Global Search
      */
 
     search: builder.query<SearchResponseType, SearchArgsType>({
       query: ({ skip = 0, take = 100, search = "" }) => ({
         variables: { skip, take, search },
         document: gql`
-          query ($search: String) {
-            search(input: { search: $search }) {
+          query ($search: String, $skip: Int, $take: Int) {
+            search(input: { skip: $skip, take: $take, search: $search }) {
               __typename
               ... on City {
                 id
                 city
                 country
                 iso2
+                rate
+                visitors
                 image {
+                  url
+                }
+                images {
+                  id
                   url
                 }
               }
@@ -705,6 +711,37 @@ export const trekSpotApi = createApi({
                 name
                 iso2
                 image {
+                  url
+                }
+              }
+            }
+          }
+        `,
+      }),
+    }),
+
+    /**
+     * Global Search for cities
+     */
+
+    searchCities: builder.query<SearchResponseType, SearchArgsType>({
+      query: ({ skip = 0, take = 100, search = "" }) => ({
+        variables: { skip, take, search },
+        document: gql`
+          query ($search: String, $skip: Int, $take: Int) {
+            search(input: { skip: $skip, take: $take, search: $search }) {
+              ... on City {
+                id
+                city
+                country
+                iso2
+                rate
+                visitors
+                image {
+                  url
+                }
+                images {
+                  id
                   url
                 }
               }
@@ -738,4 +775,5 @@ export const {
   useRandomSightQuery,
   useDishesByISO2Query,
   useLazySearchQuery,
+  useLazySearchCitiesQuery,
 } = trekSpotApi;

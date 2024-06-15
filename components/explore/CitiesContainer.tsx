@@ -41,7 +41,6 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
   const handleCity = useCallback((city: CityType) => {
     navigation.navigate("CityDetail", {
       city,
-      iso2: city.iso2,
     });
   }, []);
 

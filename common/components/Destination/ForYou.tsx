@@ -15,6 +15,9 @@ import { ForYouCountryItem } from "../../../components/explore/ForYouCountryItem
 import { useNavigation } from "@react-navigation/native";
 import { FaqItem } from "./_FaqItem";
 
+import { ExploreRoutesStackParamList } from "../../../routes/explore/ExploreRoutes";
+import { StackNavigationProp } from "@react-navigation/stack";
+
 type ForYouPros = {
   DATA: any;
   country: CountryType;
@@ -25,8 +28,11 @@ interface IState {
   city: CityType | null;
 }
 
+type ExploreStackNavigationProp =
+  StackNavigationProp<ExploreRoutesStackParamList>;
+
 export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<ExploreStackNavigationProp>();
 
   // const modalEmbedRef = useRef(null);
 
@@ -43,9 +49,7 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
   // };
 
   const onPlaceDetailOpen = useCallback((city: CityType) => {
-    navigation.navigate("CityDetail", {
-      city,
-    });
+    navigation.navigate("CityDetail", { city });
   }, []);
 
   useEffect(() => {
@@ -55,29 +59,32 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
     });
   }, [fetchCountryCities, country]);
 
-
   const faqData = [
     {
       question: "When is the best time to visit France?",
-      answer: "<ul><li><strong>Spring (April to June):</strong> Mild weather and blooming flowers make this a great time to visit.</li><li><strong>Summer (July to August):</strong> Warm weather and long days, but it's also the peak tourist season.</li><li><strong>Autumn (September to November):</strong> Pleasant weather and fewer tourists.</li><li><strong>Winter (December to February):</strong> Best for visiting ski resorts in the Alps or experiencing Paris without the crowds.</li></ul>"
+      answer:
+        "<ul><li><strong>Spring (April to June):</strong> Mild weather and blooming flowers make this a great time to visit.</li><li><strong>Summer (July to August):</strong> Warm weather and long days, but it's also the peak tourist season.</li><li><strong>Autumn (September to November):</strong> Pleasant weather and fewer tourists.</li><li><strong>Winter (December to February):</strong> Best for visiting ski resorts in the Alps or experiencing Paris without the crowds.</li></ul>",
     },
     {
       question: "Do I need a visa to visit France?",
-      answer: "<ul><li><strong>EU Citizens:</strong> No visa is required for EU citizens.</li><li><strong>US Citizens:</strong> No visa is required for stays up to 90 days within a 180-day period.</li><li><strong>Other Nationalities:</strong> Check the French consulate website for specific visa requirements.</li></ul>"
+      answer:
+        "<ul><li><strong>EU Citizens:</strong> No visa is required for EU citizens.</li><li><strong>US Citizens:</strong> No visa is required for stays up to 90 days within a 180-day period.</li><li><strong>Other Nationalities:</strong> Check the French consulate website for specific visa requirements.</li></ul>",
     },
     {
       question: "What is the currency in France?",
-      answer: "<ul><li>The currency in France is the Euro (€).</li></ul>"
+      answer: "<ul><li>The currency in France is the Euro (€).</li></ul>",
     },
     {
       question: "What language is spoken in France?",
-      answer: "<ul><li>The official language is French. In tourist areas, many people speak English, but learning a few basic French phrases is appreciated.</li></ul>"
+      answer:
+        "<ul><li>The official language is French. In tourist areas, many people speak English, but learning a few basic French phrases is appreciated.</li></ul>",
     },
     {
       question: "What is the time zone in France?",
-      answer: "France is in the Central European Time (CET) zone, which is UTC+1. During daylight saving time (late March to late October), it is UTC+2."
-    }
-  ]
+      answer:
+        "France is in the Central European Time (CET) zone, which is UTC+1. During daylight saving time (late March to late October), it is UTC+2.",
+    },
+  ];
 
   return (
     <>
@@ -149,18 +156,20 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
         <FlashList
           contentContainerStyle={{ paddingHorizontal: 15 }}
           renderItem={({ item, ind }) => {
-            return <FaqItem item={item}/>;
+            return <FaqItem item={item} />;
           }}
           // numColumns={3}
           estimatedItemSize={20}
           data={faqData}
         />
 
-      <Text style={[styles.forYouRowTitleSub, {marginTop: 15}]}>Accommodation and Food</Text>
+        <Text style={[styles.forYouRowTitleSub, { marginTop: 15 }]}>
+          Accommodation and Food
+        </Text>
         <FlashList
           contentContainerStyle={{ paddingHorizontal: 15 }}
           renderItem={({ item, ind }) => {
-            return <FaqItem item={item}/>;
+            return <FaqItem item={item} />;
           }}
           // numColumns={3}
           estimatedItemSize={20}

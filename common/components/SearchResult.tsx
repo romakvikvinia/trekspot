@@ -2,7 +2,6 @@ import { FlashList } from "@shopify/flash-list";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORS } from "../../styles/theme";
 import { LocationLinearIcon } from "../../utilities/SvgIcons.utility";
-import { useNavigation } from "@react-navigation/native";
 import { CityType, CountryType } from "../../api/api.types";
 
 type ItemType = CountryType | CityType;
@@ -15,8 +14,7 @@ export const Item = ({
   handleChange: (
     params: Partial<{
       countryId: string;
-      iso2: string;
-      city: string;
+      city: CityType;
     }>
   ) => void;
 }) => {
@@ -33,8 +31,7 @@ export const Item = ({
           //@ts-ignore
           countryId: item.__typename === "Country" && item.id,
           //@ts-ignore
-          city: item.city,
-          iso2: item.iso2,
+          city: item,
         })
       }
       style={styles.countryItem}
@@ -81,8 +78,7 @@ export const SearchResult = ({
   handleChange: (
     params: Partial<{
       countryId: string;
-      iso2: string;
-      city: string;
+      city: CityType;
     }>
   ) => void;
 }) => {

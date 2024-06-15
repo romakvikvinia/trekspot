@@ -29,9 +29,7 @@ export type ExploreRoutesStackParamList = {
   TripQuickInsights: undefined;
   TripQuickInsightsDetail: undefined;
   CityDetail: {
-    iso2: string;
-    city?: CityType;
-    cityName?: string;
+    city: CityType;
   };
   Search: undefined;
   WishlistScreen: undefined;
