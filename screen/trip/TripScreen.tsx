@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import {
   Platform,
   ScrollView,
@@ -19,16 +19,34 @@ import {
 import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 import { NewTrip } from "./NewTrip";
-import { useNavigation } from "@react-navigation/native";
-import { Tripitem } from "./TripItem";
 
-interface TripProps {}
+import { TripItem } from "./TripItem";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
+import { useLazyMyTripsQuery } from "../../api/api.trekspot";
+import moment from "moment";
 
-export const TripScreen: React.FC<TripProps> = ({}) => {
-  const navigation = useNavigation();
+type TripProps = NativeStackScreenProps<TripRouteStackParamList, "TripsScreen">;
 
+export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
   const newTripModal = useRef<Modalize>(null);
-  const tripActivitesModal = useRef<Modalize>(null);
+
+  const [fetchDate, { data, isLoading, isError }] = useLazyMyTripsQuery();
+
+  useEffect(() => {
+    fetchDate({});
+  }, []);
+
+  const callBack = useCallback(() => {
+    fetchDate({});
+  }, []);
+
+  const upComingTrips =
+    data?.trips.filter((i) => moment(i.endAt).valueOf() > moment().valueOf()) ||
+    [];
+  const oldTrips =
+    data?.trips.filter((i) => moment(i.endAt).valueOf() < moment().valueOf()) ||
+    [];
 
   return (
     <>
@@ -51,7 +69,20 @@ export const TripScreen: React.FC<TripProps> = ({}) => {
         </View>
 
         <ScrollView style={{ flex: 1, paddingHorizontal: 15 }}>
-          {false ? (
+          {!isLoading &&
+            upComingTrips.map((i) => (
+              <TripItem key={`trip-${i.id}`} item={i} />
+            ))}
+
+          {!isLoading && (
+            <>
+              <Text style={_tripScreenStyles.headingTitle}>Past trips</Text>
+              {!isLoading &&
+                oldTrips.map((i) => <TripItem key={`trip-${i.id}`} item={i} />)}
+            </>
+          )}
+
+          {!data?.trips.length && (
             <View style={_tripScreenStyles.notFoundView}>
               <NoDestinationFoundIcon />
               <Text style={_tripScreenStyles.notFoundViewText}>
@@ -59,12 +90,6 @@ export const TripScreen: React.FC<TripProps> = ({}) => {
                 prepare for your next destination
               </Text>
             </View>
-          ) : (
-            <>
-              <Tripitem />
-                <Text style={_tripScreenStyles.headingTitle}>Past trips</Text>
-              <Tripitem />
-            </>
           )}
         </ScrollView>
       </View>
@@ -85,10 +110,7 @@ export const TripScreen: React.FC<TripProps> = ({}) => {
           }}
           modalHeight={SIZES.height}
         >
-          <NewTrip
-            newTripModalRef={newTripModal}
-            tripActivitesModal={tripActivitesModal}
-          />
+          <NewTrip newTripModalRef={newTripModal} callBack={callBack} />
         </Modalize>
       </Portal>
     </>

@@ -31,6 +31,10 @@ import {
   CountryDishesArgsType,
   SearchResponseType,
   SearchArgsType,
+  CreateTripResponseType,
+  CreateTripArgsType,
+  TripsResponseType,
+  TripsArgsType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -730,6 +734,7 @@ export const trekSpotApi = createApi({
         document: gql`
           query ($search: String, $skip: Int, $take: Int) {
             search(input: { skip: $skip, take: $take, search: $search }) {
+              __typename
               ... on City {
                 id
                 city
@@ -742,6 +747,68 @@ export const trekSpotApi = createApi({
                 }
                 images {
                   id
+                  url
+                }
+              }
+            }
+          }
+        `,
+      }),
+    }),
+
+    /**
+     * Create Trip
+     */
+
+    createTrip: builder.mutation<CreateTripResponseType, CreateTripArgsType>({
+      query: ({ name, startAt, endAt, type, cities }) => ({
+        variables: { name, startAt, endAt, type, cities },
+        document: gql`
+          mutation (
+            $name: String!
+            $startAt: DateTime!
+            $endAt: DateTime!
+            $type: TripType!
+            $cities: [ID!]!
+          ) {
+            createTrip(
+              input: {
+                name: $name
+                startAt: $startAt
+                endAt: $endAt
+                type: $type
+                cities: $cities
+              }
+            ) {
+              id
+              name
+              startAt
+              endAt
+              type
+            }
+          }
+        `,
+      }),
+    }),
+    /**
+     * My trips
+     */
+
+    myTrips: builder.query<TripsResponseType, TripsArgsType>({
+      query: ({ skip = 0, take = 10, search = "" }) => ({
+        variables: { skip, take, search },
+        document: gql`
+          query ($skip: Int, $take: Int, $search: String) {
+            trips(input: { skip: $skip, take: $take, search: $search }) {
+              id
+              name
+              startAt
+              endAt
+              type
+              cities {
+                id
+                city
+                image {
                   url
                 }
               }
@@ -776,4 +843,6 @@ export const {
   useDishesByISO2Query,
   useLazySearchQuery,
   useLazySearchCitiesQuery,
+  useCreateTripMutation,
+  useLazyMyTripsQuery,
 } = trekSpotApi;

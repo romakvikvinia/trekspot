@@ -26,7 +26,7 @@ export const SearchComponent = ({ search, setSearch, withIcon = true }) => {
         placeholder="Search cities"
         placeholderTextColor={COLORS.darkgray}
         onChangeText={(e) => setSearch(e)}
-        value={search}
+        // value={search}
       />
       {search?.length > 2 ? (
         <TouchableOpacity
@@ -37,8 +37,6 @@ export const SearchComponent = ({ search, setSearch, withIcon = true }) => {
           <CloseCircleIcon size="17" />
         </TouchableOpacity>
       ) : null}
-
-   
     </View>
   );
 };

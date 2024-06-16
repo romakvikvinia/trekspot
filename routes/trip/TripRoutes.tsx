@@ -15,12 +15,16 @@ import { TripFAQ } from "../../screen/trip/TripFAQ";
 import { TripDishes } from "../../screen/trip/TripDishes";
 import { TripTransport } from "../../screen/trip/TripTransport";
 import { TripEmergency } from "../../screen/trip/TripEmergency";
+import { CityType, TripType } from "../../api/api.types";
 
 interface TripRouteProps {}
 
-type TripRouteStackParamList = {
+export type TripRouteStackParamList = {
   TripsScreen: undefined;
-  TripDetailScreen: undefined;
+  TripDetailScreen: {
+    trip: TripType;
+    city: CityType;
+  };
   TripInsights: undefined;
   TripInsightDetailScreen: undefined;
   TripMapViewScreen: undefined;
