@@ -31,7 +31,8 @@ import { Header } from "./SubComponents/Header";
 import { TripActivityCard } from "./TripActivityCard";
 import { useLazyGetSightsQuery } from "../../api/api.trekspot";
 import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
-
+import { NoActivity } from "../../common/components/NoActivity";
+import * as Haptics from "expo-haptics";
  
 interface TripProps {}
 
@@ -108,7 +109,6 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
 
  
   const handleAddToTrip = (activity) => {
-    console.log("activity,activity",activity)
     setTrip(prevTrip => {
       const newTripData = prevTrip.data.map(day => {
         if (day.id === currentTabIndex) {
@@ -241,7 +241,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                     borderStyle: "dashed",
                     height: "96%",
                     top: 25,
-                    left: 15,
+                    left: 14,
                     borderColor: "#ddd",
                     borderRadius: 1,
                     opacity: 0.7,
@@ -261,13 +261,15 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
 
                  {item?.activities?.length < 1 ? (
                   <View style={tripDetailStyles.noActivitiesWrapper}>
-                    <Text style={tripDetailStyles.noActivitiesWrapperTitle}>
-                      You don't have activites for today
-                    </Text>
+                    <NoActivity text="You don't have activites for today" />
+                    
                     <TouchableOpacity
                       style={tripDetailStyles.addActivityButtonItem}
                       activeOpacity={0.7}
-                      onPress={() => onActivitiesModalOpen()}
+                      onPress={() => {
+                        onActivitiesModalOpen();
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      }}
                     >
                       <Text style={tripDetailStyles.addActivityButtonText}>
                         Add activity
@@ -291,7 +293,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
 
       {trip?.data[currentTabIndex]?.activities?.length > 0 ? (
         <TouchableOpacity
-          onPress={() => onActivitiesModalOpen()}
+          onPress={() => {onActivitiesModalOpen();  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);}}
           activeOpacity={0.7}
           style={tripDetailStyles.addActivityButton}
         >

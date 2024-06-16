@@ -1,9 +1,6 @@
 import { Image } from "expo-image";
 import React, { useRef } from "react";
 import {
-  Platform,
-  SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -14,7 +11,6 @@ import Constants from "expo-constants";
 import { enGB, he, registerTranslation } from "react-native-paper-dates";
 registerTranslation("en", enGB);
 
-import { useNavigation } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
 import { InnovationIcon, XIcon } from "../../../utilities/SvgIcons.utility";
 import { COLORS, SIZES } from "../../../styles/theme";
@@ -25,7 +21,6 @@ import RenderHTML from "react-native-render-html";
 interface TripProps {}
 
 export const TripInsightTab: React.FC<TripProps> = ({}) => {
-  const navigation = useNavigation();
   const modalInsightDetailRef = useRef(null);
 
   const onInsightDetailOpen = () => {
@@ -34,7 +29,10 @@ export const TripInsightTab: React.FC<TripProps> = ({}) => {
   return (
     <>
       <View style={[styles.topicsRow, { marginTop: 25 }]}>
-        <Text style={styles.topicsRowTitle}>Moving about</Text>
+        <View style={styles.headingItem}>
+          <Text style={styles.topicsRowTitle}>Moving about</Text>
+          <View style={[styles.shapeBg, { backgroundColor: "#ffd5d1" }]}></View>
+        </View>
         <View style={{ flexGrow: 1 }}>
           <FlashList
             horizontal
@@ -77,7 +75,10 @@ export const TripInsightTab: React.FC<TripProps> = ({}) => {
         </View>
       </View>
       <View style={styles.topicsRow}>
-        <Text style={styles.topicsRowTitle}>Moving about</Text>
+      <View style={styles.headingItem}>
+          <Text style={styles.topicsRowTitle}>Moving about</Text>
+          <View style={[styles.shapeBg, { backgroundColor: "#ffd5d1" }]}></View>
+        </View>
         <View style={{ flexGrow: 1 }}>
           <FlashList
             horizontal
@@ -120,7 +121,10 @@ export const TripInsightTab: React.FC<TripProps> = ({}) => {
         </View>
       </View>
       <View style={styles.topicsRow}>
-        <Text style={styles.topicsRowTitle}>Moving about</Text>
+      <View style={styles.headingItem}>
+          <Text style={styles.topicsRowTitle}>Moving about</Text>
+          <View style={[styles.shapeBg, { backgroundColor: "#ffd5d1" }]}></View>
+        </View>
         <View style={{ flexGrow: 1 }}>
           <FlashList
             horizontal
@@ -159,7 +163,10 @@ export const TripInsightTab: React.FC<TripProps> = ({}) => {
         </View>
       </View>
       <View style={styles.topicsRow}>
-        <Text style={styles.topicsRowTitle}>Moving about</Text>
+      <View style={styles.headingItem}>
+          <Text style={styles.topicsRowTitle}>Moving about</Text>
+          <View style={[styles.shapeBg, { backgroundColor: "#ffd5d1" }]}></View>
+        </View>
         <View style={{ flexGrow: 1 }}>
           <FlashList
             horizontal
@@ -197,6 +204,8 @@ export const TripInsightTab: React.FC<TripProps> = ({}) => {
           />
         </View>
       </View>
+
+      <View style={{paddingBottom: 30}}></View>
 
       <Portal>
         <Modalize
@@ -300,7 +309,20 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#F2F2F7",
-    paddingTop: Constants?.statusBarHeight + 10
+    paddingTop: Constants?.statusBarHeight + 10,
+  },
+  headingItem: {
+    position: "relative",
+    paddingHorizontal: 20,
+  },
+  shapeBg: {
+    position: "absolute",
+    width: 100,
+    height: 10,
+    left: 15,
+    bottom: 15,
+    borderRadius: 10,
+    opacity: 0.6,
   },
   noteCardTitle: {
     fontSize: 18,
@@ -389,7 +411,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: COLORS.black,
-    paddingHorizontal: 15,
+    paddingHorizontal: 0,
     marginBottom: 15,
   },
   header: {

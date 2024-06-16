@@ -1,8 +1,8 @@
 import { Image } from "expo-image";
 import { useState } from "react";
-import { Linking, Platform } from "react-native";
+import { ImageBackground, Linking, Platform } from "react-native";
 import { Text, TouchableOpacity, View } from "react-native";
-import { COLORS, SIZES } from "../../styles/theme";
+import { COLORS } from "../../styles/theme";
 import {
   CheckLiteIcon,
   DotsIcon,
@@ -13,7 +13,12 @@ import {
 import { tripDetailStyles } from "./_tripDetailStyles";
 import * as Haptics from "expo-haptics";
 
-export const TripActivityCard = ({ item, index, onQuestionModalOpen, handleTopSightClick }) => {
+export const TripActivityCard = ({
+  item,
+  index,
+  onQuestionModalOpen,
+  handleTopSightClick,
+}) => {
   const [checkedIn, setCheckedIn] = useState(false);
 
   const openMap = (address: string) => {
@@ -38,10 +43,10 @@ export const TripActivityCard = ({ item, index, onQuestionModalOpen, handleTopSi
           checkedIn ? tripDetailStyles.checkedIn : null,
           {
             flexDirection: "row",
-            padding: 10
+            padding: 15,
           },
         ]}
-        onPress={() => handleTopSightClick(item)}
+        onPress={() => { handleTopSightClick(item);Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);}}
       >
         <View style={tripDetailStyles.pinIcon}>
           <PinIcon
@@ -61,26 +66,42 @@ export const TripActivityCard = ({ item, index, onQuestionModalOpen, handleTopSi
           </Text>
         </View>
 
-        <Image
-          style={{
-            width: 100,
-            height: 80,
-            borderRadius: 10,
-            marginRight: 15,
-          }}
-          resizeMode="cover"
-          source={
-            item?.image?.url
-              ? {
-                  uri: item?.image?.url,
-                }
-              : require("../../assets/no-image.png")
-          }
-          key={`img-${item?.title}`}
-        ></Image>
+        <View style={tripDetailStyles.imagesWrapper}>
+          {item?.images?.slice(0, 2).map((image, index) => (
+            <Image
+              style={tripDetailStyles.mainImage}
+              contentFit="cover"
+              source={
+                image?.url
+                  ? {
+                      uri: image?.url,
+                    }
+                  : require("../../assets/no-image.png")
+              }
+              key={`img-${item?.title}-${index}`}
+            ></Image>
+          ))}
+
+          <ImageBackground
+            resizeMode="cover"
+            source={{
+              uri: item?.image?.url,
+            }}
+            style={ tripDetailStyles.lastImage }
+          >
+            <View
+              style={tripDetailStyles.imageOverlay}
+            >
+              <Text style={{color:"#fff", fontWeight: "bold", fontSize: 14}}>+3</Text>
+            </View>
+          </ImageBackground>
+        </View>
 
         <View
-          style={[tripDetailStyles.sightDetails, { flexDirection: "column", marginTop: 10 }]}
+          style={[
+            tripDetailStyles.sightDetails,
+            { flexDirection: "column", marginTop: 10 },
+          ]}
         >
           <Text style={tripDetailStyles.sightTitle}>{item?.title}</Text>
           <View style={tripDetailStyles.ratingLabel}>
@@ -91,7 +112,7 @@ export const TripActivityCard = ({ item, index, onQuestionModalOpen, handleTopSi
                     position: "relative",
                     top: -1,
                     opacity: 0.8,
-                    marginRight: 3
+                    marginRight: 3,
                   }}
                 >
                   <StarIcon color="#FFBC3E" />
@@ -99,10 +120,14 @@ export const TripActivityCard = ({ item, index, onQuestionModalOpen, handleTopSi
                 <Text style={[tripDetailStyles.ratingText]}>{item?.rate}</Text>
               </>
             ) : null}
+
+            <Text style={[tripDetailStyles.sightType]}>{item?.category}</Text>
           </View>
-          <Text style={[tripDetailStyles.sightType, { width: "100%" }]}>
-            {item?.category}
-          </Text>
+          {item?.description?.length > 0 ? (
+            <Text style={tripDetailStyles.descText}>
+              {item?.description?.slice(0, 100)}...
+            </Text>
+          ) : null}
         </View>
       </TouchableOpacity>
       <View style={tripDetailStyles.sightBottomActions}>

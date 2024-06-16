@@ -10,6 +10,7 @@ import { COLORS } from "../../../styles/theme";
 import { CalendarFilledIcon, OneUserIcon, StarsIcon, TripLocationIcon } from "../../../utilities/SvgIcons.utility";
 import { TravelType } from "../TravelType";
 import {styles} from "./CreateTripStyles"; 
+import * as Haptics from "expo-haptics";
 
 export const CreateTripContent = ({
     newTripModalRef,
@@ -51,7 +52,10 @@ export const CreateTripContent = ({
             </Text>
             <TouchableOpacity
               style={styles.cancelTripButton}
-              onPress={() => handleCancelTrip()}
+              onPress={() =>  {
+                handleCancelTrip();  
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
             >
               <Text style={styles.cancelTripButtonText}>Cancel</Text>
             </TouchableOpacity>
@@ -82,6 +86,11 @@ export const CreateTripContent = ({
                 <TouchableOpacity
                   activeOpacity={0.5}
                   style={styles.datePickerTopRow}
+                  onPress={() => {
+                    setOpen(true);
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  }}
+                 
                 >
                   <View style={styles.datePickerTopRowLeft}>
                     <CalendarFilledIcon />
@@ -91,7 +100,10 @@ export const CreateTripContent = ({
                 <TouchableOpacity
                   activeOpacity={0.5}
                   style={styles.datePickerBottomRow}
-                  onPress={() => setOpen(true)}
+                  onPress={() => {
+                    setOpen(true);
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  }}
                 >
                   <View style={styles.datePickerBottomRowLeft}>
                     <Text style={styles.startsDateLabel}>Start</Text>
@@ -122,7 +134,10 @@ export const CreateTripContent = ({
                 <TouchableOpacity
                   activeOpacity={0.5}
                   style={styles.newTripBoxButton}
-                  onPress={() => onDestinationModalOpen()}
+                  onPress={() => {
+                    onDestinationModalOpen();
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  }}
                 >
                   <TripLocationIcon size="" color="" />
                   <Text style={styles.halfBoxLabelText}>Where to?</Text>
@@ -142,7 +157,10 @@ export const CreateTripContent = ({
                 <TouchableOpacity
                   activeOpacity={0.5}
                   style={styles.newTripBoxButton}
-                  onPress={() => onTravelTypeModalOpen()}
+                  onPress={() => { 
+                    onTravelTypeModalOpen(); 
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  }}
                 >
                   <OneUserIcon size="20" color="" />
                   <Text style={styles.halfBoxLabelText}>Travel type</Text>
@@ -161,7 +179,11 @@ export const CreateTripContent = ({
             <TouchableOpacity
               style={styles.aiPlanButton}
               activeOpacity={0.7}
-              onPress={() => setIsLoading(!isLoading)}
+              onPress={() => {
+                setIsLoading(!isLoading);
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }
+              }
               // disabled={isLoading}
             >
               <LinearGradient
@@ -177,7 +199,7 @@ export const CreateTripContent = ({
                 {isLoading ? (
                   <>
                     <ActivityIndicator color="#fff" />
-                    <Text style={[styles.aiPlanButtonText, { marginLeft: 5 }]}>
+                    <Text style={[styles.aiPlanButtonText, { marginLeft: 10 }]}>
                       Planning your itinerary...
                     </Text>
                   </>
@@ -191,7 +213,11 @@ export const CreateTripContent = ({
                 )}
               </LinearGradient>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.7} style={styles.manualPlanButton}>
+            <TouchableOpacity
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
+               activeOpacity={0.7} style={styles.manualPlanButton}>
               <Text style={styles.manualPlanButtonText}>
                 I will plan manually
               </Text>

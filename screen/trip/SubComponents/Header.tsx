@@ -5,6 +5,7 @@ import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { COLORS } from "../../../styles/theme";
 import { BackIcon, DotsIcon, MapIcon } from "../../../utilities/SvgIcons.utility";
 import { TripHelpers } from "./TripHelpers";
+import * as Haptics from "expo-haptics";
 
 export const Header = ({data, onQuestion2ModalOpen, handleNavigate }) => {
     const navigation = useNavigation();
@@ -59,7 +60,10 @@ export const Header = ({data, onQuestion2ModalOpen, handleNavigate }) => {
             </View>
             <View style={styles.rightSide}>
               <TouchableOpacity
-                onPress={() => onQuestion2ModalOpen()}
+                onPress={() => {
+                  onQuestion2ModalOpen();
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
                 style={styles.editButton}
                 activeOpacity={0.7}
               >

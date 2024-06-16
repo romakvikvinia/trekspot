@@ -250,7 +250,7 @@ export const tripDetailStyles = StyleSheet.create({
       paddingVertical: 8,
     },
     sightTitle: {
-      fontSize: 16,
+      fontSize: 18,
       fontWeight: "500",
       color: COLORS.black,
     },
@@ -269,7 +269,7 @@ export const tripDetailStyles = StyleSheet.create({
       fontWeight: "400",
       color: COLORS.darkgray,
       fontSize: 12,
-      marginRight: 5,
+      marginLeft: 3,
     },
     sightRight: {
       marginLeft: 15,
@@ -283,8 +283,13 @@ export const tripDetailStyles = StyleSheet.create({
       padding: 15,
       flexDirection: "column",
       position: "relative",
+      flexWrap: "wrap"
       // borderWidth: 1,
       // borderColor: "#fff"
+    },
+    imagesWrapper: {
+      flexDirection: "row",
+      width: "100%",
     },
     pinIcon: {
       position: "absolute",
@@ -342,13 +347,6 @@ export const tripDetailStyles = StyleSheet.create({
       borderWidth: 1,
       borderColor: "#fff",
     },
-   
-    invitedUserImage: {
-      minWidth: 25,
-      minHeight: 25,
-      width: 25,
-      borderRadius: 50,
-    },
     inviteTwo: {
       position: "relative",
       left: -10,
@@ -374,10 +372,36 @@ export const tripDetailStyles = StyleSheet.create({
       alignItems: "flex-end",
       justifyContent: "space-between",
     },
+    mainImage: {
+      width: (SIZES.width - 95) / 3,
+      height: 80,
+      borderRadius: 10,
+      marginRight: 8,
+    },
     tripType: {
       fontSize: 14,
       fontWeight: "500",
       color: COLORS.black,
+    },
+    imageOverlay: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      backgroundColor: "rgba(0,0,0,0.3)",
+      width: "100%",
+      height: "100%",
+      alignItems: "center",
+      justifyContent: "center"
+    },
+    lastImage: {
+      width: (SIZES.width - 95) / 3,
+              height: 80,
+              borderRadius: 10,
+              overflow: "hidden",
+              position: "relative",
+    },
+    descText: {
+      fontSize: 12
     },
     leftSide: {},
     tripDestination: {

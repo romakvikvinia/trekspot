@@ -16,8 +16,6 @@ import {
   EmergencyIcon,
   InfoIcon,
   InsightsFilled,
-  // LanguageIcon,
-  Mark2,
   PassportIcon,
   StarIcon,
   TransportIcon,
@@ -93,17 +91,7 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
               >
                 <BackIcon color="#fff" />
               </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.addToBucketButton,
-                  {
-                    // 1 == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)",
-                  },
-                ]}
-                activeOpacity={0.7}
-              >
-                <Mark2 color="#fff" />
-              </TouchableOpacity>
+               
               {isLoading && (
                 <View style={{ minHeight: SIZES.height }}>
                   <View

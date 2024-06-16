@@ -48,11 +48,11 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
       <View style={[styles.rowItem]} style={{ paddingTop: 15 }}>
         <View style={styles.rowItemHeader}>
           <Text style={styles.h2}>{title}</Text>
-          {seeAllItems && (
+          {/* {seeAllItems && (
             <TouchableOpacity activeOpacity={0.7}>
               <Text style={styles.seeAllButtonTxt}>See all</Text>
             </TouchableOpacity>
-          )}
+          )} */}
         </View>
         {!isLoading ? (
           <ScrollView

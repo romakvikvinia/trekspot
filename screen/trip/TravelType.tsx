@@ -8,11 +8,9 @@ import {
   UsersIcon,
   XIcon,
 } from "../../utilities/SvgIcons.utility";
+import * as Haptics from "expo-haptics";
 
-export const TravelType = ({
-  modalTravelTypeRef,
-  formik
-}) => {
+export const TravelType = ({ modalTravelTypeRef, formik }) => {
   return (
     <View style={styles.wrapper}>
       <View style={styles.modalHeader}>
@@ -36,7 +34,10 @@ export const TravelType = ({
             formik?.values?.travelType === "Solo" ? styles.active : null,
           ]}
           activeOpacity={0.5}
-          onPress={() => formik.setFieldValue("travelType","Solo")}
+          onPress={() => {
+            formik.setFieldValue("travelType", "Solo");
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          }}
         >
           <OneUserIcon
             size="15"
@@ -57,7 +58,10 @@ export const TravelType = ({
             formik?.values?.travelType === "Couple" ? styles.active : null,
           ]}
           activeOpacity={0.5}
-          onPress={() => formik.setFieldValue("travelType","Couple")}
+          onPress={() => {
+            formik.setFieldValue("travelType", "Couple");
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          }}
         >
           <CoupleIcon
             size="15"
@@ -66,7 +70,9 @@ export const TravelType = ({
           <Text
             style={[
               styles.switcherLabel,
-              formik?.values?.travelType === "Couple" ? styles.activeText : null,
+              formik?.values?.travelType === "Couple"
+                ? styles.activeText
+                : null,
             ]}
           >
             Couple
@@ -78,7 +84,10 @@ export const TravelType = ({
             formik?.values?.travelType === "Family" ? styles.active : null,
           ]}
           activeOpacity={0.5}
-          onPress={() => formik.setFieldValue("travelType","Family")}
+          onPress={() => {
+            formik.setFieldValue("travelType", "Family");
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          }}
         >
           <FamilyIcon
             size="15"
@@ -87,7 +96,9 @@ export const TravelType = ({
           <Text
             style={[
               styles.switcherLabel,
-              formik?.values?.travelType === "Family" ? styles.activeText : null,
+              formik?.values?.travelType === "Family"
+                ? styles.activeText
+                : null,
             ]}
           >
             Family
@@ -99,7 +110,10 @@ export const TravelType = ({
             formik?.values?.travelType === "Friends" ? styles.active : null,
           ]}
           activeOpacity={0.5}
-          onPress={() => formik.setFieldValue("travelType", "Friends")}
+          onPress={() => {
+            formik.setFieldValue("travelType", "Friends");
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          }}
         >
           <UsersIcon
             size="15"
@@ -108,7 +122,9 @@ export const TravelType = ({
           <Text
             style={[
               styles.switcherLabel,
-              formik?.values?.travelType === "Friends" ? styles.activeText : null,
+              formik?.values?.travelType === "Friends"
+                ? styles.activeText
+                : null,
             ]}
           >
             Friends

@@ -35,21 +35,11 @@ export const CountryItem: React.FC<CountryItemProps> = ({
               ? {
                   uri: item?.image?.url,
                 }
-              : require("../../assets/no-image.png")
+              : item.name === "France" ? "https://cdn.pixabay.com/photo/2018/04/25/09/26/eiffel-tower-3349075_1280.jpg" : require("../../assets/no-image.png")
           }
           cachePolicy="memory-disk"
         >
-          <TouchableOpacity
-            style={[
-              styles.addToBucketButton,
-              {
-                //   backgroundColor:  == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)",
-              },
-            ]}
-            activeOpacity={0.7}
-          >
-            <Mark2 color="#fff" />
-          </TouchableOpacity>
+         
           <TouchableOpacity
             style={styles.gradientWrapper}
             activeOpacity={0.7}
@@ -96,17 +86,7 @@ export const CountryItem: React.FC<CountryItemProps> = ({
               : require("../../assets/no-image.png")
           }
         >
-          <TouchableOpacity
-            style={[
-              styles.addToBucketButton,
-              {
-                //   backgroundColor:  == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)",
-              },
-            ]}
-            activeOpacity={0.7}
-          >
-            <Mark2 color="#fff" />
-          </TouchableOpacity>
+        
           <TouchableOpacity
             style={styles.gradientWrapper}
             activeOpacity={0.7}
