@@ -6,7 +6,7 @@ import {
   SearchBoldIcon,
 } from "../../utilities/SvgIcons.utility";
 
-export const SearchComponent = ({ search, setSearch, withIcon = true }) => {
+export const SearchComponent = ({ search, setSearch, withIcon = true, resetButton = true }) => {
   return (
     <View style={searchComponentStyles.searchComponent}>
       {withIcon ? (
@@ -16,7 +16,7 @@ export const SearchComponent = ({ search, setSearch, withIcon = true }) => {
       ) : null}
 
       <TextInput
-        autoFocus={false}
+        autoFocus={true}
         style={[
           searchComponentStyles.searchComponentInput,
           {
@@ -26,9 +26,10 @@ export const SearchComponent = ({ search, setSearch, withIcon = true }) => {
         placeholder="Search cities"
         placeholderTextColor={COLORS.darkgray}
         onChangeText={(e) => setSearch(e)}
-        value={search}
+        autoCorrect={false}
+        // value={search}
       />
-      {search?.length > 2 ? (
+      {search?.length > 2 && resetButton ? (
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => setSearch("")}
@@ -37,8 +38,6 @@ export const SearchComponent = ({ search, setSearch, withIcon = true }) => {
           <CloseCircleIcon size="17" />
         </TouchableOpacity>
       ) : null}
-
-   
     </View>
   );
 };

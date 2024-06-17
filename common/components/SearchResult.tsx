@@ -2,16 +2,42 @@ import { FlashList } from "@shopify/flash-list";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORS } from "../../styles/theme";
 import { LocationLinearIcon } from "../../utilities/SvgIcons.utility";
-import { useNavigation } from "@react-navigation/native";
+import { CityType, CountryType } from "../../api/api.types";
 
-export const Item = ({ item, handleDetailOfCountry, boxBg }) => {
+type ItemType = CountryType | CityType;
+
+export const Item = ({
+  item,
+  handleChange,
+}: {
+  item: ItemType;
+  handleChange: (
+    params: Partial<{
+      countryId: string;
+      city: CityType;
+    }>
+  ) => void;
+}) => {
+  //@ts-ignore
+  const title = item.__typename === "Country" ? item.name : item.city;
+
+  const subTitle =
+    //@ts-ignore
+    item.__typename === "City" && `City in ${item.country}`;
   return (
     <TouchableOpacity
-      onPress={() => handleDetailOfCountry(item?.iso2)}
+      onPress={() =>
+        handleChange({
+          //@ts-ignore
+          countryId: item.__typename === "Country" && item.id,
+          //@ts-ignore
+          city: item,
+        })
+      }
       style={styles.countryItem}
       activeOpacity={0.7}
     >
-    <View style={styles.box}>
+      <View style={styles.box}>
         <LocationLinearIcon color="" size="" />
       </View>
       <View style={styles.gradientWrapper}>
@@ -25,7 +51,7 @@ export const Item = ({ item, handleDetailOfCountry, boxBg }) => {
             },
           ]}
         >
-          <Text style={[styles.labelItemText]}>{item.name}</Text>
+          <Text style={[styles.labelItemText]}>{title}</Text>
           <Text
             style={[
               styles.labelItemText,
@@ -36,36 +62,38 @@ export const Item = ({ item, handleDetailOfCountry, boxBg }) => {
               },
             ]}
           >
-            {item?.type}
+            {subTitle || "Country"}
           </Text>
         </View>
       </View>
     </TouchableOpacity>
   );
 };
-export const SearchResult = ({ data, handleChange }) => {
-  const navigation = useNavigation();
 
-  const handleDetailOfCountry = (countryId) => {
-    if (handleChange) {
-      handleChange(countryId);
-    } else {
-      navigation.navigate("CountryDetailScreen", { countryId });
-    }
-  };
-
+export const SearchResult = ({
+  items,
+  handleChange,
+}: {
+  items: Array<CountryType | CityType>;
+  handleChange: (
+    params: Partial<{
+      countryId: string;
+      city: CityType;
+    }>
+  ) => void;
+}) => {
   return (
     <View style={{ minHeight: 20, flex: 1, paddingTop: 8 }}>
       <FlashList
-        data={data.slice(0, 8)}
+        data={items}
         renderItem={({ item }) => (
-          <Item item={item} handleDetailOfCountry={handleDetailOfCountry} />
+          <Item item={item} handleChange={handleChange} />
         )}
         estimatedItemSize={200}
         horizontal={false}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps={"handled"}
-        contentContainerStyle={{paddingTop: 10}}
+        contentContainerStyle={{ paddingTop: 10 }}
       />
     </View>
   );

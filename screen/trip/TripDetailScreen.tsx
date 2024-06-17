@@ -1,12 +1,6 @@
-import React, {  useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import {
-  Alert,
-  Platform,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, Platform, Text, TouchableOpacity, View } from "react-native";
 import { COLORS, SIZES } from "../../styles/theme";
 import { enGB, registerTranslation } from "react-native-paper-dates";
 registerTranslation("en", enGB);
@@ -17,6 +11,7 @@ import {
   TrashIcon,
   XIcon,
 } from "../../utilities/SvgIcons.utility";
+import * as Haptics from "expo-haptics";
 
 import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
@@ -26,27 +21,36 @@ import { questionModaStyles } from "../../styles/questionModaStyles";
 import { TripActivitiesSelect } from "./TripActivitiesSelect";
 
 import { MapEmbedView } from "../../common/components/MapEmbedView";
-import { useNavigation } from "@react-navigation/native";
+
 import { Header } from "./SubComponents/Header";
 import { TripActivityCard } from "./TripActivityCard";
 import { useLazyGetSightsQuery } from "../../api/api.trekspot";
 import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
-import { NoActivity } from "../../common/components/NoActivity";
-import * as Haptics from "expo-haptics";
- 
-interface TripProps {}
 
-export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
-  const navigation = useNavigation();
-  const [getSights, { data, isLoading: sightsLoading }] = useLazyGetSightsQuery();
-  
+import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { NoActivity } from "../../common/components/NoActivity";
+
+type TripProps = NativeStackScreenProps<
+  TripRouteStackParamList,
+  "TripDetailScreen"
+>;
+
+export const TripDetailScreen: React.FC<TripProps> = ({
+  route,
+  navigation,
+}) => {
+  const { trip, city } = route.params;
+  const [getSights, { data, isLoading: sightsLoading }] =
+    useLazyGetSightsQuery();
+
   useEffect(() => {
-    getSights({ iso2: "AE", city: "Dubai" }); 
+    getSights({ iso2: "AE", city: "Dubai" });
   }, []);
- 
+
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
   const [topSightDetail, setTopSightDetail] = useState(null);
-  const [trip, setTrip] = useState({
+  const [tripData, setTrip] = useState({
     name: "Dubai vacation",
     startDate: "15 Nov",
     endDate: "24 Nov",
@@ -63,23 +67,20 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
       {
         id: 0,
         date: "May 8",
-        activities: [
-         
-        ]
+        activities: [],
       },
       {
         id: 1,
         date: "May 9",
-        activities: [ 
-        ]
-      }
-    ]
-  })
+        activities: [],
+      },
+    ],
+  });
 
   const handleTabChange = (i) => {
-    setCurrentTabIndex(i)
-   }
- 
+    setCurrentTabIndex(i);
+  };
+
   const activitiesModal = useRef<Modalize>(null);
   const modalQuestionRef = useRef<Modalize>(null);
   const modalQuestionRef2 = useRef<Modalize>(null);
@@ -107,14 +108,14 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     }
   };
 
- 
   const handleAddToTrip = (activity) => {
-    setTrip(prevTrip => {
-      const newTripData = prevTrip.data.map(day => {
+    console.log("activity,activity", activity);
+    setTrip((prevTrip) => {
+      const newTripData = prevTrip.data.map((day) => {
         if (day.id === currentTabIndex) {
           return {
             ...day,
-            activities: [...day.activities, activity]
+            activities: [...day.activities, activity],
           };
         }
         return day;
@@ -122,20 +123,19 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
 
       return {
         ...prevTrip,
-        data: newTripData
+        data: newTripData,
       };
     });
   };
 
   const handleTopSightClick = (sight) => {
-    setTopSightDetail(sight)
-  }
+    setTopSightDetail(sight);
+  };
 
   const handleClear = useCallback(() => {
-    setTopSightDetail(null)
+    setTopSightDetail(null);
   }, []);
 
-  
   return (
     <>
       <Tabs.Container
@@ -144,7 +144,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           <Header
             onQuestion2ModalOpen={onQuestion2ModalOpen}
             handleNavigate={handleNavigate}
-            data={trip}
+            data={tripData}
           />
         )}
         headerHeight={300} // optional
@@ -181,7 +181,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         revealHeaderOnScroll={true}
         onIndexChange={handleTabChange}
       >
-        {trip?.data.map((item, ind) => (
+        {tripData?.data.map((item, ind) => (
           <Tabs.Tab
             name={item?.date}
             label={(props) => (
@@ -190,8 +190,8 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                   tripDetailStyles.customTab,
                   {
                     width:
-                      trip?.data?.length < 4
-                        ? (SIZES.width - 40) / trip?.data?.length
+                      tripData?.data?.length < 4
+                        ? (SIZES.width - 40) / tripData?.data?.length
                         : "auto",
                   },
                 ]}
@@ -233,7 +233,8 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                 paddingBottom: 60,
               }}
             >
-              {trip?.data[currentTabIndex]?.activities?.length > 0 && Platform.OS === "ios" ? (
+              {tripData?.data[currentTabIndex]?.activities?.length > 0 &&
+              Platform.OS === "ios" ? (
                 <View
                   style={{
                     position: "absolute",
@@ -259,7 +260,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                   />
                 ))}
 
-                 {item?.activities?.length < 1 ? (
+                {item?.activities?.length < 1 ? (
                   <View style={tripDetailStyles.noActivitiesWrapper}>
                     <NoActivity text="You don't have activites for today" />
                     
@@ -283,15 +284,11 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         ))}
       </Tabs.Container>
 
-      {
-        topSightDetail ? 
-        <SightDetailModal
-          data={topSightDetail}
-          closeCallBack={handleClear}
-        /> : null
-      }
+      {topSightDetail ? (
+        <SightDetailModal data={topSightDetail} closeCallBack={handleClear} />
+      ) : null}
 
-      {trip?.data[currentTabIndex]?.activities?.length > 0 ? (
+      {tripData?.data[currentTabIndex]?.activities?.length > 0 ? (
         <TouchableOpacity
           onPress={() => {onActivitiesModalOpen();  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);}}
           activeOpacity={0.7}
@@ -306,7 +303,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           ref={activitiesModal}
           modalTopOffset={200}
           modalHeight={SIZES.height - 100}
-          panGestureEnabled={true} 
+          panGestureEnabled={true}
           HeaderComponent={
             <>
               <View style={tripDetailStyles.rowItemHeader}>
@@ -318,9 +315,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                       color: COLORS.primary,
                     }}
                   >
-                    {
-                      [trip?.data[currentTabIndex].date]
-                    }
+                    {[tripData?.data[currentTabIndex].date]}
                   </Text>
                 </Text>
 
@@ -341,7 +336,14 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
             showsVerticalScrollIndicator: false,
           }}
         >
-          <TripActivitiesSelect trip={trip} currentTabIndex={currentTabIndex} handleAddToTrip={handleAddToTrip} currentTabIndex={currentTabIndex} data={data} isLoading={sightsLoading} />
+          <TripActivitiesSelect
+            trip={tripData}
+            currentTabIndex={currentTabIndex}
+            handleAddToTrip={handleAddToTrip}
+            currentTabIndex={currentTabIndex}
+            data={data}
+            isLoading={sightsLoading}
+          />
         </Modalize>
       </Portal>
 
@@ -467,20 +469,6 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     </>
   );
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // <TouchableOpacity
 // activeOpacity={0.7}

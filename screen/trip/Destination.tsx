@@ -1,37 +1,67 @@
-import { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native";
-import { useLazyGetCitiesQuery } from "../../api/api.trekspot";
+import { useLazySearchCitiesQuery } from "../../api/api.trekspot";
 import { SearchResult } from "../../common/components/SearchResult";
 import { SearchComponent } from "../../common/ui/SearchComponent";
 import { NotFound } from "../../components/common/NotFound";
 
 import { COLORS, SIZES } from "../../styles/theme";
 import { CountriesList } from "../../utilities/countryList";
+import { Loader } from "../../common/ui/Loader";
+import { CityType } from "../../api/api.types";
 
-export const Destination = ({ onDestinationModalClose }) => {
+interface IDestinationProps {
+  onDestinationModalClose: (city?: CityType, cities?: string[]) => void;
+}
+
+export const Destination: React.FC<IDestinationProps> = ({
+  onDestinationModalClose,
+}) => {
+  const [timer, setTimer] = useState<ReturnType<typeof setTimeout>>();
   const [search, setSearch] = useState("");
-  const [destinationSelected, setDestinationSelected] = useState(null);
+  const [destinationSelected, setDestinationSelected] = useState<Array<string>>(
+    []
+  );
+  const [fetchData, { isLoading, isError, data }] = useLazySearchCitiesQuery();
 
-  const handleChange = (dest) => {
-    setDestinationSelected(dest);
-    console.log("des", dest);
+  const handleChange = ({
+    city,
+  }: Partial<{
+    countryId: string;
+    city: CityType;
+  }>) => {
+    if (city) {
+      setDestinationSelected([city?.id!]);
+      onDestinationModalClose(city, [city?.id!]);
+    }
   };
 
-  const filteredCountries =
-    search && search.length > 1
-      ? CountriesList.filter(
-          (i) =>
-            i.name.toLowerCase().includes(search.toLowerCase()) ||
-            i.capital.toLowerCase().includes(search.toLowerCase())
-        )
-      : CountriesList;
-
+  const handleSetSearch = useCallback(
+    async (value: string) => {
+      clearTimeout(timer);
+  
+      if (value.length >= 3) {
+        const newTimer = setTimeout(async () => {
+          setSearch(value);
+          await fetchData({ skip: 0, take: 100, search: value });
+        }, 300);
+  
+        setTimer(newTimer);
+      } else {
+        setSearch("");
+      }
+    },
+    [fetchData, search, timer]
+  );
+  
+  const filteredCountries = data?.search?.filter((i) => i.__typename === "City") || [];
+  
   return (
     <>
       <View style={styles.modalHeader}>
         <View style={{ flex: 1 }}>
-          <SearchComponent search={search} setSearch={setSearch} />
+          <SearchComponent search={search} resetButton={false} setSearch={handleSetSearch} />
         </View>
         <TouchableOpacity
           style={styles.cancelButton}
@@ -40,21 +70,21 @@ export const Destination = ({ onDestinationModalClose }) => {
           <Text style={styles.cancelButtonText}>Cancel</Text>
         </TouchableOpacity>
       </View>
-      {/* <View style={{marginTop: 25}}>
-            <Loader background="#F2F2F7" isLoading={true} size="small" />
-        </View> */}
-        
-      {filteredCountries?.length > 0 && (
-        <View style={{ paddingHorizontal: 10,  flex: 1}}>
-          <SearchResult data={filteredCountries} handleChange={handleChange} />
+      {isLoading && (
+        <View style={{ marginTop: 25 }}>
+          <Loader background="#F2F2F7" isLoading={true} size="small" />
         </View>
       )}
 
-      {!filteredCountries?.length && (
+      {search.length >= 3 && filteredCountries.length > 0 && (
+        <View style={{ paddingHorizontal: 10, flex: 1 }}>
+          <SearchResult items={filteredCountries} handleChange={handleChange} />
+        </View>
+      )}
+
+      {search.length >= 3 && !isLoading && !filteredCountries.length && (
         <View style={styles.notesWarning}>
-          <NotFound
-            text="Can't find destination? No worries! We're adding new ones every day, so check back soon"
-          />
+          <NotFound text="Can't find destination? No worries! We're adding new ones every day, so check back soon" />
         </View>
       )}
     </>

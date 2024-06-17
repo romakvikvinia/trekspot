@@ -1,35 +1,65 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useFormik } from "formik";
 import { Modal, Platform, View } from "react-native";
+import { Modalize } from "react-native-modalize";
 
 import { RangePicker } from "./RangePicker";
 import { Portal } from "react-native-portalize";
-import { Modalize } from "react-native-modalize";
+
 import { Destination } from "./Destination";
 
-import { useFormik } from "formik";
 import { CreateTripContent } from "./SubComponents/CreateTripContent";
 import { styles } from "./SubComponents/CreateTripStyles";
+import { IHandles } from "react-native-modalize/lib/options";
+import { CityType } from "../../api/api.types";
+import { useCreateTripMutation } from "../../api/api.trekspot";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
+import { creationTrip } from "../auth/validationScheme";
 
-export const NewTrip = ({ newTripModalRef, tripActivitesModal }) => {
-  const [gradient, setGradient] = useState(["#fff", "#fff", "#fff"]);
+interface INewTripProps {
+  newTripModalRef: React.RefObject<IHandles>;
+  callBack: () => void;
+}
+
+type TripStackNavigationProp = StackNavigationProp<TripRouteStackParamList>;
+
+export const NewTrip = ({ newTripModalRef, callBack }: INewTripProps) => {
+  const navigation = useNavigation<TripStackNavigationProp>();
+  const [fetchData, { isLoading, isError, data, isSuccess }] =
+    useCreateTripMutation();
+  const [open, setOpen] = useState(false);
+  const [whereToModal, setWhereToModal] = useState(false);
+  const [submited, setSubmited] = useState(false);
+
+  const modalDestinationRef = useRef<Modalize>(null);
 
   const formik = useFormik({
     initialValues: {
       name: "",
       range: {},
-      destination: "",
+      destination: null,
       travelType: "",
+      cities: [],
     },
-    // validationSchema: SignInValidationSchema,
-    onSubmit: async ({}, methods) => {
-      methods.setSubmitting(true);
-    },
+    validationSchema: creationTrip,
+    onSubmit: async ({ name, range, travelType, cities }, methods) => {
+      methods.setSubmitting(true); 
+      fetchData({
+        name,
+        //@ts-ignore
+        startAt: range["startDate"],
+        //@ts-ignore
+        endAt: range["endDate"],
+        type: travelType.toUpperCase(),
+        cities,
+      });
+    }, 
   });
 
-  const [open, setOpen] = useState(false);
-  const [whereToModal, setWhereToModal] = useState(false);
+  
 
-  const modalDestinationRef = useRef(null);
   const onDestinationModalOpen = () => {
     if (Platform.OS === "android") {
       setWhereToModal(true);
@@ -37,15 +67,31 @@ export const NewTrip = ({ newTripModalRef, tripActivitesModal }) => {
       modalDestinationRef.current?.open();
     }
   };
-  const onDestinationModalClose = () => {
+  const onDestinationModalClose = (city?: CityType, cities?: string[]) => {
     if (Platform.OS === "android") {
       setWhereToModal(false);
     } else {
       modalDestinationRef.current?.close();
     }
+
+    if (city && cities) {
+      formik.setFieldValue("cities", cities);
+      formik.setFieldValue("destination", city);
+    }
   };
 
-  console.log("dd", formik.values);
+  useEffect(() => {
+    if (isSuccess) {
+      newTripModalRef.current?.close();
+      callBack();
+      // navigation.navigate("TripsScreen");
+    }
+  }, [isSuccess, callBack]);
+
+ 
+  useEffect(() => { 
+    setSubmited(false);
+  }, [formik.values]);
 
   return (
     <>
@@ -56,13 +102,12 @@ export const NewTrip = ({ newTripModalRef, tripActivitesModal }) => {
         // end={{ x: 1, y: 0 }}
       >
         <CreateTripContent
-          gradient={gradient}
-          setGradient={setGradient}
           newTripModalRef={newTripModalRef}
-          tripActivitesModal={tripActivitesModal}
           setOpen={setOpen}
           formik={formik}
           onDestinationModalOpen={onDestinationModalOpen}
+          submited={submited}
+          setSubmited={setSubmited}
         />
       </View>
       <RangePicker formik={formik} open={open} setOpen={setOpen} />
@@ -80,7 +125,7 @@ export const NewTrip = ({ newTripModalRef, tripActivitesModal }) => {
             backgroundColor: "#f8f8f8",
           }}
         >
-          <Destination onDestinationModalClose={onDestinationModalClose}  />
+          <Destination onDestinationModalClose={onDestinationModalClose} />
         </Modalize>
       </Portal>
 

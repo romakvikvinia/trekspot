@@ -1,7 +1,7 @@
+import React, { useRef, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRef, useState } from "react";
 import {
   Alert,
   ImageBackground,
@@ -14,16 +14,38 @@ import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
 import { QuestionModal } from "../../common/components/QuestionModal";
 import { questionModaStyles } from "../../styles/questionModaStyles";
-import { AddUser, CoupleIcon, DotsIcon, EditIcon, FamilyIcon, OneUserIcon, TrashIcon, UserIcon, UsersIcon } from "../../utilities/SvgIcons.utility";
+import {
+  AddUser,
+  CoupleIcon,
+  DotsIcon,
+  EditIcon,
+  FamilyIcon,
+  OneUserIcon,
+  TrashIcon,
+  UserIcon,
+  UsersIcon,
+} from "../../utilities/SvgIcons.utility";
 import { _tripScreenStyles } from "./_tripScreenStyles";
+import { TripType } from "../../api/api.types";
+import moment from "moment";
+import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-export const Tripitem = () => {
-  const navigation = useNavigation();
+interface ITripItemProps {
+  item: TripType;
+}
+
+type TripStackNavigationProp = StackNavigationProp<TripRouteStackParamList>;
+
+export const TripItem: React.FC<ITripItemProps> = ({ item }) => {
+  const navigation = useNavigation<TripStackNavigationProp>();
   const modalQuestionRef = useRef<Modalize>(null);
 
   const onQuestionModalOpen = () => {
     modalQuestionRef?.current?.open();
-  }
+  };
+ 
+  const city = item.cities[0];
 
   return (
     <>
@@ -31,12 +53,14 @@ export const Tripitem = () => {
         <TouchableOpacity
           style={_tripScreenStyles.tripItemHeader}
           activeOpacity={0.7}
-          onPress={() => navigation.navigate("TripDetailScreen")}
+          onPress={() =>
+            navigation.navigate("TripDetailScreen", { trip: item, city })
+          }
         >
           {Platform.OS === "android" ? (
             <ImageBackground
               source={{
-                uri: "https://images.unsplash.com/photo-1550340499-a6c60fc8287c?q=20&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                uri: city.image.url,
               }}
               resizeMode="cover"
               style={_tripScreenStyles.tripImage}
@@ -57,11 +81,13 @@ export const Tripitem = () => {
                   <View>
                     <View style={_tripScreenStyles.tripInHeader}>
                       <Text style={_tripScreenStyles.tripDate}>
-                        14 Nov → 20 Nov
+                        {moment(item.startAt).format("DD MMM")} →{" "}
+                        {moment(item.endAt).format("DD MMM")}
                       </Text>
                     </View>
                     <Text style={_tripScreenStyles.tripTitle}>
-                      Hangover Paris
+                      {item?.name}
+                   
                     </Text>
                   </View>
                   <TouchableOpacity onPress={() => onQuestionModalOpen()}>
@@ -83,7 +109,9 @@ export const Tripitem = () => {
                   </View> */}
                   <View style={_tripScreenStyles.typeTag}>
                     <UsersIcon size="10" color="#ececec" />
-                    <Text style={_tripScreenStyles.typeTagText}>Friends</Text>
+                    <Text style={_tripScreenStyles.typeTagText}>
+                      {item.type}
+                    </Text>
                   </View>
                 </View>
               </LinearGradient>
@@ -91,7 +119,7 @@ export const Tripitem = () => {
           ) : (
             <Image
               source={{
-                uri: "https://images.unsplash.com/photo-1550340499-a6c60fc8287c?q=20&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                uri: city.image.url,
               }}
               cachePolicy="memory"
               contentFit="cover"
@@ -114,12 +142,14 @@ export const Tripitem = () => {
                   <View>
                     <View style={_tripScreenStyles.tripInHeader}>
                       <Text style={_tripScreenStyles.tripDate}>
-                        14 Nov → 20 Nov
+                        {moment(item.startAt).format("DD MMM")} →{" "}
+                        {moment(item.endAt).format("DD MMM")}
                       </Text>
                     </View>
                     <Text style={_tripScreenStyles.tripTitle}>
-                      Hangover Paris
+                      {item?.name}
                     </Text>
+                
                   </View>
                   <TouchableOpacity onPress={() => onQuestionModalOpen()}>
                     <DotsIcon color="#fff" />
@@ -140,7 +170,9 @@ export const Tripitem = () => {
                   </View> */}
                   <View style={_tripScreenStyles.typeTag}>
                     <UsersIcon size="10" color="#ececec" />
-                    <Text style={_tripScreenStyles.typeTagText}>Friends</Text>
+                    <Text style={_tripScreenStyles.typeTagText}>
+                      {item.type.toLowerCase()}
+                    </Text>
                   </View>
                 </View>
               </LinearGradient>

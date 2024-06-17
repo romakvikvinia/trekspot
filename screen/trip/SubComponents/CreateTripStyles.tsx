@@ -83,9 +83,10 @@ export const styles = StyleSheet.create({
     },
     halfBoxValueText: {
       marginTop: 5,
-      fontSize: 13,
-      opacity: 0.9,
+      fontSize: 18,
+      opacity: 1,
       color: COLORS.black,
+      fontWeight: "bold"
     },
     datePickerTopRow: {
       flexDirection: "row",
@@ -111,7 +112,7 @@ export const styles = StyleSheet.create({
     startsDateText: {
       fontSize: 22,
       color: COLORS.black,
-      fontWeight: "500",
+      fontWeight: "bold",
     },
     datePickerBottomRowLeft: {
       position: "relative",

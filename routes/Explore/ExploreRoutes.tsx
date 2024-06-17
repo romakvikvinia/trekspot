@@ -10,10 +10,12 @@ import { TripInsightDetailScreen } from "../../screen/trip/TripInsightDetail";
 import { TripInsights } from "../../screen/trip/TripInsights";
 import { SIZES } from "../../styles/theme";
 import { Platform } from "react-native";
-import { CityDetail } from "../../components/explore/destination/CityDetail";
+
 import { CountryDetailScreen } from "../../screen/Explore/Country/CountryDetailScreen";
-import { Search } from "../../screen/Explore/Search";
+import { SearchScreen } from "../../screen/Explore/SearchScreen";
 import { WishlistScreen } from "../../screen/Explore/WishlistScreen";
+import { CityDetailScreen } from "../../screen/Explore/city/CityDetailScreen";
+import { CityType } from "../../api/api.types";
 
 interface ExploreRoutesProps {}
 
@@ -26,7 +28,9 @@ export type ExploreRoutesStackParamList = {
   TripQuickDetailScreen: undefined;
   TripQuickInsights: undefined;
   TripQuickInsightsDetail: undefined;
-  CityDetail: undefined;
+  CityDetail: {
+    city: CityType;
+  };
   Search: undefined;
   WishlistScreen: undefined;
 };
@@ -108,7 +112,7 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
       />
       <Stack.Screen
         name="CityDetail"
-        component={CityDetail}
+        component={CityDetailScreen}
         options={() => ({
           header: () => null,
           gestureEnabled: Platform.OS === "ios",
@@ -118,7 +122,7 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
       />
       <Stack.Screen
         name="Search"
-        component={Search}
+        component={SearchScreen}
         options={() => ({
           header: () => null,
           gestureEnabled: Platform.OS === "ios",

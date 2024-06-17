@@ -17,6 +17,8 @@ import { CityType } from "../../api/api.types";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
 
 interface CitiesContainerProps {
   title: string;
@@ -25,19 +27,22 @@ interface CitiesContainerProps {
   isCitiesLoading: boolean;
 }
 
+type ExploreStackNavigationProp =
+  StackNavigationProp<ExploreRoutesStackParamList>;
+
 export const CitiesContainer: React.FC<CitiesContainerProps> = ({
   cities,
   title,
   seeAllItems = true,
   isCitiesLoading,
 }) => {
-  const navigation = useNavigation()
- 
+  const navigation = useNavigation<ExploreStackNavigationProp>();
+
   const handleCity = useCallback((city: CityType) => {
     navigation.navigate("CityDetail", {
-      city
-    })
-  }, []); 
+      city,
+    });
+  }, []);
 
   return (
     <>
@@ -227,12 +232,6 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
           </ScrollView>
         )}
       </View>
-      {/**
-       * city detail modal
-       */}
-      {/* {state.city && (
-          <CityDetailModal city={state.city} closeCallBack={handleClear} />
-        )} */}
     </>
   );
 };
@@ -245,7 +244,7 @@ const styles = StyleSheet.create({
   titleSm: {
     fontSize: 16,
     marginLeft: 2,
-    marginTop: -1
+    marginTop: -1,
   },
   labelItemText: {
     color: "#fff",

@@ -292,3 +292,55 @@ export type CountryDishesArgsType = {
   take?: number;
   iso2: string;
 };
+
+export type SearchResponseType = {
+  search: Array<CountryType | CityType>;
+};
+export type SearchArgsType = {
+  skip?: number;
+  take?: number;
+  search?: string;
+};
+
+export type SearchCitiesResponseType = {
+  search: CityType[];
+};
+export type SearchCitiesArgsType = {
+  skip?: number;
+  take?: number;
+  search?: string;
+};
+
+/**
+ * Trip
+ */
+
+export type TripType = {
+  id: string;
+  name: string;
+  startAt: string;
+  endAt: string;
+  type: string;
+  cities: CityType[];
+};
+
+export type CreateTripResponseType = {
+  createTrip: CityType[];
+};
+export type CreateTripArgsType = {
+  name: string;
+  startAt: string;
+  endAt: string;
+  type: string;
+  cities: string[];
+};
+
+//
+export type TripsResponseType = {
+  trips: TripType[];
+};
+export type TripsArgsType = {
+  skip?: number;
+  take?: number;
+  search?: string;
+};

@@ -37,6 +37,7 @@ export const TravelType = ({ modalTravelTypeRef, formik }) => {
           onPress={() => {
             formik.setFieldValue("travelType", "Solo");
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            modalTravelTypeRef?.current?.close();
           }}
         >
           <OneUserIcon
@@ -61,6 +62,7 @@ export const TravelType = ({ modalTravelTypeRef, formik }) => {
           onPress={() => {
             formik.setFieldValue("travelType", "Couple");
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            modalTravelTypeRef?.current?.close();
           }}
         >
           <CoupleIcon
@@ -87,6 +89,7 @@ export const TravelType = ({ modalTravelTypeRef, formik }) => {
           onPress={() => {
             formik.setFieldValue("travelType", "Family");
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            modalTravelTypeRef?.current?.close();
           }}
         >
           <FamilyIcon
@@ -113,6 +116,7 @@ export const TravelType = ({ modalTravelTypeRef, formik }) => {
           onPress={() => {
             formik.setFieldValue("travelType", "Friends");
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            modalTravelTypeRef?.current?.close();
           }}
         >
           <UsersIcon
