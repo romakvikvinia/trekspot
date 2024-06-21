@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native";
 import {
@@ -10,13 +10,14 @@ import {
 } from "../../../utilities/SvgIcons.utility";
 import { styles } from "../_styles";
 import { useLazyGetPassportIndexesQuery } from "../../../api/api.trekspot";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NotFound } from "../../../components/common/NotFound";
 import { CountryType } from "../../../api/api.types";
 import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 import { CountrySelect } from "../CountrySelect";
 import { Loader } from "../../ui/Loader";
+import { count } from "console";
 
 type VisaProps = {
   country: CountryType;
@@ -27,54 +28,58 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
   const [storageLoading, setStorageLoading] = useState(false);
   const [fetchVisaInfo, { data, isLoading, isError }] =
     useLazyGetPassportIndexesQuery();
-    const modalCountryPassportSelectRef = useRef(null);
-   
-    const openCountrySelectModal = () => {
-      modalCountryPassportSelectRef.current?.open();
-    };
-    
-    const storeCountryData = async (value) => {
-      try {
-        const jsonValue = JSON.stringify(value);
-        await AsyncStorage.setItem('user-country', jsonValue);
-      } catch (e) {
-        console.log("Error storing to async storage", e)
-      }
-    };
+  const modalCountryPassportSelectRef = useRef(null);
 
-    const getCountryDataFromStorage = async () => {
-      try {
-        setStorageLoading(true)
-        const value = await AsyncStorage.getItem('user-country');
-        setStorageLoading(false)
-        if (value !== null) {
-          const countryData = JSON.parse(value);
-          setSelectedDestination(countryData);
-         }
-      } catch (error) {
-        console.error('Error retrieving data: ', error);
-      }
-    };
+  const openCountrySelectModal = () => {
+    modalCountryPassportSelectRef.current?.open();
+  };
 
-    const handleCountrySelect = (country) => {
-      setSelectedDestination(country);
-      storeCountryData(country);
-      modalCountryPassportSelectRef.current?.close();
-    };
-  
+  const storeCountryData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem("user-country", jsonValue);
+      // await AsyncStorage.clear();
+    } catch (e) {
+      console.log("Error storing to async storage", e);
+    }
+  };
+
+  const getCountryDataFromStorage = async () => {
+    try {
+      setStorageLoading(true);
+      const value = await AsyncStorage.getItem("user-country");
+      setStorageLoading(false);
+      if (value !== null) {
+        const countryData = JSON.parse(value);
+        setSelectedDestination(countryData);
+      }
+    } catch (error) {
+      console.error("Error retrieving data: ", error);
+    }
+  };
+
+  const handleCountrySelect = (country) => {
+    setSelectedDestination(country);
+    storeCountryData(country);
+    modalCountryPassportSelectRef.current?.close();
+  };
+
   const onDestinationModalClose = () => {
-    modalCountryPassportSelectRef.current?.close()
-  }
+    modalCountryPassportSelectRef.current?.close();
+  };
 
   useEffect(() => {
-    getCountryDataFromStorage();  
-  },[])
+    getCountryDataFromStorage();
+  }, []);
 
-  useEffect(() => { 
+  useEffect(() => {
     storeCountryData(selectedDestination);
     fetchVisaInfo({ from: selectedDestination?.iso2 || "", to: country.iso2 });
   }, [selectedDestination]);
 
+  const isCitizen = useMemo(() => {
+    return selectedDestination?.name === country.name;
+  }, [selectedDestination]);
 
   return (
     <>
@@ -85,31 +90,39 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
       >
         <View style={styles.visaTabHeader}>
           <Text style={styles.travelToText}>Traveling to {country.name}</Text>
-        {
-          selectedDestination ? 
-       
-          <TouchableOpacity
-            style={styles.passportBox}
-            activeOpacity={0.7}
-            onPress={() => openCountrySelectModal()}
-          >
-            <PassportIcon />
-            <View style={styles.passportTexts}>
-              <Text style={styles.passportLabel}>Passport</Text>
-              <Text numberOfLines={1} style={styles.passportCountry}>
-                {selectedDestination?.name || "Rezident of"}
-              </Text>
-            </View>
-          </TouchableOpacity> : null }
-        </View>
 
-        {isLoading  ? (
+          {selectedDestination ? (
+            <TouchableOpacity
+              style={styles.passportBox}
+              activeOpacity={0.7}
+              onPress={() => openCountrySelectModal()}
+            >
+              <PassportIcon />
+              <View style={styles.passportTexts}>
+                <Text style={styles.passportLabel}>Passport</Text>
+                <Text numberOfLines={1} style={styles.passportCountry}>
+                  {selectedDestination?.name || "Rezident of"}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          ) : null}
+        </View>
+        {isCitizen ? (
+          <View style={[styles.textContentWrapper, styles.successBg, {marginTop: 50}]}>
+            <CheckCircleIcon color="#1a806b" />
+            <Text style={[styles.headingText, styles.success]}>
+              You are citizen of {country.name} and don't need visa.
+            </Text>
+          </View>
+        ) : null}
+
+        {isLoading ? (
           <View style={{ marginTop: 45 }}>
             <Loader isLoading={isLoading} background="" size="small" />
           </View>
         ) : null}
 
-        {!data && !isLoading && (
+        {!isCitizen && !data && !isLoading && (
           <View
             style={{
               alignItems: "center",
@@ -117,7 +130,11 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
             }}
           >
             <VisaPassportIcon />
-            <Text style={{ marginVertical: 15, textAlign: "center" }}>
+            <Text style={{
+               marginVertical: 15, 
+               textAlign: "center", 
+               maxWidth: "80%", 
+            }}>
               Find out if you need a visa by selecting your passport country.
             </Text>
             <TouchableOpacity
@@ -152,7 +169,7 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
 
         {/* {!data && !isLoading && <NotFound text="Data not found! Please select the country that issued your passport." />} */}
 
-        {!isLoading && data && data.passportIndex && (
+        {!isCitizen && !isLoading && data && data.passportIndex && (
           <View style={styles.visaTabContent}>
             {data.passportIndex.requirement !== "visa required" ? (
               <View style={[styles.textContentWrapper, styles.successBg]}>

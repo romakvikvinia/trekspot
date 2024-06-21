@@ -101,7 +101,7 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
                   flexWrap: "wrap",
                   flexDirection: "row",
                   justifyContent: "space-between",
-                  minHeight: 200,
+                  minHeight: 230,
                 },
               ]}
             >
@@ -143,7 +143,7 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
             </View>
           </>
         ) : (
-          <View style={{ height: 200 }}>
+          <View style={{ height: 230 }}>
             <Loader isLoading />
           </View>
         )}

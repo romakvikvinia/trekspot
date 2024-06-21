@@ -17,6 +17,8 @@ import {
 } from "../../../utilities/SvgIcons.utility";
 import { styles } from "../_styles";
 import { CountryType } from "../../../api/api.types";
+import RenderHTML from "react-native-render-html";
+import { SIZES } from "../../../styles/theme";
 
 interface TransportProps {
   country: CountryType;
@@ -24,9 +26,37 @@ interface TransportProps {
 
 export const Transport: React.FC<TransportProps> = ({ country }) => {
   return (
-    <ScrollView style={styles.tabWrapper} showsVerticalScrollIndicator={false}>
-      <Text style={styles.secondaryTitle}>Public transport</Text>
+    <ScrollView style={styles.tabWrapper} contentContainerStyle={{
+      paddingBottom: 30
+    }} showsVerticalScrollIndicator={false}>
+      <Text style={styles.secondaryTitle}>General info</Text>
+      <RenderHTML
+        key={"topic"}
+        contentWidth={SIZES.width}
+        source={{
+          html: `
+            <ul style="line-height: 27px; padding-left: 15px">
+                <li style="line-height: 22px; font-size: 16px; margin-bottom: 8px"><strong>Trains:</strong> 
+                    Connect major cities (affordable, under $10 usually).
+                </li>
+                <li style="line-height: 22px; font-size: 16px; margin-bottom: 8px"><strong>Metro (Tbilisi only):</strong> 
+                    Fast and convenient (around ₾1 per ride).
+                </li>
+                <li style="line-height: 22px; font-size: 16px; margin-bottom: 8px"><strong>Marshrutkas:</strong> 
+                    Minibuses for city and intercity travel (cheap, fares depend on distance).
+                </li>
+                <li style="line-height: 22px; font-size: 16px; margin-bottom: 0"><strong>Buses:</strong> 
+                    Extensive network for cities and regions (affordable).
+                </li>
+            </ul>
+            `,
+        }}
+        defaultTextProps={{
+          selectable: true,
+        }}
+      />
 
+      <Text style={[styles.secondaryTitle, {marginTop: 15}]}>Public transport</Text>
       <View style={styles.transports}>
         {country.transportTypes?.map((item) => {
           return item === "Bus" ? (
@@ -98,8 +128,6 @@ export const Transport: React.FC<TransportProps> = ({ country }) => {
           </TouchableOpacity>
         ))}
       </View>
-
-      {console.log("country", country)}
 
       <Text style={styles.secondaryTitle}>Driving side</Text>
       <View style={styles.drivingSide}>

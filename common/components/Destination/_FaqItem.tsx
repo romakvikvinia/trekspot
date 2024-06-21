@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import RenderHTML from "react-native-render-html";
+import { DownIcon, UpCircleIcon, UpIcon } from "../../../utilities/SvgIcons.utility";
 
 export const FaqItem = ({item}) => {
   const [visible, setVisible] = useState(false);
@@ -8,13 +9,18 @@ export const FaqItem = ({item}) => {
   return (
     <TouchableOpacity
       activeOpacity={0.7}
-      style={styles.faqItem}
+      style={[styles.faqItem, {borderColor: visible ? "#ccc" : "#eee"}]}
       onPress={() => setVisible(!visible)}
     >
       <View style={styles.faqHeader}>
         <Text style={styles.faqHeaderText}>
             {item?.question}
         </Text>
+
+        {
+          visible ? <UpIcon color="#bbb" /> :  <DownIcon color="#ccc" />
+        }
+ 
       </View>
       {visible ? (
         <View style={styles.faqBody}>
@@ -26,6 +32,10 @@ export const FaqItem = ({item}) => {
             }}
             defaultTextProps={{
               selectable: true,
+            }}
+            baseStyle={{
+              lineHeight: 22,
+              fontWeight: "400",
             }}
           />
         </View>
@@ -50,9 +60,9 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   faqHeaderText: {
-    color: "#444444",
-    fontSize: 15,
-    fontWeight: "600",
+    color: "#000",
+    fontSize: 14,
+    fontWeight: "500",
   },
   faqBody: {
     paddingHorizontal: 15,

@@ -413,6 +413,7 @@ const styles = StyleSheet.create({
     color: COLORS.black,
     paddingHorizontal: 0,
     marginBottom: 15,
+    zIndex: 1
   },
   header: {
     flexDirection: "row",

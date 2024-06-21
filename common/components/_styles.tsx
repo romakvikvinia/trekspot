@@ -176,7 +176,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#f2f2f2",
   },
   tagText: {
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: "600",
   },
   currencySelectButton: {

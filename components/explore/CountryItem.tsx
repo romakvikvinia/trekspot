@@ -53,7 +53,7 @@ export const CountryItem: React.FC<CountryItemProps> = ({
               colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
             >
               <View style={styles.labelItem}>
-                <Mark color="#fff" size={15} />
+                {/* <Mark color="#fff" size={15} /> */}
                 <Text style={styles.labelItemText} numberOfLines={2}>
                   {item.name}
                 </Text>
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 20,
     fontWeight: "bold",
-    marginLeft: 5,
+    marginLeft: 0,
     paddingRight: 10,
   },
   labelItem: {

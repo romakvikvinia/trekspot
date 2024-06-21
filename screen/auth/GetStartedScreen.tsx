@@ -4,7 +4,7 @@ import { ImageBackground, Platform, Text, TouchableOpacity, View } from "react-n
 import Onboarding from "react-native-onboarding-swiper";
 
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
-import { Markering } from "../../utilities/SvgIcons.utility";
+import { ExploreIcon, Markering, PlanTripIcon, StatsIcon, WishlistIcon } from "../../utilities/SvgIcons.utility";
 import { COLORS } from "../../styles/theme";
 
 type GetStartedProps = NativeStackScreenProps<AuthStackParamList, "GetStarted">;
@@ -117,16 +117,7 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
             marginRight: 25,
           }}
         >
-          <ImageBackground
-            resizeMode="cover"
-            source={{
-              uri: "https://cdn-icons-png.flaticon.com/512/1946/1946767.png",
-            }}
-            style={{
-              width: 50,
-              height: 50,
-            }}
-          ></ImageBackground>
+          <ExploreIcon size={50} />
         </View>
         <View
           style={{
@@ -135,7 +126,7 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
         >
           <Text
             style={{
-              fontSize: 15,
+              fontSize: 18,
               fontWeight: "bold",
             }}
           >
@@ -167,16 +158,7 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
             marginRight: 25,
           }}
         >
-          <ImageBackground
-            resizeMode="cover"
-            source={{
-              uri: "https://cdn-icons-png.flaticon.com/512/8074/8074688.png",
-            }}
-            style={{
-              width: 50,
-              height: 50,
-            }}
-          ></ImageBackground>
+          <StatsIcon size={50} />
         </View>
 
         <View
@@ -186,7 +168,7 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
         >
           <Text
             style={{
-              fontSize: 15,
+              fontSize: 18,
               fontWeight: "bold",
             }}
           >
@@ -217,16 +199,7 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
             marginRight: 25,
           }}
         >
-          <ImageBackground
-            resizeMode="cover"
-            source={{
-              uri: "https://cdn-icons-png.flaticon.com/512/2200/2200326.png",
-            }}
-            style={{
-              width: 50,
-              height: 50,
-            }}
-          ></ImageBackground>
+          <WishlistIcon size={50}/>
         </View>
 
         <View
@@ -236,11 +209,11 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
         >
           <Text
             style={{
-              fontSize: 15,
+              fontSize: 18,
               fontWeight: "bold",
             }}
           >
-            Create Your Ultimate Bucket List
+            Create Your Wishlist 
           </Text>
           <Text
             style={{
@@ -267,16 +240,7 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
             marginRight: 25,
           }}
         >
-          <ImageBackground
-            resizeMode="cover"
-            source={{
-              uri: "https://cdn-icons-png.flaticon.com/512/12607/12607558.png",
-            }}
-            style={{
-              width: 50,
-              height: 50,
-            }}
-          ></ImageBackground>
+          <PlanTripIcon size={50} />
         </View>
 
         <View
@@ -286,7 +250,7 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
         >
           <Text
             style={{
-              fontSize: 15,
+              fontSize: 18,
               fontWeight: "bold",
             }}
           >
@@ -300,7 +264,7 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
               fontWeight: "500",
             }}
           >
-           Dream, plan, go! Seamlessly plan your next trip with AI planning feature. 
+          Seamlessly plan your next trip with AI planning feature. 
           </Text>
         </View>
       </View>

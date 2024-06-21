@@ -144,42 +144,42 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
               style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]}
               activeOpacity={0.7}
               onPress={() =>
-                Alert.alert("Do you really want to delete account?", "", [
-                  {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel",
-                  },
-                  {
-                    text: "Delete",
-                    onPress: () => console.log("OK Pressed"),
-                    style: "destructive",
-                  },
-                ])
+                Alert.alert(
+                  "Warning",
+                  "If you want to deactivate your account, you will lose all your data. If are sure, please send us email to hello@trekspot.io",
+                  [{ text: "Got it!" }]
+                )
               }
             >
               <DeleteIcon />
               <Text style={[styles.buttonText, { color: COLORS.red }]}>
-                Delete account
+                Deactivate account
               </Text>
             </TouchableOpacity>
           </View>
           <Text style={styles.buttonsWrapperTitle}>Socials</Text>
           <View style={styles.buttonsWrapper}>
             <TouchableOpacity
-              style={styles.button}
+              style={[styles.button, {
+                paddingLeft: 24,
+                marginRight: 0,
+                paddingRight: 0
+              }]}
               activeOpacity={0.7}
             >
               <FacebookLinear color="" size="" />
-              <Text style={styles.buttonText}>Like us on Facebook</Text>
+              <Text style={[styles.buttonText, {
+                paddingLeft: 0,
+                marginLeft: 8
+              }]}>Like us on Facebook</Text>
             </TouchableOpacity>
-            <TouchableOpacity  style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]} activeOpacity={0.7}>
+            <TouchableOpacity  style={[styles.button, {  marginBottom: 0 }]} activeOpacity={0.7}>
               <InstagramLinear color="" size="" />
               <Text style={styles.buttonText}>
                 Follow us on Instagram
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity  style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]} activeOpacity={0.7}>
+            <TouchableOpacity  style={[styles.button, {  marginBottom: 0 }]} activeOpacity={0.7}>
               <ThreadsLinear color="" size="" />
               <Text style={styles.buttonText}>
                 Follow us on Threads

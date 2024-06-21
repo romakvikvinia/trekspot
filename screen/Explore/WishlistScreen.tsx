@@ -99,6 +99,7 @@ export const WishlistScreen = () => {
                                 marginLeft: 0,
                                 marginBottom: 0,
                                 marginRight: 15,
+                                height: 288
                               },
                             ]}
                             onPress={() => {
@@ -107,21 +108,7 @@ export const WishlistScreen = () => {
                                 Haptics.ImpactFeedbackStyle.Light
                               );
                             }}
-                          >
-                      
-                            <TouchableOpacity
-                              style={[
-                                styles.countryItemActionButton,
-                                // state.isVisited ? styles.countryActive : null,
-                              ]}
-                              onPress={() =>
-                                Haptics.impactAsync(
-                                  Haptics.ImpactFeedbackStyle.Light
-                                )
-                              }
-                            >
-                              <Mark2 color={COLORS.white} />
-                            </TouchableOpacity>
+                          > 
                             <Image
                               style={{
                                 width: 200,
@@ -142,7 +129,7 @@ export const WishlistScreen = () => {
                               key={`img-${item?.title}`}
                             ></Image>
 
-                            <View
+                          <View
                               style={[
                                 tripDetailStyles.sightDetails,
                                 {
@@ -189,7 +176,7 @@ export const WishlistScreen = () => {
                                   </>
                                 ) : null}
                               </View>
-                            </View>
+                            </View>  
                             <View style={styles.actionButtons}>
                               <TouchableOpacity
                                 onPress={() => handleTopSightClick(item)}
@@ -250,7 +237,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   wishlistRowTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "600",
     color: COLORS.primaryDark,
     paddingHorizontal: 20,
@@ -270,7 +257,7 @@ const styles = StyleSheet.create({
   actionButtons: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 0,
+    marginTop: 15,
     width: 200,
   },
   buttonItem: {

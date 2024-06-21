@@ -114,7 +114,7 @@ export const VisaChecker = () => {
           <View
             style={{ width: 30, marginHorizontal: 10, alignItems: "center" }}
           >
-            <FlightIcon color={COLORS.primary} />
+            <FlightIcon color={COLORS.black} />
           </View>
           <TouchableOpacity
             onPress={() => {

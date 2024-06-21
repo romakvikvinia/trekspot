@@ -27,14 +27,14 @@ export const ExploreHeader = () => {
         <View style={styles.searchIcon}>
           <SearchIcon width={15} />
         </View>
-        <Text style={styles.searchInput}>Search here...</Text>
+        <Text style={styles.searchInput}>Where to?</Text>
       </TouchableOpacity>
       <View style={styles.right}>
         <TouchableOpacity
           onPress={() => onBucketlistOpen()}
           style={styles.bucketListButton}
         >
-          <FlightIcon color={COLORS.primary} />
+          <FlightIcon color={COLORS.black} />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => navigation.navigate("WishlistScreen")}

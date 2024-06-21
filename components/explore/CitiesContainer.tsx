@@ -93,7 +93,7 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
                         colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
                       >
                         <View style={styles.labelItem}>
-                          <Mark color="#fff" />
+                          {/* <Mark color="#fff" /> */}
                           <Text
                             numberOfLines={2}
                             style={[styles.labelItemText, styles.titleSm]}
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 22,
     fontWeight: "bold",
-    marginLeft: 5,
+    marginLeft: 0,
     paddingRight: 10,
   },
   labelItem: {

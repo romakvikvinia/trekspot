@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Image } from "expo-image";
 import {
   Linking,
@@ -141,6 +141,16 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
     }
   }, [data]);
 
+  const calcHeight = useMemo(() => {  
+    if (data?.description && data?.workingHours?.length > 0) {
+      return 580
+    }
+    if(data?.description || data?.workingHours?.length > 0) {
+      return 500
+    } 
+    
+  }, [data]);
+
   if (!data) return null;
 
   return (
@@ -175,7 +185,9 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
           </View>
           {/* @ts-ignore */}
           <ScrollView
-            style={styles.modalContent}
+            style={[styles.modalContent,{
+              maxHeight: calcHeight ? calcHeight : 450
+            }]}
             ref={ref}
             showsVerticalScrollIndicator={false}
           >
@@ -238,10 +250,14 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                   <Mark2 color="#fff" />
                 </TouchableOpacity>
               </View>
-              <View style={styles.locationCity}>
+              {
+                data?.city ? 
+                <View style={styles.locationCity}>
                 <Mark size="15" color={COLORS.gray} />
                 <Text style={styles.locationCityText}>{data?.city}</Text>
-              </View>
+              </View>  :null
+              }
+           
               <View style={styles.ratingWrapper}>
                 <Text style={styles.type}>{data.category}</Text>
                 <View
@@ -290,7 +306,6 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
 };
 export const styles = StyleSheet.create({
   modalContent: {
-    maxHeight: 600,
     backgroundColor: "#fff",
     width: "95%",
     borderRadius: 15,
