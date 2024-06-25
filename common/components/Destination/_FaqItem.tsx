@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     borderColor: "#eee",
     padding: 0,
     borderRadius: 10,
-    marginBottom: 8
+    marginTop: 8
   },
   faqHeader: {
     flexDirection: "row",
@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     color: "#000",
     fontSize: 14,
     fontWeight: "500",
+    maxWidth: "90%",
   },
   faqBody: {
     paddingHorizontal: 15,

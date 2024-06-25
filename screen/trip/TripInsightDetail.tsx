@@ -49,7 +49,19 @@ export const TripInsightDetailScreen: React.FC<TripProps> = ({}) => {
           contentWidth={SIZES.width}
           source={{
             html: `
-            <h2 style="color: green">Title item</h2>
+            <h2 style="color: black">Title item</h2>
+            <p style="font-sze: 18px; line-height: 22px">
+            The Foundry (v6) release is finally stable, and is now-on the recommended version. Check out the announcement blog post in our brand new website. We also have a migration guide for
+            </p>
+            <ul style="margin-top: 0">
+                <li>
+                     Text item
+                </li>
+                <li>
+                    Text item
+                </li>
+            </ul>
+            <img style="width: ${SIZES.width - 30+"px"}" src="https://cdn.pixabay.com/photo/2021/06/22/16/39/arch-6356637_1280.jpg" />
             <p style="font-sze: 18px; line-height: 22px">
             The Foundry (v6) release is finally stable, and is now-on the recommended version. Check out the announcement blog post in our brand new website. We also have a migration guide for
             </p>
@@ -64,17 +76,8 @@ export const TripInsightDetailScreen: React.FC<TripProps> = ({}) => {
             <p style="font-sze: 18px; line-height: 22px">
             The Foundry (v6) release is finally stable, and is now-on the recommended version. Check out the announcement blog post in our brand new website. We also have a migration guide for
             </p>
-            <ul>
-                <li>
-                     Text item
-                </li>
-                <li>
-                    Text item
-                </li>
-            </ul>
-            <p style="font-sze: 18px; line-height: 22px">
-            The Foundry (v6) release is finally stable, and is now-on the recommended version. Check out the announcement blog post in our brand new website. We also have a migration guide for
-            </p>
+             <img style="width: ${SIZES.width - 30+"px"}" src="https://cdn.pixabay.com/photo/2023/01/10/00/17/italy-7708552_1280.jpg" />
+
             <p style="font-sze: 18px; line-height: 22px">
             The Foundry (v6) release is finally stable, and is now-on the recommended version. Check out the announcement blog post in our brand new website. We also have a migration guide for
             </p>
@@ -90,7 +93,8 @@ export const TripInsightDetailScreen: React.FC<TripProps> = ({}) => {
             fontSize: 16,
             lineHeight: 22,
             paddingBottom: 30,
-            paddingTop: 15
+            paddingTop: 15,
+            fontWeight: "400"
           }}
         />
       </ScrollView>

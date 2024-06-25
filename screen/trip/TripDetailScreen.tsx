@@ -262,8 +262,14 @@ export const TripDetailScreen: React.FC<TripProps> = ({
 
                 {item?.activities?.length < 1 ? (
                   <View style={tripDetailStyles.noActivitiesWrapper}>
-                    <NoActivity text="You don't have activites for today" />
-                    
+                  
+                    <Text style={{
+                      color: COLORS.black,
+                      fontSize: 18,
+                      fontWeight: "bold",
+                    }}>
+                      You don't have activites for today
+                    </Text>
                     <TouchableOpacity
                       style={tripDetailStyles.addActivityButtonItem}
                       activeOpacity={0.7}

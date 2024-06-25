@@ -14,7 +14,7 @@ export const tripDetailStyles = StyleSheet.create({
   addActivityButtonItem :{
     backgroundColor: "#000",
     borderRadius: 50,
-    padding: 15,
+    padding: 10,
     width: 200,
     marginTop: 25
   },

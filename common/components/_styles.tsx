@@ -342,7 +342,7 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: COLORS.black,
-    paddingHorizontal: 15,
+    paddingHorizontal: 0,
     marginBottom: 15,
   },
   forYouRowTitleSub: {
@@ -350,7 +350,6 @@ export const styles = StyleSheet.create({
     fontWeight: "600",
     color: COLORS.black,
     paddingHorizontal: 15,
-    marginBottom: 15,
   },
   thingsTodoItemiIntypeText: {
     fontSize: 12,
