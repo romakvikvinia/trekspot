@@ -9,13 +9,14 @@ import { TripDetailScreen } from "../../screen/trip/TripDetailScreen";
 import { TripInsightDetailScreen } from "../../screen/trip/TripInsightDetail";
 import { TripInsights } from "../../screen/trip/TripInsights";
 import { SIZES } from "../../styles/theme";
-import { Platform } from "react-native";
+import { Platform, Text, TouchableOpacity } from "react-native";
 
 import { CountryDetailScreen } from "../../screen/Explore/Country/CountryDetailScreen";
 import { SearchScreen } from "../../screen/Explore/SearchScreen";
 import { WishlistScreen } from "../../screen/Explore/WishlistScreen";
 import { CityDetailScreen } from "../../screen/Explore/city/CityDetailScreen";
 import { CityType } from "../../api/api.types";
+import { useNavigation } from "@react-navigation/native";
 
 interface ExploreRoutesProps {}
 
@@ -33,6 +34,7 @@ export type ExploreRoutesStackParamList = {
   };
   Search: undefined;
   WishlistScreen: undefined;
+  TripDetails: undefined
 };
 
 const Stack = createStackNavigator<ExploreRoutesStackParamList>();
@@ -41,6 +43,7 @@ export type ExploreRoutesStackNavigationProp =
   StackNavigationProp<ExploreRoutesStackParamList>;
 
 export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
+  const navigation = useNavigation();
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -139,7 +142,24 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
           gestureResponseDistance:
             Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
+        
       />
+      {/* <Stack.Group
+        screenOptions={{ presentation: "modal",   headerShown: true,
+        headerLeft: () => null,
+        headerTitle: "",
+        headerRight: () => (
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={{ paddingHorizontal: 15 }}
+          >
+            <Text>Close</Text>
+          </TouchableOpacity>
+        ),
+      }}
+      >
+        <Stack.Screen name="TripDetails" component={TripDetailScreen} />
+      </Stack.Group> */}
     </Stack.Navigator>
   );
 };

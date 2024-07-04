@@ -1,10 +1,12 @@
 import {
+  Dimensions,
+  ImageBackground,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
- 
+
 import { COLORS, SIZES } from "../../styles/theme";
 import {
   FlightIcon,
@@ -13,41 +15,230 @@ import {
 } from "../../utilities/SvgIcons.utility";
 import Constants from "expo-constants";
 import { useNavigation } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
+// import Animated, {
+//   ReduceMotion,
+//   useAnimatedGestureHandler,
+//   useAnimatedStyle,
+//   useSharedValue,
+//   withDecay,
+//   withSpring,
+// } from "react-native-reanimated";
+// import { PanGestureHandler } from "react-native-gesture-handler";
+// import { LinearGradient } from "expo-linear-gradient";
 
 export const ExploreHeader = () => {
   const navigation = useNavigation();
 
+  // const screenWidth = Dimensions.get('window').width;
+  // const screenHeight = Dimensions.get('window').height;
+  // const buttonSize = 90;
+
+  // Initial position: top-right corner
+  // const translateX = useSharedValue(screenWidth - buttonSize - 15);
+  // const translateY = useSharedValue(45);
+
+  // const gestureHandler = useAnimatedGestureHandler({
+  //   onStart: (_, ctx) => {
+  //     ctx.startX = translateX.value;
+  //     ctx.startY = translateY.value;
+  //   },
+  //   onActive: (event, ctx) => {
+  //     translateX.value = Math.min(
+  //       Math.max(0, ctx.startX + event.translationX),
+  //       screenWidth - buttonSize
+  //     );
+  //     translateY.value = Math.min(
+  //       Math.max(0, ctx.startY + event.translationY),
+  //       screenHeight - buttonSize
+  //     );
+  //   },
+  //   onEnd: (event) => {
+  //     translateX.value = withDecay({
+  //       velocity: event.velocityX,
+  //       deceleration: 0.998,
+  //       clamp: [0, screenWidth - buttonSize],
+  //       velocityFactor: 1,
+  //       rubberBandEffect: true,
+  //       rubberBandFactor: 0.6,
+  //       reduceMotion: ReduceMotion.System,
+  //     });
+  //     translateY.value = withDecay({
+  //       velocity: event.velocityY,
+  //       deceleration: 0.998,
+  //       clamp: [0, screenHeight - buttonSize],
+  //       velocityFactor: 1,
+  //       rubberBandEffect: true,
+  //       rubberBandFactor: 0.6,
+  //       reduceMotion: ReduceMotion.System,
+  //     });
+  //   },
+  // });
+
+  // const animatedStyle = useAnimatedStyle(() => {
+  //   return {
+  //     transform: [
+  //       { translateX: translateX.value },
+  //       { translateY: translateY.value },
+  //     ],
+  //   };
+  // });
   return (
-    <View style={styles.screenHeader}>
-      <TouchableOpacity
-        style={styles.searchBox}
-        activeOpacity={1}
-        onPress={() => navigation.navigate("Search")}
-      >
-        <View style={styles.searchIcon}>
-          <SearchIcon width={15} />
+    <>
+      <View style={styles.screenHeader}>
+        <TouchableOpacity
+          style={styles.searchBox}
+          activeOpacity={1}
+          onPress={() => navigation.navigate("Search")}
+        >
+          <View style={styles.searchIcon}>
+            <SearchIcon width={15} />
+          </View>
+          <Text style={styles.searchInput}>Where to?</Text>
+        </TouchableOpacity>
+        <View style={styles.right}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("TripDetails", {
+                quickView: true,
+              })
+            }
+            style={[styles.bucketListButton, { padding: 0 }]}
+          >
+            <LinearGradient
+              style={styles.gradientWrapper}
+              colors={["#DCB92C", "#FF543E", "#C837AB"]}
+            >
+              <ImageBackground
+                source={{
+                  uri: "https://cdn.pixabay.com/photo/2019/12/27/09/57/dubai-4722074_1280.jpg",
+                }}
+                style={styles.destinationImage}
+              />
+              <View style={styles.destinationInfo}>
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    fontSize: 9,
+                    fontWeight: "bold",
+                    color: "#fff",
+                  }}
+                >
+                  Dubai
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 7,
+                    fontWeight: "600",
+                    color: "#fff",
+                    marginTop: 2,
+                    paddingHorizontal: 3,
+                  }}
+                >
+                  13-15
+                </Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("WishlistScreen")}
+            style={styles.bucketListButton}
+          >
+            <Mark2 size={16} color={COLORS.black} />
+          </TouchableOpacity>
         </View>
-        <Text style={styles.searchInput}>Where to?</Text>
-      </TouchableOpacity>
-      <View style={styles.right}>
-        <TouchableOpacity
-          onPress={() => onBucketlistOpen()}
-          style={styles.bucketListButton}
-        >
-          <FlightIcon color={COLORS.black} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("WishlistScreen")}
-          style={styles.bucketListButton}
-        >
-          <Mark2 size={16} color={COLORS.black} />
-        </TouchableOpacity>
       </View>
-    </View>
+      {/* <PanGestureHandler onGestureEvent={gestureHandler}>
+        <Animated.View style={[styles.floatingButton, animatedStyle]}>
+          <LinearGradient
+            style={styles.gradientWrapper}
+            colors={["#DCB92C", "#FF543E", "#C837AB"]}
+          >
+            <ImageBackground
+              source={{
+                uri: "https://cdn.pixabay.com/photo/2015/10/06/18/26/eiffel-tower-975004_1280.jpg",
+              }}
+              style={styles.destinationImage}
+            />
+            <View
+              style={styles.destinationInfo}
+            >
+              <Text
+                numberOfLines={1}
+                style={{
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  color: "#fff",
+                }}
+              >
+                Paris
+              </Text>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: "600",
+                  color: "#fff",
+                  marginTop: 5,
+                }}
+              >
+                13-18
+              </Text>
+            </View>
+          </LinearGradient>
+        </Animated.View>
+      </PanGestureHandler> */}
+    </>
   );
 };
 
 const styles = StyleSheet.create({
+  gradientWrapper: {
+    width: 45,
+    height: 45,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 100,
+  },
+  destinationImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 100,
+    overflow: "hidden",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  destinationInfo: {
+    width: 40,
+    height: 40,
+    borderRadius: 100,
+    overflow: "hidden",
+    backgroundColor: "rgba(0,0,0,0.6)",
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 3,
+  },
+  floatingButton: {
+    position: "absolute",
+    width: 90,
+    height: 90,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 100,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 30.84,
+    elevation: 5,
+    zIndex: 1000, // to bring the button to the front
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 24,
+  },
   safeArea: {
     flex: 1,
     backgroundColor: "#f8f8f8",
