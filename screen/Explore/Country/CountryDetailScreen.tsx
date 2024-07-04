@@ -1,5 +1,11 @@
 import React, { useEffect, useRef } from "react";
-import { ImageBackground, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  ImageBackground,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { Modalize } from "react-native-modalize";
@@ -91,7 +97,7 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
               >
                 <BackIcon color="#fff" />
               </TouchableOpacity>
-               
+
               {isLoading && (
                 <View style={{ minHeight: SIZES.height }}>
                   <View
@@ -263,7 +269,7 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
               bounces={false}
               showsVerticalScrollIndicator={false}
             >
-              <TripInsightTab />
+              <TripInsightTab iso2={(data && data.country.iso2) || ""} />
             </Tabs.ScrollView>
           </Tabs.Tab>
           <Tabs.Tab

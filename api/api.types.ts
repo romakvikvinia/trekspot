@@ -344,3 +344,29 @@ export type TripsArgsType = {
   take?: number;
   search?: string;
 };
+
+//
+
+export type TopicType = {
+  id?: string;
+  itemId: string;
+  iso2: string;
+  title: string;
+  description: string;
+  category: {
+    itemId: string;
+    title: string;
+  };
+};
+
+export type TopicsResponseType = {
+  topics: TopicType[];
+};
+export type TopicsArgsType = {
+  skip?: number;
+  take?: number;
+  search?: string;
+  iso2: string;
+};
+
+export type TransformedTopicsResponseType = Record<string, TopicType[]>;
