@@ -1,5 +1,5 @@
 import { FlashList } from "@shopify/flash-list";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Image } from "expo-image";
 import { TouchableOpacity, useWindowDimensions, View } from "react-native";
 import { StyleSheet, Text } from "react-native";
@@ -9,10 +9,18 @@ import { COLORS, SIZES } from "../../styles/theme";
 import { StarIcon } from "../../utilities/SvgIcons.utility";
 import { TabBar, TabView } from "react-native-tab-view";
 import { Loader } from "../../common/ui/Loader";
+import { TripDaysType } from "./TripDetailScreen";
+import { SightType } from "../../api/api.types";
 
-export const TripActivitiesSelect = ({
-  trip,
-  currentTabIndex,
+interface ITripActivitiesSelectProps {
+  days: TripDaysType[];
+  data: any;
+  isLoading: boolean;
+  handleAddToTrip: (data: SightType) => void;
+}
+
+export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
+  days,
   data,
   isLoading,
   handleAddToTrip,
@@ -34,11 +42,11 @@ export const TripActivitiesSelect = ({
       }, {});
       setTabData(initialTabData);
     }
-  }, [data, trip]);
+  }, [data]);
 
-  const showTopSight = (sight:object) => {
-    setTopSightDetail(sight)
-  }
+  const showTopSight = (sight: object) => {
+    setTopSightDetail(sight);
+  };
 
   const renderScene = ({ route }) => {
     if (isLoading) {
@@ -57,7 +65,14 @@ export const TripActivitiesSelect = ({
       <View style={{ minHeight: SIZES.height - 205 }}>
         <FlashList
           data={tabData[route.key]}
-          keyExtractor={(item, index) => `${route.key}-${index}`}
+          keyExtractor={(item, index) =>
+            `${route.key}-${index}-${
+              days &&
+              days.some((day) =>
+                day.activities.some((activity) => activity?.id === item?.id)
+              )
+            }`
+          }
           renderItem={({ item, index }) => (
             <TouchableOpacity
               activeOpacity={0.7}
@@ -68,7 +83,7 @@ export const TripActivitiesSelect = ({
                   marginLeft: index % 2 === 1 ? "auto" : undefined,
                 },
               ]}
-              onPress={() => showTopSight(item)} 
+              onPress={() => showTopSight(item)}
             >
               <Image
                 style={[
@@ -80,10 +95,12 @@ export const TripActivitiesSelect = ({
                 contentFit="cover"
                 transition={0}
                 source={
-                  item?.image?.url?.length ? {
-                  uri: item?.image?.url,
-                } : require("../../assets/no-image.png")
-              }
+                  item?.image?.url?.length
+                    ? {
+                        uri: item?.image?.url,
+                      }
+                    : require("../../assets/no-image.png")
+                }
               ></Image>
 
               <View style={styles.thingsTodoItemDetails}>
@@ -91,7 +108,7 @@ export const TripActivitiesSelect = ({
                   {item?.title}
                 </Text>
 
-                <View style={styles.thingsTodoItemiIn}> 
+                <View style={styles.thingsTodoItemiIn}>
                   <View style={exploreStyles.ratingWrapper}>
                     <View
                       style={{
@@ -107,12 +124,17 @@ export const TripActivitiesSelect = ({
                 </View>
 
                 <View style={styles.actionButtons}>
-                  <TouchableOpacity onPress={() => showTopSight(item)} activeOpacity={0.7} style={styles.detailsButton}>
+                  <TouchableOpacity
+                    onPress={() => showTopSight(item)}
+                    activeOpacity={0.7}
+                    style={styles.detailsButton}
+                  >
                     <Text style={styles.detailsButtonText}>Details</Text>
                   </TouchableOpacity>
 
-                  {trip?.data?.[currentTabIndex]?.activities.find(
-                    (activity) => activity?.id === item?.id
+                  {days &&
+                  days.some((day) =>
+                    day.activities.some((activity) => activity?.id === item?.id)
                   ) ? (
                     <TouchableOpacity
                       style={[
@@ -150,9 +172,8 @@ export const TripActivitiesSelect = ({
   };
 
   const handleClear = useCallback(() => {
-    setTopSightDetail(null)
+    setTopSightDetail(null);
   }, []);
-
 
   return (
     <>
@@ -201,14 +222,9 @@ export const TripActivitiesSelect = ({
           />
         </View>
       </View>
-      {
-        topSightDetail ? 
-        <SightDetailModal
-          data={topSightDetail}
-          closeCallBack={handleClear}
-        /> : null
-      }
-     
+      {topSightDetail ? (
+        <SightDetailModal data={topSightDetail} closeCallBack={handleClear} />
+      ) : null}
     </>
   );
 };

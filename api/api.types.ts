@@ -234,6 +234,11 @@ type WorkingHour = {
   hours: string;
 };
 
+export type SightLocationType = {
+  lat: number;
+  lng: number;
+};
+
 export type SightType = {
   id: string;
   iso2: string;
@@ -247,6 +252,7 @@ export type SightType = {
   url: string;
   description: string;
   workingHours: WorkingHour[];
+  location: SightLocationType;
   image: FileType;
   images: FileType[];
 };

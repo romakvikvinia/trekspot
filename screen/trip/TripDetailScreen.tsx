@@ -30,61 +30,75 @@ import { SightDetailModal } from "../../components/explore/sights/SightDetailMod
 import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { NoActivity } from "../../common/components/NoActivity";
+import { addDays, differenceInDays, format } from "date-fns";
+import { SightType } from "../../api/api.types";
 
 type TripProps = NativeStackScreenProps<
   TripRouteStackParamList,
   "TripDetailScreen"
 >;
 
+export type TripDaysType = {
+  id: number;
+  date: string;
+  weekDay: string;
+  activities: any[];
+};
+
+interface IState {
+  days: TripDaysType[];
+}
+
 export const TripDetailScreen: React.FC<TripProps> = ({
   route,
   navigation,
 }) => {
-  const { trip, city } = route.params;
-  const [getSights, { data, isLoading: sightsLoading }] =
-    useLazyGetSightsQuery();
-
-  useEffect(() => {
-    getSights({ iso2: "AE", city: "Dubai" });
-  }, []);
-
-  const [currentTabIndex, setCurrentTabIndex] = useState(0);
-  const [topSightDetail, setTopSightDetail] = useState(null);
-  const [tripData, setTrip] = useState({
-    name: "Dubai vacation",
-    startDate: "15 Nov",
-    endDate: "24 Nov",
-    type: "Solo",
-    country: "UAE",
-    city: "Dubai",
-    mainTopSight: {
-      coordinates: {
-        latitude: 25.1971636,
-        longitude: 55.274249,
-      },
-    },
-    data: [
-      {
-        id: 0,
-        date: "May 8",
-        activities: [],
-      },
-      {
-        id: 1,
-        date: "May 9",
-        activities: [],
-      },
-    ],
-  });
-
-  const handleTabChange = (i) => {
-    setCurrentTabIndex(i);
-  };
-
   const activitiesModal = useRef<Modalize>(null);
   const modalQuestionRef = useRef<Modalize>(null);
   const modalQuestionRef2 = useRef<Modalize>(null);
   const modalEmbedRef = useRef<Modalize>(null);
+
+  const { trip, city } = route.params;
+
+  const [getSights, { data, isLoading: sightsLoading }] =
+    useLazyGetSightsQuery();
+
+  useEffect(() => {
+    getSights({ iso2: city.iso2, city: city.city });
+  }, []);
+
+  const [currentTabIndex, setCurrentTabIndex] = useState(0);
+  const [deleteIndexes, setDeleteIndexes] = useState<{
+    deyIndex: number;
+    activityIndex: number;
+  }>();
+  const [topSightDetail, setTopSightDetail] = useState(null);
+  const [state, setState] = useState<IState>({
+    days: [],
+  });
+
+  const transformDataForDays = useCallback(() => {
+    if (!trip) return;
+    const diff = differenceInDays(trip.endAt, trip.startAt);
+
+    setState((prevState) => ({
+      ...prevState,
+      days: Array.from(Array(diff).keys()).map((i) => ({
+        id: i,
+        date: format(addDays(trip.startAt, i), "MMM d"),
+        weekDay: format(addDays(trip.startAt, i), "EEE"),
+        activities: [],
+      })),
+    }));
+  }, [trip]);
+
+  useEffect(() => {
+    transformDataForDays();
+  }, [transformDataForDays]);
+
+  const handleTabChange = (i) => {
+    setCurrentTabIndex(i);
+  };
 
   const onActivitiesModalOpen = () => {
     activitiesModal.current?.open();
@@ -102,19 +116,18 @@ export const TripDetailScreen: React.FC<TripProps> = ({
     if (route?.params?.directVisit) {
       navigation.navigate("TripQuickInsights", {
         directVisit: true,
-          iso2: "CN"
+        iso2: "CN",
       });
     } else {
       navigation.navigate("TripInsights", {
-        iso2: "CN"
+        iso2: "CN",
       });
     }
   };
 
-  const handleAddToTrip = (activity) => {
-    console.log("activity,activity", activity);
-    setTrip((prevTrip) => {
-      const newTripData = prevTrip.data.map((day) => {
+  const handleAddToTrip = (activity: SightType) => {
+    setState((prevTrip) => {
+      const newstate = prevTrip.days.map((day) => {
         if (day.id === currentTabIndex) {
           return {
             ...day,
@@ -126,7 +139,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
 
       return {
         ...prevTrip,
-        data: newTripData,
+        days: newstate,
       };
     });
   };
@@ -139,6 +152,31 @@ export const TripDetailScreen: React.FC<TripProps> = ({
     setTopSightDetail(null);
   }, []);
 
+  //
+  const location = React.useMemo(() => {
+    return (
+      data &&
+      !!Object.keys(data).length &&
+      data[Object.keys(data)[0]][0].location
+    );
+  }, [data]);
+
+  const handleDeleteActivity = useCallback(() => {
+    if (!deleteIndexes || !Object.keys(deleteIndexes).length) return;
+
+    setState((prevState) => {
+      let newDays = [...prevState.days];
+      newDays[deleteIndexes?.deyIndex].activities.splice(
+        deleteIndexes.deyIndex,
+        1
+      );
+      return {
+        ...prevState,
+        days: newDays,
+      };
+    });
+  }, [deleteIndexes]);
+
   return (
     <>
       <Tabs.Container
@@ -147,7 +185,8 @@ export const TripDetailScreen: React.FC<TripProps> = ({
           <Header
             onQuestion2ModalOpen={onQuestion2ModalOpen}
             handleNavigate={handleNavigate}
-            data={tripData}
+            data={trip}
+            location={location}
           />
         )}
         headerHeight={300} // optional
@@ -184,7 +223,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
         revealHeaderOnScroll={true}
         onIndexChange={handleTabChange}
       >
-        {tripData?.data.map((item, ind) => (
+        {state?.days.map((item, ind) => (
           <Tabs.Tab
             name={item?.date}
             label={(props) => (
@@ -193,8 +232,8 @@ export const TripDetailScreen: React.FC<TripProps> = ({
                   tripDetailStyles.customTab,
                   {
                     width:
-                      tripData?.data?.length < 4
-                        ? (SIZES.width - 40) / tripData?.data?.length
+                      state?.days?.length < 4
+                        ? (SIZES.width - 40) / state?.days?.length
                         : "auto",
                   },
                 ]}
@@ -207,7 +246,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
                     color: COLORS.gray,
                   }}
                 >
-                  Mon
+                  {item.weekDay}
                 </Text>
                 <Text
                   style={[
@@ -235,24 +274,28 @@ export const TripDetailScreen: React.FC<TripProps> = ({
                 position: "relative",
                 paddingBottom: 60,
               }}
-            > 
-              <View style={[tripDetailStyles.sightItemList,]}>
-                {item?.activities?.map((itm, ind) => (
+            >
+              <View style={[tripDetailStyles.sightItemList]}>
+                {item?.activities?.map((itm, activityIndex) => (
                   <TripActivityCard
                     item={itm}
-                    index={ind}
-                    onQuestionModalOpen={onQuestionModalOpen}
+                    index={activityIndex}
+                    onQuestionModalOpen={() => {
+                      onQuestionModalOpen();
+                      setDeleteIndexes({ deyIndex: ind, activityIndex });
+                    }}
                     handleTopSightClick={handleTopSightClick}
                   />
                 ))}
                 {item?.activities?.length < 1 ? (
                   <View style={tripDetailStyles.noActivitiesWrapper}>
-                  
-                    <Text style={{
-                      color: COLORS.black,
-                      fontSize: 18,
-                      fontWeight: "bold",
-                    }}>
+                    <Text
+                      style={{
+                        color: COLORS.black,
+                        fontSize: 18,
+                        fontWeight: "bold",
+                      }}
+                    >
                       You don't have activites for today
                     </Text>
                     <TouchableOpacity
@@ -279,9 +322,12 @@ export const TripDetailScreen: React.FC<TripProps> = ({
         <SightDetailModal data={topSightDetail} closeCallBack={handleClear} />
       ) : null}
 
-      {tripData?.data[currentTabIndex]?.activities?.length > 0 ? (
+      {state?.days[currentTabIndex]?.activities?.length > 0 ? (
         <TouchableOpacity
-          onPress={() => {onActivitiesModalOpen();  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);}}
+          onPress={() => {
+            onActivitiesModalOpen();
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          }}
           activeOpacity={0.7}
           style={tripDetailStyles.addActivityButton}
         >
@@ -306,7 +352,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
                       color: COLORS.primary,
                     }}
                   >
-                    {[tripData?.data[currentTabIndex].date]}
+                    {[state.days[currentTabIndex]?.date]}
                   </Text>
                 </Text>
 
@@ -328,10 +374,8 @@ export const TripDetailScreen: React.FC<TripProps> = ({
           }}
         >
           <TripActivitiesSelect
-            trip={tripData}
-            currentTabIndex={currentTabIndex}
+            days={state.days}
             handleAddToTrip={handleAddToTrip}
-            currentTabIndex={currentTabIndex}
             data={data}
             isLoading={sightsLoading}
           />
@@ -422,7 +466,8 @@ export const TripDetailScreen: React.FC<TripProps> = ({
               </TouchableOpacity> */}
               <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={() =>
+                onPress={() => {
+                  modalQuestionRef.current?.close();
                   Alert.alert("Do you really want to delete activity?", "", [
                     {
                       text: "Cancel",
@@ -431,11 +476,11 @@ export const TripDetailScreen: React.FC<TripProps> = ({
                     },
                     {
                       text: "Delete",
-                      onPress: () => console.log("OK Pressed"),
+                      onPress: handleDeleteActivity,
                       style: "destructive",
                     },
-                  ])
-                }
+                  ]);
+                }}
                 style={[questionModaStyles.button, { borderBottomWidth: 0 }]}
               >
                 <Text style={[questionModaStyles.buttonText, { color: "red" }]}>

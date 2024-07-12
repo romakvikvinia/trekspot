@@ -23,6 +23,7 @@
     "@reduxjs/toolkit": "^1.9.7",
     "@rtk-query/graphql-request-base-query": "^2.2.0",
     "@shopify/flash-list": "1.6.4",
+    "date-fns": "^3.6.0",
     "eas-cli": "^5.6.0",
     "expo": "^51.0.14",
     "expo-av": "~14.0.5",

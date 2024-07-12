@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import { format } from "date-fns";
 import { COLORS } from "../../../styles/theme";
 import {
   BackIcon,
@@ -16,14 +17,19 @@ import {
 } from "../../../utilities/SvgIcons.utility";
 import { TripHelpers } from "./TripHelpers";
 
-export const Header = ({ data, onQuestion2ModalOpen, handleNavigate }) => {
+export const Header = ({
+  data,
+  onQuestion2ModalOpen,
+  handleNavigate,
+  location,
+}) => {
   const navigation = useNavigation();
   const mapRef = useRef(null);
 
   useEffect(() => {
     mapRef.current?.animateToRegion({
-      latitude: data?.mainTopSight?.coordinates?.latitude,
-      longitude: data?.mainTopSight?.coordinates?.longitude,
+      latitude: location?.lat,
+      longitude: location?.lng,
       latitudeDelta: 0.00001,
       longitudeDelta: 0.5,
     });
@@ -65,9 +71,7 @@ export const Header = ({ data, onQuestion2ModalOpen, handleNavigate }) => {
         >
           <View style={styles.leftSide}>
             <Text style={styles.tripName}>{data?.name}</Text>
-            <Text style={styles.tripDestination}>
-              {data?.city}, {data?.country}
-            </Text>
+            <Text style={styles.tripDestination}>{data?.cities[0]?.city}</Text>
           </View>
           <View style={styles.rightSide}>
             <TouchableOpacity
@@ -79,7 +83,8 @@ export const Header = ({ data, onQuestion2ModalOpen, handleNavigate }) => {
             </TouchableOpacity>
             <View style={styles.bottomActions}>
               <Text style={styles.tripDestination}>
-                {data?.startDate} - {data?.endDate} | {data?.type}
+                {data && format(data?.startAt, "dd MMM")} -{" "}
+                {data && format(data?.endAt, "dd MMM")} | {data?.type}
               </Text>
             </View>
           </View>
