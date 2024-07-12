@@ -1,5 +1,4 @@
 import { FlashList } from "@shopify/flash-list";
-import { Image } from "expo-image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Text, Touchable, TouchableOpacity, View } from "react-native";
 // import { Modalize } from "react-native-modalize";
@@ -9,7 +8,7 @@ import { Text, Touchable, TouchableOpacity, View } from "react-native";
 // import { MapEmbedView } from "../MapEmbedView";
 import { styles } from "../_styles";
 import { CityType, CountryType } from "../../../api/api.types";
-import { useLazyGetCitiesQuery } from "../../../api/api.trekspot";
+import { useLazyFaqQuery, useLazyGetCitiesQuery } from "../../../api/api.trekspot";
 import { Loader } from "../../ui/Loader";
 import { ForYouCountryItem } from "../../../components/explore/ForYouCountryItem";
 import { useNavigation } from "@react-navigation/native";
@@ -34,7 +33,7 @@ type ExploreStackNavigationProp =
 
 
   export const FaqRowItem = ({item, index, openIndex, setOpenIndex}) => {
-    const isOpen = openIndex === index || index === 0;
+    const isOpen = openIndex === index;
 
     const toggleItem = () => {
       setOpenIndex(isOpen ? null : index);
@@ -44,7 +43,7 @@ type ExploreStackNavigationProp =
     return (
       <View style={{
         minHeight: 10,
-        backgroundColor: isOpen  ? "#f5f5f5" : "transparent",
+        backgroundColor: isOpen  ? "#f2f2f2" : "transparent",
         paddingVertical: 5,
         marginBottom: 8,
         borderRadius: 6,
@@ -93,23 +92,31 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
   });
   const [fetchCountryCities, { data, isLoading: isCitiesLoading }] =
     useLazyGetCitiesQuery();
+    const [fetchData, { isLoading, data: faqDataList }] = useLazyFaqQuery();
+
   const [blogUrl, setBlogUrl] = useState("");
 
   // const onEmbedModalOpen = () => {
   //   modalEmbedRef.current?.open();
   // };
-  const [openIndex, setOpenIndex] = useState(null);
+  const [openIndex, setOpenIndex] = useState(0);
 
   const onPlaceDetailOpen = useCallback((city: CityType) => {
     navigation.navigate("CityDetail", { city });
   }, []);
 
+  console.log("faqDataList",faqDataList)
+  
+
   useEffect(() => {
+    fetchData({
+      iso2: country.iso2,
+    })
     fetchCountryCities({
       iso2: country.iso2,
       inTopSight: true,
     });
-  }, [fetchCountryCities, country]);
+  }, [fetchCountryCities, country, fetchData]);
 
   const faqData = [
     {
@@ -338,23 +345,26 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
                 }
               />
             </View>
+            {
+              data && data?.cities?.length > 6 && ( <View style={styles.showMoreButtonWrapper}>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  style={[styles.showMoreButton, {marginBottom: 0}]}
+                  onPress={() =>
+                    setState((prevState) => ({
+                      ...prevState,
+                      showMoreCities: !prevState.showMoreCities,
+                    }))
+                  }
+                >
+                  <Text style={styles.showMoreButtonText}>
+                    {state.showMoreCities ? `Show less` : `Show more`}
+                  </Text>
+                </TouchableOpacity>
+              </View>)
+            }
 
-            <View style={styles.showMoreButtonWrapper}>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={styles.showMoreButton}
-                onPress={() =>
-                  setState((prevState) => ({
-                    ...prevState,
-                    showMoreCities: !prevState.showMoreCities,
-                  }))
-                }
-              >
-                <Text style={styles.showMoreButtonText}>
-                  {state.showMoreCities ? `Show less` : `Show more`}
-                </Text>
-              </TouchableOpacity>
-            </View>
+           
           </>
         ) : (
           <View style={{ height: 230 }}>
@@ -363,7 +373,7 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
         )}
       </View>
 
-      <View style={[styles.forYouRow, { marginBottom: 50, paddingHorizontal: 15 }]}>
+      <View style={[styles.forYouRow, { marginBottom: 50, paddingHorizontal: 15, marginTop: 25 }]}>
         <Text style={styles.forYouRowTitle}>FAQ</Text>
 
         {

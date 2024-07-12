@@ -11,7 +11,7 @@ type GetStartedProps = NativeStackScreenProps<AuthStackParamList, "GetStarted">;
 
 export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
   return (
-    <View style={{ flex: 1, paddingTop: 70 }}>
+    <View style={{ flex: 1, paddingTop: 70, backgroundColor: "#fff" }}>
       {/* <Onboarding
         showNext={false}
         showDone={false}
@@ -114,10 +114,10 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
       >
         <View
           style={{
-            marginRight: 25,
+            marginRight: 20,
           }}
         >
-          <ExploreIcon size={50} />
+          <ExploreIcon size={70} />
         </View>
         <View
           style={{
@@ -155,10 +155,10 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
       >
         <View
           style={{
-            marginRight: 25,
+            marginRight: 20,
           }}
         >
-          <StatsIcon size={50} />
+          <StatsIcon size={70} />
         </View>
 
         <View
@@ -196,10 +196,10 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
       >
         <View
           style={{
-            marginRight: 25,
+            marginRight: 20,
           }}
         >
-          <WishlistIcon size={50}/>
+          <WishlistIcon size={70}/>
         </View>
 
         <View
@@ -237,10 +237,10 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
       >
         <View
           style={{
-            marginRight: 25,
+            marginRight: 20,
           }}
         >
-          <PlanTripIcon size={50} />
+          <PlanTripIcon size={70} />
         </View>
 
         <View

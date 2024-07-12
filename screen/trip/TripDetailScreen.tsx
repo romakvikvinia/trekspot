@@ -102,9 +102,12 @@ export const TripDetailScreen: React.FC<TripProps> = ({
     if (route?.params?.directVisit) {
       navigation.navigate("TripQuickInsights", {
         directVisit: true,
+          iso2: "CN"
       });
     } else {
-      navigation.navigate("TripInsights");
+      navigation.navigate("TripInsights", {
+        iso2: "CN"
+      });
     }
   };
 
@@ -228,29 +231,12 @@ export const TripDetailScreen: React.FC<TripProps> = ({
                 paddingTop: 25,
               }}
               contentContainerStyle={{
-                paddingHorizontal: 20,
+                paddingHorizontal: 0,
                 position: "relative",
                 paddingBottom: 60,
               }}
-            >
-              {tripData?.data[currentTabIndex]?.activities?.length > 0 &&
-              Platform.OS === "ios" ? (
-                <View
-                  style={{
-                    position: "absolute",
-                    borderWidth: 1.5,
-                    borderStyle: "dashed",
-                    height: "96%",
-                    top: 25,
-                    left: 14,
-                    borderColor: "#ddd",
-                    borderRadius: 1,
-                    opacity: 0.7,
-                  }}
-                ></View>
-              ) : null}
-
-              <View style={tripDetailStyles.sightItemList}>
+            > 
+              <View style={[tripDetailStyles.sightItemList,]}>
                 {item?.activities?.map((itm, ind) => (
                   <TripActivityCard
                     item={itm}
@@ -259,7 +245,6 @@ export const TripDetailScreen: React.FC<TripProps> = ({
                     handleTopSightClick={handleTopSightClick}
                   />
                 ))}
-
                 {item?.activities?.length < 1 ? (
                   <View style={tripDetailStyles.noActivitiesWrapper}>
                   

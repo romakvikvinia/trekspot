@@ -35,7 +35,14 @@ export const CountryItem: React.FC<CountryItemProps> = ({
               ? {
                   uri: item?.image?.url,
                 }
-              : item.name === "France" ? "https://cdn.pixabay.com/photo/2018/04/25/09/26/eiffel-tower-3349075_1280.jpg" : require("../../assets/no-image.png")
+              : 
+             
+              item.name === "France" ? "https://cdn.pixabay.com/photo/2018/04/25/09/26/eiffel-tower-3349075_1280.jpg"
+
+              
+              :  item.name === "Germany" ? "https://cdn.pixabay.com/photo/2020/05/01/11/00/castle-5116436_1280.jpg" :
+              item.name === "Italy" ? "https://cdn.pixabay.com/photo/2019/03/31/14/31/houses-4093227_1280.jpg" :
+              require("../../assets/no-image.png")
           }
           cachePolicy="memory-disk"
         >

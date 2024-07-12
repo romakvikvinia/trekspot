@@ -57,9 +57,7 @@ export const NewTrip = ({ newTripModalRef, callBack }: INewTripProps) => {
       });
     }, 
   });
-
-  
-
+ 
   const onDestinationModalOpen = () => {
     if (Platform.OS === "android") {
       setWhereToModal(true);

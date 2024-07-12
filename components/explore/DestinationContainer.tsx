@@ -90,7 +90,7 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
                   style={{
                     width: 160,
                     height: 185,
-                    borderRadius: 10,
+                    borderRadius: 15,
                   }}
                 ></LinearGradient>
               </View>

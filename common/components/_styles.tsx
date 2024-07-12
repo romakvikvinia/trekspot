@@ -7,7 +7,6 @@ export const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     flexDirection: "row",
-    marginBottom: 35,
   },
   infoText: {
     marginTop: 15, 

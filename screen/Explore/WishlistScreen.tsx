@@ -44,7 +44,6 @@ export const WishlistScreen = () => {
   const handleClear = useCallback(() => {
     setTopSightDetail(null);
   }, []);
-  
 
   return (
     <>
@@ -66,7 +65,7 @@ export const WishlistScreen = () => {
         {isLoading ? (
           <Loader isLoading={isLoading} size="small" background="#F2F2F7" />
         ) : null}
-        
+
         {/* In case no data */}
         {/* <View style={{minHeight: 300, justifyContent: "center"}}> 
           <NotFound text="Your bucket list is looking a little empty! Let's find an amazing adventure to add to it." />
@@ -98,8 +97,14 @@ export const WishlistScreen = () => {
                                 width: 200,
                                 marginLeft: 0,
                                 marginBottom: 0,
+                                paddingBottom: 0,
                                 marginRight: 15,
-                                height: 288
+                                paddingTop: 0,
+                                height: 259,
+                                alignItems: "flex-start",
+                                justifyContent: "flex-start",
+                                display: "flex",
+                                flexDirection: "column",
                               },
                             ]}
                             onPress={() => {
@@ -108,7 +113,7 @@ export const WishlistScreen = () => {
                                 Haptics.ImpactFeedbackStyle.Light
                               );
                             }}
-                          > 
+                          >
                             <Image
                               style={{
                                 width: 200,
@@ -129,82 +134,72 @@ export const WishlistScreen = () => {
                               key={`img-${item?.title}`}
                             ></Image>
 
-                          <View
-                              style={[
-                                tripDetailStyles.sightDetails,
-                                {
-                                  flexDirection: "column",
-                                  marginTop: 10,
-                                  paddingHorizontal: 15,
-                                  paddingBottom: 10,
-                                  marginBottom: 0,
-                                },
-                              ]}
-                            >
-                            
-                              <Text
-                                style={tripDetailStyles.sightTitle}
-                                numberOfLines={1}
-                              >
-                                {item?.title}
-                              </Text>
-                              <Text
-                                style={[tripDetailStyles.sightTitle, {fontSize:14,color: COLORS.gray, marginTop: 5}]}
-                                numberOfLines={1}
-                              >
-                                {item?.city}
-                              </Text>
-                              <View style={tripDetailStyles.ratingLabel}>
-                                <Text style={{fontSize: 12, color: COLORS.gray, marginRight: 5}}>
-                                  {item?.category}
-                                </Text>
-                                {item?.rate ? (
-                                  <>
-                                    <View
-                                      style={{
-                                        position: "relative",
-                                        top: -1,
-                                        opacity: 0.8,
-                                        marginRight: 3,
-                                      }}
-                                    >
-                                      <StarIcon color="#FFBC3E" />
-                                    </View>
-                                    <Text style={[tripDetailStyles.ratingText]}>
-                                      {item?.rate}
-                                    </Text>
-                                  </>
-                                ) : null}
-                              </View>
-                            </View>  
-                            <View style={styles.actionButtons}>
-                              <TouchableOpacity
-                                onPress={() => handleTopSightClick(item)}
-                                activeOpacity={0.7}
+                            <View style={{
+                              width: "100%",
+                              flex: 1
+                            }}>
+                              <View
                                 style={[
-                                  styles.buttonItem,
-                                  { borderBottomLeftRadius: 10 },
-                                ]}
-                              >
-                                <Text style={styles.buttonItemText}>
-                                  Details
-                                </Text>
-                              </TouchableOpacity>
-
-                              <TouchableOpacity
-                                style={[
-                                  styles.buttonItem,
+                                  tripDetailStyles.sightDetails,
                                   {
-                                    backgroundColor: "#ffdbdb",
-                                    borderBottomRightRadius: 10,
+                                    flexDirection: "column",
+                                    marginTop: 10,
+                                    paddingHorizontal: 15,
+                                    paddingBottom: 10,
+                                    marginBottom: 0,
                                   },
                                 ]}
-                                // onPress={() => handleAddToTrip(item)}
                               >
-                                <Text style={styles.buttonItemText}>
-                                  Remove
+                                <Text
+                                  style={tripDetailStyles.sightTitle}
+                                  numberOfLines={1}
+                                >
+                                  {item?.title}
                                 </Text>
-                              </TouchableOpacity>
+                                <Text
+                                  style={[
+                                    tripDetailStyles.sightTitle,
+                                    {
+                                      fontSize: 14,
+                                      color: COLORS.gray,
+                                      marginTop: 5,
+                                    },
+                                  ]}
+                                  numberOfLines={1}
+                                >
+                                  {item?.city}
+                                </Text>
+                              </View>
+                              <View style={styles.actionButtons}>
+                                <TouchableOpacity
+                                  onPress={() => handleTopSightClick(item)}
+                                  activeOpacity={0.7}
+                                  style={[
+                                    styles.buttonItem,
+                                    { borderBottomLeftRadius: 10 },
+                                  ]}
+                                >
+                                  <Text style={styles.buttonItemText}>
+                                    Details
+                                  </Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                  style={[
+                                    styles.buttonItem,
+                                    {
+                                      borderBottomRightRadius: 10,
+                                    },
+                                  ]}
+                                  // onPress={() => handleAddToTrip(item)}
+                                >
+                                  <Text style={[styles.buttonItemText, {
+                                    color: COLORS.red
+                                  }]}>
+                                    Remove
+                                  </Text>
+                                </TouchableOpacity>
+                              </View>
                             </View>
                           </TouchableOpacity>
                         </>
@@ -255,19 +250,19 @@ const styles = StyleSheet.create({
     zIndex: 3,
   },
   actionButtons: {
-    flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 15,
-    width: 200,
+    flexDirection: "row",
   },
   buttonItem: {
     backgroundColor: COLORS.lightGray,
-    paddingVertical: 15,
     paddingHorizontal: 10,
     flex: 1,
     textAlign: "center",
     justifyContent: "center",
     flexDirection: "row",
+    height: 40,
+    alignItems: "center",
   },
   buttonItemText: {
     color: COLORS.black,

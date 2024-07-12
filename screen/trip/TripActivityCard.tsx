@@ -46,9 +46,12 @@ export const TripActivityCard = ({
             padding: 15,
           },
         ]}
-        onPress={() => { handleTopSightClick(item);Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);}}
+        onPress={() => { 
+          handleTopSightClick(item);
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        }}
       >
-        <View style={tripDetailStyles.pinIcon}>
+        {/* <View style={tripDetailStyles.pinIcon}>
           <PinIcon
             size="20"
             color={checkedIn ? COLORS.primary : COLORS.darkgray}
@@ -64,7 +67,7 @@ export const TripActivityCard = ({
           >
             {index + 1}
           </Text>
-        </View>
+        </View> */}
 
         <View style={tripDetailStyles.imagesWrapper}>
           {item?.images?.slice(0, 2).map((image, index) => (

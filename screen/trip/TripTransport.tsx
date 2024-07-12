@@ -67,7 +67,7 @@ export const TripTransport = () => {
           }}
         />
         <Text style={styles.heading}>
-            Taxi apps
+          Helpful apps
         </Text>
         <TouchableOpacity
             activeOpacity={0.7}

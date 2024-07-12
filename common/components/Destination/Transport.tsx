@@ -56,7 +56,7 @@ export const Transport: React.FC<TransportProps> = ({ country }) => {
         }}
       />
 
-      <Text style={[styles.secondaryTitle, {marginTop: 15}]}>Public transport</Text>
+      {/* <Text style={[styles.secondaryTitle, {marginTop: 15}]}>Public transport</Text>
       <View style={styles.transports}>
         {country.transportTypes?.map((item) => {
           return item === "Bus" ? (
@@ -101,8 +101,8 @@ export const Transport: React.FC<TransportProps> = ({ country }) => {
             </View>
           ) : null;
         })}
-      </View>
-      <Text style={styles.secondaryTitle}>Taxi apps</Text>
+      </View> */}
+      <Text style={styles.secondaryTitle}>Helpful apps</Text>
       <View style={styles.transports}>
         {country?.taxi.map((item, ind) => (
           <TouchableOpacity

@@ -15,6 +15,7 @@ import RenderHTML from "react-native-render-html";
 import { useFocusedTab } from "react-native-collapsible-tab-view";
 import { useLazyTopicsQuery } from "../../../api/api.trekspot";
 import { TopicType } from "../../../api/api.types";
+import { Loader } from "../../ui/Loader";
 
 interface TripInsightTabProps {
   iso2: string;
@@ -35,6 +36,8 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
     modalInsightDetailRef.current?.open();
   }, []);
 
+  const colors = ["#ffd5d1", "#f5e1d3", "#d1f5d3", "#d3d1f5", "#f5d3f5"];
+
   useEffect(() => {
     if (focusedTab === "Insights" && iso2) {
       fetchData({ iso2 });
@@ -43,13 +46,23 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
 
   return (
     <>
-      {data &&
-        Object.keys(data).map((key) => (
-          <View key={key} style={[styles.topicsRow, { marginTop: 25 }]}>
+      {isLoading ? (
+        <View style={{ height: 230 }}>
+          <Loader isLoading />
+        </View>
+      ) : null}
+
+      {!isLoading &&
+        data &&
+        Object.keys(data).map((key, i) => (
+          <View
+            key={key}
+            style={[styles.topicsRow, { marginTop: i === 0 ? 25 : 0 }]}
+          >
             <View style={styles.headingItem}>
               <Text style={styles.topicsRowTitle}>{key}</Text>
               <View
-                style={[styles.shapeBg, { backgroundColor: "#ffd5d1" }]}
+                style={[styles.shapeBg, { backgroundColor: colors[i]}]}
               ></View>
             </View>
             <View style={{ flexGrow: 1 }}>
@@ -60,7 +73,7 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
                 }}
                 showsHorizontalScrollIndicator={false}
                 data={data[key] || []}
-                renderItem={({ item }) => (
+                renderItem={({ item, i }) => (
                   <TouchableOpacity
                     onPress={() => onInsightDetailOpen(item)}
                     activeOpacity={0.7}
@@ -68,8 +81,10 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
                   >
                     <Image
                       style={styles.cardImage}
-                      resizeMode="cover"
-                      source={require("../../../assets/no-image.png")}
+                      contentFit="cover"
+                      source={{
+                        uri: "https://cdn.pixabay.com/photo/2022/09/16/15/53/city-7458934_1280.jpg",
+                      }}
                     />
                     <Text style={styles.cardTitle}>{item.title}</Text>
                   </TouchableOpacity>
@@ -79,8 +94,6 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
             </View>
           </View>
         ))}
-
-      <View style={{ paddingBottom: 30 }}></View>
 
       <Portal>
         <Modalize
@@ -122,6 +135,47 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
               defaultTextProps={{
                 selectable: true,
               }}
+              baseStyle={{
+                fontSize: 16,
+                lineHeight: 22,
+                paddingBottom: 30,
+                paddingTop: 15,
+                fontWeight: "400",
+              }}
+              tagsStyles={{
+                p: {
+                  fontSize: 16,
+                  lineHeight: 22,
+                  fontWeight: "400",
+                  marginTop: 0,
+                  marginBottom: 0,
+                },
+                ol: {
+                  lineHeight: 22,
+                  paddingLeft: 0,
+                  listStyleType: "none",
+                  marginTop: 0,
+                  paddingTop: 0,
+                  marginBottom: 0,
+                  paddingBottom: 0,
+                },
+                ul: {
+                  paddingLeft: 15,
+                  lineHeight: 22,
+                  listStyleType: "ordered",
+                  marginBottom: 0,
+                },
+                li: {
+                  fontSize: 16,
+                  lineHeight: 22,
+                  marginBottom: 15,
+                  marginTop: 0,
+                  paddingTop: 0,
+                },
+                strong: {
+                  fontWeight: "bold",
+                },
+              }}
             />
           </View>
         </Modalize>
@@ -135,6 +189,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F2F2F7",
     paddingTop: Constants?.statusBarHeight + 10,
+  },
+  premiumView: {
+    borderWidth: 5,
+    borderColor: "#d87620",
+    borderStyle: "solid",
   },
   headingItem: {
     position: "relative",

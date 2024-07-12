@@ -16,16 +16,19 @@ import { useDishesByISO2Query } from "../../../api/api.trekspot";
 import { Loader } from "../../ui/Loader";
 import { NotFound } from "../../../components/common/NotFound";
 import { Image } from "expo-image";
+import { useFocusedTab } from "react-native-collapsible-tab-view";
 
 type DiningProps = {
   country: CountryType;
 };
 
 export const Dining: React.FC<DiningProps> = ({ country }) => {
+  
+
   const { isLoading, data, isError } = useDishesByISO2Query({
     iso2: country.iso2,
   });
-  const openMap = (name: string) => {
+   const openMap = (name: string) => {
     const scheme = Platform.select({
       ios: "maps://0,0?q=",
       android: "geo:0,0?q=",

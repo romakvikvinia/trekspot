@@ -257,7 +257,7 @@ export const tripDetailStyles = StyleSheet.create({
     ratingLabel: {
       flexDirection: "row",
       alignItems: "center",
-      marginVertical: 5,
+      marginVertical: 8,
     },
     ratingText: {
       fontWeight: "400",
@@ -279,8 +279,9 @@ export const tripDetailStyles = StyleSheet.create({
       minHeight: 100,
       flex: 1,
       borderRadius: 10,
-      marginLeft: 18,
+      marginLeft: 0,
       padding: 15,
+      paddingVertical: 20,
       flexDirection: "column",
       position: "relative",
       flexWrap: "wrap"
@@ -301,11 +302,11 @@ export const tripDetailStyles = StyleSheet.create({
     sightBottomActions: {
       marginTop: 5,
       marginBottom: 25,
-      width: "95%",
-      marginLeft: "5%",
+      width: "100%",
       justifyContent: "space-between",
       alignItems: "center",
       flexDirection: "row",
+      paddingHorizontal: 15
     },
     addUserButton: {
       position: "relative",
@@ -373,8 +374,8 @@ export const tripDetailStyles = StyleSheet.create({
       justifyContent: "space-between",
     },
     mainImage: {
-      width: (SIZES.width - 95) / 3,
-      height: 80,
+      width: (SIZES.width - 48 ) / 3,
+      height: 110,
       borderRadius: 10,
       marginRight: 8,
     },
@@ -394,14 +395,16 @@ export const tripDetailStyles = StyleSheet.create({
       justifyContent: "center"
     },
     lastImage: {
-      width: (SIZES.width - 95) / 3,
-              height: 80,
+      width: (SIZES.width - 48 ) / 3,
+      height: 110,
               borderRadius: 10,
               overflow: "hidden",
               position: "relative",
     },
     descText: {
-      fontSize: 12
+      fontSize: 12,
+      fontWeight: "500",
+      color: "#707579"
     },
     leftSide: {},
     tripDestination: {

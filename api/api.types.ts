@@ -370,3 +370,29 @@ export type TopicsArgsType = {
 };
 
 export type TransformedTopicsResponseType = Record<string, TopicType[]>;
+
+//
+
+export type FaqType = {
+  id?: string;
+  itemId: string;
+  iso2: string;
+  question: string;
+  answer: string;
+  category: {
+    itemId: string;
+    title: string;
+  };
+};
+
+export type FaqResponseType = {
+  faqs: FaqType[];
+};
+export type FaqArgsType = {
+  skip?: number;
+  take?: number;
+  search?: string;
+  iso2: string;
+};
+
+export type TransformedFaqResponseType = Record<string, FaqType[]>;

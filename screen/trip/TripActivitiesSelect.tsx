@@ -141,7 +141,7 @@ export const TripActivitiesSelect = ({
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingHorizontal: 15,
-            paddingTop: 15,
+            paddingTop: 25,
             paddingBottom: 25,
           }}
         />
@@ -244,16 +244,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   addToButton: {
-    backgroundColor: "#d1e2fd",
     paddingVertical: 15,
     paddingHorizontal: 10,
     flex: 1,
     textAlign: "center",
     justifyContent: "center",
     flexDirection: "row",
+    backgroundColor: COLORS.lightGray,
   },
   addToButtonText: {
-    color: COLORS.primaryDark,
+    color: COLORS.primary,
     fontSize: 12,
     fontWeight: "500",
   },
@@ -264,11 +264,11 @@ const styles = StyleSheet.create({
   },
   thingsTodoItem: {
     backgroundColor: "#fff",
-    width: "97%",
+    width: "95%",
     marginRight: 15,
     borderRadius: 15,
     overflow: "hidden",
-    marginBottom: 15,
+    marginBottom: 25,
   },
   thingsTodoItemDetails: {},
   actionButtons: {
