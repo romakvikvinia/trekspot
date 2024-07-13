@@ -806,7 +806,7 @@ export const trekSpotApi = createApi({
      */
 
     myTrips: builder.query<TripsResponseType, TripsArgsType>({
-      query: ({ skip = 0, take = 10, search = "" }) => ({
+      query: ({ skip = 0, take = 1000, search = "" }) => ({
         variables: { skip, take, search },
         document: gql`
           query ($skip: Int, $take: Int, $search: String) {

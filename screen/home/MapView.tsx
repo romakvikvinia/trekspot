@@ -1,6 +1,13 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   ActivityIndicator,
+  Alert,
   Platform,
   StyleSheet,
   Text,
@@ -10,8 +17,6 @@ import {
 } from "react-native";
 import {
   ClearIcon,
-  LivedIcon,
-  Mark,
   MarkLinear,
   SearchIcon,
   Share,
@@ -22,7 +27,6 @@ import { Portal } from "react-native-portalize";
 import { FlashList } from "@shopify/flash-list";
 import { CountriesList, ICountry } from "../../utilities/countryList";
 import { COLORS, SIZES } from "../../styles/theme";
-import Constants from "expo-constants";
 
 import ShareModal from "../../common/components/ShareModal";
 import { CountryItem } from "../../components/home/CountryItem";
@@ -38,10 +42,10 @@ import {
 import { AnalyticsType } from "../../api/api.types";
 import { formatPercentage } from "../../helpers/number.helper";
 import { useDispatch } from "react-redux";
-import { debounce } from "../../helpers/debounce.helper";
 import { MapSvg } from "../../utilities/svg/map";
-import { SkeletonLoaderImage } from "../../common/ui/Skeleton";
-import { NotFound } from "../../components/common/NotFound";
+import { AuthContext } from "../../package/context/auth.context";
+
+const isGuest = true;
 
 interface MapVIewProps {
   analytic?: AnalyticsType;
@@ -49,6 +53,8 @@ interface MapVIewProps {
 
 export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
   const dispatch = useDispatch();
+  const { signOut } = useContext(AuthContext);
+
   const [searchValue, setSearchValue] = useState("");
   const [state, setState] = useState<{
     countries: ICountry[];
@@ -191,7 +197,44 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
   const resetSearch = () => {
     setSearchValue("");
   };
- 
+
+  const handleAddVisit = () => {
+    if (isGuest) {
+      Alert.alert("To add a visit, you need to sign in", "", [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Sign in",
+          onPress: () => signOut(),
+          style: "default",
+        },
+      ]);
+    } else {
+      onOpen();
+    }
+  };
+
+  const handleShare = () => {
+    if (isGuest) {
+      Alert.alert("To share your map, you need to sign in", "", [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Sign in",
+          onPress: () => signOut(),
+          style: "default",
+        },
+      ]);
+    } else {
+      onShareModalOpen();
+    }
+  };
 
   return (
     <>
@@ -199,7 +242,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
         <View style={styles.topActions}>
           <View style={styles.left}>
             <TouchableOpacity
-              onPress={() => onOpen()}
+              onPress={handleAddVisit}
               style={[styles.btn, { marginRight: 10 }]}
             >
               <MarkLinear size="15" color={COLORS.black} />
@@ -207,10 +250,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
             </TouchableOpacity>
           </View>
           <View style={{ flexDirection: "row" }}>
-            <TouchableOpacity
-              style={styles.btn}
-              onPress={() => onShareModalOpen()}
-            >
+            <TouchableOpacity style={styles.btn} onPress={handleShare}>
               <Share />
               <Text style={styles.txt}>Share</Text>
             </TouchableOpacity>
@@ -318,36 +358,43 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
           HeaderComponent={
             <View style={styles.modalHeader}>
               {Platform.OS === "ios" ? (
-                <View style={{flexDirection: "row", flex: 1, justifyContent: "center", alignItems:"center"}}>
-                <View style={styles.searchBox}>
-                  <View style={styles.searchIcon}>
-                    <SearchIcon width={15} />
-                  </View>
-                  <TextInput
-                    autoCorrect={false}
-                    style={styles.searchInput}
-                    placeholder="Search..."
-                    placeholderTextColor={COLORS.darkgray}
-                    onChangeText={handelSearch}
-                    value={searchValue}
-                  />
-
-                  {searchValue ? (
-                    <TouchableOpacity
-                      onPress={resetSearch}
-                      style={styles.clearButton}
-                      activeOpacity={0.7}
-                    >
-                      <ClearIcon />
-                    </TouchableOpacity>
-                  ) : null}
-                </View>
-                <TouchableOpacity
-                  style={styles.cancelButton}
-                  onPress={() => modalRef?.current?.close()}
+                <View
+                  style={{
+                    flexDirection: "row",
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
                 >
-                  <Text style={styles.cancelButtonText}>Cancel</Text>
-                </TouchableOpacity>
+                  <View style={styles.searchBox}>
+                    <View style={styles.searchIcon}>
+                      <SearchIcon width={15} />
+                    </View>
+                    <TextInput
+                      autoCorrect={false}
+                      style={styles.searchInput}
+                      placeholder="Search..."
+                      placeholderTextColor={COLORS.darkgray}
+                      onChangeText={handelSearch}
+                      value={searchValue}
+                    />
+
+                    {searchValue ? (
+                      <TouchableOpacity
+                        onPress={resetSearch}
+                        style={styles.clearButton}
+                        activeOpacity={0.7}
+                      >
+                        <ClearIcon />
+                      </TouchableOpacity>
+                    ) : null}
+                  </View>
+                  <TouchableOpacity
+                    style={styles.cancelButton}
+                    onPress={() => modalRef?.current?.close()}
+                  >
+                    <Text style={styles.cancelButtonText}>Cancel</Text>
+                  </TouchableOpacity>
                 </View>
               ) : null}
 
@@ -368,7 +415,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
           }
           modalStyle={{ flex: 1 }}
         >
-          <View style={{ flex: 1, height: SIZES.height - 200 }}> 
+          <View style={{ flex: 1, height: SIZES.height - 200 }}>
             <FlashList
               // keyExtractor={(item) =>
               //   `${item.iso2}-${item.name}-${item.capital}`
@@ -383,8 +430,8 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
                 />
               )}
               estimatedItemSize={100}
-              contentContainerStyle={{paddingTop: 15}}
-            />    
+              contentContainerStyle={{ paddingTop: 15 }}
+            />
           </View>
         </Modalize>
       </Portal>

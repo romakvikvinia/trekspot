@@ -6,6 +6,7 @@ import { COLORS } from "../../styles/theme";
 import {
   CheckLiteIcon,
   DotsIcon,
+  LocationPin,
   MapIcon,
   PinIcon,
   StarIcon,
@@ -152,7 +153,7 @@ export const TripActivityCard = ({
               { color: checkedIn ? COLORS.primary : COLORS.gray },
             ]}
           >
-            {checkedIn ? "Checked in" : "Check in"}
+           Visited
           </Text>
         </TouchableOpacity>
 
@@ -162,7 +163,7 @@ export const TripActivityCard = ({
             activeOpacity={0.7}
             onPress={() => openMap(item?.title)}
           >
-            <MapIcon width="15" color={COLORS.gray} />
+            <LocationPin width="15" color={COLORS.gray} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => onQuestionModalOpen()}

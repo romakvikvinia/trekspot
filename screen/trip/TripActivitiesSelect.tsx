@@ -139,11 +139,12 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                     <TouchableOpacity
                       style={[
                         styles.addToButton,
-                        { backgroundColor: "#ffdbdb" },
                       ]}
                       onPress={() => {}}
                     >
-                      <Text style={styles.addToButtonText}>Remove</Text>
+                      <Text style={[styles.addToButtonText, {
+                        color: COLORS.red
+                      }]}>Remove</Text>
                     </TouchableOpacity>
                   ) : (
                     <TouchableOpacity

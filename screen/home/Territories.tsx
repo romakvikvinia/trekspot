@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
   mapStatsText: {
     color: "#fff",
     fontWeight: "bold",
-    fontSize: SIZES.width < 370 ? 12 : 14,
+    fontSize: SIZES.width < 370 ? 12 : 13,
     marginLeft: 8,
   },
   rowItem: {

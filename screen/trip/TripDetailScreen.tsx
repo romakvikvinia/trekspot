@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { Alert, Platform, Text, TouchableOpacity, View } from "react-native";
+import { Alert,  Text, TouchableOpacity, View } from "react-native";
 import { COLORS, SIZES } from "../../styles/theme";
 import { enGB, registerTranslation } from "react-native-paper-dates";
 registerTranslation("en", enGB);
@@ -29,7 +29,6 @@ import { SightDetailModal } from "../../components/explore/sights/SightDetailMod
 
 import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { NoActivity } from "../../common/components/NoActivity";
 import { addDays, differenceInDays, format } from "date-fns";
 import { SightType } from "../../api/api.types";
 
@@ -177,6 +176,17 @@ export const TripDetailScreen: React.FC<TripProps> = ({
     });
   }, [deleteIndexes]);
 
+  const combineObjectArrays = (obj) => {
+    let combinedArray = [];
+    for (let key in obj) {
+        if (Array.isArray(obj[key])) {
+            combinedArray = combinedArray.concat(obj[key]);
+        }
+    }
+    return combinedArray;
+};
+const combinedArray = combineObjectArrays(data);
+ 
   return (
     <>
       <Tabs.Container
@@ -187,6 +197,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
             handleNavigate={handleNavigate}
             data={trip}
             location={location}
+            topSights={combinedArray}
           />
         )}
         headerHeight={300} // optional
@@ -232,7 +243,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
                   tripDetailStyles.customTab,
                   {
                     width:
-                      state?.days?.length < 4
+                      state?.days?.length <= 5
                         ? (SIZES.width - 40) / state?.days?.length
                         : "auto",
                   },
@@ -272,7 +283,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
               contentContainerStyle={{
                 paddingHorizontal: 0,
                 position: "relative",
-                paddingBottom: 60,
+                paddingBottom: 80,
               }}
             >
               <View style={[tripDetailStyles.sightItemList]}>
@@ -345,7 +356,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
             <>
               <View style={tripDetailStyles.rowItemHeader}>
                 <Text style={tripDetailStyles.h2}>
-                  Activites -{" "}
+                  Activities -{" "}
                   <Text
                     style={{
                       fontWeight: "500",

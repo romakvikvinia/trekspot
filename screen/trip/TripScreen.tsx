@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useContext, useEffect, useRef } from "react";
 import {
+  Alert,
   Platform,
   ScrollView,
   Text,
@@ -27,11 +28,15 @@ import { useLazyMyTripsQuery } from "../../api/api.trekspot";
 import moment from "moment";
 import { Loader } from "../../common/ui/Loader";
 import * as Haptics from "expo-haptics";
+import { AuthContext } from "../../package/context/auth.context";
+
+const isGuest = false;
 
 type TripProps = NativeStackScreenProps<TripRouteStackParamList, "TripsScreen">;
 
 export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
   const newTripModal = useRef<Modalize>(null);
+  const { signOut } = useContext(AuthContext);
 
   const [fetchDate, { data, isLoading, isError }] = useLazyMyTripsQuery();
 
@@ -43,12 +48,38 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
     fetchDate({});
   }, []);
 
-  const upComingTrips =
-    data?.trips.filter((i) => moment(i.endAt).valueOf() > moment().valueOf()) ||
-    [];
+  const upComingTrips = 
+  (data?.trips
+      .filter((i) => moment(i.endAt).valueOf() > moment().valueOf())
+      .sort((a, b) => moment(a.startAt).valueOf() - moment(b.startAt).valueOf())) || [];
+
   const oldTrips =
-    data?.trips.filter((i) => moment(i.endAt).valueOf() < moment().valueOf()) ||
-    [];
+      (data?.trips
+          .filter((i) => moment(i.endAt).valueOf() < moment().valueOf())
+          .sort((a, b) => moment(b.startAt).valueOf() - moment(a.startAt).valueOf())) || [];
+  
+  const handleCreateNewTrip = () => {
+    if(isGuest) {
+      Alert.alert("To create a new trip, you need to sign in", "", [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Sign in",
+          onPress: () => signOut(),
+          style: "default",
+        },
+      ]);
+    } else {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      Platform.OS === "android"
+        ? navigation.navigate("NewTripAndroidScreen")
+        : newTripModal.current?.open();
+    }
+    
+  };
 
   return (
     <>
@@ -59,14 +90,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
           <TouchableOpacity
             style={_tripScreenStyles.newTripButton}
             activeOpacity={0.7}
-            onPress={() =>
-              {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              Platform.OS === "android"
-                ? navigation.navigate("NewTripAndroidScreen")
-                : newTripModal.current?.open()
-              }
-            }
+            onPress={handleCreateNewTrip}
           >
             <PlusIcon color="" size="20" />
             <Text style={_tripScreenStyles.newTripButtonText}>New trip</Text>
@@ -95,8 +119,11 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
           {!isLoading && !data?.trips.length && (
             <View style={_tripScreenStyles.notFoundView}>
               <NoDestinationFoundIcon />
+              <Text style={_tripScreenStyles.notFoundViewTitleText}>
+                You don't have any trip yet
+              </Text>
               <Text style={_tripScreenStyles.notFoundViewText}>
-                You don't have any trip yet, click on New trip button and
+                Click on New trip button and
                 prepare for your next destination
               </Text>
             </View>

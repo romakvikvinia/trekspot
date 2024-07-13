@@ -78,7 +78,6 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
           !state.isAuthenticated ? (
             <AuthRoute />
           ) : (
-          
             <AppRoute />
           )
         ) : (

@@ -20,12 +20,15 @@ import { COLORS } from "../../styles/theme";
 import {
   BackIcon,
   Mark2,
+  NoDestinationFoundIcon,
   PinIcon,
   StarIcon,
   VisitedIcon,
+  WishlistIcon,
 } from "../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "../trip/_tripDetailStyles";
 import { NotFound } from "../../components/common/NotFound";
+import { _tripScreenStyles } from "../trip/_tripScreenStyles";
 
 export const WishlistScreen = () => {
   const navigation = useNavigation();
@@ -67,9 +70,24 @@ export const WishlistScreen = () => {
         ) : null}
 
         {/* In case no data */}
-        {/* <View style={{minHeight: 300, justifyContent: "center"}}> 
-          <NotFound text="Your bucket list is looking a little empty! Let's find an amazing adventure to add to it." />
-        </View> */}
+        {
+          !isLoading &&
+          !data &&
+          (
+            <View style={{ minHeight: 500, justifyContent: "center" }}>
+            <View style={_tripScreenStyles.notFoundView}>
+              <NoDestinationFoundIcon />
+              <Text style={_tripScreenStyles.notFoundViewTitleText}>
+                Your bucket list is looking empty
+              </Text>
+              <Text style={_tripScreenStyles.notFoundViewText}>
+               Go to explore and find an amazing sights.
+              </Text>
+            </View>
+          </View>
+          )
+        }
+   
 
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -134,10 +152,12 @@ export const WishlistScreen = () => {
                               key={`img-${item?.title}`}
                             ></Image>
 
-                            <View style={{
-                              width: "100%",
-                              flex: 1
-                            }}>
+                            <View
+                              style={{
+                                width: "100%",
+                                flex: 1,
+                              }}
+                            >
                               <View
                                 style={[
                                   tripDetailStyles.sightDetails,
@@ -193,9 +213,14 @@ export const WishlistScreen = () => {
                                   ]}
                                   // onPress={() => handleAddToTrip(item)}
                                 >
-                                  <Text style={[styles.buttonItemText, {
-                                    color: COLORS.red
-                                  }]}>
+                                  <Text
+                                    style={[
+                                      styles.buttonItemText,
+                                      {
+                                        color: COLORS.red,
+                                      },
+                                    ]}
+                                  >
                                     Remove
                                   </Text>
                                 </TouchableOpacity>

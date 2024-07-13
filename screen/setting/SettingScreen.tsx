@@ -38,6 +38,8 @@ import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 import { MapEmbedView } from "../../common/components/MapEmbedView";
 
+const isGuest = true;
+
 interface SettingProps {}
 
 export const SettingScreen: React.FC<SettingProps> = ({}) => {
@@ -84,119 +86,140 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
               )}
               <View style={{ maxWidth: "70%" }}>
                 <Text numberOfLines={1} style={styles.username}>
-                  Misha Gogiashvili
+                  {isGuest ? "Guest user" : "Misha Gogiashvili"}
                 </Text>
                 <Text style={styles.subTxt}>Welcome</Text>
               </View>
             </View>
           </View>
-          <Text style={styles.buttonsWrapperTitle}>Account</Text>
-          <View style={styles.buttonsWrapper}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("EditProfile")}
-              style={styles.button}
-              activeOpacity={0.7}
-            >
-              <UserCircleIcon />
-              <Text style={styles.buttonText}>Edit profile</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]}
-              activeOpacity={0.7}
-              onPress={() => navigation.navigate("ResetPasswordScreen")}
-            >
-              <LockIcon />
-              <Text style={styles.buttonText}>Reset password</Text>
-            </TouchableOpacity>
-          </View>
+          {!isGuest && (
+            <>
+              <Text style={styles.buttonsWrapperTitle}>Account</Text>
+              <View style={styles.buttonsWrapper}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("EditProfile")}
+                  style={styles.button}
+                  activeOpacity={0.7}
+                >
+                  <UserCircleIcon />
+                  <Text style={styles.buttonText}>Edit profile</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.button,
+                    { borderBottomWidth: 0, marginBottom: 0 },
+                  ]}
+                  activeOpacity={0.7}
+                  onPress={() => navigation.navigate("ResetPasswordScreen")}
+                >
+                  <LockIcon />
+                  <Text style={styles.buttonText}>Reset password</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
           <Text style={styles.buttonsWrapperTitle}>Legal</Text>
           <View style={styles.buttonsWrapper}>
             <TouchableOpacity
               onPress={() => onModalEmbedOpen()}
-              style={styles.button}
+              style={[styles.button, {borderWidth: 0}]}
               activeOpacity={0.7}
             >
               <PrivacyIcon />
               <Text style={styles.buttonText}>Privacy Policy</Text>
             </TouchableOpacity>
-            <TouchableOpacity  style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]} activeOpacity={0.7}>
-              <TermsIcon />
-              <Text style={styles.buttonText}>Terms of Service</Text>
-            </TouchableOpacity>
           </View>
-          <Text style={styles.buttonsWrapperTitle}>Manage</Text>
+          {!isGuest && (
+            <>
+              <Text style={styles.buttonsWrapperTitle}>Manage</Text>
+              <View style={styles.buttonsWrapper}>
+                <TouchableOpacity
+                  style={styles.button}
+                  activeOpacity={0.7}
+                  onPress={async () => {
+                    signOut();
+                    deleteFromAsyncStorage([
+                      "visited_countries",
+                      "lived_countries",
+                    ]);
+                  }}
+                >
+                  <LogoutIcon />
+                  <Text style={styles.buttonText}>Logout</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.button,
+                    { borderBottomWidth: 0, marginBottom: 0 },
+                  ]}
+                  activeOpacity={0.7}
+                  onPress={() =>
+                    Alert.alert(
+                      "Warning",
+                      "If you want to deactivate your account, you will lose all your data. If are sure, please send us email to hello@trekspot.io",
+                      [{ text: "Got it!" }]
+                    )
+                  }
+                >
+                  <DeleteIcon />
+                  <Text style={[styles.buttonText, { color: COLORS.red }]}>
+                    Deactivate account
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
+          <Text style={styles.buttonsWrapperTitle}>Socials</Text>
           <View style={styles.buttonsWrapper}>
             <TouchableOpacity
-              style={styles.button}
+              style={[
+                styles.button,
+                {
+                  paddingLeft: 24,
+                  marginRight: 0,
+                  paddingRight: 0,
+                },
+              ]}
               activeOpacity={0.7}
-              onPress={async () => {
-                signOut();
-                deleteFromAsyncStorage([
-                  "visited_countries",
-                  "lived_countries",
-                ]);
-              }}
             >
-              <LogoutIcon />
-              <Text style={styles.buttonText}>Logout</Text>
+              <FacebookLinear color="" size="" />
+              <Text
+                style={[
+                  styles.buttonText,
+                  {
+                    paddingLeft: 0,
+                    marginLeft: 8,
+                  },
+                ]}
+              >
+                Like us on Facebook
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, { marginBottom: 0 }]}
+              activeOpacity={0.7}
+            >
+              <InstagramLinear color="" size="" />
+              <Text style={styles.buttonText}>Follow us on Instagram</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, { marginBottom: 0 }]}
+              activeOpacity={0.7}
+            >
+              <ThreadsLinear color="" size="" />
+              <Text style={styles.buttonText}>Follow us on Threads</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]}
               activeOpacity={0.7}
-              onPress={() =>
-                Alert.alert(
-                  "Warning",
-                  "If you want to deactivate your account, you will lose all your data. If are sure, please send us email to hello@trekspot.io",
-                  [{ text: "Got it!" }]
-                )
-              }
             >
-              <DeleteIcon />
-              <Text style={[styles.buttonText, { color: COLORS.red }]}>
-                Deactivate account
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.buttonsWrapperTitle}>Socials</Text>
-          <View style={styles.buttonsWrapper}>
-            <TouchableOpacity
-              style={[styles.button, {
-                paddingLeft: 24,
-                marginRight: 0,
-                paddingRight: 0
-              }]}
-              activeOpacity={0.7}
-            >
-              <FacebookLinear color="" size="" />
-              <Text style={[styles.buttonText, {
-                paddingLeft: 0,
-                marginLeft: 8
-              }]}>Like us on Facebook</Text>
-            </TouchableOpacity>
-            <TouchableOpacity  style={[styles.button, {  marginBottom: 0 }]} activeOpacity={0.7}>
-              <InstagramLinear color="" size="" />
-              <Text style={styles.buttonText}>
-                Follow us on Instagram
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity  style={[styles.button, {  marginBottom: 0 }]} activeOpacity={0.7}>
-              <ThreadsLinear color="" size="" />
-              <Text style={styles.buttonText}>
-                Follow us on Threads
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity  style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]} activeOpacity={0.7}>
               <TiktokLinear color="" size="" />
-              <Text style={styles.buttonText}>
-                Follow us on Tiktok
-              </Text>
+              <Text style={styles.buttonText}>Follow us on Tiktok</Text>
             </TouchableOpacity>
           </View>
-       
+
           <View style={styles.version}>
-            <Text style={styles.versionText}>
-              Version: 1.0.0
-            </Text>
+            <Text style={styles.versionText}>Version: 1.0.0</Text>
           </View>
         </ScrollView>
       </View>

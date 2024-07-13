@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
@@ -15,14 +15,10 @@ import { Portal } from "react-native-portalize";
 import { QuestionModal } from "../../common/components/QuestionModal";
 import { questionModaStyles } from "../../styles/questionModaStyles";
 import {
-  AddUser,
-  CoupleIcon,
   DotsIcon,
   EditIcon,
-  FamilyIcon,
-  OneUserIcon,
+  LocationPin,
   TrashIcon,
-  UserIcon,
   UsersIcon,
 } from "../../utilities/SvgIcons.utility";
 import { _tripScreenStyles } from "./_tripScreenStyles";
@@ -87,7 +83,6 @@ export const TripItem: React.FC<ITripItemProps> = ({ item }) => {
                     </View>
                     <Text style={_tripScreenStyles.tripTitle}>
                       {item?.name}
-                   
                     </Text>
                   </View>
                   <TouchableOpacity onPress={() => onQuestionModalOpen()}>
@@ -149,7 +144,6 @@ export const TripItem: React.FC<ITripItemProps> = ({ item }) => {
                     <Text style={_tripScreenStyles.tripTitle}>
                       {item?.name}
                     </Text>
-                
                   </View>
                   <TouchableOpacity onPress={() => onQuestionModalOpen()}>
                     <DotsIcon color="#fff" />
@@ -173,6 +167,11 @@ export const TripItem: React.FC<ITripItemProps> = ({ item }) => {
                     <Text style={_tripScreenStyles.typeTagText}>
                       {item.type.toLowerCase()}
                     </Text>
+
+                  </View>
+                  <View style={_tripScreenStyles.tripLocation}>
+                    <LocationPin width="10" color="#ececec" />
+                    <Text style={_tripScreenStyles.tripLocationText}>{item?.cities[0].city}</Text>
                   </View>
                 </View>
               </LinearGradient>

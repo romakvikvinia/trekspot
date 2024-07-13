@@ -25,57 +25,19 @@ import { COLORS } from "../../styles/theme";
 
 interface TripProps {}
 
-export const TripMapViewScreen: React.FC<TripProps> = ({}) => {
+export const TripMapViewScreen: React.FC<TripProps> = ({route}) => {
   const mapRef = useRef<any>(null);
   const navigation = useNavigation();
-
-  const markers = [
-    {
-      name: "Burj Khalifa",
-      coordinates: {
-        latitude: 25.1971636,
-        longitude: 55.274249,
-      },
-    },
-    {
-      name: "Palm Jumeirah",
-      coordinates: {
-        latitude: 25.1125,
-        longitude: 55.1381,
-      },
-    },
-    {
-      name: "The Dubai Mall",
-      coordinates: {
-        latitude: 25.1972,
-        longitude: 55.2794,
-      },
-    },
-    {
-      name: "Burj Al Arab",
-      coordinates: {
-        latitude: 25.1413,
-        longitude: 55.1853,
-      },
-    },
-    {
-      name: "Dubai Marina",
-      coordinates: {
-        latitude: 25.0673,
-        longitude: 55.1401,
-      },
-    },
-  ];
-
+ 
   useEffect(() => {
     mapRef.current?.animateToRegion({
-      latitude: markers[0].coordinates?.latitude,
-      longitude: markers[0].coordinates?.longitude,
+      latitude: route?.params?.topSights[0]?.location?.lat,
+      longitude: route?.params?.topSights[0]?.location?.lng,
       latitudeDelta: 0.00001,
       longitudeDelta: 0.5,
     });
   }, []);
-
+ 
   return (
     <View style={styles.safeArea}>
       <TouchableOpacity
@@ -99,21 +61,15 @@ export const TripMapViewScreen: React.FC<TripProps> = ({}) => {
         mapType="standard"
         // onSnapToItem={() => alert("ss")}
       >
-        {markers.map((marker: any, i: any) => {
+        {route?.params?.topSights.map((marker: any, i: any) => {
           return (
-            <Marker key={marker.id} coordinate={marker.coordinates}>
+            <Marker key={marker.id} coordinate={{
+              latitude: marker?.location?.lat,
+              longitude: marker?.location?.lng,
+            }}>
               <View style={{ width: 50, height: 50 }}>
                 <SightsMarkerIcon size="50" color={COLORS.primary} />
-                <Text
-                  style={{
-                    position: "absolute",
-                    top: 18,
-                    left: 18,
-                    color: "#fff",
-                  }}
-                >
-                  {i + 1}
-                </Text>
+                
               </View>
               <Callout style={{ width: 150 }}>
                 <Text
@@ -124,7 +80,7 @@ export const TripMapViewScreen: React.FC<TripProps> = ({}) => {
                     fontSize: 16,
                   }}
                 >
-                  {marker?.name}
+                  {marker?.title}
                 </Text>
               </Callout>
             </Marker>

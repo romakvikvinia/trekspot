@@ -24,6 +24,20 @@ export const _tripScreenStyles = StyleSheet.create({
     marginLeft: 5,
     textTransform: "capitalize",
   },
+  tripLocation: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0, 0.4)",
+    borderRadius: 55,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  tripLocationText:{
+    fontSize: 12,
+    color: "#fff",
+    opacity: 0.8,
+    marginLeft: 5,
+  },
   cancelTripButton: {
     paddingVertical: 7,
     paddingHorizontal: 12,
@@ -331,10 +345,19 @@ export const _tripScreenStyles = StyleSheet.create({
     alignItems: "center",
     height: 500,
   },
-  notFoundViewText: {
-    marginTop: 25,
+  notFoundViewTitleText: {
+    marginTop: 30,
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 20,
+    color: COLORS.black,
+    lineHeight: 22,
+    maxWidth: "80%",
+    fontWeight: "600"
+  },
+  notFoundViewText: {
+    marginTop: 10,
+    textAlign: "center",
+    fontSize: 14,
     color: COLORS.darkgray,
     lineHeight: 22,
     maxWidth: "80%",

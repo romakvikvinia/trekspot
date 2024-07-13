@@ -13,6 +13,7 @@ import { COLORS } from "../../../styles/theme";
 import {
   BackIcon,
   DotsIcon,
+  LocationPin,
   MapIcon,
 } from "../../../utilities/SvgIcons.utility";
 import { TripHelpers } from "./TripHelpers";
@@ -22,24 +23,41 @@ export const Header = ({
   onQuestion2ModalOpen,
   handleNavigate,
   location,
+  topSights
 }) => {
   const navigation = useNavigation();
   const mapRef = useRef(null);
 
+ 
   useEffect(() => {
-    mapRef.current?.animateToRegion({
-      latitude: location?.lat,
-      longitude: location?.lng,
-      latitudeDelta: 0.00001,
-      longitudeDelta: 0.5,
-    });
-  }, []);
+    console.log("location", data);
+   
+
+    if(location) {
+      mapRef.current?.animateToRegion({
+        latitude: location?.lat,
+        longitude: location?.lng,
+        latitudeDelta: 0.00001,
+        longitudeDelta: 0.5,
+      });
+    } else {
+      mapRef.current?.animateToRegion({
+        latitude: 29.3606316,
+        longitude: 11.8186065,
+        latitudeDelta: 13,
+        longitudeDelta: 0.5,
+      });
+    }
+  
+  }, [location, data]);
 
   return (
     <View style={[styles.mapHeaderContainer]}>
       <MapView
         ref={mapRef}
-        onPress={() => navigation.navigate("TripMapViewScreen")}
+        onPress={() => navigation.navigate("TripMapViewScreen", {
+          topSights
+        })}
         provider={Platform.OS === "android" ? PROVIDER_GOOGLE : undefined}
         style={styles.map}
         mapType="standard"
@@ -53,7 +71,9 @@ export const Header = ({
         <BackIcon />
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => navigation.navigate("TripMapViewScreen")}
+        onPress={() => navigation.navigate("TripMapViewScreen", {
+          topSights
+        })}
         activeOpacity={0.7}
         style={styles.mapButton}
       >
@@ -71,7 +91,15 @@ export const Header = ({
         >
           <View style={styles.leftSide}>
             <Text style={styles.tripName}>{data?.name}</Text>
-            <Text style={styles.tripDestination}>{data?.cities[0]?.city}</Text>
+
+            <View style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginTop: 10
+            }}>
+              <LocationPin width="12" color={COLORS.gray} />
+              <Text style={styles.tripDestination}>{data?.cities[0]?.city}</Text>
+            </View>
           </View>
           <View style={styles.rightSide}>
             <TouchableOpacity
@@ -446,7 +474,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "500",
     color: COLORS.darkgray,
-    marginTop: 10,
+    marginTop: 0,
+    marginLeft: 5
   },
   inviteOne: {
     width: 25,
