@@ -41,6 +41,8 @@ import {
   TransformedTopicsResponseType,
   FaqResponseType,
   FaqType,
+  TransformedFaqResponseType,
+  FaqArgsType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -879,12 +881,12 @@ export const trekSpotApi = createApi({
      * topics
      */
 
-    faq: builder.query<TransformedTopicsResponseType, TopicsArgsType>({
+    faq: builder.query<TransformedFaqResponseType, FaqArgsType>({
       query: ({ skip = 0, take = 20, search = "", iso2 }) => ({
         variables: { skip, take, search, iso2 },
         document: gql`
           query ($skip: Int, $take: Int, $search: String, $iso2: String!) {
-            topics(
+            faqs(
               input: { skip: $skip, take: $take, search: $search, iso2: $iso2 }
             ) {
               itemId
@@ -902,22 +904,23 @@ export const trekSpotApi = createApi({
       //@ts-ignore
       transformResponse: (response: FaqResponseType) => {
         let transformedData: Record<string, FaqType[]> = {};
-        let items = response.faqs || [];
+        let arr = response.faqs || [];
+        console.log("arr",arr)
+        const items = [...arr].reverse();
 
-        // if (items.length) {
-        //   items.forEach((res) => {
-        //     if (res.category.title in transformedData) {
-        //       transformedData[res.category.title] = [
-        //         ...transformedData[res.category.title],
-        //         res,
-        //       ];
-        //     } else {
-        //       transformedData[res.category.title] = [res];
-        //     }
-        //   });
-        // }
-
-        return items;
+        if (items.length) {
+          items.forEach((res) => {
+            if (res.category.title in transformedData) {
+              transformedData[res.category.title] = [
+                ...transformedData[res.category.title],
+                res,
+              ];
+            } else {
+              transformedData[res.category.title] = [res];
+            }
+          });
+        }
+        return transformedData;
       },
     }),
 

@@ -29,14 +29,15 @@ import moment from "moment";
 import { Loader } from "../../common/ui/Loader";
 import * as Haptics from "expo-haptics";
 import { AuthContext } from "../../package/context/auth.context";
+import { UserContext } from "../../components/context/UserContext";
 
-const isGuest = false;
 
 type TripProps = NativeStackScreenProps<TripRouteStackParamList, "TripsScreen">;
 
 export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
   const newTripModal = useRef<Modalize>(null);
   const { signOut } = useContext(AuthContext);
+  const { user } = useContext(UserContext);
 
   const [fetchDate, { data, isLoading, isError }] = useLazyMyTripsQuery();
 
@@ -59,7 +60,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
           .sort((a, b) => moment(b.startAt).valueOf() - moment(a.startAt).valueOf())) || [];
   
   const handleCreateNewTrip = () => {
-    if(isGuest) {
+    if(user?.type === "guest") {
       Alert.alert("To create a new trip, you need to sign in", "", [
         {
           text: "Cancel",

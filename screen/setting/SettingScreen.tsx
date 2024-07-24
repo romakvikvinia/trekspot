@@ -16,34 +16,28 @@ import { deleteFromAsyncStorage } from "../../helpers/secure.storage";
 import { COLORS } from "../../styles/theme";
 import {
   DeleteIcon,
-  Email,
-  Facebook,
   FacebookLinear,
-  Instagram,
   InstagramLinear,
   LockIcon,
   LogoutIcon,
   PrivacyIcon,
-  StarIcon,
-  StarsIcon,
-  TermsIcon,
   ThreadsLinear,
   TiktokLinear,
   UserCircleIcon,
   UserIcon,
-  VersionIcon,
 } from "../../utilities/SvgIcons.utility";
 import { useNavigation } from "@react-navigation/native";
 import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 import { MapEmbedView } from "../../common/components/MapEmbedView";
+import { UserContext } from "../../components/context/UserContext";
 
-const isGuest = true;
-
+ 
 interface SettingProps {}
 
 export const SettingScreen: React.FC<SettingProps> = ({}) => {
   const modalEmbedRef = useRef<Modalize>(null);
+  const { user } = useContext(UserContext);
 
   const { signOut } = useContext(AuthContext);
   const navigation = useNavigation();
@@ -86,13 +80,13 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
               )}
               <View style={{ maxWidth: "70%" }}>
                 <Text numberOfLines={1} style={styles.username}>
-                  {isGuest ? "Guest user" : "Misha Gogiashvili"}
+                  {user?.type === "guest" ? "Guest user" : "Misha Gogiashvili"}
                 </Text>
                 <Text style={styles.subTxt}>Welcome</Text>
               </View>
             </View>
           </View>
-          {!isGuest && (
+          {user?.type !== "guest" && (
             <>
               <Text style={styles.buttonsWrapperTitle}>Account</Text>
               <View style={styles.buttonsWrapper}>
@@ -129,7 +123,7 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
               <Text style={styles.buttonText}>Privacy Policy</Text>
             </TouchableOpacity>
           </View>
-          {!isGuest && (
+          {user?.type !== "guest" && (
             <>
               <Text style={styles.buttonsWrapperTitle}>Manage</Text>
               <View style={styles.buttonsWrapper}>

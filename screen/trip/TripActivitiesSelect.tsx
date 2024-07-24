@@ -109,18 +109,21 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                 </Text>
 
                 <View style={styles.thingsTodoItemiIn}>
-                  <View style={exploreStyles.ratingWrapper}>
-                    <View
-                      style={{
-                        position: "relative",
-                        top: -1,
-                        opacity: 0.8,
-                      }}
-                    >
-                      <StarIcon size={15} color="#FFBC3E" />
+                  {
+                    item?.rate && 
+                    <View style={exploreStyles.ratingWrapper}>
+                      <View
+                        style={{
+                          position: "relative",
+                          top: -1,
+                          opacity: 0.8,
+                        }}
+                      >
+                        <StarIcon size={15} color="#FFBC3E" />
+                      </View>
+                      <Text style={exploreStyles.ratingText}>{item?.rate}</Text>
                     </View>
-                    <Text style={exploreStyles.ratingText}>{item?.rate}</Text>
-                  </View>
+                  }
                 </View>
 
                 <View style={styles.actionButtons}>

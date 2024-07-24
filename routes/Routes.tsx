@@ -10,6 +10,7 @@ import { deleteItemFromStorage, getFullToken } from "../helpers/secure.storage";
 import { AppRoute } from "./AppRoute";
 import { Loader } from "../common/ui/Loader";
 import { Alert } from "react-native";
+import { UserProvider } from "../components/context/UserContext";
 
 //reselect
 
@@ -78,7 +79,9 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
           !state.isAuthenticated ? (
             <AuthRoute />
           ) : (
-            <AppRoute />
+            <UserProvider>
+              <AppRoute />
+            </UserProvider>
           )
         ) : (
           <Loader isLoading={state.isLoading} />

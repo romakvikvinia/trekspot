@@ -23,16 +23,15 @@ export const Header = ({
   onQuestion2ModalOpen,
   handleNavigate,
   location,
-  topSights
+  topSights,
+  iso2
 }) => {
   const navigation = useNavigation();
   const mapRef = useRef(null);
 
  
   useEffect(() => {
-    console.log("location", data);
-   
-
+     
     if(location) {
       mapRef.current?.animateToRegion({
         latitude: location?.lat,
@@ -50,7 +49,7 @@ export const Header = ({
     }
   
   }, [location, data]);
-
+ 
   return (
     <View style={[styles.mapHeaderContainer]}>
       <MapView
@@ -117,7 +116,7 @@ export const Header = ({
             </View>
           </View>
         </View>
-        <TripHelpers handleNavigate={handleNavigate} />
+        <TripHelpers handleNavigate={handleNavigate} iso2={iso2} />
       </View>
     </View>
   );
@@ -475,7 +474,8 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: COLORS.darkgray,
     marginTop: 0,
-    marginLeft: 5
+    marginLeft: 5,
+    textTransform: "capitalize",
   },
   inviteOne: {
     width: 25,

@@ -44,8 +44,8 @@ import { formatPercentage } from "../../helpers/number.helper";
 import { useDispatch } from "react-redux";
 import { MapSvg } from "../../utilities/svg/map";
 import { AuthContext } from "../../package/context/auth.context";
+import { UserContext } from "../../components/context/UserContext";
 
-const isGuest = true;
 
 interface MapVIewProps {
   analytic?: AnalyticsType;
@@ -54,6 +54,8 @@ interface MapVIewProps {
 export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
   const dispatch = useDispatch();
   const { signOut } = useContext(AuthContext);
+  const { user } = useContext(UserContext);
+
 
   const [searchValue, setSearchValue] = useState("");
   const [state, setState] = useState<{
@@ -75,7 +77,23 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
   const shareModalRef = useRef<Modalize>(null);
 
   const onOpen = useCallback(() => {
-    if (modalRef.current) modalRef.current.open();
+    if (user?.type === "guest") {
+      Alert.alert("To add a visit, you need to sign in", "", [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Sign in",
+          onPress: () => signOut(),
+          style: "default",
+        },
+      ]);
+    }  else {
+      if (modalRef.current) modalRef.current.open();
+    }
+    
   }, []);
 
   const onShareModalOpen = useCallback(() => {
@@ -199,7 +217,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
   };
 
   const handleAddVisit = () => {
-    if (isGuest) {
+    if (user?.type === "guest") {
       Alert.alert("To add a visit, you need to sign in", "", [
         {
           text: "Cancel",
@@ -218,7 +236,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
   };
 
   const handleShare = () => {
-    if (isGuest) {
+    if (user?.type === "guest") {
       Alert.alert("To share your map, you need to sign in", "", [
         {
           text: "Cancel",

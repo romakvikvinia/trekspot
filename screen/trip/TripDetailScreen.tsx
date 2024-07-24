@@ -198,6 +198,7 @@ const combinedArray = combineObjectArrays(data);
             data={trip}
             location={location}
             topSights={combinedArray}
+            iso2={city.iso2}
           />
         )}
         headerHeight={300} // optional

@@ -397,7 +397,6 @@ export type FaqResponseType = {
 export type FaqArgsType = {
   skip?: number;
   take?: number;
-  search?: string;
   iso2: string;
 };
 

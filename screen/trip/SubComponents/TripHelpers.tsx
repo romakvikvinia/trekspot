@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { CarLinearIcon, DishesIcon, EmergencyLinearIcon, FaqIcon, InsightIcon } from "../../../utilities/SvgIcons.utility";
 
-export const TripHelpers = ({handleNavigate}) => {
+export const TripHelpers = ({handleNavigate, iso2}) => {
 
   const navigation = useNavigation();
 
@@ -31,7 +31,9 @@ export const TripHelpers = ({handleNavigate}) => {
         <TouchableOpacity
           style={styles.bottomActionsButton}
           activeOpacity={0.7}
-          onPress={() => navigation.navigate("TripFAQ")}
+          onPress={() => navigation.navigate("TripFAQ",{
+            iso2: iso2
+          })}
         >
           <FaqIcon size={12} color={"#0b57d0"} />
           <Text style={styles.bottomActionsButtonlabel}>FAQ</Text>

@@ -1,5 +1,5 @@
 import { Image } from "expo-image";
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Platform,
   SafeAreaView,
@@ -22,13 +22,23 @@ import {
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { customMapStyle } from "../../styles/mapView.style";
 import { COLORS } from "../../styles/theme";
+import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
 
 interface TripProps {}
 
 export const TripMapViewScreen: React.FC<TripProps> = ({route}) => {
   const mapRef = useRef<any>(null);
   const navigation = useNavigation();
- 
+  const [topSightDetail, setTopSightDetail] = useState(null);
+
+  const showTopSight = (sight: object) => {
+    setTopSightDetail(sight);
+  };
+
+  const handleClear = useCallback(() => {
+    setTopSightDetail(null);
+  }, []);
+
   useEffect(() => {
     mapRef.current?.animateToRegion({
       latitude: route?.params?.topSights[0]?.location?.lat,
@@ -39,6 +49,7 @@ export const TripMapViewScreen: React.FC<TripProps> = ({route}) => {
   }, []);
  
   return (
+    <>
     <View style={styles.safeArea}>
       <TouchableOpacity
         onPress={() => navigation.goBack()}
@@ -66,12 +77,13 @@ export const TripMapViewScreen: React.FC<TripProps> = ({route}) => {
             <Marker key={marker.id} coordinate={{
               latitude: marker?.location?.lat,
               longitude: marker?.location?.lng,
-            }}>
+            }}
+            onPress={() => showTopSight(marker)}
+            >
               <View style={{ width: 50, height: 50 }}>
                 <SightsMarkerIcon size="50" color={COLORS.primary} />
-                
               </View>
-              <Callout style={{ width: 150 }}>
+              {/* <Callout style={{ width: 150 }}>
                 <Text
                   numberOfLines={1}
                   style={{
@@ -82,12 +94,16 @@ export const TripMapViewScreen: React.FC<TripProps> = ({route}) => {
                 >
                   {marker?.title}
                 </Text>
-              </Callout>
+              </Callout> */}
             </Marker>
           );
         })}
       </MapView>
     </View>
+    {topSightDetail ? (
+        <SightDetailModal data={topSightDetail} closeCallBack={handleClear} />
+      ) : null}
+    </>
   );
 };
 

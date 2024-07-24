@@ -71,7 +71,7 @@ export const TripActivityCard = ({
         </View> */}
 
         <View style={tripDetailStyles.imagesWrapper}>
-          {item?.images?.slice(0, 2).map((image, index) => (
+          {item?.images?.length > 0 && item?.images?.slice(0, 2).map((image, index) => (
             <Image
               style={tripDetailStyles.mainImage}
               contentFit="cover"
@@ -86,19 +86,24 @@ export const TripActivityCard = ({
             ></Image>
           ))}
 
-          <ImageBackground
-            resizeMode="cover"
-            source={{
-              uri: item?.image?.url,
-            }}
-            style={ tripDetailStyles.lastImage }
-          >
-            <View
-              style={tripDetailStyles.imageOverlay}
+          {
+            item?.images?.length > 0 &&
+            <ImageBackground
+              resizeMode="cover"
+              source={{
+                uri: item?.image?.url,
+              }}
+              style={ tripDetailStyles.lastImage }
             >
-              <Text style={{color:"#fff", fontWeight: "bold", fontSize: 14}}>+3</Text>
-            </View>
-          </ImageBackground>
+              <View
+                style={tripDetailStyles.imageOverlay}
+              >
+                <Text style={{color:"#fff", fontWeight: "bold", fontSize: 14}}>+3</Text>
+              </View>
+            </ImageBackground>
+          }
+
+       
         </View>
 
         <View
