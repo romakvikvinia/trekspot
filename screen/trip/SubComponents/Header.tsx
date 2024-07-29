@@ -21,7 +21,6 @@ import { TripHelpers } from "./TripHelpers";
 export const Header = ({
   data,
   onQuestion2ModalOpen,
-  handleNavigate,
   location,
   topSights,
   iso2
@@ -116,7 +115,7 @@ export const Header = ({
             </View>
           </View>
         </View>
-        <TripHelpers handleNavigate={handleNavigate} iso2={iso2} />
+        <TripHelpers data={data} iso2={iso2} />
       </View>
     </View>
   );

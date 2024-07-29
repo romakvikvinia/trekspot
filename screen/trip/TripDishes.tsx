@@ -30,11 +30,12 @@ import { styles } from "../../common/components/_styles";
 import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
 
-export const TripDishes = () => {
+export const TripDishes = ({route}) => {
   const navigation = useNavigation();
+  const iso2 = route?.params?.iso2;
 
   const { isLoading, data, isError } = useDishesByISO2Query({
-    iso2: "GE",
+    iso2: iso2,
   });
   const openMap = (name: string) => {
     const scheme = Platform.select({

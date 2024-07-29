@@ -51,9 +51,7 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
           <Loader isLoading />
         </View>
       ) : null}
-
-      {!isLoading &&
-        data &&
+      {!isLoading && data && Object.keys(data).length > 0 ? (
         Object.keys(data).map((key, i) => (
           <View
             key={key}
@@ -62,7 +60,7 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
             <View style={styles.headingItem}>
               <Text style={styles.topicsRowTitle}>{key}</Text>
               <View
-                style={[styles.shapeBg, { backgroundColor: colors[i]}]}
+                style={[styles.shapeBg, { backgroundColor: colors[i] }]}
               ></View>
             </View>
             <View style={{ flexGrow: 1 }}>
@@ -93,7 +91,37 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
               />
             </View>
           </View>
-        ))}
+        ))
+      ) : !isLoading && (
+        <View
+          style={{
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: 230,
+          }}
+        >
+          <Text
+            style={{
+              color: COLORS.black,
+              fontSize: 18,
+              fontWeight: "bold",
+            }}
+          >
+            No data available
+          </Text>
+          <Text
+            style={{
+              color: COLORS.gray,
+              fontSize: 16,
+              fontWeight: "500",
+              marginTop: 10,
+            }}
+          >
+            We are working on it and will be available soon
+          </Text>
+        </View>
+      )}
 
       <Portal>
         <Modalize

@@ -49,6 +49,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
     fetchDate({});
   }, []);
 
+ 
   const upComingTrips = 
   (data?.trips
       .filter((i) => moment(i.endAt).valueOf() > moment().valueOf())

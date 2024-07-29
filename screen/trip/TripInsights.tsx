@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import Constants from "expo-constants";
 
-import { enGB,  registerTranslation } from "react-native-paper-dates";
+import { enGB, registerTranslation } from "react-native-paper-dates";
 registerTranslation("en", enGB);
 
 import { useNavigation } from "@react-navigation/native";
@@ -36,6 +36,7 @@ interface IState {
 export const TripInsights: React.FC<TripProps> = ({ route }) => {
   const navigation = useNavigation();
   const iso2 = route?.params?.iso2;
+  const city = route?.params?.data?.cities[0]?.city;
   const [fetchData, { isLoading, data }] = useLazyTopicsQuery();
 
   const modalInsightDetailRef = useRef<Modalize>();
@@ -45,7 +46,7 @@ export const TripInsights: React.FC<TripProps> = ({ route }) => {
     setState((prevState) => ({ ...prevState, topic }));
     modalInsightDetailRef.current?.open();
   }, []);
- 
+
   const colors = ["#ffd5d1", "#f5e1d3", "#d1f5d3", "#d3d1f5", "#f5d3f5"];
 
   useEffect(() => {
@@ -56,73 +57,103 @@ export const TripInsights: React.FC<TripProps> = ({ route }) => {
 
   return (
     <>
-    <SafeAreaView style={styles.safeArea}>
-      <View style={globalStyles.screenHeader}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={globalStyles.screenHeaderBackButton}
-        >
-          <BackIcon size="30" />
-        </TouchableOpacity>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={globalStyles.screenHeader}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={globalStyles.screenHeaderBackButton}
+          >
+            <BackIcon size="30" />
+          </TouchableOpacity>
 
-        <Text style={globalStyles.screenTitle}>Dubai</Text>
-        <TouchableOpacity
-          style={globalStyles.screenHeaderBackButton}
-        ></TouchableOpacity>
-      </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-
-        {isLoading ? (
-          <View style={{ height: 230 }}>
-            <Loader isLoading background="#F2F2F7" />
-          </View>
-        ) : null}
-
-        {!isLoading &&
-          data &&
-          Object.keys(data).map((key, i) => (
-            <View
-              key={key}
-              style={[styles.topicsRow, { marginTop: i === 0 ? 25 : 0 }]}
-            >
-              <View style={styles.headingItem}>
-                <Text style={styles.topicsRowTitle}>{key}</Text>
-                <View
-                  style={[styles.shapeBg, { backgroundColor: colors[i] }]}
-                ></View>
-              </View>
-              <View style={{ flexGrow: 1 }}>
-                <FlashList
-                  horizontal
-                  contentContainerStyle={{
-                    paddingHorizontal: 15,
-                  }}
-                  showsHorizontalScrollIndicator={false}
-                  data={data[key] || []}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity
-                      onPress={() => onInsightDetailOpen(item)}
-                      activeOpacity={0.7}
-                      style={styles.card}
-                    >
-                      <Image
-                        style={styles.cardImage}
-                        resizeMode="cover"
-                        source={{
-                          uri: "https://cdn.pixabay.com/photo/2022/09/16/15/53/city-7458934_1280.jpg",
-                        }}
-                      />
-                      <Text style={styles.cardTitle}>{item.title}</Text>
-                    </TouchableOpacity>
-                  )}
-                  estimatedItemSize={10}
-                />
-              </View>
+          <Text style={globalStyles.screenTitle}>{city}</Text>
+          <TouchableOpacity
+            style={globalStyles.screenHeaderBackButton}
+          ></TouchableOpacity>
+        </View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {isLoading ? (
+            <View style={{ height: 230 }}>
+              <Loader isLoading background="#F2F2F7" />
             </View>
-          ))}
-      </ScrollView>
-    </SafeAreaView>
-    <Portal>
+          ) : null}
+
+          {!isLoading &&
+            data &&
+            Object.keys(data).map((key, i) => (
+              <View
+                key={key}
+                style={[styles.topicsRow, { marginTop: i === 0 ? 25 : 0 }]}
+              >
+                <View style={styles.headingItem}>
+                  <Text style={styles.topicsRowTitle}>{key}</Text>
+                  <View
+                    style={[styles.shapeBg, { backgroundColor: colors[i] }]}
+                  ></View>
+                </View>
+                <View style={{ flexGrow: 1 }}>
+                  <FlashList
+                    horizontal
+                    contentContainerStyle={{
+                      paddingHorizontal: 15,
+                    }}
+                    showsHorizontalScrollIndicator={false}
+                    data={data[key] || []}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity
+                        onPress={() => onInsightDetailOpen(item)}
+                        activeOpacity={0.7}
+                        style={styles.card}
+                      >
+                        <Image
+                          style={styles.cardImage}
+                          resizeMode="cover"
+                          source={{
+                            uri: "https://cdn.pixabay.com/photo/2022/09/16/15/53/city-7458934_1280.jpg",
+                          }}
+                        />
+                        <Text style={styles.cardTitle}>{item.title}</Text>
+                      </TouchableOpacity>
+                    )}
+                    estimatedItemSize={10}
+                  />
+                </View>
+              </View>
+            ))}
+
+          {!isLoading && data && Object.keys(data)?.length === 0 && (
+            <View
+              style={{
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: 230,
+              }}
+            >
+              <Text
+                style={{
+                  color: COLORS.black,
+                  fontSize: 18,
+                  fontWeight: "bold",
+                }}
+              >
+                No data available
+              </Text>
+              <Text
+                style={{
+                  color: COLORS.gray,
+                  fontSize: 16,
+                  fontWeight: "500",
+                  marginTop: 10,
+                }}
+              >
+                We are working on it and will be available soon
+              </Text>
+            </View>
+          )}
+        </ScrollView>
+      </SafeAreaView>
+      <Portal>
         <Modalize
           ref={modalInsightDetailRef}
           modalTopOffset={65}

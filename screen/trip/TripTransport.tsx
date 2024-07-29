@@ -15,10 +15,20 @@ import { COLORS, SIZES } from "../../styles/theme";
 import { useNavigation } from "@react-navigation/native";
 import RenderHTML from "react-native-render-html";
 import { globalStyles } from "../../styles/globalStyles";
+import { useLazyCountryQuery } from "../../api/api.trekspot";
+import { useEffect } from "react";
 
-export const TripTransport = () => {
+export const TripTransport = ({route}) => {
+  console.log("route", route?.params)
+  const countryId = route?.params?.iso2;
   const navigation = useNavigation();
+  const [getCountry, { isLoading, data, isError }] = useLazyCountryQuery();
 
+  useEffect(() => {
+    if (countryId) getCountry({ id: countryId });
+  }, [route]);
+
+ 
   return (
     <SafeAreaView style={styles.safeArea}>
      <View style={globalStyles.screenHeader}>
@@ -38,34 +48,7 @@ export const TripTransport = () => {
         contentContainerStyle={{ paddingHorizontal: 20 }}
         selectable
       >
-        <Text style={styles.heading}>
-           General info
-        </Text>
-        <RenderHTML
-          key={"topic"}
-          contentWidth={SIZES.width}
-          source={{
-            html: `
-            <ul style="line-height: 27px; padding-left: 15px">
-                <li style="line-height: 22px; font-size: 16px; margin-bottom: 8px"><strong>Trains:</strong> 
-                    Connect major cities (affordable, under $10 usually).
-                </li>
-                <li style="line-height: 22px; font-size: 16px; margin-bottom: 8px"><strong>Metro (Tbilisi only):</strong> 
-                    Fast and convenient (around ₾1 per ride).
-                </li>
-                <li style="line-height: 22px; font-size: 16px; margin-bottom: 8px"><strong>Marshrutkas:</strong> 
-                    Minibuses for city and intercity travel (cheap, fares depend on distance).
-                </li>
-                <li style="line-height: 22px; font-size: 16px; margin-bottom: 8px"><strong>Buses:</strong> 
-                    Extensive network for cities and regions (affordable).
-                </li>
-            </ul>
-            `,
-          }}
-          defaultTextProps={{
-            selectable: true,
-          }}
-        />
+        
         <Text style={styles.heading}>
           Helpful apps
         </Text>

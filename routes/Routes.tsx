@@ -86,7 +86,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
         ) : (
           <Loader isLoading={state.isLoading} />
         )}
-        {/* <AppRoute /> */}
+     
       </AuthContext.Provider>
     </NavigationContainer>
   );

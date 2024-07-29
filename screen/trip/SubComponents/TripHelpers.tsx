@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { CarLinearIcon, DishesIcon, EmergencyLinearIcon, FaqIcon, InsightIcon } from "../../../utilities/SvgIcons.utility";
 
-export const TripHelpers = ({handleNavigate, iso2}) => {
+export const TripHelpers = ({data, iso2}) => {
 
   const navigation = useNavigation();
 
@@ -23,7 +23,10 @@ export const TripHelpers = ({handleNavigate, iso2}) => {
         <TouchableOpacity
           style={styles.bottomActionsButton}
           activeOpacity={0.7}
-          onPress={handleNavigate}
+          onPress={() => navigation.navigate("TripInsights",{
+            data: data,
+            iso2: iso2
+          })}
         >
           <InsightIcon size={12} color={"#0b57d0"} />
           <Text style={styles.bottomActionsButtonlabel}>Insights</Text>
@@ -41,7 +44,9 @@ export const TripHelpers = ({handleNavigate, iso2}) => {
         <TouchableOpacity
           style={styles.bottomActionsButton}
           activeOpacity={0.7}
-          onPress={() => navigation.navigate("TripTransport")}
+          onPress={() => navigation.navigate("TripTransport", {
+            iso2: iso2
+          })}
         >
           <CarLinearIcon size={12} color={"#0b57d0"} />
           <Text style={styles.bottomActionsButtonlabel}>Transport</Text>
@@ -49,7 +54,9 @@ export const TripHelpers = ({handleNavigate, iso2}) => {
         <TouchableOpacity
           style={styles.bottomActionsButton}
           activeOpacity={0.7}
-          onPress={() => navigation.navigate("TripDishes")}
+          onPress={() => navigation.navigate("TripDishes", {
+            iso2: iso2
+          })}
         >
           <DishesIcon size={12} color={"#0b57d0"} />
           <Text style={styles.bottomActionsButtonlabel}>What to eat?</Text>

@@ -4,7 +4,7 @@ const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState({
-    type: 'guest'
+    type: ''
   });
 
   return (

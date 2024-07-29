@@ -1,8 +1,6 @@
 import {
-  ImageBackground,
   Linking,
   Platform,
-  ScrollView,
   Text,
   TouchableOpacity,
   View,
@@ -14,9 +12,7 @@ import { CountryType } from "../../../api/api.types";
 import { FlashList } from "@shopify/flash-list";
 import { useDishesByISO2Query } from "../../../api/api.trekspot";
 import { Loader } from "../../ui/Loader";
-import { NotFound } from "../../../components/common/NotFound";
 import { Image } from "expo-image";
-import { useFocusedTab } from "react-native-collapsible-tab-view";
 
 type DiningProps = {
   country: CountryType;
@@ -24,7 +20,6 @@ type DiningProps = {
 
 export const Dining: React.FC<DiningProps> = ({ country }) => {
   
-
   const { isLoading, data, isError } = useDishesByISO2Query({
     iso2: country.iso2,
   });
@@ -46,11 +41,8 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
       <View style={styles.tabContentHeader}>
         <Text style={styles.tabContentHeaderText}>Popular national dishes</Text>
       </View>
-     
-      {
-        !isLoading && !data?.dishes &&  <NotFound />
-      }
-      <View style={{ minHeight: 200 }}>
+
+      <View style={{ minHeight: 230 }}>
         {isLoading ? (
           <Loader isLoading={isLoading} background="" />
         ) : (
@@ -62,10 +54,12 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
                 <Image
                   style={styles.thingsTodoItemImage}
                   source={
-                    item?.url ? {
-                    uri: item?.url,
-                  } : require("../../../assets/no-image.png")
-                }
+                    item?.url
+                      ? {
+                          uri: item?.url,
+                        }
+                      : require("../../../assets/no-image.png")
+                  }
                   contentFit="cover"
                   cachePolicy="memory-disk"
                 ></Image>
@@ -82,7 +76,12 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
                       ]}
                     >
                       <View
-                        style={{ position: "relative", top: -1, opacity: 0.8, marginRight: 3 }}
+                        style={{
+                          position: "relative",
+                          top: -1,
+                          opacity: 0.8,
+                          marginRight: 3,
+                        }}
                       >
                         <StarIcon color="#FFBC3E" />
                       </View>
@@ -125,6 +124,36 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
               paddingHorizontal: 10,
             }}
           />
+        )}
+        {!isLoading && data?.dishes && data?.dishes.length === 0 && (
+          <View
+            style={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: 230,
+            }}
+          >
+            <Text
+              style={{
+                color: COLORS.black,
+                fontSize: 18,
+                fontWeight: "bold",
+              }}
+            >
+              No data available
+            </Text>
+            <Text
+              style={{
+                color: COLORS.gray,
+                fontSize: 16,
+                fontWeight: "500",
+                marginTop: 10,
+              }}
+            >
+              We are working on it and will be available soon
+            </Text>
+          </View>
         )}
       </View>
     </>

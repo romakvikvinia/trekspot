@@ -55,6 +55,7 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
   navigation,
 }) => {
   const { countryId } = route.params;
+  console.log("countryId",countryId)
 
   const [getCountry, { isLoading, data, isError }] = useLazyCountryQuery();
   const modalCountryPassportSelectRef = useRef<Modalize>(null);

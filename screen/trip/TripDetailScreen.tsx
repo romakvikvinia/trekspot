@@ -111,18 +111,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
     modalQuestionRef2.current?.open();
   };
 
-  const handleNavigate = () => {
-    if (route?.params?.directVisit) {
-      navigation.navigate("TripQuickInsights", {
-        directVisit: true,
-        iso2: "CN",
-      });
-    } else {
-      navigation.navigate("TripInsights", {
-        iso2: "CN",
-      });
-    }
-  };
+ 
 
   const handleAddToTrip = (activity: SightType) => {
     setState((prevTrip) => {
@@ -194,7 +183,6 @@ const combinedArray = combineObjectArrays(data);
         renderHeader={() => (
           <Header
             onQuestion2ModalOpen={onQuestion2ModalOpen}
-            handleNavigate={handleNavigate}
             data={trip}
             location={location}
             topSights={combinedArray}

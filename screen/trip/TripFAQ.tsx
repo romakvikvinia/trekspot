@@ -28,7 +28,7 @@ export const FaqRowItem = ({ item, title, index, openIndex, setOpenIndex }) => {
     <View
       style={{
         minHeight: 10,
-        backgroundColor: isOpen ? "#f2f2f2" : "transparent",
+        backgroundColor: isOpen ? "#fafafa" : "transparent",
         paddingVertical: 5,
         marginBottom: 8,
         borderRadius: 6,
@@ -53,7 +53,7 @@ export const FaqRowItem = ({ item, title, index, openIndex, setOpenIndex }) => {
 
       {isOpen ? (
         <FlashList
-          contentContainerStyle={{ paddingHorizontal: 15 }}
+          contentContainerStyle={{ paddingHorizontal: 0 }}
           renderItem={({ item, ind }) => {
             return <FaqItem item={item} />;
           }}
@@ -95,25 +95,55 @@ export const TripFAQ = ({route}) => {
         ></TouchableOpacity>
       </View>
 
-      <ScrollView contentContainerStyle={{paddingHorizontal: 0, paddingTop: 15}}>
-        {
-          isLoading &&   
+      <ScrollView
+        contentContainerStyle={{ paddingHorizontal: 0, paddingTop: 15 }}
+      >
+        {isLoading && (
           <View style={{ height: 230 }}>
             <Loader isLoading background="" />
           </View>
-        }
-        {
-          !isLoading && faqDataList &&
-              Object.keys(faqDataList)?.map((item, index) => (
-                <FaqRowItem
-                  item={faqDataList[item]}
-                  title={item}
-                  index={index}
-                  openIndex={openIndex}
-                  setOpenIndex={setOpenIndex}
-                />
-          ))
-        } 
+        )}
+        {!isLoading &&
+          faqDataList &&
+          Object.keys(faqDataList)?.map((item, index) => (
+            <FaqRowItem
+              item={faqDataList[item]}
+              title={item}
+              index={index}
+              openIndex={openIndex}
+              setOpenIndex={setOpenIndex}
+            />
+          ))}
+        {!isLoading && faqDataList && faqDataList?.length === 0 && (
+          <View
+            style={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: 230,
+            }}
+          >
+            <Text
+              style={{
+                color: COLORS.black,
+                fontSize: 18,
+                fontWeight: "bold",
+              }}
+            >
+              No data available
+            </Text>
+            <Text
+              style={{
+                color: COLORS.gray,
+                fontSize: 16,
+                fontWeight: "500",
+                marginTop: 10,
+              }}
+            >
+              We are working on it and will be available soon
+            </Text>
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
