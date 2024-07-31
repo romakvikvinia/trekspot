@@ -51,77 +51,80 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
           <Loader isLoading />
         </View>
       ) : null}
-      {!isLoading && data && Object.keys(data).length > 0 ? (
-        Object.keys(data).map((key, i) => (
-          <View
-            key={key}
-            style={[styles.topicsRow, { marginTop: i === 0 ? 25 : 0 }]}
-          >
-            <View style={styles.headingItem}>
-              <Text style={styles.topicsRowTitle}>{key}</Text>
-              <View
-                style={[styles.shapeBg, { backgroundColor: colors[i] }]}
-              ></View>
+      {!isLoading && data && Object.keys(data).length > 0
+        ? Object.keys(data).map((key, i) => (
+            <View
+              key={key}
+              style={[styles.topicsRow, { marginTop: i === 0 ? 25 : 0 }]}
+            >
+              <View style={styles.headingItem}>
+                <Text style={styles.topicsRowTitle}>{key}</Text>
+                <View
+                  style={[styles.shapeBg, { backgroundColor: colors[i] }]}
+                ></View>
+              </View>
+              <View style={{ flexGrow: 1 }}>
+                <FlashList
+                  horizontal
+                  contentContainerStyle={{
+                    paddingHorizontal: 15,
+                  }}
+                  showsHorizontalScrollIndicator={false}
+                  data={data[key] || []}
+                  renderItem={({ item, i }) => (
+                    <TouchableOpacity
+                      onPress={() => onInsightDetailOpen(item)}
+                      activeOpacity={0.7}
+                      style={styles.card}
+                    >
+                      {item.image && (
+                        <Image
+                          style={styles.cardImage}
+                          contentFit="cover"
+                          source={{
+                            uri: item.image.url,
+                          }}
+                        />
+                      )}
+
+                      <Text style={styles.cardTitle}>{item.title}</Text>
+                    </TouchableOpacity>
+                  )}
+                  estimatedItemSize={10}
+                />
+              </View>
             </View>
-            <View style={{ flexGrow: 1 }}>
-              <FlashList
-                horizontal
-                contentContainerStyle={{
-                  paddingHorizontal: 15,
+          ))
+        : !isLoading && (
+            <View
+              style={{
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: 230,
+              }}
+            >
+              <Text
+                style={{
+                  color: COLORS.black,
+                  fontSize: 18,
+                  fontWeight: "bold",
                 }}
-                showsHorizontalScrollIndicator={false}
-                data={data[key] || []}
-                renderItem={({ item, i }) => (
-                  <TouchableOpacity
-                    onPress={() => onInsightDetailOpen(item)}
-                    activeOpacity={0.7}
-                    style={styles.card}
-                  >
-                    <Image
-                      style={styles.cardImage}
-                      contentFit="cover"
-                      source={{
-                        uri: "https://cdn.pixabay.com/photo/2022/09/16/15/53/city-7458934_1280.jpg",
-                      }}
-                    />
-                    <Text style={styles.cardTitle}>{item.title}</Text>
-                  </TouchableOpacity>
-                )}
-                estimatedItemSize={10}
-              />
+              >
+                No data available
+              </Text>
+              <Text
+                style={{
+                  color: COLORS.gray,
+                  fontSize: 16,
+                  fontWeight: "500",
+                  marginTop: 10,
+                }}
+              >
+                We are working on it and will be available soon
+              </Text>
             </View>
-          </View>
-        ))
-      ) : !isLoading && (
-        <View
-          style={{
-            width: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: 230,
-          }}
-        >
-          <Text
-            style={{
-              color: COLORS.black,
-              fontSize: 18,
-              fontWeight: "bold",
-            }}
-          >
-            No data available
-          </Text>
-          <Text
-            style={{
-              color: COLORS.gray,
-              fontSize: 16,
-              fontWeight: "500",
-              marginTop: 10,
-            }}
-          >
-            We are working on it and will be available soon
-          </Text>
-        </View>
-      )}
+          )}
 
       <Portal>
         <Modalize

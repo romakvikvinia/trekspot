@@ -547,9 +547,11 @@ export const trekSpotApi = createApi({
               }
               image {
                 url
+                html_attributions
               }
               images {
                 url
+                html_attributions
               }
             }
           }
@@ -836,7 +838,7 @@ export const trekSpotApi = createApi({
      */
 
     topics: builder.query<TransformedTopicsResponseType, TopicsArgsType>({
-      query: ({ skip = 0, take = 20, search = "", iso2 }) => ({
+      query: ({ skip = 0, take = 200, search = "", iso2 }) => ({
         variables: { skip, take, search, iso2 },
         document: gql`
           query ($skip: Int, $take: Int, $search: String, $iso2: String!) {
@@ -847,6 +849,9 @@ export const trekSpotApi = createApi({
               iso2
               title
               description
+              image {
+                url
+              }
               category {
                 itemId
                 title
@@ -882,7 +887,7 @@ export const trekSpotApi = createApi({
      */
 
     faq: builder.query<TransformedFaqResponseType, FaqArgsType>({
-      query: ({ skip = 0, take = 20, search = "", iso2 }) => ({
+      query: ({ skip = 0, take = 200, search = "", iso2 }) => ({
         variables: { skip, take, search, iso2 },
         document: gql`
           query ($skip: Int, $take: Int, $search: String, $iso2: String!) {
@@ -905,7 +910,7 @@ export const trekSpotApi = createApi({
       transformResponse: (response: FaqResponseType) => {
         let transformedData: Record<string, FaqType[]> = {};
         let arr = response.faqs || [];
-        console.log("arr",arr)
+        console.log("arr", arr);
         const items = [...arr].reverse();
 
         if (items.length) {

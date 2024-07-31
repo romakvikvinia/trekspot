@@ -255,6 +255,7 @@ export type SightType = {
   location: SightLocationType;
   image: FileType;
   images: FileType[];
+  html_attributions?: string[];
 };
 
 export type SightsArgsType = {
@@ -359,6 +360,7 @@ export type TopicType = {
   iso2: string;
   title: string;
   description: string;
+  image: ImageType;
   category: {
     itemId: string;
     title: string;
@@ -398,6 +400,7 @@ export type FaqArgsType = {
   skip?: number;
   take?: number;
   iso2: string;
+  search: string;
 };
 
 export type TransformedFaqResponseType = Record<string, FaqType[]>;
