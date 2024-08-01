@@ -383,14 +383,16 @@ export const styles = StyleSheet.create({
   },
   transportItemIcon: {
     backgroundColor: "#eee",
-    padding: 10,
-    width: 50,
+    padding: 0,
+    width: 50, 
+    height: 50,
     alignItems: "center"
   },
   transportText: {
     fontSize: 14,
     fontWeight: "bold",
     paddingHorizontal: 10,
+    maxWidth: "70%"
   },
   textContentWrapper: {
     backgroundColor: "#fafafa",

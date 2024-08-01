@@ -8,17 +8,11 @@ import {
 } from "react-native";
 import { ScrollView, Text } from "react-native";
 import {
-  BusIcon,
   DrivingSideLeft,
   DrivingSideRight,
-  MetroIcon,
-  TramwayIcon,
-  TrolleybusIcon,
 } from "../../../utilities/SvgIcons.utility";
 import { styles } from "../_styles";
 import { CountryType } from "../../../api/api.types";
-import RenderHTML from "react-native-render-html";
-import { SIZES } from "../../../styles/theme";
 
 interface TransportProps {
   country: CountryType;
@@ -99,11 +93,14 @@ export const Transport: React.FC<TransportProps> = ({ country }) => {
                     source={{
                       uri: item.logo,
                     }}
-                    resizeMode="cover"
-                    style={{ width: 30, height: 20 }}
+                    resizeMode="contain"
+                    style={{ 
+                      width: 50, 
+                      height: 50,
+                     }}
                   />
                 </View>
-                <Text style={styles.transportText}>{item.name}</Text>
+                <Text numberOfLines={1} style={styles.transportText}>{item.name}</Text>
               </TouchableOpacity>
             ))}
           </View>

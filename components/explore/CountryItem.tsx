@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { CountryType } from "../../api/api.types";
-import { Mark, Mark2, StarIcon } from "../../utilities/SvgIcons.utility";
+import { Mark, StarIcon } from "../../utilities/SvgIcons.utility";
 import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
 
@@ -35,18 +35,10 @@ export const CountryItem: React.FC<CountryItemProps> = ({
               ? {
                   uri: item?.image?.url,
                 }
-              : 
-             
-              item.name === "France" ? "https://cdn.pixabay.com/photo/2018/04/25/09/26/eiffel-tower-3349075_1280.jpg"
-
-              
-              :  item.name === "Germany" ? "https://cdn.pixabay.com/photo/2020/05/01/11/00/castle-5116436_1280.jpg" :
-              item.name === "Italy" ? "https://cdn.pixabay.com/photo/2019/03/31/14/31/houses-4093227_1280.jpg" :
-              require("../../assets/no-image.png")
+              : require("../../assets/no-image.png")
           }
           cachePolicy="memory-disk"
         >
-         
           <TouchableOpacity
             style={styles.gradientWrapper}
             activeOpacity={0.7}
@@ -93,7 +85,6 @@ export const CountryItem: React.FC<CountryItemProps> = ({
               : require("../../assets/no-image.png")
           }
         >
-        
           <TouchableOpacity
             style={styles.gradientWrapper}
             activeOpacity={0.7}
