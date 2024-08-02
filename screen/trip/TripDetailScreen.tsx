@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { Alert,  Text, TouchableOpacity, View } from "react-native";
+import { Alert, Text, TouchableOpacity, View } from "react-native";
 import { COLORS, SIZES } from "../../styles/theme";
 import { enGB, registerTranslation } from "react-native-paper-dates";
 registerTranslation("en", enGB);
@@ -24,7 +24,11 @@ import { MapEmbedView } from "../../common/components/MapEmbedView";
 
 import { Header } from "./SubComponents/Header";
 import { TripActivityCard } from "./TripActivityCard";
-import { useLazyGetSightsQuery } from "../../api/api.trekspot";
+import {
+  useLazyGetSightsQuery,
+  useTripQuery,
+  useUpdateTripRouteAndActivitiesMutation,
+} from "../../api/api.trekspot";
 import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
 
 import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
@@ -59,8 +63,17 @@ export const TripDetailScreen: React.FC<TripProps> = ({
 
   const { trip, city } = route.params;
 
+  const { isLoading: isTripDetailLoading, data: tripDetail } = useTripQuery({
+    id: trip.id,
+  });
+
   const [getSights, { data, isLoading: sightsLoading }] =
     useLazyGetSightsQuery();
+
+  const [
+    fetchUpdateRouteAndActivities,
+    { isLoading: isUpdateRouteAndActivitiesLoading },
+  ] = useUpdateTripRouteAndActivitiesMutation();
 
   useEffect(() => {
     getSights({ iso2: city.iso2, city: city.city });
@@ -78,18 +91,37 @@ export const TripDetailScreen: React.FC<TripProps> = ({
 
   const transformDataForDays = useCallback(() => {
     if (!trip) return;
+
     const diff = differenceInDays(trip.endAt, trip.startAt);
 
     setState((prevState) => ({
       ...prevState,
-      days: Array.from(Array(diff).keys()).map((i) => ({
-        id: i,
-        date: format(addDays(trip.startAt, i), "MMM d"),
-        weekDay: format(addDays(trip.startAt, i), "EEE"),
-        activities: [],
-      })),
+      days: Array.from(Array(diff).keys()).map((i: number) => {
+        const currentActivities = tripDetail?.trip.routes
+          .find((route) => route.city.iso2 === city.iso2)
+          ?.activities.filter((j) => j.day == i)
+          ?.map((act) => act.sight.id);
+
+        const activities = [];
+
+        if (data && Object.keys(data).length) {
+          for (const key in data) {
+            const sight = data[key].find((j) =>
+              currentActivities?.includes(j.id)
+            );
+            if (sight) activities.push(sight);
+          }
+        }
+
+        return {
+          id: i,
+          date: format(addDays(trip.startAt, i), "MMM d"),
+          weekDay: format(addDays(trip.startAt, i), "EEE"),
+          activities,
+        };
+      }),
     }));
-  }, [trip]);
+  }, [trip, tripDetail, data]);
 
   useEffect(() => {
     transformDataForDays();
@@ -110,8 +142,6 @@ export const TripDetailScreen: React.FC<TripProps> = ({
   const onQuestion2ModalOpen = () => {
     modalQuestionRef2.current?.open();
   };
-
- 
 
   const handleAddToTrip = (activity: SightType) => {
     setState((prevTrip) => {
@@ -165,17 +195,37 @@ export const TripDetailScreen: React.FC<TripProps> = ({
     });
   }, [deleteIndexes]);
 
+  const handleSaveActivities = useCallback(() => {
+    if (!city || !trip) return;
+
+    const payload = {
+      city: city.id!,
+      trip: trip.id,
+      location: { lat: city.lat, lng: city.lng },
+      iso2: city.iso2,
+      days: state.days.map((day) => ({
+        date: format(addDays(trip.startAt, day.id), "yyyy-MM-dd"),
+        day: day.id,
+        activities: day.activities.map((i) => i.id),
+      })),
+    };
+
+    fetchUpdateRouteAndActivities(payload);
+  }, [state, trip, city]);
+
   const combineObjectArrays = (obj) => {
     let combinedArray = [];
     for (let key in obj) {
-        if (Array.isArray(obj[key])) {
-            combinedArray = combinedArray.concat(obj[key]);
-        }
+      if (Array.isArray(obj[key])) {
+        combinedArray = combinedArray.concat(obj[key]);
+      }
     }
     return combinedArray;
-};
-const combinedArray = combineObjectArrays(data);
- 
+  };
+  const combinedArray = combineObjectArrays(data);
+
+  console.log("city", state, tripDetail);
+
   return (
     <>
       <Tabs.Container
@@ -341,6 +391,7 @@ const combinedArray = combineObjectArrays(data);
           modalTopOffset={200}
           modalHeight={SIZES.height - 100}
           panGestureEnabled={true}
+          onClosed={handleSaveActivities}
           HeaderComponent={
             <>
               <View style={tripDetailStyles.rowItemHeader}>

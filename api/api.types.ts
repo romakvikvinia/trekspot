@@ -322,6 +322,20 @@ export type SearchCitiesArgsType = {
  * Trip
  */
 
+export type TripRouteActivityType = {
+  id: string;
+  day: number;
+  date: string;
+  visited: boolean;
+  sight: SightType;
+};
+
+export type TripRouteType = {
+  id: string;
+  city: CityType;
+  activities: TripRouteActivityType[];
+};
+
 export type TripType = {
   id: string;
   name: string;
@@ -329,6 +343,7 @@ export type TripType = {
   endAt: string;
   type: string;
   cities: CityType[];
+  routes: TripRouteType[];
 };
 
 export type CreateTripResponseType = {
@@ -404,3 +419,24 @@ export type FaqArgsType = {
 };
 
 export type TransformedFaqResponseType = Record<string, FaqType[]>;
+
+export type TripDetailResponseType = {
+  trip: TripType;
+};
+export type TripDetailArgsType = {
+  id: string;
+};
+
+export type UpdateTripRouteAndActivitiesResponseType = {};
+
+export type UpdateTripRouteAndActivitiesArgsType = {
+  trip: string;
+  city: string;
+  location: { lat: number; lng: number };
+  iso2: string;
+  days: {
+    day: number;
+    date: string;
+    activities: string[];
+  }[];
+};

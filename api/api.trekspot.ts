@@ -43,6 +43,10 @@ import {
   FaqType,
   TransformedFaqResponseType,
   FaqArgsType,
+  TripDetailResponseType,
+  TripDetailArgsType,
+  UpdateTripRouteAndActivitiesResponseType,
+  UpdateTripRouteAndActivitiesArgsType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -824,6 +828,8 @@ export const trekSpotApi = createApi({
                 id
                 city
                 iso2
+                lng
+                lat
                 image {
                   url
                 }
@@ -883,7 +889,7 @@ export const trekSpotApi = createApi({
     }),
 
     /**
-     * topics
+     * faq
      */
 
     faq: builder.query<TransformedFaqResponseType, FaqArgsType>({
@@ -910,7 +916,6 @@ export const trekSpotApi = createApi({
       transformResponse: (response: FaqResponseType) => {
         let transformedData: Record<string, FaqType[]> = {};
         let arr = response.faqs || [];
-        console.log("arr", arr);
         const items = [...arr].reverse();
 
         if (items.length) {
@@ -927,6 +932,90 @@ export const trekSpotApi = createApi({
         }
         return transformedData;
       },
+    }),
+    /**
+     * trip
+     */
+
+    trip: builder.query<TripDetailResponseType, TripDetailArgsType>({
+      query: ({ id }) => ({
+        variables: { id },
+        document: gql`
+          query ($id: ID!) {
+            trip(id: $id) {
+              id
+              type
+              startAt
+              endAt
+
+              routes {
+                id
+                city {
+                  id
+                  city
+                  iso2
+                  lng
+                  lat
+                  image {
+                    url
+                  }
+                }
+                activities {
+                  id
+                  day
+                  date
+                  visited
+                  sight {
+                    id
+                    title
+                  }
+                }
+              }
+            }
+          }
+        `,
+      }),
+
+      transformResponse: (response: TripDetailResponseType) => {
+        return response;
+      },
+    }),
+
+    // save trip details
+    updateTripRouteAndActivities: builder.mutation<
+      UpdateTripRouteAndActivitiesResponseType,
+      UpdateTripRouteAndActivitiesArgsType
+    >({
+      query: ({ trip, city, iso2, location, days }) => {
+        return {
+          variables: { trip, city, iso2, location, days },
+          document: gql`
+            mutation (
+              $trip: ID!
+              $city: ID!
+              $iso2: String!
+              $location: RoueLocationInputType!
+              $days: [RoueDayInputType!]!
+            ) {
+              createRouteAndActivities(
+                input: {
+                  trip: $trip
+                  city: $city
+                  iso2: $iso2
+                  location: $location
+                  days: $days
+                }
+              ) {
+                id
+              }
+            }
+          `,
+        };
+      },
+      transformResponse: (response: AuthLoginResponseType) => {
+        return response;
+      },
+      invalidatesTags: (result, error) => (error ? [] : ["signIn"]),
     }),
 
     //
@@ -958,4 +1047,7 @@ export const {
   useLazyMyTripsQuery,
   useLazyTopicsQuery,
   useLazyFaqQuery,
+  //
+  useTripQuery,
+  useUpdateTripRouteAndActivitiesMutation,
 } = trekSpotApi;
