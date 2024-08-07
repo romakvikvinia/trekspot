@@ -47,6 +47,10 @@ import {
   TripDetailArgsType,
   UpdateTripRouteAndActivitiesResponseType,
   UpdateTripRouteAndActivitiesArgsType,
+  RemoveActivityFromRouteResponseType,
+  RemoveActivityFromRouteArgsType,
+  ChangeActivityVisitedResponseType,
+  ChangeActivityVisitedArgsType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -96,6 +100,8 @@ export const trekSpotApi = createApi({
     "stories",
     "createOrUpdateStories",
     "getSights",
+    "removeActivityFromRoute",
+    "changeActivityVisited",
   ],
   endpoints: (builder) => ({
     /**
@@ -1018,6 +1024,67 @@ export const trekSpotApi = createApi({
       invalidatesTags: (result, error) => (error ? [] : ["signIn"]),
     }),
 
+    // removes particular sight from route activities
+    removeActivityFromRoute: builder.mutation<
+      RemoveActivityFromRouteResponseType,
+      RemoveActivityFromRouteArgsType
+    >({
+      query: ({ day, route, sight }) => {
+        return {
+          variables: { day, route, sight },
+          document: gql`
+            mutation ($day: Int!, $route: ID!, $sight: ID!) {
+              removeActivityFromRoute(
+                input: { day: $day, route: $route, sight: $sight }
+              ) {
+                id
+              }
+            }
+          `,
+        };
+      },
+      transformResponse: (response: AuthLoginResponseType) => {
+        return response;
+      },
+      invalidatesTags: (result, error) =>
+        error ? [] : ["removeActivityFromRoute"],
+    }),
+    // change activity is visited or not
+    changeActivityVisited: builder.mutation<
+      ChangeActivityVisitedResponseType,
+      ChangeActivityVisitedArgsType
+    >({
+      query: ({ day, route, sight, visited }) => {
+        return {
+          variables: { day, route, sight, visited },
+          document: gql`
+            mutation (
+              $day: Int!
+              $route: ID!
+              $sight: ID!
+              $visited: Boolean!
+            ) {
+              changeActivityVisited(
+                input: {
+                  visited: $visited
+                  day: $day
+                  route: $route
+                  sight: $sight
+                }
+              ) {
+                id
+              }
+            }
+          `,
+        };
+      },
+      transformResponse: (response: AuthLoginResponseType) => {
+        return response;
+      },
+      invalidatesTags: (result, error) =>
+        error ? [] : ["changeActivityVisited"],
+    }),
+
     //
   }),
 });
@@ -1050,4 +1117,6 @@ export const {
   //
   useTripQuery,
   useUpdateTripRouteAndActivitiesMutation,
+  useRemoveActivityFromRouteMutation,
+  useChangeActivityVisitedMutation,
 } = trekSpotApi;

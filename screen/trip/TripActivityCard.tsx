@@ -1,5 +1,5 @@
 import { Image } from "expo-image";
-import { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { ImageBackground, Linking, Platform } from "react-native";
 import { Text, TouchableOpacity, View } from "react-native";
 import { COLORS } from "../../styles/theme";
@@ -13,14 +13,29 @@ import {
 } from "../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "./_tripDetailStyles";
 import * as Haptics from "expo-haptics";
+import { SightType } from "../../api/api.types";
+import { TripDaysType } from "./TripDetailScreen";
+import { useChangeActivityVisitedMutation } from "../../api/api.trekspot";
 
-export const TripActivityCard = ({
+interface ITripActivityCardProps {
+  visited: boolean;
+  day: TripDaysType;
+  item: SightType;
+  index: number;
+  onQuestionModalOpen: (sight: string) => void;
+  handleTopSightClick: (sight: SightType) => void;
+}
+
+export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
+  visited,
   item,
-  index,
+  day,
   onQuestionModalOpen,
   handleTopSightClick,
 }) => {
-  const [checkedIn, setCheckedIn] = useState(false);
+  const [changeActivityVisited, { isLoading }] =
+    useChangeActivityVisitedMutation();
+  const [checkedIn, setCheckedIn] = useState(visited);
 
   const openMap = (address: string) => {
     const scheme = Platform.select({
@@ -32,8 +47,19 @@ export const TripActivityCard = ({
       android: `${scheme}${address}`,
     });
 
-    Linking.openURL(url);
+    Linking.openURL(url!);
   };
+
+  const handleChangeActivityVisited = useCallback(() => {
+    setCheckedIn(!checkedIn);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    changeActivityVisited({
+      day: day.id,
+      visited: !checkedIn,
+      route: day.route!,
+      sight: item.id,
+    });
+  }, [checkedIn]);
 
   return (
     <>
@@ -47,7 +73,7 @@ export const TripActivityCard = ({
             padding: 15,
           },
         ]}
-        onPress={() => { 
+        onPress={() => {
           handleTopSightClick(item);
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         }}
@@ -71,39 +97,39 @@ export const TripActivityCard = ({
         </View> */}
 
         <View style={tripDetailStyles.imagesWrapper}>
-          {item?.images?.length > 0 && item?.images?.slice(0, 2).map((image, index) => (
-            <Image
-              style={tripDetailStyles.mainImage}
-              contentFit="cover"
-              source={
-                image?.url
-                  ? {
-                      uri: image?.url,
-                    }
-                  : require("../../assets/no-image.png")
-              }
-              key={`img-${item?.title}-${index}`}
-            ></Image>
-          ))}
+          {item?.images?.length > 0 &&
+            item?.images?.slice(0, 2).map((image, index) => (
+              <Image
+                style={tripDetailStyles.mainImage}
+                contentFit="cover"
+                source={
+                  image?.url
+                    ? {
+                        uri: image?.url,
+                      }
+                    : require("../../assets/no-image.png")
+                }
+                key={`img-${item?.title}-${index}`}
+              ></Image>
+            ))}
 
-          {
-            item?.images?.length > 0 &&
+          {item?.images?.length > 0 && (
             <ImageBackground
               resizeMode="cover"
               source={{
                 uri: item?.image?.url,
               }}
-              style={ tripDetailStyles.lastImage }
+              style={tripDetailStyles.lastImage}
             >
-              <View
-                style={tripDetailStyles.imageOverlay}
-              >
-                <Text style={{color:"#fff", fontWeight: "bold", fontSize: 14}}>+3</Text>
+              <View style={tripDetailStyles.imageOverlay}>
+                <Text
+                  style={{ color: "#fff", fontWeight: "bold", fontSize: 14 }}
+                >
+                  +3
+                </Text>
               </View>
             </ImageBackground>
-          }
-
-       
+          )}
         </View>
 
         <View
@@ -143,10 +169,7 @@ export const TripActivityCard = ({
         <TouchableOpacity
           activeOpacity={0.7}
           style={tripDetailStyles.checkinButton}
-          onPress={() => {
-            setCheckedIn(!checkedIn);
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          }}
+          onPress={handleChangeActivityVisited}
         >
           <CheckLiteIcon
             color={checkedIn ? COLORS.primary : COLORS.gray}
@@ -158,7 +181,7 @@ export const TripActivityCard = ({
               { color: checkedIn ? COLORS.primary : COLORS.gray },
             ]}
           >
-           Visited
+            Visited
           </Text>
         </TouchableOpacity>
 
@@ -171,7 +194,7 @@ export const TripActivityCard = ({
             <LocationPin width="15" color={COLORS.gray} />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => onQuestionModalOpen()}
+            onPress={() => onQuestionModalOpen(item.id)}
             style={tripDetailStyles.sightRightActionsButton}
             activeOpacity={0.7}
           >

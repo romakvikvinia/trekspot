@@ -440,3 +440,31 @@ export type UpdateTripRouteAndActivitiesArgsType = {
     activities: string[];
   }[];
 };
+
+/**
+ * Activity type
+ */
+
+export type ActivityType = {
+  id: string;
+  date: string;
+  day: number;
+  sight: SightType;
+  visited: boolean;
+};
+
+export type RemoveActivityFromRouteResponseType = {};
+
+export type RemoveActivityFromRouteArgsType = {
+  day: number;
+  route: string;
+  sight: string;
+};
+export type ChangeActivityVisitedResponseType = {};
+
+export type ChangeActivityVisitedArgsType = {
+  visited: boolean;
+  day: number;
+  route: string;
+  sight: string;
+};

@@ -26,6 +26,7 @@ import { Header } from "./SubComponents/Header";
 import { TripActivityCard } from "./TripActivityCard";
 import {
   useLazyGetSightsQuery,
+  useRemoveActivityFromRouteMutation,
   useTripQuery,
   useUpdateTripRouteAndActivitiesMutation,
 } from "../../api/api.trekspot";
@@ -42,10 +43,11 @@ type TripProps = NativeStackScreenProps<
 >;
 
 export type TripDaysType = {
+  route?: string;
   id: number;
   date: string;
   weekDay: string;
-  activities: any[];
+  activities: SightType[];
 };
 
 interface IState {
@@ -75,16 +77,22 @@ export const TripDetailScreen: React.FC<TripProps> = ({
     { isLoading: isUpdateRouteAndActivitiesLoading },
   ] = useUpdateTripRouteAndActivitiesMutation();
 
+  const [
+    removeActivityFromRoute,
+    { isLoading: isRemoveActivityFromRouteLoading },
+  ] = useRemoveActivityFromRouteMutation();
+
   useEffect(() => {
     getSights({ iso2: city.iso2, city: city.city });
   }, []);
 
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
   const [deleteIndexes, setDeleteIndexes] = useState<{
-    deyIndex: number;
-    activityIndex: number;
+    route: string;
+    day: number;
+    sight: string;
   }>();
-  const [topSightDetail, setTopSightDetail] = useState(null);
+  const [topSightDetail, setTopSightDetail] = useState<SightType | null>();
   const [state, setState] = useState<IState>({
     days: [],
   });
@@ -97,9 +105,11 @@ export const TripDetailScreen: React.FC<TripProps> = ({
     setState((prevState) => ({
       ...prevState,
       days: Array.from(Array(diff).keys()).map((i: number) => {
-        const currentActivities = tripDetail?.trip.routes
-          .find((route) => route.city.iso2 === city.iso2)
-          ?.activities.filter((j) => j.day == i)
+        const currentRoute = tripDetail?.trip.routes.find(
+          (route) => route.city.iso2 === city.iso2
+        );
+        const currentActivities = currentRoute?.activities
+          .filter((j) => j.day == i)
           ?.map((act) => act.sight.id);
 
         const activities = [];
@@ -114,6 +124,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
         }
 
         return {
+          route: currentRoute?.id,
           id: i,
           date: format(addDays(trip.startAt, i), "MMM d"),
           weekDay: format(addDays(trip.startAt, i), "EEE"),
@@ -127,7 +138,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
     transformDataForDays();
   }, [transformDataForDays]);
 
-  const handleTabChange = (i) => {
+  const handleTabChange = (i: number) => {
     setCurrentTabIndex(i);
   };
 
@@ -162,7 +173,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
     });
   };
 
-  const handleTopSightClick = (sight) => {
+  const handleTopSightClick = (sight: SightType) => {
     setTopSightDetail(sight);
   };
 
@@ -182,12 +193,17 @@ export const TripDetailScreen: React.FC<TripProps> = ({
   const handleDeleteActivity = useCallback(() => {
     if (!deleteIndexes || !Object.keys(deleteIndexes).length) return;
 
+    removeActivityFromRoute({
+      day: deleteIndexes.day,
+      sight: deleteIndexes.sight,
+      route: deleteIndexes.route,
+    });
+
     setState((prevState) => {
       let newDays = [...prevState.days];
-      newDays[deleteIndexes?.deyIndex].activities.splice(
-        deleteIndexes.deyIndex,
-        1
-      );
+      newDays[deleteIndexes?.day].activities = newDays[
+        deleteIndexes?.day
+      ].activities.filter((i) => i.id !== deleteIndexes.sight);
       return {
         ...prevState,
         days: newDays,
@@ -213,8 +229,8 @@ export const TripDetailScreen: React.FC<TripProps> = ({
     fetchUpdateRouteAndActivities(payload);
   }, [state, trip, city]);
 
-  const combineObjectArrays = (obj) => {
-    let combinedArray = [];
+  const combineObjectArrays = (obj: any) => {
+    let combinedArray: any[] = [];
     for (let key in obj) {
       if (Array.isArray(obj[key])) {
         combinedArray = combinedArray.concat(obj[key]);
@@ -224,7 +240,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
   };
   const combinedArray = combineObjectArrays(data);
 
-  console.log("city", state, tripDetail);
+  console.log("tripDetail", tripDetail);
 
   return (
     <>
@@ -325,14 +341,25 @@ export const TripDetailScreen: React.FC<TripProps> = ({
                 paddingBottom: 80,
               }}
             >
-              <View style={[tripDetailStyles.sightItemList]}>
+              <View>
                 {item?.activities?.map((itm, activityIndex) => (
                   <TripActivityCard
+                    visited={
+                      tripDetail?.trip.routes
+                        .find((route) => route.city.iso2 === city.iso2)
+                        ?.activities.find((i) => i.sight.id === itm.id)
+                        ?.visited || false
+                    }
                     item={itm}
+                    day={item}
                     index={activityIndex}
-                    onQuestionModalOpen={() => {
+                    onQuestionModalOpen={(sight: string) => {
                       onQuestionModalOpen();
-                      setDeleteIndexes({ deyIndex: ind, activityIndex });
+                      setDeleteIndexes({
+                        day: item.id,
+                        sight,
+                        route: item.route!,
+                      });
                     }}
                     handleTopSightClick={handleTopSightClick}
                   />
