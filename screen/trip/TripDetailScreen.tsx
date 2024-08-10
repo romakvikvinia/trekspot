@@ -62,6 +62,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
   const modalQuestionRef = useRef<Modalize>(null);
   const modalQuestionRef2 = useRef<Modalize>(null);
   const modalEmbedRef = useRef<Modalize>(null);
+  const scrollRef = useRef(null);
 
   const { trip, city } = route.params;
 
@@ -240,6 +241,11 @@ export const TripDetailScreen: React.FC<TripProps> = ({
   };
   const combinedArray = combineObjectArrays(data);
 
+  useEffect(() => {
+    console.log("ll")
+   scrollRef.current?.scrollTo({ y: 0, animated: true })
+  }, []);
+
   console.log("tripDetail", tripDetail);
 
   return (
@@ -286,12 +292,27 @@ export const TripDetailScreen: React.FC<TripProps> = ({
             inactiveColor="yellow"
           />
         )}
-        revealHeaderOnScroll={true}
+        // revealHeaderOnScroll={true}
         onIndexChange={handleTabChange}
       >
+             <Tabs.Tab name="B">
+          <Tabs.ScrollView>
+            <Text>
+              sdjfnksd ns
+            </Text>
+          </Tabs.ScrollView>
+        </Tabs.Tab>
+        <Tabs.Tab name="A">
+          <Tabs.ScrollView>
+            <Text>
+              sdjfnksd ns
+            </Text>
+          </Tabs.ScrollView>
+        </Tabs.Tab>
         {state?.days.map((item, ind) => (
           <Tabs.Tab
             name={item?.date}
+            key={ind}
             label={(props) => (
               <View
                 style={[
@@ -340,6 +361,10 @@ export const TripDetailScreen: React.FC<TripProps> = ({
                 position: "relative",
                 paddingBottom: 80,
               }}
+              ref={scrollRef}
+              key={ind}
+
+              // scrollsToTop
             >
               <View>
                 {item?.activities?.map((itm, activityIndex) => (

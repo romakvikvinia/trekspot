@@ -43,6 +43,9 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
     navigation.navigate("CountryDetailScreen", { countryId });
   }, []);
 
+ 
+  const sortedCountries = !isLoading && [...countries].sort((a, b) => b.rate - a.rate);
+
   return (
     <>
       <View style={[styles.rowItem]} style={{ paddingTop: 15 }}>
@@ -60,7 +63,8 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
             style={styles.contentBox}
             showsHorizontalScrollIndicator={false}
           >
-            {countries.map((country, ind) => (
+             
+            {sortedCountries?.length > 0 && sortedCountries.map((country, ind) => (
               <CountryItem
                 key={`countries-${country.id}-${country.name}-${title}`}
                 item={country}

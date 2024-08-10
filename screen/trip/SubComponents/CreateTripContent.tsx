@@ -245,7 +245,7 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
             paddingBottom: 35,
           }}
         >
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.aiPlanButton}
             activeOpacity={0.7}
             onPress={handelSubmit}
@@ -277,7 +277,7 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
                 </>
               )}
             </LinearGradient>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             activeOpacity={0.7}
             style={styles.manualPlanButton}
@@ -286,7 +286,7 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
           >
             {formik.isSubmitting && <ActivityIndicator />}
             <Text style={[styles.manualPlanButtonText, { marginLeft: 8 }]}>
-              I will plan manually
+              Create trip
             </Text>
           </TouchableOpacity>
         </View>

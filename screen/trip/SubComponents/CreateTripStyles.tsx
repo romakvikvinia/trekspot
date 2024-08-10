@@ -46,12 +46,13 @@ export const styles = StyleSheet.create({
       height: 50,
       borderRadius: 50,
       overflow: "hidden",
-      backgroundColor: "#f2f2f2",
+      backgroundColor: "#000",
       marginTop: 15,
     },
     manualPlanButtonText: {
       fontSize: 16,
       fontWeight: "600",
+      color:"#fff"
     },
     cancelTripButton: {
       paddingVertical: 7,

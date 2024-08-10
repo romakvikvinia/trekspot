@@ -36,7 +36,7 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
     modalInsightDetailRef.current?.open();
   }, []);
 
-  const colors = ["#ffd5d1", "#f5e1d3", "#d1f5d3", "#d3d1f5", "#f5d3f5"];
+  const colors = ["#ffd5d1", "#f5e1d3", "#d1f5d3", "#d3d1f5", "#f5d3f5", "#d3f5f5", "#f5f5d3", "#f5f5f5"];
 
   useEffect(() => {
     if (focusedTab === "Insights" && iso2) {
@@ -265,6 +265,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: COLORS.black,
     fontWeight: "bold",
+    maxWidth: "80%",
   },
   noteCardDesc: {
     fontSize: 14,
@@ -324,7 +325,7 @@ const styles = StyleSheet.create({
   },
   topicsRowTitle: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: "600",
     color: COLORS.black,
     paddingHorizontal: 0,
     marginBottom: 15,

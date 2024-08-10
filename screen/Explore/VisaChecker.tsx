@@ -76,7 +76,7 @@ export const VisaChecker = () => {
   return (
     <>
       <View style={styles.visaCheckerCard}>
-        <Text style={styles.visaCheckerCardTitle}>Travel Visa Assistant</Text>
+        <Text style={styles.visaCheckerCardTitle}>Travel Visa Checker</Text>
         <Text style={styles.visaCheckerCardSub}>
           Select your country and destination
         </Text>
