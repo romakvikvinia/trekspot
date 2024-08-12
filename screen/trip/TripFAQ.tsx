@@ -47,7 +47,7 @@ export const FaqRowItem = ({ item, title, index, openIndex, setOpenIndex }) => {
           paddingVertical: 15,
         }}
       >
-        <Text style={[styles.forYouRowTitleSub]}>{title} ffad nakjs</Text>
+        <Text style={[styles.forYouRowTitleSub]}>{title}</Text>
         <DownCircleIcon />
       </TouchableOpacity>
 

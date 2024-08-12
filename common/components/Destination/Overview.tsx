@@ -40,6 +40,7 @@ const Overview: React.FC<OverviewProps> = memo(function ({ country }) {
             ))}
           </View>
         </View>
+      
 
         <View style={[styles.keyValue, { marginTop: 25, marginBottom: 0 }]}>
           <Text style={styles.key}>When to visit</Text>

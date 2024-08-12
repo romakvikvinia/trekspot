@@ -114,10 +114,12 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
   return (
     <>
       <View style={[styles.forYouRow, { marginTop: 25 }]}>
-        <Text style={[styles.forYouRowTitle, { paddingHorizontal: 15 }]}>
-          Cities to visit
-        </Text>
-        {!isCitiesLoading ? (
+        {!isCitiesLoading && data && data?.cities?.length > 0 && (
+          <Text style={[styles.forYouRowTitle, { paddingHorizontal: 15 }]}>
+            Cities to visit
+          </Text>
+        )}
+        {!isCitiesLoading && data && data?.cities?.length > 0 ? (
           <>
             <View
               style={[
@@ -170,7 +172,8 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
               </View>
             )}
           </>
-        ) : (
+        ) : null}
+        {isCitiesLoading && (
           <View style={{ height: 230 }}>
             <Loader isLoading background="" />
           </View>

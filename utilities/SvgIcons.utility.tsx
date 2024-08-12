@@ -1651,7 +1651,7 @@ export const LogoutIcon = () => {
   return <SvgImage />;
 };
 export const DeleteIcon = () => {
-  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M9 12a6 6 0 1 0-6-6 6.006 6.006 0 0 0 6 6zM9 2a4 4 0 1 1-4 4 4 4 0 0 1 4-4zm9 17v5h-2v-5a3 3 0 0 0-3-3H5a3 3 0 0 0-3 3v5H0v-5a5.006 5.006 0 0 1 5-5h8a5.006 5.006 0 0 1 5 5zm3.414-9 2.543 2.543-1.414 1.414L20 11.414l-2.543 2.543-1.414-1.414L18.586 10l-2.543-2.543 1.414-1.414L20 8.586l2.543-2.543 1.414 1.414z" fill="#FF4134" opacity="1" data-original="#000000" class=""></path></g></svg>`;
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M9 12a6 6 0 1 0-6-6 6.006 6.006 0 0 0 6 6zM9 2a4 4 0 1 1-4 4 4 4 0 0 1 4-4zm9 17v5h-2v-5a3 3 0 0 0-3-3H5a3 3 0 0 0-3 3v5H0v-5a5.006 5.006 0 0 1 5-5h8a5.006 5.006 0 0 1 5 5zm3.414-9 2.543 2.543-1.414 1.414L20 11.414l-2.543 2.543-1.414-1.414L18.586 10l-2.543-2.543 1.414-1.414L20 8.586l2.543-2.543 1.414 1.414z" fill="#000000" opacity="1" data-original="#000000" class=""></path></g></svg>`;
   const SvgImage = () => <SvgXml xml={svgMarkup} width={20} height={20} />;
   return <SvgImage />;
 };

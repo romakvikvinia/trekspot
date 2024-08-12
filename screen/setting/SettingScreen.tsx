@@ -83,14 +83,15 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
                 <Text numberOfLines={1} style={styles.username}>
                   {user?.type === "guest" ? "Guest user" : "Misha Gogiashvili"}
                 </Text>
-                <Text style={styles.subTxt}>Welcome</Text>
+                <Text style={styles.subTxt}>ashoniaa@gmail.com</Text>
               </View>
             </View>
           </View>
-          {user?.type !== "guest" && (
-            <>
-              <Text style={styles.buttonsWrapperTitle}>Account</Text>
-              <View style={styles.buttonsWrapper}>
+
+          <Text style={styles.buttonsWrapperTitle}>Account</Text>
+          <View style={styles.buttonsWrapper}>
+            {user?.type !== "guest" && (
+              <>
                 <TouchableOpacity
                   onPress={() => navigation.navigate("EditProfile")}
                   style={styles.button}
@@ -110,38 +111,18 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
                   <LockIcon />
                   <Text style={styles.buttonText}>Reset password</Text>
                 </TouchableOpacity>
-              </View>
-            </>
-          )}
-          <Text style={styles.buttonsWrapperTitle}>Legal</Text>
-          <View style={styles.buttonsWrapper}>
+              </>
+            )}
             <TouchableOpacity
               onPress={() => onModalEmbedOpen()}
-              style={[styles.button, {borderWidth: 0}]}
+              style={[styles.button, { borderWidth: 0 }]}
               activeOpacity={0.7}
             >
               <PrivacyIcon />
               <Text style={styles.buttonText}>Privacy Policy</Text>
             </TouchableOpacity>
-          </View>
-          {user?.type !== "guest" && (
-            <>
-              <Text style={styles.buttonsWrapperTitle}>Manage</Text>
-              <View style={styles.buttonsWrapper}>
-                <TouchableOpacity
-                  style={styles.button}
-                  activeOpacity={0.7}
-                  onPress={async () => {
-                    signOut();
-                    deleteFromAsyncStorage([
-                      "visited_countries",
-                      "lived_countries",
-                    ]);
-                  }}
-                >
-                  <LogoutIcon />
-                  <Text style={styles.buttonText}>Logout</Text>
-                </TouchableOpacity>
+            {user?.type !== "guest" && (
+              <>
                 <TouchableOpacity
                   style={[
                     styles.button,
@@ -157,13 +138,28 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
                   }
                 >
                   <DeleteIcon />
-                  <Text style={[styles.buttonText, { color: COLORS.red }]}>
+                  <Text style={[styles.buttonText]}>
                     Deactivate account
                   </Text>
                 </TouchableOpacity>
-              </View>
-            </>
-          )}
+                <TouchableOpacity
+                  style={styles.button}
+                  activeOpacity={0.7}
+                  onPress={async () => {
+                    signOut();
+                    deleteFromAsyncStorage([
+                      "visited_countries",
+                      "lived_countries",
+                    ]);
+                  }}
+                >
+                  <LogoutIcon />
+                  <Text style={styles.buttonText}>Logout</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
+
           <Text style={styles.buttonsWrapperTitle}>Socials</Text>
           <View style={styles.buttonsWrapper}>
             <TouchableOpacity
