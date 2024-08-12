@@ -16,7 +16,13 @@ interface ITripActivitiesSelectProps {
   days: TripDaysType[];
   data: any;
   isLoading: boolean;
+
   handleAddToTrip: (data: SightType) => void;
+  removeActivity: (deleteIndexes: {
+    day: number;
+    sight: string;
+    route: string;
+  }) => void;
 }
 
 export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
@@ -24,6 +30,7 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
   data,
   isLoading,
   handleAddToTrip,
+  removeActivity,
 }) => {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
@@ -43,7 +50,7 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
       setTabData(initialTabData);
     }
   }, [data]);
-  console.log("data",data)
+  console.log("data", data);
 
   const showTopSight = (sight: object) => {
     setTopSightDetail(sight);
@@ -110,8 +117,7 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                 </Text>
 
                 <View style={styles.thingsTodoItemiIn}>
-                  {
-                    item?.rate && 
+                  {item?.rate && (
                     <View style={exploreStyles.ratingWrapper}>
                       <View
                         style={{
@@ -124,7 +130,7 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                       </View>
                       <Text style={exploreStyles.ratingText}>{item?.rate}</Text>
                     </View>
-                  }
+                  )}
                 </View>
 
                 <View style={styles.actionButtons}>
@@ -141,14 +147,30 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                     day.activities.some((activity) => activity?.id === item?.id)
                   ) ? (
                     <TouchableOpacity
-                      style={[
-                        styles.addToButton,
-                      ]}
-                      onPress={() => {}}
+                      style={[styles.addToButton]}
+                      onPress={() => {
+                        const day = days.find((day) =>
+                          day.activities.some(
+                            (activity) => activity?.id === item?.id
+                          )
+                        );
+                        removeActivity({
+                          route: day?.route!,
+                          day: day?.id!,
+                          sight: item?.id!,
+                        });
+                      }}
                     >
-                      <Text style={[styles.addToButtonText, {
-                        color: COLORS.red
-                      }]}>Remove</Text>
+                      <Text
+                        style={[
+                          styles.addToButtonText,
+                          {
+                            color: COLORS.red,
+                          },
+                        ]}
+                      >
+                        Remove
+                      </Text>
                     </TouchableOpacity>
                   ) : (
                     <TouchableOpacity

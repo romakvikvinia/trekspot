@@ -63,9 +63,7 @@ interface IState {
   days: TripDaysType[];
 }
 
-export const TripDetailScreen: React.FC<TripProps> = ({
-  route,
-}) => {
+export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   const { trip, city } = route.params;
 
   const layout = useWindowDimensions();
@@ -87,9 +85,8 @@ export const TripDetailScreen: React.FC<TripProps> = ({
     days: [],
   });
 
-
   const { isLoading: isTripDetailLoading, data: tripDetail } = useTripQuery({
-    id: trip.id 
+    id: trip.id,
   });
 
   const [getSights, { data, isLoading: sightsLoading }] =
@@ -97,7 +94,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
 
   const [
     fetchUpdateRouteAndActivities,
-    { isLoading: isUpdateRouteAndActivitiesLoading },
+    { isLoading: isUpdateRouteAndActivitiesLoading, isError },
   ] = useUpdateTripRouteAndActivitiesMutation();
 
   const [
@@ -109,12 +106,10 @@ export const TripDetailScreen: React.FC<TripProps> = ({
     getSights({ iso2: city.iso2, city: city.city });
   }, []);
 
-
-
   const transformDataForDays = useCallback(() => {
     if (!trip) return;
 
-    const diff = differenceInDays(trip.endAt, trip.startAt);
+    const diff = differenceInDays(trip.endAt, trip.startAt) + 1;
 
     setState((prevState) => ({
       ...prevState,
@@ -130,10 +125,11 @@ export const TripDetailScreen: React.FC<TripProps> = ({
 
         if (data && Object.keys(data).length) {
           for (const key in data) {
-            const sight = data[key].find((j) =>
-              currentActivities?.includes(j.id)
+            let sight = data[key].filter((j) =>
+              currentActivities?.some((k) => k == j.id)
             );
-            if (sight) activities.push(sight);
+
+            if (sight) activities.push(...sight);
           }
         }
 
@@ -152,7 +148,6 @@ export const TripDetailScreen: React.FC<TripProps> = ({
     transformDataForDays();
   }, [transformDataForDays]);
 
-  
   const onActivitiesModalOpen = () => {
     activitiesModal.current?.open();
   };
@@ -192,7 +187,6 @@ export const TripDetailScreen: React.FC<TripProps> = ({
     setTopSightDetail(null);
   }, []);
 
- 
   const location = React.useMemo(() => {
     return (
       data &&
@@ -284,7 +278,9 @@ export const TripDetailScreen: React.FC<TripProps> = ({
               handleTopSightClick={handleTopSightClick}
             />
           ))}
-        {!isTripDetailLoading && tabData && tabData[route.key]?.activities?.length < 1 ? (
+        {!isTripDetailLoading &&
+        tabData &&
+        tabData[route.key]?.activities?.length < 1 ? (
           <View style={tripDetailStyles.noActivitiesWrapper}>
             <Text
               style={{
@@ -325,16 +321,42 @@ export const TripDetailScreen: React.FC<TripProps> = ({
         }, {});
       }
       const newData = transformArrayToObject(state?.days);
- 
+
       const keys = Object.keys(newData);
-      const newRoutes = keys.map((key) => ({ key, title: key, weekDay: newData[key].weekDay }));
+      const newRoutes = keys.map((key) => ({
+        key,
+        title: key,
+        weekDay: newData[key].weekDay,
+      }));
       setRoutes(newRoutes);
       setTabData(newData);
     }
   }, [state, transformDataForDays]);
 
- 
-  
+  const removeActivity = useCallback(
+    (deleteIndexes: { day: number; sight: string; route: string }) => {
+      removeActivityFromRoute({
+        day: deleteIndexes.day,
+        sight: deleteIndexes.sight,
+        route: deleteIndexes.route,
+      });
+
+      setState((prevState) => {
+        let newDays = [...prevState.days];
+        newDays[deleteIndexes?.day].activities = newDays[
+          deleteIndexes?.day
+        ].activities.filter((i) => i.id !== deleteIndexes.sight);
+        return {
+          ...prevState,
+          days: newDays,
+        };
+      });
+    },
+    []
+  );
+
+  console.log("isError", tripDetail, state);
+
   return (
     <>
       <Header
@@ -352,87 +374,89 @@ export const TripDetailScreen: React.FC<TripProps> = ({
         >
           <Loader isLoading={isTripDetailLoading} color="" background="" />
         </View>
-      ) : routes && (
-        <TabView
-          navigationState={{ index, routes }}
-          renderScene={renderScene}
-          onIndexChange={setIndex}
-          initialLayout={{ width: layout.width }}
-          sceneContainerStyle={{
-            backgroundColor: "#f7f7f7",
-          }}
-          style={{
-            backgroundColor: "#F2F2F7",
-          }}
-          pagerStyle={{
-            backgroundColor: "#F2F2F7",
-          }}
-          renderTabBar={(props) => (
-            <TabBar
-              scrollEnabled={true}
-              {...props}
-              style={{
-                backgroundColor: "#fbfbfb",
-                paddingBottom: 2,
-              }}
-              contentContainerStyle={{
-                backgroundColor: "#fbfbfb",
-                paddingHorizontal: 0,
-              }}
-              inactiveColor="#000"
-              tabStyle={{
-                paddingHorizontal: 0,
-                padding: 0,
-                height: 55,
-                paddingTop: 5,
-                width: state?.days?.length <= 5
-                ? (SIZES.width) / state?.days?.length
-                : "auto",
-              }}
-              activeColor="#000"
-              indicatorStyle={{ backgroundColor: COLORS.primaryDark }}
-              labelStyle={{
-                textTransform: "capitalize",
-                fontWeight: "600",
-              }}
-              renderLabel={({ route, focused }) => (
-                <View
-                  style={[
-                    tripDetailStyles.customTab,
-                    {
-                      width:
-                         100
-                    },
-                  ]}
-                  key={route?.key}
-                >
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      marginBottom: 3,
-                      color: COLORS.gray,
-                    }}
-                  >
-                    {route?.weekDay}
-                  </Text>
-                  <Text
+      ) : (
+        routes && (
+          <TabView
+            navigationState={{ index, routes }}
+            renderScene={renderScene}
+            onIndexChange={setIndex}
+            initialLayout={{ width: layout.width }}
+            sceneContainerStyle={{
+              backgroundColor: "#f7f7f7",
+            }}
+            style={{
+              backgroundColor: "#F2F2F7",
+            }}
+            pagerStyle={{
+              backgroundColor: "#F2F2F7",
+            }}
+            renderTabBar={(props) => (
+              <TabBar
+                scrollEnabled={true}
+                {...props}
+                style={{
+                  backgroundColor: "#fbfbfb",
+                  paddingBottom: 2,
+                }}
+                contentContainerStyle={{
+                  backgroundColor: "#fbfbfb",
+                  paddingHorizontal: 0,
+                }}
+                inactiveColor="#000"
+                tabStyle={{
+                  paddingHorizontal: 0,
+                  padding: 0,
+                  height: 55,
+                  paddingTop: 5,
+                  width:
+                    state?.days?.length <= 5
+                      ? SIZES.width / state?.days?.length
+                      : "auto",
+                }}
+                activeColor="#000"
+                indicatorStyle={{ backgroundColor: COLORS.primaryDark }}
+                labelStyle={{
+                  textTransform: "capitalize",
+                  fontWeight: "600",
+                }}
+                renderLabel={({ route, focused }) => (
+                  <View
                     style={[
-                      tripDetailStyles.customTabLabel,
+                      tripDetailStyles.customTab,
                       {
-                        color: COLORS.black,
-                        marginBottom: 5,
+                        width: 100,
                       },
                     ]}
+                    key={route?.key}
                   >
-                    {route?.title}
-                  </Text>
-                </View>
-              )}
-            />
-          )}
-        />
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        marginBottom: 3,
+                        color: COLORS.gray,
+                      }}
+                    >
+                      {route?.weekDay}
+                    </Text>
+                    <Text
+                      style={[
+                        tripDetailStyles.customTabLabel,
+                        {
+                          color: COLORS.black,
+                          marginBottom: 5,
+                        },
+                      ]}
+                    >
+                      {route?.title}
+                    </Text>
+                  </View>
+                )}
+              />
+            )}
+          />
+        )
       )}
-  
+
       {topSightDetail ? (
         <SightDetailModal data={topSightDetail} closeCallBack={handleClear} />
       ) : null}
@@ -494,6 +518,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
             handleAddToTrip={handleAddToTrip}
             data={data}
             isLoading={sightsLoading}
+            removeActivity={removeActivity}
           />
         </Modalize>
       </Portal>
