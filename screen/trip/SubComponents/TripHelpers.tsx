@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { CarLinearIcon, DishesIcon, EmergencyLinearIcon, FaqIcon, InsightIcon } from "../../../utilities/SvgIcons.utility";
+import { AppsIcon, CarLinearIcon, DishesIcon, EmergencyLinearIcon, FaqIcon, InsightIcon } from "../../../utilities/SvgIcons.utility";
 
 export const TripHelpers = ({data, iso2}) => {
 
@@ -48,8 +48,8 @@ export const TripHelpers = ({data, iso2}) => {
             iso2: iso2
           })}
         >
-          <CarLinearIcon size={12} color={"#0b57d0"} />
-          <Text style={styles.bottomActionsButtonlabel}>Transport</Text>
+          <AppsIcon size={12} color={"#0b57d0"} />
+          <Text style={styles.bottomActionsButtonlabel}>Apps</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.bottomActionsButton}
@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     marginTop: 15,
     paddingTop: 12,
+    paddingBottom: 12,
   },
   bottomActionsButton: {
     borderRadius: 50,

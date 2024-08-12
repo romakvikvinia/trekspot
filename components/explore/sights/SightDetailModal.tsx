@@ -185,9 +185,12 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
           </View>
           {/* @ts-ignore */}
           <ScrollView
-            style={[styles.modalContent,{
-              maxHeight: calcHeight ? calcHeight : 450
-            }]}
+            style={[
+              styles.modalContent,
+              {
+                maxHeight: calcHeight ? calcHeight : 450,
+              },
+            ]}
             ref={ref}
             showsVerticalScrollIndicator={false}
           >
@@ -217,20 +220,28 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                 height: 3,
               }}
             >
-              {data.images?.map((item, ind) => (
+              {data?.images?.length > 0 &&
+                data.images?.map((item, ind) => (
+                  <Image
+                    style={[styles.box]}
+                    contentFit="cover"
+                    source={
+                      item?.url
+                        ? {
+                            uri: item?.url,
+                          }
+                        : require("../../../assets/no-image.png")
+                    }
+                    key={`slide-${ind}`}
+                  ></Image>
+                ))}
+              {data?.images?.length === 0 && (
                 <Image
                   style={[styles.box]}
                   contentFit="cover"
-                  source={
-                    item?.url
-                      ? {
-                          uri: item?.url,
-                        }
-                      : require("../../../assets/no-image.png")
-                  }
-                  key={`slide-${ind}`}
+                  source={require("../../../assets/no-image.png")}
                 ></Image>
-              ))}
+              )}
             </Swiper>
 
             <View style={styles.sightDetails}>
@@ -250,14 +261,13 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                   <Mark2 color="#fff" />
                 </TouchableOpacity>
               </View>
-              {
-                data?.city ? 
+              {data?.city ? (
                 <View style={styles.locationCity}>
-                <Mark size="15" color={COLORS.gray} />
-                <Text style={styles.locationCityText}>{data?.city}</Text>
-              </View>  :null
-              }
-           
+                  <Mark size="15" color={COLORS.gray} />
+                  <Text style={styles.locationCityText}>{data?.city}</Text>
+                </View>
+              ) : null}
+
               <View style={styles.ratingWrapper}>
                 <Text style={styles.type}>{data.category}</Text>
                 <View

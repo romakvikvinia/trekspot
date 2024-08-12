@@ -1,6 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { Alert, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { COLORS, SIZES } from "../../styles/theme";
 import { enGB, registerTranslation } from "react-native-paper-dates";
 registerTranslation("en", enGB);
@@ -36,6 +43,8 @@ import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { addDays, differenceInDays, format } from "date-fns";
 import { SightType } from "../../api/api.types";
+import { TabBar, TabView } from "react-native-tab-view";
+import { Loader } from "../../common/ui/Loader";
 
 type TripProps = NativeStackScreenProps<
   TripRouteStackParamList,
@@ -56,18 +65,31 @@ interface IState {
 
 export const TripDetailScreen: React.FC<TripProps> = ({
   route,
-  navigation,
 }) => {
+  const { trip, city } = route.params;
+
+  const layout = useWindowDimensions();
+
   const activitiesModal = useRef<Modalize>(null);
   const modalQuestionRef = useRef<Modalize>(null);
   const modalQuestionRef2 = useRef<Modalize>(null);
   const modalEmbedRef = useRef<Modalize>(null);
-  const scrollRef = useRef(null);
+  const [index, setIndex] = useState(0);
+  const [routes, setRoutes] = useState();
+  const [tabData, setTabData] = useState();
+  const [deleteIndexes, setDeleteIndexes] = useState<{
+    route: string;
+    day: number;
+    sight: string;
+  }>();
+  const [topSightDetail, setTopSightDetail] = useState<SightType | null>();
+  const [state, setState] = useState<IState>({
+    days: [],
+  });
 
-  const { trip, city } = route.params;
 
   const { isLoading: isTripDetailLoading, data: tripDetail } = useTripQuery({
-    id: trip.id,
+    id: trip.id 
   });
 
   const [getSights, { data, isLoading: sightsLoading }] =
@@ -87,16 +109,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
     getSights({ iso2: city.iso2, city: city.city });
   }, []);
 
-  const [currentTabIndex, setCurrentTabIndex] = useState(0);
-  const [deleteIndexes, setDeleteIndexes] = useState<{
-    route: string;
-    day: number;
-    sight: string;
-  }>();
-  const [topSightDetail, setTopSightDetail] = useState<SightType | null>();
-  const [state, setState] = useState<IState>({
-    days: [],
-  });
+
 
   const transformDataForDays = useCallback(() => {
     if (!trip) return;
@@ -139,10 +152,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
     transformDataForDays();
   }, [transformDataForDays]);
 
-  const handleTabChange = (i: number) => {
-    setCurrentTabIndex(i);
-  };
-
+  
   const onActivitiesModalOpen = () => {
     activitiesModal.current?.open();
   };
@@ -158,7 +168,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
   const handleAddToTrip = (activity: SightType) => {
     setState((prevTrip) => {
       const newstate = prevTrip.days.map((day) => {
-        if (day.id === currentTabIndex) {
+        if (day.id === index) {
           return {
             ...day,
             activities: [...day.activities, activity],
@@ -182,7 +192,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
     setTopSightDetail(null);
   }, []);
 
-  //
+ 
   const location = React.useMemo(() => {
     return (
       data &&
@@ -241,190 +251,193 @@ export const TripDetailScreen: React.FC<TripProps> = ({
   };
   const combinedArray = combineObjectArrays(data);
 
+  const renderScene = ({ route }) => {
+    return (
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingTop: 15,
+          paddingBottom: 80,
+        }}
+      >
+        {tabData &&
+          tabData[route.key]?.activities?.map((itm, activityIndex) => (
+            <TripActivityCard
+              visited={
+                tripDetail?.trip.routes
+                  .find((route) => route.city.iso2 === city.iso2)
+                  ?.activities.find((i) => i.sight.id === itm.id)?.visited ||
+                false
+              }
+              item={itm}
+              key={itm.id + route.key}
+              day={tabData[route.key]}
+              index={activityIndex}
+              onQuestionModalOpen={(sight: string) => {
+                onQuestionModalOpen();
+                setDeleteIndexes({
+                  day: tabData[route.key].id,
+                  sight,
+                  route: tabData[route.key].route!,
+                });
+              }}
+              handleTopSightClick={handleTopSightClick}
+            />
+          ))}
+        {!isTripDetailLoading && tabData && tabData[route.key]?.activities?.length < 1 ? (
+          <View style={tripDetailStyles.noActivitiesWrapper}>
+            <Text
+              style={{
+                color: COLORS.black,
+                fontSize: 18,
+                fontWeight: "bold",
+              }}
+            >
+              You don't have activites for today
+            </Text>
+            <TouchableOpacity
+              style={tripDetailStyles.addActivityButtonItem}
+              activeOpacity={0.7}
+              onPress={() => {
+                onActivitiesModalOpen();
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
+            >
+              <Text style={tripDetailStyles.addActivityButtonText}>
+                Add activity
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : null}
+      </ScrollView>
+    );
+  };
+
   useEffect(() => {
-    console.log("ll")
-   scrollRef.current?.scrollTo({ y: 0, animated: true })
-  }, []);
+    if (state) {
+      console.log("state", state, routes, tabData);
 
-  console.log("tripDetail", tripDetail);
+      function transformArrayToObject(days) {
+        return days.reduce((acc, day) => {
+          const { date, ...otherProps } = day;
+          acc[date] = otherProps;
+          return acc;
+        }, {});
+      }
+      const newData = transformArrayToObject(state?.days);
+ 
+      const keys = Object.keys(newData);
+      const newRoutes = keys.map((key) => ({ key, title: key, weekDay: newData[key].weekDay }));
+      setRoutes(newRoutes);
+      setTabData(newData);
+    }
+  }, [state, transformDataForDays]);
 
+ 
+  
   return (
     <>
-      <Tabs.Container
-        minHeaderHeight={50}
-        renderHeader={() => (
-          <Header
-            onQuestion2ModalOpen={onQuestion2ModalOpen}
-            data={trip}
-            location={location}
-            topSights={combinedArray}
-            iso2={city.iso2}
-          />
-        )}
-        headerHeight={300} // optional
-        containerStyle={{
-          flex: 1,
-          backgroundColor: "#f7f7f7",
-        }}
-        headerContainerStyle={{
-          elevation: 0,
-          shadowColor: "#fff",
-        }}
-        renderTabBar={(props) => (
-          <MaterialTabBar
-            {...props}
-            scrollEnabled
-            indicatorStyle={{
-              backgroundColor: COLORS.black,
-              height: 3,
-            }}
-            style={{
-              paddingLeft: 10,
-              backgroundColor: COLORS.lightGray,
-              marginTop: 15,
-              paddingTop: 10,
-            }}
-            tabStyle={{
-              height: 50,
-              marginRight: 15,
-            }}
-            activeColor="red"
-            inactiveColor="yellow"
-          />
-        )}
-        // revealHeaderOnScroll={true}
-        onIndexChange={handleTabChange}
-      >
-             <Tabs.Tab name="B">
-          <Tabs.ScrollView>
-            <Text>
-              sdjfnksd ns
-            </Text>
-          </Tabs.ScrollView>
-        </Tabs.Tab>
-        <Tabs.Tab name="A">
-          <Tabs.ScrollView>
-            <Text>
-              sdjfnksd ns
-            </Text>
-          </Tabs.ScrollView>
-        </Tabs.Tab>
-        {state?.days.map((item, ind) => (
-          <Tabs.Tab
-            name={item?.date}
-            key={ind}
-            label={(props) => (
-              <View
-                style={[
-                  tripDetailStyles.customTab,
-                  {
-                    width:
-                      state?.days?.length <= 5
-                        ? (SIZES.width - 40) / state?.days?.length
-                        : "auto",
-                  },
-                ]}
-                key={ind}
-              >
-                <Text
-                  style={{
-                    fontSize: 12,
-                    marginBottom: 3,
-                    color: COLORS.gray,
-                  }}
-                >
-                  {item.weekDay}
-                </Text>
-                <Text
-                  style={[
-                    tripDetailStyles.customTabLabel,
-                    {
-                      color: COLORS.black,
-                      marginBottom: 5,
-                    },
-                  ]}
-                >
-                  {item?.date}
-                </Text>
-              </View>
-            )}
-          >
-            <Tabs.ScrollView
-              alwaysBounceVertical={false}
-              bounces={false}
-              showsVerticalScrollIndicator={false}
+      <Header
+        onQuestion2ModalOpen={onQuestion2ModalOpen}
+        data={trip}
+        location={location}
+        topSights={combinedArray}
+        iso2={city.iso2}
+      />
+      {isTripDetailLoading ? (
+        <View
+          style={[
+            { justifyContent: "center", alignItems: "center", marginTop: 150 },
+          ]}
+        >
+          <Loader isLoading={isTripDetailLoading} color="" background="" />
+        </View>
+      ) : routes && (
+        <TabView
+          navigationState={{ index, routes }}
+          renderScene={renderScene}
+          onIndexChange={setIndex}
+          initialLayout={{ width: layout.width }}
+          sceneContainerStyle={{
+            backgroundColor: "#f7f7f7",
+          }}
+          style={{
+            backgroundColor: "#F2F2F7",
+          }}
+          pagerStyle={{
+            backgroundColor: "#F2F2F7",
+          }}
+          renderTabBar={(props) => (
+            <TabBar
+              scrollEnabled={true}
+              {...props}
               style={{
-                paddingTop: 25,
+                backgroundColor: "#fbfbfb",
+                paddingBottom: 2,
               }}
               contentContainerStyle={{
+                backgroundColor: "#fbfbfb",
                 paddingHorizontal: 0,
-                position: "relative",
-                paddingBottom: 80,
               }}
-              ref={scrollRef}
-              key={ind}
-
-              // scrollsToTop
-            >
-              <View>
-                {item?.activities?.map((itm, activityIndex) => (
-                  <TripActivityCard
-                    visited={
-                      tripDetail?.trip.routes
-                        .find((route) => route.city.iso2 === city.iso2)
-                        ?.activities.find((i) => i.sight.id === itm.id)
-                        ?.visited || false
-                    }
-                    item={itm}
-                    day={item}
-                    index={activityIndex}
-                    onQuestionModalOpen={(sight: string) => {
-                      onQuestionModalOpen();
-                      setDeleteIndexes({
-                        day: item.id,
-                        sight,
-                        route: item.route!,
-                      });
+              inactiveColor="#000"
+              tabStyle={{
+                paddingHorizontal: 0,
+                padding: 0,
+                height: 55,
+                paddingTop: 5,
+                width: state?.days?.length <= 5
+                ? (SIZES.width) / state?.days?.length
+                : "auto",
+              }}
+              activeColor="#000"
+              indicatorStyle={{ backgroundColor: COLORS.primaryDark }}
+              labelStyle={{
+                textTransform: "capitalize",
+                fontWeight: "600",
+              }}
+              renderLabel={({ route, focused }) => (
+                <View
+                  style={[
+                    tripDetailStyles.customTab,
+                    {
+                      width:
+                         100
+                    },
+                  ]}
+                  key={route?.key}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      marginBottom: 3,
+                      color: COLORS.gray,
                     }}
-                    handleTopSightClick={handleTopSightClick}
-                  />
-                ))}
-                {item?.activities?.length < 1 ? (
-                  <View style={tripDetailStyles.noActivitiesWrapper}>
-                    <Text
-                      style={{
+                  >
+                    {route?.weekDay}
+                  </Text>
+                  <Text
+                    style={[
+                      tripDetailStyles.customTabLabel,
+                      {
                         color: COLORS.black,
-                        fontSize: 18,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      You don't have activites for today
-                    </Text>
-                    <TouchableOpacity
-                      style={tripDetailStyles.addActivityButtonItem}
-                      activeOpacity={0.7}
-                      onPress={() => {
-                        onActivitiesModalOpen();
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                      }}
-                    >
-                      <Text style={tripDetailStyles.addActivityButtonText}>
-                        Add activity
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                ) : null}
-              </View>
-            </Tabs.ScrollView>
-          </Tabs.Tab>
-        ))}
-      </Tabs.Container>
-
+                        marginBottom: 5,
+                      },
+                    ]}
+                  >
+                    {route?.title}
+                  </Text>
+                </View>
+              )}
+            />
+          )}
+        />
+      )}
+  
       {topSightDetail ? (
         <SightDetailModal data={topSightDetail} closeCallBack={handleClear} />
       ) : null}
 
-      {state?.days[currentTabIndex]?.activities?.length > 0 ? (
+      {state?.days[index]?.activities?.length > 0 ? (
         <TouchableOpacity
           onPress={() => {
             onActivitiesModalOpen();
@@ -455,7 +468,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({
                       color: COLORS.primary,
                     }}
                   >
-                    {[state.days[currentTabIndex]?.date]}
+                    {[state.days[index]?.date]}
                   </Text>
                 </Text>
 

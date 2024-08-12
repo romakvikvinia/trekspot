@@ -46,6 +46,7 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
     modalEmbedRef.current?.open();
   };
 
+ 
   return (
     <>
       <View style={styles.safeArea}>
@@ -281,9 +282,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderBottomColor: "#f8f8f8",
     borderBottomWidth: 5,
-    paddingTop: 5,
-    paddingBottom: 15,
-    marginBottom: 0,
+    padding: 15,
+    marginBottom: 15,
+    backgroundColor: "#fff",
+    borderRadius: 15,
+    overflow: "hidden",
   },
   profileLeft: {
     flexDirection: "row",

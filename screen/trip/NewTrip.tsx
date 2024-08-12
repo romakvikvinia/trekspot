@@ -80,9 +80,12 @@ export const NewTrip = ({ newTripModalRef, callBack }: INewTripProps) => {
 
   useEffect(() => {
     if (isSuccess) {
-      newTripModalRef.current?.close();
-      callBack();
-      // navigation.navigate("TripsScreen");
+      console.log("data",data)
+      // newTripModalRef.current?.close();
+      // callBack();
+      // navigation.navigate("TripsScreen", {
+
+      // });
     }
   }, [isSuccess, callBack]);
 

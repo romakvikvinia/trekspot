@@ -43,6 +43,7 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
       setTabData(initialTabData);
     }
   }, [data]);
+  console.log("data",data)
 
   const showTopSight = (sight: object) => {
     setTopSightDetail(sight);

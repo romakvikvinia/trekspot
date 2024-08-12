@@ -128,7 +128,7 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
                   flexWrap: "wrap",
                   flexDirection: "row",
                   justifyContent: "space-between",
-                  minHeight: 230,
+                  minHeight: data?.cities?.length < 4 ? 100 : 230,
                 },
               ]}
             >

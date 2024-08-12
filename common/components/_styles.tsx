@@ -349,6 +349,7 @@ export const styles = StyleSheet.create({
     fontWeight: "600",
     color: COLORS.black,
     paddingHorizontal: 15,
+    maxWidth:"90%"
   },
   thingsTodoItemiIntypeText: {
     fontSize: 12,
@@ -506,6 +507,7 @@ export const styles = StyleSheet.create({
   travelToText: {
     fontSize: 16,
     fontWeight: "bold",
+    maxWidth: "70%"
   },
   backButton: {
     width: Platform.OS === "android" ? 30 : 40,

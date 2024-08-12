@@ -47,7 +47,7 @@ export const FaqRowItem = ({ item, title, index, openIndex, setOpenIndex }) => {
           paddingVertical: 15,
         }}
       >
-        <Text style={[styles.forYouRowTitleSub]}>{title}</Text>
+        <Text style={[styles.forYouRowTitleSub]}>{title} ffad nakjs</Text>
         <DownCircleIcon />
       </TouchableOpacity>
 
@@ -173,9 +173,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: COLORS.black,
+    lineHeight: 26,
     paddingHorizontal: 0,
     marginBottom: 15,
     position: "relative",
-    top: 6
+    top: 6,
+    maxWidth: "90%",
   },
 });

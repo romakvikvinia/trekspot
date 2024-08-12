@@ -108,9 +108,13 @@ export const TripInsights: React.FC<TripProps> = ({ route }) => {
                         <Image
                           style={styles.cardImage}
                           resizeMode="cover"
-                          source={{
-                            uri: "https://cdn.pixabay.com/photo/2022/09/16/15/53/city-7458934_1280.jpg",
-                          }}
+                          source={
+                            item?.image?.url
+                              ? {
+                                  uri: item?.image?.url,
+                                }
+                              : require("../../assets/no-image.png")
+                          }
                         />
                         <Text style={styles.cardTitle}>{item.title}</Text>
                       </TouchableOpacity>
@@ -260,6 +264,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: COLORS.black,
     fontWeight: "bold",
+    maxWidth: "80%",
   },
   rowItemHeader: {
     flexDirection: "row",
@@ -338,10 +343,11 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: COLORS.black,
     marginTop: 10,
+    height: 60
   },
   topicsRow: {
     width: "100%",
-    marginBottom: 35,
+    marginBottom: 5,
     flexGrow: 1,
   },
   topicsRowTitle: {
