@@ -36,6 +36,7 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
   title,
   seeAllItems = false,
   isLoading,
+  isExplore = false,
 }) => {
   const navigation = useNavigation<ExploreStackNavigationProp>();
 
@@ -70,6 +71,7 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
                 item={country}
                 isWith={countries.length - 1 === ind}
                 openModal={handleDetailOfCountry}
+                isExplore={isExplore}
               />
             ))}
           </ScrollView>

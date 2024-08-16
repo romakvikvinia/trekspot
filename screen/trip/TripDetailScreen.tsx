@@ -186,14 +186,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   const handleClear = useCallback(() => {
     setTopSightDetail(null);
   }, []);
-
-  const location = React.useMemo(() => {
-    return (
-      data &&
-      !!Object.keys(data).length &&
-      data[Object.keys(data)[0]][0].location
-    );
-  }, [data]);
+  
 
   const handleDeleteActivity = useCallback(() => {
     if (!deleteIndexes || !Object.keys(deleteIndexes).length) return;
@@ -362,7 +355,6 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
       <Header
         onQuestion2ModalOpen={onQuestion2ModalOpen}
         data={trip}
-        location={location}
         topSights={combinedArray}
         iso2={city.iso2}
       />

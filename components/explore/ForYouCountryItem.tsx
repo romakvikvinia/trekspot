@@ -68,7 +68,7 @@ export const ForYouCountryItem: React.FC<ForYouCountryItemProps> = ({
             <Text
               style={[
                 styles.thingsTodoItemTitle,
-                { color: "#fff", fontWeight: "bold" },
+                { color: "#fff", fontWeight: "bold", paddingRight: 10 },
               ]}
             >
               {item.city}

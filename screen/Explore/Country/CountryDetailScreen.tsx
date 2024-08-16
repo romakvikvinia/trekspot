@@ -116,6 +116,7 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
                   </View>
                 </View>
               )}
+           
               <Swiper
                 activeDotColor="#fff"
                 showsButtons={false}

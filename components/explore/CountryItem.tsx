@@ -23,12 +23,19 @@ export const CountryItem: React.FC<CountryItemProps> = ({
   item,
   isWith,
   openModal,
+  isExplore
 }) => {
   return (
     <>
       {Platform.OS === "ios" ? (
         <Image
-          style={[styles.box, styles.typeMd]}
+          style={[
+            styles.box, 
+            styles.typeMd,
+            {
+              height: isExplore ? 130 : 180,
+            }
+          ]}
           contentFit="cover"
           source={
             item?.image?.url
@@ -51,12 +58,15 @@ export const CountryItem: React.FC<CountryItemProps> = ({
               style={styles.gradientWrapper}
               colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
             >
-              <View style={styles.labelItem}>
+              <View style={[styles.labelItem, {
+                marginBottom: isExplore ? 12 : 0
+              }]}>
                 {/* <Mark color="#fff" size={15} /> */}
                 <Text style={styles.labelItemText} numberOfLines={2}>
                   {item.name}
                 </Text>
               </View>
+              {!isExplore &&
               <View style={styles.ratingLabel}>
                 <View
                   style={{
@@ -70,12 +80,19 @@ export const CountryItem: React.FC<CountryItemProps> = ({
                 <Text style={styles.ratingText}>{item.rate} /</Text>
                 <Text style={styles.ratingText}>{item.visitors} visitors</Text>
               </View>
+}
             </LinearGradient>
           </TouchableOpacity>
         </Image>
       ) : (
         <ImageBackground
-          style={[styles.box, styles.typeMd]}
+          style={[
+            styles.box, 
+            styles.typeMd,
+            {
+              height: isExplore ? 130 : 180,
+            }
+          ]}
           resizeMode="cover"
           source={
             item?.image?.url
@@ -97,12 +114,15 @@ export const CountryItem: React.FC<CountryItemProps> = ({
               style={styles.gradientWrapper}
               colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
             >
-              <View style={styles.labelItem}>
+            <View style={[styles.labelItem, {
+                marginBottom: isExplore ? 12 : 0
+              }]}>
                 <Mark color="#fff" size={15} />
                 <Text style={styles.labelItemText} numberOfLines={2}>
                   {item.name}
                 </Text>
               </View>
+              { !isExplore &&
               <View style={styles.ratingLabel}>
                 <View
                   style={{
@@ -116,6 +136,7 @@ export const CountryItem: React.FC<CountryItemProps> = ({
                 <Text style={styles.ratingText}>{item.rate} /</Text>
                 <Text style={styles.ratingText}>{item.visitors} visitors</Text>
               </View>
+              }
             </LinearGradient>
           </TouchableOpacity>
         </ImageBackground>

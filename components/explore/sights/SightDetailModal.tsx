@@ -194,34 +194,34 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
             ref={ref}
             showsVerticalScrollIndicator={false}
           >
-            <Swiper
-              activeDotColor="#fff"
-              style={[styles.wrapper]}
-              showsButtons={false}
-              loop={true}
-              dotColor="#949494"
-              automaticallyAdjustContentInsets
-              paginationStyle={{
-                position: "absolute",
-                justifyContent: "center",
-                left: 0,
-                top: 0,
-                height: 10,
-                marginHorizontal: 15,
-              }}
-              autoplay={true}
-              dotStyle={{
-                width: SIZES.width / data.images.length - 50,
-                height: 3,
-              }}
-              activeDotStyle={{
-                backgroundColor: "#fff",
-                width: SIZES.width / data.images.length - 15,
-                height: 3,
-              }}
-            >
-              {data?.images?.length > 0 &&
-                data.images?.map((item, ind) => (
+            {data?.images?.length > 0 ? (
+              <Swiper
+                activeDotColor="#fff"
+                style={[styles.wrapper]}
+                showsButtons={false}
+                loop={true}
+                dotColor="#949494"
+                automaticallyAdjustContentInsets
+                paginationStyle={{
+                  position: "absolute",
+                  justifyContent: "center",
+                  left: 0,
+                  top: 0,
+                  height: 10,
+                  marginHorizontal: 15,
+                }}
+                autoplay={true}
+                dotStyle={{
+                  width: SIZES.width / data.images.length - 50,
+                  height: 3,
+                }}
+                activeDotStyle={{
+                  backgroundColor: "#fff",
+                  width: SIZES.width / data.images.length - 15,
+                  height: 3,
+                }}
+              >
+                {data.images?.map((item, ind) => (
                   <Image
                     style={[styles.box]}
                     contentFit="cover"
@@ -235,14 +235,14 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                     key={`slide-${ind}`}
                   ></Image>
                 ))}
-              {data?.images?.length === 0 && (
-                <Image
-                  style={[styles.box]}
-                  contentFit="cover"
-                  source={require("../../../assets/no-image.png")}
-                ></Image>
-              )}
-            </Swiper>
+              </Swiper>
+            ) : (
+              <Image
+                style={[styles.box]}
+                contentFit="cover"
+                source={require("../../../assets/no-image.png")}
+              ></Image>
+            )}
 
             <View style={styles.sightDetails}>
               <View style={styles.headingRow}>

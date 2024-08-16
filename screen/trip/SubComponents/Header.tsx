@@ -17,50 +17,19 @@ import {
   MapIcon,
 } from "../../../utilities/SvgIcons.utility";
 import { TripHelpers } from "./TripHelpers";
+import { MapHeader } from "./MapHeader";
 
 export const Header = ({
   data,
   onQuestion2ModalOpen,
-  location,
   topSights,
   iso2
 }) => {
   const navigation = useNavigation();
-  const mapRef = useRef(null);
-
- 
-  useEffect(() => {
-     
-    if(location) {
-      mapRef.current?.animateToRegion({
-        latitude: location?.lat,
-        longitude: location?.lng,
-        latitudeDelta: 0.00001,
-        longitudeDelta: 0.5,
-      });
-    } else {
-      mapRef.current?.animateToRegion({
-        latitude: 29.3606316,
-        longitude: 11.8186065,
-        latitudeDelta: 13,
-        longitudeDelta: 0.5,
-      });
-    }
   
-  }, [location, data]);
- 
   return (
     <View style={[styles.mapHeaderContainer]}>
-      <MapView
-        ref={mapRef}
-        onPress={() => navigation.navigate("TripMapViewScreen", {
-          topSights
-        })}
-        provider={Platform.OS === "android" ? PROVIDER_GOOGLE : undefined}
-        style={styles.map}
-        mapType="standard"
-      ></MapView>
-
+      <MapHeader trip={data} topSights={topSights} key={data?.cities[0]?.city} />
       <TouchableOpacity
         onPress={() => navigation.goBack()}
         activeOpacity={0.7}
@@ -543,7 +512,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 50,
   },
-  map: {
-    height: 130,
-  },
+ 
 });

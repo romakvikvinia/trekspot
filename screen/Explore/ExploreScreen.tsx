@@ -168,6 +168,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
               title="Asia"
               countries={randomCountriesByContinent?.groupedCountry.asia || []}
               seeAllItems={false}
+              isExplore={true}
             />
             <DestinationContainer
               isLoading={isRandomCountriesByContinentLoading}
@@ -175,6 +176,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
               countries={
                 randomCountriesByContinent?.groupedCountry.africa || []
               }
+              isExplore={true}
             />
             <DestinationContainer
               isLoading={isRandomCountriesByContinentLoading}
@@ -182,6 +184,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
               countries={
                 randomCountriesByContinent?.groupedCountry.europe || []
               }
+              isExplore={true}
             />
             <DestinationContainer
               isLoading={isRandomCountriesByContinentLoading}
@@ -189,6 +192,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
               countries={
                 randomCountriesByContinent?.groupedCountry.oceania || []
               }
+              isExplore={true}
             />
             <DestinationContainer
               isLoading={isRandomCountriesByContinentLoading}
@@ -196,6 +200,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
               countries={
                 randomCountriesByContinent?.groupedCountry.southAmerica || []
               }
+              isExplore={true}
             />
             <DestinationContainer
               isLoading={isRandomCountriesByContinentLoading}
@@ -203,6 +208,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
               countries={
                 randomCountriesByContinent?.groupedCountry.northAmerica || []
               }
+              isExplore={true}
             />
           </ScrollView>
         </KeyboardAvoidingView>
