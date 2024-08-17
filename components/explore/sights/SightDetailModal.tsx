@@ -27,6 +27,7 @@ import {
   TripLocationIcon,
 } from "../../../utilities/SvgIcons.utility";
 import { SightType } from "../../../api/api.types";
+import { ShowDirectionButton } from "./_ShowDirectionButton";
 
 type SightDetailModalProps = {
   data: SightType;
@@ -107,6 +108,7 @@ export const HoursRow = ({ data }) => {
 export const SightDetailModal: React.FC<SightDetailModalProps> = ({
   data,
   closeCallBack = () => {},
+  showDirection = false,
 }) => {
 
   const [state, setState] = useState({ isOpen: false });
@@ -246,20 +248,26 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
 
             <View style={styles.sightDetails}>
               <View style={styles.headingRow}>
-                <Text style={styles.sightDetailsTitle}>{data?.title}</Text>
+                <Text style={[styles.sightDetailsTitle, {
+                  fontSize: showDirection ? 20 : 24,
+                }]}>{data?.title}</Text>
 
-                <TouchableOpacity
-                  style={[
-                    styles.addToBucketButton,
-                    {
-                      backgroundColor: "rgba(0, 0, 0, 0.3)",
-                      // 1 == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)", // if this place is marked as favorate
-                    },
-                  ]}
-                  activeOpacity={0.7}
-                >
-                  <Mark2 color="#fff" />
-                </TouchableOpacity>
+                {showDirection ? (
+                  <ShowDirectionButton data={data} />
+                ) : (
+                  <TouchableOpacity
+                    style={[
+                      styles.addToBucketButton,
+                      {
+                        backgroundColor: "rgba(0, 0, 0, 0.3)",
+                        // 1 == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)", // if this place is marked as favorate
+                      },
+                    ]}
+                    activeOpacity={0.7}
+                  >
+                    <Mark2 color="#fff" />
+                  </TouchableOpacity>
+                )}
               </View>
               {data?.city ? (
                 <View style={styles.locationCity}>
@@ -358,10 +366,10 @@ export const styles = StyleSheet.create({
     marginLeft: 5,
   },
   sightDetailsTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "600",
     color: COLORS.black,
-    width: "80%",
+    width: "60%",
   },
   type: {
     fontSize: 14,

@@ -23,7 +23,8 @@ export const Header = ({
   data,
   onQuestion2ModalOpen,
   topSights,
-  iso2
+  iso2,
+  tabData
 }) => {
   const navigation = useNavigation();
   
@@ -39,7 +40,8 @@ export const Header = ({
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => navigation.navigate("TripMapViewScreen", {
-          topSights
+          tabData,
+          city: data?.cities[0]
         })}
         activeOpacity={0.7}
         style={styles.mapButton}

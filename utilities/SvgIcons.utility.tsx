@@ -363,6 +363,17 @@ interface IDownIcon {
   color?: string;
   size?: number;
 }
+export const DirectionIcon = () => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M21.833 8.872 13.839.877a3 3 0 0 0-4.242 0L1.651 8.823c-.345.345-.638.753-.782 1.22-.35 1.136-.054 2.285.733 3.071L11.717 23.23l10.062-10.062c.345-.345.638-.751.783-1.217.355-1.137.059-2.29-.73-3.08Zm-4.369 2.42-2.757 2.758-1.414-1.414L14.928 11H11a1 1 0 0 0-1 1v5.586l-2-2v-3.585a3 3 0 0 1 3-3h3.928l-1.635-1.636 1.414-1.414 2.758 2.759c.345.344.535.803.535 1.291s-.19.947-.536 1.292Z" fill="#fff" opacity="1" data-original="#000000" class=""></path></g></svg>`;
+  const SvgImage = () => (
+    <SvgXml
+      xml={svgMarkup}
+      width="15"
+      height="15"
+    />
+  );
+  return <SvgImage />;
+};
 export const DownIcon: React.FC<IDownIcon> = ({ color, size }) => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="m0 8.057 9.52 9.507a3.507 3.507 0 0 0 4.948 0L24 8.046l-2.121-2.117-9.531 9.517a.5.5 0 0 1-.707 0L2.121 5.94Z" fill=${
     color ? color : "#000000"

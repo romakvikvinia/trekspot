@@ -357,6 +357,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         data={trip}
         topSights={combinedArray}
         iso2={city.iso2}
+        tabData={tabData}
       />
       {isTripDetailLoading ? (
         <View
