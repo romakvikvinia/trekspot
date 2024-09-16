@@ -67,7 +67,6 @@ interface IState {
 
 export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   const { trip, city } = route.params;
- 
 
   const layout = useWindowDimensions();
 
@@ -193,7 +192,6 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   const handleClear = useCallback(() => {
     setTopSightDetail(null);
   }, []);
-  
 
   const handleDeleteActivity = useCallback(() => {
     if (!deleteIndexes || !Object.keys(deleteIndexes).length) return;
@@ -244,7 +242,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     return combinedArray;
   };
   const combinedArray = combineObjectArrays(data);
- 
+
   const renderScene = ({ route }) => {
     return (
       <ScrollView
@@ -252,7 +250,8 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         contentContainerStyle={{
           paddingTop: 15,
           paddingBottom: 80,
-          paddingLeft: tripStyle && tabData[route.key]?.activities?.length > 1 ? 30 : 0,
+          paddingLeft:
+            tripStyle && tabData[route.key]?.activities?.length > 1 ? 30 : 0,
         }}
         onLayout={(e) => console.log("e", e.nativeEvent.layout)}
       >
@@ -272,16 +271,18 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
               lastIndex={tabData[route.key]?.activities?.length - 1}
               onQuestionModalOpen={(sight: string) => {
                 onQuestionModalOpen();
-                setDeleteIndexes({
-                  day: tabData[route.key].id,
-                  sight,
-                  route: tabData[route.key].route!,
-                });
+                // setDeleteIndexes({
+                //   day: tabData[route.key].id,
+                //   sight,
+                //   route: tabData[route.key].route!,
+                // });
               }}
               handleTopSightClick={handleTopSightClick}
             />
           ))}
-        {!isTripDetailLoading &&  tripDetail && tripDetail?.trip?.routes[0].activities?.length < 1 ? (
+        {!isTripDetailLoading &&
+        tripDetail &&
+        tripDetail?.trip?.routes[0].activities?.length < 1 ? (
           <View style={tripDetailStyles.noActivitiesWrapper}>
             <Text
               style={{
@@ -290,7 +291,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                 fontWeight: "bold",
               }}
             >
-              You don't have activites for today 
+              You don't have activites for today
             </Text>
             <TouchableOpacity
               style={tripDetailStyles.addActivityButtonItem}
@@ -356,7 +357,6 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     []
   );
 
- 
   return (
     <>
       <Header
@@ -544,12 +544,17 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         >
           <QuestionModal modalQuestionRef={modalQuestionRef2} title="Action">
             <View style={questionModaStyles.buttonGroup}>
-            <TouchableOpacity
+              <TouchableOpacity
                 activeOpacity={0.7}
                 style={[questionModaStyles.button]}
-                onPress={() => {setTripStyle(!tripStyle); modalQuestionRef2.current?.close()}}
+                onPress={() => {
+                  setTripStyle(!tripStyle);
+                  modalQuestionRef2.current?.close();
+                }}
               >
-                <Text style={questionModaStyles.buttonText}>{!tripStyle ? "Classic" : "Reach"} view</Text>
+                <Text style={questionModaStyles.buttonText}>
+                  {!tripStyle ? "Classic" : "Reach"} view
+                </Text>
                 <TwoSideArrows size="15" />
               </TouchableOpacity>
               <TouchableOpacity

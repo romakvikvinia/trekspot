@@ -347,7 +347,7 @@ export type TripType = {
 };
 
 export type CreateTripResponseType = {
-  createTrip: CityType[];
+  createTrip: TripType;
 };
 export type CreateTripArgsType = {
   name: string;

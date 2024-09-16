@@ -45,7 +45,7 @@ export const NewTrip = ({ newTripModalRef, callBack }: INewTripProps) => {
     },
     validationSchema: creationTrip,
     onSubmit: async ({ name, range, travelType, cities }, methods) => {
-      methods.setSubmitting(true); 
+      methods.setSubmitting(true);
       fetchData({
         name,
         //@ts-ignore
@@ -55,9 +55,9 @@ export const NewTrip = ({ newTripModalRef, callBack }: INewTripProps) => {
         type: travelType.toUpperCase(),
         cities,
       });
-    }, 
+    },
   });
- 
+
   const onDestinationModalOpen = () => {
     if (Platform.OS === "android") {
       setWhereToModal(true);
@@ -80,17 +80,17 @@ export const NewTrip = ({ newTripModalRef, callBack }: INewTripProps) => {
 
   useEffect(() => {
     if (isSuccess) {
-      console.log("data",data)
+      console.log("data", data);
       // newTripModalRef.current?.close();
       // callBack();
-      // navigation.navigate("TripsScreen", {
-
-      // });
+      navigation.navigate("TripDetailScreen", {
+        trip: data.createTrip,
+        city: data.createTrip.cities[0],
+      });
     }
   }, [isSuccess, callBack]);
 
- 
-  useEffect(() => { 
+  useEffect(() => {
     setSubmited(false);
   }, [formik.values]);
 
