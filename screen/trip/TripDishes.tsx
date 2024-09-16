@@ -71,9 +71,10 @@ export const TripDishes = ({route}) => {
       {!isLoading && (
         <View
           style={{
-            minHeight: SIZES.height,
+            minHeight: 20,
             paddingHorizontal: 0,
             width: "100%",
+            flex: 1,
           }}
         >
           <FlashList

@@ -103,7 +103,7 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
                 <TouchableOpacity
                   style={[
                     styles.button,
-                    { borderBottomWidth: 0, marginBottom: 0 },
+                    {  marginBottom: 0 },
                   ]}
                   activeOpacity={0.7}
                   onPress={() => navigation.navigate("ResetPasswordScreen")}
@@ -126,7 +126,7 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
                 <TouchableOpacity
                   style={[
                     styles.button,
-                    { borderBottomWidth: 0, marginBottom: 0 },
+                    {   marginBottom: 0 },
                   ]}
                   activeOpacity={0.7}
                   onPress={() =>
@@ -143,7 +143,7 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={styles.button}
+                  style={[styles.button, {borderBottomWidth: 0, marginBottom: 0}]}
                   activeOpacity={0.7}
                   onPress={async () => {
                     signOut();

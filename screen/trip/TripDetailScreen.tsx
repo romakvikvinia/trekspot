@@ -16,6 +16,7 @@ import {
   EditIcon,
   PlusIcon,
   TrashIcon,
+  TwoSideArrows,
   XIcon,
 } from "../../utilities/SvgIcons.utility";
 import * as Haptics from "expo-haptics";
@@ -41,10 +42,11 @@ import { SightDetailModal } from "../../components/explore/sights/SightDetailMod
 
 import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { addDays, differenceInDays, format } from "date-fns";
+import { addDays, differenceInDays, format, set } from "date-fns";
 import { SightType } from "../../api/api.types";
 import { TabBar, TabView } from "react-native-tab-view";
 import { Loader } from "../../common/ui/Loader";
+import { useTripStore } from "../../components/store/store";
 
 type TripProps = NativeStackScreenProps<
   TripRouteStackParamList,
@@ -65,6 +67,7 @@ interface IState {
 
 export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   const { trip, city } = route.params;
+ 
 
   const layout = useWindowDimensions();
 
@@ -80,6 +83,10 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     day: number;
     sight: string;
   }>();
+  const { setTripStyle, tripStyle } = useTripStore((state) => ({
+    setTripStyle: state.setTripStyle,
+    tripStyle: state.tripStyle,
+  }));
   const [topSightDetail, setTopSightDetail] = useState<SightType | null>();
   const [state, setState] = useState<IState>({
     days: [],
@@ -237,7 +244,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     return combinedArray;
   };
   const combinedArray = combineObjectArrays(data);
-
+ 
   const renderScene = ({ route }) => {
     return (
       <ScrollView
@@ -245,7 +252,9 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         contentContainerStyle={{
           paddingTop: 15,
           paddingBottom: 80,
+          paddingLeft: tripStyle && tabData[route.key]?.activities?.length > 1 ? 30 : 0,
         }}
+        onLayout={(e) => console.log("e", e.nativeEvent.layout)}
       >
         {tabData &&
           tabData[route.key]?.activities?.map((itm, activityIndex) => (
@@ -260,6 +269,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
               key={itm.id + route.key}
               day={tabData[route.key]}
               index={activityIndex}
+              lastIndex={tabData[route.key]?.activities?.length - 1}
               onQuestionModalOpen={(sight: string) => {
                 onQuestionModalOpen();
                 setDeleteIndexes({
@@ -271,9 +281,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
               handleTopSightClick={handleTopSightClick}
             />
           ))}
-        {!isTripDetailLoading &&
-        tabData &&
-        tabData[route.key]?.activities?.length < 1 ? (
+        {!isTripDetailLoading &&  tripDetail && tripDetail?.trip?.routes[0].activities?.length < 1 ? (
           <View style={tripDetailStyles.noActivitiesWrapper}>
             <Text
               style={{
@@ -282,7 +290,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                 fontWeight: "bold",
               }}
             >
-              You don't have activites for today
+              You don't have activites for today 
             </Text>
             <TouchableOpacity
               style={tripDetailStyles.addActivityButtonItem}
@@ -348,8 +356,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     []
   );
 
-  console.log("isError", tripDetail, state);
-
+ 
   return (
     <>
       <Header
@@ -529,7 +536,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           closeSnapPointStraightEnabled={false}
           modalStyle={{
             backgroundColor: "#F2F2F7",
-            minHeight: "30%",
+            minHeight: "35%",
           }}
           scrollViewProps={{
             showsVerticalScrollIndicator: false,
@@ -537,6 +544,14 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         >
           <QuestionModal modalQuestionRef={modalQuestionRef2} title="Action">
             <View style={questionModaStyles.buttonGroup}>
+            <TouchableOpacity
+                activeOpacity={0.7}
+                style={[questionModaStyles.button]}
+                onPress={() => {setTripStyle(!tripStyle); modalQuestionRef2.current?.close()}}
+              >
+                <Text style={questionModaStyles.buttonText}>{!tripStyle ? "Classic" : "Reach"} view</Text>
+                <TwoSideArrows size="15" />
+              </TouchableOpacity>
               <TouchableOpacity
                 activeOpacity={0.7}
                 style={[questionModaStyles.button]}

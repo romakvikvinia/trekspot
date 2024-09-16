@@ -32,7 +32,8 @@ export const MapHeader = ({trip, topSights}) => {
         <MapView
         ref={mapRef}
         onPress={() => navigation.navigate("TripMapViewScreen", {
-          topSights
+          topSights,
+          city: trip?.cities[0]
         })}
         provider={Platform.OS === "android" ? PROVIDER_GOOGLE : undefined}
         style={styles.map}

@@ -99,7 +99,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <ScrollView style={{ flex: 1, paddingHorizontal: 15, paddingTop: 15 }}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, paddingHorizontal: 15, paddingTop: 15 }}>
 
           {
             isLoading && <View style={{marginTop: 30}}><Loader isLoading={true} background="#F2F2F7" size="small" /></View>

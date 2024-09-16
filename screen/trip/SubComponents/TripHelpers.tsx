@@ -31,7 +31,7 @@ export const TripHelpers = ({data, iso2}) => {
           <InsightIcon size={12} color={"#0b57d0"} />
           <Text style={styles.bottomActionsButtonlabel}>Insights</Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.bottomActionsButton}
           activeOpacity={0.7}
           onPress={() => navigation.navigate("TripFAQ",{
@@ -40,7 +40,7 @@ export const TripHelpers = ({data, iso2}) => {
         >
           <FaqIcon size={12} color={"#0b57d0"} />
           <Text style={styles.bottomActionsButtonlabel}>FAQ</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           style={styles.bottomActionsButton}
           activeOpacity={0.7}

@@ -116,7 +116,7 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
       <View style={[styles.forYouRow, { marginTop: 25 }]}>
         {!isCitiesLoading && data && data?.cities?.length > 0 && (
           <Text style={[styles.forYouRowTitle, { paddingHorizontal: 15 }]}>
-            Cities to visit
+            Places to visit
           </Text>
         )}
         {!isCitiesLoading && data && data?.cities?.length > 0 ? (
