@@ -810,6 +810,16 @@ export const trekSpotApi = createApi({
               startAt
               endAt
               type
+              cities {
+                id
+                city
+                iso2
+                lng
+                lat
+                image {
+                  url
+                }
+              }
             }
           }
         `,
