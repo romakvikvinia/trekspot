@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import {
   Alert,
@@ -23,7 +29,7 @@ import * as Haptics from "expo-haptics";
 
 import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
-import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
+
 import { QuestionModal } from "../../common/components/QuestionModal";
 import { questionModaStyles } from "../../styles/questionModaStyles";
 import { TripActivitiesSelect } from "./TripActivitiesSelect";
@@ -42,9 +48,15 @@ import { SightDetailModal } from "../../components/explore/sights/SightDetailMod
 
 import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { addDays, differenceInDays, format, set } from "date-fns";
+import { addDays, differenceInDays, format } from "date-fns";
 import { SightType } from "../../api/api.types";
-import { TabBar, TabView } from "react-native-tab-view";
+import {
+  NavigationState,
+  Route,
+  SceneRendererProps,
+  TabBar,
+  TabView,
+} from "react-native-tab-view";
 import { Loader } from "../../common/ui/Loader";
 import { useTripStore } from "../../components/store/store";
 
@@ -54,6 +66,7 @@ type TripProps = NativeStackScreenProps<
 >;
 
 export type TripDaysType = {
+  key: string;
   route?: string;
   id: number;
   date: string;
@@ -75,17 +88,17 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   const modalQuestionRef2 = useRef<Modalize>(null);
   const modalEmbedRef = useRef<Modalize>(null);
   const [index, setIndex] = useState(0);
-  const [routes, setRoutes] = useState();
-  const [tabData, setTabData] = useState();
+
   const [deleteIndexes, setDeleteIndexes] = useState<{
     route: string;
     day: number;
     sight: string;
   }>();
-  const { setTripStyle, tripStyle } = useTripStore((state) => ({
+  const { setTripStyle, tripStyle } = useTripStore((state: any) => ({
     setTripStyle: state.setTripStyle,
     tripStyle: state.tripStyle,
   }));
+
   const [topSightDetail, setTopSightDetail] = useState<SightType | null>();
   const [state, setState] = useState<IState>({
     days: [],
@@ -141,6 +154,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
 
         return {
           route: currentRoute?.id,
+          key: `days-${i}`,
           id: i,
           date: format(addDays(trip.startAt, i), "MMM d"),
           weekDay: format(addDays(trip.startAt, i), "EEE"),
@@ -249,45 +263,78 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     }
     return false;
   }, [state, isTripDetailLoading]);
-  
-  const renderScene = ({ route }) => {
+
+  const removeActivity = useCallback(
+    (deleteIndexes: { day: number; sight: string; route: string }) => {
+      removeActivityFromRoute({
+        day: deleteIndexes.day,
+        sight: deleteIndexes.sight,
+        route: deleteIndexes.route,
+      });
+
+      setState((prevState) => {
+        let newDays = [...prevState.days];
+        newDays[deleteIndexes?.day].activities = newDays[
+          deleteIndexes?.day
+        ].activities.filter((i) => i.id !== deleteIndexes.sight);
+        return {
+          ...prevState,
+          days: newDays,
+        };
+      });
+    },
+    []
+  );
+
+  const renderCurrentScene: React.FC<
+    SceneRendererProps & {
+      route: Route;
+    }
+  > = (props) => {
+    const route = props.route as unknown as TripDaysType;
+
+    console.log(
+      "state2->",
+      route
+      // isTripDetailLoading,
+      // showUdontHaveActivities
+    );
+
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingTop: 15,
           paddingBottom: 80,
-          paddingLeft:
-            tripStyle && tabData[route.key]?.activities?.length > 1 ? 30 : 0,
+          paddingLeft: tripStyle && route?.activities?.length > 1 ? 30 : 0,
         }}
         onLayout={(e) => console.log("e", e.nativeEvent.layout)}
       >
-        {tabData &&
-          tabData[route.key]?.activities?.map((itm, activityIndex) => (
-            <TripActivityCard
-              visited={
-                tripDetail?.trip.routes
-                  .find((route) => route.city.iso2 === city.iso2)
-                  ?.activities.find((i) => i.sight.id === itm.id)?.visited ||
-                false
-              }
-              item={itm}
-              key={itm.id + route.key}
-              day={tabData[route.key]}
-              index={activityIndex}
-              lastIndex={tabData[route.key]?.activities?.length - 1}
-              onQuestionModalOpen={(sight: string) => {
-                onQuestionModalOpen();
-                // setDeleteIndexes({
-                //   day: tabData[route.key].id,
-                //   sight,
-                //   route: tabData[route.key].route!,
-                // });
-              }}
-              handleTopSightClick={handleTopSightClick}
-            />
-          ))}
-      
+        {route?.activities?.map((itm, activityIndex) => (
+          <TripActivityCard
+            visited={
+              tripDetail?.trip.routes
+                .find((route) => route.city.iso2 === city.iso2)
+                ?.activities.find((i) => i.sight.id === itm.id)?.visited ||
+              false
+            }
+            item={itm}
+            key={itm.id + route.key}
+            day={route}
+            index={activityIndex}
+            lastIndex={route?.activities.length - 1}
+            onQuestionModalOpen={(sight: string) => {
+              onQuestionModalOpen();
+              setDeleteIndexes({
+                day: route.id,
+                sight,
+                route: route.route!,
+              });
+            }}
+            handleTopSightClick={handleTopSightClick}
+          />
+        ))}
+
         {!isTripDetailLoading && showUdontHaveActivities ? (
           <View style={tripDetailStyles.noActivitiesWrapper}>
             <Text
@@ -317,51 +364,10 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     );
   };
 
-  useEffect(() => {
-    if (state) {
-      console.log("state", state, routes, tabData);
-
-      function transformArrayToObject(days) {
-        return days.reduce((acc, day) => {
-          const { date, ...otherProps } = day;
-          acc[date] = otherProps;
-          return acc;
-        }, {});
-      }
-      const newData = transformArrayToObject(state?.days);
-
-      const keys = Object.keys(newData);
-      const newRoutes = keys.map((key) => ({
-        key,
-        title: key,
-        weekDay: newData[key].weekDay,
-      }));
-      setRoutes(newRoutes);
-      setTabData(newData);
-    }
-  }, [state, transformDataForDays]);
-
-  const removeActivity = useCallback(
-    (deleteIndexes: { day: number; sight: string; route: string }) => {
-      removeActivityFromRoute({
-        day: deleteIndexes.day,
-        sight: deleteIndexes.sight,
-        route: deleteIndexes.route,
-      });
-
-      setState((prevState) => {
-        let newDays = [...prevState.days];
-        newDays[deleteIndexes?.day].activities = newDays[
-          deleteIndexes?.day
-        ].activities.filter((i) => i.id !== deleteIndexes.sight);
-        return {
-          ...prevState,
-          days: newDays,
-        };
-      });
-    },
-    []
-  );
+  const navigationState: NavigationState<TripDaysType> = {
+    index,
+    routes: state.days,
+  };
 
   return (
     <>
@@ -370,7 +376,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         data={trip}
         topSights={combinedArray}
         iso2={city.iso2}
-        tabData={tabData}
+        tabData={state.days}
       />
       {isTripDetailLoading ? (
         <View
@@ -381,10 +387,11 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           <Loader isLoading={isTripDetailLoading} color="" background="" />
         </View>
       ) : (
-        routes && (
+        state.days.length && (
           <TabView
-            navigationState={{ index, routes }}
-            renderScene={renderScene}
+            navigationState={navigationState}
+            // renderScene={renderScene}
+            renderScene={renderCurrentScene}
             onIndexChange={setIndex}
             initialLayout={{ width: layout.width }}
             sceneContainerStyle={{
@@ -453,7 +460,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                         },
                       ]}
                     >
-                      {route?.title}
+                      {route?.date}
                     </Text>
                   </View>
                 )}

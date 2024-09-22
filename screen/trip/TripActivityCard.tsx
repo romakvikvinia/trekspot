@@ -24,6 +24,7 @@ interface ITripActivityCardProps {
   day: TripDaysType;
   item: SightType;
   index: number;
+  lastIndex: number;
   onQuestionModalOpen: (sight: string) => void;
   handleTopSightClick: (sight: SightType) => void;
 }
@@ -35,11 +36,11 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
   onQuestionModalOpen,
   handleTopSightClick,
   index,
-  lastIndex
+  lastIndex,
 }) => {
   const [changeActivityVisited, { isLoading }] =
     useChangeActivityVisitedMutation();
-  const { tripStyle } = useTripStore((state) => ({
+  const { tripStyle } = useTripStore((state: any) => ({
     tripStyle: state.tripStyle,
   }));
   const [checkedIn, setCheckedIn] = useState(visited);
@@ -69,7 +70,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
   }, [checkedIn]);
 
   return (
-    <> 
+    <>
       {tripStyle ? (
         <TouchableOpacity
           activeOpacity={0.7}
@@ -119,9 +120,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
               )}
 
               {index !== 0 && index !== lastIndex && (
-                <View
-                  style={tripDetailStyles.smallCircle}
-                ></View>
+                <View style={tripDetailStyles.smallCircle}></View>
               )}
               {index === lastIndex && (
                 <View
@@ -297,7 +296,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
           }}
         >
-         <View
+          <View
             style={[
               checkedIn ? tripDetailStyles.checkedIn : null,
               {
@@ -424,7 +423,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
                 activeOpacity={0.7}
                 onPress={() => openMap(item?.title)}
               >
-               <MapDirection width="15" color={COLORS.gray} />
+                <MapDirection width="15" color={COLORS.gray} />
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => onQuestionModalOpen(item.id)}
