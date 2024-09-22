@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import { SIZES } from "../../styles/theme";
 import { Platform, Text, TouchableOpacity } from "react-native";
 import Agreement from "../../screen/auth/Agreement";
+import { useTripStore } from "../../components/store/store";
 
 interface AuthRouteProps {}
 
@@ -29,8 +30,14 @@ export type AuthStackNavigationProp = StackNavigationProp<AuthStackParamList>;
 export const AuthRoute: React.FC<AuthRouteProps> = () => {
   const navigation = useNavigation<AuthStackNavigationProp>();
 
+  const {  onboardingSeen } = useTripStore((state) => ({
+    onboardingSeen: state.onboardingSeen,
+  }));
+
   useEffect(() => {
-    navigation.navigate("GetStarted");
+    if(!onboardingSeen) {
+      navigation.navigate("GetStarted");
+    }
   }, []);
 
   return (

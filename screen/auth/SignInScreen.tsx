@@ -251,12 +251,14 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
               >
                 <GoogleIcon />
               </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={0.1}
-                style={styles.continueWithButton}
-              >
-                <AppleIcon />
-              </TouchableOpacity>
+              {Platform.OS === "ios" && (
+                <TouchableOpacity
+                  activeOpacity={0.1}
+                  style={styles.continueWithButton}
+                >
+                  <AppleIcon />
+                </TouchableOpacity>
+              )}
               <TouchableOpacity
                 activeOpacity={0.1}
                 style={styles.continueWithButton}
@@ -274,38 +276,37 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
           </View>
 
           <View style={[styles.textWithButtonWrapper]}>
-          <Text
-            style={[
-              styles.textWithButtonLabel,
-              {
-                fontSize: SIZES.body5,
-                color: COLORS.darkgray,
-              },
-            ]}
-          >
-            By sign in you agree our
-          </Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Agreement")}
-            activeOpacity={0.1}
-            style={styles.textWithButton}
-          >
             <Text
               style={[
-                styles.textWithButtonText,
+                styles.textWithButtonLabel,
                 {
                   fontSize: SIZES.body5,
-                  fontWeight: "normal",
-                  color: COLORS.primaryDark,
+                  color: COLORS.darkgray,
                 },
               ]}
             >
-              Privacy policy
-            </Text>
-          </TouchableOpacity>
-        </View>
+              By sign in you agree our
+            </Text> 
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Agreement")}
+              activeOpacity={0.1}
+              style={styles.textWithButton}
+            >
+              <Text
+                style={[
+                  styles.textWithButtonText,
+                  {
+                    fontSize: SIZES.body5,
+                    fontWeight: "normal",
+                    color: COLORS.primary,
+                  },
+                ]}
+              >
+                Privacy Policy
+              </Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
-      
       </KeyboardAvoidingView>
     </View>
   );

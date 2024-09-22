@@ -110,7 +110,6 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
   closeCallBack = () => {},
   showDirection = false,
 }) => {
-
   const [state, setState] = useState({ isOpen: false });
   const openMap = (address: string) => {
     const scheme = Platform.select({
@@ -143,15 +142,24 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
     }
   }, [data]);
 
-  const calcHeight = useMemo(() => {  
+  const calcHeight = useMemo(() => {
     if (data?.description && data?.workingHours?.length > 0) {
-      return 580
+      return 580;
     }
-    if(data?.description || data?.workingHours?.length > 0) {
-      return 500
-    } 
-    
+    if (data?.description || data?.workingHours?.length > 0) {
+      return 500;
+    }
   }, [data]);
+
+  const redirectToContrib = (URL) => {
+    const link = URL.split('href="')[1].split('"')[0];
+    Linking.openURL(link);
+  };
+
+  const renderAuthor = (item) => {
+    const author = item.split('">')[1].split("</a>")[0];
+    return author;
+  };
 
   if (!data) return null;
 
@@ -235,7 +243,24 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                         : require("../../../assets/no-image.png")
                     }
                     key={`slide-${ind}`}
-                  ></Image>
+                  >
+                    {item?.html_attributions && (
+                      <TouchableOpacity
+                        style={styles.attr}
+                        activeOpacity={0.7}
+                        onPress={() =>
+                          redirectToContrib(item?.html_attributions[0])
+                        }
+                      >
+                        <Text
+                          numberOfLines={1}
+                          style={{ color: "#fff", fontSize: 12 }}
+                        >
+                          {renderAuthor(item?.html_attributions[0])}
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+                  </Image>
                 ))}
               </Swiper>
             ) : (
@@ -248,9 +273,16 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
 
             <View style={styles.sightDetails}>
               <View style={styles.headingRow}>
-                <Text style={[styles.sightDetailsTitle, {
-                  fontSize: showDirection ? 20 : 24,
-                }]}>{data?.title}</Text>
+                <Text
+                  style={[
+                    styles.sightDetailsTitle,
+                    {
+                      fontSize: showDirection ? 20 : 24,
+                    },
+                  ]}
+                >
+                  {data?.title}
+                </Text>
 
                 {showDirection ? (
                   <ShowDirectionButton data={data} />
@@ -328,6 +360,19 @@ export const styles = StyleSheet.create({
     width: "95%",
     borderRadius: 15,
   },
+  attr: {
+    position: "absolute",
+    right: 15,
+    bottom: 25,
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    borderRadius: 50,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    maxWidth: 100,
+  },
   headingRow: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -338,13 +383,13 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 8,
-    marginBottom: 5
+    marginBottom: 5,
   },
   locationCityText: {
     marginLeft: 5,
     fontSize: 16,
-    color:COLORS.gray,
-    fontWeight: "500"
+    color: COLORS.gray,
+    fontWeight: "500",
   },
   addToBucketButton: {
     width: 30,

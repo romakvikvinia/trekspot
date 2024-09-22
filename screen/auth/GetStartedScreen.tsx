@@ -1,15 +1,19 @@
 import React from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { ImageBackground, Platform, Text, TouchableOpacity, View } from "react-native";
-import Onboarding from "react-native-onboarding-swiper";
+import {  Platform, Text, TouchableOpacity, View } from "react-native";
 
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
-import { ExploreIcon, Markering, PlanTripIcon, StatsIcon, WishlistIcon } from "../../utilities/SvgIcons.utility";
+import { ExploreIcon, PlanTripIcon, StatsIcon, WishlistIcon } from "../../utilities/SvgIcons.utility";
 import { COLORS } from "../../styles/theme";
+import { useTripStore } from "../../components/store/store";
 
 type GetStartedProps = NativeStackScreenProps<AuthStackParamList, "GetStarted">;
 
 export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
+  const { setOnboardingSeen } = useTripStore((state) => ({
+    setOnboardingSeen: state.setOnboardingSeen,
+  }));
+
   return (
     <View style={{ flex: 1, paddingTop: 70, backgroundColor: "#fff" }}>
       {/* <Onboarding
@@ -121,7 +125,7 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
         </View>
         <View
           style={{
-            maxWidth: "80%",
+            maxWidth: "70%",
           }}
         >
           <Text
@@ -163,7 +167,7 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
 
         <View
           style={{
-            maxWidth: "80%",
+            maxWidth: "70%",
           }}
         >
           <Text
@@ -199,12 +203,12 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
             marginRight: 20,
           }}
         >
-          <WishlistIcon size={70}/>
+          <WishlistIcon size={70} />
         </View>
 
         <View
           style={{
-            maxWidth: "80%",
+            maxWidth: "70%",
           }}
         >
           <Text
@@ -213,7 +217,7 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
               fontWeight: "bold",
             }}
           >
-            Create Your Wishlist 
+            Create Your Wishlist
           </Text>
           <Text
             style={{
@@ -223,7 +227,7 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
               fontWeight: "500",
             }}
           >
-          Dream big and start ticking off your bucket list items.
+            Dream big and start ticking off your bucket list items.
           </Text>
         </View>
       </View>
@@ -245,7 +249,7 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
 
         <View
           style={{
-            maxWidth: "80%",
+            maxWidth: "70%",
           }}
         >
           <Text
@@ -264,7 +268,7 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
               fontWeight: "500",
             }}
           >
-          Seamlessly plan your next trip with AI planning feature. 
+            Seamlessly plan your next trip with suggested places.
           </Text>
         </View>
       </View>
@@ -289,7 +293,10 @@ export const GetStartedScreen: React.FC<GetStartedProps> = ({ navigation }) => {
             justifyContent: "center",
           }}
           activeOpacity={0.7}
-          onPress={() => navigation.navigate("SignIn")}
+          onPress={() => {
+            navigation.navigate("SignIn");
+            setOnboardingSeen(true);
+          }}
         >
           <Text
             style={{

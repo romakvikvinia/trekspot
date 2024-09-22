@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, ScrollView, StyleSheet, SafeAreaView, Platform } from "react-native";
+import { Text, View, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 
 import { MapView } from "./MapView";
 import { COLORS, SIZES } from "../../styles/theme";
@@ -8,8 +8,11 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { HomeRouteStackParamList } from "../../routes/home/HomeRoutes";
 import Constants from "expo-constants";
 import { Territories } from "./Territories";
+import { AttractionsIcon, BeachesIcon, HistoricalPlacesIcon, MarketsIcon, MuseumsIcon, TopExperiencesIcon, TopSights, TopsightsIcon } from "../../utilities/SvgIcons.utility";
 
 type HomeProps = NativeStackScreenProps<HomeRouteStackParamList, "Main">;
+
+const ARR = ['Top Sights', 'Historical Places', 'Museums', 'Outdoor Attractions', 'Markets', 'Top Experiences', 'Beaches']
 
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
   return (
@@ -22,10 +25,56 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
         <MapView
          />
         <View style={styles.mapStats}>
-          <Text style={{ fontSize: 24, fontWeight: "bold", color: "#000" }}>
+          <Text style={styles.cardTitle}>
             Territories
           </Text>
-           <Territories />
+          <Territories />
+        </View>
+        <View style={styles.visitedStats}>
+          <Text style={[styles.cardTitle, {paddingHorizontal: 15, marginBottom: 15}]}>
+            Activities
+          </Text>
+          <ScrollView showsHorizontalScrollIndicator={false} horizontal contentContainerStyle={{paddingHorizontal: 15}}>
+            {
+             ARR.map((category, index) => (
+                <TouchableOpacity
+                  style={styles.statItem}
+                  key={`${category}-${index}`}
+                  activeOpacity={0.7}>
+                   <View style={styles.lf}>
+                    <View style={{height: 40}}>
+                      <Text style={styles.visitedCategoryText}>{category}</Text>
+                    </View>
+                    <View style={styles.categoryIcon}>
+                      {
+                        category === 'Top Sights' && <TopsightsIcon />
+                      }
+                      {
+                        category === 'Museums' && <MuseumsIcon />
+                      }
+                      {
+                        category === 'Historical Places' && <HistoricalPlacesIcon />
+                      }
+                      {
+                        category === 'Outdoor Attractions' && <AttractionsIcon />
+                      }
+                      {
+                        category === 'Markets' && <MarketsIcon />
+                      }
+                      {
+                        category === 'Top Experiences' && <TopExperiencesIcon />
+                      }
+                      {
+                        category === 'Beaches' && <BeachesIcon />
+                      }
+                    </View>
+                   </View>
+                   <Text style={styles.amount}>{index + 23}</Text>
+
+                </TouchableOpacity>
+              ))
+            }
+          </ScrollView>
         </View>
       </ScrollView>
     </View>
@@ -38,6 +87,46 @@ const styles = StyleSheet.create({
     backgroundColor: "#f8f8f8",
     paddingTop:
     Constants?.statusBarHeight + 10
+  },
+  lf: {
+    maxWidth: "80%"
+  },
+  amount: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  categoryIcon: {
+    width: 30,
+    height: 30,
+    backgroundColor: "#fff",
+    borderRadius: 100,
+    marginTop: 20,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  visitedCategoryText: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  statItem: {
+    width: 150,
+    height: 120,
+    backgroundColor: "#fafafa",
+    marginRight: 15,
+    borderRadius: 10,
+    padding: 15,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  cardTitle: {
+    fontSize: 24, 
+    fontWeight: "bold", 
+    color: "#000"
+  },
+  visitedStats: {
+    marginTop: 15,
+    backgroundColor: "#fff",
+    paddingVertical: 20
   },
   countriesAmountText: {
     fontSize: 8,

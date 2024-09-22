@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   Alert,
@@ -244,7 +244,14 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     return combinedArray;
   };
   const combinedArray = combineObjectArrays(data);
- 
+
+  const showUdontHaveActivities = useMemo(() => {
+    if (state) {
+      return state.days[index]?.activities?.length < 1;
+    }
+    return false;
+  }, [state, isTripDetailLoading]);
+  
   const renderScene = ({ route }) => {
     return (
       <ScrollView
@@ -281,7 +288,8 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
               handleTopSightClick={handleTopSightClick}
             />
           ))}
-        {!isTripDetailLoading &&  tripDetail && tripDetail?.trip?.routes[0].activities?.length < 1 ? (
+      
+        {!isTripDetailLoading && showUdontHaveActivities ? (
           <View style={tripDetailStyles.noActivitiesWrapper}>
             <Text
               style={{
