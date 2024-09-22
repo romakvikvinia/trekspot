@@ -6,12 +6,18 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { AppsIcon, CarLinearIcon, DishesIcon, EmergencyLinearIcon, FaqIcon, InsightIcon } from "../../../utilities/SvgIcons.utility";
+import {
+  AppsIcon,
+  CarLinearIcon,
+  DishesIcon,
+  EmergencyLinearIcon,
+  FaqIcon,
+  InsightIcon,
+} from "../../../utilities/SvgIcons.utility";
 
-export const TripHelpers = ({data, iso2}) => {
-
+export const TripHelpers = ({ data, iso2 }) => {
   const navigation = useNavigation();
-
+  console.log("data", data);
   return (
     <View style={styles.bottomRow}>
       <ScrollView
@@ -23,10 +29,12 @@ export const TripHelpers = ({data, iso2}) => {
         <TouchableOpacity
           style={styles.bottomActionsButton}
           activeOpacity={0.7}
-          onPress={() => navigation.navigate("TripInsights",{
-            data: data,
-            iso2: iso2
-          })}
+          onPress={() =>
+            navigation.navigate("TripInsights", {
+              data: data,
+              iso2: iso2,
+            })
+          }
         >
           <InsightIcon size={12} color={"#0b57d0"} />
           <Text style={styles.bottomActionsButtonlabel}>Insights</Text>
@@ -44,9 +52,11 @@ export const TripHelpers = ({data, iso2}) => {
         <TouchableOpacity
           style={styles.bottomActionsButton}
           activeOpacity={0.7}
-          onPress={() => navigation.navigate("TripTransport", {
-            iso2: iso2
-          })}
+          onPress={() =>
+            navigation.navigate("TripTransport", {
+              iso2: iso2,
+            })
+          }
         >
           <AppsIcon size={12} color={"#0b57d0"} />
           <Text style={styles.bottomActionsButtonlabel}>Apps</Text>
@@ -54,9 +64,11 @@ export const TripHelpers = ({data, iso2}) => {
         <TouchableOpacity
           style={styles.bottomActionsButton}
           activeOpacity={0.7}
-          onPress={() => navigation.navigate("TripDishes", {
-            iso2: iso2
-          })}
+          onPress={() =>
+            navigation.navigate("TripDishes", {
+              iso2: iso2,
+            })
+          }
         >
           <DishesIcon size={12} color={"#0b57d0"} />
           <Text style={styles.bottomActionsButtonlabel}>What to eat?</Text>
@@ -64,7 +76,7 @@ export const TripHelpers = ({data, iso2}) => {
         <TouchableOpacity
           style={styles.bottomActionsButton}
           activeOpacity={0.7}
-          onPress={() => navigation.navigate('TripTransportation')}
+          onPress={() => navigation.navigate("TripTransportation")}
         >
           <EmergencyLinearIcon size={12} color={"#0b57d0"} />
           <Text style={styles.bottomActionsButtonlabel}>Emergency</Text>

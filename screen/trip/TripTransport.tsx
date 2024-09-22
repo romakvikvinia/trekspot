@@ -1,5 +1,5 @@
 import {
-    ImageBackground,
+  ImageBackground,
   Linking,
   Platform,
   SafeAreaView,
@@ -18,8 +18,8 @@ import { globalStyles } from "../../styles/globalStyles";
 import { useLazyCountryQuery } from "../../api/api.trekspot";
 import { useEffect } from "react";
 
-export const TripTransport = ({route}) => {
-  console.log("route", route?.params)
+export const TripTransport = ({ route }) => {
+  console.log("route", route?.params);
   const countryId = route?.params?.iso2;
   const navigation = useNavigation();
   const [getCountry, { isLoading, data, isError }] = useLazyCountryQuery();
@@ -28,10 +28,10 @@ export const TripTransport = ({route}) => {
     if (countryId) getCountry({ id: countryId });
   }, [route]);
 
- 
+  console.log("data", data);
   return (
     <SafeAreaView style={styles.safeArea}>
-     <View style={globalStyles.screenHeader}>
+      <View style={globalStyles.screenHeader}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={globalStyles.screenHeaderBackButton}
@@ -40,7 +40,9 @@ export const TripTransport = ({route}) => {
         </TouchableOpacity>
 
         <Text style={globalStyles.screenTitle}>Transport</Text>
-        <TouchableOpacity style={globalStyles.screenHeaderBackButton}></TouchableOpacity>
+        <TouchableOpacity
+          style={globalStyles.screenHeaderBackButton}
+        ></TouchableOpacity>
       </View>
 
       <ScrollView
@@ -48,52 +50,49 @@ export const TripTransport = ({route}) => {
         contentContainerStyle={{ paddingHorizontal: 20 }}
         selectable
       >
-        
-        <Text style={styles.heading}>
-          Helpful apps
-        </Text>
+        <Text style={styles.heading}>Helpful apps</Text>
         <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.transportItem}
-            key={`taxt-${2}`}
-            // onPress={() =>
-            //   Linking.openURL(
-            //     `${Platform.OS === "android" ? item.android : item.ios}`
-            //   )
-            // }
-          >
-            <View style={styles.transportItemIcon}>
-              <ImageBackground
-                source={{
-                  uri: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/90/7f/a6/907fa619-ce8d-32cc-feb4-4a30b0e24816/AppIcon-0-0-1x_U007emarketing-0-7-0-sRGB-85-220.png/246x0w.webp',
-                }}
-                resizeMode="cover"
-                style={{ width: 55, height: 50 }}
-              />
-            </View>
-            <Text style={styles.transportText}>Uber</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.transportItem}
-            key={`taxt-${4}`}
-            // onPress={() =>
-            //   Linking.openURL(
-            //     `${Platform.OS === "android" ? item.android : item.ios}`
-            //   )
-            // }
-          >
-            <View style={styles.transportItemIcon}>
-              <ImageBackground
-                source={{
-                  uri: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/ce/88/d9/ce88d9b4-5794-f849-de84-1986ab9dc09e/AppIcon-0-0-1x_U007emarketing-0-5-0-0-85-220.png/246x0w.webp',
-                }}
-                resizeMode="cover"
-                style={{ width: 55, height: 50 }}
-              />
-            </View>
-            <Text style={styles.transportText}>Yandex</Text>
-          </TouchableOpacity>
+          activeOpacity={0.7}
+          style={styles.transportItem}
+          key={`taxt-${2}`}
+          // onPress={() =>
+          //   Linking.openURL(
+          //     `${Platform.OS === "android" ? item.android : item.ios}`
+          //   )
+          // }
+        >
+          <View style={styles.transportItemIcon}>
+            <ImageBackground
+              source={{
+                uri: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/90/7f/a6/907fa619-ce8d-32cc-feb4-4a30b0e24816/AppIcon-0-0-1x_U007emarketing-0-7-0-sRGB-85-220.png/246x0w.webp",
+              }}
+              resizeMode="cover"
+              style={{ width: 55, height: 50 }}
+            />
+          </View>
+          <Text style={styles.transportText}>Uber</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.transportItem}
+          key={`taxt-${4}`}
+          // onPress={() =>
+          //   Linking.openURL(
+          //     `${Platform.OS === "android" ? item.android : item.ios}`
+          //   )
+          // }
+        >
+          <View style={styles.transportItemIcon}>
+            <ImageBackground
+              source={{
+                uri: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/ce/88/d9/ce88d9b4-5794-f849-de84-1986ab9dc09e/AppIcon-0-0-1x_U007emarketing-0-5-0-0-85-220.png/246x0w.webp",
+              }}
+              resizeMode="cover"
+              style={{ width: 55, height: 50 }}
+            />
+          </View>
+          <Text style={styles.transportText}>Yandex</Text>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
@@ -124,7 +123,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: COLORS.black,
     marginTop: 25,
-     marginBottom: 10
+    marginBottom: 10,
   },
   transportItem: {
     backgroundColor: "#fff",
@@ -133,12 +132,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     overflow: "hidden",
     marginTop: 15,
-    width: "100%"
+    width: "100%",
   },
   transportItemIcon: {
     backgroundColor: "#fff",
     padding: 0,
-    alignItems: "center"
+    alignItems: "center",
   },
   transportText: {
     fontSize: 16,

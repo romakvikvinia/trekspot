@@ -286,13 +286,6 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   > = (props) => {
     const route = props.route as unknown as TripDaysType;
 
-    console.log(
-      "state2->",
-      route
-      // isTripDetailLoading,
-      // showUdontHaveActivities
-    );
-
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
