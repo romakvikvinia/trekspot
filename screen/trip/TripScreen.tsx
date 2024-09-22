@@ -31,7 +31,6 @@ import * as Haptics from "expo-haptics";
 import { AuthContext } from "../../package/context/auth.context";
 import { UserContext } from "../../components/context/UserContext";
 
-
 type TripProps = NativeStackScreenProps<TripRouteStackParamList, "TripsScreen">;
 
 export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
@@ -46,22 +45,26 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
   }, []);
 
   const callBack = useCallback(() => {
+    newTripModal.current?.close();
     fetchDate({});
   }, []);
 
- 
-  const upComingTrips = 
-  (data?.trips
+  const upComingTrips =
+    data?.trips
       .filter((i) => moment(i.endAt).valueOf() > moment().valueOf())
-      .sort((a, b) => moment(a.startAt).valueOf() - moment(b.startAt).valueOf())) || [];
+      .sort(
+        (a, b) => moment(a.startAt).valueOf() - moment(b.startAt).valueOf()
+      ) || [];
 
   const oldTrips =
-      (data?.trips
-          .filter((i) => moment(i.endAt).valueOf() < moment().valueOf())
-          .sort((a, b) => moment(b.startAt).valueOf() - moment(a.startAt).valueOf())) || [];
-  
+    data?.trips
+      .filter((i) => moment(i.endAt).valueOf() < moment().valueOf())
+      .sort(
+        (a, b) => moment(b.startAt).valueOf() - moment(a.startAt).valueOf()
+      ) || [];
+
   const handleCreateNewTrip = () => {
-    if(user?.type === "guest") {
+    if (user?.type === "guest") {
       Alert.alert("To create a new trip, you need to sign in", "", [
         {
           text: "Cancel",
@@ -80,7 +83,6 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
         ? navigation.navigate("NewTripAndroidScreen")
         : newTripModal.current?.open();
     }
-    
   };
 
   return (
@@ -99,11 +101,15 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, paddingHorizontal: 15, paddingTop: 15 }}>
-
-          {
-            isLoading && <View style={{marginTop: 30}}><Loader isLoading={true} background="#F2F2F7" size="small" /></View>
-          }
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ flex: 1, paddingHorizontal: 15, paddingTop: 15 }}
+        >
+          {isLoading && (
+            <View style={{ marginTop: 30 }}>
+              <Loader isLoading={true} background="#F2F2F7" size="small" />
+            </View>
+          )}
 
           {!isLoading &&
             upComingTrips.map((i) => (
@@ -125,8 +131,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
                 You don't have any trip yet
               </Text>
               <Text style={_tripScreenStyles.notFoundViewText}>
-                Click on New trip button and
-                prepare for your next destination
+                Click on New trip button and prepare for your next destination
               </Text>
             </View>
           )}
@@ -137,6 +142,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
 
       <Portal>
         <Modalize
+          closeAnimationConfig={{ timing: { duration: 0 } }}
           ref={newTripModal}
           modalTopOffset={0}
           withHandle={false}

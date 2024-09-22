@@ -31,7 +31,6 @@ export const NewTrip = ({ newTripModalRef, callBack }: INewTripProps) => {
     useCreateTripMutation();
   const [open, setOpen] = useState(false);
   const [whereToModal, setWhereToModal] = useState(false);
-  const [submited, setSubmited] = useState(false);
 
   const modalDestinationRef = useRef<Modalize>(null);
 
@@ -80,19 +79,13 @@ export const NewTrip = ({ newTripModalRef, callBack }: INewTripProps) => {
 
   useEffect(() => {
     if (isSuccess) {
-      console.log("data", data);
-      // newTripModalRef.current?.close();
-      // callBack();
+      callBack();
       navigation.navigate("TripDetailScreen", {
         trip: data.createTrip,
         city: data.createTrip.cities[0],
       });
     }
   }, [isSuccess, callBack]);
-
-  useEffect(() => {
-    setSubmited(false);
-  }, [formik.values]);
 
   return (
     <>
@@ -107,8 +100,6 @@ export const NewTrip = ({ newTripModalRef, callBack }: INewTripProps) => {
           setOpen={setOpen}
           formik={formik}
           onDestinationModalOpen={onDestinationModalOpen}
-          submited={submited}
-          setSubmited={setSubmited}
         />
       </View>
       <RangePicker formik={formik} open={open} setOpen={setOpen} />

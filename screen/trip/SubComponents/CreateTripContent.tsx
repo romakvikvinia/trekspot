@@ -1,8 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
-import { LinearGradient } from "expo-linear-gradient";
 import moment from "moment";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useRef } from "react";
 import {
   ActivityIndicator,
   Platform,
@@ -31,8 +30,6 @@ interface ICreateTripContentProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   formik: any;
   onDestinationModalOpen: () => void;
-  submited: boolean;
-  setSubmited: () => void;
 }
 
 export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
@@ -40,8 +37,6 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
   setOpen,
   onDestinationModalOpen,
   formik,
-  submited,
-  setSubmited
 }) => {
   const navigation = useNavigation();
   const modalTravelTypeRef = useRef<Modalize>(null);
@@ -64,17 +59,11 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
     !formik.values.destination;
 
   const handelSubmit = useCallback(() => {
-    if(!isInValid) {
+    if (!isInValid) {
       formik.submitForm();
-    } else {
-      setSubmited(true)
     }
-   
-  }, [formik]);
+  }, [formik, isInValid]);
 
-
-  
- 
   return (
     <>
       <View style={styles.newTripWrapper}>
@@ -226,7 +215,7 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
               </TouchableOpacity>
             </BlurView>
           </View>
-          {isInValid && submited && (
+          {isInValid && formik.dirty && (
             <Text
               style={{
                 color: "red",

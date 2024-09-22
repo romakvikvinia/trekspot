@@ -123,7 +123,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
 
   useEffect(() => {
     getSights({ iso2: city.iso2, city: city.city });
-  }, []);
+  }, [city]);
 
   const transformDataForDays = useCallback(() => {
     if (!trip) return;
@@ -257,13 +257,6 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   };
   const combinedArray = combineObjectArrays(data);
 
-  const showUdontHaveActivities = useMemo(() => {
-    if (state) {
-      return state.days[index]?.activities?.length < 1;
-    }
-    return false;
-  }, [state, isTripDetailLoading]);
-
   const removeActivity = useCallback(
     (deleteIndexes: { day: number; sight: string; route: string }) => {
       removeActivityFromRoute({
@@ -335,7 +328,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           />
         ))}
 
-        {!isTripDetailLoading && showUdontHaveActivities ? (
+        {!isTripDetailLoading && route?.activities.length === 0 ? (
           <View style={tripDetailStyles.noActivitiesWrapper}>
             <Text
               style={{
@@ -378,16 +371,20 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         iso2={city.iso2}
         tabData={state.days}
       />
-      {isTripDetailLoading ? (
+      {isTripDetailLoading || sightsLoading ? (
         <View
           style={[
             { justifyContent: "center", alignItems: "center", marginTop: 150 },
           ]}
         >
-          <Loader isLoading={isTripDetailLoading} color="" background="" />
+          <Loader
+            isLoading={isTripDetailLoading || sightsLoading}
+            color=""
+            background=""
+          />
         </View>
       ) : (
-        state.days.length && (
+        !!state.days.length && (
           <TabView
             navigationState={navigationState}
             // renderScene={renderScene}
