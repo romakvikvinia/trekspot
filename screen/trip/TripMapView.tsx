@@ -28,6 +28,10 @@ import { SightDetailModal } from "../../components/explore/sights/SightDetailMod
 interface TripProps {}
 
 export const TripMapViewScreen: React.FC<TripProps> = ({route}) => {
+
+  const currentDay = route?.params?.activeDay;
+  const currentTabActivites = route?.params?.tabData;
+
   const mapRef = useRef<any>(null);
   const navigation = useNavigation();
   const [topSightDetail, setTopSightDetail] = useState(null);
@@ -64,7 +68,7 @@ export const TripMapViewScreen: React.FC<TripProps> = ({route}) => {
     });
   }, []);
 
-  console.log("activities",activities)
+  console.log("route?.params?.tabData",route?.params?.tabData, route?.params?.activeDay);
  
   return (
     <>
@@ -104,10 +108,10 @@ export const TripMapViewScreen: React.FC<TripProps> = ({route}) => {
           //  followsUserLocation={true}
           // showsUserLocation={true}
           //customMapStyle={customMapStyle}
-          mapType="standard"
+          mapType="mutedStandard"
           // onSnapToItem={() => alert("ss")}
         >
-          {activities?.map((marker: any, i: any) => {
+          {currentTabActivites[currentDay]?.activities?.map((marker: any, i: any) => {
             return (
               <Marker
                 key={marker.id}
@@ -132,6 +136,21 @@ export const TripMapViewScreen: React.FC<TripProps> = ({route}) => {
                       borderWidth: 0,
                     }}
                     />
+                    <View style={{
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      backgroundColor: COLORS.primary,
+                      width: 25,
+                      height: 25,
+                      borderRadius: 50,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderWidth: 2,
+                      borderColor: "#fff",
+                    }}>
+                      <Text style={{color: '#fff', fontSize: 11, fontWeight: "bold"}}>{i+ 1}</Text>
+                    </View>
                 </View>
                 {/* <Callout style={{ width: 150 }} >
                 <Text

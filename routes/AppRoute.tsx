@@ -29,7 +29,7 @@ export const AppRoute: React.FC<AppRouteProps> = ({}) => {
           keyboardHidesTabBar: true,
           tabBarLabelStyle: {
             fontSize: 10,
-            fontWeight: "500",
+            fontWeight: "600",
           },
           tabBarIcon: ({ focused }: any) => {
             switch (route.name) {
@@ -68,7 +68,7 @@ export const AppRoute: React.FC<AppRouteProps> = ({}) => {
           // tabBarShowLabel: false,
           headerShown: false,
           tabBarStyle: {
-            borderTopColor: "#f6f6f6",
+            borderTopColor: "#f1f1f1",
             borderTopWidth: 1,
             paddingTop: 5,
             backgroundColor: "#fff",

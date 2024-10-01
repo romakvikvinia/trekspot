@@ -18,5 +18,6 @@ export const questionModaStyles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     color: COLORS.black,
+    fontWeight: "500"
   },
 });

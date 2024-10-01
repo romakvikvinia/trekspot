@@ -1,7 +1,6 @@
 import React, {
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -59,6 +58,7 @@ import {
 } from "react-native-tab-view";
 import { Loader } from "../../common/ui/Loader";
 import { useTripStore } from "../../components/store/store";
+import { useNavigation } from "@react-navigation/native";
 
 type TripProps = NativeStackScreenProps<
   TripRouteStackParamList,
@@ -79,6 +79,7 @@ interface IState {
 }
 
 export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
+  const navigation = useNavigation();
   const { trip, city } = route.params;
 
   const layout = useWindowDimensions();
@@ -279,12 +280,28 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     []
   );
 
+  useEffect(() => {
+    navigation.getParent()?.setOptions({
+      tabBarStyle: {
+        display: "none",
+      },
+    });
+    return () => {
+      navigation.getParent()?.setOptions({
+        tabBarStyle: {
+          display: "flex",
+        },
+      });
+    };
+  }, []);
+
   const renderCurrentScene: React.FC<
     SceneRendererProps & {
       route: Route;
     }
   > = (props) => {
     const route = props.route as unknown as TripDaysType;
+
 
     return (
       <ScrollView
@@ -294,7 +311,6 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           paddingBottom: 80,
           paddingLeft: tripStyle && route?.activities?.length > 1 ? 30 : 0,
         }}
-        onLayout={(e) => console.log("e", e.nativeEvent.layout)}
       >
         {route?.activities?.map((itm, activityIndex) => (
           <TripActivityCard
@@ -355,6 +371,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     routes: state.days,
   };
 
+
   return (
     <>
       <Header
@@ -363,6 +380,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         topSights={combinedArray}
         iso2={city.iso2}
         tabData={state.days}
+        activeDay={index}
       />
       {isTripDetailLoading || sightsLoading ? (
         <View

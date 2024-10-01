@@ -12,13 +12,9 @@ export const tripDetailStyles = StyleSheet.create({
     fontWeight: "600"
   },
   circleItem: {
-    width: 20,
-    height: 20,
-    backgroundColor: COLORS.primary,
-    borderRadius: 100,
-    borderColor: "#fff",
-    borderWidth: 3,
     position: "absolute",
+    marginTop: -15,
+    left: -11
   },
   smallCircle: {
     width: 15,
@@ -32,12 +28,12 @@ export const tripDetailStyles = StyleSheet.create({
   verticalLine: {
     borderStyle: "solid",
     borderColor: "#ddd",
-    opacity: 0.5,
     alignItems: "center",
     justifyContent: "center",
     borderLeftWidth: 2,
     position: "absolute",
-    left: -25,
+    left: -35,
+    opacity: 0.7
   },
   addActivityButtonItem :{
     backgroundColor: "#000",

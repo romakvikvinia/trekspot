@@ -4,13 +4,20 @@ import { ImageBackground, Linking, Platform } from "react-native";
 import { Text, TouchableOpacity, View } from "react-native";
 import { COLORS } from "../../styles/theme";
 import {
+  AttractionsIcon,
+  BeachesIcon,
   CheckLiteIcon,
   DotsIcon,
+  HistoricalPlacesIcon,
   LocationPin,
   MapDirection,
   MapIcon,
+  MarketsIcon,
+  MuseumsIcon,
   PinIcon,
   StarIcon,
+  TopExperiencesIcon,
+  TopsightsIcon,
 } from "../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "./_tripDetailStyles";
 import * as Haptics from "expo-haptics";
@@ -27,6 +34,26 @@ interface ITripActivityCardProps {
   lastIndex: number;
   onQuestionModalOpen: (sight: string) => void;
   handleTopSightClick: (sight: SightType) => void;
+}
+
+export const ReturnIcon = ({category}) => { 
+  console.log(category)
+  switch (category) {
+    case "Top sights":
+      return <TopsightsIcon color="" size={20} />;
+    case "Museums":
+      return <MuseumsIcon color="" size={20} />;
+    case "Historical places":
+      return <HistoricalPlacesIcon color="" size={20} />;
+    case "Outdoor attractions":
+      return <AttractionsIcon color="" size={20} />;
+    case "Markets":
+      return <MarketsIcon color="" size={20} />;
+    case "Top experiences":
+      return <TopExperiencesIcon color="" size={20} />;
+    case "Beaches":
+      return <BeachesIcon color="" size={20} />;
+  }
 }
 
 export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
@@ -57,7 +84,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
 
     Linking.openURL(url!);
   };
-
+  
   const handleChangeActivityVisited = useCallback(() => {
     setCheckedIn(!checkedIn);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -79,7 +106,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
             {
               flexDirection: "column",
               padding: 0,
-              marginLeft: 15,
+              marginLeft: 25,
               marginRight: 15,
               marginBottom: 15,
               paddingBottom: 0,
@@ -116,11 +143,15 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
                       top: 0,
                     },
                   ]}
-                ></View>
+                >
+                  <ReturnIcon category={item?.category} />
+                </View>
               )}
 
               {index !== 0 && index !== lastIndex && (
-                <View style={tripDetailStyles.smallCircle}></View>
+                <View style={tripDetailStyles.circleItem}>
+                  <ReturnIcon category={item?.category} />
+                </View>
               )}
               {index === lastIndex && (
                 <View
@@ -130,7 +161,9 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
                       bottom: 0,
                     },
                   ]}
-                ></View>
+                >
+                  <ReturnIcon category={item?.category} />
+                </View>
               )}
             </View>
           )}
@@ -152,8 +185,8 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
               style={[
                 tripDetailStyles.imagesWrapper,
                 {
-                  width: 80,
-                  height: 80,
+                  width: 70,
+                  height: 70,
                 },
               ]}
             >
@@ -162,8 +195,8 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
                   style={[
                     tripDetailStyles.mainImage,
                     {
-                      width: 80,
-                      height: 80,
+                      width: 70,
+                      height: 70,
                     },
                   ]}
                   contentFit="cover"

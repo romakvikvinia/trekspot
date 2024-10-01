@@ -1,6 +1,7 @@
 import React, { useContext, useRef } from "react";
 import {
   Alert,
+  Linking,
   Platform,
   ScrollView,
   StyleSheet,
@@ -172,6 +173,7 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
                 },
               ]}
               activeOpacity={0.7}
+              onPress={() => Linking.openURL("https://www.facebook.com/trekspot.io")}
             >
               <FacebookLinear color="" size="" />
               <Text
@@ -189,6 +191,7 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
             <TouchableOpacity
               style={[styles.button, { marginBottom: 0 }]}
               activeOpacity={0.7}
+              onPress={() => Linking.openURL("https://www.instagram.com/trekspot.io/")}
             >
               <InstagramLinear color="" size="" />
               <Text style={styles.buttonText}>Follow us on Instagram</Text>
@@ -196,6 +199,7 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
             <TouchableOpacity
               style={[styles.button, { marginBottom: 0 }]}
               activeOpacity={0.7}
+              onPress={() => Linking.openURL("https://www.threads.net/@trekspot.io")}
             >
               <ThreadsLinear color="" size="" />
               <Text style={styles.buttonText}>Follow us on Threads</Text>
@@ -203,6 +207,7 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
             <TouchableOpacity
               style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]}
               activeOpacity={0.7}
+              onPress={() => Linking.openURL("https://www.tiktok.com/@trekspot.io")}
             >
               <TiktokLinear color="" size="" />
               <Text style={styles.buttonText}>Follow us on Tiktok</Text>

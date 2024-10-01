@@ -26,6 +26,7 @@ export const Header = ({
   topSights,
   iso2,
   tabData,
+  activeDay
 }) => {
   const navigation = useNavigation();
   const { tripStyle } = useTripStore((state) => ({
@@ -52,6 +53,7 @@ export const Header = ({
               navigation.navigate("TripMapViewScreen", {
                 tabData,
                 city: data?.cities[0],
+                activeDay: activeDay
               })
             }
             activeOpacity={0.7}
@@ -83,6 +85,7 @@ export const Header = ({
                   top: 0,
                   width: 35,
                   height: 35,
+                  left: 15,
                   alignItems: "flex-start",
                   marginLeft: 0,
                   backgroundColor: "#eee",
@@ -138,6 +141,7 @@ export const Header = ({
                 navigation.navigate("TripMapViewScreen", {
                   tabData,
                   city: data?.cities[0],
+                  activeDay: activeDay
                 })
               }
               activeOpacity={0.7}
@@ -149,6 +153,7 @@ export const Header = ({
                   width: 35,
                   height: 35,
                   backgroundColor: "#eee",
+                  right: 15,
                 },
               ]}
             >
@@ -165,7 +170,8 @@ export const Header = ({
                   width: 35,
                   height: 35,
                   backgroundColor: "#eee",
-                  marginLeft: 10
+                  marginLeft: 10,
+                  right: 15
                 },
               ]}
             >

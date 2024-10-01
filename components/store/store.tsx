@@ -6,7 +6,7 @@ export const useTripStore = create(
   persist(
     set => ({
       onboardingSeen: false,
-      tripStyle: false,
+      tripStyle: true,
       setTripStyle: tripStyle => set({ tripStyle }),
       setOnboardingSeen: onboardingSeen => set({ onboardingSeen }),
     }),
