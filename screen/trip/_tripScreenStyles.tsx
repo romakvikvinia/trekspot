@@ -8,6 +8,34 @@ export const _tripScreenStyles = StyleSheet.create({
     backgroundColor: "#F2F2F7",
     paddingTop: Constants?.statusBarHeight + 10,
   },
+  tabSwitchersWrapper: {
+    marginVertical: 15,
+  },
+  tabSwitchers: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    marginLeft: 15,
+    marginRight: 15,
+    backgroundColor: "#fff",
+    borderRadius: 50,
+    height: 50,
+  },
+  tabSwitcher: {
+    width: "49%",
+    padding: 15,
+    // backgroundColor: "#fff",
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+  },
+  tabSwitcherText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: COLORS.black,
+  },
   typeTag: {
     backgroundColor: "rgba(0,0,0, 0.4)",
     borderRadius: 55,
@@ -528,7 +556,7 @@ export const _tripScreenStyles = StyleSheet.create({
     color: COLORS.black,
   },
   newTripButton: {
-    backgroundColor: COLORS.primaryDark,
+    // backgroundColor: COLORS.primaryDark,
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 50,
@@ -536,8 +564,8 @@ export const _tripScreenStyles = StyleSheet.create({
     alignItems: "center",
   },
   newTripButtonText: {
-    color: "#fff",
+    color: COLORS.primary,
     fontWeight: "600",
-    fontSize: 14,
+    fontSize: 16,
   },
 });

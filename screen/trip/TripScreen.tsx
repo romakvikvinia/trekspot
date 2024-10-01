@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { SIZES } from "../../styles/theme";
+import { COLORS, SIZES } from "../../styles/theme";
 import { enGB, registerTranslation } from "react-native-paper-dates";
 registerTranslation("en", enGB);
 import { _tripScreenStyles } from "./_tripScreenStyles";
@@ -37,6 +37,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
   const newTripModal = useRef<Modalize>(null);
   const { signOut } = useContext(AuthContext);
   const { user } = useContext(UserContext);
+  const [tripType, setTripType] = React.useState("upcoming");
 
   const [fetchDate, { data, isLoading, isError }] = useLazyMyTripsQuery();
 
@@ -96,13 +97,37 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
             activeOpacity={0.7}
             onPress={handleCreateNewTrip}
           >
-            <PlusIcon color="" size="20" />
+            <PlusIcon color={COLORS.primary} size="20" />
             <Text style={_tripScreenStyles.newTripButtonText}>New trip</Text>
           </TouchableOpacity>
         </View>
 
+        <View style={_tripScreenStyles.tabSwitchersWrapper}>
+          <View style={_tripScreenStyles.tabSwitchers}>
+            <TouchableOpacity style={[_tripScreenStyles.tabSwitcher, {
+              backgroundColor: tripType === "upcoming" ? "#F2F2F7" : "white",
+              marginLeft: 1
+            }]}
+              onPress={() => setTripType("upcoming")}
+            >
+              <Text style={_tripScreenStyles.tabSwitcherText}>Upcoming trips</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              onPress={() => setTripType("past")}
+            style={[_tripScreenStyles.tabSwitcher,{
+              backgroundColor: tripType === "past" ? "#F2F2F7" : "white",
+              marginRight: 1
+            }]}>
+              <Text style={_tripScreenStyles.tabSwitcherText}>Past trips</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
         <ScrollView
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: 30,
+          }}
           style={{ flex: 1, paddingHorizontal: 15, paddingTop: 15 }}
         >
           {isLoading && (
@@ -111,14 +136,13 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
             </View>
           )}
 
-          {!isLoading &&
+          {!isLoading && tripType === "upcoming" &&
             upComingTrips.map((i) => (
               <TripItem key={`trip-${i.id}`} item={i} />
             ))}
 
-          {!isLoading && oldTrips?.length > 0 && (
+          {!isLoading && tripType === "past" && oldTrips?.length > 0 && (
             <>
-              <Text style={_tripScreenStyles.headingTitle}>Past trips</Text>
               {!isLoading &&
                 oldTrips.map((i) => <TripItem key={`trip-${i.id}`} item={i} />)}
             </>

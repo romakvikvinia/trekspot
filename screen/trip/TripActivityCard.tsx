@@ -128,7 +128,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
                   height: index === 0 || lastIndex === index ? 105 : 167,
                   top:
                     index !== 0 && index !== lastIndex
-                      ? 0
+                      ? -10
                       : index === lastIndex
                       ? -20
                       : 60,
