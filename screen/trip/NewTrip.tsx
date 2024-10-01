@@ -17,6 +17,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
 import { creationTrip } from "../auth/validationScheme";
+import { format, parseISO } from "date-fns";
 
 interface INewTripProps {
   newTripModalRef: React.RefObject<IHandles>;
@@ -45,12 +46,29 @@ export const NewTrip = ({ newTripModalRef, callBack }: INewTripProps) => {
     validationSchema: creationTrip,
     onSubmit: async ({ name, range, travelType, cities }, methods) => {
       methods.setSubmitting(true);
+      //@ts-ignore
+      const startDate = range["startDate"]
+        .toLocaleDateString()
+        .split("/")
+        .reverse();
+      //@ts-ignore
+      const endDate = range["endDate"]
+        .toLocaleDateString()
+        .split("/")
+        .reverse();
+
       fetchData({
         name,
-        //@ts-ignore
-        startAt: range["startDate"],
-        //@ts-ignore
-        endAt: range["endDate"],
+
+        startAt: format(
+          new Date(startDate[0], startDate[2] - 1, startDate[1]),
+          "yyyy-MM-dd"
+        ),
+
+        endAt: format(
+          new Date(endDate[0], endDate[2] - 1, endDate[1]),
+          "yyyy-MM-dd"
+        ),
         type: travelType.toUpperCase(),
         cities,
       });

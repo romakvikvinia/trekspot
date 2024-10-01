@@ -11,14 +11,15 @@ export const RangePicker = ({ setOpen, open, formik }) => {
   const onConfirm = React.useCallback(
     ({ startDate, endDate }) => {
       setOpen(false);
+
       formik.setFieldValue("range", {
-        startDate, endDate
-      })
-      
+        startDate,
+        endDate,
+      });
     },
     [setOpen]
   );
- 
+
   return (
     <SafeAreaProvider>
       <View

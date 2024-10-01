@@ -40,7 +40,7 @@ export const TripItem: React.FC<ITripItemProps> = ({ item }) => {
   const onQuestionModalOpen = () => {
     modalQuestionRef?.current?.open();
   };
- 
+
   const city = item.cities[0];
 
   return (
@@ -138,7 +138,7 @@ export const TripItem: React.FC<ITripItemProps> = ({ item }) => {
                     <View style={_tripScreenStyles.tripInHeader}>
                       <Text style={_tripScreenStyles.tripDate}>
                         {moment(item.startAt).format("DD MMM")} →{" "}
-                        {moment(item.endAt).format("DD MMM")}
+                        {moment(item.endAt).startOf("day").format("DD MMM")}
                       </Text>
                     </View>
                     <Text style={_tripScreenStyles.tripTitle}>
@@ -167,11 +167,12 @@ export const TripItem: React.FC<ITripItemProps> = ({ item }) => {
                     <Text style={_tripScreenStyles.typeTagText}>
                       {item.type.toLowerCase()}
                     </Text>
-
                   </View>
                   <View style={_tripScreenStyles.tripLocation}>
                     <LocationPin width="10" color="#ececec" />
-                    <Text style={_tripScreenStyles.tripLocationText}>{item?.cities[0].city}</Text>
+                    <Text style={_tripScreenStyles.tripLocationText}>
+                      {item?.cities[0].city}
+                    </Text>
                   </View>
                 </View>
               </LinearGradient>
