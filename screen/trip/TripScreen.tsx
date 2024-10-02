@@ -13,8 +13,10 @@ registerTranslation("en", enGB);
 import { _tripScreenStyles } from "./_tripScreenStyles";
 
 import {
+  EditIcon,
   NoDestinationFoundIcon,
   PlusIcon,
+  TrashIcon,
 } from "../../utilities/SvgIcons.utility";
 
 import { Portal } from "react-native-portalize";
@@ -24,22 +26,45 @@ import { NewTrip } from "./NewTrip";
 import { TripItem } from "./TripItem";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
-import { useLazyMyTripsQuery } from "../../api/api.trekspot";
+import {
+  trekSpotApi,
+  useDeleteTripMutation,
+  useLazyMyTripsQuery,
+} from "../../api/api.trekspot";
 import moment from "moment";
 import { Loader } from "../../common/ui/Loader";
 import * as Haptics from "expo-haptics";
 import { AuthContext } from "../../package/context/auth.context";
 import { UserContext } from "../../components/context/UserContext";
+import { TrekSneckBar } from "../../common/components/TrekSneckBar";
+import { PaperProvider } from "react-native-paper";
+import { useDispatch } from "react-redux";
+
+// action modal
+import { QuestionModal } from "../../common/components/QuestionModal";
+import { questionModaStyles } from "../../styles/questionModaStyles";
 
 type TripProps = NativeStackScreenProps<TripRouteStackParamList, "TripsScreen">;
 
+interface IState {
+  selectedTrip: string;
+}
+
 export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
   const newTripModal = useRef<Modalize>(null);
+  const modalQuestionRef = useRef<Modalize>(null);
+  const dispatch = useDispatch();
   const { signOut } = useContext(AuthContext);
   const { user } = useContext(UserContext);
+  const [state, setState] = React.useState<IState>({ selectedTrip: "" });
   const [tripType, setTripType] = React.useState("upcoming");
 
   const [fetchDate, { data, isLoading, isError }] = useLazyMyTripsQuery();
+
+  const [
+    fetchDeleteTrip,
+    { isLoading: isDeleteTripLoading, isSuccess: isTripSuccessfullyDeleted },
+  ] = useDeleteTripMutation();
 
   useEffect(() => {
     fetchDate({});
@@ -86,8 +111,26 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
     }
   };
 
+  const handleOpenContextMenu = useCallback(
+    (selectedTrip: string) => {
+      setState((prevState) => ({ ...prevState, selectedTrip }));
+      modalQuestionRef.current?.open();
+    },
+    [modalQuestionRef]
+  );
+
+  const handelDeleteTrip = useCallback(() => {
+    fetchDeleteTrip({ id: state.selectedTrip });
+  }, [state.selectedTrip]);
+
+  useEffect(() => {
+    if (isTripSuccessfullyDeleted) {
+      dispatch(trekSpotApi.util.invalidateTags(["myTrips"]));
+    }
+  }, [isTripSuccessfullyDeleted, dispatch]);
+
   return (
-    <>
+    <PaperProvider>
       <View style={_tripScreenStyles.safeArea}>
         <View style={_tripScreenStyles.header}>
           <Text style={_tripScreenStyles.myTripsText}>Trips</Text>
@@ -104,20 +147,31 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
 
         <View style={_tripScreenStyles.tabSwitchersWrapper}>
           <View style={_tripScreenStyles.tabSwitchers}>
-            <TouchableOpacity style={[_tripScreenStyles.tabSwitcher, {
-              backgroundColor: tripType === "upcoming" ? "#F2F2F7" : "white",
-              marginLeft: 1
-            }]}
+            <TouchableOpacity
+              style={[
+                _tripScreenStyles.tabSwitcher,
+                {
+                  backgroundColor:
+                    tripType === "upcoming" ? "#F2F2F7" : "white",
+                  marginLeft: 1,
+                },
+              ]}
               onPress={() => setTripType("upcoming")}
             >
-              <Text style={_tripScreenStyles.tabSwitcherText}>Upcoming trips</Text>
+              <Text style={_tripScreenStyles.tabSwitcherText}>
+                Upcoming trips
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => setTripType("past")}
-            style={[_tripScreenStyles.tabSwitcher,{
-              backgroundColor: tripType === "past" ? "#F2F2F7" : "white",
-              marginRight: 1
-            }]}>
+              style={[
+                _tripScreenStyles.tabSwitcher,
+                {
+                  backgroundColor: tripType === "past" ? "#F2F2F7" : "white",
+                  marginRight: 1,
+                },
+              ]}
+            >
               <Text style={_tripScreenStyles.tabSwitcherText}>Past trips</Text>
             </TouchableOpacity>
           </View>
@@ -136,15 +190,26 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
             </View>
           )}
 
-          {!isLoading && tripType === "upcoming" &&
+          {!isLoading &&
+            tripType === "upcoming" &&
             upComingTrips.map((i) => (
-              <TripItem key={`trip-${i.id}`} item={i} />
+              <TripItem
+                key={`trip-${i.id}`}
+                item={i}
+                onContextMenu={() => handleOpenContextMenu(i.id)}
+              />
             ))}
 
           {!isLoading && tripType === "past" && oldTrips?.length > 0 && (
             <>
               {!isLoading &&
-                oldTrips.map((i) => <TripItem key={`trip-${i.id}`} item={i} />)}
+                oldTrips.map((i) => (
+                  <TripItem
+                    key={`trip-${i.id}`}
+                    item={i}
+                    onContextMenu={() => handleOpenContextMenu(i.id)}
+                  />
+                ))}
             </>
           )}
 
@@ -159,6 +224,10 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
               </Text>
             </View>
           )}
+          <TrekSneckBar
+            isVisible={isTripSuccessfullyDeleted}
+            message="Trip deleted successfully"
+          />
         </ScrollView>
       </View>
 
@@ -182,6 +251,68 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
           <NewTrip newTripModalRef={newTripModal} callBack={callBack} />
         </Modalize>
       </Portal>
-    </>
+
+      {/* Actions modal */}
+
+      <Portal>
+        <Modalize
+          ref={modalQuestionRef}
+          modalTopOffset={65}
+          disableScrollIfPossible
+          adjustToContentHeight
+          velocity={100000}
+          tapGestureEnabled={false}
+          closeSnapPointStraightEnabled={false}
+          modalStyle={{
+            backgroundColor: "#F2F2F7",
+            minHeight: "30%",
+          }}
+          scrollViewProps={{
+            showsVerticalScrollIndicator: false,
+          }}
+          onClosed={() =>
+            setState((prevState) => ({ ...prevState, selectedTrip: "" }))
+          }
+        >
+          <QuestionModal modalQuestionRef={modalQuestionRef} title="Action">
+            <View style={questionModaStyles.buttonGroup}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={[questionModaStyles.button]}
+              >
+                <Text style={questionModaStyles.buttonText}>Edit</Text>
+                <EditIcon size="15" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() =>
+                  Alert.alert("Do you really want to delete activity?", "", [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel",
+                    },
+                    {
+                      text: "Delete",
+                      onPress: () => {
+                        handelDeleteTrip();
+                        modalQuestionRef.current?.close();
+                      },
+                      style: "destructive",
+                    },
+                  ])
+                }
+                style={[questionModaStyles.button, { borderBottomWidth: 0 }]}
+              >
+                <Text style={[questionModaStyles.buttonText, { color: "red" }]}>
+                  Delete
+                </Text>
+                <TrashIcon size="15" />
+              </TouchableOpacity>
+            </View>
+          </QuestionModal>
+        </Modalize>
+      </Portal>
+    </PaperProvider>
   );
 };

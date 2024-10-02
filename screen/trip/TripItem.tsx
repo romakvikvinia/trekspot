@@ -3,22 +3,16 @@ import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import {
-  Alert,
   ImageBackground,
   Platform,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { Modalize } from "react-native-modalize";
-import { Portal } from "react-native-portalize";
-import { QuestionModal } from "../../common/components/QuestionModal";
-import { questionModaStyles } from "../../styles/questionModaStyles";
+
 import {
   DotsIcon,
-  EditIcon,
   LocationPin,
-  TrashIcon,
   UsersIcon,
 } from "../../utilities/SvgIcons.utility";
 import { _tripScreenStyles } from "./_tripScreenStyles";
@@ -29,17 +23,13 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 interface ITripItemProps {
   item: TripType;
+  onContextMenu: () => void;
 }
 
 type TripStackNavigationProp = StackNavigationProp<TripRouteStackParamList>;
 
-export const TripItem: React.FC<ITripItemProps> = ({ item }) => {
+export const TripItem: React.FC<ITripItemProps> = ({ item, onContextMenu }) => {
   const navigation = useNavigation<TripStackNavigationProp>();
-  const modalQuestionRef = useRef<Modalize>(null);
-
-  const onQuestionModalOpen = () => {
-    modalQuestionRef?.current?.open();
-  };
 
   const city = item.cities[0];
 
@@ -85,7 +75,7 @@ export const TripItem: React.FC<ITripItemProps> = ({ item }) => {
                       {item?.name}
                     </Text>
                   </View>
-                  <TouchableOpacity onPress={() => onQuestionModalOpen()}>
+                  <TouchableOpacity onPress={onContextMenu}>
                     <DotsIcon color="#fff" />
                   </TouchableOpacity>
                 </View>
@@ -145,7 +135,7 @@ export const TripItem: React.FC<ITripItemProps> = ({ item }) => {
                       {item?.name}
                     </Text>
                   </View>
-                  <TouchableOpacity onPress={() => onQuestionModalOpen()}>
+                  <TouchableOpacity onPress={onContextMenu}>
                     <DotsIcon color="#fff" />
                   </TouchableOpacity>
                 </View>
@@ -180,60 +170,6 @@ export const TripItem: React.FC<ITripItemProps> = ({ item }) => {
           )}
         </TouchableOpacity>
       </View>
-
-      <Portal>
-        <Modalize
-          ref={modalQuestionRef}
-          modalTopOffset={65}
-          disableScrollIfPossible
-          adjustToContentHeight
-          velocity={100000}
-          tapGestureEnabled={false}
-          closeSnapPointStraightEnabled={false}
-          modalStyle={{
-            backgroundColor: "#F2F2F7",
-            minHeight: "30%",
-          }}
-          scrollViewProps={{
-            showsVerticalScrollIndicator: false,
-          }}
-        >
-          <QuestionModal modalQuestionRef={modalQuestionRef} title="Action">
-            <View style={questionModaStyles.buttonGroup}>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={[questionModaStyles.button]}
-              >
-                <Text style={questionModaStyles.buttonText}>Edit</Text>
-                <EditIcon size="15" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() =>
-                  Alert.alert("Do you really want to delete activity?", "", [
-                    {
-                      text: "Cancel",
-                      onPress: () => console.log("Cancel Pressed"),
-                      style: "cancel",
-                    },
-                    {
-                      text: "Delete",
-                      onPress: () => console.log("OK Pressed"),
-                      style: "destructive",
-                    },
-                  ])
-                }
-                style={[questionModaStyles.button, { borderBottomWidth: 0 }]}
-              >
-                <Text style={[questionModaStyles.buttonText, { color: "red" }]}>
-                  Delete
-                </Text>
-                <TrashIcon size="15" />
-              </TouchableOpacity>
-            </View>
-          </QuestionModal>
-        </Modalize>
-      </Portal>
     </>
   );
 };

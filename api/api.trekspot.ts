@@ -51,6 +51,8 @@ import {
   RemoveActivityFromRouteArgsType,
   ChangeActivityVisitedResponseType,
   ChangeActivityVisitedArgsType,
+  DeleteTripResponseType,
+  DeleteTripArgsType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -102,6 +104,8 @@ export const trekSpotApi = createApi({
     "getSights",
     "removeActivityFromRoute",
     "changeActivityVisited",
+    "myTrips",
+    "deleteTrip",
   ],
   endpoints: (builder) => ({
     /**
@@ -854,6 +858,7 @@ export const trekSpotApi = createApi({
           }
         `,
       }),
+      providesTags: ["myTrips"],
     }),
     /**
      * topics
@@ -1095,6 +1100,26 @@ export const trekSpotApi = createApi({
         error ? [] : ["changeActivityVisited"],
     }),
 
+    // delete trip
+    deleteTrip: builder.mutation<DeleteTripResponseType, DeleteTripArgsType>({
+      query: ({ id }) => {
+        return {
+          variables: { id },
+          document: gql`
+            mutation ($id: ID!) {
+              removeTrip(input: { id: $id }) {
+                id
+              }
+            }
+          `,
+        };
+      },
+      transformResponse: (response: DeleteTripResponseType) => {
+        return response;
+      },
+      invalidatesTags: (result, error) => (error ? [] : ["deleteTrip"]),
+    }),
+
     //
   }),
 });
@@ -1129,4 +1154,5 @@ export const {
   useUpdateTripRouteAndActivitiesMutation,
   useRemoveActivityFromRouteMutation,
   useChangeActivityVisitedMutation,
+  useDeleteTripMutation,
 } = trekSpotApi;
