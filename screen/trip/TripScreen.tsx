@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useRef } from "react";
 import {
   Alert,
   Platform,
@@ -86,6 +86,24 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
     }
   };
 
+  const showNotFound = useMemo(() => {
+
+    if (isLoading) {
+      return false;
+    }
+
+    if (tripType === "upcoming") {
+      return upComingTrips.length === 0;
+    }
+
+    if (tripType === "past") {
+      return oldTrips.length === 0;
+    }
+
+    return true;
+
+  }, [oldTrips, isLoading, upComingTrips]);
+
   return (
     <>
       <View style={_tripScreenStyles.safeArea}>
@@ -105,7 +123,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
         <View style={_tripScreenStyles.tabSwitchersWrapper}>
           <View style={_tripScreenStyles.tabSwitchers}>
             <TouchableOpacity style={[_tripScreenStyles.tabSwitcher, {
-              backgroundColor: tripType === "upcoming" ? "#F2F2F7" : "white",
+              backgroundColor: tripType === "upcoming" ? "#dddde4" : "white",
               marginLeft: 1
             }]}
               onPress={() => setTripType("upcoming")}
@@ -148,7 +166,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
             </>
           )}
 
-          {!isLoading && !data?.trips.length && (
+          {showNotFound && (
             <View style={_tripScreenStyles.notFoundView}>
               <NoDestinationFoundIcon />
               <Text style={_tripScreenStyles.notFoundViewTitleText}>

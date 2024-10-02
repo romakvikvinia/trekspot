@@ -9,7 +9,8 @@ export const _tripScreenStyles = StyleSheet.create({
     paddingTop: Constants?.statusBarHeight + 10,
   },
   tabSwitchersWrapper: {
-    marginVertical: 15,
+    marginTop: 5,
+    marginBottom: 10
   },
   tabSwitchers: {
     display: "flex",
