@@ -43,20 +43,21 @@ import { useDispatch } from "react-redux";
 // action modal
 import { QuestionModal } from "../../common/components/QuestionModal";
 import { questionModaStyles } from "../../styles/questionModaStyles";
+import { TripType } from "../../api/api.types";
 
 type TripProps = NativeStackScreenProps<TripRouteStackParamList, "TripsScreen">;
 
 interface IState {
-  selectedTrip: string;
+  trip?: TripType;
 }
 
 export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
-  const newTripModal = useRef<Modalize>(null);
+  const createOrUpdateTripModal = useRef<Modalize>(null);
   const modalQuestionRef = useRef<Modalize>(null);
   const dispatch = useDispatch();
   const { signOut } = useContext(AuthContext);
   const { user } = useContext(UserContext);
-  const [state, setState] = React.useState<IState>({ selectedTrip: "" });
+  const [state, setState] = React.useState<IState>({ trip: undefined });
   const [tripType, setTripType] = React.useState("upcoming");
 
   const [fetchDate, { data, isLoading, isError }] = useLazyMyTripsQuery();
@@ -71,7 +72,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
   }, []);
 
   const callBack = useCallback(() => {
-    newTripModal.current?.close();
+    createOrUpdateTripModal.current?.close();
     fetchDate({});
   }, []);
 
@@ -107,21 +108,21 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       Platform.OS === "android"
         ? navigation.navigate("NewTripAndroidScreen")
-        : newTripModal.current?.open();
+        : createOrUpdateTripModal.current?.open();
     }
   };
 
   const handleOpenContextMenu = useCallback(
-    (selectedTrip: string) => {
-      setState((prevState) => ({ ...prevState, selectedTrip }));
+    (trip: TripType) => {
+      setState((prevState) => ({ ...prevState, trip }));
       modalQuestionRef.current?.open();
     },
     [modalQuestionRef]
   );
 
   const handelDeleteTrip = useCallback(() => {
-    fetchDeleteTrip({ id: state.selectedTrip });
-  }, [state.selectedTrip]);
+    if (state.trip) fetchDeleteTrip({ id: state.trip?.id });
+  }, [state.trip]);
 
   useEffect(() => {
     if (isTripSuccessfullyDeleted) {
@@ -196,7 +197,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
               <TripItem
                 key={`trip-${i.id}`}
                 item={i}
-                onContextMenu={() => handleOpenContextMenu(i.id)}
+                onContextMenu={() => handleOpenContextMenu(i)}
               />
             ))}
 
@@ -207,7 +208,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
                   <TripItem
                     key={`trip-${i.id}`}
                     item={i}
-                    onContextMenu={() => handleOpenContextMenu(i.id)}
+                    onContextMenu={() => handleOpenContextMenu(i)}
                   />
                 ))}
             </>
@@ -236,7 +237,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
       <Portal>
         <Modalize
           closeAnimationConfig={{ timing: { duration: 0 } }}
-          ref={newTripModal}
+          ref={createOrUpdateTripModal}
           modalTopOffset={0}
           withHandle={false}
           scrollViewProps={{
@@ -248,7 +249,11 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
           }}
           modalHeight={SIZES.height}
         >
-          <NewTrip newTripModalRef={newTripModal} callBack={callBack} />
+          <NewTrip
+            newTripModalRef={createOrUpdateTripModal}
+            callBack={callBack}
+            item={state.trip}
+          />
         </Modalize>
       </Portal>
 
@@ -279,6 +284,10 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
               <TouchableOpacity
                 activeOpacity={0.7}
                 style={[questionModaStyles.button]}
+                onPress={() => {
+                  modalQuestionRef.current?.close();
+                  createOrUpdateTripModal.current?.open();
+                }}
               >
                 <Text style={questionModaStyles.buttonText}>Edit</Text>
                 <EditIcon size="15" />

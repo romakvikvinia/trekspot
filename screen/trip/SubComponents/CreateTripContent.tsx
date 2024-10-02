@@ -26,6 +26,7 @@ import { IHandles } from "react-native-modalize/lib/options";
 import * as Haptics from "expo-haptics";
 
 interface ICreateTripContentProps {
+  isLoading: boolean;
   newTripModalRef: React.RefObject<IHandles>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   formik: any;
@@ -33,6 +34,7 @@ interface ICreateTripContentProps {
 }
 
 export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
+  isLoading,
   newTripModalRef,
   setOpen,
   onDestinationModalOpen,
@@ -273,7 +275,7 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
             disabled={formik.isSubmitting}
             onPress={handelSubmit}
           >
-            {formik.isSubmitting && <ActivityIndicator />}
+            {isLoading && <ActivityIndicator />}
             <Text style={[styles.manualPlanButtonText, { marginLeft: 8 }]}>
               Create trip
             </Text>

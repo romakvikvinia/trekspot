@@ -477,3 +477,16 @@ export type DeleteTripResponseType = {
 export type DeleteTripArgsType = {
   id: string;
 };
+
+export type UpdateTripResponseType = {
+  updateTrip: TripType;
+};
+
+export type UpdateTripArgsType = {
+  id: string;
+  name: string;
+  startAt: string;
+  endAt: string;
+  type: string;
+  cities: string[];
+};
