@@ -51,6 +51,10 @@ import {
   RemoveActivityFromRouteArgsType,
   ChangeActivityVisitedResponseType,
   ChangeActivityVisitedArgsType,
+  DeleteTripResponseType,
+  DeleteTripArgsType,
+  UpdateTripResponseType,
+  UpdateTripArgsType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -102,6 +106,9 @@ export const trekSpotApi = createApi({
     "getSights",
     "removeActivityFromRoute",
     "changeActivityVisited",
+    "myTrips",
+    "deleteTrip",
+    "updateTrip",
   ],
   endpoints: (builder) => ({
     /**
@@ -854,6 +861,7 @@ export const trekSpotApi = createApi({
           }
         `,
       }),
+      providesTags: ["myTrips"],
     }),
     /**
      * topics
@@ -1095,6 +1103,74 @@ export const trekSpotApi = createApi({
         error ? [] : ["changeActivityVisited"],
     }),
 
+    // delete trip
+    updateTrip: builder.mutation<UpdateTripResponseType, UpdateTripArgsType>({
+      query: ({ id, name, startAt, endAt, type, cities = [] }) => {
+        return {
+          variables: { id, name, startAt, endAt, type, cities },
+          document: gql`
+            mutation (
+              $id: ID!
+              $name: String
+              $startAt: DateTime
+              $endAt: DateTime
+              $type: TripType
+            ) {
+              updateTrip(
+                input: {
+                  id: $id
+                  name: $name
+                  startAt: $startAt
+                  endAt: $endAt
+                  type: $type
+                }
+              ) {
+                id
+                name
+                startAt
+                endAt
+                type
+                cities {
+                  id
+                  city
+                  iso2
+                  lng
+                  lat
+                  image {
+                    url
+                  }
+                }
+              }
+            }
+          `,
+        };
+      },
+      transformResponse: (response: UpdateTripResponseType) => {
+        return response;
+      },
+      invalidatesTags: (result, error) => (error ? [] : ["updateTrip"]),
+    }),
+
+    // delete trip
+    deleteTrip: builder.mutation<DeleteTripResponseType, DeleteTripArgsType>({
+      query: ({ id }) => {
+        return {
+          variables: { id },
+          document: gql`
+            mutation ($id: ID!) {
+              removeTrip(input: { id: $id }) {
+                id
+              }
+            }
+          `,
+        };
+      },
+      transformResponse: (response: DeleteTripResponseType) => {
+        return response;
+      },
+      invalidatesTags: (result, error) => (error ? [] : ["deleteTrip"]),
+    }),
+
     //
   }),
 });
@@ -1129,4 +1205,6 @@ export const {
   useUpdateTripRouteAndActivitiesMutation,
   useRemoveActivityFromRouteMutation,
   useChangeActivityVisitedMutation,
+  useUpdateTripMutation,
+  useDeleteTripMutation,
 } = trekSpotApi;

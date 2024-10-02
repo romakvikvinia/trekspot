@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { Modal, Platform, View } from "react-native";
 import { Modalize } from "react-native-modalize";
@@ -11,24 +11,39 @@ import { Destination } from "./Destination";
 import { CreateTripContent } from "./SubComponents/CreateTripContent";
 import { styles } from "./SubComponents/CreateTripStyles";
 import { IHandles } from "react-native-modalize/lib/options";
-import { CityType } from "../../api/api.types";
-import { useCreateTripMutation } from "../../api/api.trekspot";
+import { CityType, TripType } from "../../api/api.types";
+import {
+  useCreateTripMutation,
+  useUpdateTripMutation,
+} from "../../api/api.trekspot";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
 import { creationTrip } from "../auth/validationScheme";
+import { format, parseISO } from "date-fns";
 
 interface INewTripProps {
   newTripModalRef: React.RefObject<IHandles>;
   callBack: () => void;
+  item?: TripType;
 }
 
 type TripStackNavigationProp = StackNavigationProp<TripRouteStackParamList>;
 
-export const NewTrip = ({ newTripModalRef, callBack }: INewTripProps) => {
+export const NewTrip = ({ item, newTripModalRef, callBack }: INewTripProps) => {
   const navigation = useNavigation<TripStackNavigationProp>();
   const [fetchData, { isLoading, isError, data, isSuccess }] =
     useCreateTripMutation();
+
+  const [
+    fetchUpdateTrip,
+    {
+      isLoading: isUpdateTripLoading,
+      data: updatedTrip,
+      isSuccess: isUpdatedTripSuccess,
+    },
+  ] = useUpdateTripMutation();
+
   const [open, setOpen] = useState(false);
   const [whereToModal, setWhereToModal] = useState(false);
 
@@ -36,24 +51,50 @@ export const NewTrip = ({ newTripModalRef, callBack }: INewTripProps) => {
 
   const formik = useFormik({
     initialValues: {
-      name: "",
-      range: {},
-      destination: null,
-      travelType: "",
-      cities: [],
+      name: item?.name || "",
+      range: item
+        ? { startDate: parseISO(item.startAt), endDate: parseISO(item.endAt) }
+        : {},
+      destination: (item?.cities && item?.cities[0]) || null,
+      travelType: item?.type || "",
+      cities: item?.cities && item?.cities.length ? [item?.cities[0].id] : [],
     },
     validationSchema: creationTrip,
-    onSubmit: async ({ name, range, travelType, cities }, methods) => {
+    onSubmit: async ({ name, range, travelType, cities = [] }, methods) => {
       methods.setSubmitting(true);
-      fetchData({
+      //@ts-ignore
+      const startDate = range["startDate"]
+        .toLocaleDateString()
+        .split("/")
+        .reverse();
+      //@ts-ignore
+      const endDate = range["endDate"]
+        .toLocaleDateString()
+        .split("/")
+        .reverse();
+
+      const payload = {
         name,
-        //@ts-ignore
-        startAt: range["startDate"],
-        //@ts-ignore
-        endAt: range["endDate"],
+        startAt: format(
+          new Date(+startDate[0], +startDate[2] - 1, +startDate[1]),
+          "yyyy-MM-dd"
+        ),
+        endAt: format(
+          new Date(+endDate[0], +endDate[2] - 1, +endDate[1]),
+          "yyyy-MM-dd"
+        ),
         type: travelType.toUpperCase(),
-        cities,
-      });
+      };
+
+      if (item) {
+        //@ts-ignore
+        fetchUpdateTrip({ id: item.id, ...payload });
+      } else {
+        //@ts-ignore
+        payload.cities = (cities && cities.length && cities) || [];
+        //@ts-ignore
+        fetchData(payload);
+      }
     },
   });
 
@@ -87,6 +128,18 @@ export const NewTrip = ({ newTripModalRef, callBack }: INewTripProps) => {
     }
   }, [isSuccess, callBack]);
 
+  useEffect(() => {
+    if (isUpdatedTripSuccess) {
+      callBack();
+      navigation.navigate("TripDetailScreen", {
+        trip: updatedTrip.updateTrip,
+        city: updatedTrip.updateTrip.cities[0],
+      });
+    }
+  }, [isUpdatedTripSuccess, callBack]);
+
+  console.log("isUpdatedTripSuccess", isUpdatedTripSuccess);
+
   return (
     <>
       <View
@@ -100,6 +153,7 @@ export const NewTrip = ({ newTripModalRef, callBack }: INewTripProps) => {
           setOpen={setOpen}
           formik={formik}
           onDestinationModalOpen={onDestinationModalOpen}
+          isLoading={isUpdateTripLoading || isLoading}
         />
       </View>
       <RangePicker formik={formik} open={open} setOpen={setOpen} />

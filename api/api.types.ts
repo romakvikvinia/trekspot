@@ -460,6 +460,7 @@ export type RemoveActivityFromRouteArgsType = {
   route: string;
   sight: string;
 };
+
 export type ChangeActivityVisitedResponseType = {};
 
 export type ChangeActivityVisitedArgsType = {
@@ -467,4 +468,25 @@ export type ChangeActivityVisitedArgsType = {
   day: number;
   route: string;
   sight: string;
+};
+
+export type DeleteTripResponseType = {
+  removeTrip: TripType;
+};
+
+export type DeleteTripArgsType = {
+  id: string;
+};
+
+export type UpdateTripResponseType = {
+  updateTrip: TripType;
+};
+
+export type UpdateTripArgsType = {
+  id: string;
+  name: string;
+  startAt: string;
+  endAt: string;
+  type: string;
+  cities: string[];
 };
