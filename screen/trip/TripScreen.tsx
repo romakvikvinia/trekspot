@@ -130,6 +130,17 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
     }
   }, [isTripSuccessfullyDeleted, dispatch]);
 
+  const showNotFound = useMemo(() => {
+
+    if (isLoading) return false;
+
+    if (tripType === "upcoming" && upComingTrips.length === 0) return true;
+
+    if (tripType === "past" && oldTrips.length === 0) return true;
+
+    return false;
+  } , [isLoading, tripType, upComingTrips, oldTrips]);
+
   return (
     <PaperProvider>
       <View style={_tripScreenStyles.safeArea}>
@@ -213,10 +224,16 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
             <View style={_tripScreenStyles.notFoundView}>
               <NoDestinationFoundIcon />
               <Text style={_tripScreenStyles.notFoundViewTitleText}>
-                You don't have any trip yet
+               {
+                tripType === "past" ? "No past trips" : "You don't have any trip yet"
+               } 
               </Text>
               <Text style={_tripScreenStyles.notFoundViewText}>
-                Click on New trip button and prepare for your next destination
+                {
+                  tripType === "past" ? "Here you will see all your past trips" : 
+                  "Click on New trip button and prepare for your next destination"
+                }
+                
               </Text>
             </View>
           )}
