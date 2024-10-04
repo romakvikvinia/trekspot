@@ -12,6 +12,7 @@ import { SIZES } from "../../styles/theme";
 import { Platform, Text, TouchableOpacity } from "react-native";
 import Agreement from "../../screen/auth/Agreement";
 import { useTripStore } from "../../components/store/store";
+import { PasswordUpdate } from "../../screen/auth/PasswordUpdate";
 
 interface AuthRouteProps {}
 
@@ -66,6 +67,15 @@ export const AuthRoute: React.FC<AuthRouteProps> = () => {
           gestureResponseDistance:
             Platform.OS === "android" ? 10 : SIZES.width - 50,
         }}
+      />
+       <Stack.Screen
+        name="PasswordUpdate"
+        component={PasswordUpdate}
+        options={({ route, navigation }) => ({
+          headerShown: false,
+          gestureEnabled: true,
+          gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50
+        })}
       />
       <Stack.Screen
         name="ResetPassword"

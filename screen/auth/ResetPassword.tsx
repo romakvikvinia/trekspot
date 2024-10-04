@@ -28,6 +28,7 @@ import { storeToken } from "../../helpers/secure.storage";
 import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
 import { TrekSpotLinear } from "../../utilities/svg/TrekSpotLinear";
+import CodeVerify from "./CodeVerify";
 
 type ResetPasswordScreenProps = NativeStackScreenProps<
   AuthStackParamList,
@@ -41,6 +42,9 @@ export const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({
     useSignInMutation();
   //@ts-ignore
   const { signIn } = useContext(AuthContext);
+
+  const [sentCode, setSentCode] = useState(false);
+  const [codeValue, setCodeValue] = useState("");
 
   const formik = useFormik({
     initialValues: {
@@ -86,6 +90,8 @@ export const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({
     }
   }, [isSuccess, data]);
 
+ 
+
   return (
     <View style={styles.safeArea}>
       <KeyboardAvoidingView
@@ -103,51 +109,83 @@ export const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({
               <TrekSpotLinear />
             </View>
             <View style={styles.signTitle}>
-              <Text style={styles.signTitleText}>
-               Reset password
-              </Text>
-            </View>
-          
-            <View style={[styles.item]}>
-              <TInput
-                invalid={"Email" in formik.errors && "Email" in formik.touched}
-                keyboardType="email-address"
-                placeholder="Email"
-                autoCapitalize="none"
-                returnKeyType="next"
-                value={formik.values.email}
-                onChangeText={formik.handleChange("email")}
-                onBlur={formik.handleBlur("email")}
-                style={{
-                  borderWidth: 2,
-                  height: 55,
-                }}
-              />
+              <Text style={styles.signTitleText}>Reset password</Text>
             </View>
 
-            <TouchableOpacity
-              activeOpacity={0.7}
-              style={[
-                globalStyles.buttonItemPrimary,
-                "Email" in formik.errors ||
-                formik.isSubmitting
-                  ? globalStyles.buttonItemPrimaryDisabled
-                  : null,
-              ]}
-              onPress={formik.submitForm}
-              disabled={
-                "Email" in formik.errors ||
-                formik.isSubmitting
-              }
-            >
-              {formik.isSubmitting ? (
-                <ActivityIndicator size="small" color="#fff" />
-              ) : (
-                <Text style={globalStyles.buttonItemPrimaryText}>
-                  Reset password
-                </Text>
-              )}
-            </TouchableOpacity>
+            {sentCode ? (
+              <View style={[styles.item]}>
+                <TInput
+                  invalid={
+                    "Email" in formik.errors && "Email" in formik.touched
+                  }
+                  keyboardType="email-address"
+                  placeholder="Email"
+                  autoCapitalize="none"
+                  returnKeyType="next"
+                  value={formik.values.email}
+                  onChangeText={formik.handleChange("email")}
+                  onBlur={formik.handleBlur("email")}
+                  style={{
+                    borderWidth: 2,
+                    height: 55,
+                  }}
+                />
+              </View>
+            ) : (
+              <View
+                style={[
+                  styles.item,
+                  {
+                    justifyContent: "center",
+                    alignItems: "center",
+                  },
+                ]}
+              >
+                <CodeVerify value={codeValue} setValue={setCodeValue} />
+              </View>
+            )}
+
+            {sentCode ? (
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={[
+                  globalStyles.buttonItemPrimary,
+                  "email" in formik.errors || formik.isSubmitting
+                    ? globalStyles.buttonItemPrimaryDisabled
+                    : null,
+                ]}
+                onPress={formik.submitForm}
+                disabled={"email" in formik.errors || formik.isSubmitting}
+              >
+                {formik.isSubmitting ? (
+                  <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                  <Text style={globalStyles.buttonItemPrimaryText}>
+                    Send code
+                  </Text>
+                )}
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={[
+                  globalStyles.buttonItemPrimary,
+                  codeValue.length < 6
+                    ? globalStyles.buttonItemPrimaryDisabled
+                    : null,
+                ]}
+                onPress={() => navigation.navigate("PasswordUpdate")}
+                disabled={codeValue.length < 6}
+              >
+                {false? (
+                  <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                  <Text style={globalStyles.buttonItemPrimaryText}>
+                   Verify code
+                  </Text>
+                )}
+              </TouchableOpacity>
+            )}
 
             <View style={styles.textWithButtonWrapper}>
               <Text style={styles.textWithButtonLabel}>Go to</Text>

@@ -51,6 +51,7 @@
     "react-native": "0.74.2",
     "react-native-click-outside": "^0.1.1",
     "react-native-collapsible-tab-view": "^6.2.1",
+    "react-native-confirmation-code-field": "^7.4.0",
     "react-native-fbsdk-next": "^12.1.0",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-google-places-autocomplete": "^2.5.6",

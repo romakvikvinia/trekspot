@@ -12,6 +12,7 @@ import { EditoProfile } from "../../screen/setting/EditProfile";
 import { ResetPassword } from "../../screen/setting/ResetPassword";
 import { SIZES } from "../../styles/theme";
 import { Platform } from "react-native";
+import { PasswordUpdate } from "../../screen/auth/PasswordUpdate";
 
 interface SettingRouteProps {}
 
@@ -19,6 +20,7 @@ type SettingRouteStackParamList = {
   Setting: undefined;
   EditProfile: undefined;
   ResetPasswordScreen: undefined;
+  PasswordUpdate: undefined;
 };
 
 const Stack = createStackNavigator<SettingRouteStackParamList>();
@@ -67,6 +69,7 @@ export const SettingRouteStack: React.FC<SettingRouteProps> = ({}) => {
           gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50
         })}
       />
+     
     </Stack.Navigator>
   );
 };
