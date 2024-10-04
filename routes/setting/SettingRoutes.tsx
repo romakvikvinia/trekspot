@@ -8,14 +8,14 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { SettingScreen } from "../../screen/setting/SettingScreen";
 import { THeaderButton } from "../../common/ui/THeaderButton";
 import { PrimaryColor } from "../../styles/colors";
-import { EditoProfile } from "../../screen/setting/EditProfile";
+import { EditProfile } from "../../screen/setting/EditProfile";
 import { ResetPassword } from "../../screen/setting/ResetPassword";
 import { SIZES } from "../../styles/theme";
 import { Platform } from "react-native";
 
 interface SettingRouteProps {}
 
-type SettingRouteStackParamList = {
+export type SettingRouteStackParamList = {
   Setting: undefined;
   EditProfile: undefined;
   ResetPasswordScreen: undefined;
@@ -46,16 +46,18 @@ export const SettingRouteStack: React.FC<SettingRouteProps> = ({}) => {
         options={({ route, navigation }) => ({
           headerShown: false,
           gestureEnabled: true,
-          gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
       <Stack.Screen
         name="EditProfile"
-        component={EditoProfile}
+        component={EditProfile}
         options={({ route, navigation }) => ({
           headerShown: false,
           gestureEnabled: true,
-          gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
       <Stack.Screen
@@ -64,7 +66,8 @@ export const SettingRouteStack: React.FC<SettingRouteProps> = ({}) => {
         options={({ route, navigation }) => ({
           headerShown: false,
           gestureEnabled: true,
-          gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
     </Stack.Navigator>

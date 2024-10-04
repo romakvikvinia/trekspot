@@ -32,13 +32,18 @@ import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 import { MapEmbedView } from "../../common/components/MapEmbedView";
 import { UserContext } from "../../components/context/UserContext";
+import { useMeQuery } from "../../api/api.trekspot";
 
- 
 interface SettingProps {}
 
 export const SettingScreen: React.FC<SettingProps> = ({}) => {
   const modalEmbedRef = useRef<Modalize>(null);
   const { user } = useContext(UserContext);
+  const {
+    data: userData,
+    isLoading: isUserLoading,
+    isSuccess: isUserSuccess,
+  } = useMeQuery();
 
   const { signOut } = useContext(AuthContext);
   const navigation = useNavigation();
@@ -47,7 +52,6 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
     modalEmbedRef.current?.open();
   };
 
- 
   return (
     <>
       <View style={styles.safeArea}>
@@ -82,9 +86,11 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
               )}
               <View style={{ maxWidth: "70%" }}>
                 <Text numberOfLines={1} style={styles.username}>
-                  {user?.type === "guest" ? "Guest user" : "Misha Gogiashvili"}
+                  {user?.type === "guest"
+                    ? "Guest user"
+                    : `${userData?.me.firstName} ${userData?.me.lastName}`}
                 </Text>
-                <Text style={styles.subTxt}>ashoniaa@gmail.com</Text>
+                <Text style={styles.subTxt}>{userData?.me.email}</Text>
               </View>
             </View>
           </View>
@@ -102,10 +108,7 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
                   <Text style={styles.buttonText}>Edit profile</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={[
-                    styles.button,
-                    {  marginBottom: 0 },
-                  ]}
+                  style={[styles.button, { marginBottom: 0 }]}
                   activeOpacity={0.7}
                   onPress={() => navigation.navigate("ResetPasswordScreen")}
                 >
@@ -125,10 +128,7 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
             {user?.type !== "guest" && (
               <>
                 <TouchableOpacity
-                  style={[
-                    styles.button,
-                    {   marginBottom: 0 },
-                  ]}
+                  style={[styles.button, { marginBottom: 0 }]}
                   activeOpacity={0.7}
                   onPress={() =>
                     Alert.alert(
@@ -139,12 +139,13 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
                   }
                 >
                   <DeleteIcon />
-                  <Text style={[styles.buttonText]}>
-                    Deactivate account
-                  </Text>
+                  <Text style={[styles.buttonText]}>Deactivate account</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={[styles.button, {borderBottomWidth: 0, marginBottom: 0}]}
+                  style={[
+                    styles.button,
+                    { borderBottomWidth: 0, marginBottom: 0 },
+                  ]}
                   activeOpacity={0.7}
                   onPress={async () => {
                     signOut();
@@ -173,7 +174,9 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
                 },
               ]}
               activeOpacity={0.7}
-              onPress={() => Linking.openURL("https://www.facebook.com/trekspot.io")}
+              onPress={() =>
+                Linking.openURL("https://www.facebook.com/trekspot.io")
+              }
             >
               <FacebookLinear color="" size="" />
               <Text
@@ -191,7 +194,9 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
             <TouchableOpacity
               style={[styles.button, { marginBottom: 0 }]}
               activeOpacity={0.7}
-              onPress={() => Linking.openURL("https://www.instagram.com/trekspot.io/")}
+              onPress={() =>
+                Linking.openURL("https://www.instagram.com/trekspot.io/")
+              }
             >
               <InstagramLinear color="" size="" />
               <Text style={styles.buttonText}>Follow us on Instagram</Text>
@@ -199,7 +204,9 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
             <TouchableOpacity
               style={[styles.button, { marginBottom: 0 }]}
               activeOpacity={0.7}
-              onPress={() => Linking.openURL("https://www.threads.net/@trekspot.io")}
+              onPress={() =>
+                Linking.openURL("https://www.threads.net/@trekspot.io")
+              }
             >
               <ThreadsLinear color="" size="" />
               <Text style={styles.buttonText}>Follow us on Threads</Text>
@@ -207,7 +214,9 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
             <TouchableOpacity
               style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]}
               activeOpacity={0.7}
-              onPress={() => Linking.openURL("https://www.tiktok.com/@trekspot.io")}
+              onPress={() =>
+                Linking.openURL("https://www.tiktok.com/@trekspot.io")
+              }
             >
               <TiktokLinear color="" size="" />
               <Text style={styles.buttonText}>Follow us on Tiktok</Text>
@@ -237,31 +246,30 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#f8f8f8",
-    paddingTop:
-    Constants?.statusBarHeight + 10
+    paddingTop: Constants?.statusBarHeight + 10,
   },
   version: {
     width: "100%",
     alignItems: "center",
     marginTop: 10,
-    marginBottom: 30
+    marginBottom: 30,
   },
   versionText: {
     color: "#bbb",
     fontSize: 14,
   },
   socials: {
-    flexDirection: 'row',
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 15
+    marginTop: 15,
   },
   socialButton: {
     width: 35,
     height: 35,
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: 3
+    marginHorizontal: 3,
   },
   avatar: {
     width: 60,
