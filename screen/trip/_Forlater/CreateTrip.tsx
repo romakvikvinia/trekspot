@@ -113,7 +113,9 @@ export const CreateTripContent = ({
               >
                 <View style={styles.datePickerBottomRowLeft}>
                   <Text style={styles.startsDateLabel}>Start</Text>
-                  <Text style={styles.startsDateText}>
+                  <Text style={[styles.startsDateText, {
+                    color: range?.startDate ? COLORS.primary : COLORS.black
+                  }]}>
                     {range?.startDate
                       ? moment(range?.startDate).format("DD MMM")
                       : "Set date"}
@@ -122,7 +124,9 @@ export const CreateTripContent = ({
                 <Text style={{ fontSize: 25, color: COLORS.black }}>-</Text>
                 <View style={styles.datePickerBottomRowRight}>
                   <Text style={styles.startsDateLabel}>End</Text>
-                  <Text style={styles.startsDateText}>
+                  <Text style={[styles.startsDateText,{
+                    color: range?.endDate ? COLORS.primary : COLORS.black
+                  }]}>
                     {range?.endDate
                       ? moment(range?.endDate).format("DD MMM")
                       : "Set date"}

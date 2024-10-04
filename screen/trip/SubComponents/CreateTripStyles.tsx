@@ -197,7 +197,7 @@ export const styles = StyleSheet.create({
       height: 50,
       paddingLeft: 0,
       fontSize: 28,
-      color: COLORS.primaryDark,
+      color: COLORS.primary,
       fontWeight: "700",
       overflow: "hidden",
       marginBottom: 15,

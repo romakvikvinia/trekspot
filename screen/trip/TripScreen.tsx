@@ -231,7 +231,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
               <Text style={_tripScreenStyles.notFoundViewText}>
                 {
                   tripType === "past" ? "Here you will see all your past trips" : 
-                  "Click on New trip button and prepare for your next destination"
+                  "Click on New trip button to create"
                 }
                 
               </Text>
