@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+} from "react";
 import {
   Alert,
   Platform,
@@ -131,7 +137,6 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
   }, [isTripSuccessfullyDeleted, dispatch]);
 
   const showNotFound = useMemo(() => {
-
     if (isLoading) return false;
 
     if (tripType === "upcoming" && upComingTrips.length === 0) return true;
@@ -139,7 +144,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
     if (tripType === "past" && oldTrips.length === 0) return true;
 
     return false;
-  } , [isLoading, tripType, upComingTrips, oldTrips]);
+  }, [isLoading, tripType, upComingTrips, oldTrips]);
 
   return (
     <PaperProvider>
@@ -159,10 +164,15 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
 
         <View style={_tripScreenStyles.tabSwitchersWrapper}>
           <View style={_tripScreenStyles.tabSwitchers}>
-            <TouchableOpacity style={[_tripScreenStyles.tabSwitcher, {
-              backgroundColor: tripType === "upcoming" ? "#dddde4" : "white",
-              marginLeft: 1
-            }]}
+            <TouchableOpacity
+              style={[
+                _tripScreenStyles.tabSwitcher,
+                {
+                  backgroundColor:
+                    tripType === "upcoming" ? "#dddde4" : "white",
+                  marginLeft: 1,
+                },
+              ]}
               onPress={() => setTripType("upcoming")}
             >
               <Text style={_tripScreenStyles.tabSwitcherText}>
@@ -224,16 +234,14 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
             <View style={_tripScreenStyles.notFoundView}>
               <NoDestinationFoundIcon />
               <Text style={_tripScreenStyles.notFoundViewTitleText}>
-               {
-                tripType === "past" ? "No past trips" : "You don't have any trip yet"
-               } 
+                {tripType === "past"
+                  ? "No past trips"
+                  : "You don't have any trip yet"}
               </Text>
               <Text style={_tripScreenStyles.notFoundViewText}>
-                {
-                  tripType === "past" ? "Here you will see all your past trips" : 
-                  "Click on New trip button to create"
-                }
-                
+                {tripType === "past"
+                  ? "Here you will see all your past trips"
+                  : "Click on New trip button to create"}
               </Text>
             </View>
           )}
@@ -260,6 +268,9 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
             flex: 1,
           }}
           modalHeight={SIZES.height}
+          onClosed={() =>
+            setState((prevState) => ({ ...prevState, trip: undefined }))
+          }
         >
           <NewTrip
             newTripModalRef={createOrUpdateTripModal}
