@@ -180,6 +180,7 @@ export const trekSpotApi = createApi({
         firstName,
         lastName,
         email,
+        password = "",
         visited_countries = [],
         lived_countries = [],
       }) => {
@@ -188,6 +189,7 @@ export const trekSpotApi = createApi({
             firstName,
             lastName,
             email,
+            password,
             visited_countries,
             lived_countries,
           },
@@ -196,6 +198,7 @@ export const trekSpotApi = createApi({
               $firstName: String
               $lastName: String
               $email: String
+              $password: String
               $visited_countries: [String!]
               $lived_countries: [String!]
             ) {
@@ -204,6 +207,7 @@ export const trekSpotApi = createApi({
                   firstName: $firstName
                   lastName: $lastName
                   email: $email
+                  password: $password
                   visited_countries: $visited_countries
                   lived_countries: $lived_countries
                 }

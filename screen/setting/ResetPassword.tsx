@@ -1,5 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -15,15 +14,57 @@ import {
 import { TInput } from "../../common/ui/TInput";
 import { globalStyles } from "../../styles/globalStyles";
 import { COLORS } from "../../styles/theme";
-import { BackIcon, EyeCrossicon, EyeNoCrossicon } from "../../utilities/SvgIcons.utility";
+import {
+  BackIcon,
+  EyeCrossicon,
+  EyeNoCrossicon,
+} from "../../utilities/SvgIcons.utility";
 import Constants from "expo-constants";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { SettingRouteStackParamList } from "../../routes/setting/SettingRoutes";
+import { useUpdateMeMutation } from "../../api/api.trekspot";
+import { ResetPasswordValidationSchema } from "./validationScheme";
+import { useFormik } from "formik";
 
-interface SettingProps {}
+type ResetPassword = NativeStackScreenProps<
+  SettingRouteStackParamList,
+  "ResetPasswordScreen"
+>;
 
-export const ResetPassword: React.FC<SettingProps> = ({}) => {
-  const navigation = useNavigation();
+export const ResetPassword: React.FC<ResetPassword> = ({ navigation }) => {
   const [isSecureType, setIsSecureType] = useState(true);
   const [isNewPasswordSecureType, setIsNewPasswordSecureType] = useState(true);
+
+  const [
+    fetchUpdateMe,
+    { isLoading: isLoadingUpdateMe, isSuccess: isSuccessUpdateMe },
+  ] = useUpdateMeMutation();
+
+  const formik = useFormik({
+    initialValues: {
+      password: "",
+      confirm_password: "",
+    },
+    validationSchema: ResetPasswordValidationSchema,
+    onSubmit: async (values, methods) => {
+      methods.setSubmitting(true);
+
+      fetchUpdateMe({
+        password: values.password,
+      });
+    },
+  });
+
+  useEffect(() => {
+    if (isSuccessUpdateMe) {
+      navigation.goBack();
+    }
+  }, [isSuccessUpdateMe]);
+
+  const disabled =
+    formik.isSubmitting ||
+    !formik.values.password ||
+    !formik.values.confirm_password;
 
   return (
     <View style={styles.safeArea}>
@@ -52,15 +93,17 @@ export const ResetPassword: React.FC<SettingProps> = ({}) => {
         >
           <View style={[styles.item]}>
             <TInput
-              // invalid={"email" in formik.errors && "email" in formik.touched}
+              invalid={
+                "password" in formik.errors && "password" in formik.touched
+              }
               placeholder="New password"
               autoCapitalize="none"
               returnKeyType="next"
               secureTextEntry={isNewPasswordSecureType}
               style={{ borderWidth: 2 }}
-              // value={formik.values.email}
-              // onChangeText={formik.handleChange("email")}
-              // onBlur={formik.handleBlur("email")}
+              value={formik.values.password}
+              onChangeText={formik.handleChange("password")}
+              onBlur={formik.handleBlur("password")}
             />
             <TouchableOpacity
               activeOpacity={0.5}
@@ -74,15 +117,18 @@ export const ResetPassword: React.FC<SettingProps> = ({}) => {
           </View>
           <View style={[styles.item]}>
             <TInput
-              // invalid={"email" in formik.errors && "email" in formik.touched}
+              invalid={
+                "confirm_password" in formik.errors &&
+                "confirm_password" in formik.touched
+              }
               placeholder="Confirm password"
               autoCapitalize="none"
               secureTextEntry={isSecureType}
               returnKeyType="next"
               style={{ borderWidth: 2 }}
-              // value={formik.values.email}
-              // onChangeText={formik.handleChange("email")}
-              // onBlur={formik.handleBlur("email")}
+              value={formik.values.confirm_password}
+              onChangeText={formik.handleChange("confirm_password")}
+              onBlur={formik.handleBlur("confirm_password")}
             />
             <TouchableOpacity
               activeOpacity={0.5}
@@ -98,27 +144,20 @@ export const ResetPassword: React.FC<SettingProps> = ({}) => {
             style={[
               globalStyles.buttonItemPrimary,
 
-              // "password" in formik.errors ||
-              // "email" in formik.errors ||
-              // formik.isSubmitting
-              //   ? globalStyles.buttonItemPrimaryDisabled
-              //   : null,
+              !!Object.keys(formik.errors).length || disabled
+                ? globalStyles.buttonItemPrimaryDisabled
+                : null,
             ]}
-            // onPress={formik.submitForm}
-            // disabled={
-            //   "password" in formik.errors ||
-            //   "email" in formik.errors ||
-            //   formik.isSubmitting ||
-            //   isLoading
-            // }
+            onPress={formik.submitForm}
+            disabled={!!Object.keys(formik.errors).length || disabled}
           >
-            {/* {formik.isSubmitting || isLoading || isSuccess ? (
-                  <ActivityIndicator size="small" color="#fff" />
-                ) : (
-                  )} */}
-            <Text style={globalStyles.buttonItemPrimaryText}>
-              Update password
-            </Text>
+            {formik.isSubmitting ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
+              <Text style={globalStyles.buttonItemPrimaryText}>
+                Update password
+              </Text>
+            )}
           </TouchableOpacity>
         </ScrollView>
       </KeyboardAvoidingView>

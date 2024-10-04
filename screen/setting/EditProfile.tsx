@@ -27,12 +27,12 @@ import { useFormik } from "formik";
 import { EditProfileValidationSchema } from "./validationScheme";
 import { useDispatch } from "react-redux";
 
-type SettingProps = NativeStackScreenProps<
+type EdoProfileProps = NativeStackScreenProps<
   SettingRouteStackParamList,
   "EditProfile"
 >;
 
-export const EditProfile: React.FC<SettingProps> = ({ navigation }) => {
+export const EditProfile: React.FC<EdoProfileProps> = ({ navigation }) => {
   const dispatch = useDispatch();
   const {
     data: user,
