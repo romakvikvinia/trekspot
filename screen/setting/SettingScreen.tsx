@@ -33,10 +33,15 @@ import { Modalize } from "react-native-modalize";
 import { MapEmbedView } from "../../common/components/MapEmbedView";
 import { UserContext } from "../../components/context/UserContext";
 import { useMeQuery } from "../../api/api.trekspot";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { SettingRouteStackParamList } from "../../routes/setting/SettingRoutes";
 
-interface SettingProps {}
+type SettingProps = NativeStackScreenProps<
+  SettingRouteStackParamList,
+  "Setting"
+>;
 
-export const SettingScreen: React.FC<SettingProps> = ({}) => {
+export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
   const modalEmbedRef = useRef<Modalize>(null);
   const { user } = useContext(UserContext);
   const {
@@ -46,7 +51,6 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
   } = useMeQuery();
 
   const { signOut } = useContext(AuthContext);
-  const navigation = useNavigation();
 
   const onModalEmbedOpen = () => {
     modalEmbedRef.current?.open();
@@ -67,6 +71,7 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
                 </View>
               ) : (
                 <Image
+                  //@ts-ignore
                   style={{
                     minWidth: 60,
                     width: 60,
@@ -74,6 +79,7 @@ export const SettingScreen: React.FC<SettingProps> = ({}) => {
                     height: 60,
                     minHeight: 60,
                     flex: 1,
+
                     borderRadius: "100%",
                   }}
                   source={{
