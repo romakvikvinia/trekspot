@@ -182,7 +182,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 {isSecureType ? <EyeNoCrossicon /> : <EyeCrossicon />}
               </TouchableOpacity>
             </View>
-            <View style={{ alignItems: "flex-end" }}>
+            {/* <View style={{ alignItems: "flex-end" }}>
               <TouchableOpacity
                 activeOpacity={0.1}
                 style={styles.forgotPassword}
@@ -190,7 +190,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
               >
                 <Text style={styles.forgotPasswordText}>Forgot password?</Text>
               </TouchableOpacity>
-            </View>
+            </View> */}
             <TouchableOpacity
               activeOpacity={0.1}
               style={[

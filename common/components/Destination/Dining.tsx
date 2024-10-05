@@ -6,7 +6,7 @@ import {
   View,
 } from "react-native";
 import { COLORS } from "../../../styles/theme";
-import { StarIcon } from "../../../utilities/SvgIcons.utility";
+import { LocationPin, StarIcon } from "../../../utilities/SvgIcons.utility";
 import { styles } from "../_styles";
 import { CountryType } from "../../../api/api.types";
 import { FlashList } from "@shopify/flash-list";
@@ -94,27 +94,31 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
                         {item?.rate}
                       </Text>
                     </View>
+                    {item?.restaurant &&
                     <TouchableOpacity
                       activeOpacity={0.7}
                       style={{
-                        flexDirection:
-                          item?.restaurant?.length < 12 ? "row" : "column",
-                        alignItems: "flex-start",
-                        marginTop: 5,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginTop: 12,
                       }}
                       onPress={() => openMap(item?.restaurant)}
                     >
+                      <LocationPin width={15} color={COLORS.primary} />
                       <Text
                         style={{
                           color: COLORS.primary,
                           fontSize: 14,
                           fontWeight: "600",
+                          marginLeft: 5,
+                          paddingRight: 10
                         }}
                         selectable={true}
                       >
                         {item?.restaurant}
                       </Text>
                     </TouchableOpacity>
+            }
                   </View>
                 </View>
               </View>
@@ -122,6 +126,7 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
             estimatedItemSize={200}
             contentContainerStyle={{
               paddingHorizontal: 10,
+              paddingBottom: 25
             }}
           />
         )}

@@ -28,7 +28,7 @@ const Overview: React.FC<OverviewProps> = memo(function ({ country }) {
       <View style={styles.generalRow}>
         <Text style={styles.overviewText}>{country?.overview}</Text>
 
-        <View style={[styles.keyValue, { marginTop: 25, marginBottom: 0 }]}>
+        <View style={[styles.keyValue, { marginTop: 30, marginBottom: 0 }]}>
           <Text style={styles.key}>Recognized for</Text>
           <View style={styles.tags}>
             {country?.recognizedFor?.map((item) => (
@@ -42,7 +42,7 @@ const Overview: React.FC<OverviewProps> = memo(function ({ country }) {
         </View>
       
 
-        <View style={[styles.keyValue, { marginTop: 25, marginBottom: 0 }]}>
+        <View style={[styles.keyValue, { marginTop: 30, marginBottom: 0 }]}>
           <Text style={styles.key}>When to visit</Text>
           <Text style={styles.value}>{country?.whenToVisit}</Text>
         </View>
@@ -102,8 +102,8 @@ const Overview: React.FC<OverviewProps> = memo(function ({ country }) {
               <ImageBackground
                 source={PlugImages[item]}
                 style={{
-                  width: 60,
-                  height: 60,
+                  width: 70,
+                  height: 70,
                   marginRight: 15,
                 }}
               >
