@@ -17,15 +17,17 @@ export const _tripScreenStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     flexDirection: "row",
-    marginLeft: 15,
+    marginLeft: 0,
     marginRight: 15,
     backgroundColor: "#fff",
     borderRadius: 50,
-    height: 50,
+    height: 40,
+    width: 200
   },
   tabSwitcher: {
     width: "49%",
-    padding: 15,
+    padding: 0,
+    height: 38,
     // backgroundColor: "#fff",
     borderRadius: 50,
     alignItems: "center",
@@ -33,7 +35,7 @@ export const _tripScreenStyles = StyleSheet.create({
     flex: 1,
   },
   tabSwitcherText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "600",
     color: COLORS.black,
   },
@@ -375,7 +377,7 @@ export const _tripScreenStyles = StyleSheet.create({
     height: 500,
   },
   notFoundViewTitleText: {
-    marginTop: 30,
+    marginTop: 15,
     textAlign: "center",
     fontSize: 20,
     color: COLORS.black,
@@ -386,10 +388,22 @@ export const _tripScreenStyles = StyleSheet.create({
   notFoundViewText: {
     marginTop: 10,
     textAlign: "center",
-    fontSize: 14,
+    fontSize: 16,
     color: COLORS.darkgray,
     lineHeight: 22,
     maxWidth: "80%",
+  },
+  createNewTripButton: {
+    paddingHorizontal: 45,
+    paddingVertical: 15,
+    borderRadius: 50,
+    backgroundColor: COLORS.primaryDark,
+    marginTop: 25
+  },
+  createNewTripButtonText: {
+    color: COLORS.white,
+    fontSize: 14,
+    fontWeight: "600",
   },
   otherStats: {
     position: "absolute",
@@ -557,12 +571,13 @@ export const _tripScreenStyles = StyleSheet.create({
     color: COLORS.black,
   },
   newTripButton: {
-    // backgroundColor: COLORS.primaryDark,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    backgroundColor: COLORS.primaryDark,
     borderRadius: 50,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+    width: 40,
+    height: 40
   },
   newTripButtonText: {
     color: COLORS.primary,

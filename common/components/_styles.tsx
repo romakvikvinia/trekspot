@@ -532,7 +532,7 @@ export const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   overviewText: {
-    fontSize: 12,
+    fontSize: 13,
     color: COLORS.black,
     fontWeight: "500",
     lineHeight: 18,
@@ -592,7 +592,8 @@ export const styles = StyleSheet.create({
     color: "#fff",
     marginLeft: 3,
     fontSize: 14,
-    opacity: 0.7,
+    opacity: 0.9,
+    fontWeight: "500"
   },
   passportBox: {
     flexDirection: "row",

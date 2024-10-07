@@ -176,7 +176,8 @@ const styles = StyleSheet.create({
     color: "#fff",
     marginLeft: 3,
     fontSize: 12,
-    opacity: 0.7,
+    opacity: 0.8,
+    fontWeight: "500"
   },
   addToBucketButton: {
     width: 30,

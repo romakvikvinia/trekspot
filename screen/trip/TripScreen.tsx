@@ -50,6 +50,7 @@ import { useDispatch } from "react-redux";
 import { QuestionModal } from "../../common/components/QuestionModal";
 import { questionModaStyles } from "../../styles/questionModaStyles";
 import { TripType } from "../../api/api.types";
+import { Image } from "expo-image";
 
 type TripProps = NativeStackScreenProps<TripRouteStackParamList, "TripsScreen">;
 
@@ -150,48 +151,45 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
     <PaperProvider>
       <View style={_tripScreenStyles.safeArea}>
         <View style={_tripScreenStyles.header}>
-          <Text style={_tripScreenStyles.myTripsText}>Trips</Text>
-
-          <TouchableOpacity
-            style={_tripScreenStyles.newTripButton}
-            activeOpacity={0.7}
-            onPress={handleCreateNewTrip}
-          >
-            <PlusIcon color={COLORS.primary} size="20" />
-            <Text style={_tripScreenStyles.newTripButtonText}>New trip</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={_tripScreenStyles.tabSwitchersWrapper}>
           <View style={_tripScreenStyles.tabSwitchers}>
             <TouchableOpacity
               style={[
                 _tripScreenStyles.tabSwitcher,
                 {
                   backgroundColor:
-                    tripType === "upcoming" ? "#dddde4" : "white",
+                    tripType === "upcoming" ? "#dfebff" : "white",
                   marginLeft: 1,
                 },
               ]}
               onPress={() => setTripType("upcoming")}
             >
-              <Text style={_tripScreenStyles.tabSwitcherText}>
-                Upcoming trips
-              </Text>
+              <Text style={[_tripScreenStyles.tabSwitcherText,{
+                color: tripType === "upcoming" ?  COLORS.primary : COLORS.primaryDark
+              }]}>Upcoming</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => setTripType("past")}
               style={[
                 _tripScreenStyles.tabSwitcher,
                 {
-                  backgroundColor: tripType === "past" ? "#dddde4" : "white",
+                  backgroundColor: tripType === "past" ? "#dfebff" : "white",
                   marginRight: 1,
                 },
               ]}
             >
-              <Text style={_tripScreenStyles.tabSwitcherText}>Past trips</Text>
+              <Text style={[_tripScreenStyles.tabSwitcherText,{
+                color: tripType === "past" ? COLORS.primary : COLORS.primaryDark
+              }]}>Past</Text>
             </TouchableOpacity>
           </View>
+
+          <TouchableOpacity
+            style={_tripScreenStyles.newTripButton}
+            activeOpacity={0.7}
+            onPress={handleCreateNewTrip}
+          >
+            <PlusIcon color={COLORS.white} size="20" />
+          </TouchableOpacity>
         </View>
 
         <ScrollView
@@ -232,17 +230,32 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
 
           {showNotFound && (
             <View style={_tripScreenStyles.notFoundView}>
-              <NoDestinationFoundIcon />
+              {/* <NoDestinationFoundIcon /> */}
+              <Image
+                style={{
+                  width: 200,
+                  height: 220,
+                  alignSelf: "center",
+                  marginBottom: 10,
+                }}
+                source={require("../../assets/tripStart.webp")}
+                contentFit="cover"
+                cachePolicy="memory-disk"
+              ></Image>
               <Text style={_tripScreenStyles.notFoundViewTitleText}>
-                {tripType === "past"
-                  ? "No past trips"
-                  : "You don't have any trip yet"}
+                {tripType === "past" ? "No past trips" : "Why if not today?"}
               </Text>
               <Text style={_tripScreenStyles.notFoundViewText}>
                 {tripType === "past"
                   ? "Here you will see all your past trips"
-                  : "Click on New trip button to create"}
+                  : "Its time to plan your next trip"}
               </Text>
+
+              <TouchableOpacity style={_tripScreenStyles.createNewTripButton}>
+                <Text style={_tripScreenStyles.createNewTripButtonText}>
+                  Create a new trip
+                </Text>
+              </TouchableOpacity>
             </View>
           )}
           <TrekSneckBar
