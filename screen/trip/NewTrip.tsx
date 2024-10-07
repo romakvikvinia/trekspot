@@ -90,9 +90,11 @@ export const NewTrip = ({ item, newTripModalRef, callBack }: INewTripProps) => {
       };
 
       if (item) {
+        console.log("fetchUpdateTrip");
         //@ts-ignore
         fetchUpdateTrip({ id: item.id, ...payload });
       } else {
+        console.log("fetchData");
         //@ts-ignore
         payload.cities = (cities && cities.length && cities) || [];
         //@ts-ignore
