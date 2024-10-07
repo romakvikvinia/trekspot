@@ -7,14 +7,25 @@ import {
 } from "react-native";
 import { COLORS } from "../../styles/theme";
 import { XIcon } from "../../utilities/SvgIcons.utility";
+import React from "react";
 
-export const QuestionModal = ({ modalQuestionRef, title, children }) => {
+interface IQuestionModal {
+  title: string;
+  children: any;
+  onClose: () => void;
+}
+
+export const QuestionModal: React.FC<IQuestionModal> = ({
+  onClose,
+  title,
+  children,
+}) => {
   return (
     <>
       <View style={styles.header}>
         <Text style={styles.title}>{title}</Text>
         <TouchableOpacity
-          onPress={() => modalQuestionRef?.current?.close()}
+          onPress={onClose}
           activeOpacity={0.7}
           style={styles.closeButton}
         >

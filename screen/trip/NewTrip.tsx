@@ -62,27 +62,11 @@ export const NewTrip = ({ item, newTripModalRef, callBack }: INewTripProps) => {
     validationSchema: creationTrip,
     onSubmit: async ({ name, range, travelType, cities = [] }, methods) => {
       methods.setSubmitting(true);
-      //@ts-ignore
-      const startDate = range["startDate"]
-        .toLocaleDateString()
-        .split("/")
-        .reverse();
-      //@ts-ignore
-      const endDate = range["endDate"]
-        .toLocaleDateString()
-        .split("/")
-        .reverse();
 
       const payload = {
         name,
-        startAt: format(
-          new Date(+startDate[0], +startDate[2] - 1, +startDate[1]),
-          "yyyy-MM-dd"
-        ),
-        endAt: format(
-          new Date(+endDate[0], +endDate[2] - 1, +endDate[1]),
-          "yyyy-MM-dd"
-        ),
+        startAt: range["startDate"]?.toISOString(),
+        endAt: range["endDate"]?.toISOString(),
         type: travelType.toUpperCase(),
       };
 
@@ -137,9 +121,10 @@ export const NewTrip = ({ item, newTripModalRef, callBack }: INewTripProps) => {
       });
     }
   }, [isUpdatedTripSuccess, callBack]);
-
-  console.log("isUpdatedTripSuccess", isUpdatedTripSuccess);
-
+  console.log(
+    "start",
+    formik.values.range && formik.values.range["startDate"]?.toISOString()
+  );
   return (
     <>
       <View

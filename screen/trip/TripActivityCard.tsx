@@ -36,8 +36,7 @@ interface ITripActivityCardProps {
   handleTopSightClick: (sight: SightType) => void;
 }
 
-export const ReturnIcon = ({category}) => { 
-  console.log(category)
+export const ReturnIcon = ({ category }) => {
   switch (category) {
     case "Top sights":
       return <TopsightsIcon color="" size={20} />;
@@ -54,7 +53,7 @@ export const ReturnIcon = ({category}) => {
     case "Beaches":
       return <BeachesIcon color="" size={20} />;
   }
-}
+};
 
 export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
   visited,
@@ -84,7 +83,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
 
     Linking.openURL(url!);
   };
-  
+
   const handleChangeActivityVisited = useCallback(() => {
     setCheckedIn(!checkedIn);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);

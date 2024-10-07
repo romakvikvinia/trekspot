@@ -80,6 +80,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
 
   const callBack = useCallback(() => {
     createOrUpdateTripModal.current?.close();
+    setState((prevState) => ({ ...prevState, trip: undefined }));
     fetchDate({});
   }, []);
 
@@ -163,9 +164,19 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
               ]}
               onPress={() => setTripType("upcoming")}
             >
-              <Text style={[_tripScreenStyles.tabSwitcherText,{
-                color: tripType === "upcoming" ?  COLORS.primary : COLORS.primaryDark
-              }]}>Upcoming</Text>
+              <Text
+                style={[
+                  _tripScreenStyles.tabSwitcherText,
+                  {
+                    color:
+                      tripType === "upcoming"
+                        ? COLORS.primary
+                        : COLORS.primaryDark,
+                  },
+                ]}
+              >
+                Upcoming
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => setTripType("past")}
@@ -177,9 +188,17 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
                 },
               ]}
             >
-              <Text style={[_tripScreenStyles.tabSwitcherText,{
-                color: tripType === "past" ? COLORS.primary : COLORS.primaryDark
-              }]}>Past</Text>
+              <Text
+                style={[
+                  _tripScreenStyles.tabSwitcherText,
+                  {
+                    color:
+                      tripType === "past" ? COLORS.primary : COLORS.primaryDark,
+                  },
+                ]}
+              >
+                Past
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -251,7 +270,10 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
                   : "It's time to plan your next trip"}
               </Text>
 
-              <TouchableOpacity style={_tripScreenStyles.createNewTripButton}>
+              <TouchableOpacity
+                style={_tripScreenStyles.createNewTripButton}
+                onPress={() => createOrUpdateTripModal.current?.open()}
+              >
                 <Text style={_tripScreenStyles.createNewTripButtonText}>
                   Create a new trip
                 </Text>
@@ -311,11 +333,17 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
           scrollViewProps={{
             showsVerticalScrollIndicator: false,
           }}
-          onClosed={() =>
-            setState((prevState) => ({ ...prevState, selectedTrip: "" }))
+          onOverlayPress={() =>
+            setState((prevState) => ({ ...prevState, trip: undefined }))
           }
         >
-          <QuestionModal modalQuestionRef={modalQuestionRef} title="Action">
+          <QuestionModal
+            onClose={() => {
+              if (modalQuestionRef.current) modalQuestionRef.current.close();
+              setState((prevState) => ({ ...prevState, trip: undefined }));
+            }}
+            title="Action"
+          >
             <View style={questionModaStyles.buttonGroup}>
               <TouchableOpacity
                 activeOpacity={0.7}
