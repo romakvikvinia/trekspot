@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
@@ -17,9 +17,9 @@ import {
 } from "../../utilities/SvgIcons.utility";
 import { _tripScreenStyles } from "./_tripScreenStyles";
 import { TripType } from "../../api/api.types";
-import moment from "moment";
 import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { format, parseISO } from "date-fns";
 
 interface ITripItemProps {
   item: TripType;
@@ -67,8 +67,8 @@ export const TripItem: React.FC<ITripItemProps> = ({ item, onContextMenu }) => {
                   <View>
                     <View style={_tripScreenStyles.tripInHeader}>
                       <Text style={_tripScreenStyles.tripDate}>
-                        {moment(item.startAt).format("DD MMM")} →{" "}
-                        {moment(item.endAt).format("DD MMM")}
+                        {format(parseISO(item.startAt), "dd MMM")} →{" "}
+                        {format(parseISO(item.endAt), "dd MMM")}
                       </Text>
                     </View>
                     <Text style={_tripScreenStyles.tripTitle}>
@@ -127,8 +127,8 @@ export const TripItem: React.FC<ITripItemProps> = ({ item, onContextMenu }) => {
                   <View>
                     <View style={_tripScreenStyles.tripInHeader}>
                       <Text style={_tripScreenStyles.tripDate}>
-                        {moment(item.startAt).format("DD MMM")} →{" "}
-                        {moment(item.endAt).startOf("day").format("DD MMM")}
+                        {format(parseISO(item.startAt), "dd MMM")} →{" "}
+                        {format(parseISO(item.endAt), "dd MMM")}
                       </Text>
                     </View>
                     <Text style={_tripScreenStyles.tripTitle}>
