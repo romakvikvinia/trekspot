@@ -196,9 +196,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
         }));
         onCountryDetailOpen();
       }
-    } catch (error) {
-      // console.log(error.message);
-    }
+    } catch (error) {}
   };
   const handleResetMap = useCallback(() => {
     setState((prevState) => ({
@@ -384,7 +382,7 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
   //   (async () => {
   //     let { status } = await Location.requestForegroundPermissionsAsync();
   //     if (status !== "granted") {
-  //       // console.log("Permission to access location was denied");
+
   //       return;
   //     }
 

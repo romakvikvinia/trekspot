@@ -19,7 +19,6 @@ import { useLazyCountryQuery } from "../../api/api.trekspot";
 import { useEffect } from "react";
 
 export const TripTransport = ({ route }) => {
-  console.log("route", route?.params);
   const countryId = route?.params?.iso2;
   const navigation = useNavigation();
   const [getCountry, { isLoading, data, isError }] = useLazyCountryQuery();
@@ -28,7 +27,6 @@ export const TripTransport = ({ route }) => {
     if (countryId) getCountry({ id: countryId });
   }, [route]);
 
-  console.log("data", data);
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={globalStyles.screenHeader}>

@@ -148,9 +148,6 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
     return false;
   }, [isLoading, tripType, upComingTrips, oldTrips]);
 
-  console.log("upComingTrips", upComingTrips);
-  console.log("past", oldTrips);
-
   return (
     <PaperProvider>
       <View style={_tripScreenStyles.safeArea}>

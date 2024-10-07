@@ -46,7 +46,7 @@
 //   { label: "Other", color: "#838383", Icon: ToDoIcon },
 // ];
 // const ActivityIcon = ({ index }) => {
-//   console.log("index", index);
+
 //   switch (index) {
 //     case 0:
 //       return <BusIcon color="#fff" />;

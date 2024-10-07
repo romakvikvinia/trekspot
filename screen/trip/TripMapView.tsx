@@ -1,5 +1,11 @@
 import { Image } from "expo-image";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   ImageBackground,
   Platform,
@@ -27,8 +33,7 @@ import { SightDetailModal } from "../../components/explore/sights/SightDetailMod
 
 interface TripProps {}
 
-export const TripMapViewScreen: React.FC<TripProps> = ({route}) => {
-
+export const TripMapViewScreen: React.FC<TripProps> = ({ route }) => {
   const currentDay = route?.params?.activeDay;
   const currentTabActivites = route?.params?.tabData;
 
@@ -44,20 +49,15 @@ export const TripMapViewScreen: React.FC<TripProps> = ({route}) => {
     setTopSightDetail(null);
   }, []);
 
-  console.log("route", route);
-
-  const activities = useMemo(() => {  
-
-    const all = route?.params?.tabData && Object.values(route?.params?.tabData).reduce((acc, current) => {
-
-      return acc.concat(current.activities);
-    } 
-    , []);
+  const activities = useMemo(() => {
+    const all =
+      route?.params?.tabData &&
+      Object.values(route?.params?.tabData).reduce((acc, current) => {
+        return acc.concat(current.activities);
+      }, []);
 
     return all;
-
   }, [route?.params?.tabData]);
-  
 
   useEffect(() => {
     mapRef.current?.animateToRegion({
@@ -68,8 +68,6 @@ export const TripMapViewScreen: React.FC<TripProps> = ({route}) => {
     });
   }, []);
 
-  console.log("route?.params?.tabData",route?.params?.tabData, route?.params?.activeDay);
- 
   return (
     <>
       <View style={styles.safeArea}>
@@ -111,48 +109,59 @@ export const TripMapViewScreen: React.FC<TripProps> = ({route}) => {
           mapType="mutedStandard"
           // onSnapToItem={() => alert("ss")}
         >
-          {currentTabActivites[currentDay]?.activities?.map((marker: any, i: any) => {
-            return (
-              <Marker
-                key={marker.id}
-                coordinate={{
-                  latitude: marker?.location?.lat,
-                  longitude: marker?.location?.lng,
-                }}
-                onPress={() => showTopSight(marker)}
-              >
-                <View style={{ width: 65, height: 65 }}>
-                  <SightsMarkerIcon size="65" color={COLORS.primary} />
-                  <ImageBackground
-                    source={{ uri: marker?.image?.url }}
-                    style={{
-                      width: 53,
-                      height: 53,
-                      borderRadius: 50,
-                      position: "absolute",
-                      top: 4,
-                      left: 6,
-                      overflow: "hidden",
-                      borderWidth: 0,
-                    }}
+          {currentTabActivites[currentDay]?.activities?.map(
+            (marker: any, i: any) => {
+              return (
+                <Marker
+                  key={marker.id}
+                  coordinate={{
+                    latitude: marker?.location?.lat,
+                    longitude: marker?.location?.lng,
+                  }}
+                  onPress={() => showTopSight(marker)}
+                >
+                  <View style={{ width: 65, height: 65 }}>
+                    <SightsMarkerIcon size="65" color={COLORS.primary} />
+                    <ImageBackground
+                      source={{ uri: marker?.image?.url }}
+                      style={{
+                        width: 53,
+                        height: 53,
+                        borderRadius: 50,
+                        position: "absolute",
+                        top: 4,
+                        left: 6,
+                        overflow: "hidden",
+                        borderWidth: 0,
+                      }}
                     />
-                    <View style={{
-                      position: "absolute",
-                      top: 0,
-                      right: 0,
-                      backgroundColor: COLORS.primary,
-                      width: 25,
-                      height: 25,
-                      borderRadius: 50,
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderWidth: 2,
-                      borderColor: "#fff",
-                    }}>
-                      <Text style={{color: '#fff', fontSize: 11, fontWeight: "bold"}}>{i+ 1}</Text>
+                    <View
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        right: 0,
+                        backgroundColor: COLORS.primary,
+                        width: 25,
+                        height: 25,
+                        borderRadius: 50,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        borderWidth: 2,
+                        borderColor: "#fff",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: "#fff",
+                          fontSize: 11,
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {i + 1}
+                      </Text>
                     </View>
-                </View>
-                {/* <Callout style={{ width: 150 }} >
+                  </View>
+                  {/* <Callout style={{ width: 150 }} >
                 <Text
                   numberOfLines={1}
                   style={{
@@ -164,13 +173,18 @@ export const TripMapViewScreen: React.FC<TripProps> = ({route}) => {
                   {marker?.title}
                 </Text>
               </Callout> */}
-              </Marker>
-            );
-          })}
+                </Marker>
+              );
+            }
+          )}
         </MapView>
       </View>
       {topSightDetail ? (
-        <SightDetailModal showDirection data={topSightDetail} closeCallBack={handleClear} />
+        <SightDetailModal
+          showDirection
+          data={topSightDetail}
+          closeCallBack={handleClear}
+        />
       ) : null}
     </>
   );
@@ -208,7 +222,7 @@ const styles = StyleSheet.create({
   },
   calloutBoxTitle: {
     fontSize: 16,
-    fontWeight: "400",  
+    fontWeight: "400",
     textAlign: "left",
     width: "100%",
   },

@@ -67,11 +67,10 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
       setIsError(true);
     }
   }, [formik, isInValid]);
-  
-   useEffect(() => {  
-    console.log("hii", isInValid)
-    setIsError(false)
-   }, [formik.values]);
+
+  useEffect(() => {
+    setIsError(false);
+  }, [formik.values]);
 
   return (
     <>
@@ -146,9 +145,16 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
               >
                 <View style={styles.datePickerBottomRowLeft}>
                   <Text style={styles.startsDateLabel}>Start</Text>
-                  <Text style={[styles.startsDateText,{
-                    color: formik?.values?.range?.startDate ? COLORS.primary : COLORS.black
-                  }]}>
+                  <Text
+                    style={[
+                      styles.startsDateText,
+                      {
+                        color: formik?.values?.range?.startDate
+                          ? COLORS.primary
+                          : COLORS.black,
+                      },
+                    ]}
+                  >
                     {formik?.values?.range?.startDate
                       ? moment(formik?.values?.range?.startDate).format(
                           "DD MMM"
@@ -159,9 +165,16 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
                 <Text style={{ fontSize: 25, color: COLORS.black }}>-</Text>
                 <View style={styles.datePickerBottomRowRight}>
                   <Text style={styles.startsDateLabel}>End</Text>
-                  <Text style={[styles.startsDateText, {
-                    color: formik?.values?.range?.endDate ? COLORS.primary : COLORS.black
-                  }]}>
+                  <Text
+                    style={[
+                      styles.startsDateText,
+                      {
+                        color: formik?.values?.range?.endDate
+                          ? COLORS.primary
+                          : COLORS.black,
+                      },
+                    ]}
+                  >
                     {formik?.values?.range?.endDate
                       ? moment(formik?.values?.range?.endDate).format("DD MMM")
                       : "Set date"}
@@ -191,9 +204,14 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
                 <TripLocationIcon size="" color="" />
                 <Text style={styles.halfBoxLabelText}>Where to?</Text>
                 {formik.values.destination ? (
-                  <Text style={[styles.halfBoxValueText,{
-                    color: COLORS.primary
-                  }]}>
+                  <Text
+                    style={[
+                      styles.halfBoxValueText,
+                      {
+                        color: COLORS.primary,
+                      },
+                    ]}
+                  >
                     {/* @ts-ignore */}
                     {formik.values.destination.city!}
                   </Text>
@@ -223,9 +241,14 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
                 <OneUserIcon size="20" color="" />
                 <Text style={styles.halfBoxLabelText}>Travel type</Text>
                 {formik?.values?.travelType ? (
-                  <Text style={[styles.halfBoxValueText,{
-                    color: COLORS.primary
-                  }]}>
+                  <Text
+                    style={[
+                      styles.halfBoxValueText,
+                      {
+                        color: COLORS.primary,
+                      },
+                    ]}
+                  >
                     {formik?.values?.travelType}
                   </Text>
                 ) : null}

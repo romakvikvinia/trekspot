@@ -63,6 +63,7 @@ export const NewTrip = ({ item, newTripModalRef, callBack }: INewTripProps) => {
     onSubmit: async ({ name, range, travelType, cities = [] }, methods) => {
       methods.setSubmitting(true);
       console.log(range);
+
       //@ts-ignore
       let startDate: any = range["startDate"].toLocaleDateString();
       startDate =
@@ -90,11 +91,9 @@ export const NewTrip = ({ item, newTripModalRef, callBack }: INewTripProps) => {
       };
 
       if (item) {
-        console.log("fetchUpdateTrip");
         //@ts-ignore
         fetchUpdateTrip({ id: item.id, ...payload });
       } else {
-        console.log("fetchData");
         //@ts-ignore
         payload.cities = (cities && cities.length && cities) || [];
         //@ts-ignore
@@ -142,8 +141,6 @@ export const NewTrip = ({ item, newTripModalRef, callBack }: INewTripProps) => {
       });
     }
   }, [isUpdatedTripSuccess, callBack]);
-
-  console.log("isUpdatedTripSuccess", isUpdatedTripSuccess);
 
   return (
     <>
