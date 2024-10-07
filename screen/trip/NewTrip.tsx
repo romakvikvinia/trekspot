@@ -62,16 +62,19 @@ export const NewTrip = ({ item, newTripModalRef, callBack }: INewTripProps) => {
     validationSchema: creationTrip,
     onSubmit: async ({ name, range, travelType, cities = [] }, methods) => {
       methods.setSubmitting(true);
+      console.log(range);
       //@ts-ignore
-      const startDate = range["startDate"]
-        .toLocaleDateString()
-        .split("/")
-        .reverse();
+      let startDate: any = range["startDate"].toLocaleDateString();
+      startDate =
+        startDate.indexOf(".") != -1
+          ? startDate.split(".").reverse()
+          : startDate.split("/").reverse();
       //@ts-ignore
-      const endDate = range["endDate"]
-        .toLocaleDateString()
-        .split("/")
-        .reverse();
+      let endDate: any = range["endDate"].toLocaleDateString();
+      endDate =
+        endDate.indexOf(".") != -1
+          ? endDate.split(".").reverse()
+          : endDate.split("/").reverse();
 
       const payload = {
         name,
