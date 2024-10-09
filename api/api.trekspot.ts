@@ -176,22 +176,13 @@ export const trekSpotApi = createApi({
      */
 
     updateMe: builder.mutation<UpdateMeResponseType, UserArgType>({
-      query: ({
-        firstName,
-        lastName,
-        email,
-        password = "",
-        visited_countries = [],
-        lived_countries = [],
-      }) => {
+      query: ({ firstName, lastName, email, password }) => {
         return {
           variables: {
             firstName,
             lastName,
             email,
             password,
-            visited_countries,
-            lived_countries,
           },
           document: gql`
             mutation (
@@ -199,8 +190,6 @@ export const trekSpotApi = createApi({
               $lastName: String!
               $email: String!
               $password: String
-              $visited_countries: [String!]
-              $lived_countries: [String!]
             ) {
               updateMe(
                 input: {
@@ -208,8 +197,6 @@ export const trekSpotApi = createApi({
                   lastName: $lastName
                   email: $email
                   password: $password
-                  visited_countries: $visited_countries
-                  lived_countries: $lived_countries
                 }
               ) {
                 firstName
@@ -217,16 +204,6 @@ export const trekSpotApi = createApi({
                 email
                 role
                 emailVerifiedAt
-                visited_countries {
-                  id
-                  name
-                  iso2
-                }
-                lived_countries {
-                  id
-                  name
-                  iso2
-                }
               }
             }
           `,
