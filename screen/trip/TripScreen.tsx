@@ -275,7 +275,10 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
                 onPress={() => createOrUpdateTripModal.current?.open()}
               >
                 <Text style={_tripScreenStyles.createNewTripButtonText}>
-                  Create a new trip
+                {
+                  tripType === "past" ?
+                  'Add a past trip' : "Create a new trip"
+                }  
                 </Text>
               </TouchableOpacity>
             </View>

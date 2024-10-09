@@ -103,9 +103,10 @@ export const TripItem: React.FC<ITripItemProps> = ({ item, onContextMenu }) => {
             </ImageBackground>
           ) : (
             <Image
-              source={{
+              source={ city?.image?.url ? {
                 uri: city.image.url,
-              }}
+              } : require("../../assets/no-image.png")
+            }
               cachePolicy="memory"
               contentFit="cover"
               transition={0}

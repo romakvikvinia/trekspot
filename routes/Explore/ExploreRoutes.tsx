@@ -43,7 +43,6 @@ export type ExploreRoutesStackNavigationProp =
   StackNavigationProp<ExploreRoutesStackParamList>;
 
 export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
-  const navigation = useNavigation();
   return (
     <Stack.Navigator>
       <Stack.Screen

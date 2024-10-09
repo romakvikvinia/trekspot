@@ -55,7 +55,7 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
     delete sights["Top Sights"];
   }
 
-  console.log("topSights", isLoading, isError);
+ 
   return (
     <View style={{ flex: 1, backgroundColor: "#f8f8f8" }}>
       <ScrollView style={{ flex: 1 }}>
@@ -149,7 +149,7 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                   },
                 ]}
               >
-                <BackIcon color="#fff" />
+                <BackIcon color="#000" />
               </TouchableOpacity>
               <TouchableOpacity
                 style={[
