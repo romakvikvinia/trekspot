@@ -222,7 +222,11 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
       </ScrollView>
 
       <Portal>
-        <Modalize ref={modalCountryPassportSelectRef} modalTopOffset={65}>
+        <Modalize
+          scrollViewProps={{
+            keyboardShouldPersistTaps: "handled",
+          }}
+          ref={modalCountryPassportSelectRef} modalTopOffset={65}>
           <CountrySelect
             onSelect={handleCountrySelect}
             onDestinationModalClose={onDestinationModalClose}

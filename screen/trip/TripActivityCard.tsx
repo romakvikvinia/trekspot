@@ -6,6 +6,7 @@ import { COLORS } from "../../styles/theme";
 import {
   AttractionsIcon,
   BeachesIcon,
+  CasinosIcon,
   CheckLiteIcon,
   DotsIcon,
   HistoricalPlacesIcon,
@@ -52,6 +53,8 @@ export const ReturnIcon = ({ category }) => {
       return <TopExperiencesIcon color="" size={20} />;
     case "Beaches":
       return <BeachesIcon color="" size={20} />;
+    case "Casinos":
+        return <CasinosIcon color="" size={20} />;
   }
 };
 

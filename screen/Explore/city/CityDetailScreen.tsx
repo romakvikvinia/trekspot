@@ -54,7 +54,21 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
   if (sights && data && "Top Sights" in data && data["Top Sights"]) {
     delete sights["Top Sights"];
   }
-
+  
+  useEffect(() => {
+    navigation.getParent()?.setOptions({
+      tabBarStyle: {
+        display: "none",
+      },
+    });
+    return () => {
+      navigation.getParent()?.setOptions({
+        tabBarStyle: {
+          display: "flex",
+        },
+      });
+    };
+  }, []);
  
   return (
     <View style={{ flex: 1, backgroundColor: "#f8f8f8" }}>

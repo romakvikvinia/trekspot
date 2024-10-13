@@ -6,7 +6,7 @@ import { StyleSheet, Text } from "react-native";
 import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
 import { exploreStyles } from "../../components/explore/sights/_exploreStyles";
 import { COLORS, SIZES } from "../../styles/theme";
-import { StarIcon } from "../../utilities/SvgIcons.utility";
+import { PlusIcon, StarIcon, TrashIcon } from "../../utilities/SvgIcons.utility";
 import { TabBar, TabView } from "react-native-tab-view";
 import { Loader } from "../../common/ui/Loader";
 import { TripDaysType } from "./TripDetailScreen";
@@ -133,20 +133,28 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                 </View>
 
                 <View style={styles.actionButtons}>
-                  <TouchableOpacity
-                    onPress={() => showTopSight(item)}
-                    activeOpacity={0.7}
-                    style={styles.detailsButton}
-                  >
-                    <Text style={styles.detailsButtonText}>Details</Text>
-                  </TouchableOpacity>
+                 
 
                   {days &&
                   days.some((day) =>
                     day.activities.some((activity) => activity?.id === item?.id)
                   ) ? (
+                    <>
                     <TouchableOpacity
-                      style={[styles.addToButton]}
+                    onPress={() => handleAddToTrip(item)}
+                    activeOpacity={0.7}
+                    style={styles.detailsButton}
+                  >
+                    <Text style={[styles.detailsButtonText, {
+                      color: "red"
+                    }]}>
+                      Remove
+                    </Text>
+                  </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.addToButton, {
+                        backgroundColor: "red"
+                      }]}
                       onPress={() => {
                         const day = days.find((day) =>
                           day.activities.some(
@@ -160,24 +168,27 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                         });
                       }}
                     >
-                      <Text
-                        style={[
-                          styles.addToButtonText,
-                          {
-                            color: COLORS.red,
-                          },
-                        ]}
-                      >
-                        Remove
-                      </Text>
+                      <TrashIcon color="#fff" /> 
                     </TouchableOpacity>
+                  </>
                   ) : (
+                    <>
+                  <TouchableOpacity
+                    onPress={() => handleAddToTrip(item)}
+                    activeOpacity={0.7}
+                    style={styles.detailsButton}
+                  >
+                    <Text style={styles.detailsButtonText}>
+                      Add to trip
+                    </Text>
+                  </TouchableOpacity>
                     <TouchableOpacity
                       style={styles.addToButton}
                       onPress={() => handleAddToTrip(item)}
                     >
-                      <Text style={styles.addToButtonText}>Add to trip</Text>
+                      <PlusIcon />
                     </TouchableOpacity>
+                  </>
                   )}
                 </View>
               </View>
@@ -241,7 +252,8 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                 indicatorStyle={{ backgroundColor: COLORS.primaryDark }}
                 labelStyle={{
                   textTransform: "capitalize",
-                  fontWeight: "600",
+                  fontWeight: "bold",
+                  fontSize: 15
                 }}
               />
             )}
@@ -285,24 +297,25 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
   },
-  addToButton: {
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    flex: 1,
+  addToButton: { 
     textAlign: "center",
     justifyContent: "center",
-    flexDirection: "row",
-    backgroundColor: COLORS.lightGray,
+    display: "flex",
+    backgroundColor: COLORS.primary,
+    width: 45,
+    height: 45,
+    alignItems: "center",
+    borderBottomEndRadius: 15,
   },
   addToButtonText: {
     color: COLORS.primary,
-    fontSize: 12,
-    fontWeight: "500",
+    fontSize: 14,
+    fontWeight: "bold",
   },
   detailsButtonText: {
-    color: COLORS.black,
-    fontSize: 12,
-    fontWeight: "500",
+    color: COLORS.primary,
+    fontSize: 14,
+    fontWeight: "bold",
   },
   thingsTodoItem: {
     backgroundColor: "#fff",
@@ -316,9 +329,9 @@ const styles = StyleSheet.create({
   actionButtons: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 10,
+    marginTop: 25,
+    alignItems: "center",
   },
-
   thingsTodoItemiIntypeText: {
     fontSize: 12,
     color: COLORS.gray,

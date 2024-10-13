@@ -153,12 +153,12 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
              * Top sights
              */}
 
-            <ExploreSightListContainer
+            {/* <ExploreSightListContainer
               items={(randomSightsData && randomSightsData.randomSights) || []}
               title="Top sights"
               isRandomSightsLoading={isRandomSightsLoading}
               seeAllItems
-            />
+            /> */}
             {/*
              * Countries by Continent with random
              *

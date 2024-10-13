@@ -32,7 +32,7 @@ export type TripRouteStackParamList = {
   TripFAQ: undefined;
   TripDishes: undefined;
   TripTransport: undefined;
-  TripTransportation: undefined;
+  TripEmergency: undefined;
 };
 
 const Stack = createStackNavigator<TripRouteStackParamList>();
@@ -129,7 +129,7 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
         })}
       />
       <Stack.Screen
-        name="TripTransportation"
+        name="TripEmergency"
         component={TripEmergency}
         options={() => ({
           header: () => null,

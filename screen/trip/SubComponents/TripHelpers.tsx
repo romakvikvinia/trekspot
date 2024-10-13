@@ -26,6 +26,14 @@ export const TripHelpers = ({ data, iso2 }) => {
         contentContainerStyle={{ paddingHorizontal: 20 }}
         showsHorizontalScrollIndicator={false}
       >
+         <TouchableOpacity
+          style={styles.bottomActionsButton}
+          activeOpacity={0.7}
+          onPress={() => navigation.navigate("TripEmergency")}
+        >
+          <EmergencyLinearIcon size={12} color={"#0b57d0"} />
+          <Text style={styles.bottomActionsButtonlabel}>Emergency</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.bottomActionsButton}
           activeOpacity={0.7}
@@ -73,14 +81,7 @@ export const TripHelpers = ({ data, iso2 }) => {
           <DishesIcon size={12} color={"#0b57d0"} />
           <Text style={styles.bottomActionsButtonlabel}>What to eat?</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.bottomActionsButton}
-          activeOpacity={0.7}
-          onPress={() => navigation.navigate("TripTransportation")}
-        >
-          <EmergencyLinearIcon size={12} color={"#0b57d0"} />
-          <Text style={styles.bottomActionsButtonlabel}>Emergency</Text>
-        </TouchableOpacity>
+       
       </ScrollView>
     </View>
   );
