@@ -57,7 +57,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
     },
     validationSchema: SignInValidationSchema,
     onSubmit: async ({ email, password }, methods) => {
-      methods.setSubmitting(true);
+      // methods.setSubmitting(true);
       fetchSignIn({ email, password });
     },
   });
@@ -66,20 +66,29 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
     fadeValue: new Animated.Value(0),
   });
 
-  const handleSaveToken = useCallback(async (auth: AuthLoginResponseType) => {
-    try {
-      let token = { ...auth.signIn };
-      token.expire = new Date().getTime() + token.expire;
+  const handleSaveToken = useCallback(
+    async (auth: AuthLoginResponseType) => {
+      try {
+        let token = { ...auth.signIn };
+        token.expire = new Date().getTime() + token.expire;
 
-      await storeToken(token);
-      const user = await fetchMe().unwrap();
-      console.log("user", user);
+        await storeToken(token);
+        const user = await fetchMe().unwrap();
+        console.log("user", user);
 
-      signIn({ token: token.token, user: user.me, expire: token.expire });
-    } catch (error) {
-      // console.log(error)
-    }
-  }, []);
+        dispatch(
+          signIn({
+            token: token.token,
+            user: user.me,
+            expire: token.expire,
+          })
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [dispatch]
+  );
 
   //animations
   useEffect(() => {
@@ -107,6 +116,8 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
       },
     ]);
   }
+
+  console.log("isSuccess", isSuccess, data);
 
   return (
     <View style={styles.safeArea}>
@@ -212,7 +223,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 isLoading
               }
             >
-              {formik.isSubmitting || isLoading || isSuccess ? (
+              {formik.isSubmitting || isLoading ? (
                 <ActivityIndicator size="small" color="#fff" />
               ) : (
                 <Text style={globalStyles.buttonItemPrimaryText}>Sign In</Text>

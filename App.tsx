@@ -8,6 +8,8 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { Routes } from "./routes/Routes";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { store } from "./package/store";
+import { Provider } from "react-redux";
 
 // SplashScreen.preventAutoHideAsync();
 
@@ -27,8 +29,8 @@ export default function App() {
   }
 
   return (
-    // <Provider store={store}>
-    <ApiProvider api={trekSpotApi}>
+    <Provider store={store}>
+      {/* <ApiProvider api={trekSpotApi}> */}
       <GestureHandlerRootView
         // onLayout={onLayoutRootView}
         style={styles.container}
@@ -36,8 +38,8 @@ export default function App() {
         <StatusBar style="auto" />
         <Routes />
       </GestureHandlerRootView>
-    </ApiProvider>
-    // </Provider>
+      {/* </ApiProvider> */}
+    </Provider>
   );
 }
 

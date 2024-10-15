@@ -76,22 +76,22 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
       border: "transparent",
     },
   };
-  console.log("authState", authState);
+  console.log("authState", authState.auth);
   return (
     <NavigationContainer onReady={checkAuth} theme={theme}>
-      <AuthContext.Provider value={authContext}>
-        {authState && !authState.isLoading ? (
-          !authState.isAuthenticated ? (
-            <AuthRoute />
-          ) : (
-            <UserProvider>
-              <AppRoute />
-            </UserProvider>
-          )
+      {/* <AuthContext.Provider value={authContext}> */}
+      {authState && !authState.auth.isLoading ? (
+        !authState.auth.isAuthenticated ? (
+          <AuthRoute />
         ) : (
-          <Loader isLoading={state.isLoading} />
-        )}
-      </AuthContext.Provider>
+          <UserProvider>
+            <AppRoute />
+          </UserProvider>
+        )
+      ) : (
+        <Loader isLoading={state.isLoading} />
+      )}
+      {/* </AuthContext.Provider> */}
     </NavigationContainer>
   );
 };

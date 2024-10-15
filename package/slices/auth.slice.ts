@@ -31,21 +31,16 @@ const slice = createSlice({
         payload,
       }: PayloadAction<{ token: string; expire: number; user: UserType }>
     ) => {
-      state = {
-        ...state,
-        isLoading: false,
-        isAuthenticated: true,
-        token: payload.token,
-        user: payload.user,
-      };
+      console.log("state change", payload);
+      state.isAuthenticated = true;
+      state.isLoading = false;
+      state.token = payload.token;
+      state.user = payload.user;
     },
     refreshToken: (state, { payload }: PayloadAction<{ token: string }>) => {
-      state = {
-        ...state,
-        isLoading: false,
-        isAuthenticated: true,
-        token: payload.token,
-      };
+      state.isLoading = false;
+      state.isAuthenticated = true;
+      state.token = payload.token;
     },
   },
 });

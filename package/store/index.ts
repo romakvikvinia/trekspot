@@ -7,8 +7,11 @@ import { TypedUseSelectorHook, useSelector } from "react-redux";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    // [chatAppApi.reducerPath]: (state, action) => action.type !== HYDRATE ? chatAppApi.reducer(state, action) : {...state, ...(action.payload as unknown)[chatAppApi.reducerPath]},
-    // [trekSpotApi.reducerPath]: trekSpotApi.reducer,
+    // [chatAppApi.reducerPath]: (state, action) =>
+    //   action.type !== HYDRATE
+    //     ? chatAppApi.reducer(state, action)
+    //     : { ...state, ...(action.payload as unknown)[chatAppApi.reducerPath] },
+    [trekSpotApi.reducerPath]: trekSpotApi.reducer,
   },
   // middleware: (getDefaultMiddleware) =>
   //   getDefaultMiddleware().concat(trekSpotApi.middleware),
