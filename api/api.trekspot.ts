@@ -254,21 +254,11 @@ export const trekSpotApi = createApi({
               email
               role
               emailVerifiedAt
-              visited_countries {
-                id
-                name
-                iso2
-              }
-              lived_countries {
-                id
-                name
-                iso2
-              }
             }
           }
         `,
       }),
-      transformResponse: (response: meResponseType) => {
+      transformResponse: (response: MeResponseType) => {
         return response;
       },
       providesTags: ["me"],

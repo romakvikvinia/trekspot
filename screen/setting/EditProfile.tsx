@@ -18,14 +18,11 @@ import { BackIcon } from "../../utilities/SvgIcons.utility";
 import Constants from "expo-constants";
 import { SettingRouteStackParamList } from "../../routes/setting/SettingRoutes";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import {
-  trekSpotApi,
-  useMeQuery,
-  useUpdateMeMutation,
-} from "../../api/api.trekspot";
+import { useUpdateMeMutation } from "../../api/api.trekspot";
 import { useFormik } from "formik";
 import { EditProfileValidationSchema } from "./validationScheme";
-import { useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../package/store";
+import { updateUser } from "../../package/slices";
 
 type EdoProfileProps = NativeStackScreenProps<
   SettingRouteStackParamList,
@@ -33,12 +30,8 @@ type EdoProfileProps = NativeStackScreenProps<
 >;
 
 export const EditProfile: React.FC<EdoProfileProps> = ({ navigation }) => {
-  const dispatch = useDispatch();
-  const {
-    data: user,
-    isLoading: isUserLoading,
-    isSuccess: isUserSuccess,
-  } = useMeQuery();
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
   const [
     fetchUpdateMe,
     { isLoading: isLoadingUpdateMe, isSuccess: isSuccessUpdateMe },
@@ -46,39 +39,29 @@ export const EditProfile: React.FC<EdoProfileProps> = ({ navigation }) => {
 
   const formik = useFormik({
     initialValues: {
-      firstName: user?.me.firstName,
-      lastName: user?.me.lastName,
-      email: user?.me.email,
+      firstName: user!.firstName,
+      lastName: user!.lastName,
+      email: user!.email,
     },
     validationSchema: EditProfileValidationSchema,
-    onSubmit: (values, methods) => {
-      console.log("values", values);
-      fetchUpdateMe({
-        firstName: values.firstName,
-        lastName: values.lastName,
-        email: values.email,
-      });
+    onSubmit: async (values, methods) => {
+      methods.setSubmitting(true);
+      try {
+        const response = await fetchUpdateMe({
+          firstName: values.firstName,
+          lastName: values.lastName,
+          email: values.email,
+        }).unwrap();
+        dispatch(updateUser({ user: response.updateMe }));
+        methods.setSubmitting(false);
+        navigation.goBack();
+      } catch (error) {
+        Alert.alert("Error", "Something went wrong, please try later");
+      }
     },
   });
 
-  useEffect(() => {
-    if (isUserSuccess) {
-      formik.setValues({
-        firstName: user?.me.firstName,
-        lastName: user?.me.lastName,
-        email: user?.me.email,
-      });
-    }
-  }, [isUserSuccess]);
-
-  useEffect(() => {
-    if (isSuccessUpdateMe) {
-      dispatch(trekSpotApi.util.invalidateTags(["me"]));
-      navigation.goBack();
-    }
-  }, [isSuccessUpdateMe]);
-
-  const isLoading = isUserLoading || isLoadingUpdateMe || formik.isSubmitting;
+  const isLoading = isLoadingUpdateMe || formik.isSubmitting;
 
   return (
     <>

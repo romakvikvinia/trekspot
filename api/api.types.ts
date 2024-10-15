@@ -41,15 +41,11 @@ export type UserType = {
 
 export type FullUserType = UserType & {
   emailVerifiedAt: Date;
-  visited_countries: CountryType[];
-  lived_countries: CountryType[];
 };
 
 export type UserArgType = Partial<
-  Omit<UserType, "visited_countries" | "lived_countries"> & {
-    visited_countries: string[];
-    lived_countries: string[];
-    password?: string;
+  UserType & {
+    password: string;
   }
 >;
 

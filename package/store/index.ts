@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { trekSpotApi } from "../../api/api.trekspot";
 import authReducer from "../slices/auth.slice";
-import { TypedUseSelectorHook, useSelector } from "react-redux";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 // reducers
 
 export const store = configureStore({
@@ -13,10 +13,8 @@ export const store = configureStore({
     //     : { ...state, ...(action.payload as unknown)[chatAppApi.reducerPath] },
     [trekSpotApi.reducerPath]: trekSpotApi.reducer,
   },
-  // middleware: (getDefaultMiddleware) =>
-  //   getDefaultMiddleware().concat(trekSpotApi.middleware),
-  // middleware: (getDefaultMiddleware) =>
-  //   getDefaultMiddleware().concat(trekSpotApi.middleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(trekSpotApi.middleware),
   devTools: true,
 });
 
@@ -25,4 +23,5 @@ export type RootState = ReturnType<typeof store.getState>;
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;
 
+export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

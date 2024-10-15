@@ -1,8 +1,7 @@
-import React, { useContext, useRef } from "react";
+import React, { useRef } from "react";
 import {
   Alert,
   Linking,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,8 +11,8 @@ import {
 import Constants from "expo-constants";
 
 import { Image } from "expo-image";
-import { AuthContext } from "../../package/context/auth.context";
-import { deleteFromAsyncStorage } from "../../helpers/secure.storage";
+
+import { deleteItemFromStorage } from "../../helpers/secure.storage";
 import { COLORS } from "../../styles/theme";
 import {
   DeleteIcon,
@@ -27,14 +26,16 @@ import {
   UserCircleIcon,
   UserIcon,
 } from "../../utilities/SvgIcons.utility";
-import { useNavigation } from "@react-navigation/native";
+
 import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 import { MapEmbedView } from "../../common/components/MapEmbedView";
-import { UserContext } from "../../components/context/UserContext";
+
 import { useMeQuery } from "../../api/api.trekspot";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SettingRouteStackParamList } from "../../routes/setting/SettingRoutes";
+import { useAppDispatch, useAppSelector } from "../../package/store";
+import { signOut } from "../../package/slices";
 
 type SettingProps = NativeStackScreenProps<
   SettingRouteStackParamList,
@@ -43,18 +44,14 @@ type SettingProps = NativeStackScreenProps<
 
 export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
   const modalEmbedRef = useRef<Modalize>(null);
-  const { user } = useContext(UserContext);
-  const {
-    data: userData,
-    isLoading: isUserLoading,
-    isSuccess: isUserSuccess,
-  } = useMeQuery();
-
-  const { signOut } = useContext(AuthContext);
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
 
   const onModalEmbedOpen = () => {
     modalEmbedRef.current?.open();
   };
+
+  const isGuest = user?.role === "guest";
 
   return (
     <>
@@ -92,18 +89,18 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
               )}
               <View style={{ maxWidth: "70%" }}>
                 <Text numberOfLines={1} style={styles.username}>
-                  {user?.type === "guest"
+                  {isGuest
                     ? "Guest user"
-                    : `${userData?.me.firstName} ${userData?.me.lastName}`}
+                    : `${user!.firstName} ${user!.lastName}`}
                 </Text>
-                <Text style={styles.subTxt}>{userData?.me.email}</Text>
+                <Text style={styles.subTxt}>{user!.email}</Text>
               </View>
             </View>
           </View>
 
           <Text style={styles.buttonsWrapperTitle}>Account</Text>
           <View style={styles.buttonsWrapper}>
-            {user?.type !== "guest" && (
+            {!isGuest && (
               <>
                 <TouchableOpacity
                   onPress={() => navigation.navigate("EditProfile")}
@@ -131,7 +128,7 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
               <PrivacyIcon />
               <Text style={styles.buttonText}>Privacy Policy</Text>
             </TouchableOpacity>
-            {user?.type !== "guest" && (
+            {!isGuest && (
               <>
                 <TouchableOpacity
                   style={[styles.button, { marginBottom: 0 }]}
@@ -154,11 +151,8 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
                   ]}
                   activeOpacity={0.7}
                   onPress={async () => {
-                    signOut();
-                    deleteFromAsyncStorage([
-                      "visited_countries",
-                      "lived_countries",
-                    ]);
+                    await deleteItemFromStorage();
+                    dispatch(signOut());
                   }}
                 >
                   <LogoutIcon />

@@ -18,7 +18,6 @@ import {
 } from "react-native";
 import Constants from "expo-constants";
 
-import { AuthContext } from "../../package/context/auth.context";
 import { SignInValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
@@ -40,8 +39,6 @@ export const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({
 }) => {
   const [fetchSignIn, { data, isLoading, error, isError, isSuccess }] =
     useSignInMutation();
-  //@ts-ignore
-  const { signIn } = useContext(AuthContext);
 
   const [sentCode, setSentCode] = useState(false);
   const [codeValue, setCodeValue] = useState("");
@@ -69,7 +66,7 @@ export const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({
       token.expire = new Date().getTime() + token.expire;
 
       await storeToken(token);
-      signIn(token);
+      // signIn(token);
     } catch (error) {
       // console.log(error)
     }
@@ -89,8 +86,6 @@ export const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({
       handleSaveToken(data);
     }
   }, [isSuccess, data]);
-
- 
 
   return (
     <View style={styles.safeArea}>
@@ -177,11 +172,11 @@ export const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({
                 onPress={() => navigation.navigate("PasswordUpdate")}
                 disabled={codeValue.length < 6}
               >
-                {false? (
+                {false ? (
                   <ActivityIndicator size="small" color="#fff" />
                 ) : (
                   <Text style={globalStyles.buttonItemPrimaryText}>
-                   Verify code
+                    Verify code
                   </Text>
                 )}
               </TouchableOpacity>

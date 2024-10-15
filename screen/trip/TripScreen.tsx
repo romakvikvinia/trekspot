@@ -40,7 +40,7 @@ import {
 import moment from "moment";
 import { Loader } from "../../common/ui/Loader";
 import * as Haptics from "expo-haptics";
-import { AuthContext } from "../../package/context/auth.context";
+
 import { UserContext } from "../../components/context/UserContext";
 import { TrekSneckBar } from "../../common/components/TrekSneckBar";
 import { PaperProvider } from "react-native-paper";
@@ -51,6 +51,7 @@ import { QuestionModal } from "../../common/components/QuestionModal";
 import { questionModaStyles } from "../../styles/questionModaStyles";
 import { TripType } from "../../api/api.types";
 import { Image } from "expo-image";
+import { useAppSelector } from "../../package/store";
 
 type TripProps = NativeStackScreenProps<TripRouteStackParamList, "TripsScreen">;
 
@@ -62,8 +63,8 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
   const createOrUpdateTripModal = useRef<Modalize>(null);
   const modalQuestionRef = useRef<Modalize>(null);
   const dispatch = useDispatch();
-  const { signOut } = useContext(AuthContext);
-  const { user } = useContext(UserContext);
+  const { user } = useAppSelector((state) => state.auth);
+
   const [state, setState] = React.useState<IState>({ trip: undefined });
   const [tripType, setTripType] = React.useState("upcoming");
 
@@ -99,7 +100,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
       ) || [];
 
   const handleCreateNewTrip = () => {
-    if (user?.type === "guest") {
+    if (user?.role === "guest") {
       Alert.alert("To create a new trip, you need to sign in", "", [
         {
           text: "Cancel",
@@ -108,7 +109,9 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
         },
         {
           text: "Sign in",
-          onPress: () => signOut(),
+          onPress: () => {
+            //signOut()
+          },
           style: "default",
         },
       ]);
@@ -275,10 +278,9 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
                 onPress={() => createOrUpdateTripModal.current?.open()}
               >
                 <Text style={_tripScreenStyles.createNewTripButtonText}>
-                {
-                  tripType === "past" ?
-                  'Add a past trip' : "Create a new trip"
-                }  
+                  {tripType === "past"
+                    ? "Add a past trip"
+                    : "Create a new trip"}
                 </Text>
               </TouchableOpacity>
             </View>

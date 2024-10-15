@@ -43,9 +43,9 @@ import { AnalyticsType } from "../../api/api.types";
 import { formatPercentage } from "../../helpers/number.helper";
 import { useDispatch } from "react-redux";
 import { MapSvg } from "../../utilities/svg/map";
-import { AuthContext } from "../../package/context/auth.context";
-import { UserContext } from "../../components/context/UserContext";
 
+import { UserContext } from "../../components/context/UserContext";
+import { useAppSelector } from "../../package/store";
 
 interface MapVIewProps {
   analytic?: AnalyticsType;
@@ -53,9 +53,8 @@ interface MapVIewProps {
 
 export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
   const dispatch = useDispatch();
-  const { signOut } = useContext(AuthContext);
-  const { user } = useContext(UserContext);
 
+  const { user } = useAppSelector((state) => state.auth);
 
   const [searchValue, setSearchValue] = useState("");
   const [state, setState] = useState<{
@@ -77,7 +76,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
   const shareModalRef = useRef<Modalize>(null);
 
   const onOpen = useCallback(() => {
-    if (user?.type === "guest") {
+    if (user?.role === "guest") {
       Alert.alert("To add a visit, you need to sign in", "", [
         {
           text: "Cancel",
@@ -86,14 +85,15 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
         },
         {
           text: "Sign in",
-          onPress: () => signOut(),
+          onPress: () => {
+            //signOut()
+          },
           style: "default",
         },
       ]);
-    }  else {
+    } else {
       if (modalRef.current) modalRef.current.open();
     }
-    
   }, []);
 
   const onShareModalOpen = useCallback(() => {

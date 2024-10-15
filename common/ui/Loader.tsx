@@ -5,7 +5,7 @@ import { Center } from "./Center";
 
 interface LoaderProps {
   isLoading: boolean;
-  background: string;
+  background?: string;
   color?: string;
   size?: number | "small" | "large" | undefined;
 }

@@ -2,18 +2,16 @@ import React, { useCallback, useReducer } from "react";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 
-import { authReducer, defaultState } from "../package/reducers/auth.reducer";
-import { AuthContext } from "../package/context/auth.context";
-
 import { AuthRoute } from "./auth/AuthRoutes";
 import { deleteItemFromStorage, getFullToken } from "../helpers/secure.storage";
 import { AppRoute } from "./AppRoute";
 import { Loader } from "../common/ui/Loader";
-import { Alert } from "react-native";
-import { UserProvider } from "../components/context/UserContext";
-import { signIn } from "../package/slices";
 
-import { RootState, useAppSelector } from "../package/store";
+import { UserProvider } from "../components/context/UserContext";
+import { signIn, signOut } from "../package/slices";
+
+import { useAppDispatch, useAppSelector } from "../package/store";
+import { useLazyMeQuery } from "../api/api.trekspot";
 
 //reselect
 
@@ -23,51 +21,37 @@ SplashScreen.preventAutoHideAsync();
 
 export const Routes: React.FC<RoutesProps> = ({}) => {
   const authState = useAppSelector((state) => state);
-  const initialState = defaultState();
-  const [state, dispatch] = useReducer(authReducer, initialState);
+  const dispatch = useAppDispatch();
+  const [fetchMe] = useLazyMeQuery();
 
   const checkAuth = useCallback(async () => {
     try {
       let token = await getFullToken();
 
-      // await deleteItemFromStorage();
       if (!token || (token && new Date().getTime() >= token.expire)) {
         // unauthorize
 
         await deleteItemFromStorage();
-        dispatch({ type: "SIGN_OUT" });
+        dispatch(signOut());
         await SplashScreen.hideAsync();
         return;
       }
 
-      // // setToken(tokens.access_token);
-      dispatch({ type: "SIGN_IN", payload: { token: token.token } });
-      // signIn({ token: token.token });
+      const user = await fetchMe().unwrap();
+
+      dispatch(
+        signIn({
+          token: token.token,
+          user: user.me,
+          expire: token.expire,
+        })
+      );
     } catch (error) {
       // console.log("error", error);
       // Alert.alert(JSON.stringify(error));
     }
     await SplashScreen.hideAsync();
   }, [dispatch]);
-
-  const authContext = React.useMemo(
-    () => ({
-      signIn: async (data: any) => {
-        dispatch({
-          type: "SIGN_IN",
-          payload: {
-            token: data.access_token,
-            expire: data.expire,
-          },
-        });
-      },
-      signOut: async () => {
-        await deleteItemFromStorage();
-        dispatch({ type: "SIGN_OUT" });
-      },
-    }),
-    []
-  );
 
   const theme = {
     ...DefaultTheme,
@@ -79,7 +63,6 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
   console.log("authState", authState.auth);
   return (
     <NavigationContainer onReady={checkAuth} theme={theme}>
-      {/* <AuthContext.Provider value={authContext}> */}
       {authState && !authState.auth.isLoading ? (
         !authState.auth.isAuthenticated ? (
           <AuthRoute />
@@ -89,9 +72,8 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
           </UserProvider>
         )
       ) : (
-        <Loader isLoading={state.isLoading} />
+        <Loader isLoading={authState.auth.isLoading} />
       )}
-      {/* </AuthContext.Provider> */}
     </NavigationContainer>
   );
 };

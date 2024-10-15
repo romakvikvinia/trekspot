@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
@@ -16,7 +16,6 @@ import {
 } from "react-native";
 import Constants from "expo-constants";
 
-import { AuthContext } from "../../package/context/auth.context";
 import { SignInValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
@@ -26,7 +25,7 @@ import {
   useSignInMutation,
 } from "../../api/api.trekspot";
 import { AuthLoginResponseType } from "../../api/api.types";
-import { getFullToken, storeToken } from "../../helpers/secure.storage";
+import { storeToken } from "../../helpers/secure.storage";
 import {
   AppleIcon,
   EmailIcon,
@@ -40,6 +39,7 @@ import { globalStyles } from "../../styles/globalStyles";
 import { TrekSpotLinear } from "../../utilities/svg/TrekSpotLinear";
 
 import { signIn } from "../../package/slices";
+import { GUEST_EMAIL, GUEST_PASS } from "../../helpers/baseUrl.helper";
 
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 
@@ -48,6 +48,16 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   const [isSecureType, setIsSecureType] = useState(true);
   const [fetchSignIn, { data, isLoading, error, isError, isSuccess }] =
     useSignInMutation();
+
+  const [
+    fetchSignInAsGuest,
+    {
+      data: guest,
+      isLoading: isGuestLoading,
+      isError: isGuestError,
+      isSuccess: isGuestSuccess,
+    },
+  ] = useSignInMutation();
   const [fetchMe] = useLazyMeQuery();
 
   const formik = useFormik({
@@ -56,8 +66,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
       password: "",
     },
     validationSchema: SignInValidationSchema,
-    onSubmit: async ({ email, password }, methods) => {
-      // methods.setSubmitting(true);
+    onSubmit: async ({ email, password }) => {
       fetchSignIn({ email, password });
     },
   });
@@ -74,7 +83,6 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
 
         await storeToken(token);
         const user = await fetchMe().unwrap();
-        console.log("user", user);
 
         dispatch(
           signIn({
@@ -90,6 +98,14 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
     [dispatch]
   );
 
+  const handleContinueAsGuest = useCallback(() => {
+    console.log("handleContinueAsGuest", GUEST_EMAIL, GUEST_PASS);
+    fetchSignInAsGuest({
+      email: GUEST_EMAIL,
+      password: GUEST_PASS,
+    });
+  }, []);
+
   //animations
   useEffect(() => {
     Animated.timing(fadeValue, {
@@ -100,11 +116,11 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    if (isSuccess && data) {
+    if ((isSuccess && data) || (isGuestSuccess && guest)) {
       //@ts-ignore
-      handleSaveToken(data);
+      handleSaveToken(data || guest);
     }
-  }, [isSuccess, data]);
+  }, [isSuccess, data, isGuestSuccess, guest]);
 
   if (isError) {
     Alert.alert("Error", "Invalid Credentials", [
@@ -117,7 +133,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
     ]);
   }
 
-  console.log("isSuccess", isSuccess, data);
+  console.log("isSuccess", process.env);
 
   return (
     <View style={styles.safeArea}>
@@ -177,7 +193,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                   if (
                     !("password" in formik.errors) ||
                     !("Email" in formik.errors) ||
-                    !formik.isSubmitting
+                    isLoading
                   ) {
                     formik.submitForm();
                   }
@@ -223,7 +239,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 isLoading
               }
             >
-              {formik.isSubmitting || isLoading ? (
+              {formik.isSubmitting || isLoading || isSuccess ? (
                 <ActivityIndicator size="small" color="#fff" />
               ) : (
                 <Text style={globalStyles.buttonItemPrimaryText}>Sign In</Text>
@@ -238,17 +254,22 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                   marginTop: 15,
                 },
               ]}
+              onPress={() => handleContinueAsGuest()}
             >
-              <Text
-                style={[
-                  globalStyles.buttonItemPrimaryText,
-                  {
-                    color: COLORS.primaryDark,
-                  },
-                ]}
-              >
-                Continue as guest
-              </Text>
+              {isGuestLoading || isGuestSuccess ? (
+                <ActivityIndicator size="small" color="#fff" />
+              ) : (
+                <Text
+                  style={[
+                    globalStyles.buttonItemPrimaryText,
+                    {
+                      color: COLORS.primaryDark,
+                    },
+                  ]}
+                >
+                  Continue as guest
+                </Text>
+              )}
             </TouchableOpacity>
 
             <View style={styles.continueWithDivider}>

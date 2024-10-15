@@ -25,6 +25,9 @@ const slice = createSlice({
   initialState,
   reducers: {
     signOut: () => initialState,
+    updateUser: (state, { payload }: PayloadAction<{ user: UserType }>) => {
+      state.user = payload.user;
+    },
     signIn: (
       state,
       {
@@ -45,7 +48,7 @@ const slice = createSlice({
   },
 });
 
-export const { signOut, signIn, refreshToken } = slice.actions;
+export const { signOut, signIn, refreshToken, updateUser } = slice.actions;
 export default slice.reducer;
 
 // export const selectIsAuthenticated = (state: RootState) =>
