@@ -262,12 +262,12 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
                 cachePolicy="memory-disk"
               ></Image>
               <Text style={_tripScreenStyles.notFoundViewTitleText}>
-                {tripType === "past" ? "No past trips" : "Why if not today?"}
+                {tripType === "past" ? "No past trips" : "When if not today?"}
               </Text>
               <Text style={_tripScreenStyles.notFoundViewText}>
                 {tripType === "past"
-                  ? "Here you will see all your past trips"
-                  : "Its time to plan your next trip"}
+                  ? "Here will appear your past trips"
+                  : "It's time to plan your next trip"}
               </Text>
 
               <TouchableOpacity
@@ -275,7 +275,10 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
                 onPress={() => createOrUpdateTripModal.current?.open()}
               >
                 <Text style={_tripScreenStyles.createNewTripButtonText}>
-                  Create a new trip
+                {
+                  tripType === "past" ?
+                  'Add a past trip' : "Create a new trip"
+                }  
                 </Text>
               </TouchableOpacity>
             </View>

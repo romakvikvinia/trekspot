@@ -87,7 +87,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   const activitiesModal = useRef<Modalize>(null);
   const modalQuestionRef = useRef<Modalize>(null);
   const modalQuestionRef2 = useRef<Modalize>(null);
-  const modalEmbedRef = useRef<Modalize>(null);
+  // const modalEmbedRef = useRef<Modalize>(null);
   const [index, setIndex] = useState(0);
 
   const [deleteIndexes, setDeleteIndexes] = useState<{
@@ -668,7 +668,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         </Modalize>
       </Portal>
 
-      <Portal>
+      {/* <Portal>
         <Modalize ref={modalEmbedRef} modalTopOffset={65} adjustToContentHeight>
           <MapEmbedView
             blogUrl="https://file-examples.com/wp-content/storage/2017/10/file-sample_150kB.pdf"
@@ -676,7 +676,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
             modalEmbedRef={modalEmbedRef}
           />
         </Modalize>
-      </Portal>
+      </Portal> */}
     </>
   );
 };

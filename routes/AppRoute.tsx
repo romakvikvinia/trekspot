@@ -68,9 +68,9 @@ export const AppRoute: React.FC<AppRouteProps> = ({}) => {
           // tabBarShowLabel: false,
           headerShown: false,
           tabBarStyle: {
-            borderTopColor: "#f1f1f1",
+            borderTopColor: "#eee",
             borderTopWidth: 1,
-            paddingTop: 5,
+            // paddingTop: 5,
             backgroundColor: "#fff",
             height: 80
           },

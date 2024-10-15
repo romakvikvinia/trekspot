@@ -95,7 +95,7 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
                 activeOpacity={0.7}
                 style={styles.backButton}
               >
-                <BackIcon color="#fff" />
+                <BackIcon color="#000" />
               </TouchableOpacity>
 
               {isLoading && (
