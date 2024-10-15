@@ -62,15 +62,16 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     if (isSuccess && data) {
-      Alert.alert("Success", "Account created successfully", [
+      Alert.alert("Congratulation!", "Account created successfully", [
         {
           onPress: () => {
+            navigation.navigate("SignIn");
             dispatch(trekSpotApi.util.resetApiState());
             formik.resetForm();
           },
-          text: "OK",
+          text: "Sign in",
         },
-      ]);
+      ]); 
     }
   }, [isSuccess, data]);
 
@@ -249,7 +250,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
                 {
                   fontSize: SIZES.body5,
                   fontWeight: "normal",
-                  color: COLORS.primaryDark,
+                  color: COLORS.primary,
                 },
               ]}
             >
