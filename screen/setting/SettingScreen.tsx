@@ -144,22 +144,21 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
                   <DeleteIcon />
                   <Text style={[styles.buttonText]}>Deactivate account</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  style={[
-                    styles.button,
-                    { borderBottomWidth: 0, marginBottom: 0 },
-                  ]}
-                  activeOpacity={0.7}
-                  onPress={async () => {
-                    await deleteItemFromStorage();
-                    dispatch(signOut());
-                  }}
-                >
-                  <LogoutIcon />
-                  <Text style={styles.buttonText}>Logout</Text>
-                </TouchableOpacity>
               </>
             )}
+            <TouchableOpacity
+              style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]}
+              activeOpacity={0.7}
+              onPress={async () => {
+                await deleteItemFromStorage();
+                dispatch(signOut());
+              }}
+            >
+              <LogoutIcon />
+              <Text style={styles.buttonText}>
+                {isGuest ? "Sign In" : "Sign out"}
+              </Text>
+            </TouchableOpacity>
           </View>
 
           <Text style={styles.buttonsWrapperTitle}>Socials</Text>

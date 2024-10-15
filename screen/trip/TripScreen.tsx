@@ -138,6 +138,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
   useEffect(() => {
     if (isTripSuccessfullyDeleted) {
       dispatch(trekSpotApi.util.invalidateTags(["myTrips"]));
+      setState((prevState) => ({ ...prevState, trip: undefined }));
     }
   }, [isTripSuccessfullyDeleted, dispatch]);
 
