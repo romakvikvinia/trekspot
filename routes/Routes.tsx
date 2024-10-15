@@ -11,6 +11,9 @@ import { AppRoute } from "./AppRoute";
 import { Loader } from "../common/ui/Loader";
 import { Alert } from "react-native";
 import { UserProvider } from "../components/context/UserContext";
+import { signIn } from "../package/slices";
+
+import { RootState, useAppSelector } from "../package/store";
 
 //reselect
 
@@ -19,6 +22,7 @@ interface RoutesProps {}
 SplashScreen.preventAutoHideAsync();
 
 export const Routes: React.FC<RoutesProps> = ({}) => {
+  const authState = useAppSelector((state) => state);
   const initialState = defaultState();
   const [state, dispatch] = useReducer(authReducer, initialState);
 
@@ -38,6 +42,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
 
       // // setToken(tokens.access_token);
       dispatch({ type: "SIGN_IN", payload: { token: token.token } });
+      // signIn({ token: token.token });
     } catch (error) {
       // console.log("error", error);
       // Alert.alert(JSON.stringify(error));
@@ -71,12 +76,12 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
       border: "transparent",
     },
   };
-
+  console.log("authState", authState);
   return (
     <NavigationContainer onReady={checkAuth} theme={theme}>
       <AuthContext.Provider value={authContext}>
-        {!state.isLoading ? (
-          !state.isAuthenticated ? (
+        {authState && !authState.isLoading ? (
+          !authState.isAuthenticated ? (
             <AuthRoute />
           ) : (
             <UserProvider>
@@ -86,7 +91,6 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
         ) : (
           <Loader isLoading={state.isLoading} />
         )}
-     
       </AuthContext.Provider>
     </NavigationContainer>
   );

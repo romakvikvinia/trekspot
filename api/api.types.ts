@@ -7,9 +7,7 @@ export type TokenType = {
 };
 
 export type AuthLoginResponseType = {
-  data: {
-    login: TokenType;
-  };
+  signIn: TokenType;
 };
 
 export type AuthLoginType = {
@@ -26,9 +24,7 @@ export type AuthLogUpType = AuthLoginType & {
 };
 
 export type AuthSignUpResponseType = {
-  data: {
-    signUp: Omit<AuthLogUpType, "password">;
-  };
+  signUp: Omit<AuthLogUpType, "password">;
 };
 
 /**
@@ -41,6 +37,9 @@ export type UserType = {
   lastName: string;
   email: string;
   role: string;
+};
+
+export type FullUserType = UserType & {
   emailVerifiedAt: Date;
   visited_countries: CountryType[];
   lived_countries: CountryType[];
@@ -58,8 +57,8 @@ export type UpdateMeResponseType = {
   updateMe: UserType;
 };
 
-export type meResponseType = {
-  me: UserType;
+export type MeResponseType = {
+  me: FullUserType;
 };
 
 export type AnalyticsType = {

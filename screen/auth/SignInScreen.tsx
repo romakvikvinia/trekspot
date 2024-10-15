@@ -20,9 +20,13 @@ import { AuthContext } from "../../package/context/auth.context";
 import { SignInValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
-import { trekSpotApi, useSignInMutation } from "../../api/api.trekspot";
+import {
+  trekSpotApi,
+  useLazyMeQuery,
+  useSignInMutation,
+} from "../../api/api.trekspot";
 import { AuthLoginResponseType } from "../../api/api.types";
-import { storeToken } from "../../helpers/secure.storage";
+import { getFullToken, storeToken } from "../../helpers/secure.storage";
 import {
   AppleIcon,
   EmailIcon,
@@ -35,6 +39,8 @@ import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
 import { TrekSpotLinear } from "../../utilities/svg/TrekSpotLinear";
 
+import { signIn } from "../../package/slices";
+
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 
 export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
@@ -42,8 +48,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   const [isSecureType, setIsSecureType] = useState(true);
   const [fetchSignIn, { data, isLoading, error, isError, isSuccess }] =
     useSignInMutation();
-
-  const { signIn } = useContext(AuthContext);
+  const [fetchMe] = useLazyMeQuery();
 
   const formik = useFormik({
     initialValues: {
@@ -53,7 +58,6 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
     validationSchema: SignInValidationSchema,
     onSubmit: async ({ email, password }, methods) => {
       methods.setSubmitting(true);
-
       fetchSignIn({ email, password });
     },
   });
@@ -62,22 +66,21 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
     fadeValue: new Animated.Value(0),
   });
 
-  const handleSaveToken = useCallback(
-    async (auth: AuthLoginResponseType["data"]) => {
-      try {
-        let token = { ...auth.login };
-        token.expire = new Date().getTime() + token.expire;
+  const handleSaveToken = useCallback(async (auth: AuthLoginResponseType) => {
+    try {
+      let token = { ...auth.signIn };
+      token.expire = new Date().getTime() + token.expire;
 
-        await storeToken(token);
-        signIn(token);
-        dispatch(trekSpotApi.util.invalidateTags(["me"]));
-      } catch (error) {
-        // console.log(error)
-      }
-    },
-    []
-  );
- 
+      await storeToken(token);
+      const user = await fetchMe().unwrap();
+      console.log("user", user);
+
+      signIn({ token: token.token, user: user.me, expire: token.expire });
+    } catch (error) {
+      // console.log(error)
+    }
+  }, []);
+
   //animations
   useEffect(() => {
     Animated.timing(fadeValue, {
@@ -286,7 +289,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
               ]}
             >
               By sign in you agree our
-            </Text> 
+            </Text>
             <TouchableOpacity
               onPress={() => navigation.navigate("Agreement")}
               activeOpacity={0.1}

@@ -8,7 +8,7 @@ import {
   AuthSignUpResponseType,
   UpdateMeResponseType,
   UserArgType,
-  meResponseType,
+  MeResponseType,
   AnalyticsResponseType,
   StoriesResponseType,
   CreateOrUpdateStoriesInput,
@@ -120,7 +120,7 @@ export const trekSpotApi = createApi({
           variables: { email, password },
           document: gql`
             mutation ($email: String!, $password: String!) {
-              login(input: { email: $email, password: $password }) {
+              signIn(input: { email: $email, password: $password }) {
                 token
                 expire
               }
@@ -244,7 +244,7 @@ export const trekSpotApi = createApi({
      * Get user info
      *
      */
-    me: builder.query<meResponseType, void>({
+    me: builder.query<MeResponseType, void>({
       query: () => ({
         document: gql`
           query {

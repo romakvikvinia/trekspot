@@ -1,14 +1,8 @@
 import * as SecureStore from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const storeToken = async (token: any) => {
-  try {
-    await SecureStore.setItemAsync("token", JSON.stringify(token));
-  } catch (e) {
-    return false;
-  }
-  return true;
-};
+export const storeToken = async (token: any) =>
+  SecureStore.setItemAsync("token", JSON.stringify(token));
 
 export const getFullToken = async () => {
   let token;
