@@ -141,7 +141,18 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                   ) ? (
                     <>
                     <TouchableOpacity
-                    onPress={() => handleAddToTrip(item)}
+                    onPress={() => {
+                      const day = days.find((day) =>
+                        day.activities.some(
+                          (activity) => activity?.id === item?.id
+                        )
+                      );
+                      removeActivity({
+                        route: day?.route!,
+                        day: day?.id!,
+                        sight: item?.id!,
+                      });
+                    }}
                     activeOpacity={0.7}
                     style={styles.detailsButton}
                   >
