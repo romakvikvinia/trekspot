@@ -87,13 +87,26 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
                   transition={0}
                 />
               )}
-              <View style={{ maxWidth: "70%" }}>
-                <Text numberOfLines={1} style={styles.username}>
-                  {isGuest
-                    ? "Guest user"
-                    : `${user!.firstName} ${user!.lastName}`}
-                </Text>
-                <Text style={styles.subTxt}>{user!.email}</Text>
+              <View style={{ flex: 1 }}>
+                {isGuest ? (
+                  <TouchableOpacity activeOpacity={0.7} style={styles.signInButton}
+                  onPress={async () => {
+                    await deleteItemFromStorage();
+                    dispatch(signOut());
+                  }}
+                  >
+                    <Text style={styles.signInButtonText}>Sign in / Sign up</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <>
+                    <Text numberOfLines={1} style={styles.username}>
+                      {isGuest
+                        ? "Guest user"
+                        : `${user!.firstName} ${user!.lastName}`}
+                    </Text>
+                    <Text style={styles.subTxt}>{user!.email}</Text>
+                  </>
+                )}
               </View>
             </View>
           </View>
@@ -144,21 +157,22 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
                   <DeleteIcon />
                   <Text style={[styles.buttonText]}>Deactivate account</Text>
                 </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]}
+                  activeOpacity={0.7}
+                  onPress={async () => {
+                    await deleteItemFromStorage();
+                    dispatch(signOut());
+                  }}
+                >
+                  <LogoutIcon />
+                  <Text style={styles.buttonText}>
+                    Sign out
+                  </Text>
+                </TouchableOpacity>
               </>
             )}
-            <TouchableOpacity
-              style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]}
-              activeOpacity={0.7}
-              onPress={async () => {
-                await deleteItemFromStorage();
-                dispatch(signOut());
-              }}
-            >
-              <LogoutIcon />
-              <Text style={styles.buttonText}>
-                {isGuest ? "Sign In" : "Sign out"}
-              </Text>
-            </TouchableOpacity>
+           
           </View>
 
           <Text style={styles.buttonsWrapperTitle}>Socials</Text>
@@ -246,6 +260,21 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f8f8f8",
     paddingTop: Constants?.statusBarHeight + 10,
+  },
+  signInButton: {
+    marginLeft: 15,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f2f2f2",
+    minWidth: "100%",
+    flex: 1,
+    borderRadius: 40,
+    height: 60
+  },
+  signInButtonText: {
+    color: "#000",
+    fontSize: 18,
+    fontWeight: "600"
   },
   version: {
     width: "100%",

@@ -255,9 +255,10 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 },
               ]}
               onPress={() => handleContinueAsGuest()}
+              activeOpacity={0.8}
             >
               {isGuestLoading || isGuestSuccess ? (
-                <ActivityIndicator size="small" color="#fff" />
+                <ActivityIndicator size="small" color="#000" />
               ) : (
                 <Text
                   style={[
