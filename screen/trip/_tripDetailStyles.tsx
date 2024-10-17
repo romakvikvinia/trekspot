@@ -3,7 +3,7 @@ import { COLORS, SIZES } from "../../styles/theme";
 
 export const tripDetailStyles = StyleSheet.create({
   noActivitiesWrapper: {
-    marginTop: 50,
+    marginTop: 70,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -38,7 +38,7 @@ export const tripDetailStyles = StyleSheet.create({
   addActivityButtonItem :{
     backgroundColor: "#000",
     borderRadius: 50,
-    padding: 10,
+    padding: 12,
     width: 200,
     marginTop: 25
   },
@@ -247,14 +247,14 @@ export const tripDetailStyles = StyleSheet.create({
       marginTop: 15,
     },
     sightRightActionsButton: {
-      width: 20,
+      width: 35,
       height: 35,
       backgroundColor: "#fff",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      borderRadius: 50,
-      marginLeft: 12,
+      borderRadius: 0,
+      marginLeft: 2,
     },
     sightRightActions: {
       flexDirection: "row",
@@ -269,9 +269,9 @@ export const tripDetailStyles = StyleSheet.create({
       flexDirection: "row",
       alignItems: "center",
       backgroundColor: "#fff",
-      borderRadius: 50,
+      borderRadius: 0,
       paddingHorizontal: 0,
-      paddingVertical: 8,
+      paddingVertical: 10,
     },
     sightTitle: {
       fontSize: 18,

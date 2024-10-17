@@ -52,6 +52,7 @@ import { questionModaStyles } from "../../styles/questionModaStyles";
 import { TripType } from "../../api/api.types";
 import { Image } from "expo-image";
 import { useAppSelector } from "../../package/store";
+import { GuestUserModal } from "../../common/components/GuestUserModal";
 
 type TripProps = NativeStackScreenProps<TripRouteStackParamList, "TripsScreen">;
 
@@ -67,6 +68,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
 
   const [state, setState] = React.useState<IState>({ trip: undefined });
   const [tripType, setTripType] = React.useState("upcoming");
+  const [showGuestModal, setShowGuestModal] = React.useState(false);
 
   const [fetchDate, { data, isLoading, isError }] = useLazyMyTripsQuery();
 
@@ -101,20 +103,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
 
   const handleCreateNewTrip = () => {
     if (user?.role === "guest") {
-      Alert.alert("To create a new trip, you need to sign in", "", [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        {
-          text: "Sign in",
-          onPress: () => {
-            //signOut()
-          },
-          style: "default",
-        },
-      ]);
+      setShowGuestModal(true);
     } else {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       Platform.OS === "android"
@@ -276,7 +265,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
 
               <TouchableOpacity
                 style={_tripScreenStyles.createNewTripButton}
-                onPress={() => createOrUpdateTripModal.current?.open()}
+                onPress={() =>  handleCreateNewTrip()}
               >
                 <Text style={_tripScreenStyles.createNewTripButtonText}>
                   {tripType === "past"
@@ -292,6 +281,9 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
           />
         </ScrollView>
       </View>
+      {
+        showGuestModal && <GuestUserModal />
+      }
 
       {/* Create trip */}
 
@@ -392,6 +384,8 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
           </QuestionModal>
         </Modalize>
       </Portal>
+
+
     </PaperProvider>
   );
 };

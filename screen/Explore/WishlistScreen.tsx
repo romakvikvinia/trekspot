@@ -59,7 +59,7 @@ export const WishlistScreen = () => {
             <BackIcon size="30" />
           </TouchableOpacity>
 
-          <Text style={globalStyles.screenTitle}>Bucket list</Text>
+          <Text style={globalStyles.screenTitle}>Wishlist list</Text>
           <TouchableOpacity
             style={globalStyles.screenHeaderBackButton}
           ></TouchableOpacity>

@@ -31,7 +31,6 @@ import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 import { MapEmbedView } from "../../common/components/MapEmbedView";
 
-import { useMeQuery } from "../../api/api.trekspot";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SettingRouteStackParamList } from "../../routes/setting/SettingRoutes";
 import { useAppDispatch, useAppSelector } from "../../package/store";

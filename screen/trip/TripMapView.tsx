@@ -108,7 +108,9 @@ export const TripMapViewScreen: React.FC<TripProps> = ({ route }) => {
           //customMapStyle={customMapStyle}
           mapType="mutedStandard"
           // onSnapToItem={() => alert("ss")}
-        >
+        >{
+          console.log(currentTabActivites[currentDay]?.activities)
+        }
           {currentTabActivites[currentDay]?.activities?.map(
             (marker: any, i: any) => {
               return (
@@ -135,7 +137,7 @@ export const TripMapViewScreen: React.FC<TripProps> = ({ route }) => {
                         borderWidth: 0,
                       }}
                     />
-                    <View
+                    {/* <View
                       style={{
                         position: "absolute",
                         top: 0,
@@ -159,7 +161,7 @@ export const TripMapViewScreen: React.FC<TripProps> = ({ route }) => {
                       >
                         {i + 1}
                       </Text>
-                    </View>
+                    </View> */}
                   </View>
                   {/* <Callout style={{ width: 150 }} >
                 <Text
