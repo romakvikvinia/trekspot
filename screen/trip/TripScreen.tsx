@@ -42,7 +42,7 @@ import { Loader } from "../../common/ui/Loader";
 import * as Haptics from "expo-haptics";
 
 import { UserContext } from "../../components/context/UserContext";
-import { TrekSneckBar } from "../../common/components/TrekSneckBar";
+// import { TrekSneckBar } from "../../common/components/TrekSneckBar";
 import { PaperProvider } from "react-native-paper";
 import { useDispatch } from "react-redux";
 
@@ -53,6 +53,7 @@ import { TripType } from "../../api/api.types";
 import { Image } from "expo-image";
 import { useAppSelector } from "../../package/store";
 import { GuestUserModal } from "../../common/components/GuestUserModal";
+import { toast } from "sonner-native";
 
 type TripProps = NativeStackScreenProps<TripRouteStackParamList, "TripsScreen">;
 
@@ -128,6 +129,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
     if (isTripSuccessfullyDeleted) {
       dispatch(trekSpotApi.util.invalidateTags(["myTrips"]));
       setState((prevState) => ({ ...prevState, trip: undefined }));
+      toast('Trip deleted successfully!')
     }
   }, [isTripSuccessfullyDeleted, dispatch]);
 
@@ -140,6 +142,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
 
     return false;
   }, [isLoading, tripType, upComingTrips, oldTrips]);
+
 
   return (
     <PaperProvider>
@@ -275,14 +278,10 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
               </TouchableOpacity>
             </View>
           )}
-          <TrekSneckBar
-            isVisible={isTripSuccessfullyDeleted}
-            message="Trip deleted successfully"
-          />
         </ScrollView>
       </View>
       {
-        showGuestModal && <GuestUserModal />
+        showGuestModal && <GuestUserModal onClose={() => setShowGuestModal(false)} />
       }
 
       {/* Create trip */}

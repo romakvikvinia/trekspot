@@ -9,11 +9,27 @@ import {
 } from "react-native";
 import {
   ClickOutsideProvider,
+  useClickOutside,
 } from "react-native-click-outside";
 import { COLORS, SIZES } from "../../styles/theme";
-import {  GuestIllustration } from "../../utilities/SvgIcons.utility";
+import { GuestIllustration, XIcon } from "../../utilities/SvgIcons.utility";
+import { useAppDispatch } from "../../package/store";
+import { signOut } from "../../package/slices";
+import { deleteItemFromStorage } from "../../helpers/secure.storage";
 
-export const GuestUserModal = () => {
+export const GuestUserModal = ({onClose}) => {
+
+  const dispatch = useAppDispatch();
+
+  const ref = useClickOutside(() => {
+    onClose()
+  });
+
+  const signIn = async () => {
+      await deleteItemFromStorage();
+      dispatch(signOut());
+  }
+
   return (
     <Modal
       animationType={"none"}
@@ -35,16 +51,23 @@ export const GuestUserModal = () => {
           <ScrollView
             style={styles.modalContent}
             showsVerticalScrollIndicator={false}
+            ref={ref}
           >
             <View style={{
                 flex: 1,
                 alignItems: "center",
                 justifyContent: "center",
                 minHeight: "100%",
+                position: "relative",
             }}>
-                <GuestIllustration />
+                  <TouchableOpacity onPress={() => onClose()} activeOpacity={0.7} style={styles.closeButton}>
+                    <XIcon width="12" />
+                  </TouchableOpacity>
+                <View style={{flex: 1, marginTop: 35}}>
+                  <GuestIllustration />
+                </View>
                 <Text style={styles.title}>As a guest user, you have limited access to features</Text>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity onPress={signIn} style={styles.button}>
                     <Text style={styles.buttonText}>Sign In</Text>
                 </TouchableOpacity>
             </View>
@@ -59,8 +82,20 @@ export const styles = StyleSheet.create({
     backgroundColor: "#fff",
     width: "95%",
     borderRadius: 15,
-    maxHeight: 400,
+    maxHeight: 390,
     padding: 25,
+  },
+  closeButton: {
+    padding: 15,
+    position: "absolute",
+    right: -5,
+    top: -5,
+    backgroundColor: "#DBDBDB",
+    width: 35,
+    height: 35,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
   },
   title: {
     fontSize: 18,

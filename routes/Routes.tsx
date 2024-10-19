@@ -1,6 +1,7 @@
 import React, { useCallback, useReducer } from "react";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
+import { Toaster } from 'sonner-native';
 
 import { AuthRoute } from "./auth/AuthRoutes";
 import { deleteItemFromStorage, getFullToken } from "../helpers/secure.storage";
@@ -12,6 +13,7 @@ import { signIn, signOut } from "../package/slices";
 
 import { useAppDispatch, useAppSelector } from "../package/store";
 import { useLazyMeQuery } from "../api/api.trekspot";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 //reselect
 
@@ -62,18 +64,24 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
   };
   console.log("authState", authState.auth);
   return (
-    <NavigationContainer onReady={checkAuth} theme={theme}>
-      {authState && !authState.auth.isLoading ? (
-        !authState.auth.isAuthenticated ? (
-          <AuthRoute />
-        ) : (
-          <UserProvider>
-            <AppRoute />
-          </UserProvider>
-        )
-      ) : (
-        <Loader isLoading={authState.auth.isLoading} />
-      )}
-    </NavigationContainer>
+    <>
+      <SafeAreaProvider>
+        <NavigationContainer onReady={checkAuth} theme={theme}>
+          {authState && !authState.auth.isLoading ? (
+            !authState.auth.isAuthenticated ? (
+              <AuthRoute />
+            ) : (
+              <UserProvider>
+                <AppRoute />
+              </UserProvider>
+            )
+          ) : (
+            <Loader isLoading={authState.auth.isLoading} />
+          )}
+        </NavigationContainer>
+
+        <Toaster />
+      </SafeAreaProvider>
+    </>
   );
 };

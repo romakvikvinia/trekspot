@@ -17,6 +17,7 @@ import { COLORS } from "../../styles/theme";
 import {
   DeleteIcon,
   FacebookLinear,
+  GuestIllustration,
   InstagramLinear,
   LockIcon,
   LogoutIcon,
@@ -60,54 +61,58 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
           contentContainerStyle={{ paddingHorizontal: 15 }}
         >
           <View style={styles.profileHeader}>
-            <View style={styles.profileLeft}>
-              {true ? (
-                <View style={styles.avatar}>
-                  <UserIcon />
-                </View>
-              ) : (
-                <Image
-                  //@ts-ignore
-                  style={{
-                    minWidth: 60,
-                    width: 60,
-                    maxWidth: 60,
-                    height: 60,
-                    minHeight: 60,
-                    flex: 1,
+            {!isGuest ? (
+              <View style={styles.profileLeft}>
+                {true ? (
+                  <View style={styles.avatar}>
+                    <UserIcon />
+                  </View>
+                ) : (
+                  <Image
+                    //@ts-ignore
+                    style={{
+                      minWidth: 60,
+                      width: 60,
+                      maxWidth: 60,
+                      height: 60,
+                      minHeight: 60,
+                      flex: 1,
 
-                    borderRadius: "100%",
-                  }}
-                  source={{
-                    uri: "https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=20&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                  }}
-                  cachePolicy="memory"
-                  contentFit="cover"
-                  transition={0}
-                />
-              )}
-              <View style={{ flex: 1 }}>
-                {isGuest ? (
-                  <TouchableOpacity activeOpacity={0.7} style={styles.signInButton}
-                  onPress={async () => {
+                      borderRadius: "100%",
+                    }}
+                    source={{
+                      uri: "https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=20&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                    }}
+                    cachePolicy="memory"
+                    contentFit="cover"
+                    transition={0}
+                  />
+                )}
+                <View style={{ flex: 1 }}>
+                  <Text numberOfLines={1} style={styles.username}>
+                    {isGuest
+                      ? "Guest user"
+                      : `${user!.firstName} ${user!.lastName}`}
+                  </Text>
+                  <Text style={styles.subTxt}>{user!.email}</Text>
+                </View>
+              </View>
+            ) : (
+              <View style={styles.guestCard}>
+                <GuestIllustration />
+                <Text style={styles.guestCardTitle}>
+                  As a guest user, you have limited access to features
+                </Text>
+                <TouchableOpacity
+                   onPress={async () => {
                     await deleteItemFromStorage();
                     dispatch(signOut());
                   }}
-                  >
-                    <Text style={styles.signInButtonText}>Sign in / Sign up</Text>
-                  </TouchableOpacity>
-                ) : (
-                  <>
-                    <Text numberOfLines={1} style={styles.username}>
-                      {isGuest
-                        ? "Guest user"
-                        : `${user!.firstName} ${user!.lastName}`}
-                    </Text>
-                    <Text style={styles.subTxt}>{user!.email}</Text>
-                  </>
-                )}
+                  style={styles.guestCardButtonItem}>
+                  <Text style={styles.guestCardButtonItemText}>Sign In</Text>
+                </TouchableOpacity>
               </View>
-            </View>
+            )}
           </View>
 
           <Text style={styles.buttonsWrapperTitle}>Account</Text>
@@ -157,7 +162,10 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
                   <Text style={[styles.buttonText]}>Deactivate account</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]}
+                  style={[
+                    styles.button,
+                    { borderBottomWidth: 0, marginBottom: 0 },
+                  ]}
                   activeOpacity={0.7}
                   onPress={async () => {
                     await deleteItemFromStorage();
@@ -165,13 +173,10 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
                   }}
                 >
                   <LogoutIcon />
-                  <Text style={styles.buttonText}>
-                    Sign out
-                  </Text>
+                  <Text style={styles.buttonText}>Sign out</Text>
                 </TouchableOpacity>
               </>
             )}
-           
           </View>
 
           <Text style={styles.buttonsWrapperTitle}>Socials</Text>
@@ -259,6 +264,39 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f8f8f8",
     paddingTop: Constants?.statusBarHeight + 10,
+  },
+  guestCardTitle: {
+    fontSize: 16,
+    fontWeight: "500",
+    textAlign: "center",
+    marginBottom: 20,
+    marginTop: 15,
+    color: COLORS.black,
+    lineHeight: 20,
+  },
+  guestCard: {
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    padding: 10
+  },
+  guestCardButtonItem: {
+    backgroundColor: COLORS.primary,
+    padding: 15,
+    borderRadius: 12,
+    paddingHorizontal: 15,
+    marginRight: 0,
+    flexDirection: "row",
+    marginTop: 10,
+    flex: 1,
+    width: "100%",
+    justifyContent: "center",
+  },
+  guestCardButtonItemText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "500",
   },
   signInButton: {
     marginLeft: 15,
