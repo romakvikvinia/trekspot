@@ -1,6 +1,5 @@
 import React, {
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useRef,
@@ -20,7 +19,6 @@ import { _tripScreenStyles } from "./_tripScreenStyles";
 
 import {
   EditIcon,
-  NoDestinationFoundIcon,
   PlusIcon,
   TrashIcon,
 } from "../../utilities/SvgIcons.utility";
@@ -41,9 +39,7 @@ import moment from "moment";
 import { Loader } from "../../common/ui/Loader";
 import * as Haptics from "expo-haptics";
 
-import { UserContext } from "../../components/context/UserContext";
 // import { TrekSneckBar } from "../../common/components/TrekSneckBar";
-import { PaperProvider } from "react-native-paper";
 import { useDispatch } from "react-redux";
 
 // action modal
@@ -145,7 +141,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
 
 
   return (
-    <PaperProvider>
+    <>
       <View style={_tripScreenStyles.safeArea}>
         <View style={_tripScreenStyles.header}>
           <View style={_tripScreenStyles.tabSwitchers}>
@@ -245,7 +241,6 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
 
           {showNotFound && (
             <View style={_tripScreenStyles.notFoundView}>
-              {/* <NoDestinationFoundIcon /> */}
               <Image
                 style={{
                   width: 200,
@@ -258,11 +253,11 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
                 cachePolicy="memory-disk"
               ></Image>
               <Text style={_tripScreenStyles.notFoundViewTitleText}>
-                {tripType === "past" ? "No past trips" : "When if not today?"}
+                {tripType === "past" ? "No previous journeys" : "When if not today?"}
               </Text>
               <Text style={_tripScreenStyles.notFoundViewText}>
                 {tripType === "past"
-                  ? "Here will appear your past trips"
+                  ? "Your travel history will appear here"
                   : "It's time to plan your next trip"}
               </Text>
 
@@ -383,8 +378,6 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
           </QuestionModal>
         </Modalize>
       </Portal>
-
-
-    </PaperProvider>
+    </>
   );
 };

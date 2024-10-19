@@ -26,7 +26,9 @@ const Overview: React.FC<OverviewProps> = memo(function ({ country }) {
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.generalRow}>
-        <Text style={styles.overviewText}>{country?.overview}</Text>
+        <View style={styles.aboutBox}>
+          <Text style={styles.overviewText}>{country?.overview}</Text>
+        </View>
 
         <View style={[styles.keyValue, { marginTop: 30, marginBottom: 0 }]}>
           <Text style={styles.key}>Recognized for</Text>
@@ -130,7 +132,7 @@ const Overview: React.FC<OverviewProps> = memo(function ({ country }) {
           <Text
             style={[
               styles.value,
-              { fontWeight: "500", fontSize: 12, lineHeight: 18 },
+              { fontWeight: "500", fontSize: 14, lineHeight: 18 },
             ]}
           >
             {country?.weatherInformation?.seasonalConsiderations}

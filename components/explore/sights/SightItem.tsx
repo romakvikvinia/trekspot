@@ -20,7 +20,7 @@ export const SightItem: React.FC<SightItemProps> = ({ item, onHandleItem }) => {
         {
           minHeight: 190,
           width: 200,
-          marginRight: 5,
+          marginRight: 15,
           height: "auto",
         },
       ]}

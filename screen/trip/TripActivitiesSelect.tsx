@@ -1,7 +1,7 @@
 import { FlashList } from "@shopify/flash-list";
 import React, { useCallback, useEffect, useState } from "react";
 import { Image } from "expo-image";
-import { TouchableOpacity, useWindowDimensions, View } from "react-native";
+import { Platform, TouchableOpacity, useWindowDimensions, View } from "react-native";
 import { StyleSheet, Text } from "react-native";
 import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
 import { exploreStyles } from "../../components/explore/sights/_exploreStyles";
@@ -96,6 +96,8 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                 style={[
                   {
                     minHeight: 140,
+                    borderTopLeftRadius: 12,
+                    borderTopRightRadius: 12,
                   },
                 ]}
                 cachePolicy="memory-disk"
@@ -332,9 +334,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     width: "95%",
     marginRight: 15,
-    borderRadius: 15,
-    overflow: "hidden",
+    borderRadius: 12,
     marginBottom: 25,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 1.84, 
+    ...Platform.select({
+      android: {
+        elevation: 5,
+      },
+    }),
   },
   thingsTodoItemDetails: {},
   actionButtons: {
@@ -342,6 +352,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginTop: 25,
     alignItems: "center",
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    overflow: "hidden",
   },
   thingsTodoItemiIntypeText: {
     fontSize: 12,

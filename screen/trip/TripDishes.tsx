@@ -20,6 +20,7 @@ import {
   BackIcon,
   InnovationIcon,
   LocationLinearIcon,
+  LocationPin,
   StarIcon,
 } from "../../utilities/SvgIcons.utility";
 import { FlashList } from "@shopify/flash-list";
@@ -148,7 +149,7 @@ export const TripDishes = ({route}) => {
                         }}
                         onPress={() => openMap(item?.restaurant)}
                       >
-                        <LocationLinearIcon size={12} color={COLORS.primary} />
+                         <LocationPin width={12} color={COLORS.primary} />
                         <Text
                           style={{
                             color: COLORS.primary,

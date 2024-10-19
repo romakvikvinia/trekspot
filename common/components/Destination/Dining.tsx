@@ -104,7 +104,7 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
                       }}
                       onPress={() => openMap(item?.restaurant)}
                     >
-                      <LocationPin width={15} color={COLORS.primary} />
+                      <LocationPin width={12} color={COLORS.primary} />
                       <Text
                         style={{
                           color: COLORS.primary,

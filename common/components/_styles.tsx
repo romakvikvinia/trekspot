@@ -8,6 +8,20 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
   },
+  aboutBox: {
+    backgroundColor: "#fff",
+    padding: 15,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 1.84, 
+    ...Platform.select({
+      android: {
+        elevation: 5,
+      },
+    }),
+  },
   infoText: {
     marginTop: 15, 
     lineHeight: 15, 
@@ -316,7 +330,7 @@ export const styles = StyleSheet.create({
     paddingBottom: 15,
   },
   thingsTodoItemTitle: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#000",
     fontWeight: "600",
   },
@@ -327,12 +341,18 @@ export const styles = StyleSheet.create({
   thingsTodoItem: {
     marginBottom: 25,
     width: "96%",
-    borderWidth: 1,
     borderRadius: 10,
-    borderColor: "#f1f1f1",
     backgroundColor: "#f2f2f2",
     minHeight: 200,
-    // marginHorizontal: "2%",
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 1.84, 
+    ...Platform.select({
+      android: {
+        elevation: 5,
+      },
+    }),
   },
   forYouRow: {
     marginVertical: 0,
@@ -483,14 +503,14 @@ export const styles = StyleSheet.create({
   },
   key: {
     fontWeight: "600",
-    fontSize: 14,
+    fontSize: 15,
     color: COLORS.darkgray,
     marginRight: 5,
     marginBottom: 10,
   },
   value: {
     fontWeight: "bold",
-    fontSize: 15,
+    fontSize: 16,
     color: COLORS.black,
     marginRight: 5,
   },
@@ -532,10 +552,10 @@ export const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   overviewText: {
-    fontSize: 13,
+    fontSize: 14,
     color: COLORS.black,
     fontWeight: "500",
-    lineHeight: 18,
+    lineHeight: 20,
   },
 
   gradientWrapper: {

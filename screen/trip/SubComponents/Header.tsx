@@ -106,6 +106,7 @@ export const Header = ({
               }}
             >
               <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <LocationPin width="12" color={COLORS.primary} />
                 <Text
                   style={{
                     fontSize: 18,
@@ -117,7 +118,6 @@ export const Header = ({
                 >
                   {data?.cities[0]?.city}
                 </Text>
-                <LocationPin width="12" color={COLORS.primary} />
               </View>
               <Text
                 style={{

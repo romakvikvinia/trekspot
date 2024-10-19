@@ -33,7 +33,7 @@ export const tripDetailStyles = StyleSheet.create({
     borderLeftWidth: 2,
     position: "absolute",
     left: -35,
-    opacity: 0.7
+    opacity: 1
   },
   addActivityButtonItem :{
     backgroundColor: "#000",

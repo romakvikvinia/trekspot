@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Alert,
   ImageBackground,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -372,6 +373,15 @@ const styles = StyleSheet.create({
     borderColor: "#eee",
     padding: 15,
     borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 1.84, 
+    ...Platform.select({
+      android: {
+        elevation: 5,
+      },
+    }),
   },
   visaCheckerCardTitle: {
     textAlign: "center",

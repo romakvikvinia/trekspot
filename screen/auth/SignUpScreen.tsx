@@ -77,7 +77,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
 
   if (isError) {
     Alert.alert(
-      "Error",
+      "Warning",
       //@ts-ignore
       (error && "message" in error && error.message) || "Something went wrong",
       [

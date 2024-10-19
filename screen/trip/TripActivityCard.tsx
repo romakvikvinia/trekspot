@@ -10,12 +10,9 @@ import {
   CheckLiteIcon,
   DotsIcon,
   HistoricalPlacesIcon,
-  LocationPin,
   MapDirection,
-  MapIcon,
   MarketsIcon,
   MuseumsIcon,
-  PinIcon,
   StarIcon,
   TopExperiencesIcon,
   TopsightsIcon,
@@ -113,8 +110,15 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
               marginBottom: 15,
               paddingBottom: 0,
               paddingTop: 0,
-              borderWidth: 2,
-              borderColor: "#f2f2f2",
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 0.84, 
+              ...Platform.select({
+                android: {
+                  elevation: 5,
+                },
+              }),
             },
           ]}
           onPress={() => {
@@ -322,8 +326,14 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
               marginBottom: 15,
               paddingBottom: 0,
               paddingTop: 0,
-              borderWidth: 2,
-              borderColor: "#f2f2f2",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 0.84, 
+              ...Platform.select({
+                android: {
+                  elevation: 5,
+                },
+              }),
             },
           ]}
           onPress={() => {
