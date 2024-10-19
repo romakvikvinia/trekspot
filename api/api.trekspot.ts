@@ -186,9 +186,9 @@ export const trekSpotApi = createApi({
           },
           document: gql`
             mutation (
-              $firstName: String!
-              $lastName: String!
-              $email: String!
+              $firstName: String
+              $lastName: String
+              $email: String
               $password: String
             ) {
               updateMe(
