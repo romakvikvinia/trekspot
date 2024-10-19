@@ -1,8 +1,9 @@
+import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
 import { useCallback, useEffect, useState } from "react";
-import * as Haptics from "expo-haptics";
+
 import {
   Platform,
   SafeAreaView,
@@ -12,7 +13,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useLazyGetSightsQuery } from "../../api/api.trekspot";
+import {
+  useLazyGetSightsQuery,
+  useLazyWishlistsQuery,
+  useRemoveWishlistItemMutation,
+  useWishlistsQuery,
+} from "../../api/api.trekspot";
 import { Loader } from "../../common/ui/Loader";
 import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
 import { globalStyles } from "../../styles/globalStyles";
@@ -29,24 +35,63 @@ import {
 import { tripDetailStyles } from "../trip/_tripDetailStyles";
 import { NotFound } from "../../components/common/NotFound";
 import { _tripScreenStyles } from "../trip/_tripScreenStyles";
+import { WishlistContainer } from "./wishlist/WishlistContainer";
+import { CityType, SightType } from "../../api/api.types";
+import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-export const WishlistScreen = () => {
-  const navigation = useNavigation();
+type WishlistProps = NativeStackScreenProps<
+  ExploreRoutesStackParamList,
+  "WishlistScreen"
+>;
 
-  const [topSightDetail, setTopSightDetail] = useState(null);
-  const [getSights, { data, isLoading }] = useLazyGetSightsQuery();
+export const WishlistScreen: React.FC<WishlistProps> = ({ navigation }) => {
+  const [topSightDetail, setTopSightDetail] = useState<SightType>();
 
-  useEffect(() => {
-    getSights({ iso2: "DE", city: "Berlin" });
-  }, []);
+  const [fetchRemoveWishlistItem, { isLoading: isRemoveWishlistItemLoading }] =
+    useRemoveWishlistItemMutation();
 
-  const handleTopSightClick = (sight) => {
+  const {
+    data: cities,
+    isLoading: isCitiesLoading,
+    refetch: refetchCitiesWishlist,
+  } = useWishlistsQuery({
+    skip: 0,
+    take: 5,
+    type: "City",
+  });
+
+  const {
+    data: sights,
+    isLoading: isSightsLoading,
+    refetch: refetchSightWishlist,
+  } = useWishlistsQuery({
+    skip: 0,
+    take: 5,
+    type: "Sight",
+  });
+
+  const handleRemoveWishlistItem = useCallback(
+    async (id: string) => {
+      await fetchRemoveWishlistItem({ id }).unwrap();
+      refetchCitiesWishlist();
+      refetchSightWishlist();
+    },
+    [fetchRemoveWishlistItem]
+  );
+
+  const handleTopSightClick = (sight: SightType) => {
     setTopSightDetail(sight);
   };
 
   const handleClear = useCallback(() => {
-    setTopSightDetail(null);
+    setTopSightDetail(undefined);
   }, []);
+
+  const redirectToCityDetails = (city: CityType) =>
+    navigation.navigate("CityDetail", {
+      city,
+    });
 
   return (
     <>
@@ -65,183 +110,59 @@ export const WishlistScreen = () => {
           ></TouchableOpacity>
         </View>
 
-        {isLoading ? (
-          <Loader isLoading={isLoading} size="small" background="#F2F2F7" />
-        ) : null}
+        <Loader
+          isLoading={isCitiesLoading || isSightsLoading}
+          size="small"
+          background="#F2F2F7"
+        />
 
         {/* In case no data */}
-        {
-          !isLoading &&
-          !data &&
-          (
+        {!isCitiesLoading &&
+          !isSightsLoading &&
+          !cities?.wishlists.length &&
+          !sights?.wishlists.length && (
             <View style={{ minHeight: 500, justifyContent: "center" }}>
-            <View style={_tripScreenStyles.notFoundView}>
-              <NoDestinationFoundIcon />
-              <Text style={_tripScreenStyles.notFoundViewTitleText}>
-                Your bucket list is looking empty
-              </Text>
-              <Text style={_tripScreenStyles.notFoundViewText}>
-               Go to explore and find an amazing sights.
-              </Text>
+              <View style={_tripScreenStyles.notFoundView}>
+                <NoDestinationFoundIcon />
+                <Text style={_tripScreenStyles.notFoundViewTitleText}>
+                  Your bucket list is looking empty
+                </Text>
+                <Text style={_tripScreenStyles.notFoundViewText}>
+                  Go to explore and find an amazing sights.
+                </Text>
+              </View>
             </View>
-          </View>
-          )
-        }
-   
+          )}
 
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 30 }}
         >
-          {!isLoading &&
-            data &&
-            Object.keys(data).map((category) => {
-              return (
-                <View style={styles.wishlistRow}>
-                  <Text style={styles.wishlistRowTitle}>Brazil</Text>
-                  <View style={{ minHeight: 10 }}>
-                    <FlashList
-                      horizontal
-                      data={data?.[category]}
-                      keyExtractor={(item, index) => `${item.title}-${index}`}
-                      renderItem={({ item, index }) => (
-                        <>
-                          <TouchableOpacity
-                            activeOpacity={0.7}
-                            style={[
-                              tripDetailStyles.sightItem,
-                              {
-                                padding: 0,
-                                width: 200,
-                                marginLeft: 0,
-                                marginBottom: 0,
-                                paddingBottom: 0,
-                                marginRight: 15,
-                                paddingTop: 0,
-                                height: 259,
-                                alignItems: "flex-start",
-                                justifyContent: "flex-start",
-                                display: "flex",
-                                flexDirection: "column",
-                              },
-                            ]}
-                            onPress={() => {
-                              handleTopSightClick(item);
-                              Haptics.impactAsync(
-                                Haptics.ImpactFeedbackStyle.Light
-                              );
-                            }}
-                          >
-                            <Image
-                              style={{
-                                width: 200,
-                                height: 140,
-                                borderRadius: 10,
-                                borderBottomLeftRadius: 0,
-                                borderBottomRightRadius: 0,
-                              }}
-                              contentFit="cover"
-                              cachePolicy="memory-disk"
-                              source={
-                                item?.image?.url
-                                  ? {
-                                      uri: item?.image?.url,
-                                    }
-                                  : require("../../assets/no-image.png")
-                              }
-                              key={`img-${item?.title}`}
-                            ></Image>
+          {!isCitiesLoading &&
+            cities &&
+            cities.wishlists &&
+            !!cities.wishlists.length && (
+              <WishlistContainer
+                data={cities.wishlists}
+                type="city"
+                title="Cities"
+                onPress={redirectToCityDetails}
+                onRemove={handleRemoveWishlistItem}
+              />
+            )}
 
-                            <View
-                              style={{
-                                width: "100%",
-                                flex: 1,
-                              }}
-                            >
-                              <View
-                                style={[
-                                  tripDetailStyles.sightDetails,
-                                  {
-                                    flexDirection: "column",
-                                    marginTop: 10,
-                                    paddingHorizontal: 15,
-                                    paddingBottom: 10,
-                                    marginBottom: 0,
-                                  },
-                                ]}
-                              >
-                                <Text
-                                  style={tripDetailStyles.sightTitle}
-                                  numberOfLines={1}
-                                >
-                                  {item?.title}
-                                </Text>
-                                <Text
-                                  style={[
-                                    tripDetailStyles.sightTitle,
-                                    {
-                                      fontSize: 14,
-                                      color: COLORS.gray,
-                                      marginTop: 5,
-                                    },
-                                  ]}
-                                  numberOfLines={1}
-                                >
-                                  {item?.city}
-                                </Text>
-                              </View>
-                              <View style={styles.actionButtons}>
-                                <TouchableOpacity
-                                  onPress={() => handleTopSightClick(item)}
-                                  activeOpacity={0.7}
-                                  style={[
-                                    styles.buttonItem,
-                                    { borderBottomLeftRadius: 10 },
-                                  ]}
-                                >
-                                  <Text style={styles.buttonItemText}>
-                                    Details
-                                  </Text>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity
-                                  style={[
-                                    styles.buttonItem,
-                                    {
-                                      borderBottomRightRadius: 10,
-                                    },
-                                  ]}
-                                  // onPress={() => handleAddToTrip(item)}
-                                >
-                                  <Text
-                                    style={[
-                                      styles.buttonItemText,
-                                      {
-                                        color: COLORS.red,
-                                      },
-                                    ]}
-                                  >
-                                    Remove
-                                  </Text>
-                                </TouchableOpacity>
-                              </View>
-                            </View>
-                          </TouchableOpacity>
-                        </>
-                      )}
-                      estimatedItemSize={200}
-                      showsHorizontalScrollIndicator={false}
-                      showsVerticalScrollIndicator={false}
-                      contentContainerStyle={{
-                        paddingHorizontal: 20,
-                        paddingTop: 15,
-                        paddingBottom: 0,
-                      }}
-                    />
-                  </View>
-                </View>
-              );
-            })}
+          {!isSightsLoading &&
+            sights &&
+            sights.wishlists &&
+            !!sights.wishlists.length && (
+              <WishlistContainer
+                data={sights.wishlists}
+                type="sight"
+                title="Sight"
+                onPress={handleTopSightClick}
+                onRemove={handleRemoveWishlistItem}
+              />
+            )}
         </ScrollView>
       </SafeAreaView>
 

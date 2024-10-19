@@ -486,3 +486,37 @@ export type UpdateTripArgsType = {
   type: string;
   cities: string[];
 };
+
+export type WishlistType = {
+  id: string;
+  sight: SightType;
+  city: CityType;
+};
+
+export type WishlistResponseType = {
+  wishlists: WishlistType[];
+};
+
+export type WishlistArgsType = Partial<{
+  skip: number;
+  take: number;
+  search: string;
+  type: string;
+}>;
+
+export type RemoveWishlistItemResponseType = {
+  removeWishlist: WishlistType;
+};
+
+export type RemoveWishlistItemArgsType = Partial<{
+  id: string;
+}>;
+
+export type CreateWishlistResponseType = {
+  createWishlist: WishlistType;
+};
+
+export type CreateWishlistArgsType = Partial<{
+  city: string;
+  sight: string;
+}>;

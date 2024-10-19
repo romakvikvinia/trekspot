@@ -3,7 +3,10 @@ import { Text } from "react-native";
 import { ImageBackground, Platform, TouchableOpacity } from "react-native";
 import { ScrollView, View } from "react-native";
 import Swiper from "react-native-swiper";
-import { useLazyGetSightsQuery } from "../../../api/api.trekspot";
+import {
+  useCreateWishlistMutation,
+  useLazyGetSightsQuery,
+} from "../../../api/api.trekspot";
 import { CityType, SightType } from "../../../api/api.types";
 import { Loader } from "../../../common/ui/Loader";
 import {
@@ -26,6 +29,7 @@ import { SightsContainer } from "../../../components/explore/sights/SightsContai
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ExploreRoutesStackParamList } from "../../../routes/explore/ExploreRoutes";
 import { styles } from "../../../common/components/_styles";
+import { toast } from "sonner-native";
 
 type Props = NativeStackScreenProps<ExploreRoutesStackParamList, "CityDetail">;
 
@@ -37,11 +41,16 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
   const { city } = route?.params;
   const [state, setState] = useState<IState>({ sight: null });
   const [getSights, { data, isLoading, isError }] = useLazyGetSightsQuery();
-  console.log("city", city);
+  const [fetchAddToWishlist] = useCreateWishlistMutation();
 
   useEffect(() => {
     if (city) getSights({ iso2: city.iso2, city: city.city });
   }, [city]);
+
+  const handleAddToWishlist = useCallback(async () => {
+    await fetchAddToWishlist({ city: city.id }).unwrap();
+    toast("City was added successfully");
+  }, []);
 
   const handleSetSightItem = useCallback((sight: SightType) => {
     setState((prevState) => ({ ...prevState, sight }));
@@ -54,7 +63,7 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
   if (sights && data && "Top Sights" in data && data["Top Sights"]) {
     delete sights["Top Sights"];
   }
-  
+
   useEffect(() => {
     navigation.getParent()?.setOptions({
       tabBarStyle: {
@@ -69,7 +78,7 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
       });
     };
   }, []);
- 
+
   return (
     <View style={{ flex: 1, backgroundColor: "#f8f8f8" }}>
       <ScrollView style={{ flex: 1 }}>
@@ -176,6 +185,7 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                   },
                 ]}
                 activeOpacity={0.7}
+                onPress={handleAddToWishlist}
               >
                 <Mark2 color="#000" />
               </TouchableOpacity>

@@ -52,6 +52,7 @@ export const ResetPassword: React.FC<ResetPassword> = ({ navigation }) => {
       fetchUpdateMe({
         password: values.password,
       });
+      console.log("value", values);
     },
   });
 
@@ -65,6 +66,8 @@ export const ResetPassword: React.FC<ResetPassword> = ({ navigation }) => {
     formik.isSubmitting ||
     !formik.values.password ||
     !formik.values.confirm_password;
+
+  console.log(isSuccessUpdateMe);
 
   return (
     <View style={styles.safeArea}>

@@ -55,6 +55,12 @@ import {
   DeleteTripArgsType,
   UpdateTripResponseType,
   UpdateTripArgsType,
+  WishlistArgsType,
+  WishlistResponseType,
+  RemoveWishlistItemArgsType,
+  RemoveWishlistItemResponseType,
+  CreateWishlistResponseType,
+  CreateWishlistArgsType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -186,9 +192,9 @@ export const trekSpotApi = createApi({
           },
           document: gql`
             mutation (
-              $firstName: String!
-              $lastName: String!
-              $email: String!
+              $firstName: String
+              $lastName: String
+              $email: String
               $password: String
             ) {
               updateMe(
@@ -1161,6 +1167,109 @@ export const trekSpotApi = createApi({
     }),
 
     //
+
+    wishlists: builder.query<WishlistResponseType, WishlistArgsType>({
+      query: ({ skip = 0, take = 20, search, type }) => ({
+        variables: { skip, take, search, type },
+        document: gql`
+          query ($skip: Int, $take: Int, $search: String, $type: WishlistType) {
+            wishlists(
+              input: { skip: $skip, take: $take, search: $search, type: $type }
+            ) {
+              id
+              sight {
+                id
+                iso2
+                title
+                rate
+                category
+                price
+                reviews
+                iso2
+                city
+                address
+                url
+                description
+                location {
+                  lat
+                  lng
+                }
+                workingHours {
+                  day
+                  hours
+                }
+                image {
+                  url
+                  html_attributions
+                }
+                images {
+                  url
+                  html_attributions
+                }
+              }
+              city {
+                id
+                city
+                city_ascii
+                country
+                iso2
+                capital
+                lat
+                lng
+                rate
+                description
+                image {
+                  url
+                }
+                images {
+                  id
+                  url
+                }
+              }
+            }
+          }
+        `,
+      }),
+    }),
+
+    //
+
+    createWishlist: builder.mutation<
+      CreateWishlistResponseType,
+      CreateWishlistArgsType
+    >({
+      query: ({ sight, city }) => ({
+        variables: { sight, city },
+        document: gql`
+          mutation ($city: ID, $sight: ID) {
+            createWishlist(input: { city: $city, sight: $sight }) {
+              id
+            }
+          }
+        `,
+      }),
+    }),
+
+    //
+
+    removeWishlistItem: builder.mutation<
+      RemoveWishlistItemResponseType,
+      RemoveWishlistItemArgsType
+    >({
+      query: ({ id }) => ({
+        variables: { id },
+        document: gql`
+          # Write your query or mutation here
+          mutation ($id: ID!) {
+            removeWishlist(input: { id: $id }) {
+              id
+            }
+          }
+        `,
+      }),
+    }),
+
+    //
   }),
 });
 
@@ -1196,4 +1305,9 @@ export const {
   useChangeActivityVisitedMutation,
   useUpdateTripMutation,
   useDeleteTripMutation,
+  //
+  useWishlistsQuery,
+  useLazyWishlistsQuery,
+  useRemoveWishlistItemMutation,
+  useCreateWishlistMutation,
 } = trekSpotApi;
