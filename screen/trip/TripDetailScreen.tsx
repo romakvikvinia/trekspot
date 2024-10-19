@@ -563,7 +563,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
             showsVerticalScrollIndicator: false,
           }}
         >
-          <QuestionModal modalQuestionRef={modalQuestionRef2} title="Action">
+          <QuestionModal onClose={() => modalQuestionRef2?.current?.close()} title="Action">
             <View style={questionModaStyles.buttonGroup}>
               <TouchableOpacity
                 activeOpacity={0.7}
@@ -630,7 +630,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
             showsVerticalScrollIndicator: false,
           }}
         >
-          <QuestionModal modalQuestionRef={modalQuestionRef} title="Action">
+          <QuestionModal onClose={() => modalQuestionRef?.current?.close()} title="Action">
             <View style={questionModaStyles.buttonGroup}>
               {/* <TouchableOpacity
                 activeOpacity={0.7}

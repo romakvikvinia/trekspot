@@ -53,7 +53,7 @@ export const Header = ({
               navigation.navigate("TripMapViewScreen", {
                 tabData,
                 city: data?.cities[0],
-                activeDay: activeDay
+                activeDay: activeDay,
               })
             }
             activeOpacity={0.7}
@@ -65,129 +65,138 @@ export const Header = ({
       )}
       {tripStyle && (
         <>
-        <View
-          style={{
-            paddingTop: Constants?.statusBarHeight + 10,
-            flexDirection: "row",
-            width: "100%",
-            position: "relative",
-            backgroundColor: "#fff",
-          }}
-        >
-          <View style={{width: 110}}>
-            <TouchableOpacity
-              onPress={() => navigation.goBack()}
-              activeOpacity={0.7}
-              style={[
-                styles.backButton,
-                {
-                  position: "relative",
-                  top: 0,
-                  width: 35,
-                  height: 35,
-                  left: 15,
-                  alignItems: "flex-start",
-                  marginLeft: 0,
-                  backgroundColor: "#eee",
-                  paddingLeft: 2
-                },
-              ]}
-            >
-              <BackIcon size="30" color={COLORS.black} />
-            </TouchableOpacity>
-          </View>
-
           <View
             style={{
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
-              marginBottom: 0,
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: "bold",
-                paddingHorizontal: 5,
-              }}
-              numberOfLines={1}
-            >
-              {data?.name} 
-            </Text>
-            <Text
-              style={{
-                fontSize: 12,
-                color: COLORS.gray,
-                marginTop: 3,
-                fontWeight: "500",
-              }}
-            >
-              {data && format(data?.startAt, "dd MMM")} -{" "}
-              {data && format(data?.endAt, "dd MMM")} | {data?.type}
-            </Text>
-          </View>
-
-          <View
-            style={{
+              paddingTop: Constants?.statusBarHeight + 10,
               flexDirection: "row",
-              width: 110,
-              justifyContent: "flex-end",
-              marginRight: 0,
+              width: "100%",
+              position: "relative",
+              backgroundColor: "#fff",
             }}
           >
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("TripMapViewScreen", {
-                  tabData,
-                  city: data?.cities[0],
-                  activeDay: activeDay
-                })
-              }
-              activeOpacity={0.7}
-              style={[
-                styles.mapButton,
-                {
-                  position: "relative",
-                  top: 0,
-                  width: 35,
-                  height: 35,
-                  backgroundColor: "#eee",
-                  right: 15,
-                },
-              ]}
+            <View style={{ width: 110 }}>
+              <TouchableOpacity
+                onPress={() => navigation.goBack()}
+                activeOpacity={0.7}
+                style={[
+                  styles.backButton,
+                  {
+                    position: "relative",
+                    top: 0,
+                    width: 35,
+                    height: 35,
+                    left: 15,
+                    alignItems: "flex-start",
+                    marginLeft: 0,
+                    backgroundColor: "#eee",
+                    paddingLeft: 2,
+                  },
+                ]}
+              >
+                <BackIcon size="30" color={COLORS.black} />
+              </TouchableOpacity>
+            </View>
+
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                marginBottom: 0,
+              }}
             >
-              <MapWithLocationIcon width={18} color={COLORS.black} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => onQuestion2ModalOpen()}
-              activeOpacity={0.7}
-              style={[
-                styles.mapButton,
-                {
-                  position: "relative",
-                  top: 0,
-                  width: 35,
-                  height: 35,
-                  backgroundColor: "#eee",
-                  marginLeft: 10,
-                  right: 15
-                },
-              ]}
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    fontWeight: "bold",
+                    paddingHorizontal: 5,
+                    color: COLORS.primary,
+                  }}
+                  numberOfLines={1}
+                >
+                  {data?.cities[0]?.city}
+                </Text>
+                <LocationPin width="12" color={COLORS.primary} />
+              </View>
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: COLORS.gray,
+                  marginTop: 3,
+                  fontWeight: "500",
+                }}
+              >
+                {data && format(data?.startAt, "dd MMM")} -{" "}
+                {data && format(data?.endAt, "dd MMM")} | {data?.type}
+              </Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                width: 110,
+                justifyContent: "flex-end",
+                marginRight: 0,
+              }}
             >
-              <DotsVerticlIcon size={18}  color={COLORS.black} />
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("TripMapViewScreen", {
+                    tabData,
+                    city: data?.cities[0],
+                    activeDay: activeDay,
+                  })
+                }
+                activeOpacity={0.7}
+                style={[
+                  styles.mapButton,
+                  {
+                    position: "relative",
+                    top: 0,
+                    width: 35,
+                    height: 35,
+                    backgroundColor: "#eee",
+                    right: 15,
+                  },
+                ]}
+              >
+                <MapWithLocationIcon width={18} color={COLORS.black} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => onQuestion2ModalOpen()}
+                activeOpacity={0.7}
+                style={[
+                  styles.mapButton,
+                  {
+                    position: "relative",
+                    top: 0,
+                    width: 35,
+                    height: 35,
+                    backgroundColor: "#eee",
+                    marginLeft: 10,
+                    right: 15,
+                  },
+                ]}
+              >
+                <DotsVerticlIcon size={18} color={COLORS.black} />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-        <View style={[styles.tripDetailsHeader, {
-          marginTop: 0,
-          paddingTop: 0,
-          borderTopRightRadius: 0,
-          borderTopLeftRadius: 0,
-        }]}>
-          <TripHelpers data={data} iso2={iso2} />
-        </View>
-      </>
+          <View
+            style={[
+              styles.tripDetailsHeader,
+              {
+                marginTop: 0,
+                paddingTop: 0,
+                borderTopRightRadius: 0,
+                borderTopLeftRadius: 0,
+              },
+            ]}
+          >
+            <TripHelpers data={data} iso2={iso2} />
+          </View>
+        </>
       )}
 
       {!tripStyle && (

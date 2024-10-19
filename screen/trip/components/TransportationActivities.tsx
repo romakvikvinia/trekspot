@@ -123,7 +123,7 @@ const TransportationActivities = ({ modalTransportationActivitiesRef }) => {
             showsVerticalScrollIndicator: false,
           }}
         >
-          <QuestionModal modalQuestionRef={modalQuestionRef} title="Action">
+          <QuestionModal onClose={() => modalQuestionRef?.current?.close()} title="Action">
             <View style={questionModaStyles.buttonGroup}>
               <TouchableOpacity
                 activeOpacity={0.7}

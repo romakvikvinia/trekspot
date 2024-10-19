@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { DirectionIcon } from "../../../utilities/SvgIcons.utility";
+import { COLORS } from "../../../styles/theme";
 
 export const ShowDirectionButton = ({ data }) => {
 const latitude = data?.location?.lat;
@@ -44,7 +45,7 @@ const placeName = data?.title;
 
 export const styles = StyleSheet.create({
   directionButton: {
-    backgroundColor: "#000",
+    backgroundColor: COLORS.primary,
     padding: 10,
     borderRadius: 25,
     paddingHorizontal: 15,

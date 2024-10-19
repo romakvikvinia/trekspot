@@ -177,7 +177,7 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                 ]}
                 activeOpacity={0.7}
               >
-                <Mark2 color="#fff" />
+                <Mark2 color="#000" />
               </TouchableOpacity>
 
               <Swiper

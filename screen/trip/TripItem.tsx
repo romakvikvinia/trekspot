@@ -136,7 +136,11 @@ export const TripItem: React.FC<ITripItemProps> = ({ item, onContextMenu }) => {
                       {item?.name}
                     </Text>
                   </View>
-                  <TouchableOpacity onPress={onContextMenu}>
+                  <TouchableOpacity style={{
+                    padding: 15,
+                    marginTop: -10,
+                    marginRight: -10
+                  }} onPress={onContextMenu}>
                     <DotsIcon color="#fff" />
                   </TouchableOpacity>
                 </View>

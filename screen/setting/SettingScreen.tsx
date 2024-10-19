@@ -17,6 +17,7 @@ import { COLORS } from "../../styles/theme";
 import {
   DeleteIcon,
   FacebookLinear,
+  GuestIllustration,
   InstagramLinear,
   LockIcon,
   LogoutIcon,
@@ -31,7 +32,6 @@ import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 import { MapEmbedView } from "../../common/components/MapEmbedView";
 
-import { useMeQuery } from "../../api/api.trekspot";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SettingRouteStackParamList } from "../../routes/setting/SettingRoutes";
 import { useAppDispatch, useAppSelector } from "../../package/store";
@@ -61,41 +61,58 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
           contentContainerStyle={{ paddingHorizontal: 15 }}
         >
           <View style={styles.profileHeader}>
-            <View style={styles.profileLeft}>
-              {true ? (
-                <View style={styles.avatar}>
-                  <UserIcon />
-                </View>
-              ) : (
-                <Image
-                  //@ts-ignore
-                  style={{
-                    minWidth: 60,
-                    width: 60,
-                    maxWidth: 60,
-                    height: 60,
-                    minHeight: 60,
-                    flex: 1,
+            {!isGuest ? (
+              <View style={styles.profileLeft}>
+                {true ? (
+                  <View style={styles.avatar}>
+                    <UserIcon />
+                  </View>
+                ) : (
+                  <Image
+                    //@ts-ignore
+                    style={{
+                      minWidth: 60,
+                      width: 60,
+                      maxWidth: 60,
+                      height: 60,
+                      minHeight: 60,
+                      flex: 1,
 
-                    borderRadius: "100%",
-                  }}
-                  source={{
-                    uri: "https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=20&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                  }}
-                  cachePolicy="memory"
-                  contentFit="cover"
-                  transition={0}
-                />
-              )}
-              <View style={{ maxWidth: "70%" }}>
-                <Text numberOfLines={1} style={styles.username}>
-                  {isGuest
-                    ? "Guest user"
-                    : `${user!.firstName} ${user!.lastName}`}
-                </Text>
-                <Text style={styles.subTxt}>{user!.email}</Text>
+                      borderRadius: "100%",
+                    }}
+                    source={{
+                      uri: "https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=20&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                    }}
+                    cachePolicy="memory"
+                    contentFit="cover"
+                    transition={0}
+                  />
+                )}
+                <View style={{ flex: 1 }}>
+                  <Text numberOfLines={1} style={styles.username}>
+                    {isGuest
+                      ? "Guest user"
+                      : `${user!.firstName} ${user!.lastName}`}
+                  </Text>
+                  <Text style={styles.subTxt}>{user!.email}</Text>
+                </View>
               </View>
-            </View>
+            ) : (
+              <View style={styles.guestCard}>
+                <GuestIllustration />
+                <Text style={styles.guestCardTitle}>
+                  As a guest user, you have limited access to features
+                </Text>
+                <TouchableOpacity
+                   onPress={async () => {
+                    await deleteItemFromStorage();
+                    dispatch(signOut());
+                  }}
+                  style={styles.guestCardButtonItem}>
+                  <Text style={styles.guestCardButtonItemText}>Sign In</Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
 
           <Text style={styles.buttonsWrapperTitle}>Account</Text>
@@ -144,21 +161,22 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
                   <DeleteIcon />
                   <Text style={[styles.buttonText]}>Deactivate account</Text>
                 </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.button,
+                    { borderBottomWidth: 0, marginBottom: 0 },
+                  ]}
+                  activeOpacity={0.7}
+                  onPress={async () => {
+                    await deleteItemFromStorage();
+                    dispatch(signOut());
+                  }}
+                >
+                  <LogoutIcon />
+                  <Text style={styles.buttonText}>Sign out</Text>
+                </TouchableOpacity>
               </>
             )}
-            <TouchableOpacity
-              style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]}
-              activeOpacity={0.7}
-              onPress={async () => {
-                await deleteItemFromStorage();
-                dispatch(signOut());
-              }}
-            >
-              <LogoutIcon />
-              <Text style={styles.buttonText}>
-                {isGuest ? "Sign In" : "Sign out"}
-              </Text>
-            </TouchableOpacity>
           </View>
 
           <Text style={styles.buttonsWrapperTitle}>Socials</Text>
@@ -246,6 +264,54 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f8f8f8",
     paddingTop: Constants?.statusBarHeight + 10,
+  },
+  guestCardTitle: {
+    fontSize: 16,
+    fontWeight: "500",
+    textAlign: "center",
+    marginBottom: 20,
+    marginTop: 15,
+    color: COLORS.black,
+    lineHeight: 20,
+  },
+  guestCard: {
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    padding: 10
+  },
+  guestCardButtonItem: {
+    backgroundColor: COLORS.primary,
+    padding: 15,
+    borderRadius: 12,
+    paddingHorizontal: 15,
+    marginRight: 0,
+    flexDirection: "row",
+    marginTop: 10,
+    flex: 1,
+    width: "100%",
+    justifyContent: "center",
+  },
+  guestCardButtonItemText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  signInButton: {
+    marginLeft: 15,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f2f2f2",
+    minWidth: "100%",
+    flex: 1,
+    borderRadius: 40,
+    height: 60
+  },
+  signInButtonText: {
+    color: "#000",
+    fontSize: 18,
+    fontWeight: "600"
   },
   version: {
     width: "100%",

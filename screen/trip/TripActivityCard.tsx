@@ -192,26 +192,24 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
                 },
               ]}
             >
-              {item?.images?.length > 0 && (
-                <Image
-                  style={[
-                    tripDetailStyles.mainImage,
-                    {
-                      width: 70,
-                      height: 70,
-                    },
-                  ]}
-                  contentFit="cover"
-                  source={
-                    item?.images[0].url
-                      ? {
-                          uri: item?.images[0].url,
-                        }
-                      : require("../../assets/no-image.png")
-                  }
-                  key={`img-${item?.title}`}
-                ></Image>
-              )}
+              <Image
+                style={[
+                  tripDetailStyles.mainImage,
+                  {
+                    width: 70,
+                    height: 70,
+                  },
+                ]}
+                contentFit="cover"
+                source={
+                  item?.images[0]?.url
+                    ? {
+                        uri: item?.images[0]?.url,
+                      }
+                    : require("../../assets/no-image.png")
+                }
+                key={`img-${item?.title}`}
+              ></Image>
             </View>
 
             <View
@@ -300,7 +298,9 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => onQuestionModalOpen(item.id)}
-                style={tripDetailStyles.sightRightActionsButton}
+                style={[tripDetailStyles.sightRightActionsButton, {
+                  marginRight: -5
+                }]}
                 activeOpacity={0.7}
               >
                 <DotsIcon color={COLORS.gray} />
@@ -462,7 +462,9 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => onQuestionModalOpen(item.id)}
-                style={tripDetailStyles.sightRightActionsButton}
+                style={[tripDetailStyles.sightRightActionsButton, {
+                  marginRight: -5
+                }]}
                 activeOpacity={0.7}
               >
                 <DotsIcon color={COLORS.gray} />
