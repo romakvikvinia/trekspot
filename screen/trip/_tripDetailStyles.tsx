@@ -248,7 +248,7 @@ export const tripDetailStyles = StyleSheet.create({
     },
     sightRightActionsButton: {
       width: 35,
-      height: 35,
+      height: 40,
       backgroundColor: "#fff",
       display: "flex",
       alignItems: "center",
@@ -264,6 +264,8 @@ export const tripDetailStyles = StyleSheet.create({
       fontSize: 12,
       marginLeft: 5,
       fontWeight: "500",
+      textTransform: "uppercase",
+      letterSpacing: 0.5,
     },
     checkinButton: {
       flexDirection: "row",

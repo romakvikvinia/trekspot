@@ -67,7 +67,7 @@ export const SearchScreen = ({ navigation }: Props) => {
             <BackIcon size="30" />
           </TouchableOpacity>
           <TextInput
-            placeholder="Search here..."
+            placeholder="Search cities, museums..."
             placeholderTextColor="#7f7f7f"
             autoFocus={true}
             style={styles.searchInput}

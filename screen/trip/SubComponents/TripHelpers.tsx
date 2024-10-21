@@ -8,10 +8,8 @@ import {
 } from "react-native";
 import {
   AppsIcon,
-  CarLinearIcon,
   DishesIcon,
   EmergencyLinearIcon,
-  FaqIcon,
   InsightIcon,
 } from "../../../utilities/SvgIcons.utility";
 
@@ -31,7 +29,7 @@ export const TripHelpers = ({ data, iso2 }) => {
           activeOpacity={0.7}
           onPress={() => navigation.navigate("TripEmergency")}
         >
-          <EmergencyLinearIcon size={12} color={"#0b57d0"} />
+          <EmergencyLinearIcon size={16} color={"#0b57d0"} />
           <Text style={styles.bottomActionsButtonlabel}>Emergency</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -44,7 +42,7 @@ export const TripHelpers = ({ data, iso2 }) => {
             })
           }
         >
-          <InsightIcon size={12} color={"#0b57d0"} />
+          <InsightIcon size={16} color={"#0b57d0"} />
           <Text style={styles.bottomActionsButtonlabel}>Insights</Text>
         </TouchableOpacity>
         {/* <TouchableOpacity
@@ -66,7 +64,7 @@ export const TripHelpers = ({ data, iso2 }) => {
             })
           }
         >
-          <AppsIcon size={12} color={"#0b57d0"} />
+          <AppsIcon size={16} color={"#0b57d0"} />
           <Text style={styles.bottomActionsButtonlabel}>Apps</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -78,7 +76,7 @@ export const TripHelpers = ({ data, iso2 }) => {
             })
           }
         >
-          <DishesIcon size={12} color={"#0b57d0"} />
+          <DishesIcon size={16} color={"#0b57d0"} />
           <Text style={styles.bottomActionsButtonlabel}>What to eat?</Text>
         </TouchableOpacity>
        
@@ -110,15 +108,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     flexDirection: "row",
   },
-
   bottomActionsButtonText: {
     alignItems: "center",
     flexDirection: "row",
   },
   bottomActionsButtonlabel: {
-    fontSize: 13,
+    fontSize: 14,
     color: "#0b57d0",
-    marginLeft: 3,
+    marginLeft: 8,
     fontWeight: "500",
   },
 });

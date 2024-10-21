@@ -1,9 +1,6 @@
 import { FlashList } from "@shopify/flash-list";
-import { useRef, useState } from "react";
 import {
   ActivityIndicator,
-  SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,

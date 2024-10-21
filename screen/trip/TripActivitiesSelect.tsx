@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
     alignItems: "center",
-    borderBottomEndRadius: 15,
+    borderBottomEndRadius: 12,
   },
   addToButtonText: {
     color: COLORS.primary,
@@ -332,10 +332,10 @@ const styles = StyleSheet.create({
   },
   thingsTodoItem: {
     backgroundColor: "#fff",
-    width: "95%",
+    width: "96%",
     marginRight: 15,
     borderRadius: 12,
-    marginBottom: 25,
+    marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,

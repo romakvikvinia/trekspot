@@ -19,6 +19,9 @@ import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
+import { useTripStore } from "../store/store";
+import { GuestUserModal } from "../../common/components/GuestUserModal";
+import { useAppSelector } from "../../package/store";
 
 interface CitiesContainerProps {
   title: string;
@@ -37,8 +40,20 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
   isCitiesLoading,
 }) => {
   const navigation = useNavigation<ExploreStackNavigationProp>();
-
+  const { user } = useAppSelector((state) => state.auth);
+  const isGuest = user?.role === "guest";
+  const [showGuestModal, setShowGuestModal] = React.useState(false);
+  const { guestActivityCount, increaseGuestActivityCount } = useTripStore((state) => ({
+    increaseGuestActivityCount: state.increaseGuestActivityCount,
+    guestActivityCount: state.guestActivityCount,
+  }));
   const handleCity = useCallback((city: CityType) => {
+    if(guestActivityCount >= 3 && isGuest) {
+      setShowGuestModal(true);
+      return;
+    }
+    increaseGuestActivityCount();
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     navigation.navigate("CityDetail", {
       city,
     });
@@ -83,10 +98,7 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
                     <TouchableOpacity
                       style={styles.gradientWrapper}
                       activeOpacity={0.7}
-                      onPress={() => {
-                        handleCity(item);
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                      }}
+                      onPress={() => handleCity(item)}
                     >
                       <LinearGradient
                         style={styles.gradientWrapper}
@@ -232,6 +244,9 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
           </ScrollView>
         )}
       </View>
+      {
+        showGuestModal && <GuestUserModal onClose={() => setShowGuestModal(false)} />
+      }
     </>
   );
 };

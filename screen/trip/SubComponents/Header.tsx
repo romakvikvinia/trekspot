@@ -88,7 +88,7 @@ export const Header = ({
                     left: 15,
                     alignItems: "flex-start",
                     marginLeft: 0,
-                    backgroundColor: "#eee",
+                    backgroundColor: "#f2f2f2",
                     paddingLeft: 2,
                   },
                 ]}
@@ -156,7 +156,7 @@ export const Header = ({
                     top: 0,
                     width: 35,
                     height: 35,
-                    backgroundColor: "#eee",
+                    backgroundColor: "#f2f2f2",
                     right: 15,
                   },
                 ]}
@@ -173,7 +173,7 @@ export const Header = ({
                     top: 0,
                     width: 35,
                     height: 35,
-                    backgroundColor: "#eee",
+                    backgroundColor: "#f2f2f2",
                     marginLeft: 10,
                     right: 15,
                   },

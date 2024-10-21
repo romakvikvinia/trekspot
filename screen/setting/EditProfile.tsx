@@ -1,10 +1,9 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import {
   ActivityIndicator,
   Alert,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -23,6 +22,7 @@ import { useFormik } from "formik";
 import { EditProfileValidationSchema } from "./validationScheme";
 import { useAppDispatch, useAppSelector } from "../../package/store";
 import { updateUser } from "../../package/slices";
+import { toast } from "sonner-native";
 
 type EdoProfileProps = NativeStackScreenProps<
   SettingRouteStackParamList,
@@ -54,6 +54,9 @@ export const EditProfile: React.FC<EdoProfileProps> = ({ navigation }) => {
         }).unwrap();
         dispatch(updateUser({ user: response.updateMe }));
         methods.setSubmitting(false);
+        toast.success("Profile updated successfully", {
+          duration: 2000,
+        });
         navigation.goBack();
       } catch (error) {
         Alert.alert("Error", "Something went wrong, please try later");

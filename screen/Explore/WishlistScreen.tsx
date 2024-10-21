@@ -123,12 +123,22 @@ export const WishlistScreen: React.FC<WishlistProps> = ({ navigation }) => {
           !sights?.wishlists.length && (
             <View style={{ minHeight: 500, justifyContent: "center" }}>
               <View style={_tripScreenStyles.notFoundView}>
-                <NoDestinationFoundIcon />
+              <Image
+                style={{
+                  width: 200,
+                  height: 220,
+                  alignSelf: "center",
+                  marginBottom: 10,
+                }}
+                source={require("../../assets/tripStart.webp")}
+                contentFit="cover"
+                cachePolicy="memory-disk"
+              ></Image>
                 <Text style={_tripScreenStyles.notFoundViewTitleText}>
                   Your bucket list is looking empty
                 </Text>
                 <Text style={_tripScreenStyles.notFoundViewText}>
-                  Go to explore and find an amazing sights.
+                  Go to explore and find an amazing spots
                 </Text>
               </View>
             </View>

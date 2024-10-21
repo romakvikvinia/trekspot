@@ -3,15 +3,12 @@ import {
   ImageBackground,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import { Modalize } from "react-native-modalize";
-import { Portal } from "react-native-portalize";
 import { COLORS, SIZES } from "../../styles/theme";
 import { CountriesList } from "../../utilities/countryList";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Flags } from "../../utilities/flags";
 import { CheckCircleIcon } from "../../utilities/SvgIcons.utility";
 import { SearchComponent } from "../ui/SearchComponent";

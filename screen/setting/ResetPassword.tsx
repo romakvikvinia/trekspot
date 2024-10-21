@@ -25,6 +25,7 @@ import { SettingRouteStackParamList } from "../../routes/setting/SettingRoutes";
 import { useUpdateMeMutation } from "../../api/api.trekspot";
 import { ResetPasswordValidationSchema } from "./validationScheme";
 import { useFormik } from "formik";
+import { toast } from "sonner-native";
 
 type ResetPassword = NativeStackScreenProps<
   SettingRouteStackParamList,
@@ -58,6 +59,9 @@ export const ResetPassword: React.FC<ResetPassword> = ({ navigation }) => {
 
   useEffect(() => {
     if (isSuccessUpdateMe) {
+      toast.success("Password updated successfully", {
+        duration: 2000,
+      });
       navigation.goBack();
     }
   }, [isSuccessUpdateMe]);

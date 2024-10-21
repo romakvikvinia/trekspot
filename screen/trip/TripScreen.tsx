@@ -125,7 +125,9 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
     if (isTripSuccessfullyDeleted) {
       dispatch(trekSpotApi.util.invalidateTags(["myTrips"]));
       setState((prevState) => ({ ...prevState, trip: undefined }));
-      toast('Trip deleted successfully!')
+      toast.success('Trip deleted successfully', {
+        duration: 2000,
+      })
     }
   }, [isTripSuccessfullyDeleted, dispatch]);
 

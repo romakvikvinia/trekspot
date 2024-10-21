@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native";
 import { useLazySearchCitiesQuery } from "../../api/api.trekspot";
@@ -7,7 +7,6 @@ import { SearchComponent } from "../../common/ui/SearchComponent";
 import { NotFound } from "../../components/common/NotFound";
 
 import { COLORS, SIZES } from "../../styles/theme";
-import { CountriesList } from "../../utilities/countryList";
 import { Loader } from "../../common/ui/Loader";
 import { CityType } from "../../api/api.types";
 

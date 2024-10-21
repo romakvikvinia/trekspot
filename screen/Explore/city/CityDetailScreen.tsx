@@ -49,7 +49,9 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
 
   const handleAddToWishlist = useCallback(async () => {
     await fetchAddToWishlist({ city: city.id }).unwrap();
-    toast("City was added successfully");
+    toast.success("The city has been added to your wishlist", {
+      duration: 2000,
+    });
   }, []);
 
   const handleSetSightItem = useCallback((sight: SightType) => {

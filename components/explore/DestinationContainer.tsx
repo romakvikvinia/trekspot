@@ -18,6 +18,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
 import { useTripStore } from "../store/store";
 import { GuestUserModal } from "../../common/components/GuestUserModal";
+import { useAppSelector } from "../../package/store";
 
 interface DestinationContainerProps {
   title: string;
@@ -41,13 +42,16 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
   isExplore = false,
 }) => {
   const navigation = useNavigation<ExploreStackNavigationProp>();
+
+  const { user } = useAppSelector((state) => state.auth);
+  const isGuest = user?.role === "guest";
   const [showGuestModal, setShowGuestModal] = React.useState(false);
   const { guestActivityCount, increaseGuestActivityCount } = useTripStore((state) => ({
     increaseGuestActivityCount: state.increaseGuestActivityCount,
     guestActivityCount: state.guestActivityCount,
   }));
   const handleDetailOfCountry = useCallback((countryId: string) => {
-    if(guestActivityCount > 3) {
+    if(guestActivityCount >= 3 && isGuest) {
       setShowGuestModal(true);
       return;
     }
@@ -62,9 +66,7 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
     <>
       <View style={[styles.rowItem]} style={{ paddingTop: isExplore ? 25 : 15, }}>
         <View style={styles.rowItemHeader}>
-          <Text style={styles.h2}>{title}
-             {/* {guestActivityCount} */}
-             </Text>
+          <Text style={styles.h2}>{title}</Text>
           {/* {seeAllItems && (
             <TouchableOpacity activeOpacity={0.7}>
               <Text style={styles.seeAllButtonTxt}>See all</Text>

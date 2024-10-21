@@ -307,7 +307,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingTop: 15,
+          paddingTop: 30,
           paddingBottom: 80,
           paddingLeft: tripStyle && route?.activities?.length > 1 ? 30 : 0,
         }}

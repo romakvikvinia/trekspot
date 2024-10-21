@@ -157,7 +157,7 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
   };
 
   const renderAuthor = (item) => {
-    const author = item.split('">')[1].split("</a>")[0];
+    const author = item?.split('">')[1]?.split("</a>")[0];
     return author;
   };
 
@@ -244,7 +244,7 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                     }
                     key={`slide-${ind}`}
                   >
-                    {item?.html_attributions && (
+                    {item?.html_attributions?.length > 0 && (
                       <TouchableOpacity
                         style={styles.attr}
                         activeOpacity={0.7}

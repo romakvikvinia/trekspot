@@ -46,6 +46,8 @@ import { MapSvg } from "../../utilities/svg/map";
 
 import { UserContext } from "../../components/context/UserContext";
 import { useAppSelector } from "../../package/store";
+import { useTripStore } from "../../components/store/store";
+import { GuestUserModal } from "../../common/components/GuestUserModal";
 
 interface MapVIewProps {
   analytic?: AnalyticsType;
@@ -74,26 +76,15 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
     useUpdateMeMutation();
   const modalRef = useRef<Modalize>(null);
   const shareModalRef = useRef<Modalize>(null);
+  const isGuest = user?.role === "guest";
+  const [showGuestModal, setShowGuestModal] = React.useState(false);
+  const { guestActivityCount, increaseGuestActivityCount } = useTripStore((state) => ({
+    increaseGuestActivityCount: state.increaseGuestActivityCount,
+    guestActivityCount: state.guestActivityCount,
+  }));
 
   const onOpen = useCallback(() => {
-    if (user?.role === "guest") {
-      Alert.alert("To add a visit, you need to sign in", "", [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        {
-          text: "Sign in",
-          onPress: () => {
-            //signOut()
-          },
-          style: "default",
-        },
-      ]);
-    } else {
-      if (modalRef.current) modalRef.current.open();
-    }
+    if (modalRef.current) modalRef.current.open();
   }, []);
 
   const onShareModalOpen = useCallback(() => {
@@ -217,38 +208,18 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
   };
 
   const handleAddVisit = () => {
-    if (user?.type === "guest") {
-      Alert.alert("To add a visit, you need to sign in", "", [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        {
-          text: "Sign in",
-          onPress: () => signOut(),
-          style: "default",
-        },
-      ]);
+    if(guestActivityCount >= 3 && isGuest) {
+      setShowGuestModal(true);
+      return;
     } else {
       onOpen();
     }
   };
 
   const handleShare = () => {
-    if (user?.type === "guest") {
-      Alert.alert("To share your map, you need to sign in", "", [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        {
-          text: "Sign in",
-          onPress: () => signOut(),
-          style: "default",
-        },
-      ]);
+    if(guestActivityCount >= 3 && isGuest) {
+      setShowGuestModal(true);
+      return;
     } else {
       onShareModalOpen();
     }
@@ -476,6 +447,10 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
           />
         </Modalize>
       </Portal>
+
+      {
+        showGuestModal && <GuestUserModal onClose={() => setShowGuestModal(false)} />
+      }
     </>
   );
 };

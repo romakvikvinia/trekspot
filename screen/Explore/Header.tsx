@@ -16,6 +16,10 @@ import {
 import Constants from "expo-constants";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTripStore } from "../../components/store/store";
+import { useState } from "react";
+import { GuestUserModal } from "../../common/components/GuestUserModal";
+import { useAppSelector } from "../../package/store";
 // import Animated, {
 //   ReduceMotion,
 //   useAnimatedGestureHandler,
@@ -29,6 +33,23 @@ import { LinearGradient } from "expo-linear-gradient";
 
 export const ExploreHeader = () => {
   const navigation = useNavigation();
+  const { user } = useAppSelector((state) => state.auth);
+  const isGuest = user?.role === "guest";
+
+  const [showGuestModal, setShowGuestModal] = useState(false);
+  const { guestActivityCount, increaseGuestActivityCount } = useTripStore((state) => ({
+    increaseGuestActivityCount: state.increaseGuestActivityCount,
+    guestActivityCount: state.guestActivityCount,
+  }));
+
+  const handleGoToSearch = () => {
+    if(guestActivityCount >= 3 && isGuest) {
+      setShowGuestModal(true);
+      return;
+    }
+    increaseGuestActivityCount();
+    navigation.navigate("Search")
+  }
 
   // const screenWidth = Dimensions.get('window').width;
   // const screenHeight = Dimensions.get('window').height;
@@ -89,7 +110,7 @@ export const ExploreHeader = () => {
         <TouchableOpacity
           style={styles.searchBox}
           activeOpacity={1}
-          onPress={() => navigation.navigate("Search")}
+          onPress={handleGoToSearch}
         >
           <View style={styles.searchIcon}>
             <SearchIcon width={15} />
@@ -187,6 +208,10 @@ export const ExploreHeader = () => {
           </LinearGradient>
         </Animated.View>
       </PanGestureHandler> */}
+
+      {
+        showGuestModal && <GuestUserModal onClose={() => setShowGuestModal(false)} />
+      }
     </>
   );
 };
