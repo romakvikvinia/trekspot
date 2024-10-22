@@ -16,6 +16,7 @@ import { TripDishes } from "../../screen/trip/TripDishes";
 import { TripTransport } from "../../screen/trip/TripTransport";
 import { TripEmergency } from "../../screen/trip/TripEmergency";
 import { CityType, TripType } from "../../api/api.types";
+import { TripActivityReview } from "../../screen/trip/TripActivityReview";
 
 interface TripRouteProps {}
 
@@ -33,6 +34,7 @@ export type TripRouteStackParamList = {
   TripDishes: undefined;
   TripTransport: undefined;
   TripEmergency: undefined;
+  TripActivityReview: undefined
 };
 
 const Stack = createStackNavigator<TripRouteStackParamList>();
@@ -131,6 +133,16 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
       <Stack.Screen
         name="TripEmergency"
         component={TripEmergency}
+        options={() => ({
+          header: () => null,
+          gestureEnabled: Platform.OS === "ios",
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
+        })}
+      />
+      <Stack.Screen
+        name="TripActivityReview"
+        component={TripActivityReview}
         options={() => ({
           header: () => null,
           gestureEnabled: Platform.OS === "ios",

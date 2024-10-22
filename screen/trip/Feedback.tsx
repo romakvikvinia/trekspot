@@ -1,7 +1,8 @@
 import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import {
+  KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
@@ -13,32 +14,24 @@ import {
 import { Rating } from "react-native-ratings";
 import { COLORS } from "../../styles/theme";
 import {
-  ImageIcon,
-  ImagesIcon,
   ImagesLinearIcon,
   XIcon,
 } from "../../utilities/SvgIcons.utility";
 import * as ImagePicker from "expo-image-picker";
-import { Video, ResizeMode } from "expo-av";
-import * as VideoThumbnails from "expo-video-thumbnails";
 import { SkeletonLoader, SkeletonLoaderImage } from "../../common/ui/Skeleton";
 
 const DATA = [
   "https://cdn.pixabay.com/photo/2019/03/09/21/30/downtown-4045035_1280.jpg",
-  "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
   "https://cdn.pixabay.com/photo/2019/03/09/21/30/downtown-4045035_1280.jpg",
-  "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
   "https://cdn.pixabay.com/photo/2019/03/09/21/30/downtown-4045035_1280.jpg",
-  "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
 ];
 
-export const Feedback = () => {
+export const Feedback = ({item}) => {
   const ratingCompleted = (rating) => {
     console.log("Rating is: " + rating);
   };
-  const videoRef = useRef(null);
 
-  const [thumbnails, setThumbnails] = useState([]);
+ 
   const [loading, setLoading] = useState();
 
   const pickImages = async () => {
@@ -58,52 +51,37 @@ export const Feedback = () => {
 
     // }
   };
-
-  const generateThumbnails = async () => {
-    try {
-      setLoading(true);
-      const thumbnailPromises = DATA.map(async (item) => {
-        if (item.endsWith(".mp4")) {
-          const { uri } = await VideoThumbnails.getThumbnailAsync(item, {
-            time: 15000,
-          });
-          return uri;
-        } else {
-          return item; // Return the image URL directly
-        }
-      });
-
-      const thumbnails = await Promise.all(thumbnailPromises);
-      setLoading(false);
-      setThumbnails(thumbnails);
-    } catch (error) {
-      setLoading(false);
-      console.warn(error);
-    }
-  };
-
-  useEffect(() => {
-    generateThumbnails();
-  }, []);
-
-  console.log("thumbnails", thumbnails);
+  
 
   return (
     <View style={styles.feedbackWrapper}>
-      <Text style={styles.feedbackText}>
-        Your feedback will visible for everyone
-      </Text>
-      <ScrollView
-        style={{
-          flex: 1,
-        }}
-      >
+     
         <View style={styles.textArea}>
+          <View style={styles.spotWrapper}>
+            <Image
+              style={{
+                height: 120,
+                width: 120,
+                borderRadius: 12,
+                backgroundColor: "#ccc",
+              }}
+              cachePolicy="memory"
+              contentFit="cover"
+              transition={0}
+              source={{ uri: item.image.url }}
+            />
+            <Text style={styles.spotTitle} numberOfLines={1}>
+              {item.title}
+            </Text>
+          </View>
+
           <Rating
+            type="custom"
             startingValue={0}
             onFinishRating={ratingCompleted}
             imageSize={40}
             tintColor="#F2F2F7"
+            ratingBackgroundColor="#ccc"
             style={{
               paddingTop: 0,
               marginBottom: 15,
@@ -115,22 +93,12 @@ export const Feedback = () => {
             // onChangeText={text=>this.setState({value:text})}
             multiline={true}
             numberOfLines={4}
-            placeholder="Enter your feedback about this place"
+            placeholder="Enter your feedback"
             placeholderTextColor={COLORS.gray}
-            style={{
-              backgroundColor: "transparent",
-              height: 70,
-              padding: 15,
-              borderRadius: 15,
-              paddingTop: Platform.OS === "android" ? 0 : 15,
-              marginTop: 15,
-              color: COLORS.black,
-              borderWidth: 1,
-              borderColor: COLORS.gray,
-            }}
+            style={styles.textInput}
           />
         </View>
-        {loading ? (
+        {/* {loading ? (
           <View style={{ flexDirection: "row", display: "flex" }}>
             {[0, 1, 2, 3].map((item) => (
               <SkeletonLoaderImage
@@ -142,9 +110,8 @@ export const Feedback = () => {
             ))}
           </View>
         ) : (
-          <FlashList
-            data={DATA}
-            renderItem={({ item }) => (
+          <ScrollView horizontal>
+            {DATA.map((item, index) => (
               <View style={styles.reviewImage}>
                 <Image
                   style={[
@@ -164,27 +131,28 @@ export const Feedback = () => {
                   activeOpacity={0.7}
                   style={[styles.removeItemButton]}
                 >
-                  <XIcon width="10" />
+                  <XIcon width="10" color="#fff" />
                 </TouchableOpacity>
               </View>
-            )}
-            estimatedItemSize={200}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-              paddingHorizontal: 0,
-            }}
-          />
-        )}
+            ))}
+          </ScrollView>
+        )} */}
         <TouchableOpacity
           style={styles.uploadButton}
           onPress={() => pickImages()}
+          activeOpacity={0.7}
         >
-          <ImagesLinearIcon size={18} />
-          <Text style={styles.uploadButtonText}>Upload images and videos</Text>
+          <ImagesLinearIcon size={16} color={COLORS.gray} />
+          <Text style={styles.uploadButtonText}>Add photos</Text>
         </TouchableOpacity>
-      </ScrollView>
+
+        {/* <Text style={styles.errorMessage}>
+          Please set the rating and upload minimum 1 photo to submit your review
+        </Text>  */}
+
+        <TouchableOpacity style={styles.submitButton} activeOpacity={0.7}>
+          <Text style={styles.submitButtonText}>Submit review</Text>
+        </TouchableOpacity>
     </View>
   );
 };
@@ -194,14 +162,56 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     marginTop: 25,
     paddingBottom: 0,
-    borderRadius: 15,
+    borderRadius: 12,
     marginBottom: 15,
+  },
+  errorMessage: {
+    marginTop: 25,
+    textAlign: "center",
+    fontSize: 16,
+    color: "red"
+  }, 
+  spotWrapper: {
+    flexDirection: "column",
+    alignItems: "center",
+    marginBottom: 35
+  },
+  spotTitle: {
+    marginTop: 15,
+    fontSize: 18
+  },
+  submitButton: {
+    paddingHorizontal: 45,
+    paddingVertical: 18,
+    borderRadius: 50,
+    backgroundColor: COLORS.primaryDark,
+    marginTop: 50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  submitButtonText: {
+    color: COLORS.white,
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  textInput: {
+    backgroundColor: "transparent",
+    height: 100,
+    padding: 15,
+    borderRadius: 12,
+    paddingTop: Platform.OS === "android" ? 0 : 15,
+    marginTop: 15,
+    color: COLORS.black,
+    borderWidth: 1,
+    borderColor: COLORS.gray,
+    fontSize: 16,
   },
   reviewImage: {
     position: "relative",
+    marginBottom: 15
   },
   removeItemButton: {
-    backgroundColor: "#DBDBDB",
+    backgroundColor: "red",
     width: 25,
     height: 25,
     borderRadius: 50,
@@ -219,20 +229,22 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: Platform.OS === "android" ? 10 : 15,
     paddingHorizontal: 25,
-    borderRadius: 50,
-    marginTop: 25,
-    borderWidth: 1,
+    paddingVertical: 15,
+    borderRadius: 12,
+    marginTop: 5,
+    borderWidth: 2,
     borderColor: COLORS.gray,
+    borderStyle: "dashed",
   },
   uploadButtonText: {
     marginLeft: 10,
-    fontSize: Platform.OS === "android" ? 12 : 14,
+    fontSize: 15,
+    fontWeight: "500",
+    color: COLORS.gray
   },
   feedbackWrapper: {
     justifyContent: "space-between",
-    minHeight: "100%",
     paddingHorizontal: 15,
   },
 });

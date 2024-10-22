@@ -23,6 +23,7 @@ import { SightType } from "../../api/api.types";
 import { TripDaysType } from "./TripDetailScreen";
 import { useChangeActivityVisitedMutation } from "../../api/api.trekspot";
 import { useTripStore } from "../../components/store/store";
+import { useNavigation } from "@react-navigation/native";
 
 interface ITripActivityCardProps {
   visited: boolean;
@@ -64,6 +65,9 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
   index,
   lastIndex,
 }) => {
+
+  const navigation = useNavigation();
+
   const [changeActivityVisited, { isLoading }] =
     useChangeActivityVisitedMutation();
   const { tripStyle } = useTripStore((state: any) => ({
@@ -85,14 +89,18 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
   };
 
   const handleChangeActivityVisited = useCallback(() => {
-    setCheckedIn(!checkedIn);
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    changeActivityVisited({
-      day: day.id,
-      visited: !checkedIn,
-      route: day.route!,
-      sight: item.id,
+    navigation.navigate("TripActivityReview", {
+      item
     });
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    // setCheckedIn(!checkedIn);
+    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    // changeActivityVisited({
+    //   day: day.id,
+    //   visited: !checkedIn,
+    //   route: day.route!,
+    //   sight: item.id,
+    // });
   }, [checkedIn]);
 
   return (
