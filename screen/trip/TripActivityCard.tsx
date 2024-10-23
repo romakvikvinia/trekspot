@@ -89,18 +89,14 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
   };
 
   const handleChangeActivityVisited = useCallback(() => {
-    navigation.navigate("TripActivityReview", {
-      item
-    });
+    setCheckedIn(!checkedIn);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    // setCheckedIn(!checkedIn);
-    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    // changeActivityVisited({
-    //   day: day.id,
-    //   visited: !checkedIn,
-    //   route: day.route!,
-    //   sight: item.id,
-    // });
+    changeActivityVisited({
+      day: day.id,
+      visited: !checkedIn,
+      route: day.route!,
+      sight: item.id,
+    });
   }, [checkedIn]);
 
   return (
