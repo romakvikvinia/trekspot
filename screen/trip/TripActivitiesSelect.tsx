@@ -68,10 +68,11 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
         </View>
       );
     }
+    const filterImages = tabData?.[route?.key]?.filter(sightItem => sightItem?.images?.length > 0);  
     return (
-      <View style={{ minHeight: SIZES.height - 205 }}>
+      <View style={{ minHeight: SIZES.height - 205 }}> 
         <FlashList
-          data={tabData[route.key]}
+          data={filterImages}
           keyExtractor={(item, index) =>
             `${route.key}-${index}-${
               days &&
@@ -80,7 +81,7 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
               )
             }`
           }
-          renderItem={({ item, index }) => (
+          renderItem={({ item, index }) => item?.images?.length > 0 && (
             <TouchableOpacity
               activeOpacity={0.7}
               style={[
@@ -91,7 +92,7 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                 },
               ]}
               onPress={() => showTopSight(item)}
-            >
+            > 
               <Image
                 style={[
                   {

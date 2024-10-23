@@ -1,11 +1,20 @@
 import React from "react";
-import { View, TouchableOpacity, Text, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  Alert,
+  Platform,
+} from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
 import { COLORS } from "../../../styles/theme";
 import { tripDetailStyles } from "../../trip/_tripDetailStyles";
 import { WishlistType } from "../../../api/api.types";
 import * as Haptics from "expo-haptics";
+import { Mark2 } from "../../../utilities/SvgIcons.utility";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface IWishlistContainer {
   data: WishlistType[];
@@ -23,15 +32,18 @@ export const WishlistContainer: React.FC<IWishlistContainer> = ({
   onRemove,
 }) => {
   const handleDeleteItem = (id: string) => {
-    Alert.alert("Are you sure?", "", [
+    Alert.alert("Do you really want to remove from wishlist?", "", [
       {
         text: "Cancel",
         onPress: () => console.log("Cancel Pressed"),
         style: "cancel",
       },
       {
-        text: "OK",
-        onPress: (text) => onRemove(id),
+        text: "Remove",
+        onPress: (text) => {
+          onRemove(id);
+        },
+        style: "destructive",
       },
     ]);
   };
@@ -53,13 +65,13 @@ export const WishlistContainer: React.FC<IWishlistContainer> = ({
                     tripDetailStyles.sightItem,
                     {
                       padding: 0,
-                      width: 200,
+                      width: 160,
+                      height: 180,
                       marginLeft: 0,
                       marginBottom: 0,
                       paddingBottom: 0,
                       marginRight: 15,
                       paddingTop: 0,
-                      height: 259,
                       alignItems: "flex-start",
                       justifyContent: "flex-start",
                       display: "flex",
@@ -71,13 +83,19 @@ export const WishlistContainer: React.FC<IWishlistContainer> = ({
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   }}
                 >
+                  <TouchableOpacity
+                    style={styles.addToBucketButton}
+                    activeOpacity={0.7}
+                    onPress={() => handleDeleteItem(item.id)}
+                  >
+                    <Mark2 color={COLORS.primary} />
+                  </TouchableOpacity>
+
                   <Image
                     style={{
-                      width: 200,
-                      height: 140,
-                      borderRadius: 10,
-                      borderBottomLeftRadius: 0,
-                      borderBottomRightRadius: 0,
+                      width: 160,
+                      height: 180,
+                      borderRadius: 12,
                     }}
                     contentFit="cover"
                     cachePolicy="memory-disk"
@@ -89,69 +107,26 @@ export const WishlistContainer: React.FC<IWishlistContainer> = ({
                         : require("../../../assets/no-image.png")
                     }
                     key={`img-${item.id}`}
-                  ></Image>
-
-                  <View
-                    style={{
-                      width: "100%",
-                      flex: 1,
-                    }}
                   >
-                    <View
-                      style={[
-                        tripDetailStyles.sightDetails,
-                        {
-                          flexDirection: "column",
-                          marginTop: 10,
-                          paddingHorizontal: 15,
-                          paddingBottom: 10,
-                          marginBottom: 0,
-                        },
-                      ]}
+                    <LinearGradient
+                      style={styles.gradientWrapper}
+                      colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
                     >
-                      <Text
-                        style={tripDetailStyles.sightTitle}
+                       <Text
+                        style={[
+                          tripDetailStyles.sightTitle,
+                          {
+                            color: "#fff",
+                            fontSize: 20,
+                            fontWeight: "bold",
+                          },
+                        ]}
                         numberOfLines={1}
                       >
                         {title}
                       </Text>
-                    </View>
-                    <View style={styles.actionButtons}>
-                      <TouchableOpacity
-                        onPress={() =>
-                          onPress(type == "city" ? item.city : item.sight)
-                        }
-                        activeOpacity={0.7}
-                        style={[
-                          styles.buttonItem,
-                          { borderBottomLeftRadius: 10 },
-                        ]}
-                      >
-                        <Text style={styles.buttonItemText}>Details</Text>
-                      </TouchableOpacity>
-
-                      <TouchableOpacity
-                        style={[
-                          styles.buttonItem,
-                          {
-                            borderBottomRightRadius: 10,
-                          },
-                        ]}
-                        onPress={() => handleDeleteItem(item.id)}
-                      >
-                        <Text
-                          style={[
-                            styles.buttonItemText,
-                            {
-                              color: COLORS.red,
-                            },
-                          ]}
-                        >
-                          Remove
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
+                    </LinearGradient>
+                  </Image>
                 </TouchableOpacity>
               </>
             );
@@ -173,6 +148,24 @@ export const WishlistContainer: React.FC<IWishlistContainer> = ({
 const styles = StyleSheet.create({
   wishlistRow: {
     marginTop: 25,
+  },
+  gradientWrapper: {
+    flex: 1,
+    justifyContent: "flex-end",
+    paddingBottom: 15,
+    paddingHorizontal: 15,
+  },
+  addToBucketButton: {
+    width: Platform.OS === "android" ? 30 : 40,
+    height: Platform.OS === "android" ? 30 : 40,
+    borderRadius: 50,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    right: 8,
+    top: 8,
+    zIndex: 3,
   },
   wishlistRowTitle: {
     fontSize: 20,

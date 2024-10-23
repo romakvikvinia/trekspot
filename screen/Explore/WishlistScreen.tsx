@@ -1,11 +1,8 @@
-import React from "react";
-import { useNavigation } from "@react-navigation/native";
-import { FlashList } from "@shopify/flash-list";
+import React, { useEffect } from "react";
 import { Image } from "expo-image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import {
-  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -14,8 +11,6 @@ import {
   View,
 } from "react-native";
 import {
-  useLazyGetSightsQuery,
-  useLazyWishlistsQuery,
   useRemoveWishlistItemMutation,
   useWishlistsQuery,
 } from "../../api/api.trekspot";
@@ -25,20 +20,13 @@ import { globalStyles } from "../../styles/globalStyles";
 import { COLORS } from "../../styles/theme";
 import {
   BackIcon,
-  Mark2,
-  NoDestinationFoundIcon,
-  PinIcon,
-  StarIcon,
-  VisitedIcon,
-  WishlistIcon,
 } from "../../utilities/SvgIcons.utility";
-import { tripDetailStyles } from "../trip/_tripDetailStyles";
-import { NotFound } from "../../components/common/NotFound";
 import { _tripScreenStyles } from "../trip/_tripScreenStyles";
 import { WishlistContainer } from "./wishlist/WishlistContainer";
 import { CityType, SightType } from "../../api/api.types";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { toast } from "sonner-native";
 
 type WishlistProps = NativeStackScreenProps<
   ExploreRoutesStackParamList,
@@ -91,7 +79,16 @@ export const WishlistScreen: React.FC<WishlistProps> = ({ navigation }) => {
   const redirectToCityDetails = (city: CityType) =>
     navigation.navigate("CityDetail", {
       city,
-    });
+  });
+
+  useEffect(() => {
+    if(isRemoveWishlistItemLoading) {
+      toast.loading("Removing from wishlist...",{
+        duration: 500
+      })
+    }
+  }, [isRemoveWishlistItemLoading]);
+
 
   return (
     <>
@@ -120,7 +117,8 @@ export const WishlistScreen: React.FC<WishlistProps> = ({ navigation }) => {
         {!isCitiesLoading &&
           !isSightsLoading &&
           !cities?.wishlists.length &&
-          !sights?.wishlists.length && (
+          !sights?.wishlists.length && 
+          !isRemoveWishlistItemLoading && (
             <View style={{ minHeight: 500, justifyContent: "center" }}>
               <View style={_tripScreenStyles.notFoundView}>
               <Image
@@ -135,10 +133,10 @@ export const WishlistScreen: React.FC<WishlistProps> = ({ navigation }) => {
                 cachePolicy="memory-disk"
               ></Image>
                 <Text style={_tripScreenStyles.notFoundViewTitleText}>
-                  Your bucket list is looking empty
+                  Your wishlist is empty
                 </Text>
                 <Text style={_tripScreenStyles.notFoundViewText}>
-                  Go to explore and find an amazing spots
+                  Add your favorite items to get started!
                 </Text>
               </View>
             </View>

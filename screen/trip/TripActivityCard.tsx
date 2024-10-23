@@ -23,7 +23,6 @@ import { SightType } from "../../api/api.types";
 import { TripDaysType } from "./TripDetailScreen";
 import { useChangeActivityVisitedMutation } from "../../api/api.trekspot";
 import { useTripStore } from "../../components/store/store";
-import { useNavigation } from "@react-navigation/native";
 
 interface ITripActivityCardProps {
   visited: boolean;
@@ -66,7 +65,6 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
   lastIndex,
 }) => {
 
-  const navigation = useNavigation();
 
   const [changeActivityVisited, { isLoading }] =
     useChangeActivityVisitedMutation();
@@ -109,7 +107,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
             {
               flexDirection: "column",
               padding: 0,
-              marginLeft: 25,
+              marginLeft: lastIndex === 0 ? 15 : 25,
               marginRight: 15,
               marginBottom: 25,
               paddingBottom: 0,

@@ -33,7 +33,7 @@ import { QuestionModal } from "../../common/components/QuestionModal";
 import { questionModaStyles } from "../../styles/questionModaStyles";
 import { TripActivitiesSelect } from "./TripActivitiesSelect";
 
-import { MapEmbedView } from "../../common/components/MapEmbedView";
+// import { MapEmbedView } from "../../common/components/MapEmbedView";
 
 import { Header } from "./SubComponents/Header";
 import { TripActivityCard } from "./TripActivityCard";
@@ -198,6 +198,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         days: newstate,
       };
     });
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
   const handleTopSightClick = (sight: SightType) => {
@@ -227,6 +228,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         days: newDays,
       };
     });
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   }, [deleteIndexes]);
 
   const handleSaveActivities = useCallback(() => {
