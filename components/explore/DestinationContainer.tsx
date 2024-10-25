@@ -25,6 +25,7 @@ interface DestinationContainerProps {
   countries: CountryType[];
   seeAllItems?: boolean;
   isLoading: boolean;
+  isExplore?: boolean;
 }
 
 interface IState {
@@ -46,12 +47,14 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
   const { user } = useAppSelector((state) => state.auth);
   const isGuest = user?.role === "guest";
   const [showGuestModal, setShowGuestModal] = React.useState(false);
-  const { guestActivityCount, increaseGuestActivityCount } = useTripStore((state) => ({
-    increaseGuestActivityCount: state.increaseGuestActivityCount,
-    guestActivityCount: state.guestActivityCount,
-  }));
+  const { guestActivityCount, increaseGuestActivityCount } = useTripStore(
+    (state) => ({
+      increaseGuestActivityCount: state.increaseGuestActivityCount,
+      guestActivityCount: state.guestActivityCount,
+    })
+  );
   const handleDetailOfCountry = useCallback((countryId: string) => {
-    if(guestActivityCount >= 3 && isGuest) {
+    if (guestActivityCount >= 3 && isGuest) {
       setShowGuestModal(true);
       return;
     }
@@ -59,12 +62,15 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
     navigation.navigate("CountryDetailScreen", { countryId });
   }, []);
 
- 
-  const sortedCountries = !isLoading && [...countries].sort((a, b) => b.rate - a.rate);
+  const sortedCountries =
+    !isLoading && [...countries].sort((a, b) => b.rate - a.rate);
 
   return (
     <>
-      <View style={[styles.rowItem]} style={{ paddingTop: isExplore ? 25 : 15, }}>
+      <View
+        style={[styles.rowItem]}
+        style={{ paddingTop: isExplore ? 25 : 15 }}
+      >
         <View style={styles.rowItemHeader}>
           <Text style={styles.h2}>{title}</Text>
           {/* {seeAllItems && (
@@ -79,16 +85,16 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
             style={styles.contentBox}
             showsHorizontalScrollIndicator={false}
           >
-             
-            {sortedCountries?.length > 0 && sortedCountries.map((country, ind) => (
-              <CountryItem
-                key={`countries-${country.id}-${country.name}-${title}`}
-                item={country}
-                isWith={countries.length - 1 === ind}
-                openModal={handleDetailOfCountry}
-                isExplore={isExplore}
-              />
-            ))}
+            {sortedCountries?.length > 0 &&
+              sortedCountries.map((country, ind) => (
+                <CountryItem
+                  key={`countries-${country.id}-${country.name}-${title}`}
+                  item={country}
+                  isWith={countries.length - 1 === ind}
+                  openModal={handleDetailOfCountry}
+                  isExplore={isExplore}
+                />
+              ))}
           </ScrollView>
         ) : (
           <ScrollView
@@ -119,9 +125,9 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
           </ScrollView>
         )}
       </View>
-      {
-        showGuestModal && <GuestUserModal onClose={() => setShowGuestModal(false)} />
-      }
+      {showGuestModal && (
+        <GuestUserModal onClose={() => setShowGuestModal(false)} />
+      )}
     </>
   );
 };

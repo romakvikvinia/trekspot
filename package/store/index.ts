@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { trekSpotApi } from "../../api/api.trekspot";
 import authReducer from "../slices/auth.slice";
+import wishListReducer from "../slices/wishlist.slice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 // reducers
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    wishlist: wishListReducer,
     // [chatAppApi.reducerPath]: (state, action) =>
     //   action.type !== HYDRATE
     //     ? chatAppApi.reducer(state, action)

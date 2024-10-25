@@ -1,0 +1,57 @@
+import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import { WishlistType } from "../../api/api.types";
+
+type initialStateType = {
+  wishlists: WishlistType[];
+};
+
+const initialState: initialStateType = {
+  wishlists: [],
+};
+
+const slice = createSlice({
+  name: "wishlist",
+  initialState,
+  reducers: {
+    reset: () => initialState,
+    setWishlists: (state, { payload }: PayloadAction<WishlistType[]>) => {
+      state.wishlists = payload;
+    },
+    toggleWishlistItem: (state, { payload }: PayloadAction<WishlistType>) => {
+      if (
+        state.wishlists.some(
+          (i) =>
+            (payload.city && i.city.id === payload.city.id) ||
+            (payload.sight && i.sight.id === payload.sight.id)
+        )
+      ) {
+        state.wishlists = state.wishlists.filter(
+          (i) =>
+            (payload.city && i.city.id === payload.city.id) ||
+            (payload.sight && i.sight.id === payload.sight.id)
+        );
+      } else {
+        state.wishlists.push(payload);
+      }
+    },
+    addItemIntoWishlist: (state, { payload }: PayloadAction<WishlistType>) => {
+      state.wishlists.push(payload);
+    },
+    removeItemFromWishlist: (
+      state,
+      { payload }: PayloadAction<WishlistType>
+    ) => {
+      state.wishlists = state.wishlists.filter((i) => i.id != payload.id);
+    },
+  },
+});
+
+export const {
+  reset,
+  setWishlists,
+  toggleWishlistItem,
+  addItemIntoWishlist,
+  removeItemFromWishlist,
+} = slice.actions;
+export default slice.reducer;
