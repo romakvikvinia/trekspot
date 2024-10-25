@@ -1,5 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import {
+  ImageBackground,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -19,6 +20,7 @@ import {
 import { TripHelpers } from "./TripHelpers";
 import { MapHeader } from "./MapHeader";
 import { useTripStore } from "../../../components/store/store";
+import { LinearGradient } from "expo-linear-gradient";
 
 export const Header = ({
   data,
@@ -36,11 +38,42 @@ export const Header = ({
     <View style={[styles.mapHeaderContainer]}>
       {!tripStyle && (
         <>
-          <MapHeader
+         
+          {/* <MapHeader
             trip={data}
             topSights={topSights}
             key={data?.cities[0]?.city}
-          />
+          /> */}
+          <View style={styles.reachContainer}>
+            <ImageBackground
+              source={{
+                uri: "https://cdn.pixabay.com/photo/2021/06/22/16/39/arch-6356637_1280.jpg",
+              }}
+              style={styles.reachImage}
+            >
+              <LinearGradient
+                colors={["rgba(0,0,0,0.5)", "rgba(0,0,0,1)"]}
+                style={styles.reachGradient}
+              >
+                <Text style={styles.destTitle}>{data?.name}</Text>
+                <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginTop: 10,
+                }}
+              >
+                <LocationPin width="12" color={COLORS.white} />
+                <Text style={[styles.tripDestination, {
+                  color: "#fff"
+                }]}>
+                  {data?.cities[0]?.city}
+                </Text>
+              </View>
+                <TripHelpers data={data} iso2={iso2} reachView />
+              </LinearGradient>
+            </ImageBackground>
+          </View> 
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             activeOpacity={0.7}
@@ -60,6 +93,15 @@ export const Header = ({
             style={styles.mapButton}
           >
             <MapIcon width={15} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => onQuestion2ModalOpen()}
+            activeOpacity={0.7}
+            style={[styles.mapButton, {
+              right: 20
+            }]}
+          >
+            <DotsVerticlIcon size="" color="#000" />
           </TouchableOpacity>
         </>
       )}
@@ -199,7 +241,7 @@ export const Header = ({
         </>
       )}
 
-      {!tripStyle && (
+      {/* {!tripStyle && (
         <View style={styles.tripDetailsHeader}>
           <View
             style={{
@@ -243,11 +285,29 @@ export const Header = ({
           </View>
           <TripHelpers data={data} iso2={iso2} />
         </View>
-      )}
+      )} */}
     </View>
   );
 };
 const styles = StyleSheet.create({
+  reachContainer: {
+    position: "relative",
+    overflow: "hidden",
+  },
+  reachGradient: {
+    flex: 1,
+    paddingTop: 120,
+    paddingHorizontal: 20,
+  },
+  destTitle: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#fff"
+  },
+  reachImage: {
+    height: 300,
+    width: "100%",  
+  },
   uploadButton: {
     backgroundColor: COLORS.primaryDark,
     flexDirection: "row",
@@ -661,7 +721,7 @@ const styles = StyleSheet.create({
   mapButton: {
     position: "absolute",
     top: 55,
-    right: 20,
+    right: 70,
     width: 35,
     height: 35,
     backgroundColor: "#fff",

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@birdwingo/react-native-instagram-stories": "^1.0.13",
+    "@gorhom/bottom-sheet": "^5.0.4",
     "@openspacelabs/react-native-zoomable-view": "^2.1.5",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-native-community/blur": "^4.4.0",
@@ -58,7 +59,6 @@
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-maps": "1.14.0",
     "react-native-modalize": "^2.1.1",
-    "react-native-onboarding-swiper": "^1.2.0",
     "react-native-pager-view": "6.3.0",
     "react-native-paper": "^5.11.3",
     "react-native-paper-dates": "^0.21.7",
@@ -73,7 +73,6 @@
     "react-native-swiper": "^1.6.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-toast-message": "^2.2.0",
-    "react-native-video": "^5.2.1",
     "react-native-view-shot": "3.8.0",
     "react-native-webview": "13.8.6",
     "react-navigation-header-buttons": "^11.1.1",

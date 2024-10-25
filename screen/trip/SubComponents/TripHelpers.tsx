@@ -13,15 +13,17 @@ import {
   InsightIcon,
 } from "../../../utilities/SvgIcons.utility";
 
-export const TripHelpers = ({ data, iso2 }) => {
+export const TripHelpers = ({ data, iso2, reachView = false }) => {
   const navigation = useNavigation();
   console.log("data", data);
   return (
-    <View style={styles.bottomRow}>
+    <View style={[styles.bottomRow, {
+      borderTopWidth: reachView ? 0 : 1,
+    }]}>
       <ScrollView
         horizontal
         style={{ flex: 1 }}
-        contentContainerStyle={{ paddingHorizontal: 20 }}
+        contentContainerStyle={{ paddingHorizontal: reachView ? 0 : 20 }}
         showsHorizontalScrollIndicator={false}
       >
          <TouchableOpacity
@@ -29,8 +31,10 @@ export const TripHelpers = ({ data, iso2 }) => {
           activeOpacity={0.7}
           onPress={() => navigation.navigate("TripEmergency")}
         >
-          <EmergencyLinearIcon size={16} color={"#0b57d0"} />
-          <Text style={styles.bottomActionsButtonlabel}>Emergency</Text>
+          <EmergencyLinearIcon size={16} color={reachView ? "#000" : "#0b57d0"} />
+          <Text style={[styles.bottomActionsButtonlabel, {
+            color: reachView ? "#000" : "#0b57d0",
+          }]}>Emergency</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.bottomActionsButton}
@@ -42,8 +46,10 @@ export const TripHelpers = ({ data, iso2 }) => {
             })
           }
         >
-          <InsightIcon size={16} color={"#0b57d0"} />
-          <Text style={styles.bottomActionsButtonlabel}>Insights</Text>
+          <InsightIcon size={16} color={reachView ? "#000" : "#0b57d0"} />
+          <Text style={[styles.bottomActionsButtonlabel, {
+            color: reachView ? "#000" : "#0b57d0",
+          }]}>Insights</Text>
         </TouchableOpacity>
         {/* <TouchableOpacity
           style={styles.bottomActionsButton}
@@ -64,8 +70,10 @@ export const TripHelpers = ({ data, iso2 }) => {
             })
           }
         >
-          <AppsIcon size={16} color={"#0b57d0"} />
-          <Text style={styles.bottomActionsButtonlabel}>Apps</Text>
+          <AppsIcon size={16} color={reachView ? "#000" : "#0b57d0"} />
+          <Text style={[styles.bottomActionsButtonlabel, {
+            color: reachView ? "#000" : "#0b57d0",
+          }]}>Apps</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.bottomActionsButton}
@@ -76,8 +84,10 @@ export const TripHelpers = ({ data, iso2 }) => {
             })
           }
         >
-          <DishesIcon size={16} color={"#0b57d0"} />
-          <Text style={styles.bottomActionsButtonlabel}>What to eat?</Text>
+          <DishesIcon size={16} color={reachView ? "#000" : "#0b57d0"} />
+          <Text style={[styles.bottomActionsButtonlabel, {
+            color: reachView ? "#000" : "#0b57d0",
+          }]}>What to eat?</Text>
         </TouchableOpacity>
        
       </ScrollView>

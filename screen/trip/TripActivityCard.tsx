@@ -99,7 +99,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
 
   return (
     <>
-      {tripStyle ? (
+      {!tripStyle ? (
         <TouchableOpacity
           activeOpacity={0.7}
           style={[
@@ -325,7 +325,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
               padding: 0,
               marginLeft: 15,
               marginRight: 15,
-              marginBottom: 25,
+              marginBottom: lastIndex === index ? 80 : 25,
               paddingBottom: 0,
               paddingTop: 0,
               shadowOffset: { width: 0, height: 2 },

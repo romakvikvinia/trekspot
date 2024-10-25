@@ -245,8 +245,6 @@ export const tripDetailStyles = StyleSheet.create({
     sightDetails: {
       width: "100%",
       marginTop: 15,
-      position: "absolute",
-      bottom: 15
     },
     sightRightActionsButton: {
       width: 35,
