@@ -414,16 +414,9 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         tabData={state.days}
         activeDay={index}
       />
-
       {isTripDetailLoading || sightsLoading ? (
         <View
-          style={[
-            {
-              justifyContent: "center",
-              alignItems: "center",
-              marginTop: 150,
-            },
-          ]}
+          style={styles.loaderWrapper}
         >
           <Loader
             isLoading={isTripDetailLoading || sightsLoading}
@@ -711,7 +704,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#F2F2F7",
     flex: 1,
     overflow: "hidden",
-    borderRadius: 15,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
     marginTop: -35
   },
   tabStyles: {
@@ -719,5 +713,15 @@ const styles = StyleSheet.create({
     padding: 0,
     height: 55,
     paddingTop: 5,
+  },
+  loaderWrapper: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: -35,
+    backgroundColor: "#F2F2F7",
+    flex: 1,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    paddingBottom: 200,
   }
 });

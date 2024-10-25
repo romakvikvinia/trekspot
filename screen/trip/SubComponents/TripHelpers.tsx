@@ -13,9 +13,15 @@ import {
   InsightIcon,
 } from "../../../utilities/SvgIcons.utility";
 
-export const TripHelpers = ({ data, iso2, reachView = false }) => {
+type TripHelpersProps = {
+  data: any;
+  iso2: string;
+  reachView?: boolean;
+}
+
+export const TripHelpers = ({ data, iso2, reachView = false }: TripHelpersProps) => {
   const navigation = useNavigation();
-  console.log("data", data);
+
   return (
     <View style={[styles.bottomRow, {
       borderTopWidth: reachView ? 0 : 1,
@@ -23,7 +29,7 @@ export const TripHelpers = ({ data, iso2, reachView = false }) => {
       <ScrollView
         horizontal
         style={{ flex: 1 }}
-        contentContainerStyle={{ paddingHorizontal: reachView ? 0 : 20 }}
+        contentContainerStyle={{ paddingHorizontal: reachView ? 20 : 20 }}
         showsHorizontalScrollIndicator={false}
       >
          <TouchableOpacity
@@ -51,16 +57,7 @@ export const TripHelpers = ({ data, iso2, reachView = false }) => {
             color: reachView ? "#000" : "#0b57d0",
           }]}>Insights</Text>
         </TouchableOpacity>
-        {/* <TouchableOpacity
-          style={styles.bottomActionsButton}
-          activeOpacity={0.7}
-          onPress={() => navigation.navigate("TripFAQ",{
-            iso2: iso2
-          })}
-        >
-          <FaqIcon size={12} color={"#0b57d0"} />
-          <Text style={styles.bottomActionsButtonlabel}>FAQ</Text>
-        </TouchableOpacity> */}
+       
         <TouchableOpacity
           style={styles.bottomActionsButton}
           activeOpacity={0.7}
@@ -103,16 +100,17 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderTopColor: "#f2f2f2",
     borderTopWidth: 1,
-    marginTop: 15,
+    marginTop: 10,
     paddingTop: 12,
     paddingBottom: 12,
+    marginBottom: 15
   },
   bottomActionsButton: {
     borderRadius: 50,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#ecf3fe",
+    backgroundColor: "#fff",
     marginRight: 8,
     paddingVertical: 10,
     paddingHorizontal: 15,

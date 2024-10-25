@@ -1,53 +1,171 @@
-import { StyleSheet } from "react-native";
-import { COLORS, SIZES } from "../../styles/theme";
+import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { BackIcon, DotsVerticlIcon, LocationPin, MapWithLocationIcon } from "../../../utilities/SvgIcons.utility";
+import { COLORS } from "../../../styles/theme";
+import Constants from "expo-constants";
+import { format } from "date-fns";
+import { TripHelpers } from "./TripHelpers";
 
-export const tripDetailStyles = StyleSheet.create({
-  noActivitiesWrapper: {
-    marginTop: 70,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  noActivitiesWrapperTitle: {
-    fontSize: 16,
-    fontWeight: "600"
-  },
-  circleItem: {
-    position: "absolute",
-    marginTop: -15,
-    left: -11
-  },
-  smallCircle: {
-    width: 15,
-    height: 15,
-    backgroundColor: COLORS.primary,
-    borderRadius: 100,
-    borderColor: "#fff",
-    borderWidth: 3,
-    position: "absolute",
-  },
-  verticalLine: {
-    borderStyle: "solid",
-    borderColor: "#ddd",
-    alignItems: "center",
-    justifyContent: "center",
-    // borderLeftWidth: 2,
-    position: "absolute",
-    left: 0,
-    opacity: 1
-  },
-  addActivityButtonItem :{
-    backgroundColor: "#000",
-    borderRadius: 50,
-    padding: 12,
-    width: 200,
-    marginTop: 25
-  },
-  addActivityButtonText: {
-    color: "#fff",
-    fontWeight: "500",
-    textAlign: "center",
-    fontSize: 14
-  },
+export const ClassicHeaderContent = ({data, onQuestion2ModalOpen, iso2}) => {
+
+    const navigation = useNavigation();
+
+    return (
+        <>
+        <View
+          style={{
+            paddingTop: Constants?.statusBarHeight + 10,
+            flexDirection: "row",
+            width: "100%",
+            position: "relative",
+            backgroundColor: "#fff",
+          }}
+        >
+          <View style={{ width: 110 }}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              activeOpacity={0.7}
+              style={[
+                styles.backButton,
+                {
+                  position: "relative",
+                  top: 0,
+                  width: 35,
+                  height: 35,
+                  left: 15,
+                  alignItems: "flex-start",
+                  marginLeft: 0,
+                  backgroundColor: "#f2f2f2",
+                  paddingLeft: 2,
+                },
+              ]}
+            >
+              <BackIcon size="30" color={COLORS.black} />
+            </TouchableOpacity>
+          </View>
+
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              marginBottom: 0,
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <LocationPin width="12" color={COLORS.primary} />
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontWeight: "bold",
+                  paddingHorizontal: 5,
+                  color: COLORS.primary,
+                }}
+                numberOfLines={1}
+              >
+                {data?.cities[0]?.city}
+              </Text>
+            </View>
+            <Text
+              style={{
+                fontSize: 12,
+                color: COLORS.gray,
+                marginTop: 3,
+                fontWeight: "500",
+              }}
+            >
+              {data && format(data?.startAt, "dd MMM")} -{" "}
+              {data && format(data?.endAt, "dd MMM")} | {data?.type}
+            </Text>
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              width: 110,
+              justifyContent: "flex-end",
+              marginRight: 0,
+            }}
+          >
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("TripMapViewScreen", {
+                  tabData,
+                  city: data?.cities[0],
+                  activeDay: activeDay,
+                })
+              }
+              activeOpacity={0.7}
+              style={[
+                styles.mapButton,
+                {
+                  position: "relative",
+                  top: 0,
+                  width: 35,
+                  height: 35,
+                  backgroundColor: "#f2f2f2",
+                  right: 15,
+                },
+              ]}
+            >
+              <MapWithLocationIcon width={18} color={COLORS.black} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => onQuestion2ModalOpen()}
+              activeOpacity={0.7}
+              style={[
+                styles.mapButton,
+                {
+                  position: "relative",
+                  top: 0,
+                  width: 35,
+                  height: 35,
+                  backgroundColor: "#f2f2f2",
+                  marginLeft: 10,
+                  right: 15,
+                },
+              ]}
+            >
+              <DotsVerticlIcon size={18} color={COLORS.black} />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View
+          style={[
+            styles.tripDetailsHeader,
+            {
+              marginTop: 0,
+              paddingTop: 0,
+              borderTopRightRadius: 0,
+              borderTopLeftRadius: 0,
+            },
+          ]}
+        >
+          <TripHelpers data={data} iso2={iso2} />
+        </View>
+      </>
+    )
+}
+
+const styles = StyleSheet.create({
+    reachContainer: {
+      position: "relative",
+      overflow: "hidden",
+    },
+    reachGradient: {
+      flex: 1,
+      paddingTop: 120,
+      paddingHorizontal: 20,
+    },
+    destTitle: {
+      fontSize: 30,
+      fontWeight: "bold",
+      color: "#fff"
+    },
+    reachImage: {
+      height: 300,
+      width: "100%",  
+    },
     uploadButton: {
       backgroundColor: COLORS.primaryDark,
       flexDirection: "row",
@@ -104,11 +222,10 @@ export const tripDetailStyles = StyleSheet.create({
       justifyContent: "space-between",
       paddingHorizontal: 15,
       paddingTop: 15,
-      paddingBottom: 10,
+      paddingBottom: 25,
     },
     checkedIn: {
-      opacity: 0.6,
-      // backgroundColor: "#f2f7ff"
+      opacity: 0.7,
     },
     sightRightActionsButtonText: {
       fontSize: 12,
@@ -248,13 +365,13 @@ export const tripDetailStyles = StyleSheet.create({
     },
     sightRightActionsButton: {
       width: 35,
-      height: 40,
+      height: 35,
       backgroundColor: "#fff",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      borderRadius: 0,
-      marginLeft: 2,
+      borderRadius: 50,
+      marginLeft: 8,
     },
     sightRightActions: {
       flexDirection: "row",
@@ -264,26 +381,24 @@ export const tripDetailStyles = StyleSheet.create({
       fontSize: 12,
       marginLeft: 5,
       fontWeight: "500",
-      textTransform: "uppercase",
-      letterSpacing: 0.5,
     },
     checkinButton: {
       flexDirection: "row",
       alignItems: "center",
       backgroundColor: "#fff",
-      borderRadius: 0,
-      paddingHorizontal: 0,
-      paddingVertical: 10,
+      borderRadius: 50,
+      paddingHorizontal: 15,
+      paddingVertical: 8,
     },
     sightTitle: {
-      fontSize: 18,
-      fontWeight: "600",
+      fontSize: 16,
+      fontWeight: "500",
       color: COLORS.black,
     },
     ratingLabel: {
       flexDirection: "row",
       alignItems: "center",
-      marginVertical: 8,
+      marginVertical: 5,
     },
     ratingText: {
       fontWeight: "400",
@@ -295,44 +410,36 @@ export const tripDetailStyles = StyleSheet.create({
       fontWeight: "400",
       color: COLORS.darkgray,
       fontSize: 12,
-      marginLeft: 3,
+      marginRight: 5,
     },
     sightRight: {
       marginLeft: 15,
     },
     sightItem: {
       backgroundColor: "#fff",
-      minHeight: 110,
+      minHeight: 100,
       flex: 1,
       borderRadius: 10,
-      marginLeft: 0,
+      marginLeft: 18,
       padding: 15,
-      paddingVertical: 20,
       flexDirection: "column",
       position: "relative",
-      flexWrap: "wrap"
-      // borderWidth: 1,
-      // borderColor: "#fff"
-    },
-    imagesWrapper: {
-      flexDirection: "row",
-      width: "100%",
     },
     pinIcon: {
       position: "absolute",
-      left: -33,
+      left: -31,
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
     },
     sightBottomActions: {
       marginTop: 5,
-      marginBottom: 25,
-      width: "100%",
+      marginBottom: 45,
+      width: "95%",
+      marginLeft: "5%",
       justifyContent: "space-between",
       alignItems: "center",
       flexDirection: "row",
-      paddingHorizontal: 15
     },
     addUserButton: {
       position: "relative",
@@ -374,6 +481,7 @@ export const tripDetailStyles = StyleSheet.create({
       borderWidth: 1,
       borderColor: "#fff",
     },
+  
     inviteTwo: {
       position: "relative",
       left: -10,
@@ -399,45 +507,19 @@ export const tripDetailStyles = StyleSheet.create({
       alignItems: "flex-end",
       justifyContent: "space-between",
     },
-    mainImage: {
-      width: (SIZES.width - 90 ) / 3,
-      height: 110,
-      borderRadius: 10,
-      marginRight: 8,
-    },
     tripType: {
       fontSize: 14,
       fontWeight: "500",
       color: COLORS.black,
-    },
-    imageOverlay: {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      backgroundColor: "rgba(0,0,0,0.3)",
-      width: "100%",
-      height: "100%",
-      alignItems: "center",
-      justifyContent: "center"
-    },
-    lastImage: {
-      width: (SIZES.width - 48 ) / 3,
-      height: 110,
-              borderRadius: 10,
-              overflow: "hidden",
-              position: "relative",
-    },
-    descText: {
-      fontSize: 12,
-      fontWeight: "500",
-      color: "#707579"
     },
     leftSide: {},
     tripDestination: {
       fontSize: 14,
       fontWeight: "500",
       color: COLORS.darkgray,
-      marginTop: 10,
+      marginTop: 0,
+      marginLeft: 5,
+      textTransform: "capitalize",
     },
     inviteOne: {
       width: 25,
@@ -497,7 +579,7 @@ export const tripDetailStyles = StyleSheet.create({
     mapButton: {
       position: "absolute",
       top: 55,
-      right: 20,
+      right: 70,
       width: 35,
       height: 35,
       backgroundColor: "#fff",
@@ -505,8 +587,5 @@ export const tripDetailStyles = StyleSheet.create({
       alignItems: "center",
       justifyContent: "center",
       borderRadius: 50,
-    },
-    map: {
-      height: 130,
     },
   });
