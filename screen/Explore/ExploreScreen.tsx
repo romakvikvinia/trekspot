@@ -1,4 +1,5 @@
 import React from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
 import {
   KeyboardAvoidingView,
@@ -17,15 +18,17 @@ import {
   useCountriesQuery,
   useGetCitiesQuery,
   useGetRandomCountriesGroupedByContinentQuery,
+  useLazyWishlistsQuery,
   useRandomSightQuery,
 } from "../../api/api.trekspot";
 
 import { DestinationContainer } from "../../components/explore/DestinationContainer";
 import { CitiesContainer } from "../../components/explore/CitiesContainer";
-import { ExploreSightListContainer } from "../../components/explore/ExploreSightListContainer";
 
 import { ExploreHeader } from "./Header";
 import { VisaChecker } from "./VisaChecker";
+import { useAppDispatch, useAppSelector } from "../../package/store";
+import { setWishlists } from "../../package/slices";
 
 type ExploreProps = NativeStackScreenProps<
   ExploreRoutesStackParamList,
@@ -33,6 +36,29 @@ type ExploreProps = NativeStackScreenProps<
 >;
 
 export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
+  /**
+   * TODO:: maybe we will change this  approach
+   * fetching wishlist on this screen
+   */
+  const { wishlists } = useAppSelector((state) => state.wishlist);
+
+  const dispatch = useAppDispatch();
+  const [fetchWishlist] = useLazyWishlistsQuery();
+
+  useFocusEffect(
+    React.useCallback(() => {
+      (async () => {
+        try {
+          const { wishlists } = await fetchWishlist({
+            skip: 0,
+            take: 500,
+          }).unwrap();
+          dispatch(setWishlists(wishlists));
+        } catch (error) {}
+      })();
+    }, [fetchWishlist])
+  );
+
   //data
   const {
     data: popularCountries,

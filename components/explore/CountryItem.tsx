@@ -16,6 +16,7 @@ import { Image } from "expo-image";
 type CountryItemProps = {
   item: CountryType;
   isWith?: boolean;
+  isExplore?: boolean;
   openModal: (countryId: string) => void;
 };
 
@@ -23,18 +24,18 @@ export const CountryItem: React.FC<CountryItemProps> = ({
   item,
   isWith,
   openModal,
-  isExplore
+  isExplore,
 }) => {
   return (
     <>
       {Platform.OS === "ios" ? (
         <Image
           style={[
-            styles.box, 
+            styles.box,
             styles.typeMd,
             {
               height: isExplore ? 130 : 180,
-            }
+            },
           ]}
           contentFit="cover"
           source={
@@ -58,40 +59,47 @@ export const CountryItem: React.FC<CountryItemProps> = ({
               style={styles.gradientWrapper}
               colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
             >
-              <View style={[styles.labelItem, {
-                marginBottom: isExplore ? 12 : 0
-              }]}>
+              <View
+                style={[
+                  styles.labelItem,
+                  {
+                    marginBottom: isExplore ? 12 : 0,
+                  },
+                ]}
+              >
                 {/* <Mark color="#fff" size={15} /> */}
                 <Text style={styles.labelItemText} numberOfLines={2}>
                   {item.name}
                 </Text>
               </View>
-              {!isExplore &&
-              <View style={styles.ratingLabel}>
-                <View
-                  style={{
-                    position: "relative",
-                    top: -1,
-                    opacity: 0.8,
-                  }}
-                >
-                  <StarIcon color="#FFBC3E" />
+              {!isExplore && (
+                <View style={styles.ratingLabel}>
+                  <View
+                    style={{
+                      position: "relative",
+                      top: -1,
+                      opacity: 0.8,
+                    }}
+                  >
+                    <StarIcon color="#FFBC3E" />
+                  </View>
+                  <Text style={styles.ratingText}>{item.rate} /</Text>
+                  <Text style={styles.ratingText}>
+                    {item.visitors} visitors
+                  </Text>
                 </View>
-                <Text style={styles.ratingText}>{item.rate} /</Text>
-                <Text style={styles.ratingText}>{item.visitors} visitors</Text>
-              </View>
-}
+              )}
             </LinearGradient>
           </TouchableOpacity>
         </Image>
       ) : (
         <ImageBackground
           style={[
-            styles.box, 
+            styles.box,
             styles.typeMd,
             {
               height: isExplore ? 130 : 180,
-            }
+            },
           ]}
           resizeMode="cover"
           source={
@@ -114,29 +122,36 @@ export const CountryItem: React.FC<CountryItemProps> = ({
               style={styles.gradientWrapper}
               colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
             >
-            <View style={[styles.labelItem, {
-                marginBottom: isExplore ? 12 : 0
-              }]}>
+              <View
+                style={[
+                  styles.labelItem,
+                  {
+                    marginBottom: isExplore ? 12 : 0,
+                  },
+                ]}
+              >
                 <Mark color="#fff" size={15} />
                 <Text style={styles.labelItemText} numberOfLines={2}>
                   {item.name}
                 </Text>
               </View>
-              { !isExplore &&
-              <View style={styles.ratingLabel}>
-                <View
-                  style={{
-                    position: "relative",
-                    top: -1,
-                    opacity: 0.8,
-                  }}
-                >
-                  <StarIcon color="#FFBC3E" />
+              {!isExplore && (
+                <View style={styles.ratingLabel}>
+                  <View
+                    style={{
+                      position: "relative",
+                      top: -1,
+                      opacity: 0.8,
+                    }}
+                  >
+                    <StarIcon color="#FFBC3E" />
+                  </View>
+                  <Text style={styles.ratingText}>{item.rate} /</Text>
+                  <Text style={styles.ratingText}>
+                    {item.visitors} visitors
+                  </Text>
                 </View>
-                <Text style={styles.ratingText}>{item.rate} /</Text>
-                <Text style={styles.ratingText}>{item.visitors} visitors</Text>
-              </View>
-              }
+              )}
             </LinearGradient>
           </TouchableOpacity>
         </ImageBackground>
@@ -177,7 +192,7 @@ const styles = StyleSheet.create({
     marginLeft: 3,
     fontSize: 12,
     opacity: 0.8,
-    fontWeight: "500"
+    fontWeight: "500",
   },
   addToBucketButton: {
     width: 30,

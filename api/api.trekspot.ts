@@ -59,8 +59,8 @@ import {
   WishlistResponseType,
   RemoveWishlistItemArgsType,
   RemoveWishlistItemResponseType,
-  CreateWishlistResponseType,
-  CreateWishlistArgsType,
+  ToggleWishlistResponseType,
+  ToggleWishlistArgsType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -1234,15 +1234,15 @@ export const trekSpotApi = createApi({
 
     //
 
-    createWishlist: builder.mutation<
-      CreateWishlistResponseType,
-      CreateWishlistArgsType
+    toggleWishlist: builder.mutation<
+      ToggleWishlistResponseType,
+      ToggleWishlistArgsType
     >({
       query: ({ sight, city }) => ({
         variables: { sight, city },
         document: gql`
           mutation ($city: ID, $sight: ID) {
-            createWishlist(input: { city: $city, sight: $sight }) {
+            toggleWishlist(input: { city: $city, sight: $sight }) {
               id
             }
           }
@@ -1309,5 +1309,5 @@ export const {
   useWishlistsQuery,
   useLazyWishlistsQuery,
   useRemoveWishlistItemMutation,
-  useCreateWishlistMutation,
+  useToggleWishlistMutation,
 } = trekSpotApi;

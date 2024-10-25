@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Text } from "react-native";
 import { ImageBackground, Platform, TouchableOpacity } from "react-native";
 import { ScrollView, View } from "react-native";
 import Swiper from "react-native-swiper";
 import {
-  useCreateWishlistMutation,
+  useToggleWishlistMutation,
   useLazyGetSightsQuery,
 } from "../../../api/api.trekspot";
 import { CityType, SightType } from "../../../api/api.types";
@@ -16,7 +16,7 @@ import {
   StarIcon,
 } from "../../../utilities/SvgIcons.utility";
 
-import { SIZES } from "../../../styles/theme";
+import { COLORS, SIZES } from "../../../styles/theme";
 
 import Constants from "expo-constants";
 import { Image } from "expo-image";
@@ -30,6 +30,11 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ExploreRoutesStackParamList } from "../../../routes/explore/ExploreRoutes";
 import { styles } from "../../../common/components/_styles";
 import { toast } from "sonner-native";
+import { useAppDispatch, useAppSelector } from "../../../package/store";
+import {
+  addItemIntoWishlist,
+  removeItemFromWishlist,
+} from "../../../package/slices";
 
 type Props = NativeStackScreenProps<ExploreRoutesStackParamList, "CityDetail">;
 
@@ -38,21 +43,58 @@ interface IState {
 }
 
 export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
+  const dispatch = useAppDispatch();
   const { city } = route?.params;
   const [state, setState] = useState<IState>({ sight: null });
   const [getSights, { data, isLoading, isError }] = useLazyGetSightsQuery();
-  const [fetchAddToWishlist] = useCreateWishlistMutation();
+  /**
+   * wishlist slice related things
+   */
+  const wishlistState = useAppSelector((state) => state.wishlist);
+  const [fetchToggleWishlist, { isLoading: isWishlistToggleLoading }] =
+    useToggleWishlistMutation();
 
   useEffect(() => {
     if (city) getSights({ iso2: city.iso2, city: city.city });
   }, [city]);
 
-  const handleAddToWishlist = useCallback(async () => {
-    await fetchAddToWishlist({ city: city.id }).unwrap();
-    toast.success("The city has been added to your wishlist", {
-      duration: 2000,
-    });
-  }, []);
+  const handleAddToWishlist = useCallback(
+    async (exists: boolean = false) => {
+      try {
+        if (exists) {
+          dispatch(
+            removeItemFromWishlist({ id: city.id!, city, sight: undefined! })
+          );
+        } else {
+          dispatch(
+            addItemIntoWishlist({ id: city.id!, city, sight: undefined! })
+          );
+        }
+
+        await fetchToggleWishlist({ city: city.id }).unwrap();
+
+        if (!exists)
+          toast.success("The city has been added to your wishlist", {
+            duration: 2000,
+          });
+      } catch (error) {
+        if (exists) {
+          dispatch(
+            addItemIntoWishlist({ id: city.id!, city, sight: undefined! })
+          );
+        } else {
+          dispatch(
+            removeItemFromWishlist({ id: city.id!, city, sight: undefined! })
+          );
+        }
+
+        toast.error("Something went wrong, please try later", {
+          duration: 2000,
+        });
+      }
+    },
+    [dispatch, city]
+  );
 
   const handleSetSightItem = useCallback((sight: SightType) => {
     setState((prevState) => ({ ...prevState, sight }));
@@ -80,6 +122,8 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
       });
     };
   }, []);
+
+  console.log("wishlistState", wishlistState);
 
   return (
     <View style={{ flex: 1, backgroundColor: "#f8f8f8" }}>
@@ -187,9 +231,27 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                   },
                 ]}
                 activeOpacity={0.7}
-                onPress={handleAddToWishlist}
+                disabled={isWishlistToggleLoading}
+                onPress={() =>
+                  !isWishlistToggleLoading &&
+                  handleAddToWishlist(
+                    wishlistState &&
+                      wishlistState.wishlists.some(
+                        (i) => i.city && i.city.id === city.id
+                      )
+                  )
+                }
               >
-                <Mark2 color="#000" />
+                <Mark2
+                  color={
+                    wishlistState &&
+                    wishlistState.wishlists.some(
+                      (i) => i.city && i.city.id === city.id
+                    )
+                      ? COLORS.primary
+                      : "#000"
+                  }
+                />
               </TouchableOpacity>
 
               <Swiper

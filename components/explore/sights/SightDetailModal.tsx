@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Image } from "expo-image";
 import {
   Linking,
@@ -28,9 +28,17 @@ import {
 } from "../../../utilities/SvgIcons.utility";
 import { SightType } from "../../../api/api.types";
 import { ShowDirectionButton } from "./_ShowDirectionButton";
+import { useAppDispatch, useAppSelector } from "../../../package/store";
+import { useToggleWishlistMutation } from "../../../api/api.trekspot";
+import { toast } from "sonner-native";
+import {
+  removeItemFromWishlist,
+  addItemIntoWishlist,
+} from "../../../package/slices";
 
 type SightDetailModalProps = {
   data: SightType;
+  showDirection: boolean;
   closeCallBack?: () => void;
 };
 
@@ -107,10 +115,65 @@ export const HoursRow = ({ data }) => {
 
 export const SightDetailModal: React.FC<SightDetailModalProps> = ({
   data,
-  closeCallBack = () => {},
   showDirection = false,
+  closeCallBack = () => {},
 }) => {
+  const dispatch = useAppDispatch();
+  /**
+   * wishlist slice related things
+   */
+  const wishlistState = useAppSelector((state) => state.wishlist);
+  const [fetchToggleWishlist, { isLoading: isWishlistToggleLoading }] =
+    useToggleWishlistMutation();
+
   const [state, setState] = useState({ isOpen: false });
+
+  const handleAddToWishlist = useCallback(
+    async (exists: boolean = false) => {
+      try {
+        if (exists) {
+          dispatch(
+            removeItemFromWishlist({
+              id: data.id!,
+              city: undefined!,
+              sight: data,
+            })
+          );
+        } else {
+          dispatch(
+            addItemIntoWishlist({ id: data.id!, city: undefined!, sight: data })
+          );
+        }
+
+        await fetchToggleWishlist({ sight: data.id }).unwrap();
+
+        if (!exists)
+          toast.success("The city has been added to your wishlist", {
+            duration: 2000,
+          });
+      } catch (error) {
+        if (exists) {
+          dispatch(
+            addItemIntoWishlist({ id: data.id!, city: undefined!, sight: data })
+          );
+        } else {
+          dispatch(
+            removeItemFromWishlist({
+              id: data.id!,
+              city: undefined!,
+              sight: data,
+            })
+          );
+        }
+
+        toast.error("Something went wrong, please try later", {
+          duration: 2000,
+        });
+      }
+    },
+    [dispatch, data]
+  );
+
   const openMap = (address: string) => {
     const scheme = Platform.select({
       ios: "maps://0,0?q=",
@@ -121,7 +184,7 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
       android: `${scheme}${address}`,
     });
 
-    Linking.openURL(url);
+    Linking.openURL(url!);
   };
 
   const ref = useClickOutside(() => {
@@ -151,12 +214,12 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
     }
   }, [data]);
 
-  const redirectToContrib = (URL) => {
+  const redirectToContrib = (URL: any) => {
     const link = URL.split('href="')[1].split('"')[0];
     Linking.openURL(link);
   };
 
-  const renderAuthor = (item) => {
+  const renderAuthor = (item: any) => {
     const author = item?.split('">')[1]?.split("</a>")[0];
     return author;
   };
@@ -296,8 +359,27 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                       },
                     ]}
                     activeOpacity={0.7}
+                    disabled={isWishlistToggleLoading}
+                    onPress={() =>
+                      !isWishlistToggleLoading &&
+                      handleAddToWishlist(
+                        wishlistState &&
+                          wishlistState.wishlists.some(
+                            (i) => i.sight && i.sight.id === data.id
+                          )
+                      )
+                    }
                   >
-                    <Mark2 color="#fff" />
+                    <Mark2
+                      color={
+                        wishlistState &&
+                        wishlistState.wishlists.some(
+                          (i) => i.sight && i.sight.id === data.id
+                        )
+                          ? COLORS.primary
+                          : "#000"
+                      }
+                    />
                   </TouchableOpacity>
                 )}
               </View>

@@ -1,7 +1,7 @@
 import React, { useCallback, useReducer } from "react";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
-import { Toaster } from 'sonner-native';
+import { Toaster } from "sonner-native";
 
 import { AuthRoute } from "./auth/AuthRoutes";
 import { deleteItemFromStorage, getFullToken } from "../helpers/secure.storage";
@@ -62,7 +62,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
       border: "transparent",
     },
   };
-  console.log("authState", authState.auth);
+
   return (
     <>
       <SafeAreaProvider>

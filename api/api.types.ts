@@ -512,11 +512,11 @@ export type RemoveWishlistItemArgsType = Partial<{
   id: string;
 }>;
 
-export type CreateWishlistResponseType = {
-  createWishlist: WishlistType;
+export type ToggleWishlistResponseType = {
+  toggleWishlist: WishlistType;
 };
 
-export type CreateWishlistArgsType = Partial<{
+export type ToggleWishlistArgsType = Partial<{
   city: string;
   sight: string;
 }>;
