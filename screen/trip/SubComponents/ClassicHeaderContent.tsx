@@ -141,7 +141,7 @@ export const ClassicHeaderContent = ({data, onQuestion2ModalOpen, iso2}) => {
             },
           ]}
         >
-          <TripHelpers data={data} iso2={iso2} />
+          <TripHelpers reachView={false} data={data} iso2={iso2} />
         </View>
       </>
     )

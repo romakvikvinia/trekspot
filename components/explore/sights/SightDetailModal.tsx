@@ -148,7 +148,7 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
         await fetchToggleWishlist({ sight: data.id }).unwrap();
 
         if (!exists)
-          toast.success("The city has been added to your wishlist", {
+          toast.success("Successfully added to your wishlist", {
             duration: 2000,
           });
       } catch (error) {
@@ -166,7 +166,7 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
           );
         }
 
-        toast.error("Something went wrong, please try later", {
+        toast.error("Something went wrong, please try again", {
           duration: 2000,
         });
       }
@@ -354,8 +354,7 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                     style={[
                       styles.addToBucketButton,
                       {
-                        backgroundColor: "rgba(0, 0, 0, 0.3)",
-                        // 1 == 0 ? COLORS.primary : "rgba(0, 0, 0, 0.3)", // if this place is marked as favorate
+                        backgroundColor:  "#f2f2f2", // if this place is marked as favorate
                       },
                     ]}
                     activeOpacity={0.7}
@@ -379,6 +378,7 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                           ? COLORS.primary
                           : "#000"
                       }
+                      size="18"
                     />
                   </TouchableOpacity>
                 )}
@@ -474,8 +474,8 @@ export const styles = StyleSheet.create({
     fontWeight: "500",
   },
   addToBucketButton: {
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 40,
     borderRadius: 50,
     backgroundColor: "rgba(0, 0, 0, 0.3)",
     justifyContent: "center",

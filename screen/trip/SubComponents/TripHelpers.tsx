@@ -17,33 +17,62 @@ type TripHelpersProps = {
   data: any;
   iso2: string;
   reachView?: boolean;
-}
+};
 
-export const TripHelpers = ({ data, iso2, reachView = false }: TripHelpersProps) => {
+export const TripHelpers = ({
+  data,
+  iso2,
+  reachView = false,
+}: TripHelpersProps) => {
   const navigation = useNavigation();
 
   return (
-    <View style={[styles.bottomRow, {
-      borderTopWidth: reachView ? 0 : 1,
-    }]}>
+    <View
+      style={[
+        styles.bottomRow,
+        {
+          borderTopWidth: reachView ? 0 : 1,
+        },
+      ]}
+    >
       <ScrollView
         horizontal
         style={{ flex: 1 }}
         contentContainerStyle={{ paddingHorizontal: reachView ? 20 : 20 }}
         showsHorizontalScrollIndicator={false}
       >
-         <TouchableOpacity
-          style={styles.bottomActionsButton}
+        <TouchableOpacity
+          style={[
+            styles.bottomActionsButton,
+            {
+              backgroundColor: !reachView ? "#f5f9ff" : "#fff",
+            },
+          ]}
           activeOpacity={0.7}
           onPress={() => navigation.navigate("TripEmergency")}
         >
-          <EmergencyLinearIcon size={16} color={reachView ? "#000" : "#0b57d0"} />
-          <Text style={[styles.bottomActionsButtonlabel, {
-            color: reachView ? "#000" : "#0b57d0",
-          }]}>Emergency</Text>
+          <EmergencyLinearIcon
+            size={16}
+            color={reachView ? "#000" : "#0b57d0"}
+          />
+          <Text
+            style={[
+              styles.bottomActionsButtonlabel,
+              {
+                color: reachView ? "#000" : "#0b57d0",
+              },
+            ]}
+          >
+            Emergency
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.bottomActionsButton}
+          style={[
+            styles.bottomActionsButton,
+            {
+              backgroundColor: !reachView ? "#f5f9ff" : "#fff",
+            },
+          ]}
           activeOpacity={0.7}
           onPress={() =>
             navigation.navigate("TripInsights", {
@@ -53,13 +82,25 @@ export const TripHelpers = ({ data, iso2, reachView = false }: TripHelpersProps)
           }
         >
           <InsightIcon size={16} color={reachView ? "#000" : "#0b57d0"} />
-          <Text style={[styles.bottomActionsButtonlabel, {
-            color: reachView ? "#000" : "#0b57d0",
-          }]}>Insights</Text>
+          <Text
+            style={[
+              styles.bottomActionsButtonlabel,
+              {
+                color: reachView ? "#000" : "#0b57d0",
+              },
+            ]}
+          >
+            Insights
+          </Text>
         </TouchableOpacity>
-       
+
         <TouchableOpacity
-          style={styles.bottomActionsButton}
+          style={[
+            styles.bottomActionsButton,
+            {
+              backgroundColor: !reachView ? "#f5f9ff" : "#fff",
+            },
+          ]}
           activeOpacity={0.7}
           onPress={() =>
             navigation.navigate("TripTransport", {
@@ -68,12 +109,24 @@ export const TripHelpers = ({ data, iso2, reachView = false }: TripHelpersProps)
           }
         >
           <AppsIcon size={16} color={reachView ? "#000" : "#0b57d0"} />
-          <Text style={[styles.bottomActionsButtonlabel, {
-            color: reachView ? "#000" : "#0b57d0",
-          }]}>Apps</Text>
+          <Text
+            style={[
+              styles.bottomActionsButtonlabel,
+              {
+                color: reachView ? "#000" : "#0b57d0",
+              },
+            ]}
+          >
+            Apps
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.bottomActionsButton}
+          style={[
+            styles.bottomActionsButton,
+            {
+              backgroundColor: !reachView ? "#f5f9ff" : "#fff",
+            },
+          ]}
           activeOpacity={0.7}
           onPress={() =>
             navigation.navigate("TripDishes", {
@@ -82,11 +135,17 @@ export const TripHelpers = ({ data, iso2, reachView = false }: TripHelpersProps)
           }
         >
           <DishesIcon size={16} color={reachView ? "#000" : "#0b57d0"} />
-          <Text style={[styles.bottomActionsButtonlabel, {
-            color: reachView ? "#000" : "#0b57d0",
-          }]}>What to eat?</Text>
+          <Text
+            style={[
+              styles.bottomActionsButtonlabel,
+              {
+                color: reachView ? "#000" : "#0b57d0",
+              },
+            ]}
+          >
+            What to eat?
+          </Text>
         </TouchableOpacity>
-       
       </ScrollView>
     </View>
   );
@@ -103,7 +162,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingTop: 12,
     paddingBottom: 12,
-    marginBottom: 15
+    marginBottom: 15,
   },
   bottomActionsButton: {
     borderRadius: 50,

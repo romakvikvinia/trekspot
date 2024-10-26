@@ -1,6 +1,6 @@
 import { Image } from "expo-image";
 import React, { useCallback, useState } from "react";
-import { ImageBackground, Linking, Platform } from "react-native";
+import { ImageBackground, Linking, Platform, StyleSheet } from "react-native";
 import { Text, TouchableOpacity, View } from "react-native";
 import { COLORS } from "../../styles/theme";
 import {
@@ -22,6 +22,7 @@ import * as Haptics from "expo-haptics";
 import { SightType } from "../../api/api.types";
 import { TripDaysType } from "./TripDetailScreen";
 import { useChangeActivityVisitedMutation } from "../../api/api.trekspot";
+import { useTripStore } from "../../components/store/store";
 
 interface ITripActivityCardProps {
   visited: boolean;
@@ -29,28 +30,62 @@ interface ITripActivityCardProps {
   item: SightType;
   index: number;
   lastIndex: number;
+  activityAmount: number;
   onQuestionModalOpen: (sight: string) => void;
   handleTopSightClick: (sight: SightType) => void;
 }
 
-export const ReturnIcon = ({ category }) => {
+const ImgComponent = ({ item }:any) => {
+  return (
+    <View
+      style={[
+        tripDetailStyles.imagesWrapper,
+        {
+          width: 70,
+          height: 70,
+        },
+      ]}
+    >
+      <Image
+        style={[
+          tripDetailStyles.mainImage,
+          {
+            width: 70,
+            height: 70,
+          },
+        ]}
+        contentFit="cover"
+        source={
+          item?.images[0]?.url
+            ? {
+                uri: item?.images[0]?.url,
+              }
+            : require("../../assets/no-image.png")
+        }
+        key={`img-${item?.title}`}
+      ></Image>
+    </View>
+  );
+};
+
+export const ReturnIcon = ({ category }: any) => {
   switch (category) {
     case "Top sights":
-      return <TopsightsIcon color="" size={20} />;
+      return <TopsightsIcon color="#333" size={25} />;
     case "Museums":
-      return <MuseumsIcon color="" size={20} />;
+      return <MuseumsIcon color="#333" size={25} />;
     case "Historical places":
-      return <HistoricalPlacesIcon color="" size={20} />;
+      return <HistoricalPlacesIcon color="#333" size={25} />;
     case "Outdoor attractions":
-      return <AttractionsIcon color="" size={20} />;
+      return <AttractionsIcon color="#333" size={25} />;
     case "Markets":
-      return <MarketsIcon color="" size={20} />;
+      return <MarketsIcon color="#333" size={25} />;
     case "Top experiences":
-      return <TopExperiencesIcon color="" size={20} />;
+      return <TopExperiencesIcon color="#333" size={25} />;
     case "Beaches":
-      return <BeachesIcon color="" size={20} />;
+      return <BeachesIcon color="#333" size={25} />;
     case "Casinos":
-      return <CasinosIcon color="" size={20} />;
+      return <CasinosIcon color="#333" size={25} />;
   }
 };
 
@@ -62,7 +97,12 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
   handleTopSightClick,
   index,
   lastIndex,
+  activityAmount,
 }) => {
+  const { tripStyle } = useTripStore((state: any) => ({
+    tripStyle: state.tripStyle,
+  }));
+
   const [changeActivityVisited, { isLoading }] =
     useChangeActivityVisitedMutation();
 
@@ -94,46 +134,32 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
 
   return (
     <>
-      {/* <View
-        style={{
-          height: "100%",
-          position: "absolute",
-          top: 100,
-          left: 15,
-          width: 3,
-          opacity: 0.1
-        }}
-      >
-        <ImageBackground
-          source={ require("../../assets/dash.png")}
-          imageStyle={{ resizeMode: "repeat" }}
-          style={{
-            width: 3,
-            height: "100%",
-          }}
-        ></ImageBackground>
-      </View> */}
+      {activityAmount > 1 && (
+        <View
+          style={[
+            styles.verticalLine,
+            {
+              height: activityAmount * 165 - 170,
+            },
+          ]}
+        >
+          <ImageBackground
+            source={require("../../assets/dash.png")}
+            imageStyle={{ resizeMode: "repeat" }}
+            style={{
+              width: 2,
+              height: "100%",
+            }}
+          ></ImageBackground>
+        </View>
+      )}
       <TouchableOpacity
         activeOpacity={0.7}
         style={[
           tripDetailStyles.sightItem,
+          styles.activityItem,
           {
-            flexDirection: "column",
-            padding: 0,
-            marginLeft: 15,
-            marginRight: 15,
-            marginBottom: 25,
-            paddingBottom: 0,
-            paddingTop: 0,
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.1,
-            shadowRadius: 0.84,
-            ...Platform.select({
-              android: {
-                elevation: 5,
-              },
-            }),
+            marginLeft: activityAmount > 1 ? 25 : 15,
           },
         ]}
         onPress={() => {
@@ -141,108 +167,21 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         }}
       >
-        {/* {lastIndex > 0 && (
-          <View
-            style={[
-              tripDetailStyles.verticalLine,
-              {
-                height: index === 0 || lastIndex === index ? 105 : 167,
-                top:
-                  index !== 0 && index !== lastIndex
-                    ? -10
-                    : index === lastIndex
-                    ? -20
-                    : 60,
-              },
-            ]}
-          >
-            {index === 0 && (
-              <View
-                style={[
-                  tripDetailStyles.circleItem,
-                  {
-                    top: 0,
-                  },
-                ]}
-              >
-                <ReturnIcon category={item?.category} />
-              </View>
-            )}
-
-            {index !== 0 && index !== lastIndex && (
-              <View style={tripDetailStyles.circleItem}>
-                <ReturnIcon category={item?.category} />
-              </View>
-            )}
-            {index === lastIndex && (
-              <View
-                style={[
-                  tripDetailStyles.circleItem,
-                  {
-                    bottom: 0,
-                  },
-                ]}
-              >
-                <ReturnIcon category={item?.category} />
-              </View>
-            )}
+        {activityAmount > 1 && (
+          <View style={styles.activityIcon}>
+            <ReturnIcon category={item?.category} />
           </View>
-        )} */}
+        )}
 
         <View
           style={[
             checkedIn ? tripDetailStyles.checkedIn : null,
-            {
-              width: "100%",
-              flexDirection: "row",
-              flex: 1,
-              height: "100%",
-              paddingHorizontal: 15,
-              paddingTop: 15,
-            },
+            styles.activityContent,
           ]}
         >
-          <View
-            style={[
-              tripDetailStyles.imagesWrapper,
-              {
-                width: 70,
-                height: 70,
-              },
-            ]}
-          >
-            <Image
-              style={[
-                tripDetailStyles.mainImage,
-                {
-                  width: 70,
-                  height: 70,
-                },
-              ]}
-              contentFit="cover"
-              source={
-                item?.images[0]?.url
-                  ? {
-                      uri: item?.images[0]?.url,
-                    }
-                  : require("../../assets/no-image.png")
-              }
-              key={`img-${item?.title}`}
-            ></Image>
-          </View>
+          <ImgComponent item={item} />
 
-          <View
-            style={[
-              tripDetailStyles.sightDetails,
-              {
-                flexDirection: "column",
-                justifyContent: "center",
-                marginTop: 0,
-                flex: 1,
-                paddingLeft: 16,
-              },
-            ]}
-          >
+          <View style={[tripDetailStyles.sightDetails, styles.textContent]}>
             <Text numberOfLines={2} style={tripDetailStyles.sightTitle}>
               {item?.title}
             </Text>
@@ -267,24 +206,11 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
 
               <Text style={[tripDetailStyles.sightType]}>{item?.category}</Text>
             </View>
-            {item?.description?.length > 0 ? (
-              <Text style={tripDetailStyles.descText} numberOfLines={1}>
-                {item?.description}
-              </Text>
-            ) : null}
           </View>
         </View>
 
         <View
-          style={[
-            tripDetailStyles.sightBottomActions,
-            {
-              marginTop: 15,
-              marginBottom: 0,
-              borderTopColor: "#f2f2f2",
-              borderTopWidth: 1,
-            },
-          ]}
+          style={[tripDetailStyles.sightBottomActions, styles.bottomActions]}
         >
           <TouchableOpacity
             activeOpacity={0.7}
@@ -331,6 +257,65 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  activityContent: {
+    width: "100%",
+    flexDirection: "row",
+    flex: 1,
+    height: "100%",
+    paddingHorizontal: 15,
+    paddingTop: 15,
+  },
+  activityItem: {
+    flexDirection: "column",
+    padding: 0,
+    marginRight: 15,
+    marginBottom: 25,
+    paddingBottom: 0,
+    paddingTop: 0,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 0.84,
+    position: "relative",
+    ...Platform.select({
+      android: {
+        elevation: 5,
+      },
+    }),
+    zIndex: 1,
+  },
+  activityIcon: {
+    position: "absolute",
+    top: 55,
+    borderWidth: 5,
+    borderColor: "#f7f7f7",
+    zIndex: 2,
+    opacity: 1,
+    left: -51,
+  },
+  bottomActions: {
+    marginTop: 15,
+    marginBottom: 0,
+    borderTopColor: "#f2f2f2",
+    borderTopWidth: 1,
+  },
+  textContent: {
+    flexDirection: "column",
+    justifyContent: "center",
+    marginTop: 0,
+    flex: 1,
+    paddingLeft: 16,
+  },
+  verticalLine: {
+    position: "absolute",
+    top: 100,
+    left: 20,
+    width: 2,
+    opacity: 0.05,
+  },
+});
 
 //View with images
 
@@ -503,3 +488,60 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
 //     </View>
 //   </View>
 // </TouchableOpacity>
+
+{
+  /* {lastIndex > 0 && (
+          <View
+            style={[
+              tripDetailStyles.verticalLine,
+              {
+                height: index === 0 || lastIndex === index ? 105 : 167,
+                top:
+                  index !== 0 && index !== lastIndex
+                    ? -10
+                    : index === lastIndex
+                    ? -20
+                    : 60,
+              },
+            ]}
+          >
+            {index === 0 && (
+              <View
+                style={[
+                  tripDetailStyles.circleItem,
+                  {
+                    top: 0,
+                  },
+                ]}
+              >
+                <ReturnIcon category={item?.category} />
+              </View>
+            )}
+
+            {index !== 0 && index !== lastIndex && (
+              <View style={tripDetailStyles.circleItem}>
+                <ReturnIcon category={item?.category} />
+              </View>
+            )}
+            {index === lastIndex && (
+              <View
+                style={[
+                  tripDetailStyles.circleItem,
+                  {
+                    bottom: 0,
+                  },
+                ]}
+              >
+                <ReturnIcon category={item?.category} />
+              </View>
+            )}
+          </View>
+)} */
+}
+{
+  /* {item?.description?.length > 0 ? (
+              <Text style={tripDetailStyles.descText} numberOfLines={1}>
+                {item?.description}
+              </Text>
+) : null} */
+}

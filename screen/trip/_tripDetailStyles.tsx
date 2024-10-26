@@ -310,7 +310,8 @@ export const tripDetailStyles = StyleSheet.create({
       paddingVertical: 20,
       flexDirection: "column",
       position: "relative",
-      flexWrap: "wrap"
+      flexWrap: "wrap",
+      height: 140,
       // borderWidth: 1,
       // borderColor: "#fff"
     },

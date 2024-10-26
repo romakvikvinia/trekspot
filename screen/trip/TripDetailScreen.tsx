@@ -342,7 +342,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         contentContainerStyle={{
           paddingTop: 30,
           paddingBottom: 80,
-          paddingLeft: tripStyle && route?.activities?.length > 1 ? 30 : 0,
+          paddingLeft: route?.activities?.length > 1 ? 30 : 0,
         }}
       >
         {route?.activities?.map((itm, activityIndex) => (
@@ -367,6 +367,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
               });
             }}
             handleTopSightClick={handleTopSightClick}
+            activityAmount={route?.activities.length}
           />
         ))}
 
@@ -409,19 +410,16 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
       <Header
         onQuestion2ModalOpen={onQuestion2ModalOpen}
         data={trip}
-        topSights={combinedArray}
         iso2={city.iso2}
         tabData={state.days}
         activeDay={index}
       />
       {isTripDetailLoading || sightsLoading ? (
-        <View
-          style={styles.loaderWrapper}
-        >
+        <View style={styles.loaderWrapper}>
           <Loader
             isLoading={isTripDetailLoading || sightsLoading}
             color=""
-            background=""
+            background="#F2F2F7"
           />
         </View>
       ) : (
@@ -480,7 +478,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
       )}
 
       {topSightDetail ? (
-        <SightDetailModal data={topSightDetail} closeCallBack={handleClear} />
+        <SightDetailModal showDirection={true} data={topSightDetail} closeCallBack={handleClear} />
       ) : null}
 
       {state?.days[index]?.activities?.length > 0 ? (
