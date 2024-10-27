@@ -66,6 +66,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
   const [state, setState] = React.useState<IState>({ trip: undefined });
   const [tripType, setTripType] = React.useState("upcoming");
   const [showGuestModal, setShowGuestModal] = React.useState(false);
+  const [editMode, setEditMode] = React.useState(false);
 
   const [fetchDate, { data, isLoading, isError }] = useLazyMyTripsQuery();
 
@@ -297,14 +298,22 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
             flex: 1,
           }}
           modalHeight={SIZES.height}
-          onClosed={() =>
-            setState((prevState) => ({ ...prevState, trip: undefined }))
+          onClosed={() => {
+              setState((prevState) => ({ ...prevState, trip: undefined }));
+              setEditMode(true);
+            }
+          }
+          onOverlayPress={() => {
+              setState((prevState) => ({ ...prevState, trip: undefined }));
+              setEditMode(true);
+            }
           }
         >
           <NewTrip
             newTripModalRef={createOrUpdateTripModal}
             callBack={callBack}
             item={state.trip}
+            editMode={editMode}
           />
         </Modalize>
       </Portal>
@@ -345,6 +354,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
                 onPress={() => {
                   modalQuestionRef.current?.close();
                   createOrUpdateTripModal.current?.open();
+                  setEditMode(true);
                 }}
               >
                 <Text style={questionModaStyles.buttonText}>Edit</Text>

@@ -26,11 +26,12 @@ interface INewTripProps {
   newTripModalRef: React.RefObject<IHandles>;
   callBack: () => void;
   item?: TripType;
+  editMode: boolean;
 }
 
 type TripStackNavigationProp = StackNavigationProp<TripRouteStackParamList>;
 
-export const NewTrip = ({ item, newTripModalRef, callBack }: INewTripProps) => {
+export const NewTrip = ({ item, newTripModalRef, callBack, editMode }: INewTripProps) => {
   const navigation = useNavigation<TripStackNavigationProp>();
   const [fetchData, { isLoading, isError, data, isSuccess }] =
     useCreateTripMutation();
@@ -139,6 +140,7 @@ export const NewTrip = ({ item, newTripModalRef, callBack }: INewTripProps) => {
           formik={formik}
           onDestinationModalOpen={onDestinationModalOpen}
           isLoading={isUpdateTripLoading || isLoading}
+          editMode={editMode}
         />
       </View>
       <RangePicker formik={formik} open={open} setOpen={setOpen} />

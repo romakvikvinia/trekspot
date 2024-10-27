@@ -27,6 +27,7 @@ import { CityType, SightType } from "../../api/api.types";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { toast } from "sonner-native";
+import { groupByCategory } from "./wishlist/helper";
 
 type WishlistProps = NativeStackScreenProps<
   ExploreRoutesStackParamList,
@@ -55,7 +56,7 @@ export const WishlistScreen: React.FC<WishlistProps> = ({ navigation }) => {
     refetch: refetchSightWishlist,
   } = useWishlistsQuery({
     skip: 0,
-    take: 5,
+    take: 500,
     type: "Sight",
   });
 
@@ -89,6 +90,8 @@ export const WishlistScreen: React.FC<WishlistProps> = ({ navigation }) => {
     }
   }, [isRemoveWishlistItemLoading]);
 
+
+  const dataByCategory = groupByCategory(sights?.wishlists);
 
   return (
     <>
@@ -159,7 +162,22 @@ export const WishlistScreen: React.FC<WishlistProps> = ({ navigation }) => {
               />
             )}
 
-          {!isSightsLoading &&
+            {!isSightsLoading && dataByCategory &&
+              Object.keys(dataByCategory).map((category) => {
+                return (
+                  <WishlistContainer
+                    data={dataByCategory[category]}
+                    type="sight"
+                    title={category}
+                    onPress={handleTopSightClick}
+                    onRemove={handleRemoveWishlistItem}
+                    key={category}
+                  />
+                )
+              })
+            }
+
+          {/* {!isSightsLoading &&
             sights &&
             sights.wishlists &&
             !!sights.wishlists.length && (
@@ -170,7 +188,7 @@ export const WishlistScreen: React.FC<WishlistProps> = ({ navigation }) => {
                 onPress={handleTopSightClick}
                 onRemove={handleRemoveWishlistItem}
               />
-            )}
+            )} */}
         </ScrollView>
       </SafeAreaView>
 

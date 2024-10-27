@@ -64,6 +64,7 @@ import { useTripStore } from "../../components/store/store";
 import { useNavigation } from "@react-navigation/native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { getAndReturnCurrentDay } from "./helper";
 
 type TripProps = NativeStackScreenProps<
   TripRouteStackParamList,
@@ -86,6 +87,7 @@ interface IState {
 export const TabLabel = ({
   route
 }: any) => {
+
 
   return ( 
     <View style = {[tripDetailStyles.customTab, {width: 100,}]} key = {route?.key}>
@@ -280,16 +282,16 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     fetchUpdateRouteAndActivities(payload);
   }, [state, trip, city]);
 
-  const combineObjectArrays = (obj: any) => {
-    let combinedArray: any[] = [];
-    for (let key in obj) {
-      if (Array.isArray(obj[key])) {
-        combinedArray = combinedArray.concat(obj[key]);
-      }
-    }
-    return combinedArray;
-  };
-  const combinedArray = combineObjectArrays(data);
+  // const combineObjectArrays = (obj: any) => {
+  //   let combinedArray: any[] = [];
+  //   for (let key in obj) {
+  //     if (Array.isArray(obj[key])) {
+  //       combinedArray = combinedArray.concat(obj[key]);
+  //     }
+  //   }
+  //   return combinedArray;
+  // };
+  // const combinedArray = combineObjectArrays(data);
 
   const removeActivity = useCallback(
     (deleteIndexes: { day: number; sight: string; route: string }) => {
@@ -329,11 +331,14 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     };
   }, []);
 
+
   const renderCurrentScene: React.FC<
     SceneRendererProps & {
       route: Route;
     }
   > = (props) => {
+   
+
     const route = props.route as unknown as TripDaysType;
 
     return (
@@ -403,7 +408,21 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   const navigationState: NavigationState<TripDaysType> = {
     index,
     routes: state.days,
-  };
+  };  
+
+
+  useEffect(() => {
+
+
+    // const currentDay = getAndReturnCurrentDay();
+    // const getIndexByDate =
+    //   state && state?.days?.findIndex((day) => day?.date === currentDay);
+    //   if (getIndexByDate) {
+    //     setIndex(getIndexByDate);
+    //   }
+
+  }, []);
+
 
   return (
     <>

@@ -82,6 +82,7 @@ export const WishlistContainer: React.FC<IWishlistContainer> = ({
                     onPress(type == "city" ? item.city : item.sight);
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   }}
+                  key={`item-${item.id}`}
                 >
                   <TouchableOpacity
                     style={styles.addToBucketButton}

@@ -66,10 +66,9 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
         options={({ route, navigation }) => ({
           headerShown: false,
           gestureEnabled: true,
-          gestureResponseDistance:
-            Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
+   
       <Stack.Screen
         name="TripInsights"
         component={TripInsights}
@@ -80,6 +79,7 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
             Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
+  
       <Stack.Screen
         name="TripInsightDetailScreen"
         component={TripInsightDetailScreen}
@@ -130,6 +130,9 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
             Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
+       {/* <Stack.Group
+        screenOptions={{ presentation: "modal", headerShown: false }}
+      > */}
       <Stack.Screen
         name="TripEmergency"
         component={TripEmergency}
@@ -140,6 +143,7 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
             Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
+      {/* </Stack.Group> */}
       <Stack.Screen
         name="TripActivityReview"
         component={TripActivityReview}

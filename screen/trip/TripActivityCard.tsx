@@ -132,6 +132,8 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
     });
   }, [checkedIn]);
 
+  
+
   return (
     <>
       {activityAmount > 1 && (
@@ -159,7 +161,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
           tripDetailStyles.sightItem,
           styles.activityItem,
           {
-            marginLeft: activityAmount > 1 ? 25 : 15,
+            marginLeft: activityAmount > 1 ? 20 : 15,
           },
         ]}
         onPress={() => {
@@ -293,7 +295,7 @@ const styles = StyleSheet.create({
     borderColor: "#f7f7f7",
     zIndex: 2,
     opacity: 1,
-    left: -51,
+    left: -45,
   },
   bottomActions: {
     marginTop: 15,
@@ -311,7 +313,7 @@ const styles = StyleSheet.create({
   verticalLine: {
     position: "absolute",
     top: 100,
-    left: 20,
+    left: 22,
     width: 2,
     opacity: 0.05,
   },

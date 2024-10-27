@@ -31,6 +31,7 @@ interface ICreateTripContentProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   formik: any;
   onDestinationModalOpen: () => void;
+  editMode: boolean;
 }
 
 export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
@@ -39,6 +40,7 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
   setOpen,
   onDestinationModalOpen,
   formik,
+  editMode
 }) => {
   const navigation = useNavigation();
   const modalTravelTypeRef = useRef<Modalize>(null);
@@ -83,7 +85,9 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
               color: COLORS.black,
             }}
           >
-            New trip
+          {
+            editMode ? "Edit trip" : "New trip"
+          }
           </Text>
           <TouchableOpacity
             style={styles.cancelTripButton}
@@ -195,11 +199,17 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
             >
               <TouchableOpacity
                 activeOpacity={0.5}
-                style={styles.newTripBoxButton}
+                style={[
+                  styles.newTripBoxButton,
+                  {
+                    opacity: editMode ? 0.4 : 1,
+                  },
+                ]}
                 onPress={() => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   onDestinationModalOpen();
                 }}
+                disabled={editMode}
               >
                 <TripLocationIcon size="" color="" />
                 <Text style={styles.halfBoxLabelText}>Where to?</Text>
@@ -315,7 +325,9 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
           >
             {isLoading && <ActivityIndicator />}
             <Text style={[styles.manualPlanButtonText, { marginLeft: 8 }]}>
-              Create trip
+              {
+                editMode ? "Save trip" : "Create trip"
+              }
             </Text>
           </TouchableOpacity>
         </View>

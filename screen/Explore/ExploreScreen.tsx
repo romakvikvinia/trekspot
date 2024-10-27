@@ -1,5 +1,5 @@
 import React from "react";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useScrollToTop } from "@react-navigation/native";
 
 import {
   KeyboardAvoidingView,
@@ -41,7 +41,9 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
    * fetching wishlist on this screen
    */
   const { wishlists } = useAppSelector((state) => state.wishlist);
+  const ref = React.useRef(null);
 
+  useScrollToTop(ref);
   const dispatch = useAppDispatch();
   const [fetchWishlist] = useLazyWishlistsQuery();
 
@@ -148,6 +150,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
             style={{ flex: 1 }}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 25 }}
+            ref={ref}
           >
             {/**
              * Popular Countries

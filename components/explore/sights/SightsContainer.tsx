@@ -71,7 +71,7 @@ export const SightsRow = ({ rowKey, handleOpenSightDetail, items }) => {
           }}
         >
           {items &&
-            items[rowKey]?.map((item, ind) => (
+            items[rowKey]?.map((item, ind) => item?.image && (
               <TouchableOpacity
                 activeOpacity={0.7}
                 style={[
@@ -205,6 +205,10 @@ export const SightsContainer: React.FC<SightsContainerProps> = ({ items }) => {
   const handleOpenSightDetail = useCallback((item: SightType) => {
     setState((prevState) => ({ ...prevState, item }));
   }, []);
+  
+  const handleOnClose = () => {
+    setState((prevState) => ({ ...prevState, item: null }));
+  };
 
   return (
     <>
@@ -215,7 +219,7 @@ export const SightsContainer: React.FC<SightsContainerProps> = ({ items }) => {
           items={items}
         />
       ))}
-      <SightDetailModal data={state.item!} />
+      <SightDetailModal closeCallBack={handleOnClose} showDirection={false} data={state.item!} />
     </>
   );
 };
