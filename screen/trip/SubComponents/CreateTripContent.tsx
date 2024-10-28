@@ -59,7 +59,7 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
   const isInValid =
     !formik.values.name ||
     !Object.keys(formik.values.range).length ||
-    !formik.values.travelType ||
+    // !formik.values.travelType ||
     !formik.values.destination;
 
   const handelSubmit = useCallback(() => {
@@ -113,6 +113,7 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
             onChangeText={formik.handleChange("name")}
             onBlur={formik.handleBlur("name")}
             autoCorrect={false}
+            autoFocus={true}
           />
           <View style={styles.newTripBoxes}>
             <BlurView

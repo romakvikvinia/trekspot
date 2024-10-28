@@ -409,20 +409,15 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     index,
     routes: state.days,
   };  
-
-
+  const currentDay = getAndReturnCurrentDay();
+  const getIndexByDate =
+    state && state?.days?.findIndex((day) => day?.date === currentDay);
   useEffect(() => {
 
-
-    // const currentDay = getAndReturnCurrentDay();
-    // const getIndexByDate =
-    //   state && state?.days?.findIndex((day) => day?.date === currentDay);
-    //   if (getIndexByDate) {
-    //     setIndex(getIndexByDate);
-    //   }
-
-  }, []);
-
+    if (getIndexByDate >= 0) {
+      setIndex(getIndexByDate);
+    }
+  }, [getIndexByDate]);
 
   return (
     <>

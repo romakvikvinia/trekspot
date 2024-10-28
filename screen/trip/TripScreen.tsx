@@ -300,12 +300,12 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
           modalHeight={SIZES.height}
           onClosed={() => {
               setState((prevState) => ({ ...prevState, trip: undefined }));
-              setEditMode(true);
+              setEditMode(false);
             }
           }
           onOverlayPress={() => {
               setState((prevState) => ({ ...prevState, trip: undefined }));
-              setEditMode(true);
+              setEditMode(false);
             }
           }
         >

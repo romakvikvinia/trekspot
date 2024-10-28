@@ -1,5 +1,5 @@
 import { Image } from "expo-image";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ImageBackground, Linking, Platform, StyleSheet } from "react-native";
 import { Text, TouchableOpacity, View } from "react-native";
 import { COLORS } from "../../styles/theme";
@@ -95,14 +95,9 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
   day,
   onQuestionModalOpen,
   handleTopSightClick,
-  index,
-  lastIndex,
   activityAmount,
 }) => {
-  const { tripStyle } = useTripStore((state: any) => ({
-    tripStyle: state.tripStyle,
-  }));
-
+ 
   const [changeActivityVisited, { isLoading }] =
     useChangeActivityVisitedMutation();
 
@@ -132,8 +127,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
     });
   }, [checkedIn]);
 
-  
-
+ 
   return (
     <>
       {activityAmount > 1 && (
