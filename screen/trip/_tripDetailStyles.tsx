@@ -215,6 +215,12 @@ export const tripDetailStyles = StyleSheet.create({
       borderTopRightRadius: 10,
       borderBottomEndRadius: 10,
     },
+    iconWrapper: {
+      height: 16,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 3
+    },
     inviteButtonText: {
       color: "#fff",
       fontSize: 14,
@@ -247,33 +253,40 @@ export const tripDetailStyles = StyleSheet.create({
       marginTop: 15,
     },
     sightRightActionsButton: {
-      width: 35,
-      height: 40,
-      backgroundColor: "#fff",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      borderRadius: 0,
-      marginLeft: 2,
+      marginLeft: 6,
+      borderRadius: 6,
+      paddingVertical: 0,
+      // backgroundColor: "#f9f9f9",
+      paddingHorizontal: 3,
+    },
+    actionTitle: {
+      fontSize: 10,
+      color: COLORS.gray,
+      fontWeight: "400",
     },
     sightRightActions: {
       flexDirection: "row",
       alignItems: "center",
     },
     checkinButtonText: {
-      fontSize: 12,
-      marginLeft: 5,
-      fontWeight: "500",
-      textTransform: "uppercase",
-      letterSpacing: 0.5,
+      fontSize: 11,
+      color: COLORS.gray,
+      fontWeight: "400"
     },
     checkinButton: {
-      flexDirection: "row",
+      flexDirection: "column",
       alignItems: "center",
-      backgroundColor: "#fff",
-      borderRadius: 0,
-      paddingHorizontal: 0,
-      paddingVertical: 10,
+      borderRadius: 6,
+      paddingVertical: 5,
+      backgroundColor: "#fafafa",
+      paddingHorizontal: 7,
+      width: 65,
+      position: "relative",
+      zIndex: 2,
+      marginLeft: -2
     },
     sightTitle: {
       fontSize: 18,
@@ -311,7 +324,7 @@ export const tripDetailStyles = StyleSheet.create({
       flexDirection: "column",
       position: "relative",
       flexWrap: "wrap",
-      height: 140,
+      height: 160,
       // borderWidth: 1,
       // borderColor: "#fff"
     },

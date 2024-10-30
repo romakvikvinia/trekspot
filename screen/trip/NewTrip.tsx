@@ -20,7 +20,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
 import { creationTrip } from "../auth/validationScheme";
-import { format, parseISO } from "date-fns";
+import { parseISO } from "date-fns";
 
 interface INewTripProps {
   newTripModalRef: React.RefObject<IHandles>;
@@ -122,17 +122,11 @@ export const NewTrip = ({ item, newTripModalRef, callBack, editMode }: INewTripP
       });
     }
   }, [isUpdatedTripSuccess, callBack]);
-  console.log(
-    "start",
-    formik.values.range && formik.values.range["startDate"]?.toISOString()
-  );
+
   return (
     <>
       <View
         style={[styles.tripModalGradient, { padding: 0 }]}
-        // colors={gradient}
-        // start={{ x: -1, y: 1 }}
-        // end={{ x: 1, y: 0 }}
       >
         <CreateTripContent
           newTripModalRef={newTripModalRef}
