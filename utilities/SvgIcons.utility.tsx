@@ -1042,9 +1042,7 @@ export const LocationPin = ({ width, color }) => {
 };
 
 export const MapDirection = ({ width, color }) => {
-  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="m22.707 13.793-1.914-1.914A2.978 2.978 0 0 0 18.671 11H13V9h6.5C20.878 9 22 7.878 22 6.5v-2C22 3.122 20.878 2 19.5 2h-6.506L13 1.006A1 1 0 0 0 12.005 0H12a1 1 0 0 0-1 .994L10.994 2H5.328c-.801 0-1.555.312-2.122.879L1.292 4.793a.999.999 0 0 0 0 1.414l1.914 1.914c.566.567 1.32.879 2.122.879h5.671v2h-6.5a2.503 2.503 0 0 0-2.5 2.5v2c0 1.378 1.122 2.5 2.5 2.5h6.491l.009 5.002a1 1 0 0 0 1 .998h.002a1 1 0 0 0 .998-1.002L12.99 18h5.681c.801 0 1.555-.312 2.122-.879l1.914-1.914a.999.999 0 0 0 0-1.414ZM4.621 6.707 3.414 5.5l1.207-1.207A.994.994 0 0 1 5.329 4H19.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H5.329a.996.996 0 0 1-.708-.293Zm14.758 9a.994.994 0 0 1-.708.293H4.5a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h14.171c.267 0 .519.104.708.293l1.207 1.207-1.207 1.207Z" fill=${
-    color ? color : "#000000"
-  } opacity="1" data-original="#000000"></path></g></svg>`;
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="m22.543 8.481-7.024-7.024a4.984 4.984 0 0 0-7.037 0L1.457 8.481a4.984 4.984 0 0 0 0 7.037l7.024 7.024c.97.97 2.244 1.454 3.519 1.454s2.549-.484 3.519-1.454l7.024-7.024a4.984 4.984 0 0 0 0-7.037Zm-1.414 5.623-7.024 7.024a2.984 2.984 0 0 1-4.209 0l-7.025-7.024a2.982 2.982 0 0 1 0-4.209l7.025-7.024a2.98 2.98 0 0 1 4.209 0l7.024 7.024a2.982 2.982 0 0 1 0 4.209Zm-4.001-5.226a3.002 3.002 0 0 1 0 4.242l-2.421 2.421a.997.997 0 0 1-1.414 0 .999.999 0 0 1 0-1.414l2.128-2.128H11a1 1 0 0 0-1 1v3a1 1 0 1 1-2 0v-3c0-1.654 1.346-3 3-3h4.421l-2.128-2.128a.999.999 0 1 1 1.414-1.414l2.421 2.421Z" fill=${color?color:"#000000"} opacity="1" data-original=${color?color:"#000000"} class=""></path></g></svg>`;
   const SvgImage = () => (
     <SvgXml
       xml={svgMarkup}
@@ -1164,6 +1162,18 @@ export const CheckLiteIcon = ({ width, color }) => {
   );
   return <SvgImage />;
 };
+export const LeftTriangle = () => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path fill-rule="evenodd" d="M394.262 6a7.34 7.34 0 0 1 7.458 7.338v485.325a7.34 7.34 0 0 1-12.197 5.499L112.76 259.724a7.34 7.34 0 0 1 .04-11.036L389.563 7.8a7.34 7.34 0 0 1 4.7-1.8z" fill="#fff" opacity="1" data-original="#fff"></path></g></svg>`;
+  const SvgImage = () => (
+    <SvgXml
+      xml={svgMarkup}
+      width={"20"}
+      height={"20"}
+    />
+  );
+  return <SvgImage />;
+};
+ 
 export const EatIcon = ({ width, color }) => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M22 10a12.64 12.64 0 0 1-5 9.775V23a1 1 0 0 1-2 0V2A1.9 1.9 0 0 1 16.131.217a2.194 2.194 0 0 1 2.356.459A13.474 13.474 0 0 1 22 10ZM11 0a1 1 0 0 0-1 1v6a3 3 0 0 1-2 2.816V1a1 1 0 0 0-2 0v8.816A3 3 0 0 1 4 7V1a1 1 0 0 0-2 0v6a5.009 5.009 0 0 0 4 4.9V23a1 1 0 0 0 2 0V11.9A5.009 5.009 0 0 0 12 7V1a1 1 0 0 0-1-1Z" fill=${
     color ? color : "#000000"

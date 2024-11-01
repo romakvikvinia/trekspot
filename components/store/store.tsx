@@ -8,8 +8,10 @@ export const useTripStore = create(
       onboardingSeen: false,
       tripStyle: true,
       guestActivityCount: 0,
+      isVisitedUsed: false,
       setTripStyle: tripStyle => set({ tripStyle }),
       setOnboardingSeen: onboardingSeen => set({ onboardingSeen }),
+      setVisitedUsed: isVisitedUsed => set({ isVisitedUsed }),
       increaseGuestActivityCount: () =>
         set((state) => {
           return {

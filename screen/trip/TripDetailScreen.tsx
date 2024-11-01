@@ -570,7 +570,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           closeSnapPointStraightEnabled={false}
           modalStyle={{
             backgroundColor: "#F2F2F7",
-            minHeight: "35%",
+            minHeight: "25%",
           }}
           scrollViewProps={{
             showsVerticalScrollIndicator: false,
@@ -594,7 +594,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                 </Text>
                 <TwoSideArrows size="15" />
               </TouchableOpacity>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 activeOpacity={0.7}
                 style={[questionModaStyles.button]}
               >
@@ -623,7 +623,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                   Delete
                 </Text>
                 <TrashIcon size="15" />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </QuestionModal>
         </Modalize>

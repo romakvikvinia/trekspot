@@ -23,6 +23,9 @@ import { SightType } from "../../api/api.types";
 import { TripDaysType } from "./TripDetailScreen";
 import { useChangeActivityVisitedMutation } from "../../api/api.trekspot";
 import { useTripStore } from "../../components/store/store";
+import { VisitedButton } from "./components/VisitedButton";
+import { CardContent } from "./components/CardContent";
+import { ActivityCardActions } from "./components/ActivityCardActions";
 
 interface ITripActivityCardProps {
   visited: boolean;
@@ -43,6 +46,7 @@ const ImgComponent = ({ item }:any) => {
         {
           width: 70,
           height: 70,
+          backgroundColor: "#fafafa",
         },
       ]}
     >
@@ -96,6 +100,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
   onQuestionModalOpen,
   handleTopSightClick,
   activityAmount,
+  index
 }) => {
  
   const [changeActivityVisited, { isLoading }] =
@@ -135,7 +140,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
           style={[
             styles.verticalLine,
             {
-              height: activityAmount * 165 - 170,
+              height: activityAmount * 175 - 170,
             },
           ]}
         >
@@ -156,6 +161,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
           styles.activityItem,
           {
             marginLeft: activityAmount > 1 ? 20 : 15,
+            zIndex: index === 0 ? 5 : 1
           },
         ]}
         onPress={() => {
@@ -177,78 +183,17 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
         >
           <ImgComponent item={item} />
 
-          <View style={[tripDetailStyles.sightDetails, styles.textContent]}>
-            <Text numberOfLines={2} style={tripDetailStyles.sightTitle}>
-              {item?.title}
-            </Text>
-            <View style={tripDetailStyles.ratingLabel}>
-              {item?.rate ? (
-                <>
-                  <View
-                    style={{
-                      position: "relative",
-                      top: -1,
-                      opacity: 0.8,
-                      marginRight: 3,
-                    }}
-                  >
-                    <StarIcon color="#FFBC3E" />
-                  </View>
-                  <Text style={[tripDetailStyles.ratingText]}>
-                    {item?.rate}
-                  </Text>
-                </>
-              ) : null}
-
-              <Text style={[tripDetailStyles.sightType]}>{item?.category}</Text>
-            </View>
-          </View>
+          <CardContent item={item} />
         </View>
 
-        <View
-          style={[tripDetailStyles.sightBottomActions, styles.bottomActions]}
-        >
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={tripDetailStyles.checkinButton}
-            onPress={handleChangeActivityVisited}
-          >
-            <CheckLiteIcon
-              color={checkedIn ? COLORS.primary : COLORS.gray}
-              width="15"
-            />
-            <Text
-              style={[
-                tripDetailStyles.checkinButtonText,
-                { color: checkedIn ? COLORS.primary : COLORS.gray },
-              ]}
-            >
-              Visited
-            </Text>
-          </TouchableOpacity>
-
-          <View style={tripDetailStyles.sightRightActions}>
-            <TouchableOpacity
-              style={tripDetailStyles.sightRightActionsButton}
-              activeOpacity={0.7}
-              onPress={() => openMap(item?.title)}
-            >
-              <MapDirection width="15" color={COLORS.gray} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => onQuestionModalOpen(item.id)}
-              style={[
-                tripDetailStyles.sightRightActionsButton,
-                {
-                  marginRight: -5,
-                },
-              ]}
-              activeOpacity={0.7}
-            >
-              <DotsIcon color={COLORS.gray} />
-            </TouchableOpacity>
-          </View>
-        </View>
+        <ActivityCardActions 
+          item={item} 
+          onQuestionModalOpen={onQuestionModalOpen} 
+          openMap={openMap}
+          handleChangeActivityVisited={handleChangeActivityVisited}
+          checkedIn={checkedIn}
+          index={index}
+          />
       </TouchableOpacity>
     </>
   );
@@ -290,19 +235,6 @@ const styles = StyleSheet.create({
     zIndex: 2,
     opacity: 1,
     left: -45,
-  },
-  bottomActions: {
-    marginTop: 15,
-    marginBottom: 0,
-    borderTopColor: "#f2f2f2",
-    borderTopWidth: 1,
-  },
-  textContent: {
-    flexDirection: "column",
-    justifyContent: "center",
-    marginTop: 0,
-    flex: 1,
-    paddingLeft: 16,
   },
   verticalLine: {
     position: "absolute",
