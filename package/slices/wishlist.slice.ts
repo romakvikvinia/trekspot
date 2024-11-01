@@ -14,7 +14,7 @@ const slice = createSlice({
   name: "wishlist",
   initialState,
   reducers: {
-    reset: () => initialState,
+    resetWishlists: () => initialState,
     setWishlists: (state, { payload }: PayloadAction<WishlistType[]>) => {
       state.wishlists = payload;
     },
@@ -48,7 +48,7 @@ const slice = createSlice({
 });
 
 export const {
-  reset,
+  resetWishlists,
   setWishlists,
   toggleWishlistItem,
   addItemIntoWishlist,
