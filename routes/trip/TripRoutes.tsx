@@ -34,7 +34,7 @@ export type TripRouteStackParamList = {
   TripDishes: undefined;
   TripTransport: undefined;
   TripEmergency: undefined;
-  TripActivityReview: undefined
+  TripActivityReview: undefined;
 };
 
 const Stack = createStackNavigator<TripRouteStackParamList>();
@@ -68,7 +68,7 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
           gestureEnabled: true,
         })}
       />
-   
+
       <Stack.Screen
         name="TripInsights"
         component={TripInsights}
@@ -79,7 +79,7 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
             Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
-  
+
       <Stack.Screen
         name="TripInsightDetailScreen"
         component={TripInsightDetailScreen}
@@ -130,7 +130,7 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
             Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
-       {/* <Stack.Group
+      {/* <Stack.Group
         screenOptions={{ presentation: "modal", headerShown: false }}
       > */}
       <Stack.Screen
