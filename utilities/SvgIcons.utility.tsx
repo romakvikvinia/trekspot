@@ -84,7 +84,9 @@ export const DocsIcon = () => {
 };
 
 export const Mark2 = ({ color = "", size = "" }) => {
-  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 212.045 212.045" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M167.871 0H44.84C34.82 0 26.022 8.243 26.022 18v182c0 3.266.909 5.988 2.374 8.091a9.204 9.204 0 0 0 7.598 3.954c2.86 0 5.905-1.273 8.717-3.675l55.044-46.735c1.7-1.452 4.142-2.284 6.681-2.284 2.538 0 4.975.832 6.68 2.288l54.86 46.724c2.822 2.409 5.657 3.683 8.512 3.683 4.828 0 9.534-3.724 9.534-12.045V18c0-9.757-8.131-18-18.151-18z" fill=${color ? color : "#000000"} opacity="1" data-original="#000000" class=""></path></g></svg>
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 212.045 212.045" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M167.871 0H44.84C34.82 0 26.022 8.243 26.022 18v182c0 3.266.909 5.988 2.374 8.091a9.204 9.204 0 0 0 7.598 3.954c2.86 0 5.905-1.273 8.717-3.675l55.044-46.735c1.7-1.452 4.142-2.284 6.681-2.284 2.538 0 4.975.832 6.68 2.288l54.86 46.724c2.822 2.409 5.657 3.683 8.512 3.683 4.828 0 9.534-3.724 9.534-12.045V18c0-9.757-8.131-18-18.151-18z" fill=${
+    color ? color : "#000000"
+  } opacity="1" data-original="#000000" class=""></path></g></svg>
 `;
   const SvgImage = () => (
     <SvgXml
@@ -125,7 +127,7 @@ export const StarIcon = ({ color = "", size = 0 }: IStarIcon) => {
   return <SvgImage />;
 };
 
-export const Share = ({ size, color }) => {
+export const Share = ({ size = "", color = "" }) => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" width="24.971" height="30.52" viewBox="0 0 24.971 30.52">
   <g id="Group_107" data-name="Group 107" transform="translate(-3 -1)">
     <g id="Group_106" data-name="Group 106" transform="translate(3 1)">
@@ -216,7 +218,6 @@ export const CasinosIcon = ({ color, size }) => {
   );
   return <SvgImage />;
 };
-
 
 export const TopExperiencesIcon = ({ color, size }) => {
   const svgMarkup = `<svg width="407" height="407" viewBox="0 0 407 407" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1872,8 +1873,6 @@ export const NoActivityIcon = ({ size }) => {
   return <SvgImage />;
 };
 
-
-
 export const GuestIllustration = () => {
   const svgMarkup = `<svg width="3371" height="2513" viewBox="0 0 3371 2513" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M3371 2208.13H0V2209.81H3371V2208.13Z" fill="#EBEBEB"/>
@@ -1941,18 +1940,11 @@ export const GuestIllustration = () => {
 <path opacity="0.6" d="M2376.52 458.041C2420.69 458.041 2456.49 435.221 2456.49 407.071C2456.49 378.921 2420.69 356.102 2376.52 356.102C2332.36 356.102 2296.55 378.921 2296.55 407.071C2296.55 435.221 2332.36 458.041 2376.52 458.041Z" fill="#407BFF"/>
 <path opacity="0.3" d="M2249.33 478.954C2267.46 478.954 2282.15 469.588 2282.15 458.034C2282.15 446.48 2267.46 437.113 2249.33 437.113C2231.2 437.113 2216.5 446.48 2216.5 458.034C2216.5 469.588 2231.2 478.954 2249.33 478.954Z" fill="#407BFF"/>
 </svg>`;
-  const SvgImage = () => (
-    <SvgXml
-      xml={svgMarkup}
-      width={200}
-      height={150}
-    />
-  );
+  const SvgImage = () => <SvgXml xml={svgMarkup} width={200} height={150} />;
   return <SvgImage />;
 };
 
-
-export const ExploreIcon = ({ size }) => {
+export const ExploreIcon = ({ size = "" }) => {
   const svgMarkup = `<svg width="3192" height="3445" viewBox="0 0 3192 3445" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M1546.02 3444.15C1253.72 3444.15 961.337 3333.37 743.831 3140.23C513.409 2935.62 382.868 2657.56 376.067 2357.06C373.02 2314.81 371.715 2272.52 370.45 2231.6C370.12 2220.96 369.791 2210.3 369.441 2199.67L236.404 1760.69C146.883 1591.7 61.3911 1408.87 64.8083 1194.45L4.0446 993.887C-0.157215 980.028 -1.1009 965.386 1.28715 951.103C3.6752 936.819 9.33042 923.281 17.8118 911.542C26.2932 899.804 37.3714 890.184 50.1826 883.431C62.9937 876.679 77.1915 872.977 91.6687 872.615L133.59 871.559C138.984 857.954 144.64 844.456 150.556 831.07C380.473 325.829 922.765 0 1532.56 0C1841.53 0 2139.32 88.8215 2378.48 251.215L2468.11 197.628C2480.22 190.383 2493.8 185.957 2507.86 184.68C2521.91 183.402 2536.07 185.306 2549.29 190.249C2562.51 195.19 2574.45 203.044 2584.22 213.227C2593.99 223.411 2601.34 235.663 2605.73 249.075L2705.28 553.19C2941.5 847.806 3069.7 1239.36 3067.41 1659.51L3187.31 2025.81C3203.22 2074.42 3177.36 2126.84 3129.09 2143.78L2994.83 2190.93C2916.37 2479.61 2778.11 2740.35 2593.19 2947.61C2380.44 3186.08 2109.31 3347.47 1809.13 3414.37C1723.72 3434.07 1634.97 3444.15 1546.03 3444.15L1546.02 3444.15Z" fill="white"/>
 <path d="M2399.18 375.796C3392.53 1147.17 3030.82 3036.15 1786.2 3313.5C1155.3 3459 481.134 3011.77 467.552 2343.55C456.52 2193.64 468.723 2039.03 419.294 1897.14C228.48 1539.31 48.3276 1280.75 234.11 859.948C594.898 67.1543 1728.15 -158.888 2399.18 375.796Z" fill="#85C0FF"/>
