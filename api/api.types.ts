@@ -520,3 +520,22 @@ export type ToggleWishlistArgsType = Partial<{
   city: string;
   sight: string;
 }>;
+
+//
+export type UpComingTripsResponseType = {
+  upComingTrips: TripType[];
+};
+export type UpComingTripsArgsType = {
+  skip?: number;
+  take?: number;
+};
+
+export type AllCountriesResponseType = {
+  allCountries: CountryType[];
+};
+
+export type AllCountriesArgsType = Partial<{
+  skip?: number;
+  take?: number;
+  search?: string;
+}>;

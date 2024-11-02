@@ -20,6 +20,12 @@ import { useTripStore } from "../../components/store/store";
 import { useState } from "react";
 import { GuestUserModal } from "../../common/components/GuestUserModal";
 import { useAppSelector } from "../../package/store";
+import { StackNavigationProp } from "@react-navigation/stack";
+import React from "react";
+import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
+import { TripRouteStackNavigationProp } from "../../routes/trip/TripRoutes";
+import { useUpComingTripsQuery } from "../../api/api.trekspot";
+import { format, parseISO } from "date-fns";
 // import Animated, {
 //   ReduceMotion,
 //   useAnimatedGestureHandler,
@@ -31,25 +37,33 @@ import { useAppSelector } from "../../package/store";
 // import { PanGestureHandler } from "react-native-gesture-handler";
 // import { LinearGradient } from "expo-linear-gradient";
 
+type ExploreStackNavigationProp =
+  StackNavigationProp<ExploreRoutesStackParamList>;
+
 export const ExploreHeader = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
+
+  const { isLoading, isSuccess, data } = useUpComingTripsQuery({});
+
   const { user } = useAppSelector((state) => state.auth);
   const isGuest = user?.role === "guest";
 
   const [showGuestModal, setShowGuestModal] = useState(false);
-  const { guestActivityCount, increaseGuestActivityCount } = useTripStore((state) => ({
-    increaseGuestActivityCount: state.increaseGuestActivityCount,
-    guestActivityCount: state.guestActivityCount,
-  }));
+  const { guestActivityCount, increaseGuestActivityCount } = useTripStore(
+    (state) => ({
+      increaseGuestActivityCount: state.increaseGuestActivityCount,
+      guestActivityCount: state.guestActivityCount,
+    })
+  );
 
   const handleGoToSearch = () => {
-    if(guestActivityCount >= 3 && isGuest) {
+    if (guestActivityCount >= 3 && isGuest) {
       setShowGuestModal(true);
       return;
     }
     increaseGuestActivityCount();
-    navigation.navigate("Search")
-  }
+    navigation.navigate("Search");
+  };
 
   // const screenWidth = Dimensions.get('window').width;
   // const screenHeight = Dimensions.get('window').height;
@@ -104,6 +118,7 @@ export const ExploreHeader = () => {
   //     ],
   //   };
   // });
+  console.log(data);
   return (
     <>
       <View style={styles.screenHeader}>
@@ -118,54 +133,68 @@ export const ExploreHeader = () => {
           <Text style={styles.searchInput}>Where to?</Text>
         </TouchableOpacity>
         <View style={styles.right}>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("TripDetails", {
-                quickView: true,
-              })
-            }
-            style={[styles.bucketListButton, { padding: 0 }]}
-          >
-            <LinearGradient
-              style={styles.gradientWrapper}
-              colors={["#DCB92C", "#FF543E", "#C837AB"]}
+          {!isLoading &&
+          isSuccess &&
+          data &&
+          data.upComingTrips &&
+          !!data.upComingTrips.length ? (
+            <TouchableOpacity
+              onPress={() => {
+                if (data.upComingTrips.length == 1) {
+                  navigation.navigate("Trips");
+                  // navigation.navigate("TripDetailScreen", {
+                  //   city: data.upComingTrips[0].cities[0],
+                  //   trip: data.upComingTrips[0],
+                  // });
+                } else {
+                  navigation.navigate("TripsScreen");
+                }
+              }}
+              style={[styles.bucketListButton, { padding: 0 }]}
             >
-              <ImageBackground
-                source={{
-                  uri: "https://cdn.pixabay.com/photo/2019/12/27/09/57/dubai-4722074_1280.jpg",
-                }}
-                style={styles.destinationImage}
-              />
-              <View style={styles.destinationInfo}>
-                <Text
-                  numberOfLines={1}
-                  style={{
-                    fontSize: 9,
-                    fontWeight: "bold",
-                    color: "#fff",
+              <LinearGradient
+                style={styles.gradientWrapper}
+                colors={["#DCB92C", "#FF543E", "#C837AB"]}
+              >
+                <ImageBackground
+                  source={{
+                    uri: "https://cdn.pixabay.com/photo/2019/12/27/09/57/dubai-4722074_1280.jpg",
                   }}
-                >
-                  Dubai
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 7,
-                    fontWeight: "600",
-                    color: "#fff",
-                    marginTop: 2,
-                    paddingHorizontal: 3,
-                  }}
-                >
-                  13-15
-                </Text>
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
+                  style={styles.destinationImage}
+                />
+                <View style={styles.destinationInfo}>
+                  <Text
+                    numberOfLines={1}
+                    style={{
+                      fontSize: 9,
+                      fontWeight: "bold",
+                      color: "#fff",
+                    }}
+                  >
+                    {data.upComingTrips[0].name}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 7,
+                      fontWeight: "600",
+                      color: "#fff",
+                      marginTop: 2,
+                      paddingHorizontal: 3,
+                    }}
+                  >
+                    {format(parseISO(data.upComingTrips[0].startAt), "dd")}-
+                    {format(parseISO(data.upComingTrips[0].endAt), "dd")}
+                  </Text>
+                </View>
+              </LinearGradient>
+            </TouchableOpacity>
+          ) : null}
+
           <TouchableOpacity
             onPress={() => navigation.navigate("WishlistScreen")}
             style={styles.bucketListButton}
           >
-            <Mark2 size={16} color={COLORS.black} />
+            <Mark2 size={"16"} color={COLORS.black} />
           </TouchableOpacity>
         </View>
       </View>
@@ -209,9 +238,9 @@ export const ExploreHeader = () => {
         </Animated.View>
       </PanGestureHandler> */}
 
-      {
-        showGuestModal && <GuestUserModal onClose={() => setShowGuestModal(false)} />
-      }
+      {showGuestModal && (
+        <GuestUserModal onClose={() => setShowGuestModal(false)} />
+      )}
     </>
   );
 };

@@ -66,6 +66,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
   }>({
     visited_countries: [],
     lived_countries: [],
+    //@ts-ignore
     countries: CountriesList,
   });
   const { data: analyticsData, isLoading, isSuccess } = useAnalyticsQuery();
@@ -78,10 +79,12 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
   const shareModalRef = useRef<Modalize>(null);
   const isGuest = user?.role === "guest";
   const [showGuestModal, setShowGuestModal] = React.useState(false);
-  const { guestActivityCount, increaseGuestActivityCount } = useTripStore((state) => ({
-    increaseGuestActivityCount: state.increaseGuestActivityCount,
-    guestActivityCount: state.guestActivityCount,
-  }));
+  const { guestActivityCount, increaseGuestActivityCount } = useTripStore(
+    (state) => ({
+      increaseGuestActivityCount: state.increaseGuestActivityCount,
+      guestActivityCount: state.guestActivityCount,
+    })
+  );
 
   const onOpen = useCallback(() => {
     if (modalRef.current) modalRef.current.open();
@@ -91,23 +94,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
     if (shareModalRef.current) shareModalRef.current.open();
   }, []);
 
-  const handleCountriesModalClose = useCallback(async () => {
-    let visited_countries = await getCountries();
-    let lived_countries = await getCountries("lived_countries");
-
-    const payload: {
-      visited_countries?: string[];
-      lived_countries?: string[];
-    } = { visited_countries: [], lived_countries: [] };
-
-    if (visited_countries && Array.isArray(visited_countries))
-      payload.visited_countries = visited_countries;
-
-    if (lived_countries && Array.isArray(lived_countries))
-      payload.lived_countries = lived_countries;
-
-    updateMe(payload);
-  }, []);
+  const handleCountriesModalClose = useCallback(async () => {}, []);
 
   /**
    * First fetch about me
@@ -208,7 +195,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
   };
 
   const handleAddVisit = () => {
-    if(guestActivityCount >= 3 && isGuest) {
+    if (guestActivityCount >= 3 && isGuest) {
       setShowGuestModal(true);
       return;
     } else {
@@ -217,7 +204,7 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
   };
 
   const handleShare = () => {
-    if(guestActivityCount >= 3 && isGuest) {
+    if (guestActivityCount >= 3 && isGuest) {
       setShowGuestModal(true);
       return;
     } else {
@@ -448,9 +435,9 @@ export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
         </Modalize>
       </Portal>
 
-      {
-        showGuestModal && <GuestUserModal onClose={() => setShowGuestModal(false)} />
-      }
+      {showGuestModal && (
+        <GuestUserModal onClose={() => setShowGuestModal(false)} />
+      )}
     </>
   );
 };

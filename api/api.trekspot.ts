@@ -61,6 +61,10 @@ import {
   RemoveWishlistItemResponseType,
   ToggleWishlistResponseType,
   ToggleWishlistArgsType,
+  UpComingTripsArgsType,
+  UpComingTripsResponseType,
+  AllCountriesResponseType,
+  AllCountriesArgsType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -366,6 +370,25 @@ export const trekSpotApi = createApi({
         `,
       }),
     }),
+    /**
+     * fetch all countries
+     */
+
+    allCountries: builder.query<AllCountriesResponseType, AllCountriesArgsType>(
+      {
+        query: ({ skip = 0, take = 20, isPopular = false }) => ({
+          variables: { skip, take, isPopular },
+          document: gql`
+            query ($skip: Int, $take: Int) {
+              allCountries(input: { skip: $skip, take: $take }) {
+                id
+                iso2
+              }
+            }
+          `,
+        }),
+      }
+    ),
 
     /**
      * Get Country
@@ -1145,6 +1168,37 @@ export const trekSpotApi = createApi({
       },
       invalidatesTags: (result, error) => (error ? [] : ["updateTrip"]),
     }),
+    // up coming trips
+    upComingTrips: builder.query<
+      UpComingTripsResponseType,
+      UpComingTripsArgsType
+    >({
+      query: ({ skip, take }) => {
+        return {
+          variables: { skip, take },
+          document: gql`
+            query ($skip: Int, $take: Int) {
+              upComingTrips(input: { skip: $skip, take: $take }) {
+                id
+                name
+                startAt
+                endAt
+                cities {
+                  id
+                  city
+                  iso2
+                  lng
+                  lat
+                  image {
+                    url
+                  }
+                }
+              }
+            }
+          `,
+        };
+      },
+    }),
 
     // delete trip
     deleteTrip: builder.mutation<DeleteTripResponseType, DeleteTripArgsType>({
@@ -1283,6 +1337,7 @@ export const {
   useStoriesQuery,
   useCreateOrUpdateStoriesMutation,
   useCountriesQuery,
+  useLazyAllCountriesQuery,
   useCountryQuery,
   useLazyCountryQuery,
   useLazyGetPassportIndexesQuery,
@@ -1300,6 +1355,7 @@ export const {
   useLazyFaqQuery,
   //
   useTripQuery,
+  useUpComingTripsQuery,
   useUpdateTripRouteAndActivitiesMutation,
   useRemoveActivityFromRouteMutation,
   useChangeActivityVisitedMutation,
