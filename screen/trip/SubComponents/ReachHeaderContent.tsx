@@ -11,7 +11,7 @@ import {
   MapWithLocationIcon,
 } from "../../../utilities/SvgIcons.utility";
 import { TripHelpers } from "./TripHelpers";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { COLORS } from "../../../styles/theme";
 import { HeaderTextContent } from "./HeaderTextcontent";
 
@@ -30,6 +30,7 @@ export const ReachHeaderContent = ({
   onQuestion2ModalOpen,
   activeDay,
 }: ReachHeaderContentProps) => {
+  const route = useRoute();
   const navigation = useNavigation();
 
   return (
@@ -52,7 +53,28 @@ export const ReachHeaderContent = ({
       </View>
 
       <TouchableOpacity
-        onPress={() => navigation.goBack()}
+        onPress={() => {
+          console.log("route", route.params);
+          route.params &&
+          "needResetStack" in route.params &&
+          route.params.needResetStack
+            ? navigation.reset({
+                index: 0, // Reset to the first screen
+                routes: [
+                  {
+                    name: "Explore",
+                    state: {
+                      routes: [
+                        {
+                          name: "ExploreWorld",
+                        },
+                      ],
+                    },
+                  },
+                ],
+              })
+            : navigation.goBack();
+        }}
         activeOpacity={0.7}
         style={styles.backButton}
       >

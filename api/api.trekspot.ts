@@ -376,8 +376,8 @@ export const trekSpotApi = createApi({
 
     allCountries: builder.query<AllCountriesResponseType, AllCountriesArgsType>(
       {
-        query: ({ skip = 0, take = 20, isPopular = false }) => ({
-          variables: { skip, take, isPopular },
+        query: ({ skip = 0, take = 200 }) => ({
+          variables: { skip, take },
           document: gql`
             query ($skip: Int, $take: Int) {
               allCountries(input: { skip: $skip, take: $take }) {

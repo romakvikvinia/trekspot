@@ -25,6 +25,7 @@ export type TripRouteStackParamList = {
   TripDetailScreen: {
     trip: TripType;
     city: CityType;
+    needResetStack?: boolean;
   };
   TripInsights: undefined;
   TripInsightDetailScreen: undefined;

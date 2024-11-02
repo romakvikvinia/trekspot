@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Dimensions,
   ImageBackground,
@@ -21,7 +22,7 @@ import { useState } from "react";
 import { GuestUserModal } from "../../common/components/GuestUserModal";
 import { useAppSelector } from "../../package/store";
 import { StackNavigationProp } from "@react-navigation/stack";
-import React from "react";
+
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
 import { TripRouteStackNavigationProp } from "../../routes/trip/TripRoutes";
 import { useUpComingTripsQuery } from "../../api/api.trekspot";
@@ -51,7 +52,9 @@ export const ExploreHeader = () => {
   const [showGuestModal, setShowGuestModal] = useState(false);
   const { guestActivityCount, increaseGuestActivityCount } = useTripStore(
     (state) => ({
+      //@ts-ignore
       increaseGuestActivityCount: state.increaseGuestActivityCount,
+      //@ts-ignore
       guestActivityCount: state.guestActivityCount,
     })
   );
@@ -141,13 +144,35 @@ export const ExploreHeader = () => {
             <TouchableOpacity
               onPress={() => {
                 if (data.upComingTrips.length == 1) {
-                  navigation.navigate("Trips");
-                  // navigation.navigate("TripDetailScreen", {
-                  //   city: data.upComingTrips[0].cities[0],
-                  //   trip: data.upComingTrips[0],
+                  navigation.navigate("Trips", {
+                    screen: "TripDetailScreen",
+                    params: {
+                      city: data.upComingTrips[0].cities[0],
+                      trip: data.upComingTrips[0],
+                      needResetStack: true,
+                    },
+                  });
+                  // navigation.reset({
+                  //   index: 0, // Reset to the first screen
+                  //   routes: [
+                  //     {
+                  //       name: "Trips",
+                  //       state: {
+                  //         routes: [
+                  //           {
+                  //             name: "TripDetailScreen",
+                  //             params: {
+                  //               city: data.upComingTrips[0].cities[0],
+                  //               trip: data.upComingTrips[0],
+                  //             },
+                  //           },
+                  //         ],
+                  //       },
+                  //     },
+                  //   ],
                   // });
                 } else {
-                  navigation.navigate("TripsScreen");
+                  navigation.navigate("Trips");
                 }
               }}
               style={[styles.bucketListButton, { padding: 0 }]}
