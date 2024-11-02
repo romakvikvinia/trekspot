@@ -1,19 +1,14 @@
 import { Image } from "expo-image";
-import React, { useCallback, useEffect, useState } from "react";
-import { ImageBackground, Linking, Platform, StyleSheet } from "react-native";
-import { Text, TouchableOpacity, View } from "react-native";
-import { COLORS } from "../../styles/theme";
+import React, { useCallback, useState } from "react";
+import { ImageBackground, Platform, StyleSheet } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import {
   AttractionsIcon,
   BeachesIcon,
   CasinosIcon,
-  CheckLiteIcon,
-  DotsIcon,
   HistoricalPlacesIcon,
-  MapDirection,
   MarketsIcon,
   MuseumsIcon,
-  StarIcon,
   TopExperiencesIcon,
   TopsightsIcon,
 } from "../../utilities/SvgIcons.utility";
@@ -22,8 +17,6 @@ import * as Haptics from "expo-haptics";
 import { SightType } from "../../api/api.types";
 import { TripDaysType } from "./TripDetailScreen";
 import { useChangeActivityVisitedMutation } from "../../api/api.trekspot";
-import { useTripStore } from "../../components/store/store";
-import { VisitedButton } from "./components/VisitedButton";
 import { CardContent } from "./components/CardContent";
 import { ActivityCardActions } from "./components/ActivityCardActions";
 
@@ -97,7 +90,6 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
   visited,
   item,
   day,
-  onQuestionModalOpen,
   handleTopSightClick,
   activityAmount,
   index
@@ -107,20 +99,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
     useChangeActivityVisitedMutation();
 
   const [checkedIn, setCheckedIn] = useState(visited);
-
-  const openMap = (address: string) => {
-    const scheme = Platform.select({
-      ios: "maps://0,0?q=",
-      android: "geo:0,0?q=",
-    });
-    const url = Platform.select({
-      ios: `${scheme}${address}`,
-      android: `${scheme}${address}`,
-    });
-
-    Linking.openURL(url!);
-  };
-
+ 
   const handleChangeActivityVisited = useCallback(() => {
     setCheckedIn(!checkedIn);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -132,6 +111,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
     });
   }, [checkedIn]);
 
+  
  
   return (
     <>
@@ -161,7 +141,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
           styles.activityItem,
           {
             marginLeft: activityAmount > 1 ? 20 : 15,
-            zIndex: index === 0 ? 5 : 1
+            zIndex: index === 0 ? 5 : 1,
           },
         ]}
         onPress={() => {
@@ -186,14 +166,12 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
           <CardContent item={item} />
         </View>
 
-        <ActivityCardActions 
-          item={item} 
-          onQuestionModalOpen={onQuestionModalOpen} 
-          openMap={openMap}
+        <ActivityCardActions
+          item={item}
           handleChangeActivityVisited={handleChangeActivityVisited}
           checkedIn={checkedIn}
           index={index}
-          />
+        />
       </TouchableOpacity>
     </>
   );

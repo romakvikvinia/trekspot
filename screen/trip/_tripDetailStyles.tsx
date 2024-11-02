@@ -259,13 +259,12 @@ export const tripDetailStyles = StyleSheet.create({
       marginLeft: 6,
       borderRadius: 6,
       paddingVertical: 0,
-      // backgroundColor: "#f9f9f9",
       paddingHorizontal: 3,
     },
     actionTitle: {
       fontSize: 10,
       color: COLORS.gray,
-      fontWeight: "400",
+      fontWeight: "600",
     },
     sightRightActions: {
       flexDirection: "row",
@@ -274,7 +273,7 @@ export const tripDetailStyles = StyleSheet.create({
     checkinButtonText: {
       fontSize: 11,
       color: COLORS.gray,
-      fontWeight: "400"
+      fontWeight: "600"
     },
     checkinButton: {
       flexDirection: "column",
@@ -324,7 +323,7 @@ export const tripDetailStyles = StyleSheet.create({
       flexDirection: "column",
       position: "relative",
       flexWrap: "wrap",
-      height: 160,
+      height: 150,
       // borderWidth: 1,
       // borderColor: "#fff"
     },

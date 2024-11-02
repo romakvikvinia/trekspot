@@ -58,7 +58,7 @@ export const ReachHeaderContent = ({
       >
         <BackIcon />
       </TouchableOpacity>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() =>
           navigation.navigate("TripMapViewScreen", {
             tabData,
@@ -70,7 +70,7 @@ export const ReachHeaderContent = ({
         style={styles.mapButton}
       >
         <MapWithLocationIcon width={15} color={COLORS.black} />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <TouchableOpacity
         onPress={() => onQuestion2ModalOpen()}
         activeOpacity={0.7}

@@ -3,44 +3,33 @@ import { tripDetailStyles } from "../_tripDetailStyles";
 import { VisitedButton } from "./VisitedButton";
 import { DotsIcon, MapDirection } from "../../../utilities/SvgIcons.utility";
 import { COLORS } from "../../../styles/theme";
+import { DirectionButton } from "./DirectionButton";
 
 type ActivityCardActionsProps = {
-    item: any,
-    onQuestionModalOpen: () => void,
-    openMap: () => void,
-    handleChangeActivityVisited: () => void,
-    checkedIn: boolean,
-    index: number,
-} 
+  item: any;
+  handleChangeActivityVisited: () => void;
+  checkedIn: boolean;
+  index: number;
+};
 
 export const ActivityCardActions = ({
   item,
-  onQuestionModalOpen,
-  openMap,
   handleChangeActivityVisited,
   checkedIn,
   index,
 }: ActivityCardActionsProps) => {
   return (
     <View style={[tripDetailStyles.sightBottomActions, styles.bottomActions]}>
-      <VisitedButton
-        handleChangeActivityVisited={handleChangeActivityVisited}
-        checkedIn={checkedIn}
-        index={index}
-      />
+      <View style={styles.leftSideButtons}>
+        <VisitedButton
+          handleChangeActivityVisited={handleChangeActivityVisited}
+          checkedIn={checkedIn}
+          index={index}
+        />
+        <DirectionButton item={item}/>
+      </View>
 
       <View style={tripDetailStyles.sightRightActions}>
-        <TouchableOpacity
-          style={tripDetailStyles.sightRightActionsButton}
-          activeOpacity={0.7}
-          onPress={() => openMap(item?.title)}
-        >
-          <View style={tripDetailStyles.iconWrapper}>
-            <MapDirection width="15" color={COLORS.gray} />
-          </View>
-
-          <Text style={tripDetailStyles.actionTitle}>Direction</Text>
-        </TouchableOpacity>
         <TouchableOpacity
           onPress={() => onQuestionModalOpen(item.id)}
           style={[
@@ -66,6 +55,14 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     borderTopColor: "#f2f2f2",
     borderTopWidth: 1,
-    paddingVertical: 5,
+    paddingVertical: 6, 
+    backgroundColor: "#fbfbfb",
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
   },
+  leftSideButtons: {
+    flexDirection: "row",
+    flex: 1,
+    alignItems: "center",
+  }
 });
