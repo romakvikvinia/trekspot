@@ -10,6 +10,7 @@ type ActivityCardActionsProps = {
   handleChangeActivityVisited: () => void;
   checkedIn: boolean;
   index: number;
+  onQuestionModalOpen: (id: string) => void;
 };
 
 export const ActivityCardActions = ({
@@ -17,6 +18,7 @@ export const ActivityCardActions = ({
   handleChangeActivityVisited,
   checkedIn,
   index,
+  onQuestionModalOpen
 }: ActivityCardActionsProps) => {
   return (
     <View style={[tripDetailStyles.sightBottomActions, styles.bottomActions]}>

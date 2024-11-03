@@ -114,7 +114,7 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
               ></Image>
 
               <View style={styles.thingsTodoItemDetails}>
-                <Text style={styles.thingsTodoItemTitle} numberOfLines={1}>
+                <Text style={styles.thingsTodoItemTitle} numberOfLines={2}>
                   {item?.title}
                 </Text>
 

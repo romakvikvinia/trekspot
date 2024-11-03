@@ -168,7 +168,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
              * Top cities
              */}
             <CitiesContainer
-              title="Top Cities"
+              title="Trending cities"
               cities={cities}
               seeAllItems={false}
               isCitiesLoading={isCitiesLoading}

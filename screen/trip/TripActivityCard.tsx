@@ -92,7 +92,8 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
   day,
   handleTopSightClick,
   activityAmount,
-  index
+  index,
+  onQuestionModalOpen
 }) => {
  
   const [changeActivityVisited, { isLoading }] =
@@ -171,6 +172,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
           handleChangeActivityVisited={handleChangeActivityVisited}
           checkedIn={checkedIn}
           index={index}
+          onQuestionModalOpen={onQuestionModalOpen}
         />
       </TouchableOpacity>
     </>

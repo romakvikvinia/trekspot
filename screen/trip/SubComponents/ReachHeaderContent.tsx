@@ -14,11 +14,11 @@ import { TripHelpers } from "./TripHelpers";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { COLORS } from "../../../styles/theme";
 import { HeaderTextContent } from "./HeaderTextcontent";
+import { useMemo } from "react";
 
 type ReachHeaderContentProps = {
   data: any;
   iso2: string;
-  tabData: any;
   onQuestion2ModalOpen: () => void;
   activeDay: number;
 };
@@ -26,19 +26,21 @@ type ReachHeaderContentProps = {
 export const ReachHeaderContent = ({
   data,
   iso2,
-  tabData,
   onQuestion2ModalOpen,
-  activeDay,
 }: ReachHeaderContentProps) => {
   const route = useRoute();
   const navigation = useNavigation();
 
+  const imagePath = useMemo(() => {
+    return data?.cities[0]?.image?.url || route?.params?.city?.image?.url;
+  },[route, data])
+  
   return (
     <>
       <View style={styles.reachContainer}>
         <ImageBackground
           source={{
-            uri: data?.cities[0]?.image?.url,
+            uri: imagePath
           }}
           style={styles.reachImage}
         >
@@ -54,7 +56,6 @@ export const ReachHeaderContent = ({
 
       <TouchableOpacity
         onPress={() => {
-          console.log("route", route.params);
           route.params &&
           "needResetStack" in route.params &&
           route.params.needResetStack

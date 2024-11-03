@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Marquee } from '@animatereactnative/marquee';
 
 import { COLORS, SIZES } from "../../styles/theme";
 import {
@@ -121,7 +122,7 @@ export const ExploreHeader = () => {
   //     ],
   //   };
   // });
-  console.log(data);
+ 
   return (
     <>
       <View style={styles.screenHeader}>
@@ -181,23 +182,20 @@ export const ExploreHeader = () => {
                 style={styles.gradientWrapper}
                 colors={["#DCB92C", "#FF543E", "#C837AB"]}
               >
-                <ImageBackground
-                  source={{
-                    uri: "https://cdn.pixabay.com/photo/2019/12/27/09/57/dubai-4722074_1280.jpg",
-                  }}
-                  style={styles.destinationImage}
-                />
                 <View style={styles.destinationInfo}>
-                  <Text
-                    numberOfLines={1}
-                    style={{
-                      fontSize: 9,
-                      fontWeight: "bold",
-                      color: "#fff",
-                    }}
-                  >
-                    {data.upComingTrips[0].name}
-                  </Text>
+                  <Marquee spacing={20} speed={0.1}>
+                    <Text
+                      numberOfLines={1}
+                      style={{
+                        fontSize: 9,
+                        fontWeight: "bold",
+                        color: "#fff",
+                      }}
+                    >
+                      {data.upComingTrips[0].name}
+                    </Text>
+                  </Marquee>
+
                   <Text
                     style={{
                       fontSize: 7,
