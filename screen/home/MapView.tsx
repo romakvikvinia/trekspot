@@ -24,7 +24,6 @@ import { COLORS, SIZES } from "../../styles/theme";
 import ShareModal from "../../common/components/ShareModal";
 import { CountryItem } from "../../components/home/CountryItem";
 import {
-  useAnalyticsQuery,
   useCreateAnalyticsMutation,
   useLazyAllCountriesQuery,
 } from "../../api/api.trekspot";
@@ -39,13 +38,23 @@ import { GuestUserModal } from "../../common/components/GuestUserModal";
 import { useFocusEffect } from "@react-navigation/native";
 import { CountryType } from "../../api/api.types";
 
-interface MapVIewProps {}
+interface MapVIewProps {
+  isLoading?: boolean;
+  world?: number;
+  countryQuantity?: number;
+  visitedCountries?: number;
+  territories?: number;
+}
 
-export const MapView: React.FC<MapVIewProps> = () => {
+export const MapView: React.FC<MapVIewProps> = ({
+  world = 0,
+  countryQuantity = 0,
+  visitedCountries = 0,
+  territories = 0,
+  isLoading = true,
+}) => {
   const { user } = useAppSelector((state) => state.auth);
-  const { visitedCountries, livedCountries } = useAppSelector(
-    (state) => state.countries
-  );
+  const reduxCountries = useAppSelector((state) => state.countries);
 
   const [searchValue, setSearchValue] = useState("");
 
@@ -62,7 +71,6 @@ export const MapView: React.FC<MapVIewProps> = () => {
 
   const [fetchAllCountries] = useLazyAllCountriesQuery();
   const [fetchCreateAnalytics] = useCreateAnalyticsMutation();
-  const { data: analyticsData, isLoading, isSuccess } = useAnalyticsQuery();
 
   const modalRef = useRef<Modalize>(null);
   const shareModalRef = useRef<Modalize>(null);
@@ -86,14 +94,11 @@ export const MapView: React.FC<MapVIewProps> = () => {
   }, []);
 
   const handleCountriesModalClose = useCallback(async () => {
-    if (Object.keys(visitedCountries).length)
-      fetchCreateAnalytics({ countries: Object.keys(visitedCountries) });
-    console.log(
-      "visitedCountries",
-      Object.keys(visitedCountries).length,
-      Object.keys(visitedCountries)
-    );
-  }, [visitedCountries]);
+    if (Object.keys(reduxCountries.visitedCountries).length)
+      fetchCreateAnalytics({
+        countries: Object.keys(reduxCountries.visitedCountries),
+      });
+  }, [reduxCountries.visitedCountries]);
 
   const handelSearch = (search: string) => {
     setSearchValue(search);
@@ -117,9 +122,6 @@ export const MapView: React.FC<MapVIewProps> = () => {
   // transform data
 
   const isGuest = user?.role === "guest";
-
-  let world = 0;
-  world = formatPercentage(world);
 
   let countriesOnMap: string[] = [];
 
@@ -211,7 +213,7 @@ export const MapView: React.FC<MapVIewProps> = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Text style={styles.lg}>{world}</Text>
+                  <Text style={styles.lg}>{formatPercentage(world)}</Text>
                   <Text
                     style={[
                       styles.sublabel,
@@ -226,19 +228,11 @@ export const MapView: React.FC<MapVIewProps> = () => {
               </View>
               <View style={[styles.rowBox]}>
                 <View style={styles.amountView}>
-                  <Text style={styles.lg}>
-                    {analyticsData?.analytics &&
-                    analyticsData?.analytics.achievedCountries
-                      ? analyticsData?.analytics.achievedCountries
-                      : 0}
-                  </Text>
+                  <Text style={styles.lg}>{visitedCountries}</Text>
                   <View style={styles.labelView}>
                     <Text style={styles.sublabel}>/</Text>
                     <Text style={[styles.sublabel, { marginTop: 2 }]}>
-                      {analyticsData?.analytics &&
-                      analyticsData?.analytics.availableCountries
-                        ? analyticsData?.analytics.availableCountries
-                        : 0}
+                      {countryQuantity}
                     </Text>
                   </View>
                 </View>
@@ -247,13 +241,7 @@ export const MapView: React.FC<MapVIewProps> = () => {
               </View>
               <View style={[styles.rowBox]}>
                 <View style={styles.amountView}>
-                  <Text style={styles.lg}>
-                    {analyticsData?.analytics &&
-                    analyticsData?.analytics.territories &&
-                    analyticsData?.analytics.territories.quantity
-                      ? analyticsData?.analytics.territories.quantity
-                      : 0}
-                  </Text>
+                  <Text style={styles.lg}>{territories} </Text>
                   <View style={styles.labelView}>
                     <Text style={styles.sublabel}>/</Text>
                     <Text style={[styles.sublabel, { marginTop: 2 }]}>6</Text>
@@ -341,8 +329,8 @@ export const MapView: React.FC<MapVIewProps> = () => {
               renderItem={({ item }) => (
                 <CountryItem
                   country={item}
-                  visited_countries={visitedCountries}
-                  lived_countries={livedCountries}
+                  visited_countries={reduxCountries.visitedCountries}
+                  lived_countries={reduxCountries.livedCountries}
                 />
               )}
               estimatedItemSize={100}
@@ -358,19 +346,8 @@ export const MapView: React.FC<MapVIewProps> = () => {
             key={`share-on-map-${world}`}
             countries={countriesOnMap}
             world={world}
-            achievedCountries={
-              analyticsData?.analytics &&
-              analyticsData?.analytics.achievedCountries
-                ? analyticsData?.analytics.achievedCountries
-                : 0
-            }
-            territories={
-              analyticsData?.analytics &&
-              analyticsData?.analytics.territories &&
-              analyticsData?.analytics.territories.quantity
-                ? analyticsData?.analytics.territories.quantity
-                : 0
-            }
+            achievedCountries={4}
+            territories={5}
           />
         </Modalize>
       </Portal>

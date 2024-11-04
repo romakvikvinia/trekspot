@@ -285,11 +285,40 @@ export const trekSpotApi = createApi({
         document: gql`
           query {
             analytics {
-              availableCountries
-              achievedCountries
-              territories {
-                quantity
-                items
+              world
+              countries
+              livedCountries
+              visitedCountries
+              territories
+              activities {
+                id
+                iso2
+                title
+                rate
+                category
+                price
+                reviews
+                iso2
+                city
+                address
+                url
+                description
+                location {
+                  lat
+                  lng
+                }
+                workingHours {
+                  day
+                  hours
+                }
+                image {
+                  url
+                  html_attributions
+                }
+                images {
+                  url
+                  html_attributions
+                }
               }
             }
           }

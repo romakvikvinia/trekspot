@@ -1,79 +1,108 @@
 import React from "react";
-import { Text, View, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 
 import { MapView } from "./MapView";
 import { COLORS, SIZES } from "../../styles/theme";
- 
+
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { HomeRouteStackParamList } from "../../routes/home/HomeRoutes";
 import Constants from "expo-constants";
 import { Territories } from "./Territories";
-import { AttractionsIcon, BeachesIcon, HistoricalPlacesIcon, MarketsIcon, MuseumsIcon, TopExperiencesIcon, TopSights, TopsightsIcon } from "../../utilities/SvgIcons.utility";
+import {
+  AttractionsIcon,
+  BeachesIcon,
+  HistoricalPlacesIcon,
+  MarketsIcon,
+  MuseumsIcon,
+  TopExperiencesIcon,
+  TopSights,
+  TopsightsIcon,
+} from "../../utilities/SvgIcons.utility";
+import { useAnalyticsQuery } from "../../api/api.trekspot";
+import { SightType } from "../../api/api.types";
 
 type HomeProps = NativeStackScreenProps<HomeRouteStackParamList, "Main">;
 
-const ARR = ['Top Sights', 'Historical Places', 'Museums', 'Outdoor Attractions', 'Markets', 'Top Experiences', 'Beaches']
-
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
+  const { data: analyticsData, isLoading } = useAnalyticsQuery();
+
+  // transform data
+  const activities: Record<string, SightType[]> = {};
+
+  analyticsData?.analytics.activities.forEach((sight) => {
+    if (sight.category in activities) {
+      activities[sight.category] = [...activities[sight.category], sight];
+    } else {
+      activities[sight.category] = [sight];
+    }
+  });
+
+  const categoryIcons: any = {
+    "top sights": TopsightsIcon,
+    museums: MuseumsIcon,
+    "historical places": HistoricalPlacesIcon,
+    "outdoor attractions": AttractionsIcon,
+    markets: MarketsIcon,
+    "top experiences": TopExperiencesIcon,
+    beaches: BeachesIcon,
+  };
+
   return (
-    <View
-      style={[
-        styles.safeArea,
-      ]}
-    >
+    <View style={[styles.safeArea]}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <MapView
-         />
+          world={analyticsData?.analytics.world}
+          isLoading={isLoading}
+          countryQuantity={analyticsData?.analytics.countries}
+          visitedCountries={analyticsData?.analytics.visitedCountries}
+          territories={analyticsData?.analytics.territories}
+        />
         <View style={styles.mapStats}>
-          <Text style={styles.cardTitle}>
-            Territories
-          </Text>
-          <Territories />
+          <Text style={styles.cardTitle}>Territories</Text>
+          {/* <Territories /> */}
         </View>
         <View style={styles.visitedStats}>
-          <Text style={[styles.cardTitle, {paddingHorizontal: 15, marginBottom: 15}]}>
+          <Text
+            style={[
+              styles.cardTitle,
+              { paddingHorizontal: 15, marginBottom: 15 },
+            ]}
+          >
             Activities
           </Text>
-          <ScrollView showsHorizontalScrollIndicator={false} horizontal contentContainerStyle={{paddingHorizontal: 15}}>
-            {
-             ARR.map((category, index) => (
+          <ScrollView
+            showsHorizontalScrollIndicator={false}
+            horizontal
+            contentContainerStyle={{ paddingHorizontal: 15 }}
+          >
+            {Object.keys(activities).map((category, index) => {
+              const IconComponent = categoryIcons[category.toLowerCase()];
+              return (
                 <TouchableOpacity
                   style={styles.statItem}
                   key={`${category}-${index}`}
-                  activeOpacity={0.7}>
-                   <View style={styles.lf}>
-                    <View style={{height: 40}}>
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.lf}>
+                    <View style={{ height: 40 }}>
                       <Text style={styles.visitedCategoryText}>{category}</Text>
                     </View>
                     <View style={styles.categoryIcon}>
-                      {
-                        category === 'Top Sights' && <TopsightsIcon />
-                      }
-                      {
-                        category === 'Museums' && <MuseumsIcon />
-                      }
-                      {
-                        category === 'Historical Places' && <HistoricalPlacesIcon />
-                      }
-                      {
-                        category === 'Outdoor Attractions' && <AttractionsIcon />
-                      }
-                      {
-                        category === 'Markets' && <MarketsIcon />
-                      }
-                      {
-                        category === 'Top Experiences' && <TopExperiencesIcon />
-                      }
-                      {
-                        category === 'Beaches' && <BeachesIcon />
-                      }
+                      <IconComponent />
                     </View>
-                   </View>
-                   <Text style={styles.amount}>{index + 23}</Text>
-
+                  </View>
+                  <Text style={styles.amount}>
+                    {activities[category].length}
+                  </Text>
                 </TouchableOpacity>
-              ))
-            }
+              );
+            })}
           </ScrollView>
         </View>
       </ScrollView>
@@ -85,11 +114,10 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#f8f8f8",
-    paddingTop:
-    Constants?.statusBarHeight + 10
+    paddingTop: Constants?.statusBarHeight + 10,
   },
   lf: {
-    maxWidth: "80%"
+    maxWidth: "80%",
   },
   amount: {
     fontSize: 18,
@@ -119,14 +147,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   cardTitle: {
-    fontSize: 24, 
-    fontWeight: "bold", 
-    color: "#000"
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#000",
   },
   visitedStats: {
     marginTop: 15,
     backgroundColor: "#fff",
-    paddingVertical: 20
+    paddingVertical: 20,
   },
   countriesAmountText: {
     fontSize: 8,

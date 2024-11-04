@@ -58,12 +58,12 @@ export type MeResponseType = {
 };
 
 export type AnalyticsType = {
-  availableCountries: number;
-  achievedCountries: number;
-  territories: {
-    quantity: number;
-    items: Record<string, number>;
-  };
+  world: number;
+  countries: number;
+  livedCountries: number;
+  visitedCountries: number;
+  territories: number;
+  activities: SightType[];
 };
 
 export type AnalyticsResponseType = {
