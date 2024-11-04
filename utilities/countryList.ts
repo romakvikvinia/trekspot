@@ -1,4 +1,5 @@
 export type ICountry = {
+  id?: string;
   name: string;
   iso2: string;
   capital: string;

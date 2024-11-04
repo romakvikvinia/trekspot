@@ -1,13 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { WishlistType } from "../../api/api.types";
+import { CountryType } from "../../api/api.types";
 
 type initialStateType = {
-  wishlists: WishlistType[];
+  countries: CountryType[];
+  visitedCountries: Record<string, CountryType>;
+  livedCountries: Record<string, CountryType>;
 };
 
 const initialState: initialStateType = {
-  wishlists: [],
+  countries: [],
+  visitedCountries: {},
+  livedCountries: {},
 };
 
 const slice = createSlice({
@@ -15,11 +19,30 @@ const slice = createSlice({
   initialState,
   reducers: {
     resetAllCountries: () => initialState,
-    setAllCountries: (state, { payload }: PayloadAction<WishlistType[]>) => {
-      state.wishlists = payload;
+    setAllCountries: (state, { payload }: PayloadAction<CountryType[]>) => {
+      state.countries = payload;
+    },
+    toggleVisitedCountry: (state, { payload }: PayloadAction<CountryType>) => {
+      if (payload.id in state.visitedCountries) {
+        delete state.visitedCountries[payload.id];
+      } else {
+        state.visitedCountries[payload.id] = payload;
+      }
+    },
+    toggleLivedCountry: (state, { payload }: PayloadAction<CountryType>) => {
+      if (payload.id in state.livedCountries) {
+        delete state.livedCountries[payload.id];
+      } else {
+        state.livedCountries[payload.id] = payload;
+      }
     },
   },
 });
 
-export const { resetAllCountries, setAllCountries } = slice.actions;
+export const {
+  resetAllCountries,
+  setAllCountries,
+  toggleVisitedCountry,
+  toggleLivedCountry,
+} = slice.actions;
 export default slice.reducer;

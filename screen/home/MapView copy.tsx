@@ -1,6 +1,13 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   ActivityIndicator,
+  Alert,
   Platform,
   StyleSheet,
   Text,
@@ -18,61 +25,63 @@ import {
 import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
 import { FlashList } from "@shopify/flash-list";
-
+import { CountriesList, ICountry } from "../../utilities/countryList";
 import { COLORS, SIZES } from "../../styles/theme";
 
 import ShareModal from "../../common/components/ShareModal";
 import { CountryItem } from "../../components/home/CountryItem";
 import {
+  useUpdateMeMutation,
+  trekSpotApi,
   useAnalyticsQuery,
-  useCreateAnalyticsMutation,
-  useLazyAllCountriesQuery,
 } from "../../api/api.trekspot";
-
+import {
+  getCountries,
+  storeInitialCountryCodes,
+} from "../../helpers/secure.storage";
+import { AnalyticsType } from "../../api/api.types";
 import { formatPercentage } from "../../helpers/number.helper";
-
+import { useDispatch } from "react-redux";
 import { MapSvg } from "../../utilities/svg/map";
 
+import { UserContext } from "../../components/context/UserContext";
 import { useAppSelector } from "../../package/store";
 import { useTripStore } from "../../components/store/store";
 import { GuestUserModal } from "../../common/components/GuestUserModal";
-import { useFocusEffect } from "@react-navigation/native";
-import { CountryType } from "../../api/api.types";
 
-interface MapVIewProps {}
+interface MapVIewProps {
+  analytic?: AnalyticsType;
+}
 
-export const MapView: React.FC<MapVIewProps> = () => {
+export const MapView: React.FC<MapVIewProps> = ({ analytic }) => {
+  const dispatch = useDispatch();
+
   const { user } = useAppSelector((state) => state.auth);
-  const { visitedCountries, livedCountries } = useAppSelector(
-    (state) => state.countries
-  );
 
   const [searchValue, setSearchValue] = useState("");
-
   const [state, setState] = useState<{
-    countries: CountryType[];
+    countries: ICountry[];
     visited_countries: string[];
     lived_countries: string[];
   }>({
     visited_countries: [],
     lived_countries: [],
-
-    countries: [],
+    //@ts-ignore
+    countries: CountriesList,
   });
-
-  const [fetchAllCountries] = useLazyAllCountriesQuery();
-  const [fetchCreateAnalytics] = useCreateAnalyticsMutation();
   const { data: analyticsData, isLoading, isSuccess } = useAnalyticsQuery();
+  const [refetch, { data, isSuccess: isMeSuccess }] =
+    trekSpotApi.endpoints.me.useLazyQuery();
 
+  const [updateMe, { isSuccess: isUpdateMeSuccess, data: updateMeData }] =
+    useUpdateMeMutation();
   const modalRef = useRef<Modalize>(null);
   const shareModalRef = useRef<Modalize>(null);
-
+  const isGuest = user?.role === "guest";
   const [showGuestModal, setShowGuestModal] = React.useState(false);
   const { guestActivityCount, increaseGuestActivityCount } = useTripStore(
     (state) => ({
-      //@ts-ignore
       increaseGuestActivityCount: state.increaseGuestActivityCount,
-      //@ts-ignore
       guestActivityCount: state.guestActivityCount,
     })
   );
@@ -85,15 +94,60 @@ export const MapView: React.FC<MapVIewProps> = () => {
     if (shareModalRef.current) shareModalRef.current.open();
   }, []);
 
-  const handleCountriesModalClose = useCallback(async () => {
-    if (Object.keys(visitedCountries).length)
-      fetchCreateAnalytics({ countries: Object.keys(visitedCountries) });
-    console.log(
-      "visitedCountries",
-      Object.keys(visitedCountries).length,
-      Object.keys(visitedCountries)
-    );
-  }, [visitedCountries]);
+  const handleCountriesModalClose = useCallback(async () => {}, []);
+
+  /**
+   * First fetch about me
+   */
+  const handleFirstFetchMeInfo = useCallback(async () => {
+    if (isMeSuccess && data && data.me) {
+      const visited_countries = data.me.visited_countries.map((i) => i.iso2);
+      const lived_countries = data.me.lived_countries.map((i) => i.iso2);
+      storeInitialCountryCodes("visited_countries", visited_countries);
+      storeInitialCountryCodes("lived_countries", lived_countries);
+      setState((prevState) => ({
+        ...prevState,
+        visited_countries,
+        lived_countries,
+      }));
+    }
+  }, [isMeSuccess, data]);
+
+  /**
+   * handle fetch update me
+   */
+
+  const handleUpdateMeSuccess = useCallback(() => {
+    if (isUpdateMeSuccess && updateMeData && updateMeData.updateMe) {
+      const visited_countries = updateMeData.updateMe.visited_countries.map(
+        (i) => i.iso2
+      );
+      const lived_countries = updateMeData.updateMe.lived_countries.map(
+        (i) => i.iso2
+      );
+
+      setState((prevState) => ({
+        ...prevState,
+        visited_countries,
+        lived_countries,
+        search: "",
+      }));
+      dispatch(trekSpotApi.util.invalidateTags(["analytics"]));
+      dispatch(trekSpotApi.util.invalidateTags(["me"]));
+    }
+  }, [isUpdateMeSuccess, dispatch]);
+
+  useEffect(() => {
+    handleFirstFetchMeInfo();
+  }, [handleFirstFetchMeInfo]);
+
+  useEffect(() => {
+    handleUpdateMeSuccess();
+  }, [handleUpdateMeSuccess]);
+
+  useEffect(() => {
+    if (refetch) refetch();
+  }, [refetch]);
 
   const handelSearch = (search: string) => {
     setSearchValue(search);
@@ -101,27 +155,33 @@ export const MapView: React.FC<MapVIewProps> = () => {
 
   //
 
-  useFocusEffect(
-    React.useCallback(() => {
-      (async () => {
-        try {
-          const { allCountries: countries } = await fetchAllCountries(
-            {}
-          ).unwrap();
-          setState((prevState) => ({ ...prevState, countries }));
-        } catch (error) {}
-      })();
-    }, [fetchAllCountries])
-  );
-
   // transform data
 
-  const isGuest = user?.role === "guest";
-
-  let world = 0;
+  let world =
+    analyticsData?.analytics && analyticsData?.analytics.achievedCountries
+      ? (analyticsData?.analytics.achievedCountries /
+          analyticsData?.analytics.availableCountries) *
+        100
+      : 0;
   world = formatPercentage(world);
 
   let countriesOnMap: string[] = [];
+
+  if (state.lived_countries.length >= state.visited_countries.length) {
+    countriesOnMap = state.lived_countries;
+    state.visited_countries.forEach((code) => {
+      if (!countriesOnMap.includes(code)) {
+        countriesOnMap.push(code);
+      }
+    });
+  } else {
+    countriesOnMap = state.visited_countries;
+    state.lived_countries.forEach((code) => {
+      if (!countriesOnMap.includes(code)) {
+        countriesOnMap.push(code);
+      }
+    });
+  }
 
   const filteredCountries =
     searchValue && searchValue.length > 1
@@ -340,9 +400,9 @@ export const MapView: React.FC<MapVIewProps> = () => {
               data={filteredCountries}
               renderItem={({ item }) => (
                 <CountryItem
-                  country={item}
-                  visited_countries={visitedCountries}
-                  lived_countries={livedCountries}
+                  {...item}
+                  visited_countries={state.visited_countries}
+                  lived_countries={state.lived_countries}
                 />
               )}
               estimatedItemSize={100}

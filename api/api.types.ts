@@ -105,7 +105,7 @@ export type FileType = {
   url: string;
 };
 export type CountryType = {
-  id?: string;
+  id: string;
   name: string;
   iso2: string;
   capital: string;
@@ -539,3 +539,14 @@ export type AllCountriesArgsType = Partial<{
   take?: number;
   search?: string;
 }>;
+
+export type CreateAnalyticResponseType = {
+  createAnalytic: any;
+};
+
+export type CreateAnalyticArgsType = {
+  countries?: string[];
+  city?: string;
+  sight?: string;
+  wasLiving?: false;
+};
