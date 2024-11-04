@@ -67,6 +67,7 @@ import {
   AllCountriesArgsType,
   CreateAnalyticArgsType,
   CreateAnalyticResponseType,
+  VisitedCountriesResponseType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -122,6 +123,7 @@ export const trekSpotApi = createApi({
     "deleteTrip",
     "updateTrip",
     "createAnalytics",
+    "visitedCountries",
   ],
   endpoints: (builder) => ({
     /**
@@ -328,6 +330,27 @@ export const trekSpotApi = createApi({
         return response;
       },
       providesTags: ["analytics"],
+    }),
+    /**
+     * Get user visited countries
+     *
+     */
+    visitedCountries: builder.query<VisitedCountriesResponseType, void>({
+      query: () => ({
+        document: gql`
+          query {
+            visitedCountries {
+              id
+              iso2
+              continents
+            }
+          }
+        `,
+      }),
+      transformResponse: (response: VisitedCountriesResponseType) => {
+        return response;
+      },
+      providesTags: ["visitedCountries"],
     }),
     /**
      * Get user stories
@@ -1403,6 +1426,7 @@ export const {
   useMeQuery,
   useLazyMeQuery,
   useAnalyticsQuery,
+  useVisitedCountriesQuery,
   useStoriesQuery,
   useCreateOrUpdateStoriesMutation,
   useCountriesQuery,

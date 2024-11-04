@@ -70,6 +70,10 @@ export type AnalyticsResponseType = {
   analytics: AnalyticsType;
 };
 
+export type VisitedCountriesResponseType = {
+  visitedCountries: CountryType[];
+};
+
 export type ImageType = {
   id?: string;
   fieldname: string;

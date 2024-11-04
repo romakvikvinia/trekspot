@@ -24,13 +24,18 @@ import {
   TopSights,
   TopsightsIcon,
 } from "../../utilities/SvgIcons.utility";
-import { useAnalyticsQuery } from "../../api/api.trekspot";
+import {
+  useAnalyticsQuery,
+  useVisitedCountriesQuery,
+} from "../../api/api.trekspot";
 import { SightType } from "../../api/api.types";
 
 type HomeProps = NativeStackScreenProps<HomeRouteStackParamList, "Main">;
 
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
   const { data: analyticsData, isLoading } = useAnalyticsQuery();
+  const { isLoading: isVisitedCountriesLoading, data: visitedCountriesData } =
+    useVisitedCountriesQuery();
 
   // transform data
   const activities: Record<string, SightType[]> = {};
@@ -58,14 +63,20 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <MapView
           world={analyticsData?.analytics.world}
-          isLoading={isLoading}
+          isLoading={isLoading || isVisitedCountriesLoading}
           countryQuantity={analyticsData?.analytics.countries}
           visitedCountries={analyticsData?.analytics.visitedCountries}
           territories={analyticsData?.analytics.territories}
+          countriesOnMap={
+            visitedCountriesData?.visitedCountries.map((i) => i.iso2) || []
+          }
         />
         <View style={styles.mapStats}>
           <Text style={styles.cardTitle}>Territories</Text>
-          {/* <Territories /> */}
+          <Territories
+            isLoading={isVisitedCountriesLoading}
+            visitedCountries={visitedCountriesData?.visitedCountries || []}
+          />
         </View>
         <View style={styles.visitedStats}>
           <Text

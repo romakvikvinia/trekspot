@@ -44,6 +44,7 @@ interface MapVIewProps {
   countryQuantity?: number;
   visitedCountries?: number;
   territories?: number;
+  countriesOnMap?: string[];
 }
 
 export const MapView: React.FC<MapVIewProps> = ({
@@ -52,6 +53,7 @@ export const MapView: React.FC<MapVIewProps> = ({
   visitedCountries = 0,
   territories = 0,
   isLoading = true,
+  countriesOnMap = [],
 }) => {
   const { user } = useAppSelector((state) => state.auth);
   const reduxCountries = useAppSelector((state) => state.countries);
@@ -123,8 +125,6 @@ export const MapView: React.FC<MapVIewProps> = ({
 
   const isGuest = user?.role === "guest";
 
-  let countriesOnMap: string[] = [];
-
   const filteredCountries =
     searchValue && searchValue.length > 1
       ? state.countries.filter((i) =>
@@ -153,6 +153,8 @@ export const MapView: React.FC<MapVIewProps> = ({
       onShareModalOpen();
     }
   };
+
+  console.log("countriesOnMap", countriesOnMap);
 
   return (
     <>

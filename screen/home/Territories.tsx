@@ -1,5 +1,8 @@
 import { Platform, StyleSheet, Text, View } from "react-native";
-import { useAnalyticsQuery } from "../../api/api.trekspot";
+import {
+  useAnalyticsQuery,
+  useVisitedCountriesQuery,
+} from "../../api/api.trekspot";
 import { SkeletonLoaderImage } from "../../common/ui/Skeleton";
 import { formatPercentage } from "../../helpers/number.helper";
 import { COLORS, SIZES } from "../../styles/theme";
@@ -11,34 +14,48 @@ import {
   NAmerica,
   SAmerica,
 } from "../../utilities/svg";
+import React from "react";
+import { CountryType } from "../../api/api.types";
 
-export const Territories = () => {
-  const { data, isLoading, isSuccess } = useAnalyticsQuery();
+interface ITerritoriesProps {
+  isLoading: boolean;
+  visitedCountries: CountryType[];
+}
 
+export const Territories: React.FC<ITerritoriesProps> = ({
+  isLoading = true,
+  visitedCountries = [],
+}) => {
   // transform data
   const europeCountries =
-    !isLoading && data && data.analytics.territories.items["Europe"]
-      ? data.analytics.territories.items["Europe"]
+    !isLoading && visitedCountries.length
+      ? visitedCountries.filter((i) => i.continents.includes("Europe")).length
       : 0;
   const asiaCountries =
-    !isLoading && data && data?.analytics.territories.items["Asia"]
-      ? data?.analytics.territories.items["Asia"]
+    !isLoading && visitedCountries.length
+      ? visitedCountries.filter((i) => i.continents.includes("Asia")).length
       : 0;
+
   const africaCountries =
-    !isLoading && data && data.analytics.territories.items["Africa"]
-      ? data.analytics.territories.items["Africa"]
+    !isLoading && visitedCountries.length
+      ? visitedCountries.filter((i) => i.continents.includes("Africa")).length
       : 0;
+
   const northAmericaCountries =
-    !isLoading && data && data.analytics.territories.items["North America"]
-      ? data.analytics.territories.items["North America"]
+    !isLoading && visitedCountries.length
+      ? visitedCountries.filter((i) => i.continents.includes("North America"))
+          .length
       : 0;
+
   const southAmericaCountries =
-    !isLoading && data && data.analytics.territories.items["South America"]
-      ? data.analytics.territories.items["South America"]
+    !isLoading && visitedCountries.length
+      ? visitedCountries.filter((i) => i.continents.includes("South America"))
+          .length
       : 0;
+
   const oceaniaCountries =
-    !isLoading && data && data.analytics.territories.items["Oceania"]
-      ? data.analytics.territories.items["Oceania"]
+    !isLoading && visitedCountries.length
+      ? visitedCountries.filter((i) => i.continents.includes("Oceania")).length
       : 0;
 
   return (
