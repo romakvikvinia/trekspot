@@ -667,11 +667,11 @@ export const ForYouIcon = ({ color }) => {
   const SvgImage = () => <SvgXml xml={svgMarkup} width={"20"} height={"20"} />;
   return <SvgImage />;
 };
-export const BinocularsIcon = ({ color }) => {
+export const BinocularsIcon = ({ color, size }) => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M24 18.5c0 3.033-2.467 5.5-5.5 5.5S13 21.533 13 18.5s2.467-5.5 5.5-5.5 5.5 2.467 5.5 5.5ZM5.5 13C2.467 13 0 15.467 0 18.5S2.467 24 5.5 24s5.5-2.467 5.5-5.5S8.533 13 5.5 13ZM20 4V2.5a2.5 2.5 0 1 0-5 0V4h5Zm-1 2H5a5 5 0 0 0-5 5v2.418C1.371 11.935 3.326 11 5.5 11s4.129.935 5.5 2.418V10c0-.551.449-1 1-1s1 .449 1 1v3.418C14.371 11.935 16.326 11 18.5 11s4.129.935 5.5 2.418V11a5 5 0 0 0-5-5ZM9 4V2.5A2.5 2.5 0 0 0 6.5 0h-.008a2.527 2.527 0 0 0-2.518 2.51L3.97 4H9Z" fill=${
     color ? color : "#000000"
   } opacity="1" data-original="#000000" class=""></path></g></svg>`;
-  const SvgImage = () => <SvgXml xml={svgMarkup} width={"20"} height={"20"} />;
+  const SvgImage = () => <SvgXml xml={svgMarkup} width={size ? size : "20"} height={size ? size :"20"} />;
   return <SvgImage />;
 };
 export const InsightsFilled = ({ color }) => {

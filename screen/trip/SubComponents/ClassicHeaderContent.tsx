@@ -15,6 +15,8 @@ export const ClassicHeaderContent = ({ data, onQuestion2ModalOpen, iso2 }) => {
   const route = useRoute();
   const navigation = useNavigation();
 
+  console.log("data", data);
+
   return (
     <>
       <View
@@ -100,7 +102,8 @@ export const ClassicHeaderContent = ({ data, onQuestion2ModalOpen, iso2 }) => {
             }}
           >
             {data && format(data?.startAt, "dd MMM")} -{" "}
-            {data && format(data?.endAt, "dd MMM")} | {data?.type}
+            {data && format(data?.endAt, "dd MMM")} 
+            {/* | {data?.type} */}
           </Text>
         </View>
 
@@ -112,7 +115,7 @@ export const ClassicHeaderContent = ({ data, onQuestion2ModalOpen, iso2 }) => {
             marginRight: 0,
           }}
         >
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() =>
               navigation.navigate("TripMapViewScreen", {
                 tabData,
@@ -134,7 +137,7 @@ export const ClassicHeaderContent = ({ data, onQuestion2ModalOpen, iso2 }) => {
             ]}
           >
             <MapWithLocationIcon width={18} color={COLORS.black} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             onPress={() => onQuestion2ModalOpen()}
             activeOpacity={0.7}

@@ -98,7 +98,7 @@ export const AuthRoute: React.FC<AuthRouteProps> = () => {
               paddingHorizontal: 15
             }}
            >
-              <Text>Done</Text>
+              <Text>Got it</Text>
             </TouchableOpacity>
         ), }}
       >

@@ -236,8 +236,9 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
             style={[
               styles.textWithButtonLabel,
               {
-                fontSize: SIZES.body5,
+                fontSize: SIZES.body4,
                 color: COLORS.darkgray,
+                fontWeight: "500"
               },
             ]}
           >
@@ -248,8 +249,8 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
               style={[
                 styles.textWithButtonText,
                 {
-                  fontSize: SIZES.body5,
-                  fontWeight: "normal",
+                  fontSize: SIZES.body4,
+                  fontWeight: "500",
                   color: COLORS.primary,
                 },
               ]}
