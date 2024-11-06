@@ -182,14 +182,14 @@ export const Territories: React.FC<ITerritoriesProps> = ({
               <View>
                 <Text style={styles.mapStatsText}>S. America</Text>
                 <Text style={[styles.mapStatsText, styles.countriesAmountText]}>
-                  33 countries
+                  12 countries
                 </Text>
               </View>
             </View>
             <View style={styles.statWrapp}>
               <Text style={styles.mapStatsPercentText}>
                 {formatPercentage(
-                  southAmericaCountries ? (southAmericaCountries / 33) * 100 : 0
+                  southAmericaCountries ? (southAmericaCountries / 12) * 100 : 0
                 )}
               </Text>
               <Text style={styles.percentText}>%</Text>
