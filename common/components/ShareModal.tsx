@@ -17,6 +17,7 @@ import {
 } from "../../utilities/SvgIcons.utility";
 import { MapSvg } from "../../utilities/svg/map";
 import * as Haptics from "expo-haptics";
+import { formatPercentage } from "../../helpers/number.helper";
 
 interface ShareModalProps {
   world: number;
@@ -117,7 +118,9 @@ const ShareModal: React.FC<ShareModalProps> = ({
                       alignItems: "center",
                     }}
                   >
-                    <Text style={[styles.lg, { color }]}>{world}</Text>
+                    <Text style={[styles.lg, { color }]}>
+                      {formatPercentage(world)}
+                    </Text>
                     <Text
                       style={[
                         styles.sublabel,
@@ -172,7 +175,10 @@ const ShareModal: React.FC<ShareModalProps> = ({
             setColor("#000");
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
           }}
-          style={[styles.colorItem, color === "#000" ? styles.colorActive : null,]}
+          style={[
+            styles.colorItem,
+            color === "#000" ? styles.colorActive : null,
+          ]}
         ></TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.7}
@@ -272,13 +278,13 @@ const styles = StyleSheet.create({
   },
   colorActive: {
     borderWidth: 2,
-    borderColor: "#ccc"
+    borderColor: "#ccc",
   },
   shareWrapper: {
     justifyContent: "space-between",
     flex: 1,
     padding: 15,
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
   },
   shareTextWrapper: {
     backgroundColor: "#000",
