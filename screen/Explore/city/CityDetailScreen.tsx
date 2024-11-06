@@ -126,7 +126,7 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
       });
     };
   }, []);
-
+  console.log(wishlistState.wishlists);
 
   return (
     <View style={{ flex: 1, backgroundColor: "#f8f8f8" }}>
@@ -356,13 +356,16 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                   paddingHorizontal: 15,
                 }}
               >
-                {topSights.map((item) => item?.image && (
-                  <SightItem
-                    key={`top-sights-${item.id}-${item.title}`}
-                    item={item}
-                    onHandleItem={handleSetSightItem}
-                  />
-                ))}
+                {topSights.map(
+                  (item) =>
+                    item?.image && (
+                      <SightItem
+                        key={`top-sights-${item.id}-${item.title}`}
+                        item={item}
+                        onHandleItem={handleSetSightItem}
+                      />
+                    )
+                )}
               </ScrollView>
             </View>
 
@@ -372,7 +375,13 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
               <SightsContainer items={sights} />
             ) : null}
 
-            {state.sight && <SightDetailModal showDirection={false} data={state.sight} closeCallBack={handleOnClose} />}
+            {state.sight && (
+              <SightDetailModal
+                showDirection={false}
+                data={state.sight}
+                closeCallBack={handleOnClose}
+              />
+            )}
           </>
         ) : null}
       </ScrollView>

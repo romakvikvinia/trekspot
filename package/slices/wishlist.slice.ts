@@ -42,7 +42,10 @@ const slice = createSlice({
       state,
       { payload }: PayloadAction<WishlistType>
     ) => {
-      state.wishlists = state.wishlists.filter((i) => i.id != payload.id);
+      state.wishlists = state.wishlists.filter((i) => {
+        if (payload.city) return i.city.id !== payload.city.id;
+        return i.sight.id !== payload.sight.id;
+      });
     },
   },
 });

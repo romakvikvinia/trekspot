@@ -29,13 +29,14 @@ import {
   useVisitedCountriesQuery,
 } from "../../api/api.trekspot";
 import { SightType } from "../../api/api.types";
-import { useAppDispatch } from "../../package/store";
+import { useAppDispatch, useAppSelector } from "../../package/store";
 import { setVisitedCountries } from "../../package/slices";
 
 type HomeProps = NativeStackScreenProps<HomeRouteStackParamList, "Main">;
 
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
   const dispatch = useAppDispatch();
+  const { visitedCountries } = useAppSelector((state) => state.countries);
   const { data: analyticsData, isLoading } = useAnalyticsQuery();
   const {
     isLoading: isVisitedCountriesLoading,
@@ -84,7 +85,9 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
           visitedCountries={analyticsData?.analytics.visitedCountries}
           territories={analyticsData?.analytics.territories}
           countriesOnMap={
-            visitedCountriesData?.visitedCountries.map((i) => i.iso2) || []
+            (visitedCountries &&
+              Object.values(visitedCountries).map((c) => c.iso2)) ||
+            []
           }
         />
         <View style={styles.mapStats}>

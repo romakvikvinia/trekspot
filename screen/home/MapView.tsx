@@ -348,8 +348,8 @@ export const MapView: React.FC<MapVIewProps> = ({
             key={`share-on-map-${world}`}
             countries={countriesOnMap}
             world={world}
-            achievedCountries={4}
-            territories={5}
+            achievedCountries={visitedCountries}
+            territories={territories}
           />
         </Modalize>
       </Portal>

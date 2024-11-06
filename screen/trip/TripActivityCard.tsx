@@ -16,9 +16,13 @@ import { tripDetailStyles } from "./_tripDetailStyles";
 import * as Haptics from "expo-haptics";
 import { SightType } from "../../api/api.types";
 import { TripDaysType } from "./TripDetailScreen";
-import { useChangeActivityVisitedMutation } from "../../api/api.trekspot";
+import {
+  trekSpotApi,
+  useChangeActivityVisitedMutation,
+} from "../../api/api.trekspot";
 import { CardContent } from "./components/CardContent";
 import { ActivityCardActions } from "./components/ActivityCardActions";
+import { useAppDispatch } from "../../package/store";
 
 interface ITripActivityCardProps {
   visited: boolean;
@@ -31,7 +35,7 @@ interface ITripActivityCardProps {
   handleTopSightClick: (sight: SightType) => void;
 }
 
-const ImgComponent = ({ item }:any) => {
+const ImgComponent = ({ item }: any) => {
   return (
     <View
       style={[
@@ -93,14 +97,15 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
   handleTopSightClick,
   activityAmount,
   index,
-  onQuestionModalOpen
+  onQuestionModalOpen,
 }) => {
- 
+  const dispatch = useAppDispatch();
+
   const [changeActivityVisited, { isLoading }] =
     useChangeActivityVisitedMutation();
 
   const [checkedIn, setCheckedIn] = useState(visited);
- 
+
   const handleChangeActivityVisited = useCallback(() => {
     setCheckedIn(!checkedIn);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -110,10 +115,9 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
       route: day.route!,
       sight: item.id,
     });
+    dispatch(trekSpotApi.util.invalidateTags(["analytics"]));
   }, [checkedIn]);
 
-  
- 
   return (
     <>
       {activityAmount > 1 && (
