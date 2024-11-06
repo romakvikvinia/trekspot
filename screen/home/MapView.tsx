@@ -96,6 +96,7 @@ export const MapView: React.FC<MapVIewProps> = ({
   }, []);
 
   const handleCountriesModalClose = useCallback(async () => {
+    setSearchValue("");
     if (Object.keys(reduxCountries.visitedCountries).length)
       fetchCreateAnalytics({
         countries: Object.keys(reduxCountries.visitedCountries),
@@ -387,7 +388,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 25,
     height: 25,
-    top: 1,
+    top: 6,
     right: 10,
     justifyContent: "center",
     alignItems: "center",

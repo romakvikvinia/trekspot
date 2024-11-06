@@ -1,9 +1,4 @@
 import { Platform, StyleSheet, Text, View } from "react-native";
-import {
-  useAnalyticsQuery,
-  useVisitedCountriesQuery,
-} from "../../api/api.trekspot";
-import { SkeletonLoaderImage } from "../../common/ui/Skeleton";
 import { formatPercentage } from "../../helpers/number.helper";
 import { COLORS, SIZES } from "../../styles/theme";
 import {

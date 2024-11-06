@@ -1,20 +1,9 @@
 import React from "react";
-import {
-  Dimensions,
-  ImageBackground,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { Marquee } from '@animatereactnative/marquee';
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Marquee } from "@animatereactnative/marquee";
 
 import { COLORS, SIZES } from "../../styles/theme";
-import {
-  FlightIcon,
-  Mark2,
-  SearchIcon,
-} from "../../utilities/SvgIcons.utility";
+import { Mark2, SearchIcon } from "../../utilities/SvgIcons.utility";
 import Constants from "expo-constants";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
@@ -22,25 +11,8 @@ import { useTripStore } from "../../components/store/store";
 import { useState } from "react";
 import { GuestUserModal } from "../../common/components/GuestUserModal";
 import { useAppSelector } from "../../package/store";
-import { StackNavigationProp } from "@react-navigation/stack";
-
-import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
-import { TripRouteStackNavigationProp } from "../../routes/trip/TripRoutes";
 import { useUpComingTripsQuery } from "../../api/api.trekspot";
 import { format, parseISO } from "date-fns";
-// import Animated, {
-//   ReduceMotion,
-//   useAnimatedGestureHandler,
-//   useAnimatedStyle,
-//   useSharedValue,
-//   withDecay,
-//   withSpring,
-// } from "react-native-reanimated";
-// import { PanGestureHandler } from "react-native-gesture-handler";
-// import { LinearGradient } from "expo-linear-gradient";
-
-type ExploreStackNavigationProp =
-  StackNavigationProp<ExploreRoutesStackParamList>;
 
 export const ExploreHeader = () => {
   const navigation = useNavigation<any>();
@@ -69,60 +41,6 @@ export const ExploreHeader = () => {
     navigation.navigate("Search");
   };
 
-  // const screenWidth = Dimensions.get('window').width;
-  // const screenHeight = Dimensions.get('window').height;
-  // const buttonSize = 90;
-
-  // Initial position: top-right corner
-  // const translateX = useSharedValue(screenWidth - buttonSize - 15);
-  // const translateY = useSharedValue(45);
-
-  // const gestureHandler = useAnimatedGestureHandler({
-  //   onStart: (_, ctx) => {
-  //     ctx.startX = translateX.value;
-  //     ctx.startY = translateY.value;
-  //   },
-  //   onActive: (event, ctx) => {
-  //     translateX.value = Math.min(
-  //       Math.max(0, ctx.startX + event.translationX),
-  //       screenWidth - buttonSize
-  //     );
-  //     translateY.value = Math.min(
-  //       Math.max(0, ctx.startY + event.translationY),
-  //       screenHeight - buttonSize
-  //     );
-  //   },
-  //   onEnd: (event) => {
-  //     translateX.value = withDecay({
-  //       velocity: event.velocityX,
-  //       deceleration: 0.998,
-  //       clamp: [0, screenWidth - buttonSize],
-  //       velocityFactor: 1,
-  //       rubberBandEffect: true,
-  //       rubberBandFactor: 0.6,
-  //       reduceMotion: ReduceMotion.System,
-  //     });
-  //     translateY.value = withDecay({
-  //       velocity: event.velocityY,
-  //       deceleration: 0.998,
-  //       clamp: [0, screenHeight - buttonSize],
-  //       velocityFactor: 1,
-  //       rubberBandEffect: true,
-  //       rubberBandFactor: 0.6,
-  //       reduceMotion: ReduceMotion.System,
-  //     });
-  //   },
-  // });
-
-  // const animatedStyle = useAnimatedStyle(() => {
-  //   return {
-  //     transform: [
-  //       { translateX: translateX.value },
-  //       { translateY: translateY.value },
-  //     ],
-  //   };
-  // });
- 
   return (
     <>
       <View style={styles.screenHeader}>
@@ -221,45 +139,6 @@ export const ExploreHeader = () => {
           </TouchableOpacity>
         </View>
       </View>
-      {/* <PanGestureHandler onGestureEvent={gestureHandler}>
-        <Animated.View style={[styles.floatingButton, animatedStyle]}>
-          <LinearGradient
-            style={styles.gradientWrapper}
-            colors={["#DCB92C", "#FF543E", "#C837AB"]}
-          >
-            <ImageBackground
-              source={{
-                uri: "https://cdn.pixabay.com/photo/2015/10/06/18/26/eiffel-tower-975004_1280.jpg",
-              }}
-              style={styles.destinationImage}
-            />
-            <View
-              style={styles.destinationInfo}
-            >
-              <Text
-                numberOfLines={1}
-                style={{
-                  fontSize: 20,
-                  fontWeight: "bold",
-                  color: "#fff",
-                }}
-              >
-                Paris
-              </Text>
-              <Text
-                style={{
-                  fontSize: 14,
-                  fontWeight: "600",
-                  color: "#fff",
-                  marginTop: 5,
-                }}
-              >
-                13-18
-              </Text>
-            </View>
-          </LinearGradient>
-        </Animated.View>
-      </PanGestureHandler> */}
 
       {showGuestModal && (
         <GuestUserModal onClose={() => setShowGuestModal(false)} />
