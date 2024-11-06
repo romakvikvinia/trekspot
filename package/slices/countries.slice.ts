@@ -36,6 +36,12 @@ const slice = createSlice({
         state.livedCountries[payload.id] = payload;
       }
     },
+    setVisitedCountries: (
+      state,
+      { payload }: PayloadAction<Record<string, CountryType>>
+    ) => {
+      state.visitedCountries = payload;
+    },
   },
 });
 
@@ -44,5 +50,6 @@ export const {
   setAllCountries,
   toggleVisitedCountry,
   toggleLivedCountry,
+  setVisitedCountries,
 } = slice.actions;
 export default slice.reducer;

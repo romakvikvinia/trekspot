@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Text,
   View,
@@ -29,13 +29,29 @@ import {
   useVisitedCountriesQuery,
 } from "../../api/api.trekspot";
 import { SightType } from "../../api/api.types";
+import { useAppDispatch } from "../../package/store";
+import { setVisitedCountries } from "../../package/slices";
 
 type HomeProps = NativeStackScreenProps<HomeRouteStackParamList, "Main">;
 
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
+  const dispatch = useAppDispatch();
   const { data: analyticsData, isLoading } = useAnalyticsQuery();
-  const { isLoading: isVisitedCountriesLoading, data: visitedCountriesData } =
-    useVisitedCountriesQuery();
+  const {
+    isLoading: isVisitedCountriesLoading,
+    data: visitedCountriesData,
+    isSuccess: isVisitedCountriesSuccess,
+  } = useVisitedCountriesQuery();
+
+  useEffect(() => {
+    if (isVisitedCountriesSuccess) {
+      const result: any = {};
+      visitedCountriesData.visitedCountries.forEach((co) => {
+        result[co.id] = co;
+      });
+      dispatch(setVisitedCountries(result));
+    }
+  }, [isVisitedCountriesSuccess]);
 
   // transform data
   const activities: Record<string, SightType[]> = {};
