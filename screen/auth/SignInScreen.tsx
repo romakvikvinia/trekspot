@@ -204,13 +204,15 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                   height: 55,
                 }}
               />
-              <TouchableOpacity
-                activeOpacity={0.5}
-                style={styles.passwordVisibleToggle}
-                onPress={() => setIsSecureType(!isSecureType)}
-              >
-                {isSecureType ? <EyeNoCrossicon /> : <EyeCrossicon />}
-              </TouchableOpacity>
+              {formik.values.password.length > 0 && (
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  style={styles.passwordVisibleToggle}
+                  onPress={() => setIsSecureType(!isSecureType)}
+                >
+                  {isSecureType ? <EyeNoCrossicon /> : <EyeCrossicon />}
+                </TouchableOpacity>
+              )}
             </View>
             {/* <View style={{ alignItems: "flex-end" }}>
               <TouchableOpacity
@@ -316,12 +318,13 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
               style={[
                 styles.textWithButtonLabel,
                 {
-                  fontSize: SIZES.body5,
+                  fontSize: SIZES.body4,
                   color: COLORS.darkgray,
+                  fontWeight: "500"
                 },
               ]}
             >
-              By sign in you agree our
+            By sign up you agree our
             </Text>
             <TouchableOpacity
               onPress={() => navigation.navigate("Agreement")}
@@ -332,8 +335,8 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 style={[
                   styles.textWithButtonText,
                   {
-                    fontSize: SIZES.body5,
-                    fontWeight: "normal",
+                    fontSize: SIZES.body4,
+                     fontWeight: "500",
                     color: COLORS.primary,
                   },
                 ]}

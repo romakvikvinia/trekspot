@@ -59,6 +59,13 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
     });
   }, []);
 
+  const citiesByRating = cities && [...cities].sort((a, b) => {
+    if (a.rate && b.rate) {
+      return b.rate - a.rate;
+    }
+    return 0;
+  });
+ 
   return (
     <>
       <View style={[styles.rowItem]}>
@@ -78,7 +85,7 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
             style={styles.contentBox}
             showsHorizontalScrollIndicator={false}
           >
-            {cities.map((item, ind) => (
+            {citiesByRating.map((item, ind) => (
               <React.Fragment
                 key={`${title}-cities-${item.id}-${item.city}-${ind}`}
               >
@@ -128,7 +135,7 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
                               <Text
                                 style={[styles.ratingText, styles.ratingTextXs]}
                               >
-                                {item.rate} /
+                                {item.rate}
                               </Text>
                             </>
                           ) : null}
@@ -191,7 +198,7 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
                               <Text
                                 style={[styles.ratingText, styles.ratingTextXs]}
                               >
-                                {item.rate} /
+                                {item.rate} 
                               </Text>
                             </>
                           ) : null}

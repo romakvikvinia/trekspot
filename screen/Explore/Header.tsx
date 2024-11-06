@@ -180,7 +180,7 @@ export const ExploreHeader = () => {
             >
               <LinearGradient
                 style={styles.gradientWrapper}
-                colors={["#DCB92C", "#FF543E", "#C837AB"]}
+                colors={["#0092E4", "#0092E4", "#0092E4"]}
               >
                 <View style={styles.destinationInfo}>
                   <Marquee spacing={20} speed={0.1}>
