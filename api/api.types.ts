@@ -58,16 +58,20 @@ export type MeResponseType = {
 };
 
 export type AnalyticsType = {
-  availableCountries: number;
-  achievedCountries: number;
-  territories: {
-    quantity: number;
-    items: Record<string, number>;
-  };
+  world: number;
+  countries: number;
+  livedCountries: number;
+  visitedCountries: number;
+  territories: number;
+  activities: SightType[];
 };
 
 export type AnalyticsResponseType = {
   analytics: AnalyticsType;
+};
+
+export type VisitedCountriesResponseType = {
+  visitedCountries: CountryType[];
 };
 
 export type ImageType = {
@@ -105,7 +109,7 @@ export type FileType = {
   url: string;
 };
 export type CountryType = {
-  id?: string;
+  id: string;
   name: string;
   iso2: string;
   capital: string;
@@ -539,3 +543,14 @@ export type AllCountriesArgsType = Partial<{
   take?: number;
   search?: string;
 }>;
+
+export type CreateAnalyticResponseType = {
+  createAnalytic: any;
+};
+
+export type CreateAnalyticArgsType = {
+  countries?: string[];
+  city?: string;
+  sight?: string;
+  wasLiving?: false;
+};

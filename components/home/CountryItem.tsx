@@ -7,33 +7,38 @@ import {
   View,
 } from "react-native";
 import { Flags } from "../../utilities/flags";
-import { LivedIcon, VisitedIcon } from "../../utilities/SvgIcons.utility";
+import {
+  //LivedIcon,
+  VisitedIcon,
+} from "../../utilities/SvgIcons.utility";
 import { COLORS } from "../../styles/theme";
-import { storeCountries } from "../../helpers/secure.storage";
+
 import * as Haptics from "expo-haptics";
+import { toggleVisitedCountry, toggleLivedCountry } from "../../package/slices";
+import { CountryType } from "../../api/api.types";
+import { useAppDispatch } from "../../package/store";
 
 interface HomeProps {
-  name: string;
-  iso2: string;
-  capital: string;
-  visited_countries: string[];
-  lived_countries: string[];
+  country: CountryType;
+  visited_countries: Record<string, CountryType>;
+  lived_countries: Record<string, CountryType>;
 }
 
 export const CountryItem: React.FC<HomeProps> = ({
-  name,
-  iso2,
+  country,
   visited_countries,
   lived_countries,
 }) => {
+  const dispatch = useAppDispatch();
   const [state, setState] = useState({
-    isVisited: visited_countries.includes(iso2),
-    isLived: lived_countries.includes(iso2),
+    isVisited: country.id in visited_countries,
+    isLived: country.id in lived_countries,
   });
 
-  const handleVisited = useCallback((code: string) => {
+  const handleVisited = useCallback((country: CountryType) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    storeCountries(code);
+    // storeCountries(code);
+    dispatch(toggleVisitedCountry(country));
     setState((prevState) => ({
       ...prevState,
       isVisited: !prevState.isVisited,
@@ -42,7 +47,7 @@ export const CountryItem: React.FC<HomeProps> = ({
 
   const handleLived = useCallback((code: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    storeCountries(code, "lived_countries");
+    dispatch(toggleLivedCountry(country));
     setState((prevState) => ({
       ...prevState,
       isLived: !prevState.isLived,
@@ -52,19 +57,19 @@ export const CountryItem: React.FC<HomeProps> = ({
   useEffect(() => {
     setState((prevState) => ({
       ...prevState,
-      isVisited: visited_countries.includes(iso2),
+      isVisited: country.id in visited_countries,
     }));
-  }, [visited_countries, iso2]);
+  }, [visited_countries, country.iso2]);
 
   useEffect(() => {
     setState((prevState) => ({
       ...prevState,
-      isLived: lived_countries.includes(iso2),
+      isLived: country.id in lived_countries,
     }));
-  }, [lived_countries, iso2]);
+  }, [lived_countries, country.iso2]);
 
   // @ts-ignore
-  const imagePath = Flags[iso2];
+  const imagePath = Flags[country.iso2];
 
   return (
     <View style={styles.countryItem}>
@@ -89,7 +94,7 @@ export const CountryItem: React.FC<HomeProps> = ({
             source={imagePath ? imagePath : null} // Set the image source
           />
         </View>
-        <Text style={styles.itemTitle}>{name}</Text>
+        <Text style={styles.itemTitle}>{country.name}</Text>
       </View>
       <View style={styles.countryItemActions}>
         <TouchableOpacity
@@ -97,7 +102,7 @@ export const CountryItem: React.FC<HomeProps> = ({
             styles.countryItemActionButton,
             state.isVisited ? styles.countryActive : null,
           ]}
-          onPress={() => handleVisited(iso2)}
+          onPress={() => handleVisited(country)}
         >
           <VisitedIcon active={state.isVisited} />
         </TouchableOpacity>

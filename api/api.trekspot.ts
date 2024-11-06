@@ -65,6 +65,9 @@ import {
   UpComingTripsResponseType,
   AllCountriesResponseType,
   AllCountriesArgsType,
+  CreateAnalyticArgsType,
+  CreateAnalyticResponseType,
+  VisitedCountriesResponseType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -119,6 +122,8 @@ export const trekSpotApi = createApi({
     "myTrips",
     "deleteTrip",
     "updateTrip",
+    "createAnalytics",
+    "visitedCountries",
   ],
   endpoints: (builder) => ({
     /**
@@ -282,11 +287,40 @@ export const trekSpotApi = createApi({
         document: gql`
           query {
             analytics {
-              availableCountries
-              achievedCountries
-              territories {
-                quantity
-                items
+              world
+              countries
+              livedCountries
+              visitedCountries
+              territories
+              activities {
+                id
+                iso2
+                title
+                rate
+                category
+                price
+                reviews
+                iso2
+                city
+                address
+                url
+                description
+                location {
+                  lat
+                  lng
+                }
+                workingHours {
+                  day
+                  hours
+                }
+                image {
+                  url
+                  html_attributions
+                }
+                images {
+                  url
+                  html_attributions
+                }
               }
             }
           }
@@ -296,6 +330,27 @@ export const trekSpotApi = createApi({
         return response;
       },
       providesTags: ["analytics"],
+    }),
+    /**
+     * Get user visited countries
+     *
+     */
+    visitedCountries: builder.query<VisitedCountriesResponseType, void>({
+      query: () => ({
+        document: gql`
+          query {
+            visitedCountries {
+              id
+              iso2
+              continents
+            }
+          }
+        `,
+      }),
+      transformResponse: (response: VisitedCountriesResponseType) => {
+        return response;
+      },
+      providesTags: ["visitedCountries"],
     }),
     /**
      * Get user stories
@@ -383,6 +438,7 @@ export const trekSpotApi = createApi({
               allCountries(input: { skip: $skip, take: $take }) {
                 id
                 iso2
+                name
               }
             }
           `,
@@ -1313,7 +1369,6 @@ export const trekSpotApi = createApi({
       query: ({ id }) => ({
         variables: { id },
         document: gql`
-          # Write your query or mutation here
           mutation ($id: ID!) {
             removeWishlist(input: { id: $id }) {
               id
@@ -1321,6 +1376,43 @@ export const trekSpotApi = createApi({
           }
         `,
       }),
+    }),
+
+    /**
+     * Create analytics
+     */
+    createAnalytics: builder.mutation<
+      CreateAnalyticResponseType,
+      CreateAnalyticArgsType
+    >({
+      query: ({ countries, sight, city, wasLiving }) => {
+        return {
+          variables: { countries, sight, city, wasLiving },
+          document: gql`
+            mutation (
+              $countries: [ID]
+              $city: ID
+              $sight: ID
+              $wasLiving: Boolean! = false
+            ) {
+              createAnalytic(
+                input: {
+                  countries: $countries
+                  city: $city
+                  sight: $sight
+                  wasLiving: $wasLiving
+                }
+              ) {
+                id
+              }
+            }
+          `,
+        };
+      },
+      transformResponse: (response: CreateAnalyticResponseType) => {
+        return response;
+      },
+      invalidatesTags: (result, error) => (error ? [] : ["createAnalytics"]),
     }),
 
     //
@@ -1334,6 +1426,7 @@ export const {
   useMeQuery,
   useLazyMeQuery,
   useAnalyticsQuery,
+  useVisitedCountriesQuery,
   useStoriesQuery,
   useCreateOrUpdateStoriesMutation,
   useCountriesQuery,
@@ -1366,4 +1459,6 @@ export const {
   useLazyWishlistsQuery,
   useRemoveWishlistItemMutation,
   useToggleWishlistMutation,
+  //
+  useCreateAnalyticsMutation,
 } = trekSpotApi;
