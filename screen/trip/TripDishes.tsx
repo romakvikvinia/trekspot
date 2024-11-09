@@ -128,7 +128,7 @@ export const TripDishes = ({route}) => {
                           marginRight: 3,
                         }}
                       >
-                        <StarIcon color="#FFBC3E" />
+                        <StarIcon color="#FFBC3E" size={15} />
                       </View>
                       <Text
                         style={[
@@ -139,7 +139,7 @@ export const TripDishes = ({route}) => {
                         {item?.rate}
                       </Text>
                     </View>
-                    {!!item?.restaurant ? (
+                    {/* {!!item?.restaurant ? (
                       <TouchableOpacity
                         activeOpacity={0.7}
                         style={{
@@ -163,7 +163,7 @@ export const TripDishes = ({route}) => {
                           {item?.restaurant}
                         </Text>
                       </TouchableOpacity>
-                    ) : null}
+                    ) : null} */}
                   </View>
                 </View>
               </View>

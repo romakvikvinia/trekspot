@@ -337,7 +337,7 @@ export const MapView: React.FC<MapVIewProps> = ({
                 />
               )}
               estimatedItemSize={100}
-              contentContainerStyle={{ paddingTop: 15 }}
+              contentContainerStyle={{ paddingTop: 15}}
             />
           </View>
         </Modalize>
@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 25,
     height: 25,
-    top: 6,
+    top: 7,
     right: 10,
     justifyContent: "center",
     alignItems: "center",

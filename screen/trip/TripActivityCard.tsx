@@ -126,17 +126,18 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
             styles.verticalLine,
             {
               height: activityAmount * 175 - 170,
+              backgroundColor: "#e0e0e0",
             },
           ]}
         >
-          <ImageBackground
+          {/* <ImageBackground
             source={require("../../assets/dash.png")}
             imageStyle={{ resizeMode: "repeat" }}
             style={{
               width: 2,
               height: "100%",
             }}
-          ></ImageBackground>
+          ></ImageBackground> */}
         </View>
       )}
       <TouchableOpacity
@@ -156,7 +157,8 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
       >
         {activityAmount > 1 && (
           <View style={styles.activityIcon}>
-            <ReturnIcon category={item?.category} />
+            {/* <ReturnIcon category={item?.category} /> */}
+            <View style={styles.circle}></View>
           </View>
         )}
 
@@ -214,18 +216,23 @@ const styles = StyleSheet.create({
   activityIcon: {
     position: "absolute",
     top: 55,
-    borderWidth: 5,
+    borderWidth: 8,
     borderColor: "#f7f7f7",
     zIndex: 2,
-    opacity: 1,
-    left: -45,
+    left: -40,
+    borderRadius: 100,
+  },
+  circle: {
+    minWidth: 10,
+    height: 10,
+    backgroundColor: "#ccc",
+    borderRadius: 100,
   },
   verticalLine: {
     position: "absolute",
     top: 100,
     left: 22,
     width: 2,
-    opacity: 0.05,
   },
 });
 

@@ -45,14 +45,14 @@ export const CountryItem: React.FC<HomeProps> = ({
     }));
   }, []);
 
-  const handleLived = useCallback((code: string) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    dispatch(toggleLivedCountry(country));
-    setState((prevState) => ({
-      ...prevState,
-      isLived: !prevState.isLived,
-    }));
-  }, []);
+  // const handleLived = useCallback((code: string) => {
+  //   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  //   dispatch(toggleLivedCountry(country));
+  //   setState((prevState) => ({
+  //     ...prevState,
+  //     isLived: !prevState.isLived,
+  //   }));
+  // }, []);
 
   useEffect(() => {
     setState((prevState) => ({

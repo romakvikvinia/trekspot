@@ -133,7 +133,6 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
     ]);
   }
 
-  console.log("isSuccess", process.env);
 
   return (
     <View style={styles.safeArea}>

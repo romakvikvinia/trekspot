@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Text,
   View,
@@ -17,42 +17,26 @@ import { Territories } from "./Territories";
 import {
   AttractionsIcon,
   BeachesIcon,
+  CasinosIcon,
   HistoricalPlacesIcon,
   MarketsIcon,
   MuseumsIcon,
   TopExperiencesIcon,
-  TopSights,
   TopsightsIcon,
 } from "../../utilities/SvgIcons.utility";
 import {
   useAnalyticsQuery,
-  useVisitedCountriesQuery,
 } from "../../api/api.trekspot";
 import { SightType } from "../../api/api.types";
-import { useAppDispatch, useAppSelector } from "../../package/store";
-import { setVisitedCountries } from "../../package/slices";
+import {  useAppSelector } from "../../package/store";
 
 type HomeProps = NativeStackScreenProps<HomeRouteStackParamList, "Main">;
 
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
-  const dispatch = useAppDispatch();
+  
   const { visitedCountries } = useAppSelector((state) => state.countries);
   const { data: analyticsData, isLoading } = useAnalyticsQuery();
-  const {
-    isLoading: isVisitedCountriesLoading,
-    data: visitedCountriesData,
-    isSuccess: isVisitedCountriesSuccess,
-  } = useVisitedCountriesQuery();
 
-  useEffect(() => {
-    if (isVisitedCountriesSuccess) {
-      const result: any = {};
-      visitedCountriesData.visitedCountries.forEach((co) => {
-        result[co.id] = co;
-      });
-      dispatch(setVisitedCountries(result));
-    }
-  }, [isVisitedCountriesSuccess]);
 
   // transform data
   const activities: Record<string, SightType[]> = {};
@@ -73,6 +57,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
     markets: MarketsIcon,
     "top experiences": TopExperiencesIcon,
     beaches: BeachesIcon,
+    "casinos": CasinosIcon
   };
 
   return (
@@ -80,7 +65,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <MapView
           world={analyticsData?.analytics.world}
-          isLoading={isLoading || isVisitedCountriesLoading}
+          isLoading={isLoading}
           countryQuantity={analyticsData?.analytics.countries}
           visitedCountries={analyticsData?.analytics.visitedCountries}
           territories={analyticsData?.analytics.territories}
@@ -93,8 +78,8 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
         <View style={styles.mapStats}>
           <Text style={styles.cardTitle}>Territories</Text>
           <Territories
-            isLoading={isVisitedCountriesLoading}
-            visitedCountries={visitedCountriesData?.visitedCountries || []}
+            // isLoading={isVisitedCountriesLoading}
+            // visitedCountries={visitedCountriesData?.visitedCountries || []}
           />
         </View>
         <View style={styles.visitedStats}>

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Text } from "react-native";
 import { ImageBackground, Platform, TouchableOpacity } from "react-native";
 import { ScrollView, View } from "react-native";
@@ -35,6 +35,7 @@ import {
   addItemIntoWishlist,
   removeItemFromWishlist,
 } from "../../../package/slices";
+import { NotFound } from "../../../components/common/NotFound";
 
 type Props = NativeStackScreenProps<ExploreRoutesStackParamList, "CityDetail">;
 
@@ -112,6 +113,9 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
     delete sights["Top Sights"];
   }
 
+  const dataNotFound = useMemo(() => !isLoading && !topSights.length && sights && !Object.keys(sights).length,
+   [isLoading, topSights, sights]);
+
   useEffect(() => {
     navigation.getParent()?.setOptions({
       tabBarStyle: {
@@ -126,7 +130,8 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
       });
     };
   }, []);
-  console.log(wishlistState.wishlists);
+
+  console.log("dataNotFound",dataNotFound)
 
   return (
     <View style={{ flex: 1, backgroundColor: "#f8f8f8" }}>
@@ -333,47 +338,56 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
             </View>
 
             {/* Top sights */}
-            <View
-              style={[
-                exploreStyles.placeSpotsRow,
-                {
-                  borderTopWidth: 0,
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  exploreStyles.placeSpotsRowTitle,
-                  { fontSize: 20, fontWeight: "bold" },
-                ]}
-              >
-                Top sights
-              </Text>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{
-                  paddingHorizontal: 15,
-                }}
-              >
-                {topSights.map(
-                  (item) =>
-                    item?.image && (
-                      <SightItem
-                        key={`top-sights-${item.id}-${item.title}`}
-                        item={item}
-                        onHandleItem={handleSetSightItem}
-                      />
-                    )
-                )}
-              </ScrollView>
-            </View>
+            {dataNotFound && (
+              <View style={{ flex: 1, marginTop: 30 }}>
+                <NotFound />
+              </View>
+            )}
+            <>
+              {topSights?.length > 0 && (
+                <View
+                  style={[
+                    exploreStyles.placeSpotsRow,
+                    {
+                      borderTopWidth: 0,
+                    },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      exploreStyles.placeSpotsRowTitle,
+                      { fontSize: 20, fontWeight: "bold" },
+                    ]}
+                  >
+                    Top sights
+                  </Text>
+                  <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{
+                      paddingHorizontal: 15,
+                    }}
+                  >
+                    {topSights?.map(
+                      (item) =>
+                        item?.image && (
+                          <SightItem
+                            key={`top-sights-${item.id}-${item.title}`}
+                            item={item}
+                            onHandleItem={handleSetSightItem}
+                          />
+                        )
+                    )}
+                  </ScrollView>
+                </View>
+              )}
 
-            {/* Top sights */}
+              {/* Top sights */}
 
-            {sights && Object.keys(sights).length ? (
-              <SightsContainer items={sights} />
-            ) : null}
+              {sights && Object.keys(sights).length ? (
+                <SightsContainer items={sights} />
+              ) : null}
+            </>
 
             {state.sight && (
               <SightDetailModal

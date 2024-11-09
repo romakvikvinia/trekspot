@@ -62,8 +62,8 @@ import {
 import { Loader } from "../../common/ui/Loader";
 import { useTripStore } from "../../components/store/store";
 import { useNavigation } from "@react-navigation/native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+// import { GestureHandlerRootView } from "react-native-gesture-handler";
+// import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { getAndReturnCurrentDay } from "./helper";
 
 type TripProps = NativeStackScreenProps<

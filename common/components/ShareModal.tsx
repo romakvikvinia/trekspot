@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     flex: 1,
     padding: 15,
-    backgroundColor: "#fff",
+    borderRadius: 15
   },
   shareTextWrapper: {
     backgroundColor: "#000",

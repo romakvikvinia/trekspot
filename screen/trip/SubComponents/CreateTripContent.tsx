@@ -341,6 +341,7 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
           scrollViewProps={{
             alwaysBounceVertical: false,
             showsVerticalScrollIndicator: false,
+            keyboardShouldPersistTaps: "handled",
           }}
           modalStyle={{
             backgroundColor: "#F2F2F7",

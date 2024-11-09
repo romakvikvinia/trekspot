@@ -83,7 +83,7 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
                           marginRight: 3,
                         }}
                       >
-                        <StarIcon color="#FFBC3E" />
+                        <StarIcon color="#FFBC3E" size={15} />
                       </View>
                       <Text
                         style={[
@@ -94,7 +94,7 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
                         {item?.rate}
                       </Text>
                     </View>
-                    {item?.restaurant &&
+                    {/* {item?.restaurant &&
                     <TouchableOpacity
                       activeOpacity={0.7}
                       style={{
@@ -118,7 +118,7 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
                         {item?.restaurant}
                       </Text>
                     </TouchableOpacity>
-            }
+            } */}
                   </View>
                 </View>
               </View>
