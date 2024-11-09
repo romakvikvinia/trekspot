@@ -19,8 +19,7 @@ import {
 
 import { AuthContext } from "../../package/context/auth.context";
 import { SignInValidationSchema } from "./validationScheme";
-import { TInput } from "../../common/ui/TInput";
-import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
+
 import {
   trekSpotApi,
   useAuthBySocialNetworkMutation,
@@ -31,14 +30,10 @@ import {
   SocialProvidersEnum,
 } from "../../api/api.types";
 import { storeToken } from "../../helpers/secure.storage";
-import {
-  AppleIcon,
-  FacebookIcon,
-  GoogleIcon,
-} from "../../utilities/SvgIcons.utility";
+
 import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
-import { TrekSpotLinear } from "../../utilities/svg/TrekSpotLinear";
+
 import * as Facebook from "expo-auth-session/providers/facebook";
 import * as Google from "expo-auth-session/providers/google";
 import * as AppleAuthentication from "expo-apple-authentication";
@@ -49,7 +44,16 @@ import {
   GOOGLE_IOS_CLIENT_ID,
   GOOGLE_WEB_CLIENT_ID,
 } from "../../config";
+import { TInput } from "../../common/ui/TInput";
 import { Loader } from "../../common/ui/Loader";
+import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
+import { TrekSpotLinear } from "../../utilities/svg";
+import {
+  GoogleIcon,
+  AppleIcon,
+  FacebookIcon,
+} from "../../utilities/SvgIcons.utility";
+
 Logs.enableExpoCliLogging();
 
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
