@@ -15,7 +15,7 @@ import {
   Alert,
 } from "react-native";
 import Constants from "expo-constants";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
+// import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import * as AppleAuthentication from "expo-apple-authentication";
 
 import { SignInValidationSchema } from "./validationScheme";
@@ -47,16 +47,16 @@ import { TrekSpotLinear } from "../../utilities/svg/TrekSpotLinear";
 import { signIn } from "../../package/slices";
 import { GUEST_EMAIL, GUEST_PASS } from "../../helpers/baseUrl.helper";
 
-GoogleSignin.configure({
-  offlineAccess: true,
-  webClientId:
-    "714520072398-6nt61odp4p76fdfdcu8e7lhoom6qnkf0.apps.googleusercontent.com",
-  // androidClientId:
-  //   "714520072398-e14212odgjc7d7vq12rbog8fbtmit8ei.apps.googleusercontent.com",
-  iosClientId:
-    "714520072398-tnhiqksspq65qq0atcq5mei8l8mefrbu.apps.googleusercontent.com",
-  scopes: ["profile", "email"],
-});
+// GoogleSignin.configure({
+//   offlineAccess: true,
+//   webClientId:
+//     "714520072398-6nt61odp4p76fdfdcu8e7lhoom6qnkf0.apps.googleusercontent.com",
+//   // androidClientId:
+//   //   "714520072398-e14212odgjc7d7vq12rbog8fbtmit8ei.apps.googleusercontent.com",
+//   iosClientId:
+//     "714520072398-tnhiqksspq65qq0atcq5mei8l8mefrbu.apps.googleusercontent.com",
+//   scopes: ["profile", "email"],
+// });
 
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 
@@ -175,25 +175,23 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
 
   const startGoogleAuth = async () => {
     try {
-      await GoogleSignin.hasPlayServices();
-      // log in using Google account (on Android it will only work if google play services are installed)
-      const userInfo = await GoogleSignin.signIn();
-      const token = await GoogleSignin.getTokens();
-
-      if (
-        userInfo.data &&
-        userInfo.data.idToken &&
-        token &&
-        token.accessToken
-      ) {
-        fetchSocialAuth({
-          token: token.accessToken,
-          provider: SocialProvidersEnum.Google,
-        });
-      } else {
-        handelErrorMessage();
-      }
-
+      // await GoogleSignin.hasPlayServices();
+      // // log in using Google account (on Android it will only work if google play services are installed)
+      // const userInfo = await GoogleSignin.signIn();
+      // const token = await GoogleSignin.getTokens();
+      // if (
+      //   userInfo.data &&
+      //   userInfo.data.idToken &&
+      //   token &&
+      //   token.accessToken
+      // ) {
+      //   fetchSocialAuth({
+      //     token: token.accessToken,
+      //     provider: SocialProvidersEnum.Google,
+      //   });
+      // } else {
+      //   handelErrorMessage();
+      // }
       // try to sign in silently (this should be done when the user is already signed-in)
       /*
         const userInfo2 = await GoogleSignin.signInSilently();
@@ -221,6 +219,16 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
           AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ],
       });
+
+      if (credential && credential.identityToken) {
+        fetchSocialAuth({
+          token: credential.identityToken,
+          provider: SocialProvidersEnum.Apple,
+        });
+      } else {
+        handelErrorMessage();
+      }
+
       // console.log(credential);
       // signed in
     } catch (e: any) {
