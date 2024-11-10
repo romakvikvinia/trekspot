@@ -9,12 +9,12 @@ import {
   SearchBoldIcon,
   UserCircleBoldIcon,
 } from "../utilities/SvgIcons.utility";
-import { ExploreRoutesStack } from "./explore/ExploreRoutes";
 
 import { HomeRouteStack } from "./home/HomeRoutes";
 import { SettingRouteStack } from "./setting/SettingRoutes";
 import { TripRouteStack } from "./trip/TripRoutes";
 import { COLORS } from "../styles/theme";
+import { ExploreRoutesStack } from "./explore/ExploreRoutes";
 
 const Tab = createBottomTabNavigator();
 
@@ -34,16 +34,26 @@ export const AppRoute: React.FC<AppRouteProps> = ({}) => {
           tabBarIcon: ({ focused }: any) => {
             switch (route.name) {
               case "Insights": {
-                return <HomeBold color={focused ? COLORS.primary : "#8e8e8e"} />;
+                return (
+                  <HomeBold color={focused ? COLORS.primary : "#8e8e8e"} />
+                );
               }
               case "Been": {
-                return <MyWorldBold color={focused ? COLORS.primary : "#8e8e8e"} />;
+                return (
+                  <MyWorldBold color={focused ? COLORS.primary : "#8e8e8e"} />
+                );
               }
               case "Trips": {
-                return <FlightIcon color={focused ? COLORS.primary : "#8e8e8e"} />;
+                return (
+                  <FlightIcon color={focused ? COLORS.primary : "#8e8e8e"} />
+                );
               }
               case "Explore": {
-                return <SearchBoldIcon color={focused ? COLORS.primary : "#8e8e8e"} />;
+                return (
+                  <SearchBoldIcon
+                    color={focused ? COLORS.primary : "#8e8e8e"}
+                  />
+                );
               }
               case "Account": {
                 return false ? (
@@ -60,7 +70,9 @@ export const AppRoute: React.FC<AppRouteProps> = ({}) => {
                     }}
                   />
                 ) : (
-                  <UserCircleBoldIcon color={focused ? COLORS.primary : "#8e8e8e"} />
+                  <UserCircleBoldIcon
+                    color={focused ? COLORS.primary : "#8e8e8e"}
+                  />
                 );
               }
             }
@@ -72,7 +84,7 @@ export const AppRoute: React.FC<AppRouteProps> = ({}) => {
             borderTopWidth: 1,
             // paddingTop: 5,
             backgroundColor: "#fff",
-            height: 80
+            height: 80,
           },
         })}
         initialRouteName="Home"
