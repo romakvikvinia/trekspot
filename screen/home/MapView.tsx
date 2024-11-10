@@ -155,8 +155,6 @@ export const MapView: React.FC<MapVIewProps> = ({
     }
   };
 
-  console.log("countriesOnMap", countriesOnMap);
-
   return (
     <>
       <View style={styles.mapContainer}>
@@ -321,6 +319,9 @@ export const MapView: React.FC<MapVIewProps> = ({
             </View>
           }
           modalStyle={{ flex: 1 }}
+          scrollViewProps={{
+            keyboardShouldPersistTaps: "handled",
+          }}
         >
           <View style={{ flex: 1, height: SIZES.height - 200 }}>
             <FlashList
