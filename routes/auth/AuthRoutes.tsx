@@ -11,7 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import { SIZES } from "../../styles/theme";
 import { Platform, Text, TouchableOpacity } from "react-native";
 import Agreement from "../../screen/auth/Agreement";
-import { useTripStore } from "../../components/store/store";
+import { useTripStore } from "../../package/zustand/store";
 import { PasswordUpdate } from "../../screen/auth/PasswordUpdate";
 
 interface AuthRouteProps {}
@@ -21,7 +21,7 @@ export type AuthStackParamList = {
   SignUp: undefined;
   GetStarted: undefined;
   ResetPassword: undefined;
-  Agreement: undefined
+  Agreement: undefined;
 };
 
 const Stack = createStackNavigator<AuthStackParamList>();
@@ -31,12 +31,12 @@ export type AuthStackNavigationProp = StackNavigationProp<AuthStackParamList>;
 export const AuthRoute: React.FC<AuthRouteProps> = () => {
   const navigation = useNavigation<AuthStackNavigationProp>();
 
-  const {  onboardingSeen } = useTripStore((state) => ({
+  const { onboardingSeen } = useTripStore((state) => ({
     onboardingSeen: state.onboardingSeen,
   }));
 
   useEffect(() => {
-    if(!onboardingSeen) {
+    if (!onboardingSeen) {
       navigation.navigate("GetStarted");
     }
   }, []);
@@ -68,13 +68,14 @@ export const AuthRoute: React.FC<AuthRouteProps> = () => {
             Platform.OS === "android" ? 10 : SIZES.width - 50,
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="PasswordUpdate"
         component={PasswordUpdate}
         options={({ route, navigation }) => ({
           headerShown: false,
           gestureEnabled: true,
-          gestureResponseDistance: Platform.OS === 'android' ? 10 : SIZES.width - 50
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
       <Stack.Screen
@@ -88,19 +89,22 @@ export const AuthRoute: React.FC<AuthRouteProps> = () => {
         }}
       />
       <Stack.Group
-        screenOptions={{ presentation: "modal",   headerShown: true,
-        headerLeft: () => null,
-        headerTitle: "Privacy policy",
-        headerRight: () => (
-          <TouchableOpacity
-            onPress={() => navigation.goBack()} 
-            style={{
-              paddingHorizontal: 15
-            }}
-           >
+        screenOptions={{
+          presentation: "modal",
+          headerShown: true,
+          headerLeft: () => null,
+          headerTitle: "Privacy policy",
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={{
+                paddingHorizontal: 15,
+              }}
+            >
               <Text>Got it</Text>
             </TouchableOpacity>
-        ), }}
+          ),
+        }}
       >
         <Stack.Screen name="Agreement" component={Agreement} />
       </Stack.Group>

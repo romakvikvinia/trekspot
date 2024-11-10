@@ -1460,6 +1460,7 @@ export const {
   useCreateOrUpdateStoriesMutation,
   useCountriesQuery,
   useLazyAllCountriesQuery,
+  useAllCountriesQuery,
   useCountryQuery,
   useLazyCountryQuery,
   useLazyGetPassportIndexesQuery,

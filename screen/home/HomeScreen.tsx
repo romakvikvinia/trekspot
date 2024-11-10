@@ -24,19 +24,14 @@ import {
   TopExperiencesIcon,
   TopsightsIcon,
 } from "../../utilities/SvgIcons.utility";
-import {
-  useAnalyticsQuery,
-} from "../../api/api.trekspot";
+import { useAnalyticsQuery } from "../../api/api.trekspot";
 import { SightType } from "../../api/api.types";
-import {  useAppSelector } from "../../package/store";
+import { useAppSelector } from "../../package/store";
 
 type HomeProps = NativeStackScreenProps<HomeRouteStackParamList, "Main">;
 
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
-  
-  const { visitedCountries } = useAppSelector((state) => state.countries);
   const { data: analyticsData, isLoading } = useAnalyticsQuery();
-
 
   // transform data
   const activities: Record<string, SightType[]> = {};
@@ -57,7 +52,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
     markets: MarketsIcon,
     "top experiences": TopExperiencesIcon,
     beaches: BeachesIcon,
-    "casinos": CasinosIcon
+    casinos: CasinosIcon,
   };
 
   return (
@@ -69,17 +64,12 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
           countryQuantity={analyticsData?.analytics.countries}
           visitedCountries={analyticsData?.analytics.visitedCountries}
           territories={analyticsData?.analytics.territories}
-          countriesOnMap={
-            (visitedCountries &&
-              Object.values(visitedCountries).map((c) => c.iso2)) ||
-            []
-          }
         />
         <View style={styles.mapStats}>
           <Text style={styles.cardTitle}>Territories</Text>
           <Territories
-            // isLoading={isVisitedCountriesLoading}
-            // visitedCountries={visitedCountriesData?.visitedCountries || []}
+          // isLoading={isVisitedCountriesLoading}
+          // visitedCountries={visitedCountriesData?.visitedCountries || []}
           />
         </View>
         <View style={styles.visitedStats}>

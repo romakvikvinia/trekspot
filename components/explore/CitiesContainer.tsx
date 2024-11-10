@@ -19,7 +19,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
-import { useTripStore } from "../store/store";
+import { useTripStore } from "../../package/zustand/store";
 import { GuestUserModal } from "../../common/components/GuestUserModal";
 import { useAppSelector } from "../../package/store";
 
@@ -43,12 +43,14 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
   const { user } = useAppSelector((state) => state.auth);
   const isGuest = user?.role === "guest";
   const [showGuestModal, setShowGuestModal] = React.useState(false);
-  const { guestActivityCount, increaseGuestActivityCount } = useTripStore((state) => ({
-    increaseGuestActivityCount: state.increaseGuestActivityCount,
-    guestActivityCount: state.guestActivityCount,
-  }));
+  const { guestActivityCount, increaseGuestActivityCount } = useTripStore(
+    (state) => ({
+      increaseGuestActivityCount: state.increaseGuestActivityCount,
+      guestActivityCount: state.guestActivityCount,
+    })
+  );
   const handleCity = useCallback((city: CityType) => {
-    if(guestActivityCount >= 3 && isGuest) {
+    if (guestActivityCount >= 3 && isGuest) {
       setShowGuestModal(true);
       return;
     }
@@ -59,13 +61,15 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
     });
   }, []);
 
-  const citiesByRating = cities && [...cities].sort((a, b) => {
-    if (a.rate && b.rate) {
-      return b.rate - a.rate;
-    }
-    return 0;
-  });
- 
+  const citiesByRating =
+    cities &&
+    [...cities].sort((a, b) => {
+      if (a.rate && b.rate) {
+        return b.rate - a.rate;
+      }
+      return 0;
+    });
+
   return (
     <>
       <View style={[styles.rowItem]}>
@@ -198,7 +202,7 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
                               <Text
                                 style={[styles.ratingText, styles.ratingTextXs]}
                               >
-                                {item.rate} 
+                                {item.rate}
                               </Text>
                             </>
                           ) : null}
@@ -251,9 +255,9 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
           </ScrollView>
         )}
       </View>
-      {
-        showGuestModal && <GuestUserModal onClose={() => setShowGuestModal(false)} />
-      }
+      {showGuestModal && (
+        <GuestUserModal onClose={() => setShowGuestModal(false)} />
+      )}
     </>
   );
 };

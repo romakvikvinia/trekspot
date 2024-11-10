@@ -60,7 +60,7 @@ import {
   TabView,
 } from "react-native-tab-view";
 import { Loader } from "../../common/ui/Loader";
-import { useTripStore } from "../../components/store/store";
+import { useTripStore } from "../../package/zustand/store";
 import { useNavigation } from "@react-navigation/native";
 // import { GestureHandlerRootView } from "react-native-gesture-handler";
 // import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
@@ -84,32 +84,32 @@ interface IState {
   days: TripDaysType[];
 }
 
-export const TabLabel = ({
-  route
-}: any) => {
-
-
-  return ( 
-    <View style = {[tripDetailStyles.customTab, {width: 100,}]} key = {route?.key}>
-      <Text style = {{
-              fontSize: 12,
-              marginBottom: 3,
-              color: COLORS.gray,
-          }}>
-          {route?.weekDay} 
-      </Text> 
-      <Text style = {[
-              tripDetailStyles.customTabLabel,
-              {
-                  color: COLORS.black,
-                  marginBottom: 5,
-              },
-          ]}>
-          { route?.date} 
-      </Text> 
+export const TabLabel = ({ route }: any) => {
+  return (
+    <View style={[tripDetailStyles.customTab, { width: 100 }]} key={route?.key}>
+      <Text
+        style={{
+          fontSize: 12,
+          marginBottom: 3,
+          color: COLORS.gray,
+        }}
+      >
+        {route?.weekDay}
+      </Text>
+      <Text
+        style={[
+          tripDetailStyles.customTabLabel,
+          {
+            color: COLORS.black,
+            marginBottom: 5,
+          },
+        ]}
+      >
+        {route?.date}
+      </Text>
     </View>
-  )
-}
+  );
+};
 
 export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   const navigation = useNavigation();
@@ -314,7 +314,6 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     },
     []
   );
- 
 
   useEffect(() => {
     navigation.getParent()?.setOptions({
@@ -331,14 +330,11 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     };
   }, []);
 
-
   const renderCurrentScene: React.FC<
     SceneRendererProps & {
       route: Route;
     }
   > = (props) => {
-   
-
     const route = props.route as unknown as TripDaysType;
 
     return (
@@ -408,15 +404,13 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   const navigationState: NavigationState<TripDaysType> = {
     index,
     routes: state.days,
-  };  
+  };
   const currentDay = getAndReturnCurrentDay();
   const getIndexByDate =
     state && state?.days?.findIndex((day) => day?.date === currentDay);
 
-
   useEffect(() => {
     if (getIndexByDate >= 0) {
-
       setIndex(getIndexByDate);
     }
   }, [getIndexByDate]);
@@ -494,7 +488,11 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
       )}
 
       {topSightDetail ? (
-        <SightDetailModal showDirection={true} data={topSightDetail} closeCallBack={handleClear} />
+        <SightDetailModal
+          showDirection={true}
+          data={topSightDetail}
+          closeCallBack={handleClear}
+        />
       ) : null}
 
       {state?.days[index]?.activities?.length > 0 ? (
@@ -720,7 +718,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    marginTop: -35
+    marginTop: -35,
   },
   tabStyles: {
     paddingHorizontal: 0,
@@ -737,5 +735,5 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
     paddingBottom: 200,
-  }
+  },
 });
