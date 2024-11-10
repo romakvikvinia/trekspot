@@ -13,15 +13,26 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      "usesAppleSignIn": true,
       "supportsTablet": true,
-      "bundleIdentifier": "com.trekspot.app"
+      "bundleIdentifier": "com.trekspot.app",
+      "infoPlist": {
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": [
+              "com.googleusercontent.apps.714520072398-tnhiqksspq65qq0atcq5mei8l8mefrbu"
+            ]
+          }
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "softwareKeyboardLayoutMode": "pan"
+      "softwareKeyboardLayoutMode": "pan",
+      "package": "com.trekspot.app"
     },
     "web": {
       "favicon": "./assets/icon.png"
@@ -34,16 +45,10 @@
     "owner": "trekspot",
     "expo": {
       "plugins": [
-        "react-native-fbsdk-next",
+        "expo-apple-authentication",
+        "@react-native-google-signin/google-signin",
         {
-          "appID": "714520072398-6nt61odp4p76fdfdcu8e7lhoom6qnkf0.apps.googleusercontent.com",
-          "clientToken": "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",
-          "displayName": "TrekSpot",
-          "scheme": "fb714520072398-6nt61odp4p76fdfdcu8e7lhoom6qnkf0.apps.googleusercontent.com",
-          "advertiserIDCollectionEnabled": false,
-          "autoLogAppEventsEnabled": false,
-          "isAutoInitEnabled": true,
-          "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
+          "iosUrlScheme": "com.googleusercontent.apps.714520072398-tnhiqksspq65qq0atcq5mei8l8mefrbu"
         },
         [
           "expo-location",

@@ -68,6 +68,8 @@ import {
   CreateAnalyticArgsType,
   CreateAnalyticResponseType,
   VisitedCountriesResponseType,
+  AuthSocialLogInInput,
+  AuthSocialLogInResponseType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -109,6 +111,7 @@ export const trekSpotApi = createApi({
     },
   }),
   tagTypes: [
+    "authSocial",
     "signUp",
     "signIn",
     "analytics",
@@ -126,6 +129,31 @@ export const trekSpotApi = createApi({
     "visitedCountries",
   ],
   endpoints: (builder) => ({
+    /**
+     * Social Auth with provider
+     */
+
+    authBySocialNetwork: builder.mutation<
+      AuthSocialLogInResponseType,
+      AuthSocialLogInInput
+    >({
+      query: ({ token, provider }) => ({
+        variables: { token, provider },
+        document: gql`
+          mutation ($token: String!, $provider: Provider!) {
+            socialLogin(input: { token: $token, provider: $provider }) {
+              token
+              expire
+            }
+          }
+        `,
+      }),
+      transformResponse: (response: AuthSocialLogInResponseType) => {
+        return response;
+      },
+      invalidatesTags: (result, error) => (error ? [] : ["authSocial"]),
+    }),
+
     /**
      * Sign In
      */
@@ -1420,6 +1448,7 @@ export const trekSpotApi = createApi({
 });
 
 export const {
+  useAuthBySocialNetworkMutation,
   useSignInMutation,
   useSignUpMutation,
   useUpdateMeMutation,

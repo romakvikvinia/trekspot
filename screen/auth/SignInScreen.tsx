@@ -15,16 +15,22 @@ import {
   Alert,
 } from "react-native";
 import Constants from "expo-constants";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import * as AppleAuthentication from "expo-apple-authentication";
 
 import { SignInValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
 import {
   trekSpotApi,
+  useAuthBySocialNetworkMutation,
   useLazyMeQuery,
   useSignInMutation,
 } from "../../api/api.trekspot";
-import { AuthLoginResponseType } from "../../api/api.types";
+import {
+  AuthLoginResponseType,
+  SocialProvidersEnum,
+} from "../../api/api.types";
 import { storeToken } from "../../helpers/secure.storage";
 import {
   AppleIcon,
@@ -41,6 +47,17 @@ import { TrekSpotLinear } from "../../utilities/svg/TrekSpotLinear";
 import { signIn } from "../../package/slices";
 import { GUEST_EMAIL, GUEST_PASS } from "../../helpers/baseUrl.helper";
 
+GoogleSignin.configure({
+  offlineAccess: true,
+  webClientId:
+    "714520072398-6nt61odp4p76fdfdcu8e7lhoom6qnkf0.apps.googleusercontent.com",
+  // androidClientId:
+  //   "714520072398-e14212odgjc7d7vq12rbog8fbtmit8ei.apps.googleusercontent.com",
+  iosClientId:
+    "714520072398-tnhiqksspq65qq0atcq5mei8l8mefrbu.apps.googleusercontent.com",
+  scopes: ["profile", "email"],
+});
+
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 
 export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
@@ -48,6 +65,16 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   const [isSecureType, setIsSecureType] = useState(true);
   const [fetchSignIn, { data, isLoading, error, isError, isSuccess }] =
     useSignInMutation();
+
+  const [
+    fetchSocialAuth,
+    {
+      isSuccess: isSocialAuthSuccess,
+      data: socialAuthData,
+      isLoading: isSocialAuthLoading,
+      error: socialAuthError,
+    },
+  ] = useAuthBySocialNetworkMutation();
 
   const [
     fetchSignInAsGuest,
@@ -99,7 +126,6 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   );
 
   const handleContinueAsGuest = useCallback(() => {
-    console.log("handleContinueAsGuest", GUEST_EMAIL, GUEST_PASS);
     fetchSignInAsGuest({
       email: GUEST_EMAIL,
       password: GUEST_PASS,
@@ -122,7 +148,16 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
     }
   }, [isSuccess, data, isGuestSuccess, guest]);
 
-  if (isError) {
+  // social auth handler
+
+  useEffect(() => {
+    if (socialAuthData && socialAuthData.socialLogin) {
+      //@ts-ignore
+      handleSaveToken({ signIn: socialAuthData.socialLogin });
+    }
+  }, [isSocialAuthSuccess, socialAuthData]);
+
+  const handelErrorMessage = () => {
     Alert.alert("Error", "Invalid Credentials", [
       {
         onPress: () => {
@@ -131,8 +166,76 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
         text: "OK",
       },
     ]);
-  }
+  };
 
+  /**
+   *
+   * S O C I A L AUTH
+   */
+
+  const startGoogleAuth = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      // log in using Google account (on Android it will only work if google play services are installed)
+      const userInfo = await GoogleSignin.signIn();
+      const token = await GoogleSignin.getTokens();
+
+      if (
+        userInfo.data &&
+        userInfo.data.idToken &&
+        token &&
+        token.accessToken
+      ) {
+        fetchSocialAuth({
+          token: token.accessToken,
+          provider: SocialProvidersEnum.Google,
+        });
+      } else {
+        handelErrorMessage();
+      }
+
+      // try to sign in silently (this should be done when the user is already signed-in)
+      /*
+        const userInfo2 = await GoogleSignin.signInSilently();
+        console.log(userInfo2);
+      */
+      // to logout use the following piece of code
+      /*
+      const resp = await GoogleSignin.signOut();
+      console.log(resp);
+      */
+    } catch (error: any) {
+      if (error.code) {
+        console.log("Error related to Google sign-in: ", error);
+      } else {
+        console.log("An error that is not related to Google sign-in: ", error);
+      }
+    }
+  };
+
+  const startAppleSignIn = async () => {
+    try {
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+      // console.log(credential);
+      // signed in
+    } catch (e: any) {
+      console.log(e);
+      if (e.code === "ERR_REQUEST_CANCELED") {
+        // handle that the user canceled the sign-in flow
+      } else {
+        // handle other errors
+      }
+    }
+  };
+
+  if (isError) {
+    handelErrorMessage();
+  }
 
   return (
     <View style={styles.safeArea}>
@@ -240,7 +343,11 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 isLoading
               }
             >
-              {formik.isSubmitting || isLoading || isSuccess ? (
+              {formik.isSubmitting ||
+              isLoading ||
+              isSuccess ||
+              isSocialAuthLoading ||
+              isSocialAuthSuccess ? (
                 <ActivityIndicator size="small" color="#fff" />
               ) : (
                 <Text style={globalStyles.buttonItemPrimaryText}>Sign In</Text>
@@ -285,6 +392,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
               <TouchableOpacity
                 activeOpacity={0.1}
                 style={styles.continueWithButton}
+                onPress={startGoogleAuth}
               >
                 <GoogleIcon />
               </TouchableOpacity>
@@ -292,16 +400,17 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 <TouchableOpacity
                   activeOpacity={0.1}
                   style={styles.continueWithButton}
+                  onPress={startAppleSignIn}
                 >
                   <AppleIcon />
                 </TouchableOpacity>
               )}
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 activeOpacity={0.1}
                 style={styles.continueWithButton}
               >
                 <FacebookIcon />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <TouchableOpacity
                 activeOpacity={0.1}
                 style={styles.continueWithButton}
@@ -319,11 +428,11 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 {
                   fontSize: SIZES.body4,
                   color: COLORS.darkgray,
-                  fontWeight: "500"
+                  fontWeight: "500",
                 },
               ]}
             >
-            By sign up you agree our
+              By sign up you agree our
             </Text>
             <TouchableOpacity
               onPress={() => navigation.navigate("Agreement")}
@@ -335,7 +444,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                   styles.textWithButtonText,
                   {
                     fontSize: SIZES.body4,
-                     fontWeight: "500",
+                    fontWeight: "500",
                     color: COLORS.primary,
                   },
                 ]}
