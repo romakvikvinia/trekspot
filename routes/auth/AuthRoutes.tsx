@@ -9,10 +9,10 @@ import { GetStartedScreen } from "../../screen/auth/GetStartedScreen";
 import { ResetPasswordScreen } from "../../screen/auth/ResetPassword";
 import { useNavigation } from "@react-navigation/native";
 import { SIZES } from "../../styles/theme";
-import { Platform, Text, TouchableOpacity } from "react-native";
-import Agreement from "../../screen/auth/Agreement";
+import { Platform } from "react-native";
 import { useTripStore } from "../../components/store/store";
 import { PasswordUpdate } from "../../screen/auth/PasswordUpdate";
+import { LoginScreen } from "../../screen/auth/LoginScreen";
 
 interface AuthRouteProps {}
 
@@ -21,7 +21,6 @@ export type AuthStackParamList = {
   SignUp: undefined;
   GetStarted: undefined;
   ResetPassword: undefined;
-  Agreement: undefined
 };
 
 const Stack = createStackNavigator<AuthStackParamList>();
@@ -87,23 +86,16 @@ export const AuthRoute: React.FC<AuthRouteProps> = () => {
             Platform.OS === "android" ? 10 : SIZES.width - 50,
         }}
       />
-      <Stack.Group
-        screenOptions={{ presentation: "modal",   headerShown: true,
-        headerLeft: () => null,
-        headerTitle: "Privacy policy",
-        headerRight: () => (
-          <TouchableOpacity
-            onPress={() => navigation.goBack()} 
-            style={{
-              paddingHorizontal: 15
-            }}
-           >
-              <Text>Got it</Text>
-            </TouchableOpacity>
-        ), }}
-      >
-        <Stack.Screen name="Agreement" component={Agreement} />
-      </Stack.Group>
+       <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{
+          header: () => null,
+          gestureEnabled: true,
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
+        }}
+      />
     </Stack.Navigator>
   );
 };

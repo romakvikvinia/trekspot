@@ -28,9 +28,8 @@ import {
   UserIcon,
 } from "../../utilities/SvgIcons.utility";
 
-import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
-import { MapEmbedView } from "../../common/components/MapEmbedView";
+import * as WebBrowser from 'expo-web-browser';
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SettingRouteStackParamList } from "../../routes/setting/SettingRoutes";
@@ -47,11 +46,14 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
 
-  const onModalEmbedOpen = () => {
-    modalEmbedRef.current?.open();
-  };
-
+  
   const isGuest = user?.role === "guest";
+
+  const _handlePressButtonAsync = async () => {
+    let result = await WebBrowser.openBrowserAsync('https://trekspot.io/en/privacy-policy', {
+      enableBarCollapsing: true,
+    });
+  };
 
   return (
     <>
@@ -138,7 +140,7 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
               </>
             )}
             <TouchableOpacity
-              onPress={() => onModalEmbedOpen()}
+              onPress={() => _handlePressButtonAsync()}
               style={[styles.button, { borderWidth: 0 }]}
               activeOpacity={0.7}
             >
@@ -245,16 +247,7 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
           </View>
         </ScrollView>
       </View>
-
-      <Portal>
-        <Modalize ref={modalEmbedRef} modalTopOffset={65} adjustToContentHeight>
-          <MapEmbedView
-            blogUrl="https://cdn.pixabay.com/photo/2017/12/19/18/09/flowers-3028429_1280.jpg?v=3"
-            placeTitle="Tbilisi"
-            modalEmbedRef={modalEmbedRef}
-          />
-        </Modalize>
-      </Portal>
+ 
     </>
   );
 };

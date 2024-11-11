@@ -7,16 +7,15 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Image,
   ScrollView,
   KeyboardAvoidingView,
   ActivityIndicator,
   Animated,
   Platform,
-  SafeAreaView,
   Alert,
 } from "react-native";
 import Constants from "expo-constants";
+import * as WebBrowser from 'expo-web-browser';
 
 import { SignUpValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
@@ -90,6 +89,12 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
       ]
     );
   }
+
+  const _handlePressButtonAsync = async () => {
+    let result = await WebBrowser.openBrowserAsync('https://trekspot.io/en/privacy-policy', {
+      enableBarCollapsing: true,
+    });
+  };
 
   return (
     <View style={styles.safeArea}>
@@ -220,7 +225,9 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
               )}
             </TouchableOpacity>
 
-            <View style={styles.textWithButtonWrapper}>
+            <View style={[styles.textWithButtonWrapper,{
+            marginTop: 45
+          }]}>
               <Text style={styles.textWithButtonLabel}>Have an account?</Text>
               <TouchableOpacity
                 activeOpacity={0.7}
@@ -244,7 +251,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
           >
             By sign up you agree our
           </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Agreement")} activeOpacity={0.7} style={styles.textWithButton}>
+          <TouchableOpacity onPress={() => _handlePressButtonAsync()} activeOpacity={0.7} style={styles.textWithButton}>
             <Text
               style={[
                 styles.textWithButtonText,

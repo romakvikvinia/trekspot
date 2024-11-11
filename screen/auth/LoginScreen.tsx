@@ -15,8 +15,6 @@ import {
   Alert,
 } from "react-native";
 import Constants from "expo-constants";
-// import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import * as AppleAuthentication from "expo-apple-authentication";
 
 import { SignInValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
@@ -29,36 +27,22 @@ import {
 } from "../../api/api.trekspot";
 import {
   AuthLoginResponseType,
-  SocialProvidersEnum,
 } from "../../api/api.types";
 import { storeToken } from "../../helpers/secure.storage";
 import {
-  AppleIcon,
-  GoogleIcon,
-  IncoIcon,
+  EyeCrossicon,
+  EyeNoCrossicon,
 } from "../../utilities/SvgIcons.utility";
 import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
 import { TrekSpotLinear } from "../../utilities/svg/TrekSpotLinear";
-
-import { signIn } from "../../package/slices";
-import { GUEST_EMAIL, GUEST_PASS } from "../../helpers/baseUrl.helper";
 import * as WebBrowser from 'expo-web-browser';
 
-// GoogleSignin.configure({
-//   offlineAccess: true,
-//   webClientId:
-//     "714520072398-6nt61odp4p76fdfdcu8e7lhoom6qnkf0.apps.googleusercontent.com",
-//   // androidClientId:
-//   //   "714520072398-e14212odgjc7d7vq12rbog8fbtmit8ei.apps.googleusercontent.com",
-//   iosClientId:
-//     "714520072398-tnhiqksspq65qq0atcq5mei8l8mefrbu.apps.googleusercontent.com",
-//   scopes: ["profile", "email"],
-// });
-
+import { signIn } from "../../package/slices";
+  
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 
-export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
+export const LoginScreen: React.FC<SignInProps> = ({ navigation }) => {
   const dispatch = useDispatch();
   const [isSecureType, setIsSecureType] = useState(true);
   const [fetchSignIn, { data, isLoading, error, isError, isSuccess }] =
@@ -122,14 +106,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
     },
     [dispatch]
   );
-
-  const handleContinueAsGuest = useCallback(() => {
-    fetchSignInAsGuest({
-      email: GUEST_EMAIL,
-      password: GUEST_PASS,
-    });
-  }, []);
-
+ 
   //animations
   useEffect(() => {
     Animated.timing(fadeValue, {
@@ -165,80 +142,6 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
     ]);
   };
 
-  /**
-   *
-   * S O C I A L AUTH
-   */
-
-  // const startGoogleAuth = async () => {
-  //   try {
-  //     await GoogleSignin.hasPlayServices();
-  //     // log in using Google account (on Android it will only work if google play services are installed)
-  //     const userInfo = await GoogleSignin.signIn();
-  //     const token = await GoogleSignin.getTokens();
-  //     if (
-  //       userInfo.data &&
-  //       userInfo.data.idToken &&
-  //       token &&
-  //       token.accessToken
-  //     ) {
-  //       fetchSocialAuth({
-  //         token: token.accessToken,
-  //         provider: SocialProvidersEnum.Google,
-  //       });
-  //     } else {
-  //       handelErrorMessage();
-  //     }
-  //     // try to sign in silently (this should be done when the user is already signed-in)
-
-  //     const userInfo2 = await GoogleSignin.signInSilently();
-  //     console.log(userInfo2);
-
-  //     // to logout use the following piece of code
-
-  //     const resp = await GoogleSignin.signOut();
-  //     console.log(resp);
-  //   } catch (error: any) {
-  //     if (error.code) {
-  //       console.log("Error related to Google sign-in: ", error);
-  //     } else {
-  //       console.log("An error that is not related to Google sign-in: ", error);
-  //     }
-  //   }
-  // };
-
-  const startAppleSignIn = async () => {
-    try {
-      const credential = await AppleAuthentication.signInAsync({
-        requestedScopes: [
-          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-          AppleAuthentication.AppleAuthenticationScope.EMAIL,
-        ],
-      });
-
-      console.log(credential);
-
-      if (credential && credential.identityToken) {
-        fetchSocialAuth({
-          token: credential.identityToken,
-          provider: SocialProvidersEnum.Apple,
-        });
-      } else {
-        handelErrorMessage();
-      }
-
-      // console.log(credential);
-      // signed in
-    } catch (e: any) {
-      console.log(e);
-      if (e.code === "ERR_REQUEST_CANCELED") {
-        // handle that the user canceled the sign-in flow
-      } else {
-        // handle other errors
-      }
-    }
-  };
-
   const _handlePressButtonAsync = async () => {
     let result = await WebBrowser.openBrowserAsync('https://trekspot.io/en/privacy-policy', {
       enableBarCollapsing: true,
@@ -270,78 +173,109 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 Your travel hub awaits: Sign in to begin!
               </Text>
             </View>
+  
+            <View style={[styles.item]}>
+              <TInput
+                invalid={"email" in formik.errors && "email" in formik.touched}
+                keyboardType="email-address"
+                placeholder="Email"
+                autoCapitalize="none"
+                returnKeyType="next"
+                value={formik.values.email}
+                onChangeText={formik.handleChange("email")}
+                onBlur={formik.handleBlur("email")}
+                style={{
+                  borderWidth: 2,
+                  height: 55,
+                  fontSize: 16,
+                  fontWeight: "500",
+                }}
+              />
+            </View>
 
-            <View style={styles.continueWith}>
-              <TouchableOpacity
-                activeOpacity={0.1}
-                style={styles.continueWithButton}
-                // onPress={startGoogleAuth}
-              >
-                <GoogleIcon />
-                <Text style={styles.socialText}>Continue with Google</Text>
-              </TouchableOpacity>
-              {Platform.OS === "ios" && (
+            <View style={[styles.item, {
+              marginBottom: 0
+            }]}>
+              <TInput
+                invalid={
+                  "password" in formik.errors && "password" in formik.touched
+                }
+                placeholder="Password"
+                secureTextEntry={isSecureType}
+                keyboardType="default"
+                autoCapitalize="none"
+                returnKeyType="go"
+                value={formik.values.password}
+                onChangeText={formik.handleChange("password")}
+                onBlur={formik.handleBlur("password")}
+                onSubmitEditing={() => {
+                  if (
+                    !("password" in formik.errors) ||
+                    !("Email" in formik.errors) ||
+                    isLoading
+                  ) {
+                    formik.submitForm();
+                  }
+                }}
+                style={{
+                  borderWidth: 2,
+                  fontWeight: "500",
+                  height: 55,
+                }}
+              />
+              {formik.values.password.length > 0 && (
                 <TouchableOpacity
-                  activeOpacity={0.1}
-                  style={styles.continueWithButton}
-                  onPress={startAppleSignIn}
+                  activeOpacity={0.5}
+                  style={styles.passwordVisibleToggle}
+                  onPress={() => setIsSecureType(!isSecureType)}
                 >
-                  <AppleIcon />
-                  <Text style={styles.socialText}>Continue with Apple</Text>
+                  {isSecureType ? <EyeNoCrossicon /> : <EyeCrossicon />}
                 </TouchableOpacity>
               )}
-              <TouchableOpacity
-                style={[styles.continueWithButton]}
-                onPress={() => handleContinueAsGuest()}
-                activeOpacity={0.8}
-              >
-                {isGuestLoading || isGuestSuccess ? (
-                  <ActivityIndicator size="small" color="#000" />
-                ) : (
-                  <>
-                  <IncoIcon />
-                  <Text style={styles.socialText}>Continue as guest</Text>
-                  </>
-                )}
-              </TouchableOpacity>
             </View>
-
-            <View style={styles.continueWithDivider}>
-              <View style={styles.borderRow}></View>
-              <Text style={styles.continueWithDividerText}>Or</Text>
-            </View>
-
             <TouchableOpacity
               activeOpacity={0.1}
-              style={globalStyles.buttonItemPrimary}
-              onPress={() => navigation.navigate("SignUp")}
+              style={[
+                globalStyles.buttonItemPrimary,
+                "password" in formik.errors ||
+                "email" in formik.errors ||
+                formik.isSubmitting
+                  ? globalStyles.buttonItemPrimaryDisabled
+                  : null,
+              ]}
+              onPress={formik.submitForm}
+              disabled={
+                "password" in formik.errors ||
+                "email" in formik.errors ||
+                formik.isSubmitting ||
+                isLoading
+              }
             >
-              {isLoading ||
+              {formik.isSubmitting ||
+              isLoading ||
               isSuccess ||
               isSocialAuthLoading ||
               isSocialAuthSuccess ? (
                 <ActivityIndicator size="small" color="#fff" />
               ) : (
-                <Text style={globalStyles.buttonItemPrimaryText}>
-                  Create account
-                </Text>
+                <Text style={globalStyles.buttonItemPrimaryText}>Sign In</Text>
               )}
             </TouchableOpacity>
           </View>
           <View style={[styles.textWithButtonWrapper,{
             marginTop: 45
           }]}>
-            <Text style={styles.textWithButtonLabel}>Have an account?</Text>
+            <Text style={styles.textWithButtonLabel}>Create new account?</Text>
             <TouchableOpacity
               activeOpacity={0.7}
               style={styles.textWithButton}
-              onPress={() => navigation.navigate("Login")}
+              onPress={() => navigation.navigate("SignIn")}
             >
-              <Text style={styles.textWithButtonText}>Sign In</Text>
+              <Text style={styles.textWithButtonText}>Sign Up</Text>
             </TouchableOpacity>
           </View>
           <View style={[styles.textWithButtonWrapper, {
-            marginTop: 0,
+            marginTop: 0
           }]}>
             <Text
               style={[
@@ -353,7 +287,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                 },
               ]}
             >
-              By sign up you agree our
+              By sign in you agree our
             </Text>
             <TouchableOpacity
               onPress={() => _handlePressButtonAsync()}
@@ -374,6 +308,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
               </Text>
             </TouchableOpacity>
           </View>
+        
         </ScrollView>
       </KeyboardAvoidingView>
     </View>
@@ -409,9 +344,8 @@ const styles = StyleSheet.create({
   },
   socialText: {
     fontSize: SIZES.body3,
-    marginLeft: 15,
-    fontWeight: "500",
-    width: 160,
+    marginLeft:  15,
+    fontWeight: "500"
   },
   textWithButton: {
     marginLeft: 5,
@@ -428,7 +362,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginTop: 25,
-    marginBottom: 10,
+    marginBottom: 30
   },
   borderRow: {
     width: "100%",

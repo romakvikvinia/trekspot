@@ -343,6 +343,13 @@ export const AppleIcon = () => {
   const SvgImage = () => <SvgXml xml={svgMarkup} width="22" height="22" />;
   return <SvgImage />;
 };
+
+export const IncoIcon = () => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><g data-name="Layer 2"><path fill="#6ca4ff" d="M7 20a4 4 0 1 1 4-4 4 4 0 0 1-4 4zm0-6a2 2 0 1 0 2 2 2 2 0 0 0-2-2zM17 20a4 4 0 1 1 4-4 4 4 0 0 1-4 4zm0-6a2 2 0 1 0 2 2 2 2 0 0 0-2-2z" opacity="1" data-original="#6ca4ff"></path><rect width="20" height="2" x="2" y="8" fill="#0554f1" rx="1" opacity="1" data-original="#0554f1"></rect><path fill="#0554f1" d="M19.15 10H4.85l.79-5.57A4 4 0 0 1 9.6 1h4.8a4 4 0 0 1 4 3.43zm-12-2h9.7l-.47-3.28A2 2 0 0 0 14.4 3H9.6a2 2 0 0 0-2 1.72z" opacity="1" data-original="#0554f1"></path><path fill="#6ca4ff" d="M10 15h4v2h-4z" opacity="1" data-original="#6ca4ff"></path><path fill="#0554f1" d="M18 9H6l.63-4.42A3 3 0 0 1 9.6 2h4.8a3 3 0 0 1 3 2.58z" opacity="1" data-original="#0554f1"></path></g></g></svg>`;
+  const SvgImage = () => <SvgXml xml={svgMarkup} width="22" height="22" />;
+  return <SvgImage />;
+};
+
 export const VisitedIcon = ({ active = false, width = 0, height = 0 }) => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M14 7a2 2 0 1 1-2-2 2 2 0 0 1 2 2Zm2.958 5.184L13.9 15.215a2.669 2.669 0 0 1-3.79 0L7.054 12.2a7.262 7.262 0 0 1-.012-10.1 6.9 6.9 0 0 1 9.916 0 7.257 7.257 0 0 1 0 10.084ZM16 7a4 4 0 1 0-4 4 4 4 0 0 0 4-4Zm4.753 2.2a9.1 9.1 0 0 1-2.364 4.384l-3.078 3.053a4.667 4.667 0 0 1-3.3 1.371 4.665 4.665 0 0 1-3.3-1.366l-3.063-3.023a9.2 9.2 0 0 1-2.365-4.311 5.066 5.066 0 0 0-1.745 1.083A4.946 4.946 0 0 0 0 14v4.075a5.013 5.013 0 0 0 3.6 4.8l2.87.9A4.981 4.981 0 0 0 7.959 24a5.076 5.076 0 0 0 1.355-.186l5.78-1.71a2.976 2.976 0 0 1 1.573 0l2.387.8A4 4 0 0 0 24 19.021v-5.149A5.009 5.009 0 0 0 20.753 9.2Z" fill=${
     active ? "#fff" : "#898B93"

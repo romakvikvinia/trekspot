@@ -71,25 +71,6 @@ export const ExploreHeader = () => {
                       needResetStack: true,
                     },
                   });
-                  // navigation.reset({
-                  //   index: 0, // Reset to the first screen
-                  //   routes: [
-                  //     {
-                  //       name: "Trips",
-                  //       state: {
-                  //         routes: [
-                  //           {
-                  //             name: "TripDetailScreen",
-                  //             params: {
-                  //               city: data.upComingTrips[0].cities[0],
-                  //               trip: data.upComingTrips[0],
-                  //             },
-                  //           },
-                  //         ],
-                  //       },
-                  //     },
-                  //   ],
-                  // });
                 } else {
                   navigation.navigate("Trips");
                 }

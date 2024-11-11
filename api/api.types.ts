@@ -1,3 +1,7 @@
+export enum SocialProvidersEnum {
+  Google = "Google",
+  Apple = "Apple",
+}
 /**
  * Login related types
  */
@@ -13,6 +17,13 @@ export type AuthLoginResponseType = {
 export type AuthLoginType = {
   email: string;
   password: string;
+};
+
+export type AuthSocialLogInInput = Pick<TokenType, "token"> & {
+  provider: SocialProvidersEnum;
+};
+export type AuthSocialLogInResponseType = {
+  socialLogin: TokenType;
 };
 
 /**
