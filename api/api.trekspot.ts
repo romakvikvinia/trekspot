@@ -93,9 +93,9 @@ export const trekSpotApi = createApi({
   refetchOnMountOrArgChange: true,
   // refetchOnFocus: true,
   baseQuery: graphqlRequestBaseQuery({
-    // url: `${baseUrl}/graphql`,
+    url: `${baseUrl}/graphql`,
     // url: "http://localhost:8080/graphql",
-    url: "http://192.168.0.102:8080/graphql",
+    // url: "http://192.168.0.102:8080/graphql",
     // url: "https://trekspot.io/graphql",
     prepareHeaders: prepHeaders,
     customErrors: ({ name, response }) => {
