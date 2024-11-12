@@ -21,7 +21,7 @@ export type AuthLoginType = {
 
 export type AuthSocialLogInInput = Pick<TokenType, "token"> & {
   provider: SocialProvidersEnum;
-};
+} & { firstName?: string; lastName?: string };
 export type AuthSocialLogInResponseType = {
   socialLogin: TokenType;
 };

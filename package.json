@@ -1,12 +1,12 @@
 {
   "name": "trekspot",
   "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
+    "start": "expo start --dev-client",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "build:ios": "eas build --profile development-simulator --platform ios"
   },
   "dependencies": {
     "@animatereactnative/marquee": "^0.2.0",
@@ -30,7 +30,7 @@
     "expo-apple-authentication": "^6.4.2",
     "expo-av": "~14.0.5",
     "expo-blur": "~13.0.2",
-    "expo-dev-client": "~4.0.18",
+    "expo-dev-client": "~4.0.29",
     "expo-document-picker": "~12.0.2",
     "expo-font": "~12.0.4",
     "expo-haptics": "~13.0.1",
@@ -48,7 +48,7 @@
     "moment": "^2.30.1",
     "patch-package": "^8.0.0",
     "react": "18.2.0",
-    "react-native": "0.74.2",
+    "react-native": "0.74.5",
     "react-native-click-outside": "^0.1.1",
     "react-native-collapsible-tab-view": "^6.2.1",
     "react-native-confirmation-code-field": "^7.4.0",
