@@ -93,9 +93,9 @@ export const trekSpotApi = createApi({
   refetchOnMountOrArgChange: true,
   // refetchOnFocus: true,
   baseQuery: graphqlRequestBaseQuery({
-    url: `${baseUrl}/graphql`,
+    // url: `${baseUrl}/graphql`,
     // url: "http://localhost:8080/graphql",
-    // url: "http://192.168.0.105:8080/graphql",
+    url: "http://192.168.0.102:8080/graphql",
     // url: "https://trekspot.io/graphql",
     prepareHeaders: prepHeaders,
     customErrors: ({ name, response }) => {
@@ -137,11 +137,23 @@ export const trekSpotApi = createApi({
       AuthSocialLogInResponseType,
       AuthSocialLogInInput
     >({
-      query: ({ token, provider }) => ({
-        variables: { token, provider },
+      query: ({ token, provider, firstName, lastName }) => ({
+        variables: { token, provider, firstName, lastName },
         document: gql`
-          mutation ($token: String!, $provider: Provider!) {
-            socialLogin(input: { token: $token, provider: $provider }) {
+          mutation (
+            $token: String!
+            $provider: Provider!
+            $firstName: String
+            $lastName: String
+          ) {
+            socialLogin(
+              input: {
+                token: $token
+                provider: $provider
+                firstName: $firstName
+                lastName: $lastName
+              }
+            ) {
               token
               expire
             }

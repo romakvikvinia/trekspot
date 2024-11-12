@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
@@ -43,7 +43,7 @@ import { TrekSpotLinear } from "../../utilities/svg/TrekSpotLinear";
 
 import { signIn } from "../../package/slices";
 import { GUEST_EMAIL, GUEST_PASS } from "../../helpers/baseUrl.helper";
-import * as WebBrowser from 'expo-web-browser';
+import * as WebBrowser from "expo-web-browser";
 
 // GoogleSignin.configure({
 //   offlineAccess: true,
@@ -170,42 +170,40 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
    * S O C I A L AUTH
    */
 
-  // const startGoogleAuth = async () => {
-  //   try {
-  //     await GoogleSignin.hasPlayServices();
-  //     // log in using Google account (on Android it will only work if google play services are installed)
-  //     const userInfo = await GoogleSignin.signIn();
-  //     const token = await GoogleSignin.getTokens();
-  //     if (
-  //       userInfo.data &&
-  //       userInfo.data.idToken &&
-  //       token &&
-  //       token.accessToken
-  //     ) {
-  //       fetchSocialAuth({
-  //         token: token.accessToken,
-  //         provider: SocialProvidersEnum.Google,
-  //       });
-  //     } else {
-  //       handelErrorMessage();
-  //     }
-  //     // try to sign in silently (this should be done when the user is already signed-in)
-
-  //     const userInfo2 = await GoogleSignin.signInSilently();
-  //     console.log(userInfo2);
-
-  //     // to logout use the following piece of code
-
-  //     const resp = await GoogleSignin.signOut();
-  //     console.log(resp);
-  //   } catch (error: any) {
-  //     if (error.code) {
-  //       console.log("Error related to Google sign-in: ", error);
-  //     } else {
-  //       console.log("An error that is not related to Google sign-in: ", error);
-  //     }
-  //   }
-  // };
+  const startGoogleAuth = async () => {
+    try {
+      // await GoogleSignin.hasPlayServices();
+      // // log in using Google account (on Android it will only work if google play services are installed)
+      // const userInfo = await GoogleSignin.signIn();
+      // console.log(userInfo);
+      // const token = await GoogleSignin.getTokens();
+      // if (
+      //   userInfo.data &&
+      //   userInfo.data.idToken &&
+      //   token &&
+      //   token.accessToken
+      // ) {
+      //   fetchSocialAuth({
+      //     token: token.accessToken,
+      //     provider: SocialProvidersEnum.Google,
+      //   });
+      // } else {
+      //   handelErrorMessage();
+      // }
+      // try to sign in silently (this should be done when the user is already signed-in)
+      // const userInfo2 = await GoogleSignin.signInSilently();
+      // console.log(userInfo2);
+      // to logout use the following piece of code
+      // const resp = await GoogleSignin.signOut();
+      // console.log(resp);
+    } catch (error: any) {
+      if (error.code) {
+        console.log("Error related to Google sign-in: ", error);
+      } else {
+        console.log("An error that is not related to Google sign-in: ", error);
+      }
+    }
+  };
 
   const startAppleSignIn = async () => {
     try {
@@ -216,18 +214,17 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
         ],
       });
 
-      console.log(credential);
-
       if (credential && credential.identityToken) {
         fetchSocialAuth({
           token: credential.identityToken,
           provider: SocialProvidersEnum.Apple,
+          firstName: credential.fullName?.givenName || "",
+          lastName: credential.fullName?.familyName || "",
         });
       } else {
         handelErrorMessage();
       }
 
-      // console.log(credential);
       // signed in
     } catch (e: any) {
       console.log(e);
@@ -240,9 +237,12 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   };
 
   const _handlePressButtonAsync = async () => {
-    let result = await WebBrowser.openBrowserAsync('https://trekspot.io/en/privacy-policy', {
-      enableBarCollapsing: true,
-    });
+    // let result = await WebBrowser.openBrowserAsync(
+    //   "https://trekspot.io/en/privacy-policy",
+    //   {
+    //     enableBarCollapsing: true,
+    //   }
+    // );
   };
 
   if (isError) {
@@ -275,7 +275,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
               <TouchableOpacity
                 activeOpacity={0.1}
                 style={styles.continueWithButton}
-                // onPress={startGoogleAuth}
+                onPress={startGoogleAuth}
               >
                 <GoogleIcon />
                 <Text style={styles.socialText}>Continue with Google</Text>
@@ -299,8 +299,8 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
                   <ActivityIndicator size="small" color="#000" />
                 ) : (
                   <>
-                  <IncoIcon />
-                  <Text style={styles.socialText}>Continue as guest</Text>
+                    <IncoIcon />
+                    <Text style={styles.socialText}>Continue as guest</Text>
                   </>
                 )}
               </TouchableOpacity>
@@ -328,9 +328,14 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
               )}
             </TouchableOpacity>
           </View>
-          <View style={[styles.textWithButtonWrapper,{
-            marginTop: 45
-          }]}>
+          <View
+            style={[
+              styles.textWithButtonWrapper,
+              {
+                marginTop: 45,
+              },
+            ]}
+          >
             <Text style={styles.textWithButtonLabel}>Have an account?</Text>
             <TouchableOpacity
               activeOpacity={0.7}
@@ -340,9 +345,14 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
               <Text style={styles.textWithButtonText}>Sign In</Text>
             </TouchableOpacity>
           </View>
-          <View style={[styles.textWithButtonWrapper, {
-            marginTop: 0,
-          }]}>
+          <View
+            style={[
+              styles.textWithButtonWrapper,
+              {
+                marginTop: 0,
+              },
+            ]}
+          >
             <Text
               style={[
                 styles.textWithButtonLabel,
