@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Platform,
@@ -24,8 +24,8 @@ import { COLORS, SIZES } from "../../styles/theme";
 import ShareModal from "../../common/components/ShareModal";
 import { CountryItem } from "../../components/home/CountryItem";
 import {
+  useAllCountriesQuery,
   useCreateAnalyticsMutation,
-  useLazyAllCountriesQuery,
 } from "../../api/api.trekspot";
 
 import { formatPercentage } from "../../helpers/number.helper";
@@ -33,10 +33,11 @@ import { formatPercentage } from "../../helpers/number.helper";
 import { MapSvg } from "../../utilities/svg/map";
 
 import { useAppSelector } from "../../package/store";
-import { useTripStore } from "../../components/store/store";
+import { useTripStore } from "../../package/zustand/store";
 import { GuestUserModal } from "../../common/components/GuestUserModal";
 import { useFocusEffect } from "@react-navigation/native";
 import { CountryType } from "../../api/api.types";
+import { useCountriesStore } from "../../package/zustand/countries.store";
 
 interface MapVIewProps {
   isLoading?: boolean;
@@ -44,7 +45,6 @@ interface MapVIewProps {
   countryQuantity?: number;
   visitedCountries?: number;
   territories?: number;
-  countriesOnMap?: string[];
 }
 
 export const MapView: React.FC<MapVIewProps> = ({
@@ -53,25 +53,23 @@ export const MapView: React.FC<MapVIewProps> = ({
   visitedCountries = 0,
   territories = 0,
   isLoading = true,
-  countriesOnMap = [],
 }) => {
   const { user } = useAppSelector((state) => state.auth);
-  const reduxCountries = useAppSelector((state) => state.countries);
+  // const reduxCountries = useCountriesStore();
 
   const [searchValue, setSearchValue] = useState("");
 
   const [state, setState] = useState<{
     countries: CountryType[];
-    visited_countries: string[];
-    lived_countries: string[];
+    countriesOnMap: string[];
+    hideMap: boolean;
   }>({
-    visited_countries: [],
-    lived_countries: [],
-
     countries: [],
+    countriesOnMap: [],
+    hideMap: false,
   });
 
-  const [fetchAllCountries] = useLazyAllCountriesQuery();
+  const { data: countryList } = useAllCountriesQuery({});
   const [fetchCreateAnalytics] = useCreateAnalyticsMutation();
 
   const modalRef = useRef<Modalize>(null);
@@ -88,7 +86,10 @@ export const MapView: React.FC<MapVIewProps> = ({
   );
 
   const onOpen = useCallback(() => {
-    if (modalRef.current) modalRef.current.open();
+    if (modalRef.current) {
+      // setState((prevState) => ({ ...prevState, hideMap: true }));
+      modalRef.current.open();
+    }
   }, []);
 
   const onShareModalOpen = useCallback(() => {
@@ -96,31 +97,27 @@ export const MapView: React.FC<MapVIewProps> = ({
   }, []);
 
   const handleCountriesModalClose = useCallback(async () => {
+    // setState((prevState) => ({ ...prevState, hideMap: false }));
     setSearchValue("");
-    if (Object.keys(reduxCountries.visitedCountries).length)
-      fetchCreateAnalytics({
-        countries: Object.keys(reduxCountries.visitedCountries),
-      });
-  }, [reduxCountries.visitedCountries]);
+    // if (Object.keys(reduxCountries.visitedCountries).length) {
+    //   fetchCreateAnalytics({
+    //     countries: Object.keys(reduxCountries.visitedCountries),
+    //   });
+    // }
+  }, []);
 
   const handelSearch = (search: string) => {
     setSearchValue(search);
   };
 
-  //
-
-  useFocusEffect(
-    React.useCallback(() => {
-      (async () => {
-        try {
-          const { allCountries: countries } = await fetchAllCountries(
-            {}
-          ).unwrap();
-          setState((prevState) => ({ ...prevState, countries }));
-        } catch (error) {}
-      })();
-    }, [fetchAllCountries])
-  );
+  useEffect(() => {
+    if (countryList && countryList.allCountries) {
+      setState((prevState) => ({
+        ...prevState,
+        countries: countryList.allCountries,
+      }));
+    }
+  }, [countryList]);
 
   // transform data
 
@@ -154,6 +151,31 @@ export const MapView: React.FC<MapVIewProps> = ({
       onShareModalOpen();
     }
   };
+
+  const DrownMap = () =>
+    React.useMemo(() => {
+      return (
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => onOpen()}
+          style={{
+            padding: 15,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <MapSvg
+            width={SIZES.width < 370 ? 340 : 370}
+            countries={state.countriesOnMap}
+            color={COLORS.primary}
+          />
+        </TouchableOpacity>
+      );
+    }, [state.countriesOnMap]);
+  //
+
+  console.log("here");
 
   return (
     <>
@@ -189,22 +211,7 @@ export const MapView: React.FC<MapVIewProps> = ({
           </View>
         ) : (
           <>
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => onOpen()}
-              style={{
-                padding: 15,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <MapSvg
-                width={SIZES.width < 370 ? 340 : 370}
-                countries={countriesOnMap}
-                color={COLORS.primary}
-              />
-            </TouchableOpacity>
+            {!state.hideMap ? <DrownMap /> : null}
 
             <View style={styles.row}>
               <View style={[styles.rowBox]}>
@@ -330,15 +337,9 @@ export const MapView: React.FC<MapVIewProps> = ({
               // }
               extraData={filteredCountries}
               data={filteredCountries}
-              renderItem={({ item }) => (
-                <CountryItem
-                  country={item}
-                  visited_countries={reduxCountries.visitedCountries}
-                  lived_countries={reduxCountries.livedCountries}
-                />
-              )}
+              renderItem={({ item }) => <CountryItem country={item} />}
               estimatedItemSize={100}
-              contentContainerStyle={{ paddingTop: 15}}
+              contentContainerStyle={{ paddingTop: 15 }}
             />
           </View>
         </Modalize>
@@ -348,7 +349,7 @@ export const MapView: React.FC<MapVIewProps> = ({
         <Modalize ref={shareModalRef} modalTopOffset={65} adjustToContentHeight>
           <ShareModal
             key={`share-on-map-${world}`}
-            countries={countriesOnMap}
+            countries={state.countriesOnMap}
             world={world}
             achievedCountries={visitedCountries}
             territories={territories}

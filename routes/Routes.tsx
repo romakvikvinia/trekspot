@@ -22,7 +22,7 @@ interface RoutesProps {}
 SplashScreen.preventAutoHideAsync();
 
 export const Routes: React.FC<RoutesProps> = ({}) => {
-  const authState = useAppSelector((state) => state);
+  const authState = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const [fetchMe] = useLazyMeQuery();
 
@@ -67,8 +67,8 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
     <>
       <SafeAreaProvider>
         <NavigationContainer onReady={checkAuth} theme={theme}>
-          {authState && !authState.auth.isLoading ? (
-            !authState.auth.isAuthenticated ? (
+          {authState && !authState.isLoading ? (
+            !authState.isAuthenticated ? (
               <AuthRoute />
             ) : (
               <UserProvider>
@@ -76,7 +76,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
               </UserProvider>
             )
           ) : (
-            <Loader isLoading={authState.auth.isLoading} />
+            <Loader isLoading={authState.isLoading} />
           )}
         </NavigationContainer>
 

@@ -7,7 +7,7 @@ import { Mark2, SearchIcon } from "../../utilities/SvgIcons.utility";
 import Constants from "expo-constants";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useTripStore } from "../../components/store/store";
+import { useTripStore } from "../../package/zustand/store";
 import { useState } from "react";
 import { GuestUserModal } from "../../common/components/GuestUserModal";
 import { useAppSelector } from "../../package/store";

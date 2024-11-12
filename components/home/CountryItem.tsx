@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -14,59 +14,22 @@ import {
 import { COLORS } from "../../styles/theme";
 
 import * as Haptics from "expo-haptics";
-import { toggleVisitedCountry, toggleLivedCountry } from "../../package/slices";
+
 import { CountryType } from "../../api/api.types";
-import { useAppDispatch } from "../../package/store";
+
+import { useCountriesStore } from "../../package/zustand/countries.store";
 
 interface HomeProps {
   country: CountryType;
-  visited_countries: Record<string, CountryType>;
-  lived_countries: Record<string, CountryType>;
 }
 
-export const CountryItem: React.FC<HomeProps> = ({
-  country,
-  visited_countries,
-  lived_countries,
-}) => {
-  const dispatch = useAppDispatch();
-  const [state, setState] = useState({
-    isVisited: country.id in visited_countries,
-    isLived: country.id in lived_countries,
-  });
+export const CountryItem: React.FC<HomeProps> = ({ country }) => {
+  const { toggleVisitedCountry, visitedCountries } = useCountriesStore();
 
   const handleVisited = useCallback((country: CountryType) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    // storeCountries(code);
-    dispatch(toggleVisitedCountry(country));
-    setState((prevState) => ({
-      ...prevState,
-      isVisited: !prevState.isVisited,
-    }));
+    toggleVisitedCountry(country);
   }, []);
-
-  // const handleLived = useCallback((code: string) => {
-  //   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-  //   dispatch(toggleLivedCountry(country));
-  //   setState((prevState) => ({
-  //     ...prevState,
-  //     isLived: !prevState.isLived,
-  //   }));
-  // }, []);
-
-  useEffect(() => {
-    setState((prevState) => ({
-      ...prevState,
-      isVisited: country.id in visited_countries,
-    }));
-  }, [visited_countries, country.iso2]);
-
-  useEffect(() => {
-    setState((prevState) => ({
-      ...prevState,
-      isLived: country.id in lived_countries,
-    }));
-  }, [lived_countries, country.iso2]);
 
   // @ts-ignore
   const imagePath = Flags[country.iso2];
@@ -100,11 +63,11 @@ export const CountryItem: React.FC<HomeProps> = ({
         <TouchableOpacity
           style={[
             styles.countryItemActionButton,
-            state.isVisited ? styles.countryActive : null,
+            country.id in visitedCountries ? styles.countryActive : null,
           ]}
           onPress={() => handleVisited(country)}
         >
-          <VisitedIcon active={state.isVisited} />
+          <VisitedIcon active={country.id in visitedCountries} />
         </TouchableOpacity>
         {/* <TouchableOpacity
           style={[

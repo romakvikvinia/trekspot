@@ -1,8 +1,5 @@
-import {
-  StyleSheet,
-  View,
-} from "react-native";
-import { useTripStore } from "../../../components/store/store";
+import { StyleSheet, View } from "react-native";
+import { useTripStore } from "../../../package/zustand/store";
 import { ReachHeaderContent } from "./ReachHeaderContent";
 import { ClassicHeaderContent } from "./ClassicHeaderContent";
 
@@ -12,14 +9,14 @@ type HeaderProps = {
   iso2: string;
   tabData: any;
   activeDay: number;
-}
+};
 
-export const Header  = ({
+export const Header = ({
   data,
   onQuestion2ModalOpen,
   iso2,
   tabData,
-  activeDay
+  activeDay,
 }: HeaderProps) => {
   const { tripStyle } = useTripStore((state) => ({
     tripStyle: state.tripStyle,
@@ -27,10 +24,20 @@ export const Header  = ({
   return (
     <View style={[styles.mapHeaderContainer]}>
       {!tripStyle && (
-       <ReachHeaderContent data={data} iso2={iso2} tabData={tabData} onQuestion2ModalOpen={onQuestion2ModalOpen} activeDay={activeDay} />
+        <ReachHeaderContent
+          data={data}
+          iso2={iso2}
+          tabData={tabData}
+          onQuestion2ModalOpen={onQuestion2ModalOpen}
+          activeDay={activeDay}
+        />
       )}
       {tripStyle && (
-        <ClassicHeaderContent data={data} iso2={iso2} onQuestion2ModalOpen={onQuestion2ModalOpen} />
+        <ClassicHeaderContent
+          data={data}
+          iso2={iso2}
+          onQuestion2ModalOpen={onQuestion2ModalOpen}
+        />
       )}
 
       {/* {!tripStyle && (
@@ -84,5 +91,5 @@ export const Header  = ({
 const styles = StyleSheet.create({
   mapHeaderContainer: {
     position: "relative",
-  }
+  },
 });

@@ -14,7 +14,7 @@ import { TripHelpers } from "./TripHelpers";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { COLORS } from "../../../styles/theme";
 import { HeaderTextContent } from "./HeaderTextcontent";
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 
 type ReachHeaderContentProps = {
   data: any;
@@ -31,16 +31,18 @@ export const ReachHeaderContent = ({
   const route = useRoute();
   const navigation = useNavigation();
 
+  console.log("rom", data?.cities[0]?.image?.url);
+
   const imagePath = useMemo(() => {
     return data?.cities[0]?.image?.url || route?.params?.city?.image?.url;
-  },[route, data])
-  
+  }, [route, data]);
+
   return (
     <>
       <View style={styles.reachContainer}>
         <ImageBackground
           source={{
-            uri: imagePath
+            uri: imagePath,
           }}
           style={styles.reachImage}
         >

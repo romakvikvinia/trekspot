@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import {
   Text,
   View,
@@ -23,25 +23,15 @@ import {
   MuseumsIcon,
   TopExperiencesIcon,
   TopsightsIcon,
-  XIcon,
 } from "../../utilities/SvgIcons.utility";
-import {
-  useAnalyticsQuery,
-} from "../../api/api.trekspot";
+import { useAnalyticsQuery } from "../../api/api.trekspot";
 import { SightType } from "../../api/api.types";
-import {  useAppSelector } from "../../package/store";
-import { Modalize } from "react-native-modalize";
-import { Portal } from "react-native-portalize";
+import { useAppSelector } from "../../package/store";
 
 type HomeProps = NativeStackScreenProps<HomeRouteStackParamList, "Main">;
 
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
-  
-  const { visitedCountries } = useAppSelector((state) => state.countries);
   const { data: analyticsData, isLoading } = useAnalyticsQuery();
-
-  const [categoryKey, setCategoryKey] = React.useState<string | null>(null);
-  const activitiesDetailRef = useRef(null)
 
   // transform data
   const activities: Record<string, SightType[]> = {};
@@ -62,109 +52,66 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
     markets: MarketsIcon,
     "top experiences": TopExperiencesIcon,
     beaches: BeachesIcon,
-    "casinos": CasinosIcon
+    casinos: CasinosIcon,
   };
 
-  const handleShowActivitiesByCategory = (category: string) => {
-    setCategoryKey(category);
-    activitiesDetailRef.current?.open()
-  }
-  console.log("activities", categoryKey && activities[categoryKey]);
-
   return (
-    <>
-      <View style={[styles.safeArea]}>
-        <ScrollView
-          style={styles.container}
-          showsVerticalScrollIndicator={false}
-        >
-          <MapView
-            world={analyticsData?.analytics.world}
-            isLoading={isLoading}
-            countryQuantity={analyticsData?.analytics.countries}
-            visitedCountries={analyticsData?.analytics.visitedCountries}
-            territories={analyticsData?.analytics.territories}
-            countriesOnMap={
-              (visitedCountries &&
-                Object.values(visitedCountries).map((c) => c.iso2)) ||
-              []
-            }
+    <View style={[styles.safeArea]}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        <MapView
+          world={analyticsData?.analytics.world}
+          isLoading={isLoading}
+          countryQuantity={analyticsData?.analytics.countries}
+          visitedCountries={analyticsData?.analytics.visitedCountries}
+          territories={analyticsData?.analytics.territories}
+        />
+        <View style={styles.mapStats}>
+          <Text style={styles.cardTitle}>Territories</Text>
+          <Territories
+          // isLoading={isVisitedCountriesLoading}
+          // visitedCountries={visitedCountriesData?.visitedCountries || []}
           />
-          <View style={styles.mapStats}>
-            <Text style={styles.cardTitle}>Territories</Text>
-            <Territories
-            // isLoading={isVisitedCountriesLoading}
-            // visitedCountries={visitedCountriesData?.visitedCountries || []}
-            />
-          </View>
-          <View style={styles.visitedStats}>
-            <Text
-              style={[
-                styles.cardTitle,
-                { paddingHorizontal: 15, marginBottom: 15 },
-              ]}
-            >
-              Activities
-            </Text>
-            <ScrollView
-              showsHorizontalScrollIndicator={false}
-              horizontal
-              contentContainerStyle={{ paddingHorizontal: 15 }}
-            >
-              {Object.keys(activities).map((category, index) => {
-                const IconComponent = categoryIcons[category.toLowerCase()];
-                return (
-                  <TouchableOpacity
-                    style={styles.statItem}
-                    key={`${category}-${index}`}
-                    activeOpacity={0.7}
-                    onPress={() => handleShowActivitiesByCategory(category)}
-                  >
-                    <View style={styles.lf}>
-                      <View style={{ height: 40 }}>
-                        <Text style={styles.visitedCategoryText}>
-                          {category}
-                        </Text>
-                      </View>
-                      <View style={styles.categoryIcon}>
-                        <IconComponent />
-                      </View>
+        </View>
+        <View style={styles.visitedStats}>
+          <Text
+            style={[
+              styles.cardTitle,
+              { paddingHorizontal: 15, marginBottom: 15 },
+            ]}
+          >
+            Activities
+          </Text>
+          <ScrollView
+            showsHorizontalScrollIndicator={false}
+            horizontal
+            contentContainerStyle={{ paddingHorizontal: 15 }}
+          >
+            {Object.keys(activities).map((category, index) => {
+              const IconComponent = categoryIcons[category.toLowerCase()];
+              return (
+                <TouchableOpacity
+                  style={styles.statItem}
+                  key={`${category}-${index}`}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.lf}>
+                    <View style={{ height: 40 }}>
+                      <Text style={styles.visitedCategoryText}>{category}</Text>
                     </View>
-                    <Text style={styles.amount}>
-                      {activities[category].length}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </ScrollView>
-          </View>
-        </ScrollView>
-      </View>
-      <Portal>
-        <Modalize
-          ref={activitiesDetailRef}
-          modalTopOffset={65}
-          adjustToContentHeight
-        >
-         <View style={styles.header}>
-        <Text style={styles.title}>{categoryKey}</Text>
-        <TouchableOpacity
-          onPress={() => activitiesDetailRef.current?.close()}
-          activeOpacity={0.7}
-          style={styles.closeButton}
-        >
-          <XIcon width="10" />
-        </TouchableOpacity>
-      </View>
-      <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={{ paddingHorizontal: 15 }}
-      >
-            <Text>dd</Text>
+                    <View style={styles.categoryIcon}>
+                      <IconComponent />
+                    </View>
+                  </View>
+                  <Text style={styles.amount}>
+                    {activities[category].length}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
           </ScrollView>
-        </Modalize>
-      </Portal>
-    </>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 

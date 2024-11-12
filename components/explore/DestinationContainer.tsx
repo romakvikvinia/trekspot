@@ -16,7 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
-import { useTripStore } from "../store/store";
+import { useTripStore } from "../../package/zustand/store";
 import { GuestUserModal } from "../../common/components/GuestUserModal";
 import { useAppSelector } from "../../package/store";
 
