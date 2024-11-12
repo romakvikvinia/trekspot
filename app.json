@@ -42,7 +42,7 @@
         "projectId": "0208e3d2-29fc-4d09-9a72-11fae25997f6"
       }
     },
-    "owner": "Trekspot",
+    "owner": "trekspot",
     "expo": {
       "plugins": [
         "expo-apple-authentication",
