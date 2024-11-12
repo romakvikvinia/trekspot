@@ -26,7 +26,6 @@ import {
 } from "../../utilities/SvgIcons.utility";
 import { useAnalyticsQuery } from "../../api/api.trekspot";
 import { SightType } from "../../api/api.types";
-import { useAppSelector } from "../../package/store";
 
 type HomeProps = NativeStackScreenProps<HomeRouteStackParamList, "Main">;
 
@@ -72,44 +71,48 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
           // visitedCountries={visitedCountriesData?.visitedCountries || []}
           />
         </View>
-        <View style={styles.visitedStats}>
-          <Text
-            style={[
-              styles.cardTitle,
-              { paddingHorizontal: 15, marginBottom: 15 },
-            ]}
-          >
-            Activities
-          </Text>
-          <ScrollView
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            contentContainerStyle={{ paddingHorizontal: 15 }}
-          >
-            {Object.keys(activities).map((category, index) => {
-              const IconComponent = categoryIcons[category.toLowerCase()];
-              return (
-                <TouchableOpacity
-                  style={styles.statItem}
-                  key={`${category}-${index}`}
-                  activeOpacity={0.7}
-                >
-                  <View style={styles.lf}>
-                    <View style={{ height: 40 }}>
-                      <Text style={styles.visitedCategoryText}>{category}</Text>
+        {Object.keys(activities) && Object.keys(activities).length > 0 && (
+          <View style={styles.visitedStats}>
+            <Text
+              style={[
+                styles.cardTitle,
+                { paddingHorizontal: 15, marginBottom: 15 },
+              ]}
+            >
+              Activities
+            </Text>
+            <ScrollView
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              contentContainerStyle={{ paddingHorizontal: 15 }}
+            >
+              {Object.keys(activities).map((category, index) => {
+                const IconComponent = categoryIcons[category.toLowerCase()];
+                return (
+                  <TouchableOpacity
+                    style={styles.statItem}
+                    key={`${category}-${index}`}
+                    activeOpacity={0.7}
+                  >
+                    <View style={styles.lf}>
+                      <View style={{ height: 40 }}>
+                        <Text style={styles.visitedCategoryText}>
+                          {category}
+                        </Text>
+                      </View>
+                      <View style={styles.categoryIcon}>
+                        <IconComponent />
+                      </View>
                     </View>
-                    <View style={styles.categoryIcon}>
-                      <IconComponent />
-                    </View>
-                  </View>
-                  <Text style={styles.amount}>
-                    {activities[category].length}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView>
-        </View>
+                    <Text style={styles.amount}>
+                      {activities[category].length}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+          </View>
+        )}
       </ScrollView>
     </View>
   );

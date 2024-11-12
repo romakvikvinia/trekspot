@@ -86,6 +86,14 @@ export const MapView: React.FC<MapVIewProps> = ({
   );
 
   const onOpen = useCallback(() => {
+
+    if (guestActivityCount >= 3 && user?.role === "guest") {
+      setShowGuestModal(true);
+      return;
+    } else {
+      increaseGuestActivityCount();
+    }
+
     if (modalRef.current) {
       // setState((prevState) => ({ ...prevState, hideMap: true }));
       modalRef.current.open();
@@ -175,7 +183,6 @@ export const MapView: React.FC<MapVIewProps> = ({
     }, [state.countriesOnMap]);
   //
 
-  console.log("here");
 
   return (
     <>
