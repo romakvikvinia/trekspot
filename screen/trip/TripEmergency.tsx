@@ -22,7 +22,7 @@ import { Loader } from "../../common/ui/Loader";
 type Props = NativeStackScreenProps<TripRouteStackParamList, "TripEmergency">;
 
 export const TripEmergency: React.FC<Props> = ({ navigation, route }) => {
-  const { iso2 } = route.params;
+  const { iso2 } = route?.params;
 
   const { data, isLoading, isError } = useCountryByIso2Query({ iso2 });
 

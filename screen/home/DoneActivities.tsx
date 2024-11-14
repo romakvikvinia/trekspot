@@ -107,7 +107,7 @@ export const DoneActivities = ({
           HeaderComponent={
             <View style={styles.modalHeader}>
                 <Text style={styles.modalTitle}>
-                    {selectedCategory}
+                    {selectedCategory} ({selectedCategoryActivities.length})
                 </Text>
             </View>
           }
