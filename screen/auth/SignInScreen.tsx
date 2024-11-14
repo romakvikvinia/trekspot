@@ -47,11 +47,11 @@ import * as WebBrowser from "expo-web-browser";
 // GoogleSignin.configure({
 //   offlineAccess: true,
 //   webClientId:
-//     "714520072398-6nt61odp4p76fdfdcu8e7lhoom6qnkf0.apps.googleusercontent.com",
+//     "923726965679-0v6m1phte051cgbg80374i76cegsnok0.apps.googleusercontent.com",
 //   // androidClientId:
-//   //   "714520072398-e14212odgjc7d7vq12rbog8fbtmit8ei.apps.googleusercontent.com",
+//   //   "923726965679-s3evflrnovadf0l777r5hiltuj0j49fs.apps.googleusercontent.com",
 //   iosClientId:
-//     "714520072398-tnhiqksspq65qq0atcq5mei8l8mefrbu.apps.googleusercontent.com",
+//     "923726965679-tap0vlets0dvclh7uertjalc0f1ueq50.apps.googleusercontent.com",
 //   scopes: ["profile", "email"],
 // });
 
