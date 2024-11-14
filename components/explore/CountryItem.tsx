@@ -34,7 +34,7 @@ export const CountryItem: React.FC<CountryItemProps> = ({
             styles.box,
             styles.typeMd,
             {
-              height: isExplore ? 130 : 180,
+              height: isExplore ? 140 : 180,
             },
           ]}
           contentFit="cover"

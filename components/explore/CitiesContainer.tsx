@@ -298,16 +298,12 @@ const styles = StyleSheet.create({
     color: "#fff",
     marginLeft: 3,
     fontSize: 12,
-    opacity: 0.7,
+    opacity: 0.8,
+    fontWeight: "500",
   },
-
-  ratingTextXs: {
-    fontSize: 10,
-  },
-
   rowItem: {
     width: "100%",
-    paddingTop: 25,
+    paddingTop: 30,
     backgroundColor: "#f8f8f8",
   },
   rowItemHeader: {
@@ -333,7 +329,7 @@ const styles = StyleSheet.create({
   box: {
     width: 170,
     minWidth: 160,
-    height: 130,
+    height: 140,
     backgroundColor: "#fafafa",
     borderRadius: 15,
     overflow: "hidden",

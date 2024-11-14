@@ -36,6 +36,7 @@ export const VisitedButton = ({
         tripDetailStyles.sightRightActionsButton,
         {
           marginLeft: -3,
+          zIndex: 2
         },
       ]}
       onPress={handleChangeActivityVisited}
@@ -54,14 +55,14 @@ export const VisitedButton = ({
       >
         Visited
       </Text>
-      {index === 0 && !isVisitedUsed && (
+      {
+      index === 0 && !isVisitedUsed && (
         <TouchableOpacity activeOpacity={1} style={styles.calloutBox}>
           <View style={styles.caret}>
             <LeftTriangle />
           </View>
           <Text style={styles.calloutBoxTitle}>
-            Once you mark this activity as visited, it will appear in the
-            Activities section on the Insights screen.
+            After you mark this activity as visited, it will show up in the Activities section on your Insights screen.
           </Text>
 
           <TouchableOpacity
@@ -82,8 +83,8 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     zIndex: 5,
-    left: 90,
-    top: -120,
+    left: 50,
+    top: -130,
     width: 200,
     opacity: 3,
     justifyContent: "flex-end",
