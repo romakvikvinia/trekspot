@@ -3,7 +3,6 @@ import {
   StackNavigationProp,
   createStackNavigator,
 } from "@react-navigation/stack";
-import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 import { SettingScreen } from "../../screen/setting/SettingScreen";
 import { THeaderButton } from "../../common/ui/THeaderButton";
@@ -72,7 +71,6 @@ export const SettingRouteStack: React.FC<SettingRouteProps> = ({}) => {
             Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
-     
     </Stack.Navigator>
   );
 };
