@@ -38,6 +38,7 @@ import { GuestUserModal } from "../../common/components/GuestUserModal";
 import { useFocusEffect } from "@react-navigation/native";
 import { CountryType } from "../../api/api.types";
 import { useCountriesStore } from "../../package/zustand/countries.store";
+import { Loader } from "../../common/ui/Loader";
 
 interface MapVIewProps {
   isLoading?: boolean;
@@ -55,7 +56,7 @@ export const MapView: React.FC<MapVIewProps> = ({
   isLoading = true,
 }) => {
   const { user } = useAppSelector((state) => state.auth);
-  // const reduxCountries = useCountriesStore();
+  const reduxCountries = useCountriesStore();
 
   const [searchValue, setSearchValue] = useState("");
 
@@ -69,8 +70,9 @@ export const MapView: React.FC<MapVIewProps> = ({
     hideMap: false,
   });
 
-  const { data: countryList } = useAllCountriesQuery({});
-  const [fetchCreateAnalytics] = useCreateAnalyticsMutation();
+  let { data: countryList } = useAllCountriesQuery({});
+  const [fetchCreateAnalytics, { isLoading: isUpdateAnalyticsLoading }] =
+    useCreateAnalyticsMutation();
 
   const modalRef = useRef<Modalize>(null);
   const shareModalRef = useRef<Modalize>(null);
@@ -86,7 +88,6 @@ export const MapView: React.FC<MapVIewProps> = ({
   );
 
   const onOpen = useCallback(() => {
-
     if (guestActivityCount >= 3 && user?.role === "guest") {
       setShowGuestModal(true);
       return;
@@ -95,7 +96,7 @@ export const MapView: React.FC<MapVIewProps> = ({
     }
 
     if (modalRef.current) {
-      // setState((prevState) => ({ ...prevState, hideMap: true }));
+      setState((prevState) => ({ ...prevState, hideMap: true }));
       modalRef.current.open();
     }
   }, []);
@@ -105,13 +106,22 @@ export const MapView: React.FC<MapVIewProps> = ({
   }, []);
 
   const handleCountriesModalClose = useCallback(async () => {
-    // setState((prevState) => ({ ...prevState, hideMap: false }));
     setSearchValue("");
-    // if (Object.keys(reduxCountries.visitedCountries).length) {
-    //   fetchCreateAnalytics({
-    //     countries: Object.keys(reduxCountries.visitedCountries),
-    //   });
-    // }
+    setState((prevState) => ({
+      ...prevState,
+      hideMap: false,
+    }));
+    if (Object.keys(reduxCountries.visitedCountries).length) {
+      fetchCreateAnalytics({
+        countries: Object.keys(reduxCountries.visitedCountries),
+      });
+      setState((prevState) => ({
+        ...prevState,
+        countriesOnMap: Object.values(reduxCountries.visitedCountries).map(
+          (i) => i.iso2
+        ),
+      }));
+    }
   }, []);
 
   const handelSearch = (search: string) => {
@@ -136,7 +146,8 @@ export const MapView: React.FC<MapVIewProps> = ({
       ? state.countries.filter((i) =>
           i.name.toLowerCase().includes(searchValue.toLowerCase())
         )
-      : state.countries;
+      : // .sort((a, b) => b.name.localeCompare(a.name))
+        state.countries;
 
   const resetSearch = () => {
     setSearchValue("");
@@ -183,7 +194,6 @@ export const MapView: React.FC<MapVIewProps> = ({
     }, [state.countriesOnMap]);
   //
 
-
   return (
     <>
       <View style={styles.mapContainer}>
@@ -218,7 +228,11 @@ export const MapView: React.FC<MapVIewProps> = ({
           </View>
         ) : (
           <>
-            {!state.hideMap ? <DrownMap /> : null}
+            {!state.hideMap || isUpdateAnalyticsLoading ? (
+              <DrownMap />
+            ) : (
+              <Loader isLoading={true} />
+            )}
 
             <View style={styles.row}>
               <View style={[styles.rowBox]}>
