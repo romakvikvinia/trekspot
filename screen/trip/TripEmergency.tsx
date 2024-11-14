@@ -1,4 +1,5 @@
 import {
+  Alert,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -9,12 +10,31 @@ import {
 import { BackIcon } from "../../utilities/SvgIcons.utility";
 import Constants from "expo-constants";
 import { COLORS } from "../../styles/theme";
-import { useNavigation } from "@react-navigation/native";
+
 import { Emergency } from "../../common/components/Destination/Emergency";
 import { globalStyles } from "../../styles/globalStyles";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
+import React from "react";
+import { useCountryByIso2Query } from "../../api/api.trekspot";
+import { Loader } from "../../common/ui/Loader";
 
-export const TripEmergency = () => {
-  const navigation = useNavigation();
+type Props = NativeStackScreenProps<TripRouteStackParamList, "TripEmergency">;
+
+export const TripEmergency: React.FC<Props> = ({ navigation, route }) => {
+  const { iso2 } = route.params;
+
+  const { data, isLoading, isError } = useCountryByIso2Query({ iso2 });
+
+  if (isError) {
+    Alert.alert("Error", "Something went wrong", [
+      {
+        onPress: () => {},
+        text: "OK",
+      },
+    ]);
+    return;
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -27,23 +47,19 @@ export const TripEmergency = () => {
         </TouchableOpacity>
 
         <Text style={globalStyles.screenTitle}>Emergency</Text>
-        <TouchableOpacity style={globalStyles.screenHeaderBackButton}></TouchableOpacity>
+        <TouchableOpacity
+          style={globalStyles.screenHeaderBackButton}
+        ></TouchableOpacity>
       </View>
 
       <ScrollView
         style={{ flex: 1, flexGrow: 1 }}
         contentContainerStyle={{ paddingHorizontal: 0 }}
       >
-        <Emergency
-          country={{
-            emergency: {
-              emergency: "323",
-              police: "344",
-              ambulance: "3434",
-              fire: "34",
-            },
-          }}
-        />
+        <Loader isLoading={isLoading} />
+        {!isLoading && data && data.countryByIso2 && (
+          <Emergency data={data.countryByIso2.emergency} />
+        )}
       </ScrollView>
     </SafeAreaView>
   );

@@ -70,6 +70,7 @@ import {
   VisitedCountriesResponseType,
   AuthSocialLogInInput,
   AuthSocialLogInResponseType,
+  CountryByIso2ArgsType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -494,8 +495,98 @@ export const trekSpotApi = createApi({
       query: ({ id }) => ({
         variables: { id },
         document: gql`
-          query ($id: String!) {
+          query ($id: ID!) {
             country(id: $id) {
+              id
+              name
+              iso2
+              capital
+              continents
+              isPopular
+              coordinates {
+                latitude
+                longitude
+              }
+              rate
+              visitors
+              domain
+              independent
+              unMember
+              currencies
+              idd {
+                root
+                suffixes
+              }
+              region
+              subregion
+              languages
+              population
+              car {
+                side
+                signs
+              }
+              continents
+              startOfWeek
+              postalCode {
+                format
+                regex
+              }
+              overview
+              telecoms
+              emergency {
+                emergency
+                police
+                ambulance
+                fire
+              }
+              transportTypes
+              taxi {
+                name
+                ios
+                android
+                logo
+              }
+              security
+              recognizedFor {
+                emoji
+                title
+              }
+              religions
+              whenToVisit
+              nationalDay
+              plugTypes
+              weatherInformation {
+                averageTemperatures {
+                  summer
+                  spring
+                  autumn
+                  winter
+                }
+                seasonalConsiderations
+              }
+              images {
+                id
+                url
+              }
+              image {
+                url
+              }
+            }
+          }
+        `,
+      }),
+    }),
+
+    /**
+     * Get Country by iso2
+     */
+
+    countryByIso2: builder.query<CountryResponseType, CountryByIso2ArgsType>({
+      query: ({ iso2 }) => ({
+        variables: { iso2 },
+        document: gql`
+          query ($iso2: ID!) {
+            countryByIso2(iso2: $iso2) {
               id
               name
               iso2
@@ -1474,6 +1565,7 @@ export const {
   useLazyAllCountriesQuery,
   useAllCountriesQuery,
   useCountryQuery,
+  useCountryByIso2Query,
   useLazyCountryQuery,
   useLazyGetPassportIndexesQuery,
   useGetCitiesQuery,

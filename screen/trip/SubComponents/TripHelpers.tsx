@@ -49,7 +49,8 @@ export const TripHelpers = ({
             },
           ]}
           activeOpacity={0.7}
-          onPress={() => navigation.navigate("TripEmergency")}
+          //@ts-ignore
+          onPress={() => navigation.navigate("TripEmergency", { iso2 })}
         >
           <EmergencyLinearIcon
             size={16}
@@ -75,6 +76,7 @@ export const TripHelpers = ({
           ]}
           activeOpacity={0.7}
           onPress={() =>
+            //@ts-ignore
             navigation.navigate("TripInsights", {
               data: data,
               iso2: iso2,
@@ -103,6 +105,7 @@ export const TripHelpers = ({
           ]}
           activeOpacity={0.7}
           onPress={() =>
+            //@ts-ignore
             navigation.navigate("TripTransport", {
               iso2: iso2,
             })
@@ -129,6 +132,7 @@ export const TripHelpers = ({
           ]}
           activeOpacity={0.7}
           onPress={() =>
+            //@ts-ignore
             navigation.navigate("TripDishes", {
               iso2: iso2,
             })

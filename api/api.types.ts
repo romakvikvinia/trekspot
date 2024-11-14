@@ -186,11 +186,14 @@ export type CountriesArgsType = Partial<{
 }>;
 
 export type CountryResponseType = {
-  country: CountryType;
+  countryByIso2: CountryType;
 };
 
 export type CountryArgsType = {
   id: string;
+};
+export type CountryByIso2ArgsType = {
+  iso2: string;
 };
 
 //
