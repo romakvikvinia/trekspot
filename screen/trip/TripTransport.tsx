@@ -1,4 +1,5 @@
 import {
+  Alert,
   ImageBackground,
   Linking,
   Platform,
@@ -11,21 +12,31 @@ import {
 } from "react-native";
 import { BackIcon } from "../../utilities/SvgIcons.utility";
 import Constants from "expo-constants";
-import { COLORS, SIZES } from "../../styles/theme";
-import { useNavigation } from "@react-navigation/native";
-import RenderHTML from "react-native-render-html";
+import { COLORS } from "../../styles/theme";
+
 import { globalStyles } from "../../styles/globalStyles";
-import { useLazyCountryQuery } from "../../api/api.trekspot";
-import { useEffect } from "react";
+import { useCountryByIso2Query } from "../../api/api.trekspot";
+import React, { useEffect } from "react";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
+import { Loader } from "../../common/ui/Loader";
 
-export const TripTransport = ({ route }) => {
-  const countryId = route?.params?.iso2;
-  const navigation = useNavigation();
-  const [getCountry, { isLoading, data, isError }] = useLazyCountryQuery();
+type Props = NativeStackScreenProps<TripRouteStackParamList, "TripTransport">;
 
-  useEffect(() => {
-    if (countryId) getCountry({ id: countryId });
-  }, [route]);
+export const TripTransport: React.FC<Props> = ({ route, navigation }) => {
+  const { iso2 } = route.params;
+
+  const { data, isLoading, isError } = useCountryByIso2Query({ iso2 });
+
+  if (isError) {
+    Alert.alert("Error", "Something went wrong", [
+      {
+        onPress: () => {},
+        text: "OK",
+      },
+    ]);
+    return;
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -46,51 +57,36 @@ export const TripTransport = ({ route }) => {
       <ScrollView
         style={{ flex: 1, flexGrow: 1 }}
         contentContainerStyle={{ paddingHorizontal: 20 }}
+        //@ts-ignore
         selectable
       >
         <Text style={styles.heading}>Helpful apps</Text>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.transportItem}
-          key={`taxt-${2}`}
-          // onPress={() =>
-          //   Linking.openURL(
-          //     `${Platform.OS === "android" ? item.android : item.ios}`
-          //   )
-          // }
-        >
-          <View style={styles.transportItemIcon}>
-            <ImageBackground
-              source={{
-                uri: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/90/7f/a6/907fa619-ce8d-32cc-feb4-4a30b0e24816/AppIcon-0-0-1x_U007emarketing-0-7-0-sRGB-85-220.png/246x0w.webp",
-              }}
-              resizeMode="cover"
-              style={{ width: 55, height: 50 }}
-            />
-          </View>
-          <Text style={styles.transportText}>Uber</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.transportItem}
-          key={`taxt-${4}`}
-          // onPress={() =>
-          //   Linking.openURL(
-          //     `${Platform.OS === "android" ? item.android : item.ios}`
-          //   )
-          // }
-        >
-          <View style={styles.transportItemIcon}>
-            <ImageBackground
-              source={{
-                uri: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/ce/88/d9/ce88d9b4-5794-f849-de84-1986ab9dc09e/AppIcon-0-0-1x_U007emarketing-0-5-0-0-85-220.png/246x0w.webp",
-              }}
-              resizeMode="cover"
-              style={{ width: 55, height: 50 }}
-            />
-          </View>
-          <Text style={styles.transportText}>Yandex</Text>
-        </TouchableOpacity>
+
+        <Loader isLoading={isLoading} />
+
+        {data?.countryByIso2.taxi.map((i) => (
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={styles.transportItem}
+            key={`taxt-${i.name}`}
+            onPress={() =>
+              Linking.openURL(
+                `${Platform.OS === "android" ? i.android : i.ios}`
+              )
+            }
+          >
+            <View style={styles.transportItemIcon}>
+              <ImageBackground
+                source={{
+                  uri: i.logo,
+                }}
+                resizeMode="cover"
+                style={{ width: 55, height: 50 }}
+              />
+            </View>
+            <Text style={styles.transportText}>{i.name}</Text>
+          </TouchableOpacity>
+        ))}
       </ScrollView>
     </SafeAreaView>
   );

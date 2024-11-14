@@ -33,8 +33,8 @@ export type TripRouteStackParamList = {
   NewTripAndroidScreen: undefined;
   TripFAQ: undefined;
   TripDishes: undefined;
-  TripTransport: undefined;
-  TripEmergency: undefined;
+  TripTransport: { iso2: string };
+  TripEmergency: { iso2: string };
   TripActivityReview: undefined;
 };
 

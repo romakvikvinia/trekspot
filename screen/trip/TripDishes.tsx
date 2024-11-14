@@ -31,7 +31,7 @@ import { styles } from "../../common/components/_styles";
 import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
 
-export const TripDishes = ({route}) => {
+export const TripDishes = ({ route }) => {
   const navigation = useNavigation();
   const iso2 = route?.params?.iso2;
 
@@ -63,12 +63,16 @@ export const TripDishes = ({route}) => {
         </TouchableOpacity>
 
         <Text style={globalStyles.screenTitle}>National dishes</Text>
-        <TouchableOpacity style={globalStyles.screenHeaderBackButton}></TouchableOpacity>
+        <TouchableOpacity
+          style={globalStyles.screenHeaderBackButton}
+        ></TouchableOpacity>
       </View>
 
-      {!isLoading && !data?.dishes && <NotFound />}
+      {(!isLoading && !data) || (!data?.dishes.length && <NotFound />)}
 
-      {isLoading && <Loader isLoading={isLoading} size="small" background="#F2F2F7" />}
+      {isLoading && (
+        <Loader isLoading={isLoading} size="small" background="#F2F2F7" />
+      )}
       {!isLoading && (
         <View
           style={{
@@ -90,8 +94,8 @@ export const TripDishes = ({route}) => {
                     marginRight: index % 2 === 0 ? "auto" : undefined,
                     marginLeft: index % 2 === 1 ? "auto" : undefined,
                     marginTop: 0,
-                    marginBottom: 15
-                   },
+                    marginBottom: 15,
+                  },
                 ]}
                 key={item.score}
               >
