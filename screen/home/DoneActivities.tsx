@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
     Animated,
   ScrollView,
@@ -12,6 +12,8 @@ import { Portal } from "react-native-portalize";
 import { XIcon } from "../../utilities/SvgIcons.utility";
 import { COLORS } from "../../styles/theme";
 import { Image } from "expo-image";
+import { SightType } from "../../api/api.types";
+import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
 
 type DoneActivitiesProps = {
   activities: any;
@@ -23,7 +25,9 @@ export const DoneActivities = ({
   categoryIcons,
 }: DoneActivitiesProps) => {
 
-    const modalRef = React.useRef<Modalize>(null);
+  const [topSightDetail, setTopSightDetail] = useState<SightType>();
+
+  const modalRef = React.useRef<Modalize>(null);
 
   const [selectedCategory, setSelectedCategory] = useState(null);
 
@@ -41,14 +45,18 @@ export const DoneActivities = ({
     return activities[selectedCategory];
   }, [selectedCategory]);
 
+  const handleClear = useCallback(() => {
+    setTopSightDetail(undefined);
+  }, []);
+
   const renderItem = ({ item, index }) => (
-    <View key={index} style={styles.activityItem}>
+    <TouchableOpacity activeOpacity={0.7} onPress={() => setTopSightDetail(item)} key={index} style={styles.activityItem}>
       <Image source={{ uri: item?.image?.url }} style={styles.activityImage}></Image>
       <View style={styles.activityItemInfo}>
          <Text style={styles.activityItemTitle}>{item?.title}</Text>
          <Text style={styles.activityItemLocation}>{item?.city}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   
@@ -72,7 +80,7 @@ export const DoneActivities = ({
               style={styles.statItem}
               key={`${category}-${index}`}
               activeOpacity={0.7}
-            onPress={() => handleShowAllActivities(category)}
+              onPress={() => handleShowAllActivities(category)}
             >
               <View style={styles.lf}>
                 <View style={{ height: 40 }}>
@@ -106,14 +114,18 @@ export const DoneActivities = ({
           flatListProps={{
             data: selectedCategoryActivities,
             renderItem: renderItem,
-            keyExtractor: item => item.email,
+            keyExtractor: item => item.title,
             showsVerticalScrollIndicator: false,
             scrollEventThrottle: 16,
-            contentContainerStyle: { paddingHorizontal: 15, paddingTop: 15 },
+            contentContainerStyle: { paddingHorizontal: 0, paddingTop: 15, paddingBottom: 25 },
           }} 
         >
         </Modalize>
     </Portal>
+
+    {topSightDetail ? (
+        <SightDetailModal showDirection={true} data={topSightDetail} closeCallBack={handleClear} />
+      ) : null}
     </>
   );
 };
