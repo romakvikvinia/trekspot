@@ -38,6 +38,9 @@ import { GuestUserModal } from "../../common/components/GuestUserModal";
 import { useFocusEffect } from "@react-navigation/native";
 import { CountryType } from "../../api/api.types";
 import { useCountriesStore } from "../../package/zustand/countries.store";
+import { PanGestureHandler, PinchGestureHandler, State } from 'react-native-gesture-handler';
+import Reanimated, { useSharedValue, useAnimatedStyle, withTiming, useAnimatedGestureHandler } from 'react-native-reanimated';
+
 
 interface MapVIewProps {
   isLoading?: boolean;
@@ -160,9 +163,70 @@ export const MapView: React.FC<MapVIewProps> = ({
     }
   };
 
+  const scale = useSharedValue(1);
+  const baseScale = useSharedValue(1); // Tracks cumulative scale
+  const focalX = useSharedValue(0);
+  const focalY = useSharedValue(0);
+  const translateX = useSharedValue(0);
+  const translateY = useSharedValue(0);
+
+  const pinchGestureHandler = useAnimatedGestureHandler({
+    onStart: () => {
+      scale.value = baseScale.value; // Start pinch at the current base scale
+    },
+    onActive: (event) => {
+      scale.value = baseScale.value * event.scale; // Apply cumulative scaling
+      focalX.value = event.focalX;
+      focalY.value = event.focalY;
+    },
+    onEnd: () => {
+      baseScale.value = scale.value; // Update base scale after pinch ends
+    },
+  });
+
+  const panGestureHandler = useAnimatedGestureHandler({
+    onStart: (_, context) => {
+      context.startX = translateX.value;
+      context.startY = translateY.value;
+    },
+    onActive: (event, context) => {
+      if (scale.value > 1) { // Enable drag only if zoomed in
+        translateX.value = context.startX + event.translationX;
+        translateY.value = context.startY + event.translationY;
+      }
+    },
+  });
+
+  const zoomIn = () => {
+    scale.value = withTiming(scale.value * 1.5, { duration: 200 });
+    baseScale.value = scale.value; // Update base scale after zoom in
+  };
+
+  const zoomOut = () => {
+    if (scale.value > 1) {
+      scale.value = withTiming(scale.value * 0.75, { duration: 200 });
+      baseScale.value = scale.value; // Update base scale after zoom out
+    }
+  };
+
+  const resetZoom = () => {
+    scale.value = withTiming(1, { duration: 200 });
+    baseScale.value = 1; // Reset base scale
+    translateX.value = withTiming(0, { duration: 200 });
+    translateY.value = withTiming(0, { duration: 200 });
+  };
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { scale: scale.value },
+      { translateX: translateX.value },
+      { translateY: translateY.value },
+    ],
+  }));
   const DrownMap = () =>
     React.useMemo(() => {
       return (
+       
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => onOpen()}
@@ -171,14 +235,24 @@ export const MapView: React.FC<MapVIewProps> = ({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            height: 250,
           }}
         >
+        <PinchGestureHandler onGestureEvent={pinchGestureHandler}>
+        <Reanimated.View style={StyleSheet.absoluteFill}>
+          <PanGestureHandler onGestureEvent={panGestureHandler}>
+            <Reanimated.View style={[styles.zoomableView, animatedStyle]}>
           <MapSvg
             width={SIZES.width < 370 ? 340 : 370}
             countries={state.countriesOnMap}
             color={COLORS.primary}
           />
+           </Reanimated.View>
+          </PanGestureHandler>
+        </Reanimated.View>
+      </PinchGestureHandler>
         </TouchableOpacity>
+      
       );
     }, [state.countriesOnMap]);
   //
@@ -219,7 +293,7 @@ export const MapView: React.FC<MapVIewProps> = ({
         ) : (
           <>
             {!state.hideMap ? <DrownMap /> : null}
-
+         
             <View style={styles.row}>
               <View style={[styles.rowBox]}>
                 <View
@@ -267,7 +341,14 @@ export const MapView: React.FC<MapVIewProps> = ({
             </View>
           </>
         )}
+           {/* <View style={styles.controls}>
+           <TouchableOpacity  onPress={resetZoom}><Text>dd</Text></TouchableOpacity>
+        <TouchableOpacity onPress={zoomIn}><Text>+</Text></TouchableOpacity>
+        <TouchableOpacity onPress={zoomOut}><Text>-</Text></TouchableOpacity>
+     
+      </View> */}
       </View>
+   
 
       <Portal>
         <Modalize
@@ -372,6 +453,20 @@ export const MapView: React.FC<MapVIewProps> = ({
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  zoomableView: {
+    flex: 1,
+  },
+  controls: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    height: 100,
+  },
   modalHeader: {
     width: "100%",
     paddingHorizontal: 15,

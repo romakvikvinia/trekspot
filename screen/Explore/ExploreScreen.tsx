@@ -174,7 +174,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
               isCitiesLoading={isCitiesLoading}
             />
 
-            <View style={{ paddingHorizontal: 15, marginTop: 25, zIndex: 1 }}>
+            <View style={{ paddingHorizontal: 15, marginTop: 30, zIndex: 1 }}>
               <VisaChecker />
             </View>
 

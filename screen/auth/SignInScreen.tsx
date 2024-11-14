@@ -19,7 +19,6 @@ import Constants from "expo-constants";
 import * as AppleAuthentication from "expo-apple-authentication";
 
 import { SignInValidationSchema } from "./validationScheme";
-import { TInput } from "../../common/ui/TInput";
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
 import {
   trekSpotApi,
@@ -171,38 +170,38 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
    */
 
   const startGoogleAuth = async () => {
-    try {
-      // await GoogleSignin.hasPlayServices();
-      // // log in using Google account (on Android it will only work if google play services are installed)
-      // const userInfo = await GoogleSignin.signIn();
-      // console.log(userInfo);
-      // const token = await GoogleSignin.getTokens();
-      // if (
-      //   userInfo.data &&
-      //   userInfo.data.idToken &&
-      //   token &&
-      //   token.accessToken
-      // ) {
-      //   fetchSocialAuth({
-      //     token: token.accessToken,
-      //     provider: SocialProvidersEnum.Google,
-      //   });
-      // } else {
-      //   handelErrorMessage();
-      // }
-      // try to sign in silently (this should be done when the user is already signed-in)
-      // const userInfo2 = await GoogleSignin.signInSilently();
-      // console.log(userInfo2);
-      // to logout use the following piece of code
-      // const resp = await GoogleSignin.signOut();
-      // console.log(resp);
-    } catch (error: any) {
-      if (error.code) {
-        console.log("Error related to Google sign-in: ", error);
-      } else {
-        console.log("An error that is not related to Google sign-in: ", error);
-      }
-    }
+    // try {
+    //   await GoogleSignin.hasPlayServices();
+    //   // log in using Google account (on Android it will only work if google play services are installed)
+    //   const userInfo = await GoogleSignin.signIn();
+    //   // console.log(userInfo);
+    //   const token = await GoogleSignin.getTokens();
+    //   if (
+    //     userInfo.data &&
+    //     userInfo.data.idToken &&
+    //     token &&
+    //     token.accessToken
+    //   ) {
+    //     fetchSocialAuth({
+    //       token: token.accessToken,
+    //       provider: SocialProvidersEnum.Google,
+    //     });
+    //   } else {
+    //     handelErrorMessage();
+    //   }
+    //   // try to sign in silently (this should be done when the user is already signed-in)
+    //   const userInfo2 = await GoogleSignin.signInSilently();
+    //   // console.log(userInfo2);
+    //   // to logout use the following piece of code
+    //   const resp = await GoogleSignin.signOut();
+    //   // console.log(resp);
+    // } catch (error: any) {
+    //   if (error.code) {
+    //     console.log("Error related to Google sign-in: ", error);
+    //   } else {
+    //     console.log("An error that is not related to Google sign-in: ", error);
+    //   }
+    // }
   };
 
   const startAppleSignIn = async () => {
@@ -237,12 +236,12 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   };
 
   const _handlePressButtonAsync = async () => {
-    // let result = await WebBrowser.openBrowserAsync(
-    //   "https://trekspot.io/en/privacy-policy",
-    //   {
-    //     enableBarCollapsing: true,
-    //   }
-    // );
+    let result = await WebBrowser.openBrowserAsync(
+      "https://trekspot.io/en/privacy-policy",
+      {
+        enableBarCollapsing: true,
+      }
+    );
   };
 
   if (isError) {

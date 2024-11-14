@@ -26,7 +26,7 @@ import {
 } from "../../utilities/SvgIcons.utility";
 import { useAnalyticsQuery } from "../../api/api.trekspot";
 import { SightType } from "../../api/api.types";
-import { useAppSelector } from "../../package/store";
+import { DoneActivities } from "./DoneActivities";
 
 type HomeProps = NativeStackScreenProps<HomeRouteStackParamList, "Main">;
 
@@ -58,6 +58,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
   return (
     <View style={[styles.safeArea]}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+
         <MapView
           world={analyticsData?.analytics.world}
           isLoading={isLoading}
@@ -65,51 +66,16 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
           visitedCountries={analyticsData?.analytics.visitedCountries}
           territories={analyticsData?.analytics.territories}
         />
+
         <View style={styles.mapStats}>
           <Text style={styles.cardTitle}>Territories</Text>
-          <Territories
-          // isLoading={isVisitedCountriesLoading}
-          // visitedCountries={visitedCountriesData?.visitedCountries || []}
-          />
+          <Territories/>
         </View>
-        <View style={styles.visitedStats}>
-          <Text
-            style={[
-              styles.cardTitle,
-              { paddingHorizontal: 15, marginBottom: 15 },
-            ]}
-          >
-            Activities
-          </Text>
-          <ScrollView
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            contentContainerStyle={{ paddingHorizontal: 15 }}
-          >
-            {Object.keys(activities).map((category, index) => {
-              const IconComponent = categoryIcons[category.toLowerCase()];
-              return (
-                <TouchableOpacity
-                  style={styles.statItem}
-                  key={`${category}-${index}`}
-                  activeOpacity={0.7}
-                >
-                  <View style={styles.lf}>
-                    <View style={{ height: 40 }}>
-                      <Text style={styles.visitedCategoryText}>{category}</Text>
-                    </View>
-                    <View style={styles.categoryIcon}>
-                      <IconComponent />
-                    </View>
-                  </View>
-                  <Text style={styles.amount}>
-                    {activities[category].length}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView>
-        </View>
+    
+
+        {Object.keys(activities) && Object.keys(activities).length > 0 && (
+          <DoneActivities activities={activities} categoryIcons={categoryIcons} />
+        )}
       </ScrollView>
     </View>
   );

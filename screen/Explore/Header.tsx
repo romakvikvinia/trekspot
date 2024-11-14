@@ -62,7 +62,7 @@ export const ExploreHeader = () => {
           !!data.upComingTrips.length ? (
             <TouchableOpacity
               onPress={() => {
-                if (data.upComingTrips.length == 1) {
+                if (data.upComingTrips.length > 0) {
                   navigation.navigate("Trips", {
                     screen: "TripDetailScreen",
                     params: {

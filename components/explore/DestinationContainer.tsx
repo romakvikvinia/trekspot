@@ -69,7 +69,7 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
     <>
       <View
         style={[styles.rowItem]}
-        style={{ paddingTop: isExplore ? 25 : 15 }}
+        style={{ paddingTop: isExplore ? 30 : 15 }}
       >
         <View style={styles.rowItemHeader}>
           <Text style={styles.h2}>{title}</Text>

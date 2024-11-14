@@ -8,11 +8,9 @@ import {
 import {
   BackIcon,
   DotsVerticlIcon,
-  MapWithLocationIcon,
 } from "../../../utilities/SvgIcons.utility";
 import { TripHelpers } from "./TripHelpers";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { COLORS } from "../../../styles/theme";
 import { HeaderTextContent } from "./HeaderTextcontent";
 import React, { useMemo } from "react";
 
@@ -30,8 +28,6 @@ export const ReachHeaderContent = ({
 }: ReachHeaderContentProps) => {
   const route = useRoute();
   const navigation = useNavigation();
-
-  console.log("rom", data?.cities[0]?.image?.url);
 
   const imagePath = useMemo(() => {
     return data?.cities[0]?.image?.url || route?.params?.city?.image?.url;

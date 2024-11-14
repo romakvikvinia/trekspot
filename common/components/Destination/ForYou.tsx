@@ -179,7 +179,8 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
           </View>
         )}
       </View>
-      {!isLoading && faqDataList ? (
+       
+      {!isLoading && faqDataList && Object.keys(faqDataList)?.length ? (
         <View
           style={[
             styles.forYouRow,
@@ -188,8 +189,7 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
         >
           <Text style={styles.forYouRowTitle}>FAQ</Text>
 
-          {faqDataList &&
-            Object.keys(faqDataList)?.map((item, index) => (
+          {Object.keys(faqDataList)?.map((item, index) => (
               <FaqRowItem
                 item={faqDataList[item]}
                 title={item}
@@ -200,7 +200,7 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
             ))}
         </View>
       ) : (
-        <View style={{ height: 230 }}>
+        isLoading && <View style={{ height: 230 }}>
           <Loader isLoading background="" />
         </View>
       )}

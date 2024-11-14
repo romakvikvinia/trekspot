@@ -112,14 +112,14 @@ export const Territories = () => {
               <View>
                 <Text style={styles.mapStatsText}>Europe</Text>
                 <Text style={[styles.mapStatsText, styles.countriesAmountText]}>
-                  44 countries
+                  47 countries
                 </Text>
               </View>
             </View>
             <View style={styles.statWrapp}>
               <Text style={styles.mapStatsPercentText}>
                 {formatPercentage(
-                  europeCountries ? (europeCountries / 44) * 100 : 0
+                  europeCountries ? (europeCountries / 47) * 100 : 0
                 )}
               </Text>
               <Text style={styles.percentText}>%</Text>
@@ -131,7 +131,7 @@ export const Territories = () => {
               <View>
                 <Text style={styles.mapStatsText}>Asia</Text>
                 <Text style={[styles.mapStatsText, styles.countriesAmountText]}>
-                  48 countries
+                  44 countries
                 </Text>
               </View>
             </View>
@@ -139,7 +139,7 @@ export const Territories = () => {
             <View style={styles.statWrapp}>
               <Text style={styles.mapStatsPercentText}>
                 {formatPercentage(
-                  asiaCountries ? (asiaCountries / 48) * 100 : 0
+                  asiaCountries ? (asiaCountries / 44) * 100 : 0
                 )}
               </Text>
               <Text style={styles.percentText}>%</Text>
@@ -170,14 +170,14 @@ export const Territories = () => {
               <View>
                 <Text style={styles.mapStatsText}>N. America</Text>
                 <Text style={[styles.mapStatsText, styles.countriesAmountText]}>
-                  2 countries
+                23 countries
                 </Text>
               </View>
             </View>
             <View style={styles.statWrapp}>
               <Text style={styles.mapStatsPercentText}>
                 {formatPercentage(
-                  northAmericaCountries ? (northAmericaCountries / 2) * 100 : 0
+                  northAmericaCountries ? (northAmericaCountries / 23) * 100 : 0
                 )}
               </Text>
               <Text style={styles.percentText}>%</Text>
@@ -208,14 +208,14 @@ export const Territories = () => {
               <View>
                 <Text style={styles.mapStatsText}>Oceania</Text>
                 <Text style={[styles.mapStatsText, styles.countriesAmountText]}>
-                  14 countries
+                  15 countries
                 </Text>
               </View>
             </View>
             <View style={styles.statWrapp}>
               <Text style={styles.mapStatsPercentText}>
                 {formatPercentage(
-                  oceaniaCountries ? (oceaniaCountries / 14) * 100 : 0
+                  oceaniaCountries ? (oceaniaCountries / 15) * 100 : 0
                 )}
               </Text>
               <Text style={styles.percentText}>%</Text>

@@ -1,9 +1,6 @@
 import React, { useCallback } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet } from "react-native";
-
-import { trekSpotApi } from "./api/api.trekspot";
-import { ApiProvider } from "@reduxjs/toolkit/dist/query/react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { Routes } from "./routes/Routes";
@@ -18,11 +15,11 @@ export default function App() {
     //  fontName: require("./assets/fonts/FontName.ttf"),
   });
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
+  // const onLayoutRootView = useCallback(async () => {
+  //   if (fontsLoaded) {
+  //     await SplashScreen.hideAsync();
+  //   }
+  // }, [fontsLoaded]);
 
   if (!fontsLoaded) {
     return null;
