@@ -216,14 +216,7 @@ export const MapView: React.FC<MapVIewProps> = ({
         </View>
 
         {isLoading ? (
-          <View
-            style={{
-              width: "100%",
-              height: 300,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <View style={styles.loadingWrapper}>
             <ActivityIndicator color={COLORS.primaryDark} />
           </View>
         ) : (
@@ -231,7 +224,9 @@ export const MapView: React.FC<MapVIewProps> = ({
             {!state.hideMap || isUpdateAnalyticsLoading ? (
               <DrownMap />
             ) : (
-              <Loader isLoading={true} />
+              <View style={[styles.loadingWrapper, { height: 274 }]}>
+               <ActivityIndicator color={COLORS.primaryDark} />
+              </View>
             )}
 
             <View style={styles.row}>
@@ -386,6 +381,12 @@ export const MapView: React.FC<MapVIewProps> = ({
 };
 
 const styles = StyleSheet.create({
+  loadingWrapper: {
+    width: "100%",
+    height: 372,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   modalHeader: {
     width: "100%",
     paddingHorizontal: 15,
