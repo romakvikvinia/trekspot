@@ -1,0 +1,46 @@
+diff --git a/node_modules/react-native-paper-dates/src/Date/DatePickerModalContent.tsx b/node_modules/react-native-paper-dates/src/Date/DatePickerModalContent.tsx
+index 77c79e2..bfca547 100644
+--- a/node_modules/react-native-paper-dates/src/Date/DatePickerModalContent.tsx
++++ b/node_modules/react-native-paper-dates/src/Date/DatePickerModalContent.tsx
+@@ -119,6 +119,7 @@ export function DatePickerModalContent(
+ 
+   const onInnerChange = useCallback(
+     (params: any) => {
++      
+       onChange && onChange(params)
+       setState((prev) => ({ ...prev, ...params }))
+     },
+diff --git a/node_modules/react-native-paper-dates/src/Date/Day.tsx b/node_modules/react-native-paper-dates/src/Date/Day.tsx
+index 56bcee6..fcf34ae 100644
+--- a/node_modules/react-native-paper-dates/src/Date/Day.tsx
++++ b/node_modules/react-native-paper-dates/src/Date/Day.tsx
+@@ -53,7 +53,7 @@ function Day(props: {
+   const borderColor = theme.isV3 ? theme.colors.primary : v2BorderColor
+ 
+   const onPress = useCallback(() => {
+-    onPressDate(new Date(year, month, day))
++    onPressDate(new Date(Date.UTC(year, month, day)))
+   }, [onPressDate, year, month, day])
+ 
+   // TODO: check if this can be simplified
+diff --git a/node_modules/react-native-paper-dates/src/Date/dateUtils.tsx b/node_modules/react-native-paper-dates/src/Date/dateUtils.tsx
+index 34e0dc7..9c6e26d 100644
+--- a/node_modules/react-native-paper-dates/src/Date/dateUtils.tsx
++++ b/node_modules/react-native-paper-dates/src/Date/dateUtils.tsx
+@@ -221,13 +221,14 @@ export function useInputFormatter({ locale }: { locale: string | undefined }) {
+ 
+ export function getStartOfDay(d: Date): Date {
+   const startOfDay = new Date(d)
+-  startOfDay.setUTCHours(0, 0, 0, 0)
++  // startOfDay.setUTCHours(0, 0, 0, 0)
+   return startOfDay
+ }
+ 
+ export function getEndOfDay(d: Date): Date {
++  
+   const endOfDay = new Date(d)
+-  endOfDay.setUTCHours(23, 59, 59, 999)
++  // endOfDay.setUTCHours(23, 59, 59, 999)
+   return endOfDay
+ }
+ 

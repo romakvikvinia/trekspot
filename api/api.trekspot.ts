@@ -330,8 +330,20 @@ export const trekSpotApi = createApi({
             analytics {
               world
               countries
-              livedCountries
-              visitedCountries
+              livedCountries {
+                id
+                country {
+                  id
+                  iso2
+                }
+              }
+              visitedCountries {
+                id
+                country {
+                  id
+                  iso2
+                }
+              }
               territories
               activities {
                 id
@@ -1558,6 +1570,7 @@ export const {
   useMeQuery,
   useLazyMeQuery,
   useAnalyticsQuery,
+  useLazyAnalyticsQuery,
   useVisitedCountriesQuery,
   useStoriesQuery,
   useCreateOrUpdateStoriesMutation,

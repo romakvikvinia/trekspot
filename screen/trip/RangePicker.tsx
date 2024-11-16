@@ -13,7 +13,7 @@ export const RangePicker = ({ setOpen, open, formik }) => {
   const onConfirm = React.useCallback(
     ({ startDate, endDate }) => {
       setOpen(false);
-
+      // console.log("date", startDate, "      ", endDate);
       formik.setFieldValue("range", {
         startDate,
         endDate,
@@ -21,37 +21,39 @@ export const RangePicker = ({ setOpen, open, formik }) => {
     },
     [setOpen]
   );
-  const theme = { ...DefaultTheme, colors: { ...DefaultTheme.colors,
-     primary: COLORS.primary,
-     primaryContainer: "#dfebff"
-  } };
+  const theme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: COLORS.primary,
+      primaryContainer: "#dfebff",
+    },
+  };
   return (
-      <PaperProvider theme={theme}>
-        <SafeAreaProvider>
-          <View
-            style={{
-              justifyContent: "center",
-              flex: 1,
-              alignItems: "center",
-            }}
-          >
-        
-            <DatePickerModal
-              locale="en"
-              mode="range"
-              visible={open}
-              onDismiss={onDismiss}
-              startDate={formik?.values?.range?.startDate}
-              endDate={formik?.values?.range?.endDate}
-              onConfirm={onConfirm}
-              presentationStyle={"pageSheet"}
-              disableStatusBarPadding={false}
-              saveLabel="Confirm"
-              
-            />
-      
-          </View>
-        </SafeAreaProvider>
+    <PaperProvider theme={theme}>
+      <SafeAreaProvider>
+        <View
+          style={{
+            justifyContent: "center",
+            flex: 1,
+            alignItems: "center",
+          }}
+        >
+          <DatePickerModal
+            locale="en"
+            mode="range"
+            visible={open}
+            onDismiss={onDismiss}
+            onChange={(date) => console.log("onchnage", date)}
+            startDate={formik?.values?.range?.startDate}
+            endDate={formik?.values?.range?.endDate}
+            onConfirm={onConfirm}
+            presentationStyle={"pageSheet"}
+            disableStatusBarPadding={false}
+            saveLabel="Confirm"
+          />
+        </View>
+      </SafeAreaProvider>
     </PaperProvider>
   );
 };

@@ -68,11 +68,17 @@ export type MeResponseType = {
   me: FullUserType;
 };
 
+export type AnalyticType = {
+  id: string;
+  country: CountryType;
+  sight: SightType;
+};
+
 export type AnalyticsType = {
   world: number;
   countries: number;
-  livedCountries: number;
-  visitedCountries: number;
+  livedCountries: AnalyticType[];
+  visitedCountries: AnalyticType[];
   territories: number;
   activities: SightType[];
 };

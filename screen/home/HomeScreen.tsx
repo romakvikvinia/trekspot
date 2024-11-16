@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Text,
   View,
@@ -25,13 +25,25 @@ import {
   TopsightsIcon,
 } from "../../utilities/SvgIcons.utility";
 import { useAnalyticsQuery } from "../../api/api.trekspot";
-import { SightType } from "../../api/api.types";
+import { CountryType, SightType } from "../../api/api.types";
 import { DoneActivities } from "./DoneActivities";
+import { useCountriesStore } from "../../package/zustand/countries.store";
 
 type HomeProps = NativeStackScreenProps<HomeRouteStackParamList, "Main">;
 
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
-  const { data: analyticsData, isLoading } = useAnalyticsQuery();
+  const { data: analyticsData, isLoading, isSuccess } = useAnalyticsQuery();
+  const reduxCountries = useCountriesStore();
+
+  useEffect(() => {
+    if (isSuccess) {
+      const payload: Record<string, CountryType> = {};
+      visitedCountries.forEach((i) => {
+        payload[i.country.id] = i.country;
+      });
+      reduxCountries.setVisitedCountries(payload);
+    }
+  }, [isSuccess]);
 
   // transform data
   const activities: Record<string, SightType[]> = {};
@@ -55,26 +67,30 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
     casinos: CasinosIcon,
   };
 
+  //
+  const visitedCountries = analyticsData?.analytics.visitedCountries || [];
+
   return (
     <View style={[styles.safeArea]}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-
         <MapView
           world={analyticsData?.analytics.world}
           isLoading={isLoading}
           countryQuantity={analyticsData?.analytics.countries}
-          visitedCountries={analyticsData?.analytics.visitedCountries}
+          visitedCountries={visitedCountries}
           territories={analyticsData?.analytics.territories}
         />
 
         <View style={styles.mapStats}>
           <Text style={styles.cardTitle}>Territories</Text>
-          <Territories/>
+          <Territories />
         </View>
-    
 
         {Object.keys(activities) && Object.keys(activities).length > 0 && (
-          <DoneActivities activities={activities} categoryIcons={categoryIcons} />
+          <DoneActivities
+            activities={activities}
+            categoryIcons={categoryIcons}
+          />
         )}
       </ScrollView>
     </View>

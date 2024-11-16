@@ -15,16 +15,7 @@
     "ios": {
       "usesAppleSignIn": true,
       "supportsTablet": true,
-      "bundleIdentifier": "com.trekspot.app",
-      "infoPlist": {
-        "CFBundleURLTypes": [
-          {
-            "CFBundleURLSchemes": [
-              "923726965679-tap0vlets0dvclh7uertjalc0f1ueq50.apps.googleusercontent.com"
-            ]
-          }
-        ]
-      }
+      "bundleIdentifier": "com.trekspot.app"
     },
     "android": {
       "adaptiveIcon": {
@@ -48,7 +39,7 @@
         "expo-apple-authentication",
         "@react-native-google-signin/google-signin",
         {
-          "iosUrlScheme": "923726965679-tap0vlets0dvclh7uertjalc0f1ueq50.apps.googleusercontent.com"
+          "iosUrlScheme": "com.googleusercontent.apps.923726965679-tap0vlets0dvclh7uertjalc0f1ueq50"
         },
         [
           "expo-location",

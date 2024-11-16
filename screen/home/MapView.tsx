@@ -26,6 +26,7 @@ import { CountryItem } from "../../components/home/CountryItem";
 import {
   useAllCountriesQuery,
   useCreateAnalyticsMutation,
+  useLazyAnalyticsQuery,
 } from "../../api/api.trekspot";
 
 import { formatPercentage } from "../../helpers/number.helper";
@@ -35,26 +36,26 @@ import { MapSvg } from "../../utilities/svg/map";
 import { useAppSelector } from "../../package/store";
 import { useTripStore } from "../../package/zustand/store";
 import { GuestUserModal } from "../../common/components/GuestUserModal";
-import { useFocusEffect } from "@react-navigation/native";
-import { CountryType } from "../../api/api.types";
+
+import { AnalyticType, CountryType } from "../../api/api.types";
 import { useCountriesStore } from "../../package/zustand/countries.store";
-import { Loader } from "../../common/ui/Loader";
 
 interface MapVIewProps {
   isLoading?: boolean;
   world?: number;
   countryQuantity?: number;
-  visitedCountries?: number;
+  visitedCountries: AnalyticType[];
   territories?: number;
 }
 
 export const MapView: React.FC<MapVIewProps> = ({
   world = 0,
   countryQuantity = 0,
-  visitedCountries = 0,
+  visitedCountries,
   territories = 0,
   isLoading = true,
 }) => {
+  const [fetchAnalytics] = useLazyAnalyticsQuery();
   const { user } = useAppSelector((state) => state.auth);
   const reduxCountries = useCountriesStore();
 
@@ -71,8 +72,13 @@ export const MapView: React.FC<MapVIewProps> = ({
   });
 
   let { data: countryList } = useAllCountriesQuery({});
-  const [fetchCreateAnalytics, { isLoading: isUpdateAnalyticsLoading }] =
-    useCreateAnalyticsMutation();
+  const [
+    fetchCreateAnalytics,
+    {
+      isLoading: isUpdateAnalyticsLoading,
+      isSuccess: isUpdateAnalyticsSuccess,
+    },
+  ] = useCreateAnalyticsMutation();
 
   const modalRef = useRef<Modalize>(null);
   const shareModalRef = useRef<Modalize>(null);
@@ -107,21 +113,19 @@ export const MapView: React.FC<MapVIewProps> = ({
 
   const handleCountriesModalClose = useCallback(async () => {
     setSearchValue("");
+
+    await fetchCreateAnalytics({
+      countries: Object.keys(reduxCountries.visitedCountries) || [],
+    }).unwrap();
+
+    await fetchAnalytics().unwrap();
+
     setState((prevState) => ({
       ...prevState,
       hideMap: false,
+      countriesOnMap:
+        Object.values(reduxCountries.visitedCountries).map((i) => i.iso2) || [],
     }));
-    if (Object.keys(reduxCountries.visitedCountries).length) {
-      fetchCreateAnalytics({
-        countries: Object.keys(reduxCountries.visitedCountries),
-      });
-      setState((prevState) => ({
-        ...prevState,
-        countriesOnMap: Object.values(reduxCountries.visitedCountries).map(
-          (i) => i.iso2
-        ),
-      }));
-    }
   }, []);
 
   const handelSearch = (search: string) => {
@@ -136,6 +140,15 @@ export const MapView: React.FC<MapVIewProps> = ({
       }));
     }
   }, [countryList]);
+
+  useEffect(() => {
+    if (!isLoading && Array.isArray(visitedCountries)) {
+      setState((prevState) => ({
+        ...prevState,
+        countriesOnMap: visitedCountries.map((i) => i.country.iso2),
+      }));
+    }
+  }, [isLoading]);
 
   // transform data
 
@@ -170,6 +183,8 @@ export const MapView: React.FC<MapVIewProps> = ({
       onShareModalOpen();
     }
   };
+
+  console.log("isLoading", isLoading, isUpdateAnalyticsLoading);
 
   const DrownMap = () =>
     React.useMemo(() => {
@@ -221,59 +236,62 @@ export const MapView: React.FC<MapVIewProps> = ({
           </View>
         ) : (
           <>
-            {!state.hideMap || isUpdateAnalyticsLoading ? (
-              <DrownMap />
+            {!state.hideMap && !isUpdateAnalyticsLoading ? (
+              <>
+                <DrownMap />
+                <View style={styles.row}>
+                  <View style={[styles.rowBox]}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Text style={styles.lg}>{formatPercentage(world)}</Text>
+                      <Text
+                        style={[
+                          styles.sublabel,
+                          { marginLeft: 2, marginBottom: 2 },
+                        ]}
+                      >
+                        %
+                      </Text>
+                    </View>
+
+                    <Text style={styles.statLabel}>World</Text>
+                  </View>
+                  <View style={[styles.rowBox]}>
+                    <View style={styles.amountView}>
+                      <Text style={styles.lg}>{visitedCountries.length}</Text>
+                      <View style={styles.labelView}>
+                        <Text style={styles.sublabel}>/</Text>
+                        <Text style={[styles.sublabel, { marginTop: 2 }]}>
+                          {countryQuantity}
+                        </Text>
+                      </View>
+                    </View>
+
+                    <Text style={styles.statLabel}>Countries</Text>
+                  </View>
+                  <View style={[styles.rowBox]}>
+                    <View style={styles.amountView}>
+                      <Text style={styles.lg}>{territories} </Text>
+                      <View style={styles.labelView}>
+                        <Text style={styles.sublabel}>/</Text>
+                        <Text style={[styles.sublabel, { marginTop: 2 }]}>
+                          6
+                        </Text>
+                      </View>
+                    </View>
+                    <Text style={styles.statLabel}>Territories</Text>
+                  </View>
+                </View>
+              </>
             ) : (
               <View style={[styles.loadingWrapper, { height: 274 }]}>
-               <ActivityIndicator color={COLORS.primaryDark} />
+                <ActivityIndicator color={COLORS.primaryDark} />
               </View>
             )}
-
-            <View style={styles.row}>
-              <View style={[styles.rowBox]}>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text style={styles.lg}>{formatPercentage(world)}</Text>
-                  <Text
-                    style={[
-                      styles.sublabel,
-                      { marginLeft: 2, marginBottom: 2 },
-                    ]}
-                  >
-                    %
-                  </Text>
-                </View>
-
-                <Text style={styles.statLabel}>World</Text>
-              </View>
-              <View style={[styles.rowBox]}>
-                <View style={styles.amountView}>
-                  <Text style={styles.lg}>{visitedCountries}</Text>
-                  <View style={styles.labelView}>
-                    <Text style={styles.sublabel}>/</Text>
-                    <Text style={[styles.sublabel, { marginTop: 2 }]}>
-                      {countryQuantity}
-                    </Text>
-                  </View>
-                </View>
-
-                <Text style={styles.statLabel}>Countries</Text>
-              </View>
-              <View style={[styles.rowBox]}>
-                <View style={styles.amountView}>
-                  <Text style={styles.lg}>{territories} </Text>
-                  <View style={styles.labelView}>
-                    <Text style={styles.sublabel}>/</Text>
-                    <Text style={[styles.sublabel, { marginTop: 2 }]}>6</Text>
-                  </View>
-                </View>
-                <Text style={styles.statLabel}>Territories</Text>
-              </View>
-            </View>
           </>
         )}
       </View>
@@ -367,7 +385,7 @@ export const MapView: React.FC<MapVIewProps> = ({
             key={`share-on-map-${world}`}
             countries={state.countriesOnMap}
             world={world}
-            achievedCountries={visitedCountries}
+            achievedCountries={visitedCountries.length}
             territories={territories}
           />
         </Modalize>

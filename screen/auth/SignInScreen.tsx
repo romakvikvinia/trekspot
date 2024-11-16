@@ -45,14 +45,14 @@ import { GUEST_EMAIL, GUEST_PASS } from "../../helpers/baseUrl.helper";
 import * as WebBrowser from "expo-web-browser";
 
 GoogleSignin.configure({
-  offlineAccess: true,
   webClientId:
-    "923726965679-0v6m1phte051cgbg80374i76cegsnok0.apps.googleusercontent.com",
+    "923726965679-tap0vlets0dvclh7uertjalc0f1ueq50.apps.googleusercontent.com",
   // androidClientId:
   //   "923726965679-s3evflrnovadf0l777r5hiltuj0j49fs.apps.googleusercontent.com",
   iosClientId:
     "com.googleusercontent.apps.923726965679-tap0vlets0dvclh7uertjalc0f1ueq50",
-  scopes: ["profile", "email"],
+  offlineAccess: true,
+  scopes: ["email", "profile"],
 });
 
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
@@ -170,7 +170,9 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
 
   const startGoogleAuth = async () => {
     try {
-      await GoogleSignin.hasPlayServices();
+      await GoogleSignin.hasPlayServices({
+        showPlayServicesUpdateDialog: true,
+      });
       // log in using Google account (on Android it will only work if google play services are installed)
       const userInfo = await GoogleSignin.signIn();
       // console.log(userInfo);
