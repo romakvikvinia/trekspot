@@ -51,23 +51,23 @@ export const _tripScreenStyles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "500",
     color: "#fff",
-    opacity: 0.8,
+    opacity: 1,
     marginLeft: 5,
     textTransform: "capitalize",
   },
   tripLocation: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "rgba(0,0,0, 0.4)",
+    // backgroundColor: "rgba(0,0,0, 0.6)",
     borderRadius: 55,
-    paddingHorizontal: 10,
     paddingVertical: 4,
   },
   tripLocationText:{
     fontSize: 12,
     color: "#fff",
-    opacity: 0.8,
+    opacity: 1,
     marginLeft: 5,
+    fontWeight: "500"
   },
   cancelTripButton: {
     paddingVertical: 7,

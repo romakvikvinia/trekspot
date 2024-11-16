@@ -74,8 +74,8 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
     isTop: true,
   });
 
-  const { data: randomSightsData, isLoading: isRandomSightsLoading } =
-    useRandomSightQuery({ take: 10 });
+  // const { data: randomSightsData, isLoading: isRandomSightsLoading } =
+  //   useRandomSightQuery({ take: 10 });
 
   const {
     data: randomCountriesByContinent,
@@ -97,54 +97,6 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
         >
           <ExploreHeader />
 
-          {/* <View
-            style={{
-              paddingHorizontal: 15,
-              marginBottom: 15,
-            }}
-          >
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("TripQuickDetailScreen", {
-                  directVisit: true,
-                })
-              }
-              style={styles.currentTrip}
-              activeOpacity={0.7}
-            >
-              <View style={styles.currentTripLeft}>
-                <View style={styles.currentTripIcon}>
-                  <FlightIcon color={COLORS.primary} />
-                </View>
-                <View>
-                  <Text style={styles.currentTripTitle}>Dubai trip</Text>
-                  <Text style={styles.currentTripTitleDate}>
-                    12 Feb - 20 Feb
-                  </Text>
-                </View>
-              </View>
-
-              <TouchableOpacity
-                style={styles.currentTripDotsButton}
-                onPress={() =>
-                  Alert.alert("Do you want to hide current trip?", "", [
-                    {
-                      text: "Cancel",
-                      onPress: () => console.log("Cancel Pressed"),
-                      style: "cancel",
-                    },
-                    {
-                      text: "Hide",
-                      onPress: () => console.log("OK Pressed"),
-                      style: "destructive",
-                    },
-                  ])
-                }
-              >
-                <VertDots color={COLORS.primaryDark} />
-              </TouchableOpacity>
-            </TouchableOpacity>
-          </View> */}
 
           <ScrollView
             style={{ flex: 1 }}

@@ -50,7 +50,7 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
             data={data?.dishes}
             numColumns={2}
             renderItem={({ item }) => (
-              <View style={styles.thingsTodoItem} key={item.score}>
+              <View style={styles.thingsTodoItem} key={item?.score}>
                 <Image
                   style={styles.thingsTodoItemImage}
                   source={

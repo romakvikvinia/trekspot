@@ -67,10 +67,7 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
 
   return (
     <>
-      <View
-        style={[styles.rowItem]}
-        style={{ paddingTop: isExplore ? 30 : 15 }}
-      >
+      <View style={[styles.rowItem, { paddingTop: isExplore ? 30 : 15}]}>
         <View style={styles.rowItemHeader}>
           <Text style={styles.h2}>{title}</Text>
           {/* {seeAllItems && (
@@ -190,9 +187,9 @@ const styles = StyleSheet.create({
     fontSize: SIZES.body4,
   },
   h2: {
-    fontSize: 22,
+    fontSize: 20,
     color: "#000",
-    fontWeight: "600",
+    fontWeight: "700",
   },
   contentBox: {
     marginTop: 5,

@@ -429,7 +429,7 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
               bounces={false}
               showsVerticalScrollIndicator={false}
             >
-              {data && data.country && <Emergency country={data.country} />}
+                {data && data.country && <Emergency data={data?.country?.emergency} />}
             </Tabs.ScrollView>
           </Tabs.Tab>
         </Tabs.Container>

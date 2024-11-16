@@ -23,7 +23,7 @@ export const Emergency: React.FC<EmergencyProps> = ({ data }) => {
   return (
     <ScrollView style={styles.tabWrapper} showsVerticalScrollIndicator={false}>
       <View style={styles.emergencyNumbers}>
-        {data.emergency ? (
+        {data?.emergency ? (
           <TouchableOpacity
             activeOpacity={0.7}
             style={[styles.emergencyButtonItem, { backgroundColor: "#af0101" }]}
@@ -36,7 +36,7 @@ export const Emergency: React.FC<EmergencyProps> = ({ data }) => {
           </TouchableOpacity>
         ) : null}
 
-        {data.police ? (
+        {data?.police ? (
           <TouchableOpacity
             activeOpacity={0.7}
             style={[styles.emergencyButtonItem, { backgroundColor: "#366dc2" }]}
@@ -48,7 +48,7 @@ export const Emergency: React.FC<EmergencyProps> = ({ data }) => {
             </Text>
           </TouchableOpacity>
         ) : null}
-        {data.ambulance ? (
+        {data?.ambulance ? (
           <TouchableOpacity
             activeOpacity={0.7}
             style={[styles.emergencyButtonItem, { backgroundColor: "#f14e2f" }]}
@@ -60,7 +60,7 @@ export const Emergency: React.FC<EmergencyProps> = ({ data }) => {
             </Text>
           </TouchableOpacity>
         ) : null}
-        {data.fire ? (
+        {data?.fire ? (
           <TouchableOpacity
             activeOpacity={0.7}
             style={[styles.emergencyButtonItem, { backgroundColor: "#f10d00" }]}

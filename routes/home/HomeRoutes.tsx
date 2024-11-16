@@ -5,15 +5,11 @@ import {
 } from "@react-navigation/stack";
 import { HomeScreen } from "../../screen/home/HomeScreen";
 import { PrimaryColor } from "../../styles/colors";
-import BucketList from "../../screen/BucketList";
-import BucketListAllScreen from "../../screen/BucketList/BucketListAll";
 
 interface HomeRouteProps {}
 
 export type HomeRouteStackParamList = {
   Main: undefined;
-  BucketList: undefined;
-  BucketListAll: undefined;
   ShareStats: undefined;
 };
 
@@ -39,20 +35,6 @@ export const HomeRouteStack: React.FC<HomeRouteProps> = ({}) => {
       <Stack.Screen
         name="Main"
         component={HomeScreen}
-        options={() => ({
-          header: () => null,
-        })}
-      />
-      <Stack.Screen
-        name="BucketList"
-        component={BucketList}
-        options={() => ({
-          header: () => null,
-        })}
-      />
-      <Stack.Screen
-        name="BucketListAll"
-        component={BucketListAllScreen}
         options={() => ({
           header: () => null,
         })}

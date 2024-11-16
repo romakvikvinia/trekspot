@@ -45,7 +45,7 @@ export const TripHelpers = ({
           style={[
             styles.bottomActionsButton,
             {
-              backgroundColor: !reachView ? "#f5f9ff" : "#fff",
+              backgroundColor: !reachView ? "#fafafa" : "#fff",
             },
           ]}
           activeOpacity={0.7}
@@ -54,13 +54,13 @@ export const TripHelpers = ({
         >
           <EmergencyLinearIcon
             size={16}
-            color={reachView ? "#000" : "#0b57d0"}
+            color="#000"
           />
           <Text
             style={[
               styles.bottomActionsButtonlabel,
               {
-                color: reachView ? "#000" : "#0b57d0",
+                color: "#000",
               },
             ]}
           >
@@ -71,7 +71,7 @@ export const TripHelpers = ({
           style={[
             styles.bottomActionsButton,
             {
-              backgroundColor: !reachView ? "#f5f9ff" : "#fff",
+              backgroundColor: !reachView ? "#fafafa" : "#fff",
             },
           ]}
           activeOpacity={0.7}
@@ -83,12 +83,12 @@ export const TripHelpers = ({
             })
           }
         >
-          <InsightIcon size={16} color={reachView ? "#000" : "#0b57d0"} />
+          <InsightIcon size={16} color="#000" />
           <Text
             style={[
               styles.bottomActionsButtonlabel,
               {
-                color: reachView ? "#000" : "#0b57d0",
+                color: "#000",
               },
             ]}
           >
@@ -100,7 +100,7 @@ export const TripHelpers = ({
           style={[
             styles.bottomActionsButton,
             {
-              backgroundColor: !reachView ? "#f5f9ff" : "#fff",
+              backgroundColor: !reachView ? "#fafafa" : "#fff",
             },
           ]}
           activeOpacity={0.7}
@@ -111,12 +111,12 @@ export const TripHelpers = ({
             })
           }
         >
-          <AppsIcon size={16} color={reachView ? "#000" : "#0b57d0"} />
+          <AppsIcon size={16} color="#000" />
           <Text
             style={[
               styles.bottomActionsButtonlabel,
               {
-                color: reachView ? "#000" : "#0b57d0",
+                color: "#000",
               },
             ]}
           >
@@ -127,7 +127,7 @@ export const TripHelpers = ({
           style={[
             styles.bottomActionsButton,
             {
-              backgroundColor: !reachView ? "#f5f9ff" : "#fff",
+              backgroundColor: !reachView ? "#fafafa" : "#fff",
             },
           ]}
           activeOpacity={0.7}
@@ -138,12 +138,12 @@ export const TripHelpers = ({
             })
           }
         >
-          <DishesIcon size={16} color={reachView ? "#000" : "#0b57d0"} />
+          <DishesIcon size={16} color="#000" />
           <Text
             style={[
               styles.bottomActionsButtonlabel,
               {
-                color: reachView ? "#000" : "#0b57d0",
+                color: "#000",
               },
             ]}
           >
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingTop: 12,
     paddingBottom: 12,
-    marginBottom: 15,
+    marginBottom: 0,
   },
   bottomActionsButton: {
     borderRadius: 50,

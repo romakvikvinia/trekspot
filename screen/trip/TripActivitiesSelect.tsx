@@ -225,12 +225,20 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
   const handleClear = useCallback(() => {
     setTopSightDetail(null);
   }, []);
+  const [tabViewKey, setTabViewKey] = useState(0);
 
+  useEffect(() => {
+    if (routes.length) {
+      setTabViewKey((prev) => prev + 1);
+    }
+  }, [routes]);
+  
   return (
     <>
       <View style={styles.selectActivitesWrapper}>
         <View style={styles.itemRow}>
           <TabView
+            key={tabViewKey}
             navigationState={{ index, routes }}
             renderScene={renderScene}
             onIndexChange={setIndex}

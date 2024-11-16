@@ -105,6 +105,7 @@ export const tripDetailStyles = StyleSheet.create({
       paddingHorizontal: 15,
       paddingTop: 15,
       paddingBottom: 10,
+      width: "100%"
     },
     checkedIn: {
       opacity: 0.6,

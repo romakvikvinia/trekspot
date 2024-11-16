@@ -20,6 +20,7 @@ import { TripType } from "../../api/api.types";
 import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { format, parseISO } from "date-fns";
+import { FlagIcon } from "./components/FlagIcon";
 
 interface ITripItemProps {
   item: TripType;
@@ -114,7 +115,7 @@ export const TripItem: React.FC<ITripItemProps> = ({ item, onContextMenu }) => {
             >
               <LinearGradient
                 style={_tripScreenStyles.gradientWrapper}
-                colors={["rgba(0,0,0,1)", "rgba(0,0,0,0.2)"]}
+                colors={["rgba(0,0,0,1)", "rgba(0,0,0,0.4)"]}
                 start={{ x: -1, y: 1 }}
                 end={{ x: 1, y: 0 }}
               >
@@ -139,7 +140,13 @@ export const TripItem: React.FC<ITripItemProps> = ({ item, onContextMenu }) => {
                   <TouchableOpacity style={{
                     padding: 15,
                     marginTop: -10,
-                    marginRight: -10
+                    marginRight: -10,
+                    // width: 35,
+                    // height: 35,
+                    // backgroundColor: "rgba(0, 0, 0, 0.6)",
+                    // alignItems: "center",
+                    // justifyContent: "center",
+                    // borderRadius: 100
                   }} onPress={onContextMenu}>
                     <DotsIcon color="#fff" />
                   </TouchableOpacity>
@@ -157,18 +164,21 @@ export const TripItem: React.FC<ITripItemProps> = ({ item, onContextMenu }) => {
                     <FamilyIcon size="10" color="#ececec" />
                     <Text style={_tripScreenStyles.typeTagText}>Family</Text>
                   </View> */}
+                  <View style={_tripScreenStyles.tripLocation}>
+                    <LocationPin width="10" color="#ececec" />
+                    <Text style={_tripScreenStyles.tripLocationText}>
+                      {item?.cities[0].city}
+                    </Text>
+                    <FlagIcon iso2={item?.cities[0]?.iso2} />
+                  </View>
+                 
                   <View style={_tripScreenStyles.typeTag}>
                     <UsersIcon size="10" color="#ececec" />
                     <Text style={_tripScreenStyles.typeTagText}>
                       {item.type.toLowerCase()}
                     </Text>
                   </View>
-                  <View style={_tripScreenStyles.tripLocation}>
-                    <LocationPin width="10" color="#ececec" />
-                    <Text style={_tripScreenStyles.tripLocationText}>
-                      {item?.cities[0].city}
-                    </Text>
-                  </View>
+                
                 </View>
               </LinearGradient>
             </Image>

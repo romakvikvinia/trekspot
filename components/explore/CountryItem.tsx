@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { CountryType } from "../../api/api.types";
-import { Mark, StarIcon } from "../../utilities/SvgIcons.utility";
+import { Mark, StarIcon, TwoHeadsIcon, UsersIcon } from "../../utilities/SvgIcons.utility";
 import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
 
@@ -68,7 +68,9 @@ export const CountryItem: React.FC<CountryItemProps> = ({
                 ]}
               >
                 {/* <Mark color="#fff" size={15} /> */}
-                <Text style={styles.labelItemText} numberOfLines={2}>
+                <Text style={[styles.labelItemText, {
+                  fontSize: isExplore ? 18 : 20,
+                }]} numberOfLines={2}>
                   {item.name}
                 </Text>
               </View>
@@ -84,9 +86,10 @@ export const CountryItem: React.FC<CountryItemProps> = ({
                     <StarIcon color="#FFBC3E" />
                   </View>
                   <Text style={styles.ratingText}>{item.rate} /</Text>
-                  <Text style={styles.ratingText}>
-                    {item.visitors} visitors
+                  <Text style={[styles.ratingText, {marginRight: 3}]}>
+                    {item.visitors}
                   </Text>
+                  <TwoHeadsIcon />
                 </View>
               )}
             </LinearGradient>
@@ -169,7 +172,7 @@ const styles = StyleSheet.create({
   labelItemText: {
     color: "#fff",
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: "600",
     marginLeft: 0,
     paddingRight: 10,
   },
@@ -182,10 +185,11 @@ const styles = StyleSheet.create({
   ratingLabel: {
     flexDirection: "row",
     paddingHorizontal: 10,
-    paddingVertical: 3,
+    paddingVertical: 0,
     borderRadius: 30,
     alignItems: "center",
     paddingBottom: 10,
+    marginTop: 8
   },
   ratingText: {
     color: "#fff",
@@ -217,7 +221,6 @@ const styles = StyleSheet.create({
   typeMd: {
     width: 160,
     height: 180,
-    borderRadius: 15,
     overflow: "hidden",
   },
 });

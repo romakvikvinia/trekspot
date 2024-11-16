@@ -1,8 +1,6 @@
 import React, { useCallback } from "react";
 
 import {
-  ImageBackground,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,16 +10,15 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 
 import { COLORS, SIZES } from "../../styles/theme";
-import { Mark, StarIcon } from "../../utilities/SvgIcons.utility";
 import { CityType } from "../../api/api.types";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "@react-navigation/native";
-import { Image } from "expo-image";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
 import { useTripStore } from "../../package/zustand/store";
 import { GuestUserModal } from "../../common/components/GuestUserModal";
 import { useAppSelector } from "../../package/store";
+import { CityImage } from "./subComponents/CityImage";
 
 interface CitiesContainerProps {
   title: string;
@@ -93,131 +90,7 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
               <React.Fragment
                 key={`${title}-cities-${item.id}-${item.city}-${ind}`}
               >
-                {Platform.OS === "ios" ? (
-                  <Image
-                    style={styles.box}
-                    contentFit="cover"
-                    source={
-                      item?.image?.url
-                        ? {
-                            uri: item?.image?.url,
-                          }
-                        : require("../../assets/no-image.png")
-                    }
-                    cachePolicy="memory-disk"
-                  >
-                    <TouchableOpacity
-                      style={styles.gradientWrapper}
-                      activeOpacity={0.7}
-                      onPress={() => handleCity(item)}
-                    >
-                      <LinearGradient
-                        style={styles.gradientWrapper}
-                        colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
-                      >
-                        <View style={styles.labelItem}>
-                          {/* <Mark color="#fff" /> */}
-                          <Text
-                            numberOfLines={2}
-                            style={[styles.labelItemText, styles.titleSm]}
-                          >
-                            {item.city}
-                          </Text>
-                        </View>
-                        <View style={styles.ratingLabel}>
-                          {item?.rate ? (
-                            <>
-                              <View
-                                style={{
-                                  position: "relative",
-                                  top: -1,
-                                  opacity: 0.8,
-                                }}
-                              >
-                                <StarIcon color="#FFBC3E" />
-                              </View>
-                              <Text
-                                style={[styles.ratingText, styles.ratingTextXs]}
-                              >
-                                {item.rate}
-                              </Text>
-                            </>
-                          ) : null}
-                          {item?.visitors ? (
-                            <Text
-                              style={[styles.ratingText, styles.ratingTextXs]}
-                            >
-                              {item.visitors} visitors
-                            </Text>
-                          ) : null}
-                        </View>
-                      </LinearGradient>
-                    </TouchableOpacity>
-                  </Image>
-                ) : (
-                  <ImageBackground
-                    style={styles.box}
-                    resizeMode="cover"
-                    source={
-                      item?.image?.url
-                        ? {
-                            uri: item?.image?.url,
-                          }
-                        : require("../../assets/no-image.png")
-                    }
-                  >
-                    <TouchableOpacity
-                      style={styles.gradientWrapper}
-                      activeOpacity={0.7}
-                      onPress={() => {
-                        handleCity(item);
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                      }}
-                    >
-                      <LinearGradient
-                        style={styles.gradientWrapper}
-                        colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
-                      >
-                        <View style={styles.labelItem}>
-                          <Mark color="#fff" />
-                          <Text
-                            numberOfLines={2}
-                            style={[styles.labelItemText, styles.titleSm]}
-                          >
-                            {item.city}
-                          </Text>
-                        </View>
-                        <View style={styles.ratingLabel}>
-                          {item?.rate ? (
-                            <>
-                              <View
-                                style={{
-                                  position: "relative",
-                                  top: -1,
-                                  opacity: 0.8,
-                                }}
-                              >
-                                <StarIcon color="#FFBC3E" />
-                              </View>
-                              <Text
-                                style={[styles.ratingText, styles.ratingTextXs]}
-                              >
-                                {item.rate}
-                              </Text>
-                            </>
-                          ) : null}
-                          {item?.visitors ? (
-                            <Text
-                              style={[styles.ratingText, styles.ratingTextXs]}
-                            >
-                              {item.visitors} visitors
-                            </Text>
-                          ) : null}
-                        </View>
-                      </LinearGradient>
-                    </TouchableOpacity>
-                  </ImageBackground>
-                )}
+               <CityImage item={item} handleCity={handleCity} />
                 {cities.length === ind + 1 && (
                   <View style={{ width: 20 }}></View>
                 )}
@@ -235,8 +108,8 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
                 style={{
                   width: 170,
                   minWidth: 160,
-                  height: 130,
-                  borderRadius: 10,
+                  height: 145,
+                  borderRadius: 15,
                   marginRight: 10,
                 }}
                 key={`ind-${ind}`}
@@ -246,7 +119,7 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
                   style={{
                     width: 170,
                     minWidth: 160,
-                    height: 130,
+                    height: 145,
                     borderRadius: 10,
                   }}
                 ></LinearGradient>
@@ -318,9 +191,9 @@ const styles = StyleSheet.create({
     fontSize: SIZES.body4,
   },
   h2: {
-    fontSize: 22,
+    fontSize: 20,
     color: "#000",
-    fontWeight: "600",
+    fontWeight: "700",
   },
   contentBox: {
     marginTop: 5,
