@@ -26,7 +26,7 @@ import { DestinationContainer } from "../../components/explore/DestinationContai
 import { CitiesContainer } from "../../components/explore/CitiesContainer";
 
 import { ExploreHeader } from "./Header";
-import { VisaChecker } from "./VisaChecker";
+import { TripToolkit } from "./TripToolkit";
 import { useAppDispatch, useAppSelector } from "../../package/store";
 import { setWishlists } from "../../package/slices";
 
@@ -127,7 +127,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
             />
 
             <View style={{ paddingHorizontal: 15, marginTop: 30, zIndex: 1 }}>
-              <VisaChecker />
+              <TripToolkit />
             </View>
 
             {/**

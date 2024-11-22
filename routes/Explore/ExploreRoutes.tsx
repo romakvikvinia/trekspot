@@ -16,7 +16,8 @@ import { SearchScreen } from "../../screen/Explore/SearchScreen";
 import { WishlistScreen } from "../../screen/Explore/WishlistScreen";
 import { CityDetailScreen } from "../../screen/Explore/city/CityDetailScreen";
 import { CityType } from "../../api/api.types";
-import { useNavigation } from "@react-navigation/native";
+import { VisaCheckerScreen } from "../../screen/Explore/VisaCheckerScreen";
+import { SeasonalExplorerScreen } from "../../screen/Explore/SeasonalExplorerScreen";
 
 interface ExploreRoutesProps {}
 
@@ -34,7 +35,9 @@ export type ExploreRoutesStackParamList = {
   };
   Search: undefined;
   WishlistScreen: undefined;
-  TripDetails: undefined
+  TripDetails: undefined,
+  VisaCheckerScreen: undefined;
+  SeasonalExplorerScreen: undefined;  
 };
 
 const Stack = createStackNavigator<ExploreRoutesStackParamList>();
@@ -141,7 +144,26 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
           gestureResponseDistance:
             Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
-        
+      />
+      <Stack.Screen
+        name="VisaCheckerScreen"
+        component={VisaCheckerScreen}
+        options={() => ({
+          header: () => null,
+          gestureEnabled: Platform.OS === "ios",
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
+        })}
+      />
+      <Stack.Screen
+        name="SeasonalExplorerScreen"
+        component={SeasonalExplorerScreen}
+        options={() => ({
+          header: () => null,
+          gestureEnabled: Platform.OS === "ios",
+          gestureResponseDistance:
+            Platform.OS === "android" ? 10 : SIZES.width - 50,
+        })}
       />
       {/* <Stack.Group
         screenOptions={{ presentation: "modal",   headerShown: true,

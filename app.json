@@ -15,7 +15,16 @@
     "ios": {
       "usesAppleSignIn": true,
       "supportsTablet": true,
-      "bundleIdentifier": "com.trekspot.app"
+      "bundleIdentifier": "com.trekspot.app",
+      "infoPlist": {
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": [
+              "com.googleusercontent.apps.923726965679-tap0vlets0dvclh7uertjalc0f1ueq50"
+            ]
+          }
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {

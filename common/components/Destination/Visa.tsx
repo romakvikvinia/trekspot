@@ -11,13 +11,11 @@ import {
 import { styles } from "../_styles";
 import { useLazyGetPassportIndexesQuery } from "../../../api/api.trekspot";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { NotFound } from "../../../components/common/NotFound";
 import { CountryType } from "../../../api/api.types";
 import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 import { CountrySelect } from "../CountrySelect";
 import { Loader } from "../../ui/Loader";
-import { count } from "console";
 
 type VisaProps = {
   country: CountryType;
@@ -167,7 +165,6 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
           </View>
         )}
 
-        {/* {!data && !isLoading && <NotFound text="Data not found! Please select the country that issued your passport." />} */}
 
         {!isCitizen && !isLoading && data && data.passportIndex && (
           <View style={styles.visaTabContent}>

@@ -492,7 +492,26 @@ export const trekSpotApi = createApi({
                 id
                 iso2
                 name
-              }
+                rate
+                image {
+                  url
+                }
+                security
+                whenToVisit
+                recognizedFor {
+                  emoji
+                  title
+                }
+                weatherInformation {
+                    averageTemperatures {
+                      summer
+                      spring
+                      autumn
+                      winter
+                    }
+                    seasonalConsiderations
+                  }
+                }
             }
           `,
         }),

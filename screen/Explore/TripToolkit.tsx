@@ -14,7 +14,7 @@ import { useLazyGetPassportIndexesQuery } from "../../api/api.trekspot";
 import { CountrySelect } from "../../common/components/CountrySelect";
 import { Loader } from "../../common/ui/Loader";
 import { NotFound } from "../../components/common/NotFound";
-import { COLORS } from "../../styles/theme";
+import { COLORS, SIZES } from "../../styles/theme";
 import { Flags } from "../../utilities/flags";
 import {
   CheckCircleIcon,
@@ -24,8 +24,12 @@ import {
   GlobeIcon,
 } from "../../utilities/SvgIcons.utility";
 import * as Haptics from "expo-haptics";
+import { useNavigation } from "@react-navigation/native";
 
-export const VisaChecker = () => {
+export const TripToolkit = () => {
+
+  const navigation = useNavigation();
+
   const [fetchVisaInfo, { data, isLoading, isError }] =
     useLazyGetPassportIndexesQuery();
 
@@ -76,11 +80,40 @@ export const VisaChecker = () => {
 
   return (
     <>
-      <View style={styles.visaCheckerCard}>
-        <Text style={styles.visaCheckerCardTitle}>Travel Visa Checker</Text>
-        <Text style={styles.visaCheckerCardSub}>
-          Select your country and destination
-        </Text>
+      <Text style={styles.h2}>Trip toolkit</Text>
+      <View style={styles.toolboxes}>
+        <TouchableOpacity onPress={() => navigation.navigate("VisaCheckerScreen")} activeOpacity={0.7} style={styles.boxItem}>
+          <ImageBackground
+            resizeMode="cover"
+            resizeMethod="scale"
+            source={require("../../assets/visa.webp")}
+            style={styles.boxItemInner}
+          >
+            <Text style={[styles.boxItemInnerText, {
+              maxWidth: "80%"
+            }]}>Where I can go?</Text>
+          </ImageBackground>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate("SeasonalExplorerScreen")} activeOpacity={0.7} style={styles.boxItem}>
+          <ImageBackground
+            resizeMode="cover"
+            resizeMethod="scale"
+            source={require("../../assets/season.webp")}
+            style={styles.boxItemInner}
+          >
+            <Text style={styles.boxItemInnerText}>The seasonal explorer</Text>
+          </ImageBackground>
+        </TouchableOpacity>
+      </View>
+
+      {/* <View style={styles.visaCheckerCard}>
+        <View style={styles.header}>
+          <Text style={styles.visaCheckerCardTitle}>Where I can go?</Text>
+          <Text style={styles.visaCheckerCardSub}>
+            Select your country and destination
+          </Text>
+        </View>
 
         <View style={styles.countrySelects}>
           <TouchableOpacity
@@ -217,7 +250,7 @@ export const VisaChecker = () => {
             </View>
           </>
         )}
-      </View>
+      </View> */}
 
       <Portal>
         <Modalize
@@ -238,6 +271,47 @@ export const VisaChecker = () => {
 };
 
 const styles = StyleSheet.create({
+  h2: {
+    fontSize: 20,
+    color: "#000",
+    fontWeight: "700",
+  },
+  toolboxes: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 15,
+  },
+  boxItem: {
+    width: "48.5%",
+    height: 140,
+    overflow: "hidden",
+    borderRadius: 12,
+  },
+  boxItemInner: {
+    alignItems: "flex-start",
+    justifyContent: "flex-end",
+    flex: 1,
+    width: "100%",
+    height: 140
+  },
+  boxItemInnerText: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: "#fff",
+    width: "100%",
+    textAlign: "left",
+    paddingBottom: 15,
+    paddingHorizontal: 20,
+  },
+  header: {
+    backgroundColor: "#18a185",
+    paddingTop: 15,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    paddingBottom: 15
+  },
   resetButtonWrapper: {
     flexDirection: "row",
     alignItems: "center",
@@ -371,7 +445,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: "#fff",
     borderColor: "#eee",
-    padding: 15,
+    padding: 0,
     borderRadius: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -385,9 +459,9 @@ const styles = StyleSheet.create({
   },
   visaCheckerCardTitle: {
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "600",
-    color: COLORS.black,
+    color: COLORS.white,
   },
   countrySelects: {
     flexDirection: "row",
@@ -395,12 +469,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginTop: 25,
     marginBottom: 15,
+    paddingHorizontal: 15,
+    paddingBottom: 15
   },
   visaCheckerCardSub: {
     textAlign: "center",
     fontSize: 15,
     fontWeight: "400",
-    color: COLORS.gray,
+    color: COLORS.white,
     marginTop: 5,
   },
   fromTo: {
