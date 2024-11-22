@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -16,19 +16,35 @@ import { COLORS } from "../../styles/theme";
 import * as Haptics from "expo-haptics";
 
 import { CountryType } from "../../api/api.types";
-
-import { useCountriesStore } from "../../package/zustand/countries.store";
+import { storeCountries } from "../../helpers/secure.storage";
 
 interface HomeProps {
   country: CountryType;
+  visitedCountries: Record<string, string>;
 }
 
-export const CountryItem: React.FC<HomeProps> = ({ country }) => {
-  const { toggleVisitedCountry, visitedCountries } = useCountriesStore();
+export const CountryItem: React.FC<HomeProps> = ({
+  country,
+  visitedCountries,
+}) => {
+  const [state, setState] = useState({
+    visited: false,
+    lived: false,
+  });
 
-  const handleVisited = useCallback((country: CountryType) => {
+  useEffect(() => {
+    (async () => {
+      setState((prevState) => ({
+        ...prevState,
+        visited: visitedCountries && country.id in visitedCountries,
+      }));
+    })();
+  }, [visitedCountries]);
+
+  const handleVisited = useCallback(async (country: CountryType) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    toggleVisitedCountry(country);
+    await storeCountries({ id: country.id, iso2: country.iso2 });
+    setState((prevState) => ({ ...prevState, visited: !prevState.visited }));
   }, []);
 
   // @ts-ignore
@@ -57,17 +73,17 @@ export const CountryItem: React.FC<HomeProps> = ({ country }) => {
             source={imagePath ? imagePath : null} // Set the image source
           />
         </View>
-        <Text style={styles.itemTitle}>{country.name}</Text>
+        <Text style={styles.itemTitle}>{country.name} </Text>
       </View>
       <View style={styles.countryItemActions}>
         <TouchableOpacity
           style={[
             styles.countryItemActionButton,
-            country.id in visitedCountries ? styles.countryActive : null,
+            state.visited ? styles.countryActive : null,
           ]}
           onPress={() => handleVisited(country)}
         >
-          <VisitedIcon active={country.id in visitedCountries} />
+          <VisitedIcon active={state.visited} />
         </TouchableOpacity>
         {/* <TouchableOpacity
           style={[

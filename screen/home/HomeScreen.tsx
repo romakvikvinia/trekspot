@@ -25,25 +25,13 @@ import {
   TopsightsIcon,
 } from "../../utilities/SvgIcons.utility";
 import { useAnalyticsQuery } from "../../api/api.trekspot";
-import { CountryType, SightType } from "../../api/api.types";
+import { SightType } from "../../api/api.types";
 import { DoneActivities } from "./DoneActivities";
-import { useCountriesStore } from "../../package/zustand/countries.store";
 
 type HomeProps = NativeStackScreenProps<HomeRouteStackParamList, "Main">;
 
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
-  const { data: analyticsData, isLoading, isSuccess } = useAnalyticsQuery();
-  const reduxCountries = useCountriesStore();
-
-  useEffect(() => {
-    if (isSuccess) {
-      const payload: Record<string, CountryType> = {};
-      visitedCountries.forEach((i) => {
-        payload[i.country.id] = i.country;
-      });
-      reduxCountries.setVisitedCountries(payload);
-    }
-  }, [isSuccess]);
+  const { data: analyticsData, isLoading, isFetching } = useAnalyticsQuery();
 
   // transform data
   const activities: Record<string, SightType[]> = {};
@@ -69,13 +57,14 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
 
   //
   const visitedCountries = analyticsData?.analytics.visitedCountries || [];
+  console.log("activities", activities, analyticsData);
 
   return (
     <View style={[styles.safeArea]}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <MapView
           world={analyticsData?.analytics.world}
-          isLoading={isLoading}
+          isLoading={isLoading || isFetching}
           countryQuantity={analyticsData?.analytics.countries}
           visitedCountries={visitedCountries}
           territories={analyticsData?.analytics.territories}
@@ -88,6 +77,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
 
         {Object.keys(activities) && Object.keys(activities).length > 0 && (
           <DoneActivities
+            key={`DoneActivities-${Object.keys(activities).length}`}
             activities={activities}
             categoryIcons={categoryIcons}
           />

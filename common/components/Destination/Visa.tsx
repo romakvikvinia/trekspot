@@ -38,7 +38,7 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
       await AsyncStorage.setItem("user-country", jsonValue);
       // await AsyncStorage.clear();
     } catch (e) {
-      console.log("Error storing to async storage", e);
+      // console.log("Error storing to async storage", e);
     }
   };
 
@@ -106,7 +106,13 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
           ) : null}
         </View>
         {isCitizen ? (
-          <View style={[styles.textContentWrapper, styles.successBg, {marginTop: 50}]}>
+          <View
+            style={[
+              styles.textContentWrapper,
+              styles.successBg,
+              { marginTop: 50 },
+            ]}
+          >
             <CheckCircleIcon color="#1a806b" />
             <Text style={[styles.headingText, styles.success]}>
               You are citizen of {country.name} and don't need visa.
@@ -128,11 +134,13 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
             }}
           >
             <VisaPassportIcon />
-            <Text style={{
-               marginVertical: 15, 
-               textAlign: "center", 
-               maxWidth: "80%", 
-            }}>
+            <Text
+              style={{
+                marginVertical: 15,
+                textAlign: "center",
+                maxWidth: "80%",
+              }}
+            >
               Find out if you need a visa by selecting your passport country.
             </Text>
             <TouchableOpacity
@@ -223,7 +231,9 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
           scrollViewProps={{
             keyboardShouldPersistTaps: "handled",
           }}
-          ref={modalCountryPassportSelectRef} modalTopOffset={65}>
+          ref={modalCountryPassportSelectRef}
+          modalTopOffset={65}
+        >
           <CountrySelect
             onSelect={handleCountrySelect}
             onDestinationModalClose={onDestinationModalClose}

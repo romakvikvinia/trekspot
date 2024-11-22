@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  // FlatList,
 } from "react-native";
 import {
   ClearIcon,
@@ -24,21 +25,27 @@ import { COLORS, SIZES } from "../../styles/theme";
 import ShareModal from "../../common/components/ShareModal";
 import { CountryItem } from "../../components/home/CountryItem";
 import {
+  trekSpotApi,
   useAllCountriesQuery,
   useCreateAnalyticsMutation,
   useLazyAnalyticsQuery,
+  useVisitedCountriesQuery,
 } from "../../api/api.trekspot";
 
 import { formatPercentage } from "../../helpers/number.helper";
 
 import { MapSvg } from "../../utilities/svg/map";
 
-import { useAppSelector } from "../../package/store";
+import { useAppDispatch, useAppSelector } from "../../package/store";
 import { useTripStore } from "../../package/zustand/store";
 import { GuestUserModal } from "../../common/components/GuestUserModal";
 
 import { AnalyticType, CountryType } from "../../api/api.types";
 import { useCountriesStore } from "../../package/zustand/countries.store";
+import {
+  deleteFromAsyncStorage,
+  getCountries,
+} from "../../helpers/secure.storage";
 
 interface MapVIewProps {
   isLoading?: boolean;
@@ -55,20 +62,28 @@ export const MapView: React.FC<MapVIewProps> = ({
   territories = 0,
   isLoading = true,
 }) => {
-  const [fetchAnalytics] = useLazyAnalyticsQuery();
+  const dispatch = useAppDispatch();
+
+  const {
+    isLoading: isVisitedCountries,
+    data: visitedCountriesData,
+    isSuccess: isVisitedCountriesSuccess,
+  } = useVisitedCountriesQuery();
+
   const { user } = useAppSelector((state) => state.auth);
-  const reduxCountries = useCountriesStore();
 
   const [searchValue, setSearchValue] = useState("");
 
   const [state, setState] = useState<{
     countries: CountryType[];
     countriesOnMap: string[];
+    visitedCountries: Record<string, string>;
     hideMap: boolean;
   }>({
     countries: [],
     countriesOnMap: [],
     hideMap: false,
+    visitedCountries: {},
   });
 
   let { data: countryList } = useAllCountriesQuery({});
@@ -114,17 +129,20 @@ export const MapView: React.FC<MapVIewProps> = ({
   const handleCountriesModalClose = useCallback(async () => {
     setSearchValue("");
 
+    const visitedCountries = await getCountries();
+
     await fetchCreateAnalytics({
-      countries: Object.keys(reduxCountries.visitedCountries) || [],
+      countries: Object.keys(visitedCountries) || [],
     }).unwrap();
 
-    await fetchAnalytics().unwrap();
-
+    dispatch(
+      trekSpotApi.util.invalidateTags(["visitedCountries", "analytics"])
+    );
     setState((prevState) => ({
       ...prevState,
       hideMap: false,
-      countriesOnMap:
-        Object.values(reduxCountries.visitedCountries).map((i) => i.iso2) || [],
+      countriesOnMap: Object.values(visitedCountries),
+      visitedCountries: visitedCountries ? visitedCountries : {},
     }));
   }, []);
 
@@ -133,22 +151,32 @@ export const MapView: React.FC<MapVIewProps> = ({
   };
 
   useEffect(() => {
-    if (countryList && countryList.allCountries) {
-      setState((prevState) => ({
-        ...prevState,
-        countries: countryList.allCountries,
-      }));
-    }
+    (async () => {
+      if (countryList && countryList.allCountries) {
+        setState((prevState) => ({
+          ...prevState,
+          countries: countryList.allCountries,
+          hideMap: false,
+        }));
+      }
+    })();
   }, [countryList]);
 
   useEffect(() => {
-    if (!isLoading && Array.isArray(visitedCountries)) {
+    if (visitedCountriesData && visitedCountriesData.visitedCountries.length) {
+      const visitedCountries: any = {};
+
+      visitedCountriesData.visitedCountries.forEach((i) => {
+        visitedCountries[i.id] = i.iso2;
+      });
+
       setState((prevState) => ({
         ...prevState,
-        countriesOnMap: visitedCountries.map((i) => i.country.iso2),
+        visitedCountries,
+        countriesOnMap: visitedCountries ? Object.values(visitedCountries) : [],
       }));
     }
-  }, [isLoading]);
+  }, [visitedCountriesData]);
 
   // transform data
 
@@ -183,8 +211,6 @@ export const MapView: React.FC<MapVIewProps> = ({
       onShareModalOpen();
     }
   };
-
-  console.log("isLoading", isLoading, isUpdateAnalyticsLoading);
 
   const DrownMap = () =>
     React.useMemo(() => {
@@ -236,7 +262,9 @@ export const MapView: React.FC<MapVIewProps> = ({
           </View>
         ) : (
           <>
-            {!state.hideMap && !isUpdateAnalyticsLoading ? (
+            {!state.hideMap &&
+            !isUpdateAnalyticsLoading &&
+            !isVisitedCountries ? (
               <>
                 <DrownMap />
                 <View style={styles.row}>
@@ -367,11 +395,19 @@ export const MapView: React.FC<MapVIewProps> = ({
           <View style={{ flex: 1, height: SIZES.height - 200 }}>
             <FlashList
               // keyExtractor={(item) =>
-              //   `${item.iso2}-${item.name}-${item.capital}`
+              //   `${item.id}-${state.visitedCountries[item.id] ? item.id : ""}`
               // }
               extraData={filteredCountries}
               data={filteredCountries}
-              renderItem={({ item }) => <CountryItem country={item} />}
+              renderItem={({ item }) => (
+                <CountryItem
+                  key={`${item.id}-item-${
+                    state.visitedCountries[item.id] ? item.id : ""
+                  }`}
+                  country={{ ...item }}
+                  visitedCountries={state.visitedCountries}
+                />
+              )}
               estimatedItemSize={100}
               contentContainerStyle={{ paddingTop: 15 }}
             />

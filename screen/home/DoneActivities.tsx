@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react";
 import {
-    Animated,
+  Animated,
   ScrollView,
   StyleSheet,
   Text,
@@ -24,7 +24,6 @@ export const DoneActivities = ({
   activities,
   categoryIcons,
 }: DoneActivitiesProps) => {
-
   const [topSightDetail, setTopSightDetail] = useState<SightType>();
 
   const modalRef = React.useRef<Modalize>(null);
@@ -34,70 +33,79 @@ export const DoneActivities = ({
   const handleShowAllActivities = (category) => {
     setSelectedCategory(category);
     modalRef.current?.open();
-  }
+  };
 
   const selectedCategoryActivities = useMemo(() => {
-
     if (!selectedCategory) {
       return [];
     }
 
     return activities[selectedCategory];
-  }, [selectedCategory]);
+  }, [selectedCategory, activities]);
 
   const handleClear = useCallback(() => {
     setTopSightDetail(undefined);
   }, []);
 
   const renderItem = ({ item, index }) => (
-    <TouchableOpacity activeOpacity={0.7} onPress={() => setTopSightDetail(item)} key={index} style={styles.activityItem}>
-      <Image source={{ uri: item?.image?.url }} style={styles.activityImage}></Image>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      onPress={() => setTopSightDetail(item)}
+      key={index}
+      style={styles.activityItem}
+    >
+      <Image
+        source={{ uri: item?.image?.url }}
+        style={styles.activityImage}
+      ></Image>
       <View style={styles.activityItemInfo}>
-         <Text style={styles.activityItemTitle}>{item?.title}</Text>
-         <Text style={styles.activityItemLocation}>{item?.city}</Text>
+        <Text style={styles.activityItemTitle}>{item?.title}</Text>
+        <Text style={styles.activityItemLocation}>{item?.city}</Text>
       </View>
     </TouchableOpacity>
   );
 
-  
   return (
     <>
-    <View style={styles.visitedStats}>
-      <Text
-        style={[styles.cardTitle, { paddingHorizontal: 15, marginBottom: 15 }]}
-      >
-        Activities
-      </Text>
-      <ScrollView
-        showsHorizontalScrollIndicator={false}
-        horizontal
-        contentContainerStyle={{ paddingHorizontal: 15 }}
-      >
-        {Object.keys(activities).map((category, index) => {
-          const IconComponent = categoryIcons[category.toLowerCase()];
-          return (
-            <TouchableOpacity
-              style={styles.statItem}
-              key={`${category}-${index}`}
-              activeOpacity={0.7}
-              onPress={() => handleShowAllActivities(category)}
-            >
-              <View style={styles.lf}>
-                <View style={{ height: 40 }}>
-                  <Text style={styles.visitedCategoryText}>{category}</Text>
+      <View style={styles.visitedStats}>
+        <Text
+          style={[
+            styles.cardTitle,
+            { paddingHorizontal: 15, marginBottom: 15 },
+          ]}
+        >
+          Activities
+        </Text>
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          horizontal
+          contentContainerStyle={{ paddingHorizontal: 15 }}
+        >
+          {Object.keys(activities).map((category, index) => {
+            const IconComponent = categoryIcons[category.toLowerCase()];
+            return (
+              <TouchableOpacity
+                style={styles.statItem}
+                key={`${category}-${index}`}
+                activeOpacity={0.7}
+                onPress={() => handleShowAllActivities(category)}
+              >
+                <View style={styles.lf}>
+                  <View style={{ height: 40 }}>
+                    <Text style={styles.visitedCategoryText}>{category}</Text>
+                  </View>
+                  <View style={styles.categoryIcon}>
+                    <IconComponent />
+                  </View>
                 </View>
-                <View style={styles.categoryIcon}>
-                  <IconComponent />
-                </View>
-              </View>
-              <Text style={styles.amount}>{activities[category].length}</Text>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
-    </View>
+                <Text style={styles.amount}>{activities[category].length}</Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+      </View>
 
-    <Portal>
+      <Portal>
         <Modalize
           ref={modalRef}
           modalTopOffset={200}
@@ -106,25 +114,32 @@ export const DoneActivities = ({
           handleStyle={{ backgroundColor: COLORS.gray }}
           HeaderComponent={
             <View style={styles.modalHeader}>
-                <Text style={styles.modalTitle}>
-                    {selectedCategory} ({selectedCategoryActivities.length})
-                </Text>
+              <Text style={styles.modalTitle}>
+                {selectedCategory} ({selectedCategoryActivities.length})
+              </Text>
             </View>
           }
           flatListProps={{
             data: selectedCategoryActivities,
             renderItem: renderItem,
-            keyExtractor: item => item.title,
+            keyExtractor: (item) => item.id,
             showsVerticalScrollIndicator: false,
             scrollEventThrottle: 16,
-            contentContainerStyle: { paddingHorizontal: 0, paddingTop: 15, paddingBottom: 25 },
-          }} 
-        >
-        </Modalize>
-    </Portal>
+            contentContainerStyle: {
+              paddingHorizontal: 0,
+              paddingTop: 15,
+              paddingBottom: 25,
+            },
+          }}
+        ></Modalize>
+      </Portal>
 
-    {topSightDetail ? (
-        <SightDetailModal showDirection={true} data={topSightDetail} closeCallBack={handleClear} />
+      {topSightDetail ? (
+        <SightDetailModal
+          showDirection={true}
+          data={topSightDetail}
+          closeCallBack={handleClear}
+        />
       ) : null}
     </>
   );
