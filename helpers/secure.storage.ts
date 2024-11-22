@@ -50,6 +50,7 @@ export const storeCountries = async (
     } else {
       countries[country.id] = country.iso2;
     }
+
     // //@ts-ignore
     // countries =
     //   countries && countries.includes(code) && Array.isArray(countries)

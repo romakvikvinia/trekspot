@@ -31,7 +31,7 @@ import { DoneActivities } from "./DoneActivities";
 type HomeProps = NativeStackScreenProps<HomeRouteStackParamList, "Main">;
 
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
-  const { data: analyticsData, isLoading, isSuccess } = useAnalyticsQuery();
+  const { data: analyticsData, isLoading, isFetching } = useAnalyticsQuery();
 
   // transform data
   const activities: Record<string, SightType[]> = {};
@@ -63,7 +63,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <MapView
           world={analyticsData?.analytics.world}
-          isLoading={isLoading}
+          isLoading={isLoading || isFetching}
           countryQuantity={analyticsData?.analytics.countries}
           visitedCountries={visitedCountries}
           territories={analyticsData?.analytics.territories}

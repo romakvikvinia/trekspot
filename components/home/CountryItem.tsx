@@ -41,10 +41,10 @@ export const CountryItem: React.FC<HomeProps> = ({
     })();
   }, [visitedCountries]);
 
-  const handleVisited = useCallback((country: CountryType) => {
+  const handleVisited = useCallback(async (country: CountryType) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    await storeCountries({ id: country.id, iso2: country.iso2 });
     setState((prevState) => ({ ...prevState, visited: !prevState.visited }));
-    storeCountries({ id: country.id, iso2: country.iso2 });
   }, []);
 
   // @ts-ignore
