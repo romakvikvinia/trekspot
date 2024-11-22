@@ -106,15 +106,15 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
 
   const [checkedIn, setCheckedIn] = useState(visited);
 
-  const handleChangeActivityVisited = useCallback(() => {
+  const handleChangeActivityVisited = useCallback(async () => {
     setCheckedIn(!checkedIn);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    changeActivityVisited({
+    await changeActivityVisited({
       day: day.id,
       visited: !checkedIn,
       route: day.route!,
       sight: item.id,
-    });
+    }).unwrap();
     dispatch(trekSpotApi.util.invalidateTags(["analytics"]));
   }, [checkedIn]);
 
