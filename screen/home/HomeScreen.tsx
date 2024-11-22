@@ -25,25 +25,13 @@ import {
   TopsightsIcon,
 } from "../../utilities/SvgIcons.utility";
 import { useAnalyticsQuery } from "../../api/api.trekspot";
-import { CountryType, SightType } from "../../api/api.types";
+import { SightType } from "../../api/api.types";
 import { DoneActivities } from "./DoneActivities";
-import { useCountriesStore } from "../../package/zustand/countries.store";
 
 type HomeProps = NativeStackScreenProps<HomeRouteStackParamList, "Main">;
 
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
   const { data: analyticsData, isLoading, isSuccess } = useAnalyticsQuery();
-  const reduxCountries = useCountriesStore();
-
-  useEffect(() => {
-    if (isSuccess) {
-      const payload: Record<string, CountryType> = {};
-      visitedCountries.forEach((i) => {
-        payload[i.country.id] = i.country;
-      });
-      reduxCountries.setVisitedCountries(payload);
-    }
-  }, [isSuccess]);
 
   // transform data
   const activities: Record<string, SightType[]> = {};

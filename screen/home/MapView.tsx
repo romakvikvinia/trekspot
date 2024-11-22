@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  // FlatList,
 } from "react-native";
 import {
   ClearIcon,
@@ -39,6 +40,10 @@ import { GuestUserModal } from "../../common/components/GuestUserModal";
 
 import { AnalyticType, CountryType } from "../../api/api.types";
 import { useCountriesStore } from "../../package/zustand/countries.store";
+import {
+  deleteFromAsyncStorage,
+  getCountries,
+} from "../../helpers/secure.storage";
 
 interface MapVIewProps {
   isLoading?: boolean;
@@ -57,18 +62,19 @@ export const MapView: React.FC<MapVIewProps> = ({
 }) => {
   const [fetchAnalytics] = useLazyAnalyticsQuery();
   const { user } = useAppSelector((state) => state.auth);
-  const reduxCountries = useCountriesStore();
 
   const [searchValue, setSearchValue] = useState("");
 
   const [state, setState] = useState<{
     countries: CountryType[];
     countriesOnMap: string[];
+    visitedCountries: Record<string, string>;
     hideMap: boolean;
   }>({
     countries: [],
     countriesOnMap: [],
     hideMap: false,
+    visitedCountries: {},
   });
 
   let { data: countryList } = useAllCountriesQuery({});
@@ -113,9 +119,11 @@ export const MapView: React.FC<MapVIewProps> = ({
 
   const handleCountriesModalClose = useCallback(async () => {
     setSearchValue("");
+    // deleteFromAsyncStorage(["visited_countries"]);
+    const visitedCountries = await getCountries();
 
     await fetchCreateAnalytics({
-      countries: Object.keys(reduxCountries.visitedCountries) || [],
+      countries: Object.keys(visitedCountries) || [],
     }).unwrap();
 
     await fetchAnalytics().unwrap();
@@ -123,8 +131,8 @@ export const MapView: React.FC<MapVIewProps> = ({
     setState((prevState) => ({
       ...prevState,
       hideMap: false,
-      countriesOnMap:
-        Object.values(reduxCountries.visitedCountries).map((i) => i.iso2) || [],
+      countriesOnMap: Object.values(visitedCountries),
+      visitedCountries: visitedCountries ? visitedCountries : {},
     }));
   }, []);
 
@@ -133,22 +141,20 @@ export const MapView: React.FC<MapVIewProps> = ({
   };
 
   useEffect(() => {
-    if (countryList && countryList.allCountries) {
-      setState((prevState) => ({
-        ...prevState,
-        countries: countryList.allCountries,
-      }));
-    }
-  }, [countryList]);
+    (async () => {
+      const visitedCountries = await getCountries();
 
-  useEffect(() => {
-    if (!isLoading && Array.isArray(visitedCountries)) {
-      setState((prevState) => ({
-        ...prevState,
-        countriesOnMap: visitedCountries.map((i) => i.country.iso2),
-      }));
-    }
-  }, [isLoading]);
+      if (countryList && countryList.allCountries) {
+        setState((prevState) => ({
+          ...prevState,
+          countries: countryList.allCountries,
+          hideMap: false,
+          countriesOnMap: Object.values(visitedCountries),
+          visitedCountries: visitedCountries ? visitedCountries : {},
+        }));
+      }
+    })();
+  }, [countryList]);
 
   // transform data
 
@@ -183,8 +189,6 @@ export const MapView: React.FC<MapVIewProps> = ({
       onShareModalOpen();
     }
   };
-
-  console.log("isLoading", isLoading, isUpdateAnalyticsLoading);
 
   const DrownMap = () =>
     React.useMemo(() => {
@@ -367,11 +371,19 @@ export const MapView: React.FC<MapVIewProps> = ({
           <View style={{ flex: 1, height: SIZES.height - 200 }}>
             <FlashList
               // keyExtractor={(item) =>
-              //   `${item.iso2}-${item.name}-${item.capital}`
+              //   `${item.id}-${state.visitedCountries[item.id] ? item.id : ""}`
               // }
               extraData={filteredCountries}
               data={filteredCountries}
-              renderItem={({ item }) => <CountryItem country={item} />}
+              renderItem={({ item }) => (
+                <CountryItem
+                  key={`${item.id}-item-${
+                    state.visitedCountries[item.id] ? item.id : ""
+                  }`}
+                  country={{ ...item }}
+                  visitedCountries={state.visitedCountries}
+                />
+              )}
               estimatedItemSize={100}
               contentContainerStyle={{ paddingTop: 15 }}
             />

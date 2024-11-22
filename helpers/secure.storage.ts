@@ -34,19 +34,27 @@ export const storeInitialCountryCodes = async (
   return true;
 };
 
-export const storeCountries = async (code: any, key = "visited_countries") => {
+export const storeCountries = async (
+  country: { id: string; iso2: string },
+  key = "visited_countries"
+) => {
   try {
-    const defaultValue: string[] = [];
-    let countries = await AsyncStorage.getItem(key);
+    const defaultValue: Record<string, string> = {};
 
-    // @ts-ignore
-    countries = (countries ? JSON.parse(countries) : defaultValue) as string[];
+    let countries: any = await AsyncStorage.getItem(key);
 
-    //@ts-ignore
-    countries =
-      countries && countries.includes(code) && Array.isArray(countries)
-        ? countries.filter((i) => i !== code)
-        : countries?.concat(code);
+    countries = countries ? JSON.parse(countries) : defaultValue;
+
+    if (country.id in countries) {
+      delete countries[country.id];
+    } else {
+      countries[country.id] = country.iso2;
+    }
+    // //@ts-ignore
+    // countries =
+    //   countries && countries.includes(code) && Array.isArray(countries)
+    //     ? countries.filter((i) => i !== code)
+    //     : countries?.concat(code);
 
     await AsyncStorage.setItem(key, JSON.stringify(countries));
   } catch (e) {
@@ -57,12 +65,12 @@ export const storeCountries = async (code: any, key = "visited_countries") => {
 
 export const getCountries = async (key = "visited_countries") => {
   try {
-    const defaultValue: string[] = [];
-    let countries = await AsyncStorage.getItem(key);
-    // @ts-ignore
-    countries = (countries ? JSON.parse(countries) : defaultValue) as string[];
+    const defaultValue: Record<string, string> = {};
+    let countries: any = await AsyncStorage.getItem(key);
 
-    return countries;
+    countries = countries ? JSON.parse(countries) : defaultValue;
+
+    return countries as Record<string, string>;
   } catch (e) {
     return false;
   }
