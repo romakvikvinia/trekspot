@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   ImageBackground,
@@ -8,10 +8,7 @@ import {
   View,
 } from "react-native";
 import { SceneMap, TabBar, TabView } from "react-native-tab-view";
-import {
-  useAllCountriesQuery,
-  useLazyGetPassportIndexesQuery,
-} from "../../../api/api.trekspot";
+import { useLazyGetPassportIndexesQuery } from "../../../api/api.trekspot";
 import { Flags } from "../../../utilities/flags";
 import { COLORS } from "../../../styles/theme";
 import {
@@ -33,13 +30,13 @@ const TYPES = ["E-visa", "Visa required", "No admission", "Visa on arrival"];
 
 const generateColorByType = (type) => {
   switch (type) {
-    case "E-visa":
+    case "e-visa":
       return "#f09300";
-    case "Visa required":
+    case "visa required":
       return COLORS.red;
-    case "No admission":
+    case "no admission":
       return COLORS.black;
-    case "Visa on arrival":
+    case "visa on arrival":
       return COLORS.green;
     default:
       return COLORS.black;
@@ -51,10 +48,10 @@ export const VisaCheckerContent = ({ from }) => {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
 
-  const [fetchVisaInfo, { data: visaCountries, isLoading, isError }] =
-    useLazyGetPassportIndexesQuery();
-
-  let { data: countryList } = useAllCountriesQuery({});
+  const [
+    fetchVisaInfo,
+    { data: visaCountries, isLoading: isVisaCountriesLoading, isError },
+  ] = useLazyGetPassportIndexesQuery();
 
   useEffect(() => {
     if (from && from.iso2) {
@@ -124,79 +121,98 @@ export const VisaCheckerContent = ({ from }) => {
                 style={[
                   styles.visaStatusText,
                   {
-                    color: generateColorByType(
-                      TYPES[Math.floor(Math.random() * TYPES.length)]
-                    ),
+                    color: generateColorByType(item.requirement.toLowerCase()),
                   },
                 ]}
               >
-                {TYPES[Math.floor(Math.random() * TYPES.length)]}
+                {item.requirement}
               </Text>
             </View>
           )}
         </View>
-        <RenderThreatmentByType type="secure" />
+        <RenderThreatmentByType type={item?.country?.security} />
       </TouchableOpacity>
     );
   };
 
   const VisaTab = ({ loading = false }) => {
-    const countries = visaCountries
-      ? visaCountries.passportIndex.filter(
-          (i) => !isNaN(parseInt(i.requirement))
-        )
-      : [];
-    if (loading) {
-      return (
-        <View style={{ flex: 1 }}>
-          <Loader isLoading={loading} background="#f8f8f8" size="small" />
+    return React.useMemo(() => {
+      const countries = visaCountries
+        ? visaCountries.passportIndex.filter(
+            (i) => !isNaN(parseInt(i.requirement))
+          )
+        : [];
+      if (loading || isVisaCountriesLoading) {
+        return (
+          <View style={{ flex: 1 }}>
+            <Loader
+              isLoading={loading || isVisaCountriesLoading}
+              background="#f8f8f8"
+              size="small"
+            />
+          </View>
+        );
+      }
+
+      return from?.iso2 ? (
+        <FlatList
+          data={countries}
+          renderItem={({ item }) => <CountryItem item={item} />}
+          keyExtractor={(item, index) =>
+            item && item.country ? item.country.id : index.toString()
+          }
+          contentContainerStyle={{ paddingHorizontal: 15, paddingVertical: 30 }}
+        />
+      ) : (
+        <View style={styles.noResultWrapper}>
+          <VisaPassportIcon size={85} />
+          <Text style={styles.notResultText}>
+            Once you select your passport, here will appear countries where you
+            can travel without a visa.
+          </Text>
         </View>
       );
-    }
-
-    return from?.iso2 ? (
-      <FlatList
-        data={countries}
-        renderItem={({ item }) => <CountryItem item={item} />}
-        keyExtractor={(item) => item.country.id}
-        contentContainerStyle={{ paddingHorizontal: 15, paddingVertical: 30 }}
-      />
-    ) : (
-      <View style={styles.noResultWrapper}>
-        <VisaPassportIcon size={85} />
-        <Text style={styles.notResultText}>
-          Once you select your passport, here will appear countries where you
-          can travel without a visa.
-        </Text>
-      </View>
-    );
+    }, [loading, visaCountries, isVisaCountriesLoading]);
   };
 
   const VisaRequiredTab = ({ loading = false }) => {
-    if (loading) {
-      return (
-        <View style={{ flex: 1 }}>
-          <Loader isLoading={loading} background="#f8f8f8" size="small" />
+    return React.useMemo(() => {
+      const countries = visaCountries
+        ? visaCountries.passportIndex.filter((i) =>
+            isNaN(parseInt(i.requirement))
+          )
+        : [];
+      if (loading || isVisaCountriesLoading) {
+        return (
+          <View style={{ flex: 1 }}>
+            <Loader
+              isLoading={loading || isVisaCountriesLoading}
+              background="#f8f8f8"
+              size="small"
+            />
+          </View>
+        );
+      }
+
+      return from?.iso2 ? (
+        <FlatList
+          data={countries}
+          renderItem={({ item }) => <CountryItem item={item} />}
+          keyExtractor={(item, index) =>
+            item && item.country ? item.country.id : index.toString()
+          }
+          contentContainerStyle={{ paddingHorizontal: 15, paddingVertical: 30 }}
+        />
+      ) : (
+        <View style={styles.noResultWrapper}>
+          <VisaPassportIcon size={85} />
+          <Text style={styles.notResultText}>
+            Once you select your passport, here will appear countries where you
+            need a visa to travel.
+          </Text>
         </View>
       );
-    }
-
-    return from?.iso2 ? (
-      <FlatList
-        data={countryList?.allCountries?.slice(0, 10)}
-        renderItem={({ item }) => <CountryItem item={item} />}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{ paddingHorizontal: 15, paddingVertical: 30 }}
-      />
-    ) : (
-      <View style={styles.noResultWrapper}>
-        <VisaPassportIcon size={85} />
-        <Text style={styles.notResultText}>
-          Once you select your passport, here will appear countries where you
-          need a visa to travel.
-        </Text>
-      </View>
-    );
+    }, [loading, isVisaCountriesLoading, visaCountries]);
   };
 
   const renderTabBar = (props) => (

@@ -714,6 +714,7 @@ export const trekSpotApi = createApi({
                 id
                 name
                 iso2
+                security
               }
             }
           }
