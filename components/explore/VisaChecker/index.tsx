@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FlatList,
   ImageBackground,
@@ -8,7 +8,10 @@ import {
   View,
 } from "react-native";
 import { SceneMap, TabBar, TabView } from "react-native-tab-view";
-import { useAllCountriesQuery } from "../../../api/api.trekspot";
+import {
+  useAllCountriesQuery,
+  useLazyGetPassportIndexesQuery,
+} from "../../../api/api.trekspot";
 import { Flags } from "../../../utilities/flags";
 import { COLORS } from "../../../styles/theme";
 import {
@@ -48,7 +51,16 @@ export const VisaCheckerContent = ({ from }) => {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
 
+  const [fetchVisaInfo, { data: visaCountries, isLoading, isError }] =
+    useLazyGetPassportIndexesQuery();
+
   let { data: countryList } = useAllCountriesQuery({});
+
+  useEffect(() => {
+    if (from && from.iso2) {
+      fetchVisaInfo({ from: from.iso2 });
+    }
+  }, [from]);
 
   const RenderThreatmentByType = ({ type }) => {
     switch (type) {
@@ -81,13 +93,18 @@ export const VisaCheckerContent = ({ from }) => {
   };
 
   const CountryItem = ({ item }) => {
-    const imagePath = Flags[item.iso2];
+    const imagePath = Flags[item?.country?.iso2];
 
     return (
       <TouchableOpacity
-        onPress={() =>  navigation.navigate("CountryDetailScreen", { countryId: item?.id })}
-         activeOpacity={0.7} 
-         style={styles.countryItem}>
+        onPress={() =>
+          navigation.navigate("CountryDetailScreen", {
+            countryId: item?.country.id,
+          })
+        }
+        activeOpacity={0.7}
+        style={styles.countryItem}
+      >
         <View style={styles.topRow}>
           <View style={styles.countryItemLeft}>
             <ImageBackground
@@ -100,7 +117,7 @@ export const VisaCheckerContent = ({ from }) => {
             </Text>
           </View>
           {index === 0 ? (
-            <Text style={styles.visaStatusText}>90 days</Text>
+            <Text style={styles.visaStatusText}>{item?.requirement} days</Text>
           ) : (
             <View style={styles.chip}>
               <Text
@@ -124,6 +141,11 @@ export const VisaCheckerContent = ({ from }) => {
   };
 
   const VisaTab = ({ loading = false }) => {
+    const countries = visaCountries
+      ? visaCountries.passportIndex.filter(
+          (i) => !isNaN(parseInt(i.requirement))
+        )
+      : [];
     if (loading) {
       return (
         <View style={{ flex: 1 }}>
@@ -132,11 +154,11 @@ export const VisaCheckerContent = ({ from }) => {
       );
     }
 
-   return from?.iso2 ? (
+    return from?.iso2 ? (
       <FlatList
-        data={countryList?.allCountries?.slice(0, 10)}
+        data={countries}
         renderItem={({ item }) => <CountryItem item={item} />}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.country.id}
         contentContainerStyle={{ paddingHorizontal: 15, paddingVertical: 30 }}
       />
     ) : (
@@ -159,7 +181,7 @@ export const VisaCheckerContent = ({ from }) => {
       );
     }
 
-   return from?.iso2 ? (
+    return from?.iso2 ? (
       <FlatList
         data={countryList?.allCountries?.slice(0, 10)}
         renderItem={({ item }) => <CountryItem item={item} />}
@@ -178,10 +200,13 @@ export const VisaCheckerContent = ({ from }) => {
   };
 
   const renderTabBar = (props) => (
-    <TabBar {...props} 
+    <TabBar
+      {...props}
       activeColor="#fff"
       renderLabel={({ route, focused, color }) => (
-        <Text style={{ color, fontWeight: "600", fontSize: 16 }}>{route.title}</Text>
+        <Text style={{ color, fontWeight: "600", fontSize: 16 }}>
+          {route.title}
+        </Text>
       )}
       indicatorStyle={{ backgroundColor: "#014E57" }}
       indicatorContainerStyle={{ backgroundColor: "#299BA8" }}
@@ -253,7 +278,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f2f2f2",
     paddingHorizontal: 8,
     borderRadius: 5,
-    height: 26
+    height: 26,
   },
   countryItemLeft: {
     flexDirection: "column",

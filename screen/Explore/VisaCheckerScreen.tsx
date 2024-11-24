@@ -1,3 +1,4 @@
+import React, { useEffect, useRef, useState } from "react";
 import {
   ImageBackground,
   KeyboardAvoidingView,
@@ -19,10 +20,17 @@ import { Flags } from "../../utilities/flags";
 import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 import { CountrySelect } from "../../common/components/CountrySelect";
-import { useEffect, useRef, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const VisaCheckerScreen = ({ navigation }) => {
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
+type Props = NativeStackScreenProps<
+  ExploreRoutesStackParamList,
+  "VisaCheckerScreen"
+>;
+
+export const VisaCheckerScreen: React.FC<Props> = ({ navigation }) => {
   const modalCountryPassportSelectRef = useRef<Modalize>(null);
 
   const [from, setFrom] = useState(null);
@@ -83,7 +91,9 @@ export const VisaCheckerScreen = ({ navigation }) => {
               >
                 <BackIcon size="30" color="#fff" />
               </TouchableOpacity>
-              <Text style={[globalStyles.screenTitle, {color: "#fff"}]}>Visa info by citizenship</Text>
+              <Text style={[globalStyles.screenTitle, { color: "#fff" }]}>
+                Visa info by citizenship
+              </Text>
               <TouchableOpacity
                 style={globalStyles.screenHeaderBackButton}
               ></TouchableOpacity>
@@ -125,7 +135,6 @@ export const VisaCheckerScreen = ({ navigation }) => {
           <VisaCheckerContent from={from} />
         </KeyboardAvoidingView>
       </View>
-
 
       <Portal>
         <Modalize

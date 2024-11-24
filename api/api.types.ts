@@ -208,14 +208,18 @@ export type PassportIndexType = {
   form: string;
   to: string;
   requirement: string;
+  country: {
+    id: string;
+    name: string;
+    security: string;
+  };
 };
 export type PassportIndexesArgsType = {
   from: string;
-  to: string;
 };
 
 export type PassportIndexesResponseType = {
-  passportIndex: PassportIndexType;
+  passportIndex: PassportIndexType[];
 };
 
 // cities

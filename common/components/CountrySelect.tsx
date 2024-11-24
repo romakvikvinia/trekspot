@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { COLORS, SIZES } from "../../styles/theme";
 import { CountriesList } from "../../utilities/countryList";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Flags } from "../../utilities/flags";
 import { CheckCircleIcon } from "../../utilities/SvgIcons.utility";
 import { SearchComponent } from "../ui/SearchComponent";
@@ -16,12 +16,15 @@ import { SearchComponent } from "../ui/SearchComponent";
 export const Country = ({ item, onSelect }: any) => {
   const countryCode = item.iso2 as string;
 
- 
   // @ts-ignore
   const imagePath = Flags[countryCode];
 
   return (
-    <TouchableOpacity onPress={() => onSelect(item)} style={styles.countryItem} activeOpacity={0.7}>
+    <TouchableOpacity
+      onPress={() => onSelect(item)}
+      style={styles.countryItem}
+      activeOpacity={0.7}
+    >
       <View style={styles.countryItemLeft}>
         <View
           style={{
@@ -54,16 +57,19 @@ export const Country = ({ item, onSelect }: any) => {
   );
 };
 
-export const CountrySelect = ({search = true, onSelect, onDestinationModalClose}) => {
- 
+export const CountrySelect = ({
+  search = true,
+  onSelect,
+  onDestinationModalClose,
+}) => {
   const [searchValue, setSearchValue] = useState("");
-  const [countries, setCountries] = useState(CountriesList)
+  const [countries, setCountries] = useState(CountriesList);
   const filteredCountries =
-  searchValue && searchValue.length > 1
-    ? countries.filter((i) =>
-        i.name.toLowerCase().includes(searchValue.toLowerCase())
-      )
-    :  countries;
+    searchValue && searchValue.length > 1
+      ? countries.filter((i) =>
+          i.name.toLowerCase().includes(searchValue.toLowerCase())
+        )
+      : countries;
   return (
     <>
       {search ? (
@@ -97,11 +103,11 @@ const styles = StyleSheet.create({
   searchBox: {
     width: "100%",
     padding: 15,
-    flexDirection: "row"
+    flexDirection: "row",
   },
   cancelButton: {
     marginLeft: 10,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   cancelButtonText: {
     fontSize: 14,

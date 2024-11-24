@@ -503,15 +503,15 @@ export const trekSpotApi = createApi({
                   title
                 }
                 weatherInformation {
-                    averageTemperatures {
-                      summer
-                      spring
-                      autumn
-                      winter
-                    }
-                    seasonalConsiderations
+                  averageTemperatures {
+                    summer
+                    spring
+                    autumn
+                    winter
                   }
+                  seasonalConsiderations
                 }
+              }
             }
           `,
         }),
@@ -702,14 +702,19 @@ export const trekSpotApi = createApi({
       PassportIndexesResponseType,
       PassportIndexesArgsType
     >({
-      query: ({ from, to }) => ({
-        variables: { from, to },
+      query: ({ from }) => ({
+        variables: { from },
         document: gql`
-          query ($from: String!, $to: String!) {
-            passportIndex(input: { from: $from, to: $to }) {
+          query ($from: String!) {
+            passportIndex(input: { from: $from }) {
               from
               to
               requirement
+              country {
+                id
+                name
+                iso2
+              }
             }
           }
         `,

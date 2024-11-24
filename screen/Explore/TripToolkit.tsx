@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Alert,
   ImageBackground,
@@ -27,7 +27,6 @@ import * as Haptics from "expo-haptics";
 import { useNavigation } from "@react-navigation/native";
 
 export const TripToolkit = () => {
-
   const navigation = useNavigation();
 
   const [fetchVisaInfo, { data, isLoading, isError }] =
@@ -82,20 +81,35 @@ export const TripToolkit = () => {
     <>
       <Text style={styles.h2}>Trip toolkit</Text>
       <View style={styles.toolboxes}>
-        <TouchableOpacity onPress={() => navigation.navigate("VisaCheckerScreen")} activeOpacity={0.7} style={styles.boxItem}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("VisaCheckerScreen")}
+          activeOpacity={0.7}
+          style={styles.boxItem}
+        >
           <ImageBackground
             resizeMode="cover"
             resizeMethod="scale"
             source={require("../../assets/visa.webp")}
             style={styles.boxItemInner}
           >
-            <Text style={[styles.boxItemInnerText, {
-              maxWidth: "80%"
-            }]}>Where I can go?</Text>
+            <Text
+              style={[
+                styles.boxItemInnerText,
+                {
+                  maxWidth: "80%",
+                },
+              ]}
+            >
+              Where I can go?
+            </Text>
           </ImageBackground>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate("SeasonalExplorerScreen")} activeOpacity={0.7} style={styles.boxItem}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("SeasonalExplorerScreen")}
+          activeOpacity={0.7}
+          style={styles.boxItem}
+        >
           <ImageBackground
             resizeMode="cover"
             resizeMethod="scale"
@@ -294,7 +308,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     flex: 1,
     width: "100%",
-    height: 140
+    height: 140,
   },
   boxItemInnerText: {
     fontSize: 20,
@@ -310,7 +324,7 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
-    paddingBottom: 15
+    paddingBottom: 15,
   },
   resetButtonWrapper: {
     flexDirection: "row",
@@ -447,10 +461,10 @@ const styles = StyleSheet.create({
     borderColor: "#eee",
     padding: 0,
     borderRadius: 12,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 1.84, 
+    shadowRadius: 1.84,
     ...Platform.select({
       android: {
         elevation: 5,
@@ -470,7 +484,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
     marginBottom: 15,
     paddingHorizontal: 15,
-    paddingBottom: 15
+    paddingBottom: 15,
   },
   visaCheckerCardSub: {
     textAlign: "center",
