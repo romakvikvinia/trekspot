@@ -6,11 +6,13 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
+  Text,
   View,
 } from "react-native";
 import Constants from "expo-constants";
 
 import { COLORS, SIZES } from "../../styles/theme";
+import * as Sentry from '@sentry/react-native';
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
@@ -19,7 +21,7 @@ import {
   useGetCitiesQuery,
   useGetRandomCountriesGroupedByContinentQuery,
   useLazyWishlistsQuery,
-  useRandomSightQuery,
+  // useRandomSightQuery,
 } from "../../api/api.trekspot";
 
 import { DestinationContainer } from "../../components/explore/DestinationContainer";
@@ -29,6 +31,7 @@ import { ExploreHeader } from "./Header";
 import { TripToolkit } from "./TripToolkit";
 import { useAppDispatch, useAppSelector } from "../../package/store";
 import { setWishlists } from "../../package/slices";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 type ExploreProps = NativeStackScreenProps<
   ExploreRoutesStackParamList,
@@ -85,7 +88,6 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
   /**
    * Transform data
    */
-
   const cities = data && data.cities ? data.cities : [];
 
   return (
@@ -96,8 +98,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
           behavior={Platform.OS == "ios" ? "padding" : "height"}
         >
           <ExploreHeader />
-
-
+      
           <ScrollView
             style={{ flex: 1 }}
             showsVerticalScrollIndicator={false}
