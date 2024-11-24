@@ -5,14 +5,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import {
-  BackIcon,
-  DotsVerticlIcon,
-} from "../../../utilities/SvgIcons.utility";
+import { BackIcon, DotsVerticlIcon } from "../../../utilities/SvgIcons.utility";
 import { TripHelpers } from "./TripHelpers";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { HeaderTextContent } from "./HeaderTextcontent";
 import React, { useMemo } from "react";
+import { useAppDispatch } from "../../../package/store";
+import { trekSpotApi } from "../../../api/api.trekspot";
 
 type ReachHeaderContentProps = {
   data: any;
@@ -26,6 +25,7 @@ export const ReachHeaderContent = ({
   iso2,
   onQuestion2ModalOpen,
 }: ReachHeaderContentProps) => {
+  const dispatch = useAppDispatch();
   const route = useRoute();
   const navigation = useNavigation();
 
@@ -53,7 +53,10 @@ export const ReachHeaderContent = ({
       </View>
 
       <TouchableOpacity
-        onPress={() => navigation.goBack()}
+        onPress={() => {
+          dispatch(trekSpotApi.util.invalidateTags(["myTrips"]));
+          navigation.goBack();
+        }}
         activeOpacity={0.7}
         style={styles.backButton}
       >
