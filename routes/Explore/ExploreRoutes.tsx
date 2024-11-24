@@ -75,16 +75,7 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
             Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
-      <Stack.Screen
-        name="TripQuickDetailScreen"
-        component={TripDetailScreen}
-        options={({ route, navigation }) => ({
-          headerShown: false,
-          gestureEnabled: Platform.OS === "ios",
-          gestureResponseDistance:
-            Platform.OS === "android" ? 10 : SIZES.width - 50,
-        })}
-      />
+
       <Stack.Screen
         name="TripQuickInsights"
         component={TripInsights}
@@ -105,26 +96,26 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
             Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
-      <Stack.Screen
-        name="CountryDetailScreen"
-        component={CountryDetailScreen}
-        options={() => ({
-          header: () => null,
-          gestureEnabled: Platform.OS === "ios",
-          gestureResponseDistance:
-            Platform.OS === "android" ? 10 : SIZES.width - 50,
-        })}
-      />
-      <Stack.Screen
-        name="CityDetail"
-        component={CityDetailScreen}
-        options={() => ({
-          header: () => null,
-          gestureEnabled: Platform.OS === "ios",
-          gestureResponseDistance:
-            Platform.OS === "android" ? 10 : SIZES.width - 50,
-        })}
-      />
+     <Stack.Screen
+          name="VisaCheckerScreen"
+          component={VisaCheckerScreen}
+          options={() => ({
+            header: () => null,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+        />
+        <Stack.Screen
+          name="SeasonalExplorerScreen"
+          component={SeasonalExplorerScreen}
+          options={() => ({
+            header: () => null,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+        />
       <Stack.Screen
         name="Search"
         component={SearchScreen}
@@ -145,26 +136,7 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
             Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
-      <Stack.Screen
-        name="VisaCheckerScreen"
-        component={VisaCheckerScreen}
-        options={() => ({
-          header: () => null,
-          gestureEnabled: Platform.OS === "ios",
-          gestureResponseDistance:
-            Platform.OS === "android" ? 10 : SIZES.width - 50,
-        })}
-      />
-      <Stack.Screen
-        name="SeasonalExplorerScreen"
-        component={SeasonalExplorerScreen}
-        options={() => ({
-          header: () => null,
-          gestureEnabled: Platform.OS === "ios",
-          gestureResponseDistance:
-            Platform.OS === "android" ? 10 : SIZES.width - 50,
-        })}
-      />
+      
       {/* <Stack.Group
         screenOptions={{ presentation: "modal",   headerShown: true,
         headerLeft: () => null,

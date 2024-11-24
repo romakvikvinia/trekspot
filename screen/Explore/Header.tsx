@@ -63,13 +63,10 @@ export const ExploreHeader = () => {
             <TouchableOpacity
               onPress={() => {
                 if (data.upComingTrips.length > 0) {
-                  navigation.navigate("Trips", {
-                    screen: "TripDetailScreen",
-                    params: {
-                      city: data.upComingTrips[0].cities[0],
-                      trip: data.upComingTrips[0],
-                      needResetStack: true,
-                    },
+                  navigation.navigate("TripDetailScreen", {
+                    city: data.upComingTrips[0].cities[0],
+                    trip: data.upComingTrips[0],
+                    needResetStack: true,
                   });
                 } else {
                   navigation.navigate("Trips");

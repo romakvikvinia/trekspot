@@ -1,100 +1,121 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { ImageBackground } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { Platform } from "react-native";
+
+import { TabNavigator } from "./TabNavigator";
+import { SIZES } from "../styles/theme";
 import { Host } from "react-native-portalize";
+import { TripDetailScreen } from "../screen/trip/TripDetailScreen";
+import { CountryDetailScreen } from "../screen/Explore/Country/CountryDetailScreen";
+import { CityDetailScreen } from "../screen/Explore/city/CityDetailScreen";
+import { TripTransport } from "../screen/trip/TripTransport";
+import { TripEmergency } from "../screen/trip/TripEmergency";
+import { TripInsights } from "../screen/trip/TripInsights";
+import { TripDishes } from "../screen/trip/TripDishes";
 
-import {
-  FlightIcon,
-  HomeBold,
-  MyWorldBold,
-  SearchBoldIcon,
-  UserCircleBoldIcon,
-} from "../utilities/SvgIcons.utility";
+const Stack = createStackNavigator();
 
-import { HomeRouteStack } from "./home/HomeRoutes";
-import { SettingRouteStack } from "./setting/SettingRoutes";
-import { TripRouteStack } from "./trip/TripRoutes";
-import { COLORS } from "../styles/theme";
-import { ExploreRoutesStack } from "./explore/ExploreRoutes";
-
-const Tab = createBottomTabNavigator();
-
-interface AppRouteProps {}
-
-export const AppRoute: React.FC<AppRouteProps> = ({}) => {
+const AppRoute = () => {
   return (
     <Host>
-      <Tab.Navigator
-        screenOptions={({ route }: any) => ({
-          tabBarActiveTintColor: COLORS.primary,
-          keyboardHidesTabBar: true,
-          tabBarLabelStyle: {
-            fontSize: 10,
-            fontWeight: "600",
-          },
-          tabBarIcon: ({ focused }: any) => {
-            switch (route.name) {
-              case "Insights": {
-                return (
-                  <HomeBold color={focused ? COLORS.primary : "#8e8e8e"} />
-                );
-              }
-              case "Been": {
-                return (
-                  <MyWorldBold color={focused ? COLORS.primary : "#8e8e8e"} />
-                );
-              }
-              case "Trips": {
-                return (
-                  <FlightIcon color={focused ? COLORS.primary : "#8e8e8e"} />
-                );
-              }
-              case "Explore": {
-                return (
-                  <SearchBoldIcon
-                    color={focused ? COLORS.primary : "#8e8e8e"}
-                  />
-                );
-              }
-              case "Account": {
-                return false ? (
-                  <ImageBackground
-                    resizeMode="cover"
-                    style={{
-                      width: 25,
-                      borderRadius: 50,
-                      overflow: "hidden",
-                      height: 25,
-                    }}
-                    source={{
-                      uri: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=10&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                    }}
-                  />
-                ) : (
-                  <UserCircleBoldIcon
-                    color={focused ? COLORS.primary : "#8e8e8e"}
-                  />
-                );
-              }
-            }
-          },
-          // tabBarShowLabel: false,
+      <Stack.Navigator
+        screenOptions={{
           headerShown: false,
-          tabBarStyle: {
-            borderTopColor: "#eee",
-            borderTopWidth: 1,
-            // paddingTop: 5,
-            backgroundColor: "#fff",
-            height: 80,
-          },
-        })}
-        initialRouteName="Home"
+          animationEnabled: false,
+        }}
+        initialRouteName="Tabs"
       >
-        <Tab.Screen name="Explore" component={ExploreRoutesStack} />
-        <Tab.Screen name="Trips" component={TripRouteStack} />
-        {/* <Tab.Screen name="Been" component={MyWorldRouteStack} /> */}
-        <Tab.Screen name="Insights" component={HomeRouteStack} />
-        <Tab.Screen name="Account" component={SettingRouteStack} />
-      </Tab.Navigator>
+        <Stack.Screen
+          name="Tabs"
+          options={{
+            gestureEnabled: true,
+            gestureResponseDistance:
+              Platform.OS === "android" ? 5 : SIZES.width - 50,
+          }}
+          component={TabNavigator}
+        />
+
+        <Stack.Screen
+          name="TripDetailScreen"
+          component={TripDetailScreen}
+          options={({ route, navigation }) => ({
+            animationEnabled: true,
+            headerShown: false,
+            gestureEnabled: true,
+          })}
+        />
+        <Stack.Screen
+          name="CountryDetailScreen"
+          component={CountryDetailScreen}
+          options={() => ({
+            header: () => null,
+            animationEnabled: true,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+        />
+        <Stack.Screen
+          name="CityDetail"
+          component={CityDetailScreen}
+          options={() => ({
+            header: () => null,
+            animationEnabled: true,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+        />
+        <Stack.Screen
+          name="TripTransport"
+          component={TripTransport}
+          options={() => ({
+            header: () => null,
+            animationEnabled: true,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+        />
+        <Stack.Screen
+          name="TripEmergency"
+          component={TripEmergency}
+          options={() => ({
+            header: () => null,
+            animationEnabled: true,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+        />
+        <Stack.Screen
+          name="TripInsights"
+          component={TripInsights}
+          options={({ route, navigation }) => ({
+            headerShown: false,
+            animationEnabled: true,
+            gestureEnabled: true,
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+        />
+        <Stack.Screen
+          name="TripDishes"
+          component={TripDishes}
+          options={() => ({
+            header: () => null,
+            animationEnabled: true,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+        />
+        {/* <Stack.Screen
+          name="Onboarding"
+          component={OnboardingView}
+          options={{ animationEnabled: true, gestureEnabled: true,  gestureResponseDistance: Platform.OS === "android" ? 5 : SIZES.width - 50, }}
+        /> */}
+      </Stack.Navigator>
     </Host>
   );
 };
+export default AppRoute;

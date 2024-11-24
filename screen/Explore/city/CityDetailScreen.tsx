@@ -131,7 +131,6 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
     };
   }, []);
 
-  console.log("dataNotFound",dataNotFound)
 
   return (
     <View style={{ flex: 1, backgroundColor: "#f8f8f8" }}>
@@ -325,12 +324,12 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                       >
                         <StarIcon size={15} color="#FFBC3E" />
                       </View>
-                      <Text style={styles.ratingText}>{city.rate} /</Text>
+                      <Text style={styles.ratingText}>{city.rate} </Text>
                     </>
                   )}
                   {city?.visitors && (
                     <Text style={styles.ratingText}>
-                      {city?.visitors} visitors
+                      /{city?.visitors} visitors
                     </Text>
                   )}
                 </View>

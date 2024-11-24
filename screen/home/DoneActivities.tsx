@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react";
 import {
-  Animated,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,7 +8,6 @@ import {
 } from "react-native";
 import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
-import { XIcon } from "../../utilities/SvgIcons.utility";
 import { COLORS } from "../../styles/theme";
 import { Image } from "expo-image";
 import { SightType } from "../../api/api.types";

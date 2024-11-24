@@ -1,11 +1,10 @@
-import React, { useCallback, useReducer } from "react";
+import React, { useCallback } from "react";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import { Toaster } from "sonner-native";
-
+import { PostHogProvider } from "posthog-react-native";
 import { AuthRoute } from "./auth/AuthRoutes";
 import { deleteItemFromStorage, getFullToken } from "../helpers/secure.storage";
-import { AppRoute } from "./AppRoute";
 import { Loader } from "../common/ui/Loader";
 
 import { UserProvider } from "../components/context/UserContext";
@@ -14,8 +13,8 @@ import { signIn, signOut } from "../package/slices";
 import { useAppDispatch, useAppSelector } from "../package/store";
 import { useLazyMeQuery } from "../api/api.trekspot";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-
-//reselect
+import AppRoute from "./AppRoute";
+import { posthog } from "../utilities/Posthog";
 
 interface RoutesProps {}
 
@@ -67,17 +66,29 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
     <>
       <SafeAreaProvider>
         <NavigationContainer onReady={checkAuth} theme={theme}>
-          {authState && !authState.isLoading ? (
-            !authState.isAuthenticated ? (
-              <AuthRoute />
+          <PostHogProvider
+            client={posthog}
+            options={{
+              enableSessionReplay: true,
+            }}
+            autocapture={{
+              captureTouches: true,
+              captureLifecycleEvents: true,
+              captureScreens: true,
+            }}
+          >
+            {authState && !authState.isLoading ? (
+              !authState.isAuthenticated ? (
+                <AuthRoute />
+              ) : (
+                <UserProvider>
+                  <AppRoute />
+                </UserProvider>
+              )
             ) : (
-              <UserProvider>
-                <AppRoute />
-              </UserProvider>
-            )
-          ) : (
-            <Loader isLoading={authState.isLoading} />
-          )}
+              <Loader isLoading={authState.isLoading} />
+            )}
+          </PostHogProvider>
         </NavigationContainer>
 
         <Toaster />

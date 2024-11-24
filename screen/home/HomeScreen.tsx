@@ -57,8 +57,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
 
   //
   const visitedCountries = analyticsData?.analytics.visitedCountries || [];
-  console.log("activities", activities, analyticsData);
-
+ 
   return (
     <View style={[styles.safeArea]}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>

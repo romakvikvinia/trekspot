@@ -4,7 +4,6 @@ import {
   Linking,
   Platform,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -12,15 +11,12 @@ import {
 } from "react-native";
 import Constants from "expo-constants";
 
-import { enGB, he, registerTranslation } from "react-native-paper-dates";
+import { enGB, registerTranslation } from "react-native-paper-dates";
 registerTranslation("en", enGB);
 
 import { useNavigation } from "@react-navigation/native";
 import {
   BackIcon,
-  InnovationIcon,
-  LocationLinearIcon,
-  LocationPin,
   StarIcon,
 } from "../../utilities/SvgIcons.utility";
 import { FlashList } from "@shopify/flash-list";
@@ -38,18 +34,18 @@ export const TripDishes = ({ route }) => {
   const { isLoading, data, isError } = useDishesByISO2Query({
     iso2: iso2,
   });
-  const openMap = (name: string) => {
-    const scheme = Platform.select({
-      ios: "maps://0,0?q=",
-      android: "geo:0,0?q=",
-    });
-    const url = Platform.select({
-      ios: `${scheme}${name}`,
-      android: `${scheme}${name}`,
-    });
+  // const openMap = (name: string) => {
+  //   const scheme = Platform.select({
+  //     ios: "maps://0,0?q=",
+  //     android: "geo:0,0?q=",
+  //   });
+  //   const url = Platform.select({
+  //     ios: `${scheme}${name}`,
+  //     android: `${scheme}${name}`,
+  //   });
 
-    Linking.openURL(url);
-  };
+  //   Linking.openURL(url);
+  // };
   const blurhash = "L6PZfSi_.AyE_3t7t7R**0o#DgR4";
 
   return (
@@ -90,7 +86,7 @@ export const TripDishes = ({ route }) => {
                 style={[
                   styles.thingsTodoItem,
                   {
-                    backgroundColor: "#fafafa",
+                    // backgroundColor: "#fafafa",
                     marginRight: index % 2 === 0 ? "auto" : undefined,
                     marginLeft: index % 2 === 1 ? "auto" : undefined,
                     marginTop: 0,

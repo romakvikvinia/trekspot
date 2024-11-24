@@ -1,46 +1,43 @@
-import {
-  Linking,
-  Platform,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { COLORS } from "../../../styles/theme";
-import { LocationPin, StarIcon } from "../../../utilities/SvgIcons.utility";
+import { Text, View } from "react-native";
+import { StarIcon } from "../../../utilities/SvgIcons.utility";
 import { styles } from "../_styles";
 import { CountryType } from "../../../api/api.types";
 import { FlashList } from "@shopify/flash-list";
 import { useDishesByISO2Query } from "../../../api/api.trekspot";
 import { Loader } from "../../ui/Loader";
 import { Image } from "expo-image";
+import { NodataText } from "../../../components/common/NoDataText";
 
 type DiningProps = {
   country: CountryType;
 };
 
 export const Dining: React.FC<DiningProps> = ({ country }) => {
-  
   const { isLoading, data, isError } = useDishesByISO2Query({
     iso2: country.iso2,
   });
-   const openMap = (name: string) => {
-    const scheme = Platform.select({
-      ios: "maps://0,0?q=",
-      android: "geo:0,0?q=",
-    });
-    const url = Platform.select({
-      ios: `${scheme}${name}`,
-      android: `${scheme}${name}`,
-    });
+  //  const openMap = (name: string) => {
+  //   const scheme = Platform.select({
+  //     ios: "maps://0,0?q=",
+  //     android: "geo:0,0?q=",
+  //   });
+  //   const url = Platform.select({
+  //     ios: `${scheme}${name}`,
+  //     android: `${scheme}${name}`,
+  //   });
 
-    Linking.openURL(url);
-  };
+  //   Linking.openURL(url);
+  // };
 
   return (
     <>
-      <View style={styles.tabContentHeader}>
-        <Text style={styles.tabContentHeaderText}>Popular national dishes</Text>
-      </View>
+      {data?.dishes && data?.dishes.length > 0 && (
+        <View style={styles.tabContentHeader}>
+          <Text style={styles.tabContentHeaderText}>
+            Popular national dishes
+          </Text>
+        </View>
+      )}
 
       <View style={{ minHeight: 230 }}>
         {isLoading ? (
@@ -126,39 +123,12 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
             estimatedItemSize={200}
             contentContainerStyle={{
               paddingHorizontal: 10,
-              paddingBottom: 25
+              paddingBottom: 25,
             }}
           />
         )}
         {!isLoading && data?.dishes && data?.dishes.length === 0 && (
-          <View
-            style={{
-              width: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-              minHeight: 230,
-            }}
-          >
-            <Text
-              style={{
-                color: COLORS.black,
-                fontSize: 18,
-                fontWeight: "bold",
-              }}
-            >
-              No data available
-            </Text>
-            <Text
-              style={{
-                color: COLORS.gray,
-                fontSize: 16,
-                fontWeight: "500",
-                marginTop: 10,
-              }}
-            >
-              We are working on it and will be available soon
-            </Text>
-          </View>
+          <NodataText />
         )}
       </View>
     </>

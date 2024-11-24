@@ -15,8 +15,7 @@ export const ClassicHeaderContent = ({ data, onQuestion2ModalOpen, iso2 }) => {
   const route = useRoute();
   const navigation = useNavigation();
 
-  console.log("data", data);
-
+ 
   return (
     <>
       <View

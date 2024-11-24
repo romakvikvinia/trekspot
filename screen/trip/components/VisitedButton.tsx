@@ -43,14 +43,14 @@ export const VisitedButton = ({
     >
       <View style={tripDetailStyles.iconWrapper}>
         <CheckLiteIcon
-          color={checkedIn ? COLORS.primary : COLORS.gray}
+          color={checkedIn ? COLORS.black : COLORS.gray}
           width="15"
         />
       </View>
       <Text
         style={[
           tripDetailStyles.checkinButtonText,
-          { color: checkedIn ? COLORS.primary : COLORS.gray },
+          { color: checkedIn ? COLORS.black : COLORS.gray },
         ]}
       >
         Visited
@@ -106,10 +106,11 @@ const styles = StyleSheet.create({
     bottom: 30,
   },
   calloutBoxTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "400",
     textAlign: "left",
     width: "100%",
+    lineHeight: 20,
   },
   gotItButton: {
     backgroundColor: "#000",

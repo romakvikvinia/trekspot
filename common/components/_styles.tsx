@@ -315,9 +315,8 @@ export const styles = StyleSheet.create({
   },
   thingsTodoItemImage: {
     width: "100%",
-    minHeight: 110,
-    borderTopEndRadius: 10,
-    borderTopLeftRadius: 10,
+    minHeight: 130,
+    borderRadius: 15,
     overflow: "hidden",
     position: "relative",
   },
@@ -330,7 +329,7 @@ export const styles = StyleSheet.create({
     paddingBottom: 15,
   },
   thingsTodoItemTitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#000",
     fontWeight: "600",
   },
@@ -342,17 +341,17 @@ export const styles = StyleSheet.create({
     marginBottom: 25,
     width: "96%",
     borderRadius: 10,
-    backgroundColor: "#f2f2f2",
+    // backgroundColor: "#f2f2f2",
     minHeight: 200,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 1.84, 
-    ...Platform.select({
-      android: {
-        elevation: 5,
-      },
-    }),
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 1.84, 
+    // ...Platform.select({
+    //   android: {
+    //     elevation: 5,
+    //   },
+    // }),
   },
   forYouRow: {
     marginVertical: 0,

@@ -27,6 +27,7 @@ import * as Haptics from "expo-haptics";
 import { Loader } from "../../common/ui/Loader";
 import { useAllCountriesQuery } from "../../api/api.trekspot";
 import { toast } from "sonner-native";
+import { convertToFahrenheit } from "./helper";
 
 const SEASONSBYMONTH = [
   {
@@ -45,9 +46,9 @@ const SEASONSBYMONTH = [
     season: "winter",
     months: ["December", "January", "February"],
   },
-]
+];
 
-const MONTHS = [  
+const MONTHS = [
   { id: 1, name: "January" },
   { id: 2, name: "February" },
   { id: 3, name: "March" },
@@ -62,39 +63,48 @@ const MONTHS = [
   { id: 12, name: "December" },
 ];
 
-export const SeasonalExplorerScreen = ({ navigation }) => {
-
+export const SeasonalExplorerScreen = ({ navigation }: any) => {
   let { data: countryList, isLoading, isError } = useAllCountriesQuery({});
-  const [currentMonth, setCurrentMonth] = useState(new Date().toLocaleString("default", { month: "long" }));
+  const [currentMonth, setCurrentMonth] = useState(
+    new Date().toLocaleString("default", { month: "long" })
+  );
+  const [isCelsiues, setIsCelsius] = useState(true);
 
-  if(isError) {
+  if (isError) {
     toast.error("Error while fetching countries", {
       duration: 2000,
     });
   }
 
-  console.log("countryList", countryList);
-
   const filteredCountries = useMemo(() => {
-    return countryList?.allCountries?.filter((country) => {
-      return country?.whenToVisit?.includes(currentMonth) && country?.image?.url;
-    });
-  }, [countryList, currentMonth]);
 
+    const filtered = countryList?.allCountries?.filter((country) => {
+      return (
+        country?.whenToVisit?.includes(currentMonth) && country?.image?.url
+      );
+    })
+
+    return filtered?.sort((a, b) => {
+      return b.rate - a.rate;
+    })
+  }, [countryList, currentMonth]);
 
   const modalMonthSelectRef = useRef(null);
 
   const getSeasonByMonth = useMemo(() => {
-    return SEASONSBYMONTH.find((season) => season.months.includes(currentMonth))?.season;
+    return SEASONSBYMONTH.find((season) => season.months.includes(currentMonth))
+      ?.season;
   }, [currentMonth]);
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item, index }) => (
     <TouchableOpacity
       activeOpacity={0.7}
       style={styles.listItem}
-      key={item?.id}
-      onPress={() => navigation.navigate("CountryDetailScreen", { countryId: item?.id })}
-    >
+      key={`${item.id}-${item.name}`}
+      onPress={() =>
+        navigation.navigate("CountryDetailScreen", { countryId: item?.id })
+      }
+    > 
       <Image
         style={styles.listItemImage}
         source={{
@@ -108,7 +118,7 @@ export const SeasonalExplorerScreen = ({ navigation }) => {
           <Text style={styles.listItemTitle}>{item.name}</Text>
           {item?.rate && (
             <View style={styles.ratingLabel}>
-              <View style={{ position: "relative", top: -1, opacity: 0.8}}>
+              <View style={{ position: "relative", top: -0.5, opacity: 0.8 }}>
                 <StarIcon color="#FFBC3E" />
               </View>
               <Text style={styles.ratingText}>{item.rate}</Text>
@@ -117,7 +127,26 @@ export const SeasonalExplorerScreen = ({ navigation }) => {
         </View>
         <View style={styles.temperature}>
           <TemperatureIcon size={12} />
-          <Text style={styles.temperatureText}>{item?.weatherInformation?.averageTemperatures?.[getSeasonByMonth]}</Text>
+          <Text style={styles.temperatureText}>
+            {
+              isCelsiues ? item?.weatherInformation?.averageTemperatures?.[getSeasonByMonth] :
+              convertToFahrenheit(item?.weatherInformation?.averageTemperatures?.[getSeasonByMonth])
+            }
+          </Text>
+        </View>
+        <View style={styles.temperature}>
+          <Text style={[styles.temperatureText, {marginLeft: 0}]}>
+            <Text style={{fontWeight: "700"}}>Popular:</Text> {item?.whenToVisit}
+          </Text>
+        </View>
+        <View style={styles.tags}>
+          {item?.recognizedFor?.map((tag,index) => (
+            <View style={styles.tag} key={`${tag.title}-${index}`}>
+              <Text style={styles.tagText}>
+                {tag?.emoji} {tag?.title}
+              </Text>
+            </View>
+          ))}
         </View>
       </View>
     </TouchableOpacity>
@@ -133,19 +162,19 @@ export const SeasonalExplorerScreen = ({ navigation }) => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         modalMonthSelectRef?.current?.close();
       }}
-    > 
+    >
       <Text
         style={[
           styles.monthText,
           {
-            color: item.name === currentMonth ? COLORS.primary : "#000",
+            opacity: item.name === currentMonth ? 1 : 0.5,
           },
         ]}
       >
         {item.name}
       </Text>
       {item.name === currentMonth && (
-        <CheckLiteIcon width={20} color={COLORS.primary} />
+        <CheckLiteIcon width={20} color={COLORS.black} />
       )}
     </TouchableOpacity>
   );
@@ -174,7 +203,15 @@ export const SeasonalExplorerScreen = ({ navigation }) => {
               </Text>
               <TouchableOpacity
                 style={globalStyles.screenHeaderBackButton}
-              ></TouchableOpacity>
+                onPress={() => {
+                  setIsCelsius(!isCelsiues);
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
+              >
+                <Text style={styles.tempUnitText}>
+                  {!isCelsiues ? "°C" : "°F"}
+                </Text>
+              </TouchableOpacity>
             </View>
 
             <View style={styles.seasonalExplorerSelectWrapper}>
@@ -201,10 +238,10 @@ export const SeasonalExplorerScreen = ({ navigation }) => {
             data={filteredCountries}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
-            numColumns={2}
-            columnWrapperStyle={styles.columnWrapper}
+            // numColumns={2}
+            // columnWrapperStyle={styles.columnWrapper}
             contentContainerStyle={{
-              paddingHorizontal: 15,
+              paddingHorizontal: 25,
               paddingVertical: 30,
             }}
           />
@@ -254,7 +291,7 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderColor: "#E5E5E5",
+    borderColor: "#f2f2f2",
     borderRadius: 0,
     // marginBottom: 15,
     flexDirection: "row",
@@ -265,12 +302,35 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: "#000",
   },
+  tempUnitText: {
+    fontSize: 16,
+    color: "#fff",
+    fontWeight: "600",
+  },
   header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     padding: 15,
     marginBottom: 0,
+  },
+  tags: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginTop: 15,
+  },
+  tag: {
+    paddingVertical: 5,
+    paddingHorizontal: 8,
+    borderRadius: 5,
+    marginRight: 5,
+    marginBottom: 5,
+    backgroundColor: "#fafafa",
+  },
+  tagText: {
+    fontSize: 12,
+    fontWeight: "500",
+    color: "#000",
   },
   title: {
     fontSize: 18,
@@ -304,12 +364,14 @@ const styles = StyleSheet.create({
   temperature: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 15,
+    marginTop: 10,
+    opacity: 0.7
   },
   ratingText: {
     fontSize: 12,
     marginLeft: 5,
     color: "#000",
+    fontWeight: "500"
   },
   listItemDetails: {
     marginTop: 0,
@@ -319,13 +381,16 @@ const styles = StyleSheet.create({
   listItemTitle: {
     fontSize: 22,
     fontWeight: "600",
+    maxWidth: "85%"
   },
   columnWrapper: {
     justifyContent: "space-between",
   },
   listItem: {
-    width: "48%",
-    marginBottom: 25,
+    width: "100%",
+    marginBottom: 35,
+    borderWidth: 1,
+    borderColor: "#f2f2f2",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -341,7 +406,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   listItemImage: {
-    height: 160,
+    height: 250,
   },
   seasonalExplorerSelectWrapper: {
     flexDirection: "row",

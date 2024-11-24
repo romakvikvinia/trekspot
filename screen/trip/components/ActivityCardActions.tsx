@@ -21,7 +21,9 @@ export const ActivityCardActions = ({
   onQuestionModalOpen
 }: ActivityCardActionsProps) => {
   return (
-    <View style={[tripDetailStyles.sightBottomActions, styles.bottomActions]}>
+    <View style={[tripDetailStyles.sightBottomActions, styles.bottomActions, {
+      backgroundColor: checkedIn ?  "#fffcf5" : "#fff"
+    }]}>
       <View style={styles.leftSideButtons}>
         <VisitedButton
           handleChangeActivityVisited={handleChangeActivityVisited}

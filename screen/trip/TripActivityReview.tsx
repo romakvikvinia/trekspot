@@ -16,8 +16,7 @@ import { globalStyles } from "../../styles/globalStyles";
 import { Feedback } from "./Feedback";
 
 export const TripActivityReview = ({ route }) => {
-  // const countryId = route?.params?.iso2;
-  console.log(route.params.item);
+ 
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.safeArea}>
