@@ -13,7 +13,6 @@ export const RangePicker = ({ setOpen, open, formik }) => {
   const onConfirm = React.useCallback(
     ({ startDate, endDate }) => {
       setOpen(false);
-      // console.log("date", startDate, "      ", endDate);
       formik.setFieldValue("range", {
         startDate,
         endDate,

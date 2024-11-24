@@ -24,6 +24,7 @@ import { Portal } from "react-native-portalize";
 import { Modalize } from "react-native-modalize";
 import { TopicType } from "../../api/api.types";
 import RenderHTML from "react-native-render-html";
+import { NodataText } from "../../components/common/NoDataText";
 
 interface TripProps {}
 interface TripInsightTabProps {
@@ -66,7 +67,7 @@ export const TripInsights: React.FC<TripProps> = ({ route }) => {
             <BackIcon size="30" />
           </TouchableOpacity>
 
-          <Text style={globalStyles.screenTitle}>{city}</Text>
+          <Text style={globalStyles.screenTitle}>Insights</Text>
           <TouchableOpacity
             style={globalStyles.screenHeaderBackButton}
           ></TouchableOpacity>
@@ -126,34 +127,7 @@ export const TripInsights: React.FC<TripProps> = ({ route }) => {
             ))}
 
           {!isLoading && data && Object.keys(data)?.length === 0 && (
-            <View
-              style={{
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-                minHeight: 230,
-              }}
-            >
-              <Text
-                style={{
-                  color: COLORS.black,
-                  fontSize: 18,
-                  fontWeight: "bold",
-                }}
-              >
-                No data available
-              </Text>
-              <Text
-                style={{
-                  color: COLORS.gray,
-                  fontSize: 16,
-                  fontWeight: "500",
-                  marginTop: 10,
-                }}
-              >
-                We are working on it and will be available soon
-              </Text>
-            </View>
+             <NodataText />
           )}
         </ScrollView>
       </SafeAreaView>

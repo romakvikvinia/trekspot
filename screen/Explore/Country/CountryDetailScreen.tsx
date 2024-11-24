@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import {
   ImageBackground,
   Text,
@@ -7,8 +7,6 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-import { Modalize } from "react-native-modalize";
-// import { Portal } from "react-native-portalize";
 import { COLORS, SIZES } from "../../../styles/theme";
 import Swiper from "react-native-swiper";
 import { styles } from "../../../common/components/_styles";
@@ -26,7 +24,7 @@ import {
   TransportIcon,
 } from "../../../utilities/SvgIcons.utility";
 // import { CountrySelect } from "../../../common/components/CountrySelect";
-import { ForYou } from "../../../common/components/Destination/ForYou";
+import { ExploreTab } from "../../../common/components/Destination/ExploreTab";
 import Overview from "../../../common/components/Destination/Overview";
 import { Visa } from "../../../common/components/Destination/Visa";
 import { Transport } from "../../../common/components/Destination/Transport";
@@ -43,6 +41,8 @@ import { TripInsightTab } from "../../../common/components/Destination/TripInsig
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ExploreRoutesStackParamList } from "../../../routes/explore/ExploreRoutes";
 import { Loader } from "../../../common/ui/Loader";
+import { toast } from "sonner-native";
+import { NodataText } from "../../../components/common/NoDataText";
 
 type CountryDetailScreenProps = NativeStackScreenProps<
   ExploreRoutesStackParamList,
@@ -54,30 +54,18 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
   navigation,
 }) => {
   const { countryId } = route.params;
-  console.log("countryId",countryId)
 
   const [getCountry, { isLoading, data, isError }] = useLazyCountryQuery();
-  const modalCountryPassportSelectRef = useRef<Modalize>(null);
+
+  if(isError) {
+    toast.error("Error fetching country data");
+  }
 
   useEffect(() => {
     if (countryId) getCountry({ id: countryId });
   }, [route]);
 
-  useEffect(() => {
-    navigation.getParent()?.setOptions({
-      tabBarStyle: {
-        display: "none",
-      },
-    });
-    return () => {
-      navigation.getParent()?.setOptions({
-        tabBarStyle: {
-          display: "flex",
-        },
-      });
-    };
-  }, []);
-
+  
   return (
     <>
       <View
@@ -169,7 +157,7 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
                 )}
 
                 <View style={styles.ratingLabel}>
-                  {data?.country.rate && (
+                  {data?.country?.image && data?.country.rate && (
                     <>
                       <View
                         style={{
@@ -185,7 +173,7 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
                       </Text>
                     </>
                   )}
-                  {data?.country.visitors && (
+                  {data?.country?.image && data?.country.visitors && (
                     <Text style={styles.ratingText}>
                       {data?.country.visitors} visitors
                     </Text>
@@ -244,7 +232,7 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
               bounces={false}
               showsVerticalScrollIndicator={false}
             >
-              {data && <ForYou DATA={[]} country={data?.country} />}
+              {data && <ExploreTab country={data?.country} />}
             </Tabs.ScrollView>
           </Tabs.Tab>
           <Tabs.Tab
@@ -296,7 +284,7 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
               bounces={false}
               showsVerticalScrollIndicator={false}
             >
-              {data && <Overview country={data.country} />}
+              {data && data?.country?.image ? <Overview country={data.country} /> : <NodataText />}
             </Tabs.ScrollView>
           </Tabs.Tab>
           <Tabs.Tab
@@ -348,10 +336,9 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
               bounces={false}
               showsVerticalScrollIndicator={false}
             >
-              {data && <Transport country={data.country} />}
+              {data && data?.country?.image ?  <Transport country={data.country} /> : <NodataText />}
             </Tabs.ScrollView>
           </Tabs.Tab>
-
           <Tabs.Tab
             name="Dishes"
             label={(props) => (
@@ -429,12 +416,19 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
               bounces={false}
               showsVerticalScrollIndicator={false}
             >
-                {data && data.country && <Emergency data={data?.country?.emergency} />}
+                {data && data?.country?.image ? <Emergency data={data?.country?.emergency} /> : <NodataText />}
             </Tabs.ScrollView>
           </Tabs.Tab>
         </Tabs.Container>
       </View>
 
+
+      {/* <Portal>
+        <Modalize ref={modalCountryPassportSelectRef} modalTopOffset={65}>
+          <CountrySelect />
+        </Modalize>
+      </Portal> */}
+ 
       {/* <Portal>
         <Modalize ref={modalCountryPassportSelectRef} modalTopOffset={65}>
           <CountrySelect />

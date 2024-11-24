@@ -48,7 +48,7 @@ export const TripTransport: React.FC<Props> = ({ route, navigation }) => {
           <BackIcon size="30" />
         </TouchableOpacity>
 
-        <Text style={globalStyles.screenTitle}>Transport</Text>
+        <Text style={globalStyles.screenTitle}>Apps</Text>
         <TouchableOpacity
           style={globalStyles.screenHeaderBackButton}
         ></TouchableOpacity>
@@ -60,7 +60,7 @@ export const TripTransport: React.FC<Props> = ({ route, navigation }) => {
         //@ts-ignore
         selectable
       >
-        <Text style={styles.heading}>Helpful apps</Text>
+        {/* <Text style={styles.heading}>Helpful apps</Text> */}
 
         <Loader isLoading={isLoading} />
 
@@ -81,7 +81,7 @@ export const TripTransport: React.FC<Props> = ({ route, navigation }) => {
                   uri: i.logo,
                 }}
                 resizeMode="cover"
-                style={{ width: 55, height: 50 }}
+                style={{ width: 65, height: 60 }}
               />
             </View>
             <Text style={styles.transportText}>{i.name}</Text>
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 5,
+    borderRadius: 15,
     overflow: "hidden",
     marginTop: 15,
     width: "100%",

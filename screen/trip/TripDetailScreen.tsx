@@ -112,7 +112,6 @@ export const TabLabel = ({ route }: any) => {
 };
 
 export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
-  const navigation = useNavigation();
   const { trip, city } = route.params;
 
   const layout = useWindowDimensions();
@@ -314,22 +313,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     },
     []
   );
-
-  useEffect(() => {
-    navigation.getParent()?.setOptions({
-      tabBarStyle: {
-        display: "none",
-      },
-    });
-    return () => {
-      navigation.getParent()?.setOptions({
-        tabBarStyle: {
-          display: "flex",
-        },
-      });
-    };
-  }, []);
-
+ 
   const renderCurrentScene: React.FC<
     SceneRendererProps & {
       route: Route;
@@ -425,7 +409,9 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         activeDay={index}
       />
       {isTripDetailLoading || sightsLoading ? (
-        <View style={styles.loaderWrapper}>
+        <View style={[styles.loaderWrapper, {
+          marginTop: !tripStyle ? -35 : 0,
+        }]}>
           <Loader
             isLoading={isTripDetailLoading || sightsLoading}
             color=""
@@ -729,7 +715,6 @@ const styles = StyleSheet.create({
   loaderWrapper: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: -35,
     backgroundColor: "#F2F2F7",
     flex: 1,
     borderTopLeftRadius: 15,

@@ -20,9 +20,9 @@ import { FaqItem } from "./_FaqItem";
 import { ExploreRoutesStackParamList } from "../../../routes/explore/ExploreRoutes";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { DownCircleIcon } from "../../../utilities/SvgIcons.utility";
+import { NodataText } from "../../../components/common/NoDataText";
 
 type ForYouPros = {
-  DATA: any;
   country: CountryType;
 };
 
@@ -70,6 +70,7 @@ export const FaqRowItem = ({ item, title, index, openIndex, setOpenIndex }) => {
       {isOpen ? (
         <FlashList
           contentContainerStyle={{ paddingHorizontal: 15 }}
+          keyExtractor={(item, ind) => `${item.id}-${ind}`}
           renderItem={({ item, ind }) => {
             return <FaqItem item={item} />;
           }}
@@ -82,10 +83,9 @@ export const FaqRowItem = ({ item, title, index, openIndex, setOpenIndex }) => {
   );
 };
 
-export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
+export const ExploreTab: React.FC<ForYouPros> = ({ country }) => {
   const navigation = useNavigation<ExploreStackNavigationProp>();
 
- 
   const [state, setState] = useState<IState>({
     showMoreCities: false,
     city: null,
@@ -94,7 +94,6 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
     useLazyGetCitiesQuery();
   const [fetchData, { isLoading, data: faqDataList }] = useLazyFaqQuery();
 
- 
   const [openIndex, setOpenIndex] = useState(0);
 
   const onPlaceDetailOpen = useCallback((city: CityType) => {
@@ -113,6 +112,11 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
 
   return (
     <>
+      {!isCitiesLoading &&
+        !isLoading &&
+        data?.cities?.length === 0 &&
+        Object.keys(faqDataList)?.length === 0 && <NodataText />}
+
       <View style={[styles.forYouRow, { marginTop: 25 }]}>
         {!isCitiesLoading && data && data?.cities?.length > 0 && (
           <Text style={[styles.forYouRowTitle, { paddingHorizontal: 15 }]}>
@@ -179,30 +183,32 @@ export const ForYou: React.FC<ForYouPros> = ({ DATA, country }) => {
           </View>
         )}
       </View>
-       
+    
       {!isLoading && faqDataList && Object.keys(faqDataList)?.length ? (
         <View
           style={[
             styles.forYouRow,
-            { marginBottom: 50, paddingHorizontal: 15, marginTop: 25 },
+            { marginBottom: 50, paddingHorizontal: 15, marginTop: data?.cities?.length > 0 ? 25 : 0},
           ]}
         >
           <Text style={styles.forYouRowTitle}>FAQ</Text>
 
           {Object.keys(faqDataList)?.map((item, index) => (
-              <FaqRowItem
-                item={faqDataList[item]}
-                title={item}
-                index={index}
-                openIndex={openIndex}
-                setOpenIndex={setOpenIndex}
-              />
-            ))}
+            <FaqRowItem
+              item={faqDataList[item]}
+              title={item}
+              index={index}
+              openIndex={openIndex}
+              setOpenIndex={setOpenIndex}
+            />
+          ))}
         </View>
       ) : (
-        isLoading && <View style={{ height: 230 }}>
-          <Loader isLoading background="" />
-        </View>
+        isLoading && (
+          <View style={{ height: 230 }}>
+            <Loader isLoading background="" />
+          </View>
+        )
       )}
     </>
   );

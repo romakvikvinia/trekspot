@@ -7,7 +7,6 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  // FlatList,
 } from "react-native";
 import {
   ClearIcon,
@@ -28,7 +27,6 @@ import {
   trekSpotApi,
   useAllCountriesQuery,
   useCreateAnalyticsMutation,
-  useLazyAnalyticsQuery,
   useVisitedCountriesQuery,
 } from "../../api/api.trekspot";
 
@@ -41,9 +39,7 @@ import { useTripStore } from "../../package/zustand/store";
 import { GuestUserModal } from "../../common/components/GuestUserModal";
 
 import { AnalyticType, CountryType } from "../../api/api.types";
-import { useCountriesStore } from "../../package/zustand/countries.store";
 import {
-  deleteFromAsyncStorage,
   getCountries,
 } from "../../helpers/secure.storage";
 
@@ -316,7 +312,7 @@ export const MapView: React.FC<MapVIewProps> = ({
                 </View>
               </>
             ) : (
-              <View style={[styles.loadingWrapper, { height: 274 }]}>
+              <View style={[styles.loadingWrapper, { height: 372 }]}>
                 <ActivityIndicator color={COLORS.primaryDark} />
               </View>
             )}
@@ -410,6 +406,7 @@ export const MapView: React.FC<MapVIewProps> = ({
               )}
               estimatedItemSize={100}
               contentContainerStyle={{ paddingTop: 15 }}
+              keyboardShouldPersistTaps="handled"
             />
           </View>
         </Modalize>
@@ -572,6 +569,7 @@ const styles = StyleSheet.create({
   statLabel: {
     fontSize: 12,
     color: COLORS.darkgray,
+    fontWeight: "500"
   },
   topActions: {
     width: "100%",
@@ -589,7 +587,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 15,
-    backgroundColor: "#f8f8f8",
+    backgroundColor: "#fff",
     borderColor: "#fff",
     borderWidth: 2,
     borderStyle: "solid",
@@ -601,6 +599,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginTop: 0,
     marginBottom: 8,
+    position: "relative",
+    top: 10
   },
   lg: {
     fontSize: 24,

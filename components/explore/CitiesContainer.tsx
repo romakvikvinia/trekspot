@@ -106,7 +106,7 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
             {[0, 1, 2, 3].map((item, ind) => (
               <View
                 style={{
-                  width: 170,
+                  width: 160,
                   minWidth: 160,
                   height: 145,
                   borderRadius: 15,
@@ -117,10 +117,10 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
                 <LinearGradient
                   colors={["rgba(0,0,0,0.1)", "rgba(0,0,0,0.6)"]}
                   style={{
-                    width: 170,
+                    width: 160,
                     minWidth: 160,
                     height: 145,
-                    borderRadius: 10,
+                    borderRadius: 15,
                   }}
                 ></LinearGradient>
               </View>

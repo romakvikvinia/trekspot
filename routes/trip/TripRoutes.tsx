@@ -61,36 +61,7 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
         })}
       />
 
-      <Stack.Screen
-        name="TripDetailScreen"
-        component={TripDetailScreen}
-        options={({ route, navigation }) => ({
-          headerShown: false,
-          gestureEnabled: true,
-        })}
-      />
-
-      <Stack.Screen
-        name="TripInsights"
-        component={TripInsights}
-        options={({ route, navigation }) => ({
-          headerShown: false,
-          gestureEnabled: true,
-          gestureResponseDistance:
-            Platform.OS === "android" ? 10 : SIZES.width - 50,
-        })}
-      />
-
-      <Stack.Screen
-        name="TripInsightDetailScreen"
-        component={TripInsightDetailScreen}
-        options={({ route, navigation }) => ({
-          headerShown: false,
-          gestureEnabled: true,
-          gestureResponseDistance:
-            Platform.OS === "android" ? 10 : SIZES.width - 50,
-        })}
-      />
+    
       <Stack.Screen
         name="TripMapViewScreen"
         component={TripMapViewScreen}
@@ -111,39 +82,11 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
             Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       />
-      <Stack.Screen
-        name="TripDishes"
-        component={TripDishes}
-        options={() => ({
-          header: () => null,
-          gestureEnabled: Platform.OS === "ios",
-          gestureResponseDistance:
-            Platform.OS === "android" ? 10 : SIZES.width - 50,
-        })}
-      />
-      <Stack.Screen
-        name="TripTransport"
-        component={TripTransport}
-        options={() => ({
-          header: () => null,
-          gestureEnabled: Platform.OS === "ios",
-          gestureResponseDistance:
-            Platform.OS === "android" ? 10 : SIZES.width - 50,
-        })}
-      />
+
       {/* <Stack.Group
         screenOptions={{ presentation: "modal", headerShown: false }}
       > */}
-      <Stack.Screen
-        name="TripEmergency"
-        component={TripEmergency}
-        options={() => ({
-          header: () => null,
-          gestureEnabled: Platform.OS === "ios",
-          gestureResponseDistance:
-            Platform.OS === "android" ? 10 : SIZES.width - 50,
-        })}
-      />
+
       {/* </Stack.Group> */}
       <Stack.Screen
         name="TripActivityReview"

@@ -16,6 +16,7 @@ import { useFocusedTab } from "react-native-collapsible-tab-view";
 import { useLazyTopicsQuery } from "../../../api/api.trekspot";
 import { TopicType } from "../../../api/api.types";
 import { Loader } from "../../ui/Loader";
+import { NodataText } from "../../../components/common/NoDataText";
 
 interface TripInsightTabProps {
   iso2: string;
@@ -77,7 +78,6 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
                       activeOpacity={0.7}
                       style={styles.card}
                     >
-                     
                         <Image
                           style={styles.cardImage}
                           contentFit="cover"
@@ -100,34 +100,7 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
             </View>
           ))
         : !isLoading && (
-            <View
-              style={{
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-                minHeight: 230,
-              }}
-            >
-              <Text
-                style={{
-                  color: COLORS.black,
-                  fontSize: 18,
-                  fontWeight: "bold",
-                }}
-              >
-                No data available
-              </Text>
-              <Text
-                style={{
-                  color: COLORS.gray,
-                  fontSize: 16,
-                  fontWeight: "500",
-                  marginTop: 10,
-                }}
-              >
-                We are working on it and will be available soon
-              </Text>
-            </View>
+          <NodataText />
           )}
 
       <Portal>

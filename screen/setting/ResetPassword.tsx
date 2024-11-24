@@ -71,8 +71,7 @@ export const ResetPassword: React.FC<ResetPassword> = ({ navigation }) => {
     !formik.values.password ||
     !formik.values.confirm_password;
 
-  console.log(isSuccessUpdateMe);
-
+ 
   return (
     <View style={styles.safeArea}>
       <KeyboardAvoidingView

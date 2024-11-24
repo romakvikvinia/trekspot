@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { FaqItem } from "../../common/components/Destination/_FaqItem";
 import { useLazyFaqQuery } from "../../api/api.trekspot";
 import { Loader } from "../../common/ui/Loader";
+import { NodataText } from "../../components/common/NoDataText";
 
 export const FaqRowItem = ({ item, title, index, openIndex, setOpenIndex }) => {
   const isOpen = openIndex === index;
@@ -115,34 +116,7 @@ export const TripFAQ = ({route}) => {
             />
           ))}
         {!isLoading && faqDataList && faqDataList?.length === 0 && (
-          <View
-            style={{
-              width: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-              minHeight: 230,
-            }}
-          >
-            <Text
-              style={{
-                color: COLORS.black,
-                fontSize: 18,
-                fontWeight: "bold",
-              }}
-            >
-              No data available
-            </Text>
-            <Text
-              style={{
-                color: COLORS.gray,
-                fontSize: 16,
-                fontWeight: "500",
-                marginTop: 10,
-              }}
-            >
-              We are working on it and will be available soon
-            </Text>
-          </View>
+          <NodataText />
         )}
       </ScrollView>
     </SafeAreaView>

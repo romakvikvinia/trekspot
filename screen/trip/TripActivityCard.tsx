@@ -44,6 +44,7 @@ const ImgComponent = ({ item }: any) => {
           width: 70,
           height: 70,
           backgroundColor: "#fafafa",
+          borderRadius: 10,
         },
       ]}
     >
@@ -148,6 +149,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
           {
             marginLeft: activityAmount > 1 ? 20 : 15,
             zIndex: index === 0 ? 5 : 1,
+            backgroundColor: checkedIn ?  "#fffcf5" : "#fff"
           },
         ]}
         onPress={() => {

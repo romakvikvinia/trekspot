@@ -53,27 +53,7 @@ export const ReachHeaderContent = ({
       </View>
 
       <TouchableOpacity
-        onPress={() => {
-          route.params &&
-          "needResetStack" in route.params &&
-          route.params.needResetStack
-            ? navigation.reset({
-                index: 0, // Reset to the first screen
-                routes: [
-                  {
-                    name: "Explore",
-                    state: {
-                      routes: [
-                        {
-                          name: "ExploreWorld",
-                        },
-                      ],
-                    },
-                  },
-                ],
-              })
-            : navigation.goBack();
-        }}
+        onPress={() => navigation.goBack()}
         activeOpacity={0.7}
         style={styles.backButton}
       >
