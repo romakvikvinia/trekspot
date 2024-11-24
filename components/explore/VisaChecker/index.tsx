@@ -28,7 +28,7 @@ const routes = [
 
 const TYPES = ["E-visa", "Visa required", "No admission", "Visa on arrival"];
 
-const generateColorByType = (type) => {
+const generateColorByType = (type: string) => {
   switch (type) {
     case "e-visa":
       return "#f09300";
@@ -43,7 +43,7 @@ const generateColorByType = (type) => {
   }
 };
 
-export const VisaCheckerContent = ({ from }) => {
+export const VisaCheckerContent = ({ from }: { from: any }) => {
   const navigation = useNavigation();
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
@@ -59,7 +59,7 @@ export const VisaCheckerContent = ({ from }) => {
     }
   }, [from]);
 
-  const RenderThreatmentByType = ({ type }) => {
+  const RenderThreatmentByType = ({ type }: { type: string }) => {
     switch (type) {
       case "warning":
         return (
@@ -89,16 +89,18 @@ export const VisaCheckerContent = ({ from }) => {
     }
   };
 
-  const CountryItem = ({ item }) => {
+  const CountryItem = ({ item }: { item: any }) => {
+    //@ts-ignore
     const imagePath = Flags[item?.country?.iso2];
 
     return (
       <TouchableOpacity
-        onPress={() =>
+        onPress={() => {
+          //@ts-ignore
           navigation.navigate("CountryDetailScreen", {
             countryId: item?.country.id,
-          })
-        }
+          });
+        }}
         activeOpacity={0.7}
         style={styles.countryItem}
       >
@@ -215,7 +217,7 @@ export const VisaCheckerContent = ({ from }) => {
     }, [loading, isVisaCountriesLoading, visaCountries]);
   };
 
-  const renderTabBar = (props) => (
+  const renderTabBar: React.FC<any> = (props) => (
     <TabBar
       {...props}
       activeColor="#fff"
