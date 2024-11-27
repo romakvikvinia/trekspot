@@ -1,3 +1,4 @@
+import React from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import {
@@ -15,7 +16,6 @@ export const ClassicHeaderContent = ({ data, onQuestion2ModalOpen, iso2 }) => {
   const route = useRoute();
   const navigation = useNavigation();
 
- 
   return (
     <>
       <View
@@ -101,7 +101,7 @@ export const ClassicHeaderContent = ({ data, onQuestion2ModalOpen, iso2 }) => {
             }}
           >
             {data && format(data?.startAt, "dd MMM")} -{" "}
-            {data && format(data?.endAt, "dd MMM")} 
+            {data && format(data?.endAt, "dd MMM")}
             {/* | {data?.type} */}
           </Text>
         </View>

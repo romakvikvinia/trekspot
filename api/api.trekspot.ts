@@ -124,6 +124,7 @@ export const trekSpotApi = createApi({
     "removeActivityFromRoute",
     "changeActivityVisited",
     "myTrips",
+    "trip",
     "deleteTrip",
     "updateTrip",
     "createAnalytics",
@@ -1241,7 +1242,7 @@ export const trekSpotApi = createApi({
           }
         `,
       }),
-
+      providesTags: ["trip"],
       transformResponse: (response: TripDetailResponseType) => {
         return response;
       },

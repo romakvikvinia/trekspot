@@ -12,7 +12,10 @@ import Constants from "expo-constants";
 
 import { Image } from "expo-image";
 
-import { deleteItemFromStorage } from "../../helpers/secure.storage";
+import {
+  deleteFromAsyncStorage,
+  deleteItemFromStorage,
+} from "../../helpers/secure.storage";
 import { COLORS } from "../../styles/theme";
 import {
   DeleteIcon,
@@ -30,7 +33,7 @@ import {
 } from "../../utilities/SvgIcons.utility";
 
 import { Modalize } from "react-native-modalize";
-import * as WebBrowser from 'expo-web-browser';
+import * as WebBrowser from "expo-web-browser";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SettingRouteStackParamList } from "../../routes/setting/SettingRoutes";
@@ -47,13 +50,15 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
 
-  
   const isGuest = user?.role === "guest";
 
   const _handlePressButtonAsync = async () => {
-    let result = await WebBrowser.openBrowserAsync('https://trekspot.io/en/privacy-policy', {
-      enableBarCollapsing: true,
-    });
+    let result = await WebBrowser.openBrowserAsync(
+      "https://trekspot.io/en/privacy-policy",
+      {
+        enableBarCollapsing: true,
+      }
+    );
   };
 
   return (
@@ -107,11 +112,12 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
                   As a guest user, you have limited access to features
                 </Text>
                 <TouchableOpacity
-                   onPress={async () => {
+                  onPress={async () => {
                     await deleteItemFromStorage();
                     dispatch(signOut());
                   }}
-                  style={styles.guestCardButtonItem}>
+                  style={styles.guestCardButtonItem}
+                >
                   <Text style={styles.guestCardButtonItemText}>Sign In</Text>
                 </TouchableOpacity>
               </View>
@@ -172,6 +178,7 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
                   activeOpacity={0.7}
                   onPress={async () => {
                     await deleteItemFromStorage();
+                    await deleteFromAsyncStorage(["visited_countries"]);
                     dispatch(signOut());
                   }}
                 >
@@ -248,7 +255,7 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
                 Linking.openURL("https://www.youtube.com/@Trekspot-app")
               }
             >
-              <Youtube  />
+              <Youtube />
               <Text style={styles.buttonText}>Subscribe us on Youtube</Text>
             </TouchableOpacity>
           </View>
@@ -257,7 +264,6 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
           </View>
         </ScrollView>
       </View>
- 
     </>
   );
 };
@@ -282,7 +288,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
-    padding: 10
+    padding: 10,
   },
   guestCardButtonItem: {
     backgroundColor: COLORS.primary,
@@ -309,12 +315,12 @@ const styles = StyleSheet.create({
     minWidth: "100%",
     flex: 1,
     borderRadius: 40,
-    height: 60
+    height: 60,
   },
   signInButtonText: {
     color: "#000",
     fontSize: 18,
-    fontWeight: "600"
+    fontWeight: "600",
   },
   version: {
     width: "100%",
