@@ -1,6 +1,5 @@
 import { useCallback, useRef, useState } from "react";
 import {
-  ImageBackground,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -18,6 +17,8 @@ import {
 import { MapSvg } from "../../utilities/svg/map";
 import * as Haptics from "expo-haptics";
 import { formatPercentage } from "../../helpers/number.helper";
+import { usePostHog } from "posthog-react-native";
+import { Events } from "../../utilities/Posthog";
 
 interface ShareModalProps {
   world: number;
@@ -31,6 +32,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
   territories,
   achievedCountries,
 }) => {
+  const posthog = usePostHog();
   const ref = useRef();
   const [state, setState] = useState({ index: 0 });
   const [color, setColor] = useState("#000");
@@ -43,6 +45,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
   // }, []);
 
   const ShareItem = useCallback(async () => {
+    posthog.capture(Events.UserSharesStats, {});
     //@ts-ignore
     let uri = await ref.current.capture();
     Sharing.shareAsync(`${uri}`, {

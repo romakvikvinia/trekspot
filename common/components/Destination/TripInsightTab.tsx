@@ -37,7 +37,6 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
     modalInsightDetailRef.current?.open();
   }, []);
 
-  const colors = ["#ffd5d1", "#f5e1d3", "#d1f5d3", "#d3d1f5", "#f5d3f5", "#d3f5f5", "#f5f5d3", "#f5f5f5"];
 
   useEffect(() => {
     if (focusedTab === "Insights" && iso2) {
@@ -61,7 +60,7 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
               <View style={styles.headingItem}>
                 <Text style={styles.topicsRowTitle}>{key}</Text>
                 <View
-                  style={[styles.shapeBg, { backgroundColor: colors[i] }]}
+                  style={styles.shapeBg}
                 ></View>
               </View>
               <View style={{ flexGrow: 1 }}>

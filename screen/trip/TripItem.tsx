@@ -21,6 +21,8 @@ import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { format, parseISO } from "date-fns";
 import { FlagIcon } from "./components/FlagIcon";
+import { usePostHog } from "posthog-react-native";
+import { Events } from "../../utilities/Posthog";
 
 interface ITripItemProps {
   item: TripType;
@@ -30,6 +32,7 @@ interface ITripItemProps {
 type TripStackNavigationProp = StackNavigationProp<TripRouteStackParamList>;
 
 export const TripItem: React.FC<ITripItemProps> = ({ item, onContextMenu }) => {
+  const posthog = usePostHog();
   const navigation = useNavigation<TripStackNavigationProp>();
 
   const city = item.cities[0];
@@ -40,8 +43,12 @@ export const TripItem: React.FC<ITripItemProps> = ({ item, onContextMenu }) => {
         <TouchableOpacity
           style={_tripScreenStyles.tripItemHeader}
           activeOpacity={0.7}
-          onPress={() =>
-            navigation.navigate("TripDetailScreen", { trip: item, city })
+          onPress={() => {
+            posthog.capture(Events.OpenTripDetailScreen, {
+              destinationCity: city?.city
+            })
+            navigation.navigate("TripDetailScreen", { trip: item, city });
+          }
           }
         >
           {Platform.OS === "android" ? (

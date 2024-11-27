@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React from "react";
 import {
-  Alert,
   ImageBackground,
   Platform,
   StyleSheet,
@@ -8,81 +7,24 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Modalize } from "react-native-modalize";
-import { Portal } from "react-native-portalize";
-import { useLazyGetPassportIndexesQuery } from "../../api/api.trekspot";
-import { CountrySelect } from "../../common/components/CountrySelect";
-import { Loader } from "../../common/ui/Loader";
-import { NotFound } from "../../components/common/NotFound";
-import { COLORS, SIZES } from "../../styles/theme";
-import { Flags } from "../../utilities/flags";
-import {
-  CheckCircleIcon,
-  CloseCircleIcon,
-  DownIcon,
-  FlightIcon,
-  GlobeIcon,
-} from "../../utilities/SvgIcons.utility";
-import * as Haptics from "expo-haptics";
+import { COLORS } from "../../styles/theme";
 import { useNavigation } from "@react-navigation/native";
+import { Events } from "../../utilities/Posthog";
+import { usePostHog } from "posthog-react-native";
 
 export const TripToolkit = () => {
   const navigation = useNavigation();
-
-  const [fetchVisaInfo, { data, isLoading, isError }] =
-    useLazyGetPassportIndexesQuery();
-
-  const [from, setFrom] = useState(null);
-  const [to, setTo] = useState(null);
-  const [selectingFor, setSelectingFor] = useState(null);
-
-  const modalCountryPassportSelectRef = useRef(null);
-  const openCountrySelectModal = (type) => {
-    setSelectingFor(type);
-    modalCountryPassportSelectRef.current?.open();
-  };
-  const resetHandler = () => {
-    setFrom(null);
-    setTo(null);
-  };
-  const showAlert = () => {
-    Alert.alert(
-      "Warning",
-      "Your 'From' and 'To' destinations can't be the same. Please choose different locations.",
-      [{ text: "Got it!" }]
-    );
-  };
-
-  const handleCountrySelect = (country) => {
-    if ((from && from === country) || (to && to === country)) {
-      showAlert();
-      return;
-    }
-
-    if (selectingFor === "from") {
-      setFrom(country);
-    } else if (selectingFor === "to") {
-      setTo(country);
-    }
-    modalCountryPassportSelectRef.current?.close();
-  };
-
-  const onDestinationModalClose = () => {
-    modalCountryPassportSelectRef.current?.close();
-  };
-
-  useEffect(() => {
-    if (from && to && from !== to) {
-      fetchVisaInfo({ from: from?.iso2 || "", to: to?.iso2 || "" });
-    }
-  }, [from, to]);
-
+  const posthog = usePostHog();
+  
   return (
     <>
       <Text style={styles.h2}>Trip toolkit</Text>
       <View style={styles.toolboxes}>
         <TouchableOpacity
-          onPress={() => navigation.navigate("VisaCheckerScreen")}
+          onPress={() => {  
+            posthog?.capture(Events.UseVisaCheckerFromToolkit, {});
+            navigation.navigate("VisaCheckerScreen");
+          }}
           activeOpacity={0.7}
           style={styles.boxItem}
         >
@@ -106,7 +48,11 @@ export const TripToolkit = () => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate("SeasonalExplorerScreen")}
+          onPress={() => 
+            { 
+              posthog?.capture(Events.UseSeasonalExplorer, {});
+              navigation.navigate("SeasonalExplorerScreen");
+            }}
           activeOpacity={0.7}
           style={styles.boxItem}
         >
@@ -119,167 +65,7 @@ export const TripToolkit = () => {
             <Text style={styles.boxItemInnerText}>The seasonal explorer</Text>
           </ImageBackground>
         </TouchableOpacity>
-      </View>
-
-      {/* <View style={styles.visaCheckerCard}>
-        <View style={styles.header}>
-          <Text style={styles.visaCheckerCardTitle}>Where I can go?</Text>
-          <Text style={styles.visaCheckerCardSub}>
-            Select your country and destination
-          </Text>
-        </View>
-
-        <View style={styles.countrySelects}>
-          <TouchableOpacity
-            onPress={() => {
-              openCountrySelectModal("from");
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            }}
-            activeOpacity={0.7}
-            style={styles.fromTo}
-          >
-            <View style={styles.lf}>
-              {Flags[from?.iso2] ? (
-                <ImageBackground
-                  resizeMode="cover"
-                  style={{
-                    width: 25,
-                    height: 15,
-                    backgroundColor: "#ddd",
-                  }}
-                  source={Flags[from.iso2] || null}
-                />
-              ) : (
-                <GlobeIcon size={15} />
-              )}
-
-              <Text style={styles.fromToText} numberOfLines={1}>
-                {from?.name || "Resident of"}
-              </Text>
-            </View>
-            <DownIcon size={10} />
-          </TouchableOpacity>
-          <View
-            style={{ width: 30, marginHorizontal: 10, alignItems: "center" }}
-          >
-            <FlightIcon color={COLORS.black} />
-          </View>
-          <TouchableOpacity
-            onPress={() => {
-              openCountrySelectModal("to");
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            }}
-            activeOpacity={0.7}
-            style={styles.fromTo}
-          >
-            <View style={styles.lf}>
-              {Flags[to?.iso2] ? (
-                <ImageBackground
-                  resizeMode="cover"
-                  style={{
-                    width: 25,
-                    height: 15,
-                    backgroundColor: "#ddd",
-                  }}
-                  source={Flags[to?.iso2] || null}
-                />
-              ) : (
-                <GlobeIcon size={15} />
-              )}
-
-              <Text style={styles.fromToText} numberOfLines={1}>
-                {to?.name || "Anywhere"}
-              </Text>
-            </View>
-            <DownIcon size={10} />
-          </TouchableOpacity>
-        </View>
-
-        {isLoading ? (
-          <View style={{ marginTop: 15 }}>
-            <Loader size="small" background="#f9fafb" isLoading={isLoading} />
-          </View>
-        ) : null}
-
-        {!data && from?.name && to?.name && !isLoading && (
-          <NotFound text="Data not found! Please select the country that issued your passport." />
-        )}
-
-        {!isLoading && data && from?.name && to?.name && data.passportIndex && (
-          <>
-            {data.passportIndex.requirement !== "visa required" ? (
-              <View style={[styles.textContentWrapper, styles.successBg]}>
-                <CheckCircleIcon color="#1a806b" />
-                <Text style={[styles.headingText, styles.success]}>
-                  {from?.name} passport holders don't need visa to travel to{" "}
-                  {to?.name}.
-                </Text>
-              </View>
-            ) : (
-              <View style={[styles.textContentWrapper, styles.dangerBg]}>
-                <CloseCircleIcon color="#D74E4E" />
-                <Text style={[styles.headingText, styles.danger]}>
-                  {from?.name} passport holders need visa to travel to {to.name}
-                </Text>
-              </View>
-            )}
-
-            <Text style={styles.secondaryTitle}>Options</Text>
-            <View style={styles.visaTypes}>
-              <View style={styles.visaTypeCard}>
-                <Text style={styles.visaTypeCardTitle}>Visitor visa</Text>
-
-                <View style={styles.staysNtype}>
-                  <View style={styles.staysNtypeRow}>
-                    <Text style={styles.staysNtypeRowKey}>Allowed stay:</Text>
-                    <Text style={styles.staysNtypeRowValue}>
-                      {!isNaN(parseFloat(data.passportIndex.requirement))
-                        ? `${data.passportIndex.requirement} Days`
-                        : data.passportIndex.requirement}
-                    </Text>
-                  </View>
-                  <View style={styles.staysNtypeRow}>
-                    <Text style={styles.staysNtypeRowKey}>Type:</Text>
-                    <Text style={styles.staysNtypeRowValue}>
-                      Tourism, business
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-
-            <Text style={styles.infoText}>
-              We are working to provide the latest updates, but please verify
-              visa info accuracy with the embassy.
-            </Text>
-
-            <View style={styles.resetButtonWrapper}>
-              <TouchableOpacity
-                onPress={resetHandler}
-                activeOpacity={0.7}
-                style={styles.resetButton}
-              >
-                <Text style={styles.resetButtonText}>Reset</Text>
-              </TouchableOpacity>
-            </View>
-          </>
-        )}
-      </View> */}
-
-      <Portal>
-        <Modalize
-          ref={modalCountryPassportSelectRef}
-          modalTopOffset={65}
-          scrollViewProps={{
-            keyboardShouldPersistTaps: "handled",
-          }}
-        >
-          <CountrySelect
-            onSelect={handleCountrySelect}
-            onDestinationModalClose={onDestinationModalClose}
-          />
-        </Modalize>
-      </Portal>
+      </View> 
     </>
   );
 };

@@ -13,9 +13,12 @@ import { GuestUserModal } from "../../common/components/GuestUserModal";
 import { useAppSelector } from "../../package/store";
 import { useUpComingTripsQuery } from "../../api/api.trekspot";
 import { format, parseISO } from "date-fns";
+import { usePostHog } from "posthog-react-native";
+import { Events } from "../../utilities/Posthog";
 
 export const ExploreHeader = () => {
   const navigation = useNavigation<any>();
+  const posthog = usePostHog();
 
   const { isLoading, isSuccess, data } = useUpComingTripsQuery({});
 
@@ -33,6 +36,7 @@ export const ExploreHeader = () => {
   );
 
   const handleGoToSearch = () => {
+    posthog?.capture(Events.UseSearchExploreScreen, {});
     if (guestActivityCount >= 3 && isGuest) {
       setShowGuestModal(true);
       return;
@@ -62,6 +66,7 @@ export const ExploreHeader = () => {
           !!data.upComingTrips.length ? (
             <TouchableOpacity
               onPress={() => {
+                posthog?.capture(Events.UseCurrentTripExploreScreen, {});
                 if (data.upComingTrips.length > 0) {
                   navigation.navigate("TripDetailScreen", {
                     city: data.upComingTrips[0].cities[0],
@@ -91,7 +96,6 @@ export const ExploreHeader = () => {
                       {data.upComingTrips[0].name}
                     </Text>
                   </Marquee>
-
                   <Text
                     style={{
                       fontSize: 7,
@@ -110,7 +114,10 @@ export const ExploreHeader = () => {
           ) : null}
 
           <TouchableOpacity
-            onPress={() => navigation.navigate("WishlistScreen")}
+            onPress={() => {
+              posthog?.capture(Events.UseWishlistExploreScreen, {});
+              navigation.navigate("WishlistScreen")
+            }}
             style={styles.bucketListButton}
           >
             <Mark2 size={"16"} color={COLORS.black} />

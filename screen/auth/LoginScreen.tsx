@@ -39,10 +39,13 @@ import { TrekSpotLinear } from "../../utilities/svg/TrekSpotLinear";
 import * as WebBrowser from 'expo-web-browser';
 
 import { signIn } from "../../package/slices";
+import { usePostHog } from "posthog-react-native";
+import { Events } from "../../utilities/Posthog";
   
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 
 export const LoginScreen: React.FC<SignInProps> = ({ navigation }) => {
+  const posthog = usePostHog();
   const dispatch = useDispatch();
   const [isSecureType, setIsSecureType] = useState(true);
   const [fetchSignIn, { data, isLoading, error, isError, isSuccess }] =
@@ -100,6 +103,7 @@ export const LoginScreen: React.FC<SignInProps> = ({ navigation }) => {
             expire: token.expire,
           })
         );
+        posthog?.capture(Events.SignIn, {email: user?.me?.email || ""});
       } catch (error) {
         console.log(error);
       }

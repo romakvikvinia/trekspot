@@ -11,12 +11,15 @@ import { Modalize } from "react-native-modalize";
 import { QuestionModal } from "../../../common/components/QuestionModal";
 import { questionModaStyles } from "../../../styles/questionModaStyles";
 import { useRef } from "react";
+import { usePostHog } from "posthog-react-native";
+import { Events } from "../../../utilities/Posthog";
 
 type DirectionButtonProps = {
     item: any;
 }
 
 export const DirectionButton = ({item}: DirectionButtonProps) => {
+  const posthog = usePostHog();
   const modalQuestionRef = useRef<Modalize>(null);
 
   const openGoogleMaps = (title: string) => {
@@ -34,6 +37,7 @@ export const DirectionButton = ({item}: DirectionButtonProps) => {
   }
 
   const handleDirection = (title: string) => {
+    posthog.capture(Events.UserUsesDirectionMaps, {});
     if(Platform.OS === "ios") {
         modalQuestionRef.current?.open();
     } else {

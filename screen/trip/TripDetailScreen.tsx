@@ -61,10 +61,11 @@ import {
 } from "react-native-tab-view";
 import { Loader } from "../../common/ui/Loader";
 import { useTripStore } from "../../package/zustand/store";
-import { useNavigation } from "@react-navigation/native";
 // import { GestureHandlerRootView } from "react-native-gesture-handler";
 // import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { getAndReturnCurrentDay } from "./helper";
+import { Events } from "../../utilities/Posthog";
+import { usePostHog } from "posthog-react-native";
 
 type TripProps = NativeStackScreenProps<
   TripRouteStackParamList,
@@ -113,7 +114,7 @@ export const TabLabel = ({ route }: any) => {
 
 export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   const { trip, city } = route.params;
-
+  const posthog = usePostHog();
   const layout = useWindowDimensions();
 
   const activitiesModal = useRef<Modalize>(null);
@@ -485,6 +486,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         <TouchableOpacity
           onPress={() => {
             onActivitiesModalOpen();
+            posthog.capture(Events.UserUsesActivitySelectModal, {});
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
           }}
           activeOpacity={0.7}
@@ -572,6 +574,9 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                 style={[questionModaStyles.button]}
                 onPress={() => {
                   setTripStyle(!tripStyle);
+                  posthog.capture(Events.UserChangedTripStyle, {
+                    tripStyle: !tripStyle ? "Classic" : "Reach",
+                  });
                   modalQuestionRef2.current?.close();
                 }}
               >

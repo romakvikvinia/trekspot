@@ -143,7 +143,7 @@ export const CreateTripContent = ({
                 onPress={() => onDestinationModalOpen()}
               >
                 <TripLocationIcon />
-                <Text style={styles.halfBoxLabelText}>Where to?</Text>
+                <Text style={styles.halfBoxLabelText}>Where to????</Text>
                 {destination ? (
                   <Text style={styles.halfBoxValueText}>{destination}</Text>
                 ) : null}

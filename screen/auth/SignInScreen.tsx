@@ -43,6 +43,8 @@ import { TrekSpotLinear } from "../../utilities/svg/TrekSpotLinear";
 import { signIn } from "../../package/slices";
 import { GUEST_EMAIL, GUEST_PASS } from "../../helpers/baseUrl.helper";
 import * as WebBrowser from "expo-web-browser";
+import { usePostHog } from "posthog-react-native";
+import { Events } from "../../utilities/Posthog";
 
 // GoogleSignin.configure({
 //   webClientId:
@@ -58,6 +60,7 @@ import * as WebBrowser from "expo-web-browser";
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 
 export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
+  const posthog = usePostHog();
   const dispatch = useDispatch();
   const [fetchSignIn, { data, isLoading, error, isError, isSuccess }] =
     useSignInMutation();
@@ -122,6 +125,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   );
 
   const handleContinueAsGuest = useCallback(() => {
+    posthog?.capture(Events.ContinueWithGuest, { GUEST_EMAIL });
     fetchSignInAsGuest({
       email: GUEST_EMAIL,
       password: GUEST_PASS,
@@ -183,6 +187,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
     //     token &&
     //     token.accessToken
     //   ) {
+    //     posthog?.capture(Events.ContinueWithGoogle);
     //     fetchSocialAuth({
     //       token: token.accessToken,
     //       provider: SocialProvidersEnum.Google,
@@ -215,6 +220,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
       });
 
       if (credential && credential.identityToken) {
+        posthog?.capture(Events.ContinueWithApple);
         fetchSocialAuth({
           token: credential.identityToken,
           provider: SocialProvidersEnum.Apple,

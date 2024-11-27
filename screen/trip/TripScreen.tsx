@@ -50,6 +50,8 @@ import { Image } from "expo-image";
 import { useAppSelector } from "../../package/store";
 import { GuestUserModal } from "../../common/components/GuestUserModal";
 import { toast } from "sonner-native";
+import { Events } from "../../utilities/Posthog";
+import { usePostHog } from "posthog-react-native";
 
 type TripProps = NativeStackScreenProps<TripRouteStackParamList, "TripsScreen">;
 
@@ -58,6 +60,7 @@ interface IState {
 }
 
 export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
+  const posthog = usePostHog();
   const createOrUpdateTripModal = useRef<Modalize>(null);
   const modalQuestionRef = useRef<Modalize>(null);
   const dispatch = useDispatch();
@@ -81,6 +84,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
 
   const callBack = useCallback(() => {
     createOrUpdateTripModal.current?.close();
+    posthog.capture(Events.CloseCreateTripModal);
     setState((prevState) => ({ ...prevState, trip: undefined }));
     fetchDate({});
   }, []);
@@ -103,6 +107,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
     if (user?.role === "guest") {
       setShowGuestModal(true);
     } else {
+      posthog.capture(Events.CreateTripModalOpened);
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       Platform.OS === "android"
         ? navigation.navigate("NewTripAndroidScreen")

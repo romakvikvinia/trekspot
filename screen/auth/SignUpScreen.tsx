@@ -25,10 +25,13 @@ import { globalStyles } from "../../styles/globalStyles";
 
 import { trekSpotApi, useSignUpMutation } from "../../api/api.trekspot";
 import { TrekSpotLinear } from "../../utilities/svg";
+import { usePostHog } from "posthog-react-native";
+import { Events } from "../../utilities/Posthog";
 
 type SignUpScreenProps = NativeStackScreenProps<AuthStackParamList, "SignUp">;
 
 export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
+  const posthog = usePostHog();
   const dispatch = useDispatch();
   const [fetchSignUp, { data, isSuccess, isLoading, error, isError }] =
     useSignUpMutation();
@@ -42,6 +45,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
     validationSchema: SignUpValidationSchema,
     onSubmit: async ({ firstName, lastName, email, password }, methods) => {
       methods.setSubmitting(true);
+      posthog?.capture(Events.SignUp, { email });
       fetchSignUp({ firstName, lastName, email, password });
     },
   });

@@ -24,6 +24,8 @@ import { TravelType } from "../TravelType";
 import { styles } from "./CreateTripStyles";
 import { IHandles } from "react-native-modalize/lib/options";
 import * as Haptics from "expo-haptics";
+import { usePostHog } from "posthog-react-native";
+import { Events } from "../../../utilities/Posthog";
 
 interface ICreateTripContentProps {
   isLoading: boolean;
@@ -42,6 +44,7 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
   formik,
   editMode
 }) => {
+  const posthog = usePostHog();
   const navigation = useNavigation();
   const modalTravelTypeRef = useRef<Modalize>(null);
   const [isError, setIsError] = React.useState(false);
@@ -64,6 +67,7 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
 
   const handelSubmit = useCallback(() => {
     if (!isInValid) {
+      posthog?.capture(Events.CreateNewTrip, {});
       formik.submitForm();
     } else {
       setIsError(true);

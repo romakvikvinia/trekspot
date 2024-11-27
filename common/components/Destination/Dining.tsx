@@ -31,6 +31,9 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
 
   return (
     <>
+     {!isLoading && data?.dishes && data?.dishes.length === 0 && (
+          <NodataText />
+        )}
       {data?.dishes && data?.dishes.length > 0 && (
         <View style={styles.tabContentHeader}>
           <Text style={styles.tabContentHeaderText}>
@@ -127,9 +130,7 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
             }}
           />
         )}
-        {!isLoading && data?.dishes && data?.dishes.length === 0 && (
-          <NodataText />
-        )}
+       
       </View>
     </>
   );

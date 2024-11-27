@@ -6,13 +6,11 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
 import Constants from "expo-constants";
 
 import { COLORS, SIZES } from "../../styles/theme";
-import * as Sentry from '@sentry/react-native';
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
@@ -31,7 +29,7 @@ import { ExploreHeader } from "./Header";
 import { TripToolkit } from "./TripToolkit";
 import { useAppDispatch, useAppSelector } from "../../package/store";
 import { setWishlists } from "../../package/slices";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type ExploreProps = NativeStackScreenProps<
   ExploreRoutesStackParamList,
@@ -43,7 +41,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
    * TODO:: maybe we will change this  approach
    * fetching wishlist on this screen
    */
-  const { wishlists } = useAppSelector((state) => state.wishlist);
+  // const { wishlists } = useAppSelector((state) => state.wishlist);
   const ref = React.useRef(null);
 
   useScrollToTop(ref);

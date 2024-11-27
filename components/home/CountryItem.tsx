@@ -17,6 +17,8 @@ import * as Haptics from "expo-haptics";
 
 import { CountryType } from "../../api/api.types";
 import { storeCountries } from "../../helpers/secure.storage";
+import { usePostHog } from "posthog-react-native";
+import { Events } from "../../utilities/Posthog";
 
 interface HomeProps {
   country: CountryType;
@@ -27,6 +29,7 @@ export const CountryItem: React.FC<HomeProps> = ({
   country,
   visitedCountries,
 }) => {
+  const posthog = usePostHog();
   const [state, setState] = useState({
     visited: false,
     lived: false,
@@ -43,6 +46,7 @@ export const CountryItem: React.FC<HomeProps> = ({
 
   const handleVisited = useCallback(async (country: CountryType) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    posthog.capture(Events.UserAddsVisits, { country: country.name });
     await storeCountries({ id: country.id, iso2: country.iso2 });
     setState((prevState) => ({ ...prevState, visited: !prevState.visited }));
   }, []);

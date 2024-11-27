@@ -98,10 +98,7 @@ export const VisaCheckerScreen: React.FC<Props> = ({ navigation }) => {
                 style={globalStyles.screenHeaderBackButton}
               ></TouchableOpacity>
             </View>
-            {/* <Text style={styles.pageDescription}>
-            Check visa rules by citizenship
-            </Text> */}
-
+            
             <View style={styles.passportSelectWrapper}>
               <TouchableOpacity
                 onPress={() => modalCountryPassportSelectRef?.current?.open()}

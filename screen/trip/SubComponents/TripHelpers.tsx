@@ -12,6 +12,8 @@ import {
   EmergencyLinearIcon,
   InsightIcon,
 } from "../../../utilities/SvgIcons.utility";
+import { usePostHog } from "posthog-react-native";
+import { Events } from "../../../utilities/Posthog";
 
 type TripHelpersProps = {
   data: any;
@@ -24,6 +26,7 @@ export const TripHelpers = ({
   iso2,
   reachView = false,
 }: TripHelpersProps) => {
+  const posthog = usePostHog();
   const navigation = useNavigation();
 
   return (
@@ -50,12 +53,12 @@ export const TripHelpers = ({
           ]}
           activeOpacity={0.7}
           //@ts-ignore
-          onPress={() => navigation.navigate("TripEmergency", { iso2 })}
+          onPress={() => {
+            posthog.capture(Events.UserUsesTripHelperEmergency, {});
+            navigation.navigate("TripEmergency", { iso2 });
+          }}
         >
-          <EmergencyLinearIcon
-            size={16}
-            color="#000"
-          />
+          <EmergencyLinearIcon size={16} color="#000" />
           <Text
             style={[
               styles.bottomActionsButtonlabel,
@@ -75,13 +78,14 @@ export const TripHelpers = ({
             },
           ]}
           activeOpacity={0.7}
-          onPress={() =>
+          onPress={() => {
+            posthog.capture(Events.UserUsesTriphelperInsights, {});
             //@ts-ignore
             navigation.navigate("TripInsights", {
               data: data,
               iso2: iso2,
-            })
-          }
+            });
+          }}
         >
           <InsightIcon size={16} color="#000" />
           <Text
@@ -95,7 +99,6 @@ export const TripHelpers = ({
             Insights
           </Text>
         </TouchableOpacity>
-
         <TouchableOpacity
           style={[
             styles.bottomActionsButton,
@@ -104,12 +107,13 @@ export const TripHelpers = ({
             },
           ]}
           activeOpacity={0.7}
-          onPress={() =>
+          onPress={() => {
+            posthog.capture(Events.UserUsesTriphelperApps, {});
             //@ts-ignore
             navigation.navigate("TripTransport", {
               iso2: iso2,
-            })
-          }
+            });
+          }}
         >
           <AppsIcon size={16} color="#000" />
           <Text
@@ -131,12 +135,13 @@ export const TripHelpers = ({
             },
           ]}
           activeOpacity={0.7}
-          onPress={() =>
+          onPress={() => {
+            posthog.capture(Events.UserUsesTriphelperDishes, {});
             //@ts-ignore
             navigation.navigate("TripDishes", {
               iso2: iso2,
-            })
-          }
+            });
+          }}
         >
           <DishesIcon size={16} color="#000" />
           <Text

@@ -23,6 +23,8 @@ import {
 import { CardContent } from "./components/CardContent";
 import { ActivityCardActions } from "./components/ActivityCardActions";
 import { useAppDispatch } from "../../package/store";
+import { usePostHog } from "posthog-react-native";
+import { Events } from "../../utilities/Posthog";
 
 interface ITripActivityCardProps {
   visited: boolean;
@@ -100,6 +102,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
   index,
   onQuestionModalOpen,
 }) => {
+  const posthog = usePostHog();
   const dispatch = useAppDispatch();
 
   const [changeActivityVisited, { isLoading }] =
@@ -109,6 +112,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
 
   const handleChangeActivityVisited = useCallback(async () => {
     setCheckedIn(!checkedIn);
+    posthog.capture(Events.UserUsesVisited, { activity: item.title });
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     await changeActivityVisited({
       day: day.id,

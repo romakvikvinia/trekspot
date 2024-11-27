@@ -26,6 +26,7 @@ import {
   TiktokLinear,
   UserCircleIcon,
   UserIcon,
+  Youtube,
 } from "../../utilities/SvgIcons.utility";
 
 import { Modalize } from "react-native-modalize";
@@ -231,7 +232,7 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
               <Text style={styles.buttonText}>Follow us on Threads</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]}
+              style={[styles.button]}
               activeOpacity={0.7}
               onPress={() =>
                 Linking.openURL("https://www.tiktok.com/@trekspot.io")
@@ -240,8 +241,17 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
               <TiktokLinear color="" size="" />
               <Text style={styles.buttonText}>Follow us on Tiktok</Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]}
+              activeOpacity={0.7}
+              onPress={() =>
+                Linking.openURL("https://www.youtube.com/@Trekspot-app")
+              }
+            >
+              <Youtube  />
+              <Text style={styles.buttonText}>Subscribe us on Youtube</Text>
+            </TouchableOpacity>
           </View>
-
           <View style={styles.version}>
             <Text style={styles.versionText}>Version: 1.0.0</Text>
           </View>

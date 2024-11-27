@@ -42,6 +42,8 @@ import { AnalyticType, CountryType } from "../../api/api.types";
 import {
   getCountries,
 } from "../../helpers/secure.storage";
+import { usePostHog } from "posthog-react-native";
+import { Events } from "../../utilities/Posthog";
 
 interface MapVIewProps {
   isLoading?: boolean;
@@ -58,6 +60,7 @@ export const MapView: React.FC<MapVIewProps> = ({
   territories = 0,
   isLoading = true,
 }) => {
+  const posthog = usePostHog();
   const dispatch = useAppDispatch();
 
   const {
@@ -195,6 +198,7 @@ export const MapView: React.FC<MapVIewProps> = ({
       setShowGuestModal(true);
       return;
     } else {
+      posthog.capture(Events.UserOpensAddVisitModal, {}); 
       onOpen();
     }
   };
@@ -204,6 +208,7 @@ export const MapView: React.FC<MapVIewProps> = ({
       setShowGuestModal(true);
       return;
     } else {
+      posthog.capture(Events.UserOpensShareStats, {}); 
       onShareModalOpen();
     }
   };

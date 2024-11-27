@@ -6,7 +6,7 @@ export const useTripStore = create(
   persist(
     (set) => ({
       onboardingSeen: false,
-      tripStyle: true,
+      tripStyle: false,
       guestActivityCount: 0,
       isVisitedUsed: false,
       setTripStyle: (tripStyle: boolean) => set({ tripStyle }),
@@ -21,7 +21,7 @@ export const useTripStore = create(
         }),
     }),
     {
-      name: "trip-store",
+      name: "trekspot-trip-store",
       storage: createJSONStorage(() => AsyncStorage),
     }
   )

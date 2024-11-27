@@ -26,8 +26,6 @@ const routes = [
   { key: "second", title: "Visa required" },
 ];
 
-const TYPES = ["E-visa", "Visa required", "No admission", "Visa on arrival"];
-
 const generateColorByType = (type: string) => {
   switch (type) {
     case "e-visa":
@@ -52,7 +50,7 @@ export const VisaCheckerContent = ({ from }: { from: any }) => {
     fetchVisaInfo,
     { data: visaCountries, isLoading: isVisaCountriesLoading, isError },
   ] = useLazyGetPassportIndexesQuery();
-
+ 
   useEffect(() => {
     if (from && from.iso2) {
       fetchVisaInfo({ from: from.iso2 });
@@ -93,7 +91,7 @@ export const VisaCheckerContent = ({ from }: { from: any }) => {
     //@ts-ignore
     const imagePath = Flags[item?.country?.iso2];
 
-    return (
+    return item?.country && from.iso2 !== item?.country?.iso2 && (
       <TouchableOpacity
         onPress={() => {
           //@ts-ignore
@@ -110,9 +108,9 @@ export const VisaCheckerContent = ({ from }: { from: any }) => {
               resizeMode="cover"
               style={styles.flagImage}
               source={imagePath ? imagePath : null} // Set the image source
-            />
-            <Text numberOfLines={1} style={styles.itemTitle}>
-              {item.name}
+            /> 
+            <Text numberOfLines={1} style={styles.itemTitle}> 
+              {item?.country?.name}
             </Text>
           </View>
           {index === 0 ? (
@@ -132,6 +130,7 @@ export const VisaCheckerContent = ({ from }: { from: any }) => {
             </View>
           )}
         </View>
+       
         <RenderThreatmentByType type={item?.country?.security} />
       </TouchableOpacity>
     );
@@ -195,7 +194,6 @@ export const VisaCheckerContent = ({ from }: { from: any }) => {
           </View>
         );
       }
-
       return from?.iso2 ? (
         <FlatList
           data={countries}
@@ -316,8 +314,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginLeft: 0,
     color: "#000",
-    maxWidth: "80%",
-    marginTop: 10,
+    maxWidth: "100%",
+    marginTop: 15,
   },
   visaStatusText: {
     color: "#299C79",

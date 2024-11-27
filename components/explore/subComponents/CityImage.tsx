@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
-import { StarIcon } from "../../../utilities/SvgIcons.utility";
+import { Mark, StarIcon } from "../../../utilities/SvgIcons.utility";
 
 type CityImageProps = {
   item: Object;
@@ -104,7 +104,7 @@ export const CityImage = ({ item, handleCity }: CityImageProps) => {
               numberOfLines={2}
               style={[styles.labelItemText, styles.titleSm]}
             >
-              {item.city}
+              {item?.city}
             </Text>
           </View>
           <View style={styles.ratingLabel}>
