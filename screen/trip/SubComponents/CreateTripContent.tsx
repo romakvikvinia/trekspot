@@ -42,7 +42,7 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
   setOpen,
   onDestinationModalOpen,
   formik,
-  editMode
+  editMode,
 }) => {
   const posthog = usePostHog();
   const navigation = useNavigation();
@@ -60,10 +60,7 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
     }
   };
   const isInValid =
-    !formik.values.name ||
-    !Object.keys(formik.values.range).length ||
-    // !formik.values.travelType ||
-    !formik.values.destination;
+    !Object.keys(formik.values.range).length || !formik.values.destination;
 
   const handelSubmit = useCallback(() => {
     if (!isInValid) {
@@ -89,9 +86,7 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
               color: COLORS.black,
             }}
           >
-          {
-            editMode ? "Edit trip" : "New trip"
-          }
+            {editMode ? "Edit trip" : "New trip"}
           </Text>
           <TouchableOpacity
             style={styles.cancelTripButton}
@@ -330,9 +325,7 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
           >
             {isLoading && <ActivityIndicator />}
             <Text style={[styles.manualPlanButtonText, { marginLeft: 8 }]}>
-              {
-                editMode ? "Save trip" : "Create trip"
-              }
+              {editMode ? "Save trip" : "Create trip"}
             </Text>
           </TouchableOpacity>
         </View>

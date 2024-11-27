@@ -24,7 +24,13 @@ const slice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    signOut: () => initialState,
+    setIsLoading: (
+      state,
+      { payload }: PayloadAction<{ isLoading: boolean }>
+    ) => {
+      state.isLoading = payload.isLoading;
+    },
+    signOut: () => ({ ...initialState, isLoading: false }),
     updateUser: (state, { payload }: PayloadAction<{ user: UserType }>) => {
       state.user = payload.user;
     },
@@ -48,7 +54,8 @@ const slice = createSlice({
   },
 });
 
-export const { signOut, signIn, refreshToken, updateUser } = slice.actions;
+export const { signOut, signIn, refreshToken, updateUser, setIsLoading } =
+  slice.actions;
 export default slice.reducer;
 
 // export const selectIsAuthenticated = (state: RootState) =>

@@ -1036,11 +1036,11 @@ export const trekSpotApi = createApi({
      */
 
     createTrip: builder.mutation<CreateTripResponseType, CreateTripArgsType>({
-      query: ({ name, startAt, endAt, type, cities }) => ({
+      query: ({ name, startAt, endAt, type = "SOLO", cities }) => ({
         variables: { name, startAt, endAt, type, cities },
         document: gql`
           mutation (
-            $name: String!
+            $name: String
             $startAt: DateTime!
             $endAt: DateTime!
             $type: TripType!
