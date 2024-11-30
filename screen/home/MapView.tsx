@@ -39,9 +39,7 @@ import { useTripStore } from "../../package/zustand/store";
 import { GuestUserModal } from "../../common/components/GuestUserModal";
 
 import { AnalyticType, CountryType } from "../../api/api.types";
-import {
-  getCountries,
-} from "../../helpers/secure.storage";
+import { getCountries } from "../../helpers/secure.storage";
 import { usePostHog } from "posthog-react-native";
 import { Events } from "../../utilities/Posthog";
 
@@ -174,6 +172,11 @@ export const MapView: React.FC<MapVIewProps> = ({
         visitedCountries,
         countriesOnMap: visitedCountries ? Object.values(visitedCountries) : [],
       }));
+    } else {
+      setState((prevState) => ({
+        ...prevState,
+        countriesOnMap: [],
+      }));
     }
   }, [visitedCountriesData]);
 
@@ -198,7 +201,7 @@ export const MapView: React.FC<MapVIewProps> = ({
       setShowGuestModal(true);
       return;
     } else {
-      posthog.capture(Events.UserOpensAddVisitModal, {}); 
+      posthog.capture(Events.UserOpensAddVisitModal, {});
       onOpen();
     }
   };
@@ -208,7 +211,7 @@ export const MapView: React.FC<MapVIewProps> = ({
       setShowGuestModal(true);
       return;
     } else {
-      posthog.capture(Events.UserOpensShareStats, {}); 
+      posthog.capture(Events.UserOpensShareStats, {});
       onShareModalOpen();
     }
   };
@@ -574,7 +577,7 @@ const styles = StyleSheet.create({
   statLabel: {
     fontSize: 12,
     color: COLORS.darkgray,
-    fontWeight: "500"
+    fontWeight: "500",
   },
   topActions: {
     width: "100%",
@@ -605,7 +608,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
     marginBottom: 8,
     position: "relative",
-    top: 10
+    top: 10,
   },
   lg: {
     fontSize: 24,

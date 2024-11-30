@@ -8,7 +8,7 @@ import { deleteItemFromStorage, getFullToken } from "../helpers/secure.storage";
 import { Loader } from "../common/ui/Loader";
 
 import { UserProvider } from "../components/context/UserContext";
-import { signIn, signOut } from "../package/slices";
+import { setIsLoading, signIn, signOut } from "../package/slices";
 
 import { useAppDispatch, useAppSelector } from "../package/store";
 import { useLazyMeQuery } from "../api/api.trekspot";
@@ -26,6 +26,8 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
   const [fetchMe] = useLazyMeQuery();
 
   const checkAuth = useCallback(async () => {
+    dispatch(setIsLoading({ isLoading: true }));
+    console.log("heree22");
     try {
       let token = await getFullToken();
 
@@ -35,6 +37,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
         await deleteItemFromStorage();
         dispatch(signOut());
         await SplashScreen.hideAsync();
+
         return;
       }
 
@@ -48,8 +51,10 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
         })
       );
     } catch (error) {
-      // console.log("error", error);
+      console.log("error", error);
       // Alert.alert(JSON.stringify(error));
+      await deleteItemFromStorage();
+      dispatch(signOut());
     }
     await SplashScreen.hideAsync();
   }, [dispatch]);
@@ -61,7 +66,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
       border: "transparent",
     },
   };
-
+  console.log("e", authState);
   return (
     <>
       <SafeAreaProvider>

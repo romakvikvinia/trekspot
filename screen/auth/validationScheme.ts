@@ -19,11 +19,9 @@ export const SignUpValidationSchema = Yup.object().shape({
 });
 
 export const creationTrip = Yup.object().shape({
-  name: Yup.string().required(),
+  name: Yup.string(),
   range: Yup.object().required(),
   destination: Yup.object().required(),
-  travelType: Yup.string().required(),
+  travelType: Yup.string(),
   cities: Yup.array().required(),
 });
-
- 

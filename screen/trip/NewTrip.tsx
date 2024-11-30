@@ -31,7 +31,12 @@ interface INewTripProps {
 
 type TripStackNavigationProp = StackNavigationProp<TripRouteStackParamList>;
 
-export const NewTrip = ({ item, newTripModalRef, callBack, editMode }: INewTripProps) => {
+export const NewTrip = ({
+  item,
+  newTripModalRef,
+  callBack,
+  editMode,
+}: INewTripProps) => {
   const navigation = useNavigation<TripStackNavigationProp>();
   const [fetchData, { isLoading, isError, data, isSuccess }] =
     useCreateTripMutation();
@@ -68,7 +73,7 @@ export const NewTrip = ({ item, newTripModalRef, callBack, editMode }: INewTripP
         name,
         startAt: range["startDate"]?.toISOString(),
         endAt: range["endDate"]?.toISOString(),
-        type: travelType.toUpperCase(),
+        type: travelType.toUpperCase() || "SOLO",
       };
 
       if (item) {
@@ -125,9 +130,7 @@ export const NewTrip = ({ item, newTripModalRef, callBack, editMode }: INewTripP
 
   return (
     <>
-      <View
-        style={[styles.tripModalGradient, { padding: 0 }]}
-      >
+      <View style={[styles.tripModalGradient, { padding: 0 }]}>
         <CreateTripContent
           newTripModalRef={newTripModalRef}
           setOpen={setOpen}

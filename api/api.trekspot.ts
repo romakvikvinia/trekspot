@@ -124,6 +124,7 @@ export const trekSpotApi = createApi({
     "removeActivityFromRoute",
     "changeActivityVisited",
     "myTrips",
+    "trip",
     "deleteTrip",
     "updateTrip",
     "createAnalytics",
@@ -1035,11 +1036,11 @@ export const trekSpotApi = createApi({
      */
 
     createTrip: builder.mutation<CreateTripResponseType, CreateTripArgsType>({
-      query: ({ name, startAt, endAt, type, cities }) => ({
+      query: ({ name, startAt, endAt, type = "SOLO", cities }) => ({
         variables: { name, startAt, endAt, type, cities },
         document: gql`
           mutation (
-            $name: String!
+            $name: String
             $startAt: DateTime!
             $endAt: DateTime!
             $type: TripType!
@@ -1241,7 +1242,7 @@ export const trekSpotApi = createApi({
           }
         `,
       }),
-
+      providesTags: ["trip"],
       transformResponse: (response: TripDetailResponseType) => {
         return response;
       },

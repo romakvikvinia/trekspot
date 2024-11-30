@@ -54,7 +54,7 @@ export const ReachHeaderContent = ({
 
       <TouchableOpacity
         onPress={() => {
-          dispatch(trekSpotApi.util.invalidateTags(["myTrips"]));
+          dispatch(trekSpotApi.util.invalidateTags(["myTrips", "trip"]));
           navigation.goBack();
         }}
         activeOpacity={0.7}
