@@ -378,7 +378,7 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                           ? COLORS.primary
                           : "#000"
                       }
-                      size="18"
+                      size="15"
                     />
                   </TouchableOpacity>
                 )}

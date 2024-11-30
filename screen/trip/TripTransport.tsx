@@ -56,7 +56,7 @@ export const TripTransport: React.FC<Props> = ({ route, navigation }) => {
 
       <ScrollView
         style={{ flex: 1, flexGrow: 1 }}
-        contentContainerStyle={{ paddingHorizontal: 20 }}
+        contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 15 }}
         //@ts-ignore
         selectable
       >

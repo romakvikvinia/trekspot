@@ -26,7 +26,7 @@ export const TripInsightDetailScreen: React.FC<TripProps> = ({}) => {
 
   return (
     <View style={styles.safeArea}>
-      <View style={globalStyles.screenHeader}>
+      {/* <View style={globalStyles.screenHeader}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={globalStyles.screenHeaderBackButton}
@@ -38,8 +38,8 @@ export const TripInsightDetailScreen: React.FC<TripProps> = ({}) => {
         <TouchableOpacity
           style={globalStyles.screenHeaderBackButton}
         ></TouchableOpacity>
-      </View>
-      <ScrollView
+      </View> */}
+      {/* <ScrollView
         style={{ flex: 1, flexGrow: 1 }}
         contentContainerStyle={{ paddingHorizontal: 20 }}
         selectable
@@ -97,7 +97,7 @@ export const TripInsightDetailScreen: React.FC<TripProps> = ({}) => {
             fontWeight: "400"
           }}
         />
-      </ScrollView>
+      </ScrollView> */}
     </View>
   );
 };

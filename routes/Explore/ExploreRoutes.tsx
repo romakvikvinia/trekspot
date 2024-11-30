@@ -5,16 +5,12 @@ import {
 } from "@react-navigation/stack";
 import { ExploreScreen } from "../../screen/Explore/ExploreScreen";
 import SeeAllScreen from "../../screen/Explore/BucketListAll";
-import { TripDetailScreen } from "../../screen/trip/TripDetailScreen";
-import { TripInsightDetailScreen } from "../../screen/trip/TripInsightDetail";
 import { TripInsights } from "../../screen/trip/TripInsights";
 import { SIZES } from "../../styles/theme";
-import { Platform, Text, TouchableOpacity } from "react-native";
+import { Platform } from "react-native";
 
-import { CountryDetailScreen } from "../../screen/Explore/Country/CountryDetailScreen";
 import { SearchScreen } from "../../screen/Explore/SearchScreen";
 import { WishlistScreen } from "../../screen/Explore/WishlistScreen";
-import { CityDetailScreen } from "../../screen/Explore/city/CityDetailScreen";
 import { CityType } from "../../api/api.types";
 import { VisaCheckerScreen } from "../../screen/Explore/VisaCheckerScreen";
 import { SeasonalExplorerScreen } from "../../screen/Explore/SeasonalExplorerScreen";
@@ -29,7 +25,6 @@ export type ExploreRoutesStackParamList = {
   };
   TripQuickDetailScreen: undefined;
   TripQuickInsights: undefined;
-  TripQuickInsightsDetail: undefined;
   CityDetail: {
     city: CityType;
   };
@@ -79,16 +74,6 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
       <Stack.Screen
         name="TripQuickInsights"
         component={TripInsights}
-        options={({ route, navigation }) => ({
-          headerShown: false,
-          gestureEnabled: Platform.OS === "ios",
-          gestureResponseDistance:
-            Platform.OS === "android" ? 10 : SIZES.width - 50,
-        })}
-      />
-      <Stack.Screen
-        name="TripQuickInsightsDetail"
-        component={TripInsightDetailScreen}
         options={({ route, navigation }) => ({
           headerShown: false,
           gestureEnabled: Platform.OS === "ios",
