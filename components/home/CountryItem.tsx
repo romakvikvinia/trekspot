@@ -16,7 +16,7 @@ import { COLORS } from "../../styles/theme";
 import * as Haptics from "expo-haptics";
 
 import { CountryType } from "../../api/api.types";
-import { storeCountries } from "../../helpers/secure.storage";
+import { getCountries, storeCountries } from "../../helpers/secure.storage";
 import { usePostHog } from "posthog-react-native";
 import { Events } from "../../utilities/Posthog";
 

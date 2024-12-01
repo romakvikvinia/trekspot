@@ -13,6 +13,7 @@ import { styles } from "./SubComponents/CreateTripStyles";
 import { IHandles } from "react-native-modalize/lib/options";
 import { CityType, TripType } from "../../api/api.types";
 import {
+  trekSpotApi,
   useCreateTripMutation,
   useUpdateTripMutation,
 } from "../../api/api.trekspot";
@@ -21,6 +22,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
 import { creationTrip } from "../auth/validationScheme";
 import { parseISO } from "date-fns";
+import { useAppDispatch } from "../../package/store";
 
 interface INewTripProps {
   newTripModalRef: React.RefObject<IHandles>;
@@ -38,6 +40,7 @@ export const NewTrip = ({
   editMode,
 }: INewTripProps) => {
   const navigation = useNavigation<TripStackNavigationProp>();
+  const dispatch = useAppDispatch();
   const [fetchData, { isLoading, isError, data, isSuccess }] =
     useCreateTripMutation();
 
@@ -115,6 +118,7 @@ export const NewTrip = ({
         trip: data.createTrip,
         city: data.createTrip.cities[0],
       });
+      dispatch(trekSpotApi.util.invalidateTags(["upComingTrips"]));
     }
   }, [isSuccess, callBack]);
 
@@ -125,6 +129,7 @@ export const NewTrip = ({
         trip: updatedTrip.updateTrip,
         city: updatedTrip.updateTrip.cities[0],
       });
+      dispatch(trekSpotApi.util.invalidateTags(["upComingTrips"]));
     }
   }, [isUpdatedTripSuccess, callBack]);
 
