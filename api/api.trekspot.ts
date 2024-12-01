@@ -129,6 +129,7 @@ export const trekSpotApi = createApi({
     "updateTrip",
     "createAnalytics",
     "visitedCountries",
+    "upComingTrips",
   ],
   endpoints: (builder) => ({
     /**
@@ -1423,6 +1424,8 @@ export const trekSpotApi = createApi({
           `,
         };
       },
+      providesTags: ["upComingTrips"],
+      // invalidatesTags: (result, error) => (error ? [] : ["upComingTrips"]),
     }),
 
     // delete trip
