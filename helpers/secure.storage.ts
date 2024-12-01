@@ -34,6 +34,18 @@ export const storeInitialCountryCodes = async (
   return true;
 };
 
+export const storeInitialCountries = async (
+  countries: { id: string; iso2: string }[] = [],
+  key: string = "visited_countries"
+) => {
+  try {
+    await AsyncStorage.setItem(key, JSON.stringify(countries));
+  } catch (e) {
+    return false;
+  }
+  return true;
+};
+
 export const storeCountries = async (
   country: { id: string; iso2: string },
   key = "visited_countries"
@@ -43,7 +55,10 @@ export const storeCountries = async (
 
     let countries: any = await AsyncStorage.getItem(key);
 
-    countries = countries ? JSON.parse(countries) : defaultValue;
+    countries =
+      countries && !Array.isArray(countries)
+        ? JSON.parse(countries)
+        : defaultValue;
 
     if (country.id in countries) {
       delete countries[country.id];

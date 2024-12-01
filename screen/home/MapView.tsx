@@ -39,7 +39,11 @@ import { useTripStore } from "../../package/zustand/store";
 import { GuestUserModal } from "../../common/components/GuestUserModal";
 
 import { AnalyticType, CountryType } from "../../api/api.types";
-import { getCountries } from "../../helpers/secure.storage";
+import {
+  deleteFromAsyncStorage,
+  getCountries,
+  storeInitialCountries,
+} from "../../helpers/secure.storage";
 import { usePostHog } from "posthog-react-native";
 import { Events } from "../../utilities/Posthog";
 
@@ -128,6 +132,8 @@ export const MapView: React.FC<MapVIewProps> = ({
 
     const visitedCountries = await getCountries();
 
+    console.log("must store", visitedCountries);
+
     await fetchCreateAnalytics({
       countries: Object.keys(visitedCountries) || [],
     }).unwrap();
@@ -160,24 +166,36 @@ export const MapView: React.FC<MapVIewProps> = ({
   }, [countryList]);
 
   useEffect(() => {
-    if (visitedCountriesData && visitedCountriesData.visitedCountries.length) {
-      const visitedCountries: any = {};
+    (async () => {
+      console.log("visitedCountriesData", visitedCountriesData);
+      if (
+        visitedCountriesData &&
+        visitedCountriesData.visitedCountries.length
+      ) {
+        const visitedCountries: any = {};
 
-      visitedCountriesData.visitedCountries.forEach((i) => {
-        visitedCountries[i.id] = i.iso2;
-      });
-
-      setState((prevState) => ({
-        ...prevState,
-        visitedCountries,
-        countriesOnMap: visitedCountries ? Object.values(visitedCountries) : [],
-      }));
-    } else {
-      setState((prevState) => ({
-        ...prevState,
-        countriesOnMap: [],
-      }));
-    }
+        visitedCountriesData.visitedCountries.forEach((i) => {
+          visitedCountries[i.id] = i.iso2;
+        });
+        console.log("visitedCountries", visitedCountries);
+        setState((prevState) => ({
+          ...prevState,
+          visitedCountries,
+          countriesOnMap: visitedCountries
+            ? Object.values(visitedCountries)
+            : [],
+        }));
+        await storeInitialCountries(visitedCountries);
+      } else {
+        console.log("clearing storage");
+        await deleteFromAsyncStorage("visited_countries");
+        setState((prevState) => ({
+          ...prevState,
+          visitedCountries: {},
+          countriesOnMap: [],
+        }));
+      }
+    })();
   }, [visitedCountriesData]);
 
   // transform data
@@ -330,6 +348,7 @@ export const MapView: React.FC<MapVIewProps> = ({
 
       <Portal>
         <Modalize
+          key={`modal-${state.countriesOnMap.length}`}
           ref={modalRef}
           modalTopOffset={65}
           onClosed={handleCountriesModalClose}
