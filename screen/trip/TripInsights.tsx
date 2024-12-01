@@ -27,17 +27,13 @@ import RenderHTML from "react-native-render-html";
 import { NodataText } from "../../components/common/NoDataText";
 
 interface TripProps {}
-interface TripInsightTabProps {
-  iso2: string;
-}
-
+  
 interface IState {
   topic: TopicType | null;
 }
 export const TripInsights: React.FC<TripProps> = ({ route }) => {
   const navigation = useNavigation();
   const iso2 = route?.params?.iso2;
-  const city = route?.params?.data?.cities[0]?.city;
   const [fetchData, { isLoading, data }] = useLazyTopicsQuery();
 
   const modalInsightDetailRef = useRef<Modalize>();
@@ -48,8 +44,7 @@ export const TripInsights: React.FC<TripProps> = ({ route }) => {
     modalInsightDetailRef.current?.open();
   }, []);
 
-  const colors = ["#ffd5d1", "#f5e1d3", "#d1f5d3", "#d3d1f5", "#f5d3f5"];
-
+ 
   useEffect(() => {
     if (iso2) {
       fetchData({ iso2 });
@@ -74,11 +69,15 @@ export const TripInsights: React.FC<TripProps> = ({ route }) => {
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
           {isLoading ? (
-            <View style={{ height: 230 }}>
+            <View style={{ height: 200 }}>
               <Loader isLoading background="#F2F2F7" />
             </View>
           ) : null}
-
+       
+          {!isLoading && data && Object.keys(data)?.length === 0 && (
+             <NodataText />
+          )}
+          
           {!isLoading &&
             data &&
             Object.keys(data).map((key, i) => (
@@ -89,7 +88,7 @@ export const TripInsights: React.FC<TripProps> = ({ route }) => {
                 <View style={styles.headingItem}>
                   <Text style={styles.topicsRowTitle}>{key}</Text>
                   <View
-                    style={[styles.shapeBg, { backgroundColor: colors[i] }]}
+                    style={styles.shapeBg}
                   ></View>
                 </View>
                 <View style={{ flexGrow: 1 }}>
@@ -125,12 +124,10 @@ export const TripInsights: React.FC<TripProps> = ({ route }) => {
                 </View>
               </View>
             ))}
-
-          {!isLoading && data && Object.keys(data)?.length === 0 && (
-             <NodataText />
-          )}
+ 
         </ScrollView>
       </SafeAreaView>
+
       <Portal>
         <Modalize
           ref={modalInsightDetailRef}

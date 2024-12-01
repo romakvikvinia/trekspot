@@ -25,7 +25,7 @@
     "@react-spring/native": "^9.5.5",
     "@reduxjs/toolkit": "^1.9.7",
     "@rtk-query/graphql-request-base-query": "^2.2.0",
-    "@sentry/react-native": "^6.2.0",
+    "@sentry/react-native": "~5.24.3",
     "@shopify/flash-list": "1.6.4",
     "date-fns": "^3.6.0",
     "eas-cli": "^5.6.0",

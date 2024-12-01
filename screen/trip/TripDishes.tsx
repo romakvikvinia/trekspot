@@ -63,10 +63,14 @@ export const TripDishes = ({ route }) => {
           style={globalStyles.screenHeaderBackButton}
         ></TouchableOpacity>
       </View>
+
       {isLoading && (
-        <Loader isLoading={isLoading} size="small" background="#F2F2F7" />
+       <View style={{height: 200}}>
+         <Loader isLoading={isLoading} size="small" background="#F2F2F7" />
+       </View>
       )}
-      {(!isLoading && !data) || (!data?.dishes.length && <NotFound />)}
+
+      {!isLoading && !data?.dishes.length && <NotFound />}
 
   
       {!isLoading && (

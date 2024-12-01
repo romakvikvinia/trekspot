@@ -1,14 +1,12 @@
 import React, {
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
 
 import {
   Alert,
-  ImageBackground,
   ScrollView,
   StyleSheet,
   Text,
@@ -21,7 +19,6 @@ import { enGB, registerTranslation } from "react-native-paper-dates";
 registerTranslation("en", enGB);
 import { tripDetailStyles } from "./_tripDetailStyles";
 import {
-  EditIcon,
   PlusIcon,
   TrashIcon,
   TwoSideArrows,
@@ -61,8 +58,6 @@ import {
 } from "react-native-tab-view";
 import { Loader } from "../../common/ui/Loader";
 import { useTripStore } from "../../package/zustand/store";
-// import { GestureHandlerRootView } from "react-native-gesture-handler";
-// import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { getAndReturnCurrentDay } from "./helper";
 import { Events } from "../../utilities/Posthog";
 import { usePostHog } from "posthog-react-native";
@@ -120,7 +115,6 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   const activitiesModal = useRef<Modalize>(null);
   const modalQuestionRef = useRef<Modalize>(null);
   const modalQuestionRef2 = useRef<Modalize>(null);
-  // const modalEmbedRef = useRef<Modalize>(null);
   const [index, setIndex] = useState(0);
 
   const [deleteIndexes, setDeleteIndexes] = useState<{
@@ -282,16 +276,6 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     fetchUpdateRouteAndActivities(payload);
   }, [state, trip, city]);
 
-  // const combineObjectArrays = (obj: any) => {
-  //   let combinedArray: any[] = [];
-  //   for (let key in obj) {
-  //     if (Array.isArray(obj[key])) {
-  //       combinedArray = combinedArray.concat(obj[key]);
-  //     }
-  //   }
-  //   return combinedArray;
-  // };
-  // const combinedArray = combineObjectArrays(data);
 
   const removeActivity = useCallback(
     (deleteIndexes: { day: number; sight: string; route: string }) => {
@@ -314,7 +298,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     },
     []
   );
- 
+
   const renderCurrentScene: React.FC<
     SceneRendererProps & {
       route: Route;
@@ -410,9 +394,14 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         activeDay={index}
       />
       {isTripDetailLoading || sightsLoading ? (
-        <View style={[styles.loaderWrapper, {
-          marginTop: !tripStyle ? -35 : 0,
-        }]}>
+        <View
+          style={[
+            styles.loaderWrapper,
+            {
+              marginTop: !tripStyle ? -35 : 0,
+            },
+          ]}
+        >
           <Loader
             isLoading={isTripDetailLoading || sightsLoading}
             color=""

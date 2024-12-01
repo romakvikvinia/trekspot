@@ -18,6 +18,7 @@ import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
 import React from "react";
 import { useCountryByIso2Query } from "../../api/api.trekspot";
 import { Loader } from "../../common/ui/Loader";
+import { NodataText } from "../../components/common/NoDataText";
 
 type Props = NativeStackScreenProps<TripRouteStackParamList, "TripEmergency">;
 
@@ -46,17 +47,28 @@ export const TripEmergency: React.FC<Props> = ({ navigation, route }) => {
           <BackIcon size="30" />
         </TouchableOpacity>
 
-        <Text style={globalStyles.screenTitle}>Emergency</Text>
+        <Text style={globalStyles.screenTitle}>Emergency numbers</Text>
         <TouchableOpacity
           style={globalStyles.screenHeaderBackButton}
         ></TouchableOpacity>
       </View>
 
       <ScrollView
-        style={{ flex: 1, flexGrow: 1 }}
+        style={{ flex: 1 }}
         contentContainerStyle={{ paddingHorizontal: 0 }}
       >
-        <Loader isLoading={isLoading} />
+        {isLoading && (
+          <View style={{ flex: 1, height: 200 }}>
+            <Loader isLoading={isLoading} background="#F2F2F7" />
+          </View>
+        )}
+
+        {
+          !isLoading && !data && (
+            <NodataText />
+          )
+        }
+
         {!isLoading && data && data.countryByIso2 && (
           <Emergency data={data.countryByIso2.emergency} />
         )}

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Trekspot",
+    "name": "Trekspot.io",
     "slug": "comtrekspot",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -16,7 +16,7 @@
     ],
     "ios": {
       "usesAppleSignIn": true,
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.trekspot.app",
       "infoPlist": {
         "CFBundleURLTypes": [
@@ -50,7 +50,7 @@
         "expo-apple-authentication",
         "@react-native-google-signin/google-signin",
         {
-          "iosUrlScheme": "com.googleusercontent.apps.923726965679-tap0vlets0dvclh7uertjalc0f1ueq50"
+          "iosUrlScheme": "923726965679-tap0vlets0dvclh7uertjalc0f1ueq50.apps.googleusercontent.com"
         },
         [
           "expo-location",
@@ -77,7 +77,13 @@
             "savePhotosPermission": "Allow Trekspot to save photos.",
             "isAccessMediaLocationEnabled": true
           }
-        ]
+        ],
+        "@sentry/react-native/expo",
+        {
+          "organization": "trekspot",
+          "project": "Trekspot",
+          "url": "https://sentry.io/"
+        }
       ]
     },
     "runtimeVersion": {

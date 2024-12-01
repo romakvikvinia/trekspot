@@ -20,6 +20,7 @@ import React, { useEffect } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
 import { Loader } from "../../common/ui/Loader";
+import { NodataText } from "../../components/common/NoDataText";
 
 type Props = NativeStackScreenProps<TripRouteStackParamList, "TripTransport">;
 
@@ -60,33 +61,38 @@ export const TripTransport: React.FC<Props> = ({ route, navigation }) => {
         //@ts-ignore
         selectable
       >
-        {/* <Text style={styles.heading}>Helpful apps</Text> */}
+        {isLoading && (
+          <View style={{ height: 200 }}>
+            <Loader isLoading={isLoading} background="#F2F2F7" />
+          </View>
+        )}
+        
+        {!isLoading && !data?.countryByIso2?.taxi?.length && <NodataText />}
 
-        <Loader isLoading={isLoading} />
-
-        {data?.countryByIso2.taxi.map((i) => (
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.transportItem}
-            key={`taxt-${i.name}`}
-            onPress={() =>
-              Linking.openURL(
-                `${Platform.OS === "android" ? i.android : i.ios}`
-              )
-            }
-          >
-            <View style={styles.transportItemIcon}>
-              <ImageBackground
-                source={{
-                  uri: i.logo,
-                }}
-                resizeMode="cover"
-                style={{ width: 65, height: 60 }}
-              />
-            </View>
-            <Text style={styles.transportText}>{i.name}</Text>
-          </TouchableOpacity>
-        ))}
+        {!isLoading &&
+          data?.countryByIso2?.taxi?.map((i) => (
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.transportItem}
+              key={`taxt-${i.name}`}
+              onPress={() =>
+                Linking.openURL(
+                  `${Platform.OS === "android" ? i.android : i.ios}`
+                )
+              }
+            >
+              <View style={styles.transportItemIcon}>
+                <ImageBackground
+                  source={{
+                    uri: i.logo,
+                  }}
+                  resizeMode="cover"
+                  style={{ width: 65, height: 60 }}
+                />
+              </View>
+              <Text style={styles.transportText}>{i.name}</Text>
+            </TouchableOpacity>
+          ))}
       </ScrollView>
     </SafeAreaView>
   );

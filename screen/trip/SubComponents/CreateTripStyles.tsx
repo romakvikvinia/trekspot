@@ -87,7 +87,8 @@ export const styles = StyleSheet.create({
       fontSize: 18,
       opacity: 1,
       color: COLORS.black,
-      fontWeight: "bold"
+      fontWeight: "bold",
+      textTransform: "capitalize"
     },
     datePickerTopRow: {
       flexDirection: "row",

@@ -27,9 +27,8 @@ import { CitiesContainer } from "../../components/explore/CitiesContainer";
 
 import { ExploreHeader } from "./Header";
 import { TripToolkit } from "./TripToolkit";
-import { useAppDispatch, useAppSelector } from "../../package/store";
+import { useAppDispatch } from "../../package/store";
 import { setWishlists } from "../../package/slices";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type ExploreProps = NativeStackScreenProps<
   ExploreRoutesStackParamList,

@@ -13,7 +13,8 @@ const isRunningInExpoGo = Constants.appOwnership === 'expo';
 
 if (!__DEV__) {
   Sentry.init({
-    dsn: "https://0b2a9bad4daeb837a828e2e9a9305e63@o4508354636873728.ingest.us.sentry.io/4508354638249984",    debug: true,
+    dsn: "https://0b2a9bad4daeb837a828e2e9a9305e63@o4508354636873728.ingest.us.sentry.io/4508354638249984",    
+    debug: true,
     tracesSampleRate: 1.0,
     enableAutoPerformanceTracing: true,
     enableWatchdogTerminationTracking: false,
@@ -21,6 +22,25 @@ if (!__DEV__) {
     environment: isRunningInExpoGo ? 'development' : 'production',
   });
 }
+
+Promise.allSettled = function (promises: any[]) {
+  const mappedPromises = promises.map(p => {
+    return p
+      .then((value: any) => {
+        return {
+          status: 'fulfilled',
+          value,
+        };
+      })
+      .catch((reason: any) => {
+        return {
+          status: 'rejected',
+          reason,
+        };
+      });
+  });
+  return Promise.all(mappedPromises);
+};
 
 const App = () =>  {
   
