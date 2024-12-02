@@ -52,7 +52,7 @@ GoogleSignin.configure({
   // androidClientId:
   //   "923726965679-s3evflrnovadf0l777r5hiltuj0j49fs.apps.googleusercontent.com",
   iosClientId:
-    "com.googleusercontent.apps.923726965679-tap0vlets0dvclh7uertjalc0f1ueq50",
+    "923726965679-tap0vlets0dvclh7uertjalc0f1ueq50.apps.googleusercontent.com",
   offlineAccess: true,
   scopes: ["email", "profile"],
 });
