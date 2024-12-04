@@ -90,6 +90,7 @@ export const EditProfile: React.FC<EdoProfileProps> = ({ navigation }) => {
           <ScrollView
             style={{ flex: 1, paddingTop: 25 }}
             contentContainerStyle={{ paddingHorizontal: 15 }}
+            keyboardShouldPersistTaps="handled"
           >
             <View style={[styles.item]}>
               <TInput

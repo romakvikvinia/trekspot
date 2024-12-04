@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { ImageBackground } from "react-native";
+import { ImageBackground, Platform } from "react-native";
 import { Host } from "react-native-portalize";
 
 import {
@@ -30,6 +30,7 @@ export const TabNavigator: React.FC<AppRouteProps> = ({}) => {
           tabBarLabelStyle: {
             fontSize: 10,
             fontWeight: "600",
+            paddingBottom: 10,
           },
           tabBarIcon: ({ focused }: any) => {
             switch (route.name) {
@@ -84,7 +85,7 @@ export const TabNavigator: React.FC<AppRouteProps> = ({}) => {
             borderTopWidth: 1,
             // paddingTop: 5,
             backgroundColor: "#fff",
-            height: 80,
+            height: Platform.OS === "android" ? 65 : 80,
           },
         })}
         initialRouteName="Home"

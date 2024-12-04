@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 
 import {
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -67,7 +68,7 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
 
   return (
     <>
-      <View style={[styles.rowItem, { paddingTop: isExplore ? 30 : 15}]}>
+      <View style={[styles.rowItem, { paddingTop: isExplore ? Platform.OS === "android" ? 20 : 30 : Platform.OS === "android" ? 0 : 15}]}>
         <View style={styles.rowItemHeader}>
           <Text style={styles.h2}>{title}</Text>
           {/* {seeAllItems && (

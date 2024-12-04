@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   FlatList,
   ImageBackground,
+  ScrollView,
   StyleSheet,
   Text,
   useWindowDimensions,
@@ -204,13 +205,13 @@ export const VisaCheckerContent = ({ from }: { from: any }) => {
           contentContainerStyle={{ paddingHorizontal: 15, paddingVertical: 30 }}
         />
       ) : (
-        <View style={styles.noResultWrapper}>
-          <VisaPassportIcon size={85} />
-          <Text style={styles.notResultText}>
-            Once you select your passport, here will appear countries where you
-            need a visa to travel.
-          </Text>
-        </View>
+          <View style={styles.noResultWrapper}>
+            <VisaPassportIcon size={85} />
+            <Text style={styles.notResultText}>
+              Once you select your passport, here will appear countries where
+              you need a visa to travel.
+            </Text>
+          </View>
       );
     }, [loading, isVisaCountriesLoading, visaCountries]);
   };
@@ -289,12 +290,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    minHeight: "100%",
   },
   chip: {
     backgroundColor: "#f2f2f2",
     paddingHorizontal: 8,
     borderRadius: 5,
     height: 26,
+    alignItems: "center",
+    justifyContent: "center",
   },
   countryItemLeft: {
     flexDirection: "column",
@@ -321,6 +325,7 @@ const styles = StyleSheet.create({
     color: "#299C79",
     fontSize: 14,
     fontWeight: "600",
-    marginTop: 5,
+    marginTop: 0,
+    textTransform: "capitalize",
   },
 });

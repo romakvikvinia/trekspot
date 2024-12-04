@@ -191,7 +191,17 @@ export const SeasonalExplorerScreen = ({ navigation }: any) => {
             resizeMode="cover"
             style={styles.screenHeaderWrapper}
           >
-            <View style={styles.screenHeader}>
+            <View
+              style={[
+                styles.screenHeader,
+                {
+                  paddingTop:
+                    Constants?.statusBarHeight +
+                    (Platform.OS === "android" ? 0 : 10),
+                  paddingHorizontal: Platform.OS === "android" ? 5 : 15,
+                },
+              ]}
+            >
               <TouchableOpacity
                 onPress={() => navigation.goBack()}
                 style={globalStyles.screenHeaderBackButton}

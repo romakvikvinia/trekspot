@@ -96,6 +96,7 @@ export const ResetPassword: React.FC<ResetPassword> = ({ navigation }) => {
         <ScrollView
           style={{ flex: 1, paddingTop: 25 }}
           contentContainerStyle={{ paddingHorizontal: 15 }}
+          keyboardShouldPersistTaps={"handled"}
         >
           <View style={[styles.item]}>
             <TInput

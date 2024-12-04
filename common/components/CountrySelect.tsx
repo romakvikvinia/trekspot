@@ -86,7 +86,7 @@ export const CountrySelect = ({
         </View>
       ) : null}
 
-      <View style={{ flex: 1, height: SIZES.height - 155 }}>
+      {/* <View style={{ flex: 1, height: SIZES.height - 155 }}> */}
         <FlashList
           extraData={filteredCountries}
           data={filteredCountries}
@@ -94,7 +94,7 @@ export const CountrySelect = ({
           estimatedItemSize={200}
           keyboardShouldPersistTaps={"handled"}
         />
-      </View>
+      {/* </View> */}
     </>
   );
 };

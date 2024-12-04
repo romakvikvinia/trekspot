@@ -26,6 +26,7 @@ import { NotFound } from "../../components/common/NotFound";
 import { styles } from "../../common/components/_styles";
 import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
+import { NodataText } from "../../components/common/NoDataText";
 
 export const TripDishes = ({ route }) => {
   const navigation = useNavigation();
@@ -70,7 +71,7 @@ export const TripDishes = ({ route }) => {
        </View>
       )}
 
-      {!isLoading && !data?.dishes.length && <NotFound />}
+      {!isLoading && !data?.dishes.length && <NodataText />}
 
   
       {!isLoading && (

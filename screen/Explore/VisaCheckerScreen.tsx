@@ -84,7 +84,17 @@ export const VisaCheckerScreen: React.FC<Props> = ({ navigation }) => {
             resizeMode="cover"
             style={styles.screenHeaderWrapper}
           >
-            <View style={styles.screenHeader}>
+            <View
+              style={[
+                styles.screenHeader,
+                {
+                  paddingTop:
+                    Constants?.statusBarHeight +
+                    (Platform.OS === "android" ? 0 : 10),
+                  paddingHorizontal: Platform.OS === "android" ? 5 : 15,
+                },
+              ]}
+            >
               <TouchableOpacity
                 onPress={() => navigation.goBack()}
                 style={globalStyles.screenHeaderBackButton}
@@ -98,7 +108,7 @@ export const VisaCheckerScreen: React.FC<Props> = ({ navigation }) => {
                 style={globalStyles.screenHeaderBackButton}
               ></TouchableOpacity>
             </View>
-            
+
             <View style={styles.passportSelectWrapper}>
               <TouchableOpacity
                 onPress={() => modalCountryPassportSelectRef?.current?.open()}
@@ -193,7 +203,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#238D99",
   },
   screenHeader: {
-    paddingTop: Constants?.statusBarHeight + 10,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",

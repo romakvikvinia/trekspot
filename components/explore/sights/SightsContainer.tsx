@@ -93,6 +93,7 @@ export const SightsRow = ({ rowKey, handleOpenSightDetail, items }) => {
                       {
                         minHeight: 190,
                         minWidth: 200,
+                        backgroundColor: "#eee",
                       },
                     ]}
                     cachePolicy="memory"

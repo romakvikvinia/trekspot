@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 
 import {
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -69,7 +70,9 @@ export const CitiesContainer: React.FC<CitiesContainerProps> = ({
 
   return (
     <>
-      <View style={[styles.rowItem]}>
+      <View style={[styles.rowItem, {
+        paddingTop: Platform.OS === "android" ? 20 : 30,
+      }]}>
         <View style={styles.rowItemHeader}>
           <Text style={styles.h2}>{title}</Text>
 

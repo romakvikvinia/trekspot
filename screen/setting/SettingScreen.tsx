@@ -161,9 +161,23 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
                   activeOpacity={0.7}
                   onPress={() =>
                     Alert.alert(
-                      "Warning",
-                      "If you want to deactivate your account, you will lose all your data. If are sure, please send us email to hello@trekspot.io",
-                      [{ text: "Got it!" }]
+                      "Deactivate account",
+                      "Once you deactivate your account, data will be available for 30 days. After 30 days, your data will be permanently deleted.",
+                      [
+                        {
+                          text: "Cancel",
+                          style: "cancel",
+                        },
+                        {
+                          text: "Deactivate",
+                          style: "destructive",
+                          // onPress: async () => {
+                          //   await deleteItemFromStorage();
+                          //   await deleteFromAsyncStorage(["visited_countries"]);
+                          //   dispatch(signOut());
+                          // },
+                        },
+                      ]
                     )
                   }
                 >
@@ -252,7 +266,7 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
               style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]}
               activeOpacity={0.7}
               onPress={() =>
-                Linking.openURL("https://www.youtube.com/@Trekspot-app")
+                Linking.openURL("https://www.youtube.com/@trekspotio")
               }
             >
               <Youtube />

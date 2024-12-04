@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  ImageBackground,
   Platform,
   StyleSheet,
   Text,
@@ -9,7 +8,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { CountryType } from "../../api/api.types";
-import { Mark, StarIcon, TwoHeadsIcon, UsersIcon } from "../../utilities/SvgIcons.utility";
+import { StarIcon, TwoHeadsIcon } from "../../utilities/SvgIcons.utility";
 import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
 
@@ -96,68 +95,82 @@ export const CountryItem: React.FC<CountryItemProps> = ({
           </TouchableOpacity>
         </Image>
       ) : (
-        <ImageBackground
-          style={[
-            styles.box,
-            styles.typeMd,
-            {
-              height: isExplore ? 130 : 180,
-            },
-          ]}
-          resizeMode="cover"
-          source={
-            item?.image?.url
-              ? {
-                  uri: item?.image?.url,
-                }
-              : require("../../assets/no-image.png")
-          }
-        >
+        <View style={[styles.androidImageContainer,{
+          height: isExplore ? 140 : 180,
+        }]}>
+          <Image
+            style={[
+              styles.box,
+              styles.typeMd,
+              {
+                height: isExplore ? 140 : 180,
+              },
+            ]}
+            contentFit="cover"
+            source={
+              item?.image?.url
+                ? {
+                    uri: item?.image?.url,
+                  }
+                : require("../../assets/no-image.png")
+            }
+            cachePolicy="memory-disk"
+          > 
+          </Image>
           <TouchableOpacity
-            style={styles.gradientWrapper}
-            activeOpacity={0.7}
-            onPress={() => {
-              openModal(item.id!),
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            }}
-          >
-            <LinearGradient
-              style={styles.gradientWrapper}
-              colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+              style={[styles.gradientWrapper,{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+              }]}
+              activeOpacity={0.7}
+              onPress={() => {
+                openModal(item.id!),
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
             >
-              <View
-                style={[
-                  styles.labelItem,
-                  {
-                    marginBottom: isExplore ? 12 : 0,
-                  },
-                ]}
+              <LinearGradient
+                style={styles.gradientWrapper}
+                colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
               >
-                <Mark color="#fff" size={15} />
-                <Text style={styles.labelItemText} numberOfLines={2}>
-                  {item.name}
-                </Text>
-              </View>
-              {!isExplore && (
-                <View style={styles.ratingLabel}>
-                  <View
-                    style={{
-                      position: "relative",
-                      top: -1,
-                      opacity: 0.8,
-                    }}
-                  >
-                    <StarIcon color="#FFBC3E" />
-                  </View>
-                  <Text style={styles.ratingText}>{item.rate} /</Text>
-                  <Text style={styles.ratingText}>
-                    {item.visitors} visitors
+                <View
+                  style={[
+                    styles.labelItem,
+                    {
+                      marginBottom: isExplore ? 12 : 0,
+                    },
+                  ]}
+                >
+                  {/* <Mark color="#fff" size={15} /> */}
+                  <Text style={[styles.labelItemText, {
+                    fontSize: isExplore ? 18 : 20,
+                  }]} numberOfLines={2}>
+                    {item.name}
                   </Text>
                 </View>
-              )}
-            </LinearGradient>
+                {!isExplore && (
+                  <View style={styles.ratingLabel}>
+                    <View
+                      style={{
+                        position: "relative",
+                        top: -1,
+                        opacity: 0.8,
+                      }}
+                    >
+                      <StarIcon color="#FFBC3E" />
+                    </View>
+                    <Text style={styles.ratingText}>{item.rate} /</Text>
+                    <Text style={[styles.ratingText, {marginRight: 3}]}>
+                      {item.visitors}
+                    </Text>
+                    <TwoHeadsIcon />
+                  </View>
+                )}
+              </LinearGradient>
           </TouchableOpacity>
-        </ImageBackground>
+        </View>
       )}
       {isWith && <View style={{ width: 20 }}></View>}
     </>
@@ -168,6 +181,14 @@ const styles = StyleSheet.create({
   gradientWrapper: {
     flex: 1,
     justifyContent: "flex-end",
+  },
+  androidImageContainer: {
+    width: 160,
+    position: "relative",
+    backgroundColor: "#fafafa",
+    borderRadius: 15,
+    overflow: "hidden",
+    marginRight: 10,
   },
   labelItemText: {
     color: "#fff",
@@ -189,7 +210,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: "center",
     paddingBottom: 10,
-    marginTop: 8
+    marginTop: 8,
   },
   ratingText: {
     color: "#fff",

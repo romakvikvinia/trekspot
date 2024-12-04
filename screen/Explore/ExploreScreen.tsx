@@ -29,6 +29,7 @@ import { ExploreHeader } from "./Header";
 import { TripToolkit } from "./TripToolkit";
 import { useAppDispatch } from "../../package/store";
 import { setWishlists } from "../../package/slices";
+import { StatusBar } from "expo-status-bar";
 
 type ExploreProps = NativeStackScreenProps<
   ExploreRoutesStackParamList,
@@ -89,7 +90,11 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
 
   return (
     <>
-      <View style={styles.safeArea}>
+      <View style={[styles.safeArea,{
+        paddingTop: Constants?.statusBarHeight + 10,
+      }]}>
+        <StatusBar style="auto" />
+
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -124,7 +129,7 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
               isCitiesLoading={isCitiesLoading}
             />
 
-            <View style={{ paddingHorizontal: 15, marginTop: 30, zIndex: 1 }}>
+            <View style={{ paddingHorizontal: 15, marginTop: Platform.OS === "android" ? 20 : 30, zIndex: 1 }}>
               <TripToolkit />
             </View>
 
@@ -151,20 +156,21 @@ export const ExploreScreen: React.FC<ExploreProps> = ({ navigation }) => {
             />
             <DestinationContainer
               isLoading={isRandomCountriesByContinentLoading}
-              title="Africa"
-              countries={
-                randomCountriesByContinent?.groupedCountry.africa || []
-              }
-              isExplore={true}
-            />
-            <DestinationContainer
-              isLoading={isRandomCountriesByContinentLoading}
               title="Europe"
               countries={
                 randomCountriesByContinent?.groupedCountry.europe || []
               }
               isExplore={true}
             />
+            <DestinationContainer
+              isLoading={isRandomCountriesByContinentLoading}
+              title="Africa"
+              countries={
+                randomCountriesByContinent?.groupedCountry.africa || []
+              }
+              isExplore={true}
+            />
+          
             <DestinationContainer
               isLoading={isRandomCountriesByContinentLoading}
               title="Oceania"
@@ -200,7 +206,6 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#f8f8f8",
-    paddingTop: Constants?.statusBarHeight + 10,
   },
   currentTrip: {
     backgroundColor: "#fef0ff",

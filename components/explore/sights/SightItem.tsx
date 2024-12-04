@@ -35,6 +35,7 @@ export const SightItem: React.FC<SightItemProps> = ({ item, onHandleItem }) => {
             styles.thingsTodoItemImage,
             {
               minHeight: 190,
+              backgroundColor: "#eee",
             },
           ]}
           cachePolicy="memory"

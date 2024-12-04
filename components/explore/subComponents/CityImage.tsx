@@ -60,86 +60,93 @@ export const CityImage = ({ item, handleCity }: CityImageProps) => {
                 >
                   <StarIcon color="#FFBC3E" />
                 </View>
-                <Text style={styles.ratingText}>
-                  {item.rate}
-                </Text>
+                <Text style={styles.ratingText}>{item.rate}</Text>
               </>
             ) : null}
             {item?.visitors ? (
-              <Text style={styles.ratingText}>
-                {item.visitors} visitors
-              </Text>
+              <Text style={styles.ratingText}>{item.visitors} visitors</Text>
             ) : null}
           </View>
         </LinearGradient>
       </TouchableOpacity>
     </Image>
   ) : (
-    <ImageBackground
-      style={styles.box}
-      resizeMode="cover"
-      source={
-        item?.image?.url
-          ? {
-              uri: item?.image?.url,
-            }
-          : require("../../../assets/no-image.png")
-      }
-    >
-      <TouchableOpacity
-        style={styles.gradientWrapper}
-        activeOpacity={0.7}
-        onPress={() => {
-          handleCity(item);
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        }}
+    <View style={styles.androidImageContainer}>
+      <Image
+        style={styles.box}
+        contentFit="cover"
+        source={
+          item?.image?.url
+            ? {
+                uri: item?.image?.url,
+              }
+            : require("../../../assets/no-image.png")
+        }
+        cachePolicy="memory-disk"
       >
-        <LinearGradient
+      </Image>
+      <TouchableOpacity
           style={styles.gradientWrapper}
-          colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+          activeOpacity={0.7}
+          onPress={() => handleCity(item)}
         >
-          <View style={styles.labelItem}>
-            <Mark color="#fff" />
-            <Text
-              numberOfLines={2}
-              style={[styles.labelItemText, styles.titleSm]}
-            >
-              {item?.city}
-            </Text>
-          </View>
-          <View style={styles.ratingLabel}>
-            {item?.rate ? (
-              <>
-                <View
-                  style={{
-                    position: "relative",
-                    top: -1,
-                    opacity: 0.8,
-                  }}
-                >
-                  <StarIcon color="#FFBC3E" />
-                </View>
-                <Text style={[styles.ratingText, styles.ratingTextXs]}>
-                  {item.rate}
-                </Text>
-              </>
-            ) : null}
-            {item?.visitors ? (
-              <Text style={[styles.ratingText, styles.ratingTextXs]}>
-                {item.visitors} visitors
+          <LinearGradient
+            style={styles.gradientWrapper}
+            colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+          >
+            <View style={styles.labelItem}>
+              {/* <Mark color="#fff" /> */}
+              <Text
+                numberOfLines={2}
+                style={[styles.labelItemText, styles.titleSm]}
+              >
+                {item.city}
               </Text>
-            ) : null}
-          </View>
-        </LinearGradient>
-      </TouchableOpacity>
-    </ImageBackground>
+            </View>
+            <View style={styles.ratingLabel}>
+              {item?.rate ? (
+                <>
+                  <View
+                    style={{
+                      position: "relative",
+                      top: -1,
+                      opacity: 0.8,
+                    }}
+                  >
+                    <StarIcon color="#FFBC3E" />
+                  </View>
+                  <Text style={styles.ratingText}>{item.rate}</Text>
+                </>
+              ) : null}
+              {item?.visitors ? (
+                <Text style={styles.ratingText}>{item.visitors} visitors</Text>
+              ) : null}
+            </View>
+          </LinearGradient>
+        </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  androidImageContainer: {
+    width: 160,
+    minWidth: 160,
+    height: 140,
+    backgroundColor: "#fafafa",
+    borderRadius: 15,
+    overflow: "hidden",
+    marginRight: 10,
+    position: "relative",
+  },
   gradientWrapper: {
     flex: 1,
     justifyContent: "flex-end",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
   },
   titleSm: {
     fontSize: 16,
@@ -187,6 +194,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#fafafa",
     borderRadius: 15,
     overflow: "hidden",
-    marginRight: 10,
   },
 });
