@@ -1,10 +1,8 @@
-import { useNavigation } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
 import moment from "moment";
 import React, { useCallback, useEffect, useRef } from "react";
 import {
   ActivityIndicator,
-  Platform,
   ScrollView,
   Text,
   TextInput,
@@ -45,7 +43,6 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
   editMode,
 }) => {
   const posthog = usePostHog();
-  const navigation = useNavigation();
   const modalTravelTypeRef = useRef<Modalize>(null);
   const [isError, setIsError] = React.useState(false);
   const onTravelTypeModalOpen = () => {
@@ -53,11 +50,7 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
   };
 
   const handleCancelTrip = () => {
-    if (Platform.OS === "android") {
-      navigation.goBack();
-    } else {
-      newTripModalRef?.current?.close();
-    }
+    newTripModalRef?.current?.close();
   };
   const isInValid =
     !Object.keys(formik.values.range).length || !formik.values.destination;

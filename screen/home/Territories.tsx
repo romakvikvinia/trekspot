@@ -1,4 +1,10 @@
-import { Platform, StyleSheet, Text, View } from "react-native";
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { formatPercentage } from "../../helpers/number.helper";
 import { COLORS, SIZES } from "../../styles/theme";
 import {
@@ -12,7 +18,7 @@ import {
 import React from "react";
 import { useVisitedCountriesQuery } from "../../api/api.trekspot";
 
-export const Territories = () => {
+export const Territories = ({ setContinent }) => {
   const {
     isLoading,
     data: visitedCountriesData,
@@ -102,7 +108,11 @@ export const Territories = () => {
         </>
       ) : (
         <>
-          <View style={styles.mapStatRow}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => setContinent("Europe")}
+            style={styles.mapStatRow}
+          >
             <View style={styles.leftSide}>
               <EuropeIcon />
               <View>
@@ -120,8 +130,12 @@ export const Territories = () => {
               </Text>
               <Text style={styles.percentText}>%</Text>
             </View>
-          </View>
-          <View style={[styles.mapStatRow, { backgroundColor: "#A88955" }]}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => setContinent("Asia")}
+            style={[styles.mapStatRow, { backgroundColor: "#A88955" }]}
+          >
             <View style={styles.leftSide}>
               <AsiaIcon />
               <View>
@@ -140,8 +154,12 @@ export const Territories = () => {
               </Text>
               <Text style={styles.percentText}>%</Text>
             </View>
-          </View>
-          <View style={[styles.mapStatRow, { backgroundColor: "#C68A4A" }]}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => setContinent("Africa")}
+            style={[styles.mapStatRow, { backgroundColor: "#C68A4A" }]}
+          >
             <View style={styles.leftSide}>
               <AfricaIcon />
               <View>
@@ -159,8 +177,12 @@ export const Territories = () => {
               </Text>
               <Text style={styles.percentText}>%</Text>
             </View>
-          </View>
-          <View style={[styles.mapStatRow, { backgroundColor: "#438E6A" }]}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => setContinent("North America")}
+            style={[styles.mapStatRow, { backgroundColor: "#438E6A" }]}
+          >
             <View style={styles.leftSide}>
               <NAmerica />
               <View>
@@ -178,8 +200,12 @@ export const Territories = () => {
               </Text>
               <Text style={styles.percentText}>%</Text>
             </View>
-          </View>
-          <View style={[styles.mapStatRow, { backgroundColor: "#893B70" }]}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => setContinent("South America")}
+            style={[styles.mapStatRow, { backgroundColor: "#893B70" }]}
+          >
             <View style={styles.leftSide}>
               <SAmerica />
               <View>
@@ -197,8 +223,12 @@ export const Territories = () => {
               </Text>
               <Text style={styles.percentText}>%</Text>
             </View>
-          </View>
-          <View style={[styles.mapStatRow, { backgroundColor: "#4490AA" }]}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => setContinent("Oceania")}
+            style={[styles.mapStatRow, { backgroundColor: "#4490AA" }]}
+          >
             <View style={styles.leftSide}>
               <Australia />
               <View>
@@ -216,7 +246,7 @@ export const Territories = () => {
               </Text>
               <Text style={styles.percentText}>%</Text>
             </View>
-          </View>
+          </TouchableOpacity>
         </>
       )}
     </View>

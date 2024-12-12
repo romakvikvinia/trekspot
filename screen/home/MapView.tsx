@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Platform,
@@ -53,6 +53,8 @@ interface MapVIewProps {
   countryQuantity?: number;
   visitedCountries: AnalyticType[];
   territories?: number;
+  continent?: string;
+  setContinent?: any;
 }
 
 export const MapView: React.FC<MapVIewProps> = ({
@@ -61,6 +63,8 @@ export const MapView: React.FC<MapVIewProps> = ({
   visitedCountries,
   territories = 0,
   isLoading = true,
+  continent,
+  setContinent
 }) => {
   const posthog = usePostHog();
   const dispatch = useAppDispatch();
@@ -129,6 +133,7 @@ export const MapView: React.FC<MapVIewProps> = ({
 
   const handleCountriesModalClose = useCallback(async () => {
     setSearchValue("");
+    setContinent(null);
 
     const visitedCountries = await getCountries();
 
@@ -198,22 +203,9 @@ export const MapView: React.FC<MapVIewProps> = ({
     })();
   }, [visitedCountriesData]);
 
-  // transform data
-
+  
   const isGuest = user?.role === "guest";
-
-  const filteredCountries =
-    searchValue && searchValue.length > 1
-      ? state.countries.filter((i) =>
-          i.name.toLowerCase().includes(searchValue.toLowerCase())
-        )
-      : // .sort((a, b) => b.name.localeCompare(a.name))
-        state.countries;
-
-  const resetSearch = () => {
-    setSearchValue("");
-  };
-
+ 
   const handleAddVisit = () => {
     if (guestActivityCount >= 3 && isGuest) {
       setShowGuestModal(true);
@@ -224,6 +216,29 @@ export const MapView: React.FC<MapVIewProps> = ({
     }
   };
 
+  const filteredCountries = useMemo(() => {
+    if(continent) {
+      handleAddVisit();
+
+      if(searchValue && searchValue.length > 1) {
+        return state.countries.filter((country) => country.continents[0] === continent && country.name.toLowerCase().includes(searchValue.toLowerCase()));
+      }
+
+      return state.countries.filter((country) => country.continents[0] === continent);
+    }
+  const other = searchValue && searchValue.length > 1
+    ? state.countries.filter((i) =>
+        i.name.toLowerCase().includes(searchValue.toLowerCase())
+      )
+    : // .sort((a, b) => b.name.localeCompare(a.name))
+      state.countries;
+    return other;
+  }, [searchValue, state.countries, continent]);
+
+  const resetSearch = () => {
+    setSearchValue("");
+  };
+ 
   const handleShare = () => {
     if (guestActivityCount >= 3 && isGuest) {
       setShowGuestModal(true);
@@ -255,8 +270,7 @@ export const MapView: React.FC<MapVIewProps> = ({
         </TouchableOpacity>
       );
     }, [state.countriesOnMap]);
-  //
-
+   
   return (
     <>
       <View style={styles.mapContainer}>
@@ -352,51 +366,53 @@ export const MapView: React.FC<MapVIewProps> = ({
           ref={modalRef}
           modalTopOffset={65}
           onClosed={handleCountriesModalClose}
+          withHandle={false}
+          panGestureEnabled={false}
+          adjustToContentHeight
           HeaderComponent={
             <View style={styles.modalHeader}>
-              {Platform.OS === "ios" ? (
-                <View
-                  style={{
-                    flexDirection: "row",
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <View style={styles.searchBox}>
-                    <View style={styles.searchIcon}>
-                      <SearchIcon width={15} />
-                    </View>
-                    <TextInput
-                      autoCorrect={false}
-                      style={styles.searchInput}
-                      placeholder="Search..."
-                      placeholderTextColor={COLORS.darkgray}
-                      onChangeText={handelSearch}
-                      value={searchValue}
-                    />
-
-                    {searchValue ? (
-                      <TouchableOpacity
-                        onPress={resetSearch}
-                        style={styles.clearButton}
-                        activeOpacity={0.7}
-                      >
-                        <ClearIcon />
-                      </TouchableOpacity>
-                    ) : null}
+              <View
+                style={{
+                  flexDirection: "row",
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <View style={styles.searchBox}>
+                  <View style={styles.searchIcon}>
+                    <SearchIcon width={15} />
                   </View>
-                  <TouchableOpacity
-                    style={styles.cancelButton}
-                    onPress={() => modalRef?.current?.close()}
-                  >
-                    <Text style={styles.cancelButtonText}>Cancel</Text>
-                  </TouchableOpacity>
-                </View>
-              ) : null}
+                  <TextInput
+                    autoCorrect={false}
+                    style={styles.searchInput}
+                    placeholder="Search..."
+                    placeholderTextColor={COLORS.darkgray}
+                    onChangeText={handelSearch}
+                    value={searchValue}
+                  />
 
+                  {searchValue ? (
+                    <TouchableOpacity
+                      onPress={resetSearch}
+                      style={styles.clearButton}
+                      activeOpacity={0.7}
+                    >
+                      <ClearIcon />
+                    </TouchableOpacity>
+                  ) : null}
+                </View>
+                <TouchableOpacity
+                  style={styles.cancelButton}
+                  onPress={() => modalRef?.current?.close()}
+                >
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                </TouchableOpacity>
+              </View>
               <View style={styles.infoRow}>
-                <Text style={styles.countryAmount}>UN 195 Countries</Text>
+                <Text style={styles.countryAmount}>
+                  {continent ? continent : "UN 195 Countries"}
+                </Text>
                 <View style={styles.lengend}>
                   <View style={styles.legendItem}>
                     <VisitedIcon />

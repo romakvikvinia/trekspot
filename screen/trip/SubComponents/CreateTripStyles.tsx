@@ -1,6 +1,6 @@
 import Constants from "expo-constants";
 
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { COLORS, SIZES } from "../../../styles/theme";
 
 export const styles = StyleSheet.create({
@@ -207,7 +207,7 @@ export const styles = StyleSheet.create({
     tripModalGradient: {
       flex: 1,
       minHeight: SIZES.height,
-      paddingTop: Constants?.statusBarHeight + 10,
+      paddingTop: Platform.OS === "android" ? 25  : Constants?.statusBarHeight + 10,
       paddingHorizontal: 20,
     },
     invitationStatus: {

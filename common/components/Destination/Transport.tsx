@@ -13,6 +13,8 @@ import {
 } from "../../../utilities/SvgIcons.utility";
 import { styles } from "../_styles";
 import { CountryType } from "../../../api/api.types";
+import { FeedbackCountryDetail } from "../../../components/explore/FeedbackCountryDetail";
+import { SIZES } from "../../../styles/theme";
 
 interface TransportProps {
   country: CountryType;
@@ -21,61 +23,15 @@ interface TransportProps {
 export const Transport: React.FC<TransportProps> = ({ country }) => {
   return (
     <ScrollView
-      style={styles.tabWrapper}
+      style={[styles.tabWrapper, {paddingHorizontal: 0}]}
       contentContainerStyle={{
         paddingBottom: 30,
       }}
       showsVerticalScrollIndicator={false}
-    >
-      {/* <Text style={[styles.secondaryTitle, {marginTop: 15}]}>Public transport</Text>
-      <View style={styles.transports}>
-        {country.transportTypes?.map((item) => {
-          return item === "Bus" ? (
-            <View
-              style={styles.transportItem}
-              key={`transport-${item}-${country.id}`}
-            >
-              <View style={styles.transportItemIcon}>
-                <BusIcon />
-              </View>
-              <Text style={styles.transportText}>Bus</Text>
-            </View>
-          ) : item === "Metro" ? (
-            <View
-              style={styles.transportItem}
-              key={`transport-${item}-${country.id}`}
-            >
-              <View style={styles.transportItemIcon}>
-                <MetroIcon />
-              </View>
-              <Text style={styles.transportText}>Metro</Text>
-            </View>
-          ) : item === "Trolleybus" ? (
-            <View
-              style={styles.transportItem}
-              key={`transport-${item}-${country.id}`}
-            >
-              <View style={styles.transportItemIcon}>
-                <TrolleybusIcon />
-              </View>
-              <Text style={styles.transportText}>Trolleybus</Text>
-            </View>
-          ) : item === "Trams" ? (
-            <View
-              style={styles.transportItem}
-              key={`transport-${item}-${country.id}`}
-            >
-              <View style={styles.transportItemIcon}>
-                <TramwayIcon />
-              </View>
-              <Text style={styles.transportText}>Trams</Text>
-            </View>
-          ) : null;
-        })}
-      </View> */}
+    > 
       {country?.taxi?.length > 0 && (
         <>
-          <Text style={styles.secondaryTitle}>Helpful apps</Text>
+          <Text style={[styles.secondaryTitle, {paddingHorizontal: 15}]}>Helpful apps</Text>
           <View style={styles.transports}>
             {country?.taxi.map((item, ind) => (
               <TouchableOpacity
@@ -107,7 +63,7 @@ export const Transport: React.FC<TransportProps> = ({ country }) => {
         </>
       )}
 
-      <Text style={styles.secondaryTitle}>Driving side</Text>
+      <Text style={[styles.secondaryTitle, {paddingHorizontal: 15}]}>Driving side</Text>
       <View style={styles.drivingSide}>
         {country.car.side === "Right" ? (
           <>
@@ -121,6 +77,7 @@ export const Transport: React.FC<TransportProps> = ({ country }) => {
           </>
         )}
       </View>
+      <View style={{marginTop: 50, width: "100%"}}><FeedbackCountryDetail /></View>
     </ScrollView>
   );
 };

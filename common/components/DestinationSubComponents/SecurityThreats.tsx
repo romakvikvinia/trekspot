@@ -13,9 +13,11 @@ type SecurityThreatsProps = {
 
 export const SecurityThreats: React.FC<SecurityThreatsProps> = ({ type }) => {
   return (
-    <View style={styles.keyValue}>
+    <View style={[styles.keyValue, {
+      marginTop: 30,
+      marginBottom: 0
+    }]}>
       <Text style={styles.key}>Security</Text>
-
       <View
         style={{
           flexDirection: "row",

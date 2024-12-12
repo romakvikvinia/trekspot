@@ -1,9 +1,9 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Marquee } from "@animatereactnative/marquee";
 
 import { COLORS, SIZES } from "../../styles/theme";
-import { Mark2, SearchIcon } from "../../utilities/SvgIcons.utility";
+import { Mark2, SearchBoldIcon, SearchIcon } from "../../utilities/SvgIcons.utility";
 import Constants from "expo-constants";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
@@ -54,9 +54,15 @@ export const ExploreHeader = () => {
           onPress={handleGoToSearch}
         >
           <View style={styles.searchIcon}>
-            <SearchIcon width={15} />
+            <SearchBoldIcon width={16} />
           </View>
-          <Text style={styles.searchInput}>Where to?</Text>
+          <View style={{
+            paddingTop: Platform.OS === "android" ? 4 : 6,
+            paddingBottom: 4
+          }}>
+            <Text style={styles.searchInput}>Where to?</Text>
+            <Text style={styles.subTitle}>Explore countries · cities</Text>
+          </View>
         </TouchableOpacity>
         <View style={styles.right}>
           {!isLoading &&
@@ -281,16 +287,25 @@ const styles = StyleSheet.create({
   },
   searchIcon: {
     paddingLeft: 15,
+    marginRight: 2
   },
   searchInput: {
     paddingLeft: 10,
-    fontSize: 16,
     flex: 1,
-    color: "#7f7f7f",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
+    fontSize: 14, 
+    fontWeight: "500", 
+    color: "#000"
+  },
+  subTitle: {
+    fontSize: 12,
+    fontWeight: "400",
+    paddingLeft: 10,
+    flex: 1,
+    color: "#7f7f7f"
   },
   right: {
     flexDirection: "row",

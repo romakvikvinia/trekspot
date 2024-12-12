@@ -17,6 +17,7 @@ import { useLazyTopicsQuery } from "../../../api/api.trekspot";
 import { TopicType } from "../../../api/api.types";
 import { Loader } from "../../ui/Loader";
 import { NodataText } from "../../../components/common/NoDataText";
+import { FeedbackCountryDetail } from "../../../components/explore/FeedbackCountryDetail";
 
 interface TripInsightTabProps {
   iso2: string;
@@ -59,9 +60,6 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
             >
               <View style={styles.headingItem}>
                 <Text style={styles.topicsRowTitle}>{key}</Text>
-                <View
-                  style={styles.shapeBg}
-                ></View>
               </View>
               <View style={{ flexGrow: 1 }}>
                 <FlashList
@@ -77,19 +75,19 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
                       activeOpacity={0.7}
                       style={styles.card}
                     >
+                       <View style={styles.imageWrapper}>
                         <Image
-                          style={styles.cardImage}
-                          contentFit="cover"
-                          source={
-                            item?.image?.url
-                              ? {
-                                  uri: item?.image?.url,
-                                }
-                              : require("../../../assets/no-image.png")
-                          }
-                        />
-                  
-
+                            style={styles.cardImage}
+                            contentFit="cover"
+                            source={
+                              item?.image?.url
+                                ? {
+                                    uri: item?.image?.url,
+                                  }
+                                : require("../../../assets/no-image.png")
+                            }
+                          /> 
+                       </View>
                       <Text style={styles.cardTitle}>{item.title}</Text>
                     </TouchableOpacity>
                   )}
@@ -101,7 +99,7 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
         : !isLoading && (
           <NodataText />
           )}
-
+        {!isLoading && data ? <View style={{marginTop: 30, width: "100%"}}><FeedbackCountryDetail /></View> : null } 
       <Portal>
         <Modalize
           ref={modalInsightDetailRef}
@@ -206,15 +204,6 @@ const styles = StyleSheet.create({
     position: "relative",
     paddingHorizontal: 20,
   },
-  shapeBg: {
-    position: "absolute",
-    width: 100,
-    height: 10,
-    left: 15,
-    bottom: 15,
-    borderRadius: 10,
-    opacity: 0.6,
-  },
   noteCardTitle: {
     fontSize: 18,
     fontWeight: "500",
@@ -283,10 +272,16 @@ const styles = StyleSheet.create({
     minHeight: 160,
     marginRight: 15,
   },
+  imageWrapper: {
+    width: 160,
+    height: 130,
+    backgroundColor: "#f2f2f2",
+    borderRadius: 15,
+    overflow: "hidden",
+  },
   cardImage: {
     width: 160,
     height: 130,
-    borderRadius: 15,
   },
   cardTitle: {
     fontSize: 16,

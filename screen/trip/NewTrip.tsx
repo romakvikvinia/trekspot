@@ -92,18 +92,12 @@ export const NewTrip = ({
   });
 
   const onDestinationModalOpen = () => {
-    if (Platform.OS === "android") {
-      setWhereToModal(true);
-    } else {
-      modalDestinationRef.current?.open();
-    }
+    modalDestinationRef.current?.open();
   };
   const onDestinationModalClose = (city?: CityType, cities?: string[]) => {
-    if (Platform.OS === "android") {
-      setWhereToModal(false);
-    } else {
+   
       modalDestinationRef.current?.close();
-    }
+    
 
     if (city && cities) {
       formik.setFieldValue("cities", cities);
@@ -163,21 +157,6 @@ export const NewTrip = ({
           <Destination onDestinationModalClose={onDestinationModalClose} />
         </Modalize>
       </Portal>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={whereToModal}
-        onRequestClose={() => {
-          setWhereToModal(!whereToModal);
-        }}
-      >
-        <View style={styles.modalViewWrapper}>
-          <View style={styles.modalViewCenter}>
-            <Destination onDestinationModalClose={onDestinationModalClose} />
-          </View>
-        </View>
-      </Modal>
     </>
   );
 };

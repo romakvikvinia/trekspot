@@ -3,6 +3,7 @@ import { Image } from "expo-image";
 import { useCallback, useState } from "react";
 
 import {
+  Pressable,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -97,12 +98,13 @@ export const WishlistScreen: React.FC<WishlistProps> = ({ navigation }) => {
     <>
       <SafeAreaView style={globalStyles.safeArea}>
         <View style={globalStyles.screenHeader}>
-          <TouchableOpacity
+          <Pressable
             onPress={() => navigation.goBack()}
             style={globalStyles.screenHeaderBackButton}
+            hitSlop={20}
           >
             <BackIcon size="30" />
-          </TouchableOpacity>
+          </Pressable>
 
           <Text style={globalStyles.screenTitle}>Wishlist</Text>
           <TouchableOpacity

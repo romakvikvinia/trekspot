@@ -70,7 +70,7 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
     }
     const filterImages = tabData?.[route?.key]?.filter(sightItem => sightItem?.images?.length > 0);  
     return (
-      <View style={{ minHeight: SIZES.height - 205 }}> 
+      <View style={{ minHeight: SIZES.height - 180 }}> 
         <FlashList
           data={filterImages}
           keyExtractor={(item, index) =>
@@ -275,8 +275,9 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                 labelStyle={{
                   textTransform: "capitalize",
                   fontWeight: "bold",
-                  fontSize: 15
+                  fontSize: 15,
                 }}
+                android_ripple={{ color: "#F2F2F7" }}
               />
             )}
           />
@@ -351,7 +352,7 @@ const styles = StyleSheet.create({
     shadowRadius: 1.84, 
     ...Platform.select({
       android: {
-        elevation: 5,
+        elevation: 2,
       },
     }),
   },

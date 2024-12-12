@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     zIndex: 5,
     left: 50,
-    top: -130,
+    top: Platform.OS === "android" ? -118 : -130,
     width: 200,
     opacity: 3,
     justifyContent: "flex-end",
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8.84,
     ...Platform.select({
       android: {
-        elevation: 5,
+        elevation: 10,
       },
     }),
   },

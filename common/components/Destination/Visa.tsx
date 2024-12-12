@@ -13,9 +13,10 @@ import { useLazyGetPassportIndexesQuery } from "../../../api/api.trekspot";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CountryType } from "../../../api/api.types";
 import { Portal } from "react-native-portalize";
-import { Modalize } from "react-native-modalize";
 import { CountrySelect } from "../CountrySelect";
 import { Loader } from "../../ui/Loader";
+import { FeedbackCountryDetail } from "../../../components/explore/FeedbackCountryDetail";
+import { SIZES } from "../../../styles/theme";
 
 type VisaProps = {
   country: CountryType;
@@ -82,7 +83,7 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
   return (
     <>
       <ScrollView
-        style={styles.tabWrapper}
+        style={[styles.tabWrapper, { paddingHorizontal: 0 }]}
         showsVerticalScrollIndicator={false}
         alwaysBounceVertical={false}
       >
@@ -106,17 +107,19 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
           ) : null}
         </View>
         {isCitizen ? (
-          <View
-            style={[
-              styles.textContentWrapper,
-              styles.successBg,
-              { marginTop: 50 },
-            ]}
-          >
-            <CheckCircleIcon color="#1a806b" />
-            <Text style={[styles.headingText, styles.success]}>
-              You are citizen of {country.name} and don't need visa.
-            </Text>
+          <View style={{ paddingHorizontal: 15 }}>
+            <View
+              style={[
+                styles.textContentWrapper,
+                styles.successBg,
+                { marginTop: 50 },
+              ]}
+            >
+              <CheckCircleIcon color="#1a806b" />
+              <Text style={[styles.headingText, styles.success]}>
+                You are citizen of {country.name} and don't need visa.
+              </Text>
+            </View>
           </View>
         ) : null}
 
@@ -131,6 +134,7 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
             style={{
               alignItems: "center",
               marginTop: 50,
+              paddingHorizontal: 15
             }}
           >
             <VisaPassportIcon />
@@ -172,7 +176,6 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
             </TouchableOpacity>
           </View>
         )}
-
 
         {!isCitizen && !isLoading && data && data.passportIndex && (
           <View style={styles.visaTabContent}>
@@ -224,21 +227,19 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
             </Text>
           </View>
         )}
+        {!isLoading && data ? (
+          <View style={{ marginTop: 30, width: "100%" }}>
+            <FeedbackCountryDetail />
+          </View>
+        ) : null}
       </ScrollView>
 
       <Portal>
-        <Modalize
-          scrollViewProps={{
-            keyboardShouldPersistTaps: "handled",
-          }}
-          ref={modalCountryPassportSelectRef}
-          modalTopOffset={65}
-        >
-          <CountrySelect
-            onSelect={handleCountrySelect}
-            onDestinationModalClose={onDestinationModalClose}
-          />
-        </Modalize>
+        <CountrySelect
+          onSelect={handleCountrySelect}
+          onDestinationModalClose={onDestinationModalClose}
+          modalCountryPassportSelectRef={modalCountryPassportSelectRef}
+        />
       </Portal>
     </>
   );

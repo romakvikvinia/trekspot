@@ -3,6 +3,7 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -28,6 +29,7 @@ import { Loader } from "../../common/ui/Loader";
 import { useAllCountriesQuery } from "../../api/api.trekspot";
 import { toast } from "sonner-native";
 import { convertToFahrenheit } from "./helper";
+import { StatusBar } from "expo-status-bar";
 
 const SEASONSBYMONTH = [
   {
@@ -75,6 +77,7 @@ export const SeasonalExplorerScreen = ({ navigation }: any) => {
       duration: 2000,
     });
   }
+  const flatListRef = useRef(null);
 
   const filteredCountries = useMemo(() => {
 
@@ -95,6 +98,7 @@ export const SeasonalExplorerScreen = ({ navigation }: any) => {
     return SEASONSBYMONTH.find((season) => season.months.includes(currentMonth))
       ?.season;
   }, [currentMonth]);
+
 
   const renderItem = ({ item, index }) => (
     <TouchableOpacity
@@ -152,29 +156,38 @@ export const SeasonalExplorerScreen = ({ navigation }: any) => {
     </TouchableOpacity>
   );
 
+  const scrollToTop = () => {
+    flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
+  };
+
+  const handleChangeMonth = (item: string) => {
+    setCurrentMonth(item.name);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    modalMonthSelectRef?.current?.close();
+    scrollToTop();
+  }
+
   const renderMonthItem = ({ item }) => (
     <TouchableOpacity
       key={`${item.id}-${item.name}`}
       style={styles.monthItem}
       activeOpacity={0.7}
-      onPress={() => {
-        setCurrentMonth(item.name);
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        modalMonthSelectRef?.current?.close();
-      }}
+      onPress={() => handleChangeMonth(item)}
     >
       <Text
         style={[
           styles.monthText,
           {
-            opacity: item.name === currentMonth ? 1 : 0.5,
+            color: item.name === currentMonth ? COLORS.primary : COLORS.black,
+            opacity: item.name === currentMonth ? 1 : 0.7,
+            fontWeight: item.name === currentMonth ? "700" : "500",
           },
         ]}
       >
         {item.name}
       </Text>
       {item.name === currentMonth && (
-        <CheckLiteIcon width={20} color={COLORS.black} />
+        <CheckLiteIcon width={20} color={COLORS.primary} />
       )}
     </TouchableOpacity>
   );
@@ -182,6 +195,7 @@ export const SeasonalExplorerScreen = ({ navigation }: any) => {
   return (
     <>
       <View style={styles.safeArea}>
+        <StatusBar style="light" />
         <KeyboardAvoidingView
           behavior={Platform.OS == "ios" ? "padding" : "height"}
           style={styles.screen}
@@ -202,12 +216,13 @@ export const SeasonalExplorerScreen = ({ navigation }: any) => {
                 },
               ]}
             >
-              <TouchableOpacity
+              <Pressable
                 onPress={() => navigation.goBack()}
                 style={globalStyles.screenHeaderBackButton}
+                hitSlop={20}
               >
                 <BackIcon size="30" color="#fff" />
-              </TouchableOpacity>
+              </Pressable>
               <Text style={[globalStyles.screenTitle, { color: "#fff" }]}>
                 Explore by months
               </Text>
@@ -245,6 +260,7 @@ export const SeasonalExplorerScreen = ({ navigation }: any) => {
           )}
 
           <FlatList
+            ref={flatListRef}
             data={filteredCountries}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}

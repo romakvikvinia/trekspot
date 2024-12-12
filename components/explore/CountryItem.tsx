@@ -151,7 +151,9 @@ export const CountryItem: React.FC<CountryItemProps> = ({
                   </Text>
                 </View>
                 {!isExplore && (
-                  <View style={styles.ratingLabel}>
+                  <View style={[styles.ratingLabel, {
+                    marginTop: 5
+                  }]}>
                     <View
                       style={{
                         position: "relative",

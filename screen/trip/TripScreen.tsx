@@ -109,9 +109,10 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
     } else {
       posthog.capture(Events.CreateTripModalOpened);
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      Platform.OS === "android"
-        ? navigation.navigate("NewTripAndroidScreen")
-        : createOrUpdateTripModal.current?.open();
+      // Platform.OS === "android"
+      //   ? navigation.navigate("NewTripAndroidScreen")
+      //   : 
+        createOrUpdateTripModal.current?.open();
     }
   };
 

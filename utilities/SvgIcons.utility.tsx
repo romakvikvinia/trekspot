@@ -126,6 +126,17 @@ export const StarIcon = ({ color = "", size = 0 }: IStarIcon) => {
   );
   return <SvgImage />;
 };
+export const FlagIcon = ({ color = "", size = 0 }: IStarIcon) => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M23.903 0H3C1.346 0 0 1.346 0 3v21h2v-9h21.903l-5.651-7.5L23.903 0Z" fill=${color ? color : "#000000"} opacity="1" data-original="#000000" class=""></path></g></svg>`;
+  const SvgImage = () => (
+    <SvgXml
+      xml={svgMarkup}
+      width={size ? size : "12"}
+      height={size ? size : "12"}
+    />
+  );
+  return <SvgImage />;
+};
 
 export const Share = ({ size = "", color = "" }) => {
   const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" width="24.971" height="30.52" viewBox="0 0 24.971 30.52">
@@ -718,8 +729,8 @@ export const DownCircleIcon = ({
   );
   return <SvgImage />;
 };
-export const UpCircleIcon = () => {
-  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M12 24A12 12 0 1 0 0 12a12.013 12.013 0 0 0 12 12ZM10.586 8.586a2 2 0 0 1 2.828 0l4.673 4.673-1.414 1.414L12 10l-4.712 4.711L5.874 13.3Z" fill="#ccc" opacity="1" data-original="#ccc" class=""></path></g></svg>`;
+export const UpCircleIcon = ({color = "#ccc"}) => {
+  const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M12 24A12 12 0 1 0 0 12a12.013 12.013 0 0 0 12 12ZM10.586 8.586a2 2 0 0 1 2.828 0l4.673 4.673-1.414 1.414L12 10l-4.712 4.711L5.874 13.3Z" fill=${color ? color : "#ccc"} opacity="1" data-original="#ccc" class=""></path></g></svg>`;
   const SvgImage = () => <SvgXml xml={svgMarkup} width={"20"} height={"20"} />;
   return <SvgImage />;
 };

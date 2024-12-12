@@ -295,18 +295,20 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                 }}
               >
                 {data.images?.map((item, ind) => (
-                  <Image
-                    style={[styles.box]}
-                    contentFit="cover"
-                    source={
-                      item?.url
-                        ? {
-                            uri: item?.url,
-                          }
-                        : require("../../../assets/no-image.png")
-                    }
-                    key={`slide-${ind}`}
-                  >
+                  <View style={styles.imageWrapper}>
+                    <Image
+                      style={[styles.box]}
+                      contentFit="cover"
+                      source={
+                        item?.url
+                          ? {
+                              uri: item?.url,
+                            }
+                          : require("../../../assets/no-image.png")
+                      }
+                      key={`slide-${ind}`}
+                    >
+                    </Image>
                     {item?.html_attributions?.length > 0 && (
                       <TouchableOpacity
                         style={styles.attr}
@@ -323,7 +325,7 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                         </Text>
                       </TouchableOpacity>
                     )}
-                  </Image>
+                  </View>
                 ))}
               </Swiper>
             ) : (
@@ -442,6 +444,13 @@ export const styles = StyleSheet.create({
     width: "95%",
     borderRadius: 15,
   },
+  imageWrapper: {
+    width: "100%",
+    position: "relative",
+    backgroundColor: "#f2f2f2",
+    borderTopStartRadius: 15,
+    borderTopEndRadius: 15
+  },
   attr: {
     position: "absolute",
     right: 15,
@@ -531,5 +540,6 @@ export const styles = StyleSheet.create({
   wrapper: {
     position: "relative",
     height: 300,
+    borderTopStartRadius: 15,
   },
 });

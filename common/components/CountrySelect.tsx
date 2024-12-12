@@ -1,4 +1,3 @@
-import { FlashList } from "@shopify/flash-list";
 import {
   ImageBackground,
   StyleSheet,
@@ -10,8 +9,8 @@ import { COLORS, SIZES } from "../../styles/theme";
 import { CountriesList } from "../../utilities/countryList";
 import React, { useState } from "react";
 import { Flags } from "../../utilities/flags";
-import { CheckCircleIcon } from "../../utilities/SvgIcons.utility";
 import { SearchComponent } from "../ui/SearchComponent";
+import { Modalize } from "react-native-modalize";
 
 export const Country = ({ item, onSelect }: any) => {
   const countryCode = item.iso2 as string;
@@ -48,19 +47,14 @@ export const Country = ({ item, onSelect }: any) => {
         </View>
         <Text style={styles.itemTitle}>{item.name}</Text>
       </View>
-      {/* <View style={styles.checkIcon}>
-        {
-          selected === item.iso2 ? <CheckCircleIcon color={COLORS.primaryDark} /> : null
-        }
-      </View> */}
     </TouchableOpacity>
   );
 };
 
 export const CountrySelect = ({
-  search = true,
   onSelect,
   onDestinationModalClose,
+  modalCountryPassportSelectRef,
 }) => {
   const [searchValue, setSearchValue] = useState("");
   const [countries, setCountries] = useState(CountriesList);
@@ -70,31 +64,47 @@ export const CountrySelect = ({
           i.name.toLowerCase().includes(searchValue.toLowerCase())
         )
       : countries;
+
+  const renderItem = ({ item }) => <Country item={item} onSelect={onSelect} />;
+
   return (
     <>
-      {search ? (
-        <View style={styles.searchBox}>
-          <View style={{ flex: 1 }}>
-            <SearchComponent search={searchValue} setSearch={setSearchValue} />
+      <Modalize
+        ref={modalCountryPassportSelectRef}
+        modalTopOffset={65}
+        withHandle={false}
+        panGestureEnabled={false}
+        onClosed={() => setSearchValue("")}
+        HeaderComponent={
+          <View style={styles.searchBox}>
+            <View style={{ flex: 1 }}>
+              <SearchComponent
+                search={searchValue}
+                setSearch={setSearchValue}
+              />
+            </View>
+            <TouchableOpacity
+              style={styles.cancelButton}
+              onPress={() => onDestinationModalClose()}
+            >
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            style={styles.cancelButton}
-            onPress={() => onDestinationModalClose()}
-          >
-            <Text style={styles.cancelButtonText}>Cancel</Text>
-          </TouchableOpacity>
-        </View>
-      ) : null}
-
-      {/* <View style={{ flex: 1, height: SIZES.height - 155 }}> */}
-        <FlashList
-          extraData={filteredCountries}
-          data={filteredCountries}
-          renderItem={({ item }) => <Country item={item} onSelect={onSelect} />}
-          estimatedItemSize={200}
-          keyboardShouldPersistTaps={"handled"}
-        />
-      {/* </View> */}
+        }
+        flatListProps={{
+          data: filteredCountries,
+          renderItem: renderItem,
+          keyExtractor: (item) => item.name,
+          showsVerticalScrollIndicator: false,
+          scrollEventThrottle: 16,
+          contentContainerStyle: {
+            paddingHorizontal: 15,
+            paddingTop: 0,
+            paddingBottom: 25,
+          },
+          keyboardShouldPersistTaps: "handled",
+        }}
+      ></Modalize>
     </>
   );
 };

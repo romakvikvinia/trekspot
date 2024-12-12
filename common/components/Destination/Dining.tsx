@@ -7,6 +7,7 @@ import { useDishesByISO2Query } from "../../../api/api.trekspot";
 import { Loader } from "../../ui/Loader";
 import { Image } from "expo-image";
 import { NodataText } from "../../../components/common/NoDataText";
+import { FeedbackCountryDetail } from "../../../components/explore/FeedbackCountryDetail";
 
 type DiningProps = {
   country: CountryType;
@@ -130,7 +131,9 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
             }}
           />
         )}
-       
+       {
+        !isLoading && data?.dishes?.length > 0 && <View style={{marginTop: 0, width: "100%"}}><FeedbackCountryDetail /></View>
+       }
       </View>
     </>
   );

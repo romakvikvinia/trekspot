@@ -76,6 +76,9 @@ export const WishlistContainer: React.FC<IWishlistContainer> = ({
                       justifyContent: "flex-start",
                       display: "flex",
                       flexDirection: "column",
+                      position: "relative",
+                      borderRadius: 15,
+                      overflow: "hidden",
                     },
                   ]}
                   onPress={() => {
@@ -96,7 +99,8 @@ export const WishlistContainer: React.FC<IWishlistContainer> = ({
                     style={{
                       width: 160,
                       height: 180,
-                      borderRadius: 12,
+                      borderRadius: 15,
+                      overflow: "hidden",
                     }}
                     contentFit="cover"
                     cachePolicy="memory-disk"
@@ -108,26 +112,25 @@ export const WishlistContainer: React.FC<IWishlistContainer> = ({
                         : require("../../../assets/no-image.png")
                     }
                     key={`img-${item.id}`}
+                  ></Image>
+                  <LinearGradient
+                    style={styles.gradientWrapper}
+                    colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
                   >
-                    <LinearGradient
-                      style={styles.gradientWrapper}
-                      colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
+                    <Text
+                      style={[
+                        tripDetailStyles.sightTitle,
+                        {
+                          color: "#fff",
+                          fontSize: 20,
+                          fontWeight: "bold",
+                        },
+                      ]}
+                      numberOfLines={1}
                     >
-                       <Text
-                        style={[
-                          tripDetailStyles.sightTitle,
-                          {
-                            color: "#fff",
-                            fontSize: 20,
-                            fontWeight: "bold",
-                          },
-                        ]}
-                        numberOfLines={1}
-                      >
-                        {title}
-                      </Text>
-                    </LinearGradient>
-                  </Image>
+                      {title}
+                    </Text>
+                  </LinearGradient>
                 </TouchableOpacity>
               </>
             );
@@ -155,6 +158,13 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     paddingBottom: 15,
     paddingHorizontal: 15,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    overflow: "hidden",
+    borderRadius: 15
   },
   addToBucketButton: {
     width: Platform.OS === "android" ? 30 : 40,

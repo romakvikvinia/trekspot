@@ -18,6 +18,18 @@ type OverviewProps = {
   country: CountryType;
 };
 
+const backgroundColors = [
+  "#ffc5cc",
+  "#dbeaff",
+  "#ffd2c1",
+  "#ffe3c3",
+  "#d3fff5",
+  "#ffe3ee",
+  "#fffbe5",
+  "#efe9ff",
+  "#ffe9fd"
+];
+
 const Overview: React.FC<OverviewProps> = memo(function ({ country }) {
   if (!country) return null;
   return (
@@ -29,12 +41,22 @@ const Overview: React.FC<OverviewProps> = memo(function ({ country }) {
         <View style={styles.aboutBox}>
           <Text style={styles.overviewText}>{country?.overview}</Text>
         </View>
-
+        <SecurityThreats type={country?.security} />
         <View style={[styles.keyValue, { marginTop: 30, marginBottom: 0 }]}>
           <Text style={styles.key}>Recognized for</Text>
           <View style={styles.tags}>
             {country?.recognizedFor?.map((item) => (
-              <View style={styles.tag}>
+              <View
+                style={[
+                  styles.tag,
+                  {
+                    backgroundColor:
+                      backgroundColors[
+                        Math.floor(Math.random() * backgroundColors.length)
+                      ],
+                  },
+                ]}
+              >
                 <Text style={styles.tagText}>
                   {item?.emoji} {item?.title}
                 </Text>
@@ -42,7 +64,6 @@ const Overview: React.FC<OverviewProps> = memo(function ({ country }) {
             ))}
           </View>
         </View>
-      
 
         <View style={[styles.keyValue, { marginTop: 30, marginBottom: 0 }]}>
           <Text style={styles.key}>When to visit</Text>
@@ -50,10 +71,11 @@ const Overview: React.FC<OverviewProps> = memo(function ({ country }) {
         </View>
       </View>
       <View style={styles.generalRow}>
-        <SecurityThreats type={country?.security} />
         <View style={styles.keyValue}>
           <Text style={styles.key}>National Language(s)</Text>
-          <Text style={styles.value}>{country.languages && Object.values(country.languages)[0]}</Text>
+          <Text style={styles.value}>
+            {country.languages && Object.values(country.languages)[0]}
+          </Text>
         </View>
         <View style={styles.keyValue}>
           <Text style={styles.key}>Currency</Text>
@@ -127,7 +149,7 @@ const Overview: React.FC<OverviewProps> = memo(function ({ country }) {
         </View>
       </View>
       <View style={[styles.generalRow, { borderBottomWidth: 0 }]}>
-        <View style={styles.keyValue}>
+        <View style={[styles.keyValue, { marginBottom: 20 }]}>
           <Text style={styles.key}>Weather</Text>
           <Text
             style={[

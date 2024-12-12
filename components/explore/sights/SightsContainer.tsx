@@ -71,56 +71,50 @@ export const SightsRow = ({ rowKey, handleOpenSightDetail, items }) => {
           }}
         >
           {items &&
-            items[rowKey]?.map((item, ind) => item?.image && (
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={[
-                  styles.thingsTodoItem,
-                  {
-                    width: 200,
-                    marginRight: 15,
-                    height: "auto",
-                  },
-                ]}
-                key={ind}
-                onPress={() => handleOpenSightDetail(item)}
-              >
-               {
-                item?.image?.url ?
-                  <Image
+            items[rowKey]?.map(
+              (item, ind) =>
+                item?.image && (
+                  <TouchableOpacity
+                    activeOpacity={0.7}
                     style={[
-                      styles.thingsTodoItemImage,
+                      styles.thingsTodoItem,
                       {
-                        minHeight: 190,
-                        minWidth: 200,
-                        backgroundColor: "#eee",
+                        width: 200,
+                        marginRight: 15,
+                        height: "auto",
                       },
                     ]}
-                    cachePolicy="memory"
-                    contentFit="cover"
-                    transition={0}
-                    source={{
-                      uri: item?.image?.url,
-                    }}
-                  ></Image> :
+                    key={ind}
+                    onPress={() => handleOpenSightDetail(item)}
+                  >
+                    <View style={styles.imageWrapper}>
+                      <Image
+                        style={[
+                          styles.thingsTodoItemImage,
+                          {
+                            minHeight: 190,
+                            minWidth: 200,
+                          },
+                        ]}
+                        cachePolicy="memory"
+                        contentFit="cover"
+                        transition={0}
+                        source={
+                          item?.image?.url
+                            ? {
+                                uri: item?.image?.url,
+                              }
+                            : require("../../../assets/no-image.png")
+                        }
+                      ></Image>
+                    </View>
 
-                    <ImageBackground
-                      source={require("../../../assets/no-image.png")}
-                      resizeMode="cover"
-                      style={{
-                        width: "100%",
-                        minHeight: 190,
-                        borderRadius: 10,
-                        overflow: "hidden"
-                      }}
-                    ></ImageBackground>
-                }
-              
+                    <View style={styles.thingsTodoItemDetails}>
+                      <Text style={styles.thingsTodoItemTitle}>
+                        {item.title}
+                      </Text>
 
-                <View style={styles.thingsTodoItemDetails}>
-                  <Text style={styles.thingsTodoItemTitle}>{item.title}</Text>
-
-                  {/* <View style={styles.thingsTodoItemiIn}>
+                      {/* <View style={styles.thingsTodoItemiIn}>
                         {item.price ? (
                           <Text
                             style={[
@@ -147,9 +141,9 @@ export const SightsRow = ({ rowKey, handleOpenSightDetail, items }) => {
                         ) : null}
                       </View> */}
 
-                  {/* event type style  */}
+                      {/* event type style  */}
 
-                  {/* <View style={styles.thingsTodoItemiIn}>
+                      {/* <View style={styles.thingsTodoItemiIn}>
                         <Text
                           style={[
                             styles.thingsTodoItemiIntypeText,
@@ -191,9 +185,10 @@ export const SightsRow = ({ rowKey, handleOpenSightDetail, items }) => {
                           </Text>
                         </TouchableOpacity>
                       </View> */}
-                </View>
-              </TouchableOpacity>
-            ))}
+                    </View>
+                  </TouchableOpacity>
+                )
+            )}
         </ScrollView>
       ) : null}
     </View>

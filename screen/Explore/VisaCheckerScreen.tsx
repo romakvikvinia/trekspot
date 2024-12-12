@@ -3,6 +3,7 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -24,6 +25,7 @@ import { CountrySelect } from "../../common/components/CountrySelect";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { StatusBar } from "expo-status-bar";
 
 type Props = NativeStackScreenProps<
   ExploreRoutesStackParamList,
@@ -75,6 +77,7 @@ export const VisaCheckerScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <>
       <View style={styles.safeArea}>
+        <StatusBar style="light" />
         <KeyboardAvoidingView
           behavior={Platform.OS == "ios" ? "padding" : "height"}
           style={styles.screen}
@@ -95,12 +98,13 @@ export const VisaCheckerScreen: React.FC<Props> = ({ navigation }) => {
                 },
               ]}
             >
-              <TouchableOpacity
+               <Pressable
                 onPress={() => navigation.goBack()}
                 style={globalStyles.screenHeaderBackButton}
+                hitSlop={20}
               >
                 <BackIcon size="30" color="#fff" />
-              </TouchableOpacity>
+              </Pressable>
               <Text style={[globalStyles.screenTitle, { color: "#fff" }]}>
                 Visa info by citizenship
               </Text>
@@ -144,18 +148,11 @@ export const VisaCheckerScreen: React.FC<Props> = ({ navigation }) => {
       </View>
 
       <Portal>
-        <Modalize
-          ref={modalCountryPassportSelectRef}
-          modalTopOffset={65}
-          scrollViewProps={{
-            keyboardShouldPersistTaps: "handled",
-          }}
-        >
-          <CountrySelect
-            onSelect={handleCountrySelect}
-            onDestinationModalClose={onDestinationModalClose}
-          />
-        </Modalize>
+        <CountrySelect
+          onSelect={handleCountrySelect}
+          onDestinationModalClose={onDestinationModalClose}
+          modalCountryPassportSelectRef={modalCountryPassportSelectRef}
+        />
       </Portal>
     </>
   );

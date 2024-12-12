@@ -488,9 +488,10 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
       <Portal>
         <Modalize
           ref={activitiesModal}
-          modalTopOffset={200}
-          modalHeight={SIZES.height - 100}
-          panGestureEnabled={true}
+          modalTopOffset={50}
+          adjustToContentHeight
+          withHandle={false}
+          panGestureEnabled={false}
           onClosed={handleSaveActivities}
           HeaderComponent={
             <>
@@ -519,6 +520,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           }
           modalStyle={{
             backgroundColor: "#F2F2F7",
+            height: "100%"
           }}
           scrollViewProps={{
             showsVerticalScrollIndicator: false,

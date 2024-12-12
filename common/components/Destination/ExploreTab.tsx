@@ -19,7 +19,7 @@ import { FaqItem } from "./_FaqItem";
 
 import { ExploreRoutesStackParamList } from "../../../routes/explore/ExploreRoutes";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { DownCircleIcon } from "../../../utilities/SvgIcons.utility";
+import { DownCircleIcon, UpCircleIcon } from "../../../utilities/SvgIcons.utility";
 import { NodataText } from "../../../components/common/NoDataText";
 
 type ForYouPros = {
@@ -50,6 +50,8 @@ export const FaqRowItem = ({ item, title, index, openIndex, setOpenIndex }) => {
         marginBottom: 8,
         borderRadius: 6,
         paddingBottom: isOpen ? 15 : 0,
+        borderWidth: isOpen ? 1 : 0,
+        borderColor: "#ccc"
       }}
     >
       <TouchableOpacity
@@ -64,7 +66,10 @@ export const FaqRowItem = ({ item, title, index, openIndex, setOpenIndex }) => {
         }}
       >
         <Text style={[styles.forYouRowTitleSub]}>{title}</Text>
-        <DownCircleIcon />
+        {
+          isOpen ?  <UpCircleIcon color="#929292" /> : <DownCircleIcon />
+        }
+       
       </TouchableOpacity>
 
       {isOpen ? (
@@ -188,7 +193,7 @@ export const ExploreTab: React.FC<ForYouPros> = ({ country }) => {
         <View
           style={[
             styles.forYouRow,
-            { marginBottom: 50, paddingHorizontal: 15, marginTop: data?.cities?.length > 0 ? 25 : 0},
+            { marginBottom: 30, paddingHorizontal: 15, marginTop: data?.cities?.length > 0 ? 25 : 0},
           ]}
         >
           <Text style={styles.forYouRowTitle}>FAQ</Text>

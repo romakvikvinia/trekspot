@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
   Text,
+  Pressable,
 } from "react-native";
 import { SearchResult } from "../../common/components/SearchResult";
 import { COLORS } from "../../styles/theme";
@@ -18,10 +19,13 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
 import { useLazySearchQuery } from "../../api/api.trekspot";
 import { CityType } from "../../api/api.types";
+import { usePostHog } from "posthog-react-native";
+import { Events } from "../../utilities/Posthog";
 
 type Props = NativeStackScreenProps<ExploreRoutesStackParamList, "Search">;
 
 export const SearchScreen = ({ navigation }: Props) => {
+  const posthog = usePostHog();
   const [fetchData, { data, isLoading, isError }] = useLazySearchQuery();
   const [searchValue, setSearchValue] = useState("");
 
@@ -40,15 +44,25 @@ export const SearchScreen = ({ navigation }: Props) => {
     countryId: string;
     city: CityType;
   }>) => {
+   
     if (countryId) {
       navigation.navigate("CountryDetailScreen", { countryId });
+      posthog?.capture(Events.useUserVisitsAfterSearchCountryOrCity, {
+        countryId,
+      });
     } else if (city) {
       navigation.navigate("CityDetail", { city });
+      posthog?.capture(Events.useUserVisitsAfterSearchCountryOrCity, {
+        city,
+      });
     }
   };
 
   useEffect(() => {
     if (searchValue && searchValue.length >= 3) {
+      posthog?.capture(Events.useSearchCountryOrCity, {
+        searchValue,
+       });
       fetchData({ search: searchValue, skip: 0, take: 3 });
     }
   }, [searchValue]);
@@ -60,12 +74,13 @@ export const SearchScreen = ({ navigation }: Props) => {
         style={{ flex: 1, paddingHorizontal: 15 }}
       >
         <View style={styles.searchBox}>
-          <TouchableOpacity
+          <Pressable
             style={styles.backButton}
             onPress={() => navigation.goBack()}
+            hitSlop={20}
           >
             <BackIcon size="30" />
-          </TouchableOpacity>
+          </Pressable>
           <TextInput
             placeholder="Search cities, countries..."
             placeholderTextColor="#7f7f7f"

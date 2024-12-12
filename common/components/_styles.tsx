@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
     shadowRadius: 1.84, 
     ...Platform.select({
       android: {
-        elevation: 5,
+        elevation: 2,
       },
     }),
   },
@@ -181,7 +181,7 @@ export const styles = StyleSheet.create({
     marginTop: 5,
   },
   tag: {
-    paddingVertical: 5,
+    paddingVertical: 6,
     paddingHorizontal: 8,
     borderRadius: 5,
     marginRight: 5,
@@ -224,6 +224,7 @@ export const styles = StyleSheet.create({
   emergencyNumbers: {
     flex: 1,
     marginTop: 25,
+    paddingHorizontal: 15
   },
   emergencyButtonItem: {
     flexDirection: "row",
@@ -300,6 +301,7 @@ export const styles = StyleSheet.create({
   visaTabContent: {
     flex: 1,
     marginBottom: 25,
+    paddingHorizontal: 15
   },
   thingsTodo: {
     marginTop: 25,
@@ -312,6 +314,11 @@ export const styles = StyleSheet.create({
     marginTop: 10,
     paddingHorizontal: 10,
     paddingBottom: 10,
+  },
+  imageWrapper: {
+    borderRadius: 15,
+    overflow: "hidden",
+    backgroundColor: "#f2f2f2"
   },
   thingsTodoItemImage: {
     width: "100%",
@@ -380,6 +387,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 15,
+    paddingHorizontal: 15
   },
   drivingSideText: {
     color: "#000",
@@ -390,7 +398,8 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 5,
     flexWrap: "wrap",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    paddingHorizontal: 15
   },
   transportItem: {
     backgroundColor: "#f2f2f2",
@@ -522,6 +531,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginTop: 20,
+    paddingHorizontal: 15
   },
   travelToText: {
     fontSize: 16,
@@ -538,7 +548,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     ...COLORS.shadow,
     position: "absolute",
-    top: Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 55,
+    top: Platform.OS === "android" ? Constants?.statusBarHeight + 5 : 55,
     left: 15,
     zIndex: 1,
   },
@@ -621,9 +631,19 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 7,
     borderRadius: 6,
-    ...COLORS.shadow,
     marginLeft: 0,
     width: 110,
+    borderColor: "#f2f2f2",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 0.84,
+    position: "relative",
+    ...Platform.select({
+      android: {
+        elevation: 1,
+      },
+    }),
   },
   passportTexts: {
     marginLeft: 5,

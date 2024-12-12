@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -32,6 +32,7 @@ type HomeProps = NativeStackScreenProps<HomeRouteStackParamList, "Main">;
 
 export const HomeScreen: React.FC<HomeProps> = ({}) => {
   const { data: analyticsData, isLoading, isFetching } = useAnalyticsQuery();
+  const [continent, setContinent] = useState<string | null>(null);
 
   // transform data
   const activities: Record<string, SightType[]> = {};
@@ -58,6 +59,7 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
   //
   const visitedCountries = analyticsData?.analytics.visitedCountries || [];
 
+
   return (
     <View style={[styles.safeArea]}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -67,11 +69,13 @@ export const HomeScreen: React.FC<HomeProps> = ({}) => {
           countryQuantity={analyticsData?.analytics.countries}
           visitedCountries={visitedCountries}
           territories={analyticsData?.analytics.territories}
+          continent={continent}
+          setContinent={setContinent}
         />
 
         <View style={styles.mapStats}>
           <Text style={styles.cardTitle}>Territories</Text>
-          <Territories />
+          <Territories setContinent={setContinent} />
         </View>
 
         {Object.keys(activities) && Object.keys(activities).length > 0 && (

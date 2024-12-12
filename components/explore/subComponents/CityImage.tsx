@@ -17,19 +17,20 @@ type CityImageProps = {
 };
 
 export const CityImage = ({ item, handleCity }: CityImageProps) => {
-  return Platform.OS === "ios" ? (
-    <Image
-      style={styles.box}
-      contentFit="cover"
-      source={
-        item?.image?.url
-          ? {
-              uri: item?.image?.url,
-            }
-          : require("../../../assets/no-image.png")
-      }
-      cachePolicy="memory-disk"
-    >
+  return (
+    <View style={styles.androidImageContainer}>
+      <Image
+        style={styles.box}
+        contentFit="cover"
+        source={
+          item?.image?.url
+            ? {
+                uri: item?.image?.url,
+              }
+            : require("../../../assets/no-image.png")
+        }
+        cachePolicy="memory-disk"
+      ></Image>
       <TouchableOpacity
         style={styles.gradientWrapper}
         activeOpacity={0.7}
@@ -69,61 +70,6 @@ export const CityImage = ({ item, handleCity }: CityImageProps) => {
           </View>
         </LinearGradient>
       </TouchableOpacity>
-    </Image>
-  ) : (
-    <View style={styles.androidImageContainer}>
-      <Image
-        style={styles.box}
-        contentFit="cover"
-        source={
-          item?.image?.url
-            ? {
-                uri: item?.image?.url,
-              }
-            : require("../../../assets/no-image.png")
-        }
-        cachePolicy="memory-disk"
-      >
-      </Image>
-      <TouchableOpacity
-          style={styles.gradientWrapper}
-          activeOpacity={0.7}
-          onPress={() => handleCity(item)}
-        >
-          <LinearGradient
-            style={styles.gradientWrapper}
-            colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.6)"]}
-          >
-            <View style={styles.labelItem}>
-              {/* <Mark color="#fff" /> */}
-              <Text
-                numberOfLines={2}
-                style={[styles.labelItemText, styles.titleSm]}
-              >
-                {item.city}
-              </Text>
-            </View>
-            <View style={styles.ratingLabel}>
-              {item?.rate ? (
-                <>
-                  <View
-                    style={{
-                      position: "relative",
-                      top: -1,
-                      opacity: 0.8,
-                    }}
-                  >
-                    <StarIcon color="#FFBC3E" />
-                  </View>
-                  <Text style={styles.ratingText}>{item.rate}</Text>
-                </>
-              ) : null}
-              {item?.visitors ? (
-                <Text style={styles.ratingText}>{item.visitors} visitors</Text>
-              ) : null}
-            </View>
-          </LinearGradient>
-        </TouchableOpacity>
     </View>
   );
 };

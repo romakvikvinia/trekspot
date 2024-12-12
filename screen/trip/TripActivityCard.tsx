@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     position: "relative",
     ...Platform.select({
       android: {
-        elevation: 5,
+        elevation: 2,
       },
     }),
     zIndex: 1,

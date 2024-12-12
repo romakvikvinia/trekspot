@@ -13,7 +13,7 @@ export const FlagIcon = ({iso2} : FlagIconProps) => {
       resizeMode="cover"
       style={{
         width: 22,
-        height: 12,
+        height: 15,
         backgroundColor: "#ddd",
         borderRadius: 2,
         overflow: "hidden",

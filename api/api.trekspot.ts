@@ -504,6 +504,7 @@ export const trekSpotApi = createApi({
                   emoji
                   title
                 }
+                continents
                 weatherInformation {
                   averageTemperatures {
                     summer

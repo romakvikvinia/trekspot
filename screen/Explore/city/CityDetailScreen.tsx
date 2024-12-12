@@ -7,7 +7,7 @@ import {
   useToggleWishlistMutation,
   useLazyGetSightsQuery,
 } from "../../../api/api.trekspot";
-import { CityType, SightType } from "../../../api/api.types";
+import { SightType } from "../../../api/api.types";
 import { Loader } from "../../../common/ui/Loader";
 import {
   BackIcon,
@@ -19,7 +19,6 @@ import {
 import { COLORS, SIZES } from "../../../styles/theme";
 
 import Constants from "expo-constants";
-import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { exploreStyles } from "../../../components/explore/sights/_exploreStyles";
 import { SightDetailModal } from "../../../components/explore/sights/SightDetailModal";
@@ -75,7 +74,7 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
         await fetchToggleWishlist({ city: city.id }).unwrap();
 
         if (!exists)
-          toast.success("The city has been added to your wishlist", {
+          toast.success(`${city?.city || "City"} has been added to your wishlist`, {
             duration: 2000,
           });
       } catch (error) {
@@ -220,7 +219,7 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                   {
                     top:
                       Platform.OS === "android"
-                        ? Constants?.statusBarHeight + 10
+                        ? Constants?.statusBarHeight + 5
                         : 55,
                   },
                 ]}
@@ -233,7 +232,7 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                   {
                     top:
                       Platform.OS === "android"
-                        ? Constants?.statusBarHeight + 10
+                        ? Constants?.statusBarHeight + 5
                         : 55,
                   },
                 ]}

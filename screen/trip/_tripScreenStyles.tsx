@@ -1,12 +1,12 @@
 import Constants from "expo-constants";
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { COLORS, SIZES } from "../../styles/theme";
 
 export const _tripScreenStyles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#F2F2F7",
-    paddingTop: Constants?.statusBarHeight + 10,
+    paddingTop: Constants?.statusBarHeight + (Platform.OS === "android" ? 5 : 10),
   },
   tabSwitchersWrapper: {
     marginTop: 5,

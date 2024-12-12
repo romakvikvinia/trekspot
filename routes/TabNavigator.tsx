@@ -85,7 +85,7 @@ export const TabNavigator: React.FC<AppRouteProps> = ({}) => {
             borderTopWidth: 1,
             // paddingTop: 5,
             backgroundColor: "#fff",
-            height: Platform.OS === "android" ? 65 : 80,
+            height: Platform.OS === "android" ? 65 : 95,
           },
         })}
         initialRouteName="Home"

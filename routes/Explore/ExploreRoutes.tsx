@@ -4,7 +4,6 @@ import {
   createStackNavigator,
 } from "@react-navigation/stack";
 import { ExploreScreen } from "../../screen/Explore/ExploreScreen";
-import SeeAllScreen from "../../screen/Explore/BucketListAll";
 import { TripInsights } from "../../screen/trip/TripInsights";
 import { SIZES } from "../../styles/theme";
 import { Platform } from "react-native";
@@ -19,7 +18,6 @@ interface ExploreRoutesProps {}
 
 export type ExploreRoutesStackParamList = {
   ExploreWorld: undefined;
-  SeeAllScreen: undefined;
   CountryDetailScreen: {
     countryId: string;
   };
@@ -59,18 +57,7 @@ export const ExploreRoutesStack: React.FC<ExploreRoutesProps> = ({}) => {
           //   </HeaderButtons>
           // ),
         })}
-      />
-      <Stack.Screen
-        name="SeeAllScreen"
-        component={SeeAllScreen}
-        options={() => ({
-          header: () => null,
-          gestureEnabled: Platform.OS === "ios",
-          gestureResponseDistance:
-            Platform.OS === "android" ? 10 : SIZES.width - 50,
-        })}
-      />
-
+      /> 
       <Stack.Screen
         name="TripQuickInsights"
         component={TripInsights}

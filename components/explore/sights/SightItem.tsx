@@ -29,34 +29,26 @@ export const SightItem: React.FC<SightItemProps> = ({ item, onHandleItem }) => {
         if (onHandleItem) onHandleItem(item);
       }}
     >
-      {item.image ? (
+      <View style={styles.imageWrapper}>
         <Image
           style={[
             styles.thingsTodoItemImage,
             {
               minHeight: 190,
-              backgroundColor: "#eee",
             },
           ]}
           cachePolicy="memory"
           contentFit="cover"
           transition={0}
-          source={{
-            uri: item.image.url,
-          }}
+          source={
+            item?.image?.url
+              ? {
+                  uri: item?.image?.url,
+                }
+              : require("../../../assets/no-image.png")
+          }
         ></Image>
-      ) : (
-        <ImageBackground
-          source={require("../../../assets/no-image.png")}
-          resizeMode="cover"
-          style={{
-            width: "100%",
-            minHeight: 190,
-            borderRadius: 10,
-            overflow: "hidden"
-          }}
-        ></ImageBackground>
-      )}
+      </View>
 
       <View style={styles.thingsTodoItemDetails}>
         <Text style={styles.thingsTodoItemTitle}>{item.title}</Text>

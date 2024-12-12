@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import {
   ImageBackground,
+  Pressable,
   Text,
   TouchableOpacity,
   View,
@@ -23,7 +24,6 @@ import {
   StarIcon,
   TransportIcon,
 } from "../../../utilities/SvgIcons.utility";
-// import { CountrySelect } from "../../../common/components/CountrySelect";
 import { ExploreTab } from "../../../common/components/Destination/ExploreTab";
 import Overview from "../../../common/components/Destination/Overview";
 import { Visa } from "../../../common/components/Destination/Visa";
@@ -37,12 +37,13 @@ import { Emergency } from "../../../common/components/Destination/Emergency";
 import { useLazyCountryQuery } from "../../../api/api.trekspot";
 
 import { TripInsightTab } from "../../../common/components/Destination/TripInsightTab";
-// import { Loader } from "../../../common/ui/Loader";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ExploreRoutesStackParamList } from "../../../routes/explore/ExploreRoutes";
 import { Loader } from "../../../common/ui/Loader";
 import { toast } from "sonner-native";
 import { NodataText } from "../../../components/common/NoDataText";
+import { FeedbackCountryDetail } from "../../../components/explore/FeedbackCountryDetail";
+import { StatusBar } from "expo-status-bar";
 
 type CountryDetailScreenProps = NativeStackScreenProps<
   ExploreRoutesStackParamList,
@@ -74,17 +75,18 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
           minHeight: "100%",
         }}
       >
+        <StatusBar style="light" />
         <Tabs.Container
           minHeaderHeight={120}
           renderHeader={() => (
             <View style={[styles.swiperWrapper]}>
-              <TouchableOpacity
+              <Pressable
                 onPress={() => navigation.goBack()}
-                activeOpacity={0.7}
                 style={styles.backButton}
+                hitSlop={20}
               >
                 <BackIcon color="#000" />
-              </TouchableOpacity>
+              </Pressable>
 
               {isLoading && (
                 <View style={{ minHeight: SIZES.height }}>
@@ -103,7 +105,7 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
                   </View>
                 </View>
               )}
-           
+
               <Swiper
                 activeDotColor="#fff"
                 showsButtons={false}
@@ -233,6 +235,38 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
               showsVerticalScrollIndicator={false}
             >
               {data && <ExploreTab country={data?.country} />}
+              {data ? <FeedbackCountryDetail /> : null}
+            </Tabs.ScrollView>
+          </Tabs.Tab>
+          <Tabs.Tab
+            name="Overview"
+            label={(props) => (
+              <View style={styles.customTab}>
+                <InfoIcon color={COLORS.black} />
+                <Text
+                  style={[
+                    styles.customTabLabel,
+                    {
+                      color: COLORS.black,
+                    },
+                  ]}
+                >
+                  Overview
+                </Text>
+              </View>
+            )}
+          >
+            <Tabs.ScrollView
+              alwaysBounceVertical={false}
+              bounces={false}
+              showsVerticalScrollIndicator={false}
+            >
+              {data && data?.country?.image ? (
+                <Overview country={data.country} />
+              ) : (
+                <NodataText />
+              )}
+              {data ? <FeedbackCountryDetail /> : null}
             </Tabs.ScrollView>
           </Tabs.Tab>
           <Tabs.Tab
@@ -261,32 +295,7 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
               <TripInsightTab iso2={(data && data.country.iso2) || ""} />
             </Tabs.ScrollView>
           </Tabs.Tab>
-          <Tabs.Tab
-            name="Overview"
-            label={(props) => (
-              <View style={styles.customTab}>
-                <InfoIcon color={COLORS.black} />
-                <Text
-                  style={[
-                    styles.customTabLabel,
-                    {
-                      color: COLORS.black,
-                    },
-                  ]}
-                >
-                  Overview
-                </Text>
-              </View>
-            )}
-          >
-            <Tabs.ScrollView
-              alwaysBounceVertical={false}
-              bounces={false}
-              showsVerticalScrollIndicator={false}
-            >
-              {data && data?.country?.image ? <Overview country={data.country} /> : <NodataText />}
-            </Tabs.ScrollView>
-          </Tabs.Tab>
+
           <Tabs.Tab
             name="Visa"
             label={(props) => (
@@ -336,7 +345,11 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
               bounces={false}
               showsVerticalScrollIndicator={false}
             >
-              {data && data?.country?.image ?  <Transport country={data.country} /> : <NodataText />}
+              {data && data?.country?.image ? (
+                <Transport country={data.country} />
+              ) : (
+                <NodataText />
+              )}
             </Tabs.ScrollView>
           </Tabs.Tab>
           <Tabs.Tab
@@ -416,24 +429,15 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
               bounces={false}
               showsVerticalScrollIndicator={false}
             >
-                {data && data?.country?.image ? <Emergency data={data?.country?.emergency} /> : <NodataText />}
+              {data && data?.country?.image ? (
+                <Emergency data={data?.country?.emergency} />
+              ) : (
+                <NodataText />
+              )} 
             </Tabs.ScrollView>
           </Tabs.Tab>
         </Tabs.Container>
       </View>
-
-
-      {/* <Portal>
-        <Modalize ref={modalCountryPassportSelectRef} modalTopOffset={65}>
-          <CountrySelect />
-        </Modalize>
-      </Portal> */}
- 
-      {/* <Portal>
-        <Modalize ref={modalCountryPassportSelectRef} modalTopOffset={65}>
-          <CountrySelect />
-        </Modalize>
-      </Portal> */}
     </>
   );
 };
