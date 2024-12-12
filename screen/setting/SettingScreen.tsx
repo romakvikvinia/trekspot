@@ -39,6 +39,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SettingRouteStackParamList } from "../../routes/setting/SettingRoutes";
 import { useAppDispatch, useAppSelector } from "../../package/store";
 import { signOut } from "../../package/slices";
+import { useDeactivateAccountMutation } from "../../api/api.trekspot";
 
 type SettingProps = NativeStackScreenProps<
   SettingRouteStackParamList,
@@ -49,6 +50,8 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
   const modalEmbedRef = useRef<Modalize>(null);
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
+
+  const [fetchDeactivateAccount] = useDeactivateAccountMutation();
 
   const isGuest = user?.role === "guest";
 
@@ -171,11 +174,12 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
                         {
                           text: "Deactivate",
                           style: "destructive",
-                          // onPress: async () => {
-                          //   await deleteItemFromStorage();
-                          //   await deleteFromAsyncStorage(["visited_countries"]);
-                          //   dispatch(signOut());
-                          // },
+                          onPress: async () => {
+                            await deleteItemFromStorage();
+                            await deleteFromAsyncStorage(["visited_countries"]);
+                            await fetchDeactivateAccount().unwrap();
+                            dispatch(signOut());
+                          },
                         },
                       ]
                     )

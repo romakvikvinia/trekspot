@@ -578,3 +578,9 @@ export type CreateAnalyticArgsType = {
   sight?: string;
   wasLiving?: false;
 };
+
+export type DeactivateAccountResponseType = {
+  deactivateAccount: boolean;
+};
+
+export type DeactivateAccountArgsType = {};

@@ -71,6 +71,8 @@ import {
   AuthSocialLogInInput,
   AuthSocialLogInResponseType,
   CountryByIso2ArgsType,
+  DeactivateAccountResponseType,
+  DeactivateAccountArgsType,
 } from "./api.types";
 import { getFullToken } from "../helpers/secure.storage";
 import { baseUrl } from "../helpers/baseUrl.helper";
@@ -130,6 +132,7 @@ export const trekSpotApi = createApi({
     "createAnalytics",
     "visitedCountries",
     "upComingTrips",
+    "deactivateAccount",
   ],
   endpoints: (builder) => ({
     /**
@@ -1587,6 +1590,25 @@ export const trekSpotApi = createApi({
       },
       invalidatesTags: (result, error) => (error ? [] : ["createAnalytics"]),
     }),
+    /**
+     * Create analytics
+     */
+    deactivateAccount: builder.mutation<DeactivateAccountResponseType, void>({
+      query: () => {
+        return {
+          variables: {},
+          document: gql`
+            mutation {
+              deactivateAccount
+            }
+          `,
+        };
+      },
+      transformResponse: (response: DeactivateAccountResponseType) => {
+        return response;
+      },
+      invalidatesTags: (result, error) => (error ? [] : ["deactivateAccount"]),
+    }),
 
     //
   }),
@@ -1638,4 +1660,6 @@ export const {
   useToggleWishlistMutation,
   //
   useCreateAnalyticsMutation,
+  //
+  useDeactivateAccountMutation,
 } = trekSpotApi;
