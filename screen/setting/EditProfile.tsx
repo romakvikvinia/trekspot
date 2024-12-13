@@ -4,6 +4,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -23,6 +24,7 @@ import { EditProfileValidationSchema } from "./validationScheme";
 import { useAppDispatch, useAppSelector } from "../../package/store";
 import { updateUser } from "../../package/slices";
 import { toast } from "sonner-native";
+import { ScreenHeader } from "../../components/common/ScreenHeader";
 
 type EdoProfileProps = NativeStackScreenProps<
   SettingRouteStackParamList,
@@ -72,20 +74,8 @@ export const EditProfile: React.FC<EdoProfileProps> = ({ navigation }) => {
         <KeyboardAvoidingView
           behavior={Platform.OS == "ios" ? "padding" : "height"}
           style={styles.screen}
-        >
-          <View style={globalStyles.screenHeader}>
-            <TouchableOpacity
-              onPress={() => navigation.goBack()}
-              style={globalStyles.screenHeaderBackButton}
-            >
-              <BackIcon size="30" />
-            </TouchableOpacity>
-
-            <Text style={globalStyles.screenTitle}>Edit Profile</Text>
-            <TouchableOpacity
-              style={globalStyles.screenHeaderBackButton}
-            ></TouchableOpacity>
-          </View>
+        > 
+          <ScreenHeader title="Edit Profile" />
 
           <ScrollView
             style={{ flex: 1, paddingTop: 25 }}
@@ -163,7 +153,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#f8f8f8",
-    paddingTop: Constants?.statusBarHeight + 10,
+    paddingTop: Constants?.statusBarHeight + (Platform.OS === "android" ? 5 : 10),
   },
   header: {
     flexDirection: "row",

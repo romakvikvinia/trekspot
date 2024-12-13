@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Image } from "expo-image";
 import {
+  ActivityIndicator,
   Linking,
   Modal,
   Platform,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,6 +16,7 @@ import {
   ClickOutsideProvider,
   useClickOutside,
 } from "react-native-click-outside";
+import * as Haptics from "expo-haptics";
 import Swiper from "react-native-swiper";
 import { COLORS, SIZES } from "../../../styles/theme";
 import {
@@ -21,10 +24,10 @@ import {
   CloseCircleIcon,
   DownIcon,
   Mark,
-  Mark2,
-  PinIcon,
   StarIcon,
   TripLocationIcon,
+  WishlistAddIcon,
+  WishlistedIcon,
 } from "../../../utilities/SvgIcons.utility";
 import { SightType } from "../../../api/api.types";
 import { ShowDirectionButton } from "./_ShowDirectionButton";
@@ -148,9 +151,7 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
         await fetchToggleWishlist({ sight: data.id }).unwrap();
 
         if (!exists)
-          toast.success("Successfully added to your wishlist", {
-            duration: 2000,
-          });
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       } catch (error) {
         if (exists) {
           dispatch(
@@ -226,6 +227,7 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
 
   if (!data) return null;
 
+  
   return (
     <Modal
       animationType={"none"}
@@ -267,170 +269,167 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
             ref={ref}
             showsVerticalScrollIndicator={false}
           >
-            {data?.images?.length > 0 ? (
-              <Swiper
-                activeDotColor="#fff"
-                style={[styles.wrapper]}
-                showsButtons={false}
-                loop={true}
-                dotColor="#949494"
-                automaticallyAdjustContentInsets
-                paginationStyle={{
-                  position: "absolute",
-                  justifyContent: "center",
-                  left: 0,
-                  top: 0,
-                  height: 10,
-                  marginHorizontal: 15,
-                }}
-                autoplay={true}
-                dotStyle={{
-                  width: SIZES.width / data.images.length - 50,
-                  height: 3,
-                }}
-                activeDotStyle={{
-                  backgroundColor: "#fff",
-                  width: SIZES.width / data.images.length - 15,
-                  height: 3,
-                }}
-              >
-                {data.images?.map((item, ind) => (
-                  <View style={styles.imageWrapper}>
-                    <Image
-                      style={[styles.box]}
-                      contentFit="cover"
-                      source={
-                        item?.url
-                          ? {
-                              uri: item?.url,
-                            }
-                          : require("../../../assets/no-image.png")
-                      }
-                      key={`slide-${ind}`}
-                    >
-                    </Image>
-                    {item?.html_attributions?.length > 0 && (
-                      <TouchableOpacity
-                        style={styles.attr}
-                        activeOpacity={0.7}
-                        onPress={() =>
-                          redirectToContrib(item?.html_attributions[0])
-                        }
-                      >
-                        <Text
-                          numberOfLines={1}
-                          style={{ color: "#fff", fontSize: 12 }}
-                        >
-                          {renderAuthor(item?.html_attributions[0])}
-                        </Text>
-                      </TouchableOpacity>
-                    )}
-                  </View>
-                ))}
-              </Swiper>
-            ) : (
-              <Image
-                style={[styles.box]}
-                contentFit="cover"
-                source={require("../../../assets/no-image.png")}
-              ></Image>
-            )}
-
-            <View style={styles.sightDetails}>
-              <View style={styles.headingRow}>
-                <Text
-                  style={[
-                    styles.sightDetailsTitle,
-                    {
-                      fontSize: showDirection ? 20 : 24,
-                    },
-                  ]}
+            <View style={{ flex: 1, borderRadius: 15, overflow: "hidden" }}>
+              {data?.images?.length > 0 ? (
+                <Swiper
+                  activeDotColor="#fff"
+                  style={[styles.wrapper]}
+                  showsButtons={false}
+                  loop={true}
+                  dotColor="#949494"
+                  automaticallyAdjustContentInsets
+                  paginationStyle={{
+                    position: "absolute",
+                    justifyContent: "center",
+                    left: 0,
+                    top: 0,
+                    height: 10,
+                    marginHorizontal: 15,
+                  }}
+                  autoplay={true}
+                  dotStyle={{
+                    width: SIZES.width / data.images.length - 50,
+                    height: 3,
+                  }}
+                  activeDotStyle={{
+                    backgroundColor: "#fff",
+                    width: SIZES.width / data.images.length - 15,
+                    height: 3,
+                  }}
                 >
-                  {data?.title}
-                </Text>
+                  {data.images?.map((item, ind) => (
+                    <View style={styles.imageWrapper}>
+                      <Image
+                        style={[styles.box]}
+                        contentFit="cover"
+                        source={
+                          item?.url
+                            ? {
+                                uri: item?.url,
+                              }
+                            : require("../../../assets/no-image.png")
+                        }
+                        key={`slide-${ind}`}
+                      ></Image>
+                      {item?.html_attributions?.length > 0 && (
+                        <TouchableOpacity
+                          style={styles.attr}
+                          activeOpacity={0.7}
+                          onPress={() =>
+                            redirectToContrib(item?.html_attributions[0])
+                          }
+                        >
+                          <Text
+                            numberOfLines={1}
+                            style={{ color: "#fff", fontSize: 12 }}
+                          >
+                            {renderAuthor(item?.html_attributions[0])}
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  ))}
+                </Swiper>
+              ) : (
+                <Image
+                  style={[styles.box]}
+                  contentFit="cover"
+                  source={require("../../../assets/no-image.png")}
+                ></Image>
+              )}
 
-                {showDirection ? (
-                  <ShowDirectionButton data={data} />
-                ) : (
-                  <TouchableOpacity
+              <View style={styles.sightDetails}>
+                <View style={styles.headingRow}>
+                  <Text
                     style={[
-                      styles.addToBucketButton,
+                      styles.sightDetailsTitle,
                       {
-                        backgroundColor:  "#f2f2f2", // if this place is marked as favorate
+                        fontSize: showDirection ? 20 : 24,
                       },
                     ]}
-                    activeOpacity={0.7}
-                    disabled={isWishlistToggleLoading}
-                    onPress={() =>
-                      !isWishlistToggleLoading &&
-                      handleAddToWishlist(
-                        wishlistState &&
-                          wishlistState.wishlists.some(
-                            (i) => i.sight && i.sight.id === data.id
-                          )
-                      )
-                    }
                   >
-                    <Mark2
-                      color={
-                        wishlistState &&
-                        wishlistState.wishlists.some(
-                          (i) => i.sight && i.sight.id === data.id
+                    {data?.title}
+                  </Text>
+
+                  {showDirection ? (
+                    <ShowDirectionButton data={data} />
+                  ) : (
+                    <Pressable
+                      hitSlop={20}
+                      style={[
+                        styles.addToBucketButton,
+                        {
+                          backgroundColor: "#f2f2f2", // if this place is marked as favorate
+                        },
+                      ]}
+                      disabled={isWishlistToggleLoading}
+                      onPress={() =>
+                        !isWishlistToggleLoading &&
+                        handleAddToWishlist(
+                          wishlistState &&
+                            wishlistState.wishlists.some(
+                              (i) => i.sight && i.sight.id === data.id
+                            )
                         )
-                          ? COLORS.primary
-                          : "#000"
                       }
-                      size="15"
-                    />
+                    >
+                      {isWishlistToggleLoading ? (
+                        <ActivityIndicator color="#000" />
+                      ) : wishlistState && wishlistState.wishlists.some((i) => i.sight && i.sight.id === data.id) ? (
+                        <WishlistedIcon />
+                      ) : (
+                        <WishlistAddIcon />
+                      )}
+                    </Pressable>
+                  )}
+                </View>
+                {data?.city ? (
+                  <View style={styles.locationCity}>
+                    <Mark size="15" color={COLORS.gray} />
+                    <Text style={styles.locationCityText}>{data?.city}</Text>
+                  </View>
+                ) : null}
+
+                <View style={styles.ratingWrapper}>
+                  <Text style={styles.type}>{data.category}</Text>
+                  <View
+                    style={{
+                      position: "relative",
+                      top: -1,
+                      opacity: 0.8,
+                      marginLeft: 5,
+                    }}
+                  >
+                    <StarIcon size={15} color="#FFBC3E" />
+                  </View>
+                  <Text style={styles.ratingText}>{data.rate}</Text>
+                </View>
+
+                {data?.description ? (
+                  <Text style={styles.sightDetailsDescription}>
+                    {data?.description}
+                  </Text>
+                ) : null}
+
+                {data.address ? (
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={{
+                      flexDirection: "row",
+                      marginBottom: 15,
+                      backgroundColor: "#f2f2f2",
+                      padding: 15,
+                      borderRadius: 10,
+                    }}
+                    onPress={() => openMap(data.address)}
+                  >
+                    <TripLocationIcon color={COLORS.primaryDark} size="16" />
+                    <Text style={styles.address}>{data.address}</Text>
                   </TouchableOpacity>
-                )}
+                ) : null}
+
+                {data?.workingHours?.length > 0 && <HoursRow data={data} />}
               </View>
-              {data?.city ? (
-                <View style={styles.locationCity}>
-                  <Mark size="15" color={COLORS.gray} />
-                  <Text style={styles.locationCityText}>{data?.city}</Text>
-                </View>
-              ) : null}
-
-              <View style={styles.ratingWrapper}>
-                <Text style={styles.type}>{data.category}</Text>
-                <View
-                  style={{
-                    position: "relative",
-                    top: -1,
-                    opacity: 0.8,
-                    marginLeft: 5,
-                  }}
-                >
-                  <StarIcon size={15} color="#FFBC3E" />
-                </View>
-                <Text style={styles.ratingText}>{data.rate}</Text>
-              </View>
-
-              {data?.description ? (
-                <Text style={styles.sightDetailsDescription}>
-                  {data?.description}
-                </Text>
-              ) : null}
-
-              {data.address ? (
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={{
-                    flexDirection: "row",
-                    marginBottom: 15,
-                    backgroundColor: "#f2f2f2",
-                    padding: 15,
-                    borderRadius: 10,
-                  }}
-                  onPress={() => openMap(data.address)}
-                >
-                  <TripLocationIcon color={COLORS.primaryDark} size="16" />
-                  <Text style={styles.address}>{data.address}</Text>
-                </TouchableOpacity>
-              ) : null}
-
-              {data?.workingHours?.length > 0 && <HoursRow data={data} />}
             </View>
           </ScrollView>
         </View>
@@ -448,8 +447,6 @@ export const styles = StyleSheet.create({
     width: "100%",
     position: "relative",
     backgroundColor: "#f2f2f2",
-    borderTopStartRadius: 15,
-    borderTopEndRadius: 15
   },
   attr: {
     position: "absolute",
@@ -533,13 +530,10 @@ export const styles = StyleSheet.create({
   },
   box: {
     height: 300,
-    borderTopEndRadius: 10,
-    borderTopLeftRadius: 10,
     overflow: "hidden",
   },
   wrapper: {
     position: "relative",
     height: 300,
-    borderTopStartRadius: 15,
   },
 });

@@ -1,20 +1,22 @@
 import React from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import {
   BackIcon,
   DotsVerticlIcon,
   LocationPin,
-  MapWithLocationIcon,
 } from "../../../utilities/SvgIcons.utility";
 import { COLORS } from "../../../styles/theme";
 import Constants from "expo-constants";
 import { format } from "date-fns";
 import { TripHelpers } from "./TripHelpers";
+import { useAppDispatch } from "../../../package/store";
+import { trekSpotApi } from "../../../api/api.trekspot";
 
 export const ClassicHeaderContent = ({ data, onQuestion2ModalOpen, iso2 }) => {
-  const route = useRoute();
+
   const navigation = useNavigation();
+  const dispatch = useAppDispatch();
 
   return (
     <>
@@ -30,25 +32,8 @@ export const ClassicHeaderContent = ({ data, onQuestion2ModalOpen, iso2 }) => {
         <View style={{ width: 110 }}>
           <TouchableOpacity
             onPress={() => {
-              route.params &&
-              "needResetStack" in route.params &&
-              route.params.needResetStack
-                ? navigation.reset({
-                    index: 0, // Reset to the first screen
-                    routes: [
-                      {
-                        name: "Explore",
-                        state: {
-                          routes: [
-                            {
-                              name: "ExploreWorld",
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  })
-                : navigation.goBack();
+              dispatch(trekSpotApi.util.invalidateTags(["myTrips", "trip"]));
+              navigation.goBack();
             }}
             activeOpacity={0.7}
             style={[

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
-  Platform,
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
@@ -402,12 +402,13 @@ export const MapView: React.FC<MapVIewProps> = ({
                     </TouchableOpacity>
                   ) : null}
                 </View>
-                <TouchableOpacity
+                <Pressable
                   style={styles.cancelButton}
                   onPress={() => modalRef?.current?.close()}
+                  hitSlop={20}
                 >
                   <Text style={styles.cancelButtonText}>Cancel</Text>
-                </TouchableOpacity>
+                </Pressable>
               </View>
               <View style={styles.infoRow}>
                 <Text style={styles.countryAmount}>
@@ -527,6 +528,7 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     fontSize: 14,
     color: COLORS.darkgray,
+    fontWeight: "500"
   },
   countryAmount: {
     color: COLORS.darkgray,

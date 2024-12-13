@@ -13,7 +13,7 @@ import { COLORS } from "../../../styles/theme";
 import { tripDetailStyles } from "../../trip/_tripDetailStyles";
 import { WishlistType } from "../../../api/api.types";
 import * as Haptics from "expo-haptics";
-import { Mark2 } from "../../../utilities/SvgIcons.utility";
+import { Mark2, WishlistedIcon } from "../../../utilities/SvgIcons.utility";
 import { LinearGradient } from "expo-linear-gradient";
 
 interface IWishlistContainer {
@@ -92,7 +92,7 @@ export const WishlistContainer: React.FC<IWishlistContainer> = ({
                     activeOpacity={0.7}
                     onPress={() => handleDeleteItem(item.id)}
                   >
-                    <Mark2 color={COLORS.primary} />
+                    <WishlistedIcon />
                   </TouchableOpacity>
 
                   <Image
@@ -122,11 +122,11 @@ export const WishlistContainer: React.FC<IWishlistContainer> = ({
                         tripDetailStyles.sightTitle,
                         {
                           color: "#fff",
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: "bold",
                         },
                       ]}
-                      numberOfLines={1}
+                      numberOfLines={2}
                     >
                       {title}
                     </Text>

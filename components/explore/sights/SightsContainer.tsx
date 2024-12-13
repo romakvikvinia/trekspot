@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { Image } from "expo-image";
-import { View, TouchableOpacity, ScrollView, Text, ImageBackground } from "react-native";
+import { View, TouchableOpacity, ScrollView, Text } from "react-native";
 import { exploreStyles } from "./_exploreStyles";
 import { styles } from "../../../common/components/_styles";
 import { COLORS } from "../../../styles/theme";

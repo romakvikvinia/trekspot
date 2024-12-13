@@ -26,6 +26,7 @@ import { useUpdateMeMutation } from "../../api/api.trekspot";
 import { ResetPasswordValidationSchema } from "./validationScheme";
 import { useFormik } from "formik";
 import { toast } from "sonner-native";
+import { ScreenHeader } from "../../components/common/ScreenHeader";
 
 type ResetPassword = NativeStackScreenProps<
   SettingRouteStackParamList,
@@ -79,20 +80,8 @@ export const ResetPassword: React.FC<ResetPassword> = ({ navigation }) => {
         behavior={Platform.OS == "ios" ? "padding" : "height"}
         // keyboardVerticalOffset={10}
         style={styles.screen}
-      >
-        <View style={globalStyles.screenHeader}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={globalStyles.screenHeaderBackButton}
-          >
-            <BackIcon size="30" />
-          </TouchableOpacity>
-
-          <Text style={globalStyles.screenTitle}>Reset password</Text>
-          <TouchableOpacity
-            style={globalStyles.screenHeaderBackButton}
-          ></TouchableOpacity>
-        </View>
+      > 
+        <ScreenHeader title="Reset password" />
         <ScrollView
           style={{ flex: 1, paddingTop: 25 }}
           contentContainerStyle={{ paddingHorizontal: 15 }}
@@ -176,7 +165,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#f8f8f8",
-    paddingTop: Constants?.statusBarHeight + 10,
+    paddingTop: Constants?.statusBarHeight + (Platform.OS === "android" ? 5 : 10),
   },
   header: {
     flexDirection: "row",

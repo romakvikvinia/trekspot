@@ -3,7 +3,7 @@ import { searchComponentStyles } from "../../styles/searchComponentStyles";
 import { COLORS } from "../../styles/theme";
 import {
   CloseCircleIcon,
-  SearchBoldIcon,
+  SearchIcon,
 } from "../../utilities/SvgIcons.utility";
 
 export const SearchComponent = ({ search, setSearch, withIcon = true, resetButton = true }) => {
@@ -11,7 +11,7 @@ export const SearchComponent = ({ search, setSearch, withIcon = true, resetButto
     <View style={searchComponentStyles.searchComponent}>
       {withIcon ? (
         <View style={searchComponentStyles.searchComponentIcon}>
-          <SearchBoldIcon width={15} />
+          <SearchIcon width={15} />
         </View>
       ) : null}
 
@@ -23,7 +23,7 @@ export const SearchComponent = ({ search, setSearch, withIcon = true, resetButto
             paddingLeft: withIcon ? 40 : 15,
           },
         ]}
-        placeholder="Search cities"
+        placeholder="Search..."
         placeholderTextColor={COLORS.darkgray}
         onChangeText={(e) => setSearch(e)}
         autoCorrect={false}

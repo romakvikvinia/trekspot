@@ -1,7 +1,8 @@
-import React, { useRef } from "react";
+import React from "react";
 import {
   Alert,
   Linking,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -32,7 +33,6 @@ import {
   Youtube,
 } from "../../utilities/SvgIcons.utility";
 
-import { Modalize } from "react-native-modalize";
 import * as WebBrowser from "expo-web-browser";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -47,7 +47,6 @@ type SettingProps = NativeStackScreenProps<
 >;
 
 export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
-  const modalEmbedRef = useRef<Modalize>(null);
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
 
@@ -290,7 +289,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#f8f8f8",
-    paddingTop: Constants?.statusBarHeight + 10,
+    paddingTop: Constants?.statusBarHeight + (Platform.OS === "android" ? 5 : 10),
   },
   guestCardTitle: {
     fontSize: 16,

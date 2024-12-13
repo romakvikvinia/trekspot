@@ -539,8 +539,8 @@ export const styles = StyleSheet.create({
     maxWidth: "70%"
   },
   backButton: {
-    width: Platform.OS === "android" ? 30 : 40,
-    height: Platform.OS === "android" ? 30 : 40,
+    width: 40,
+    height: 40,
     backgroundColor: "#fff",
     borderRadius: 100,
     display: "flex",
@@ -581,8 +581,8 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
   },
   addToBucketButton: {
-    width: Platform.OS === "android" ? 30 : 40,
-    height: Platform.OS === "android" ? 30 : 40,
+    width: 40,
+    height: 40,
     borderRadius: 50,
     backgroundColor: "#fff",
     justifyContent: "center",

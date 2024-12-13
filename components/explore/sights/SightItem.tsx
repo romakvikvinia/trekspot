@@ -1,6 +1,6 @@
 import React from "react";
 import { Image } from "expo-image";
-import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { styles } from "../../../common/components/_styles";
 import { SightType } from "../../../api/api.types";
 import { exploreStyles } from "./_exploreStyles";

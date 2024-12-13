@@ -37,13 +37,6 @@ const ShareModal: React.FC<ShareModalProps> = ({
   const [state, setState] = useState({ index: 0 });
   const [color, setColor] = useState("#000");
 
-  // const handleNewImage = useCallback(() => {
-  //   setState((prevState) => ({
-  //     ...prevState,
-  //     index: prevState.index !== 2 ? prevState.index + 1 : 0,
-  //   }));
-  // }, []);
-
   const ShareItem = useCallback(async () => {
     posthog.capture(Events.UserSharesStats, {});
     //@ts-ignore

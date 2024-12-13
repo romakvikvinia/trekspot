@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Text } from "react-native";
+import { ActivityIndicator, Text } from "react-native";
 import { ImageBackground, Platform, TouchableOpacity } from "react-native";
 import { ScrollView, View } from "react-native";
 import Swiper from "react-native-swiper";
@@ -14,6 +14,8 @@ import {
   DownIcon,
   Mark2,
   StarIcon,
+  WishlistAddIcon,
+  WishlistedIcon,
 } from "../../../utilities/SvgIcons.utility";
 
 import { COLORS, SIZES } from "../../../styles/theme";
@@ -63,31 +65,32 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
       try {
         if (exists) {
           dispatch(
-            removeItemFromWishlist({ id: city.id!, city, sight: undefined! })
+            removeItemFromWishlist({ id: city.id!, city, sight: null })
           );
         } else {
           dispatch(
-            addItemIntoWishlist({ id: city.id!, city, sight: undefined! })
+            addItemIntoWishlist({ id: city.id!, city, sight: null })
           );
         }
-
+  
         await fetchToggleWishlist({ city: city.id }).unwrap();
-
+  
         if (!exists)
           toast.success(`${city?.city || "City"} has been added to your wishlist`, {
             duration: 2000,
           });
       } catch (error) {
+        // Reverse the action in case of an error
         if (exists) {
           dispatch(
-            addItemIntoWishlist({ id: city.id!, city, sight: undefined! })
+            addItemIntoWishlist({ id: city.id!, city, sight: null })
           );
         } else {
           dispatch(
-            removeItemFromWishlist({ id: city.id!, city, sight: undefined! })
+            removeItemFromWishlist({ id: city.id!, city, sight: null })
           );
         }
-
+  
         toast.error("Something went wrong, please try later", {
           duration: 2000,
         });
@@ -226,6 +229,7 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
               >
                 <BackIcon color="#000" />
               </TouchableOpacity>
+
               <TouchableOpacity
                 style={[
                   styles.addToBucketButton,
@@ -248,16 +252,17 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                   )
                 }
               >
-                <Mark2
-                  color={
-                    wishlistState &&
-                    wishlistState.wishlists.some(
-                      (i) => i.city && i.city.id === city.id
-                    )
-                      ? COLORS.primary
-                      : "#000"
-                  }
-                />
+                {isWishlistToggleLoading ? (
+                  <ActivityIndicator color="#000" />
+                ) : wishlistState &&
+                  wishlistState &&
+                  wishlistState.wishlists.some(
+                    (i) => i.city && i.city.id === city.id
+                  ) ? (
+                  <WishlistedIcon />
+                ) : (
+                  <WishlistAddIcon />
+                )}
               </TouchableOpacity>
 
               <Swiper

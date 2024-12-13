@@ -15,7 +15,7 @@ import {
   Alert,
 } from "react-native";
 import Constants from "expo-constants";
-// import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import * as AppleAuthentication from "expo-apple-authentication";
 
 import { SignInValidationSchema } from "./validationScheme";
@@ -46,16 +46,16 @@ import * as WebBrowser from "expo-web-browser";
 import { usePostHog } from "posthog-react-native";
 import { Events } from "../../utilities/Posthog";
 
-// GoogleSignin.configure({
-//   webClientId:
-//     "923726965679-tap0vlets0dvclh7uertjalc0f1ueq50.apps.googleusercontent.com",
-//   // androidClientId:
-//   //   "923726965679-s3evflrnovadf0l777r5hiltuj0j49fs.apps.googleusercontent.com",
-//   iosClientId:
-//     "923726965679-tap0vlets0dvclh7uertjalc0f1ueq50.apps.googleusercontent.com",
-//   offlineAccess: true,
-//   scopes: ["email", "profile"],
-// });
+GoogleSignin.configure({
+  webClientId:
+    "923726965679-tap0vlets0dvclh7uertjalc0f1ueq50.apps.googleusercontent.com",
+  // androidClientId:
+  //   "923726965679-s3evflrnovadf0l777r5hiltuj0j49fs.apps.googleusercontent.com",
+  iosClientId:
+    "923726965679-tap0vlets0dvclh7uertjalc0f1ueq50.apps.googleusercontent.com",
+  offlineAccess: true,
+  scopes: ["email", "profile"],
+});
 
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 

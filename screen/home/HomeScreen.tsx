@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Text,
   View,
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
+  Platform,
 } from "react-native";
 
 import { MapView } from "./MapView";
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#f8f8f8",
-    paddingTop: Constants?.statusBarHeight + 10,
+    paddingTop: Constants?.statusBarHeight + (Platform.OS === "android" ? 5 : 10),
   },
   lf: {
     maxWidth: "80%",

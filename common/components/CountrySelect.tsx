@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     fontSize: 14,
     color: COLORS.darkgray,
+    fontWeight: "500"
   },
   searchInput: {
     height: 40,
