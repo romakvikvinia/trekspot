@@ -15,7 +15,7 @@ import {
   Alert,
 } from "react-native";
 import Constants from "expo-constants";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
+// import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import * as AppleAuthentication from "expo-apple-authentication";
 
 import { SignInValidationSchema } from "./validationScheme";
@@ -46,16 +46,16 @@ import * as WebBrowser from "expo-web-browser";
 import { usePostHog } from "posthog-react-native";
 import { Events } from "../../utilities/Posthog";
 
-GoogleSignin.configure({
-  webClientId:
-    "923726965679-tap0vlets0dvclh7uertjalc0f1ueq50.apps.googleusercontent.com",
-  // androidClientId:
-  //   "923726965679-s3evflrnovadf0l777r5hiltuj0j49fs.apps.googleusercontent.com",
-  iosClientId:
-    "923726965679-tap0vlets0dvclh7uertjalc0f1ueq50.apps.googleusercontent.com",
-  offlineAccess: true,
-  scopes: ["email", "profile"],
-});
+// GoogleSignin.configure({
+//   webClientId:
+//     "923726965679-tap0vlets0dvclh7uertjalc0f1ueq50.apps.googleusercontent.com",
+//   // androidClientId:
+//   //   "923726965679-s3evflrnovadf0l777r5hiltuj0j49fs.apps.googleusercontent.com",
+//   iosClientId:
+//     "923726965679-tap0vlets0dvclh7uertjalc0f1ueq50.apps.googleusercontent.com",
+//   offlineAccess: true,
+//   scopes: ["email", "profile"],
+// });
 
 type SignInProps = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 
@@ -156,14 +156,18 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   }, [isSocialAuthSuccess, socialAuthData]);
 
   const handelErrorMessage = () => {
-    Alert.alert("Invalid Credentials", "The username or password entered is incorrect.", [
-      {
-        onPress: () => {
-          dispatch(trekSpotApi.util.resetApiState());
+    Alert.alert(
+      "Invalid Credentials",
+      "The username or password entered is incorrect.",
+      [
+        {
+          onPress: () => {
+            dispatch(trekSpotApi.util.resetApiState());
+          },
+          text: "OK",
         },
-        text: "OK",
-      },
-    ]);
+      ]
+    );
   };
 
   /**
@@ -173,32 +177,32 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
 
   const startGoogleAuth = async () => {
     try {
-      await GoogleSignin.hasPlayServices({
-        showPlayServicesUpdateDialog: true,
-      });
-      // log in using Google account (on Android it will only work if google play services are installed)
-      const userInfo = await GoogleSignin.signIn();
-      // console.log(userInfo);
-      const token = await GoogleSignin.getTokens();
-      if (
-        userInfo.data &&
-        userInfo.data.idToken &&
-        token &&
-        token.accessToken
-      ) {
-        posthog?.capture(Events.ContinueWithGoogle);
-        fetchSocialAuth({
-          token: token.accessToken,
-          provider: SocialProvidersEnum.Google,
-        });
-      } else {
-        handelErrorMessage();
-      }
-      // try to sign in silently (this should be done when the user is already signed-in)
-      const userInfo2 = await GoogleSignin.signInSilently();
-      // console.log(userInfo2);
-      // to logout use the following piece of code
-      const resp = await GoogleSignin.signOut();
+      // await GoogleSignin.hasPlayServices({
+      //   showPlayServicesUpdateDialog: true,
+      // });
+      // // log in using Google account (on Android it will only work if google play services are installed)
+      // const userInfo = await GoogleSignin.signIn();
+      // // console.log(userInfo);
+      // const token = await GoogleSignin.getTokens();
+      // if (
+      //   userInfo.data &&
+      //   userInfo.data.idToken &&
+      //   token &&
+      //   token.accessToken
+      // ) {
+      //   posthog?.capture(Events.ContinueWithGoogle);
+      //   fetchSocialAuth({
+      //     token: token.accessToken,
+      //     provider: SocialProvidersEnum.Google,
+      //   });
+      // } else {
+      //   handelErrorMessage();
+      // }
+      // // try to sign in silently (this should be done when the user is already signed-in)
+      // const userInfo2 = await GoogleSignin.signInSilently();
+      // // console.log(userInfo2);
+      // // to logout use the following piece of code
+      // const resp = await GoogleSignin.signOut();
       // console.log(resp);
     } catch (error: any) {
       if (error.code) {
