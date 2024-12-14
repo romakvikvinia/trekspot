@@ -156,14 +156,18 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   }, [isSocialAuthSuccess, socialAuthData]);
 
   const handelErrorMessage = () => {
-    Alert.alert("Invalid Credentials", "The username or password entered is incorrect.", [
-      {
-        onPress: () => {
-          dispatch(trekSpotApi.util.resetApiState());
+    Alert.alert(
+      "Invalid Credentials",
+      "The username or password entered is incorrect.",
+      [
+        {
+          onPress: () => {
+            dispatch(trekSpotApi.util.resetApiState());
+          },
+          text: "OK",
         },
-        text: "OK",
-      },
-    ]);
+      ]
+    );
   };
 
   /**

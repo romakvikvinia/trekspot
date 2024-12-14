@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
   Alert,
   Linking,
@@ -62,6 +62,13 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
       }
     );
   };
+
+  const handleSignOut = useCallback(async () => {
+    await deleteFromAsyncStorage(["visited_countries"]);
+    await fetchDeactivateAccount();
+    await deleteItemFromStorage();
+    dispatch(signOut());
+  }, []);
 
   return (
     <>
@@ -173,12 +180,7 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
                         {
                           text: "Deactivate",
                           style: "destructive",
-                          onPress: async () => {
-                            await deleteItemFromStorage();
-                            await deleteFromAsyncStorage(["visited_countries"]);
-                            await fetchDeactivateAccount().unwrap();
-                            dispatch(signOut());
-                          },
+                          onPress: handleSignOut,
                         },
                       ]
                     )
@@ -289,7 +291,8 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#f8f8f8",
-    paddingTop: Constants?.statusBarHeight + (Platform.OS === "android" ? 5 : 10),
+    paddingTop:
+      Constants?.statusBarHeight + (Platform.OS === "android" ? 5 : 10),
   },
   guestCardTitle: {
     fontSize: 16,
