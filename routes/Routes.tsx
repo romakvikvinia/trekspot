@@ -27,7 +27,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
 
   const checkAuth = useCallback(async () => {
     dispatch(setIsLoading({ isLoading: true }));
-    console.log("heree22");
+
     try {
       let token = await getFullToken();
 
