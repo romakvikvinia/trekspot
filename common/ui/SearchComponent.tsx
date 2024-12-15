@@ -6,7 +6,7 @@ import {
   SearchIcon,
 } from "../../utilities/SvgIcons.utility";
 
-export const SearchComponent = ({ search, setSearch, withIcon = true, resetButton = true }) => {
+export const SearchComponent = ({ placeholder, search, setSearch, withIcon = true, resetButton = true }) => {
   return (
     <View style={searchComponentStyles.searchComponent}>
       {withIcon ? (
@@ -23,7 +23,7 @@ export const SearchComponent = ({ search, setSearch, withIcon = true, resetButto
             paddingLeft: withIcon ? 40 : 15,
           },
         ]}
-        placeholder="Search..."
+        placeholder={placeholder ? placeholder : "Search..."}
         placeholderTextColor={COLORS.darkgray}
         onChangeText={(e) => setSearch(e)}
         autoCorrect={false}

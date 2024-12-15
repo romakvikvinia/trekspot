@@ -11,15 +11,13 @@ import { SightType } from "../../../api/api.types";
 import { Loader } from "../../../common/ui/Loader";
 import {
   BackIcon,
-  DownIcon,
-  Mark2,
   StarIcon,
   WishlistAddIcon,
   WishlistedIcon,
 } from "../../../utilities/SvgIcons.utility";
 
-import { COLORS, SIZES } from "../../../styles/theme";
-
+import { SIZES } from "../../../styles/theme";
+import * as Haptics from "expo-haptics";
 import Constants from "expo-constants";
 import { LinearGradient } from "expo-linear-gradient";
 import { exploreStyles } from "../../../components/explore/sights/_exploreStyles";
@@ -67,6 +65,7 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
           dispatch(
             removeItemFromWishlist({ id: city.id!, city, sight: null })
           );
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         } else {
           dispatch(
             addItemIntoWishlist({ id: city.id!, city, sight: null })
@@ -74,11 +73,10 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
         }
   
         await fetchToggleWishlist({ city: city.id }).unwrap();
+
   
         if (!exists)
-          toast.success(`${city?.city || "City"} has been added to your wishlist`, {
-            duration: 2000,
-          });
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       } catch (error) {
         // Reverse the action in case of an error
         if (exists) {

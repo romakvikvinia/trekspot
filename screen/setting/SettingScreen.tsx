@@ -80,7 +80,7 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
           <View style={styles.profileHeader}>
             {!isGuest ? (
               <View style={styles.profileLeft}>
-                {true ? (
+                {!user?.image ? (
                   <View style={styles.avatar}>
                     <UserIcon />
                   </View>
@@ -94,11 +94,10 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
                       height: 60,
                       minHeight: 60,
                       flex: 1,
-
-                      borderRadius: "100%",
+                      borderRadius: 100,
                     }}
                     source={{
-                      uri: "https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=20&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                      uri: user?.image,
                     }}
                     cachePolicy="memory"
                     contentFit="cover"

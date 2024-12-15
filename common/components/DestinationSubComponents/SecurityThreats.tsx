@@ -4,6 +4,7 @@ import {
   CheckCircleIcon,
   CheckIcon,
   CloseCircleIcon,
+  WarningIcon,
 } from "../../../utilities/SvgIcons.utility";
 import { styles } from "../_styles";
 
@@ -56,7 +57,7 @@ export const SecurityThreats: React.FC<SecurityThreatsProps> = ({ type }) => {
           ) : null}
           {type === "warning" ? (
             <>
-              <CheckIcon color="#d27d00" />
+              <WarningIcon />
               <Text
                 style={{
                   alignItems: "center",

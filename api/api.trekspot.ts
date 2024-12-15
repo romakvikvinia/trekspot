@@ -314,6 +314,7 @@ export const trekSpotApi = createApi({
               lastName
               email
               role
+              image
               emailVerifiedAt
             }
           }

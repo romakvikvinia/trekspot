@@ -142,6 +142,7 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
               sight: data,
             })
           );
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         } else {
           dispatch(
             addItemIntoWishlist({ id: data.id!, city: undefined!, sight: data })

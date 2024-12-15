@@ -42,6 +42,7 @@ export const WishlistContainer: React.FC<IWishlistContainer> = ({
         text: "Remove",
         onPress: (text) => {
           onRemove(id);
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         },
         style: "destructive",
       },

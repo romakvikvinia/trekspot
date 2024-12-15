@@ -152,7 +152,7 @@ export const TripHelpers = ({
               },
             ]}
           >
-            What to eat?
+            National dishes
           </Text>
         </TouchableOpacity>
       </ScrollView>

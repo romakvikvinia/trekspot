@@ -105,7 +105,6 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
             onChangeText={formik.handleChange("name")}
             onBlur={formik.handleBlur("name")}
             autoCorrect={false}
-            autoFocus={true}
           />
           <View style={styles.newTripBoxes}>
             <BlurView

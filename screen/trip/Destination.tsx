@@ -60,7 +60,7 @@ export const Destination: React.FC<IDestinationProps> = ({
     <>
       <View style={styles.modalHeader}>
         <View style={{ flex: 1 }}>
-          <SearchComponent search={search} resetButton={false} setSearch={handleSetSearch} />
+          <SearchComponent placeholder="Search cities" search={search} resetButton={false} setSearch={handleSetSearch} />
         </View>
         <TouchableOpacity
           style={styles.cancelButton}

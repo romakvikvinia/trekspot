@@ -18,6 +18,8 @@ import { TopicType } from "../../../api/api.types";
 import { Loader } from "../../ui/Loader";
 import { NodataText } from "../../../components/common/NoDataText";
 import { FeedbackCountryDetail } from "../../../components/explore/FeedbackCountryDetail";
+import { usePostHog } from "posthog-react-native";
+import { Events } from "../../../utilities/Posthog";
 
 interface TripInsightTabProps {
   iso2: string;
@@ -28,6 +30,7 @@ interface IState {
 }
 
 export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
+  const posthog = usePostHog();
   const [fetchData, { isLoading, data }] = useLazyTopicsQuery();
   const focusedTab = useFocusedTab();
   const modalInsightDetailRef = useRef<Modalize>();
@@ -71,7 +74,14 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
                   data={data[key] || []}
                   renderItem={({ item, i }) => (
                     <TouchableOpacity
-                      onPress={() => onInsightDetailOpen(item)}
+                      onPress={() => 
+                        {
+                          onInsightDetailOpen(item); 
+                          posthog.capture(Events.useCountryInsight, {
+                            topic: item.title
+                          });
+                        }
+                      }
                       activeOpacity={0.7}
                       style={styles.card}
                     >

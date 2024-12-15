@@ -536,7 +536,8 @@ export const styles = StyleSheet.create({
   travelToText: {
     fontSize: 16,
     fontWeight: "bold",
-    maxWidth: "70%"
+    maxWidth: "70%",
+    paddingRight: 10
   },
   backButton: {
     width: 40,

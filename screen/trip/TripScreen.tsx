@@ -6,7 +6,6 @@ import React, {
 } from "react";
 import {
   Alert,
-  Platform,
   ScrollView,
   Text,
   TouchableOpacity,

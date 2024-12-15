@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
   countryItemLeft: {
     flexDirection: "column",
     alignItems: "flex-start",
-    width: "70%",
+    width: "60%",
   },
   flagImage: {
     width: 38,

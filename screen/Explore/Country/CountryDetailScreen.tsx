@@ -235,7 +235,7 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
               showsVerticalScrollIndicator={false}
             >
               {data && <ExploreTab country={data?.country} />}
-              {data ? <FeedbackCountryDetail /> : null}
+              {data ? <View style={{marginTop: 25}}><FeedbackCountryDetail /></View>: null}
             </Tabs.ScrollView>
           </Tabs.Tab>
           <Tabs.Tab

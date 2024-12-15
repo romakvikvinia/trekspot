@@ -41,8 +41,8 @@ export const TravelType = ({ modalTravelTypeRef, formik }) => {
           }}
         >
           <OneUserIcon
-            size="15"
-            color={formik?.values?.travelType === "Solo" ? "#fff" : "#000"}
+            size="25"
+            color="#000"
           />
           <Text
             style={[
@@ -66,8 +66,8 @@ export const TravelType = ({ modalTravelTypeRef, formik }) => {
           }}
         >
           <CoupleIcon
-            size="15"
-            color={formik?.values?.travelType === "Couple" ? "#fff" : "#000"}
+            size="25"
+            color="#000"
           />
           <Text
             style={[
@@ -93,8 +93,8 @@ export const TravelType = ({ modalTravelTypeRef, formik }) => {
           }}
         >
           <FamilyIcon
-            size="15"
-            color={formik?.values?.travelType === "Family" ? "#fff" : "#000"}
+            size="25"
+            olor="#000"
           />
           <Text
             style={[
@@ -120,8 +120,8 @@ export const TravelType = ({ modalTravelTypeRef, formik }) => {
           }}
         >
           <UsersIcon
-            size="15"
-            color={formik?.values?.travelType === "Friends" ? "#fff" : "#000"}
+            size="25"
+            color="#000"
           />
           <Text
             style={[
@@ -163,27 +163,34 @@ const styles = StyleSheet.create({
   },
   switchers: {
     marginTop: 25,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between"
   },
   switcher: {
-    backgroundColor: COLORS.white,
     paddingVertical: 15,
     paddingHorizontal: 15,
     marginBottom: 15,
     borderRadius: 10,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    width: "48%",
+    height: 100,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    justifyContent: "space-between"
   },
   switcherLabel: {
     color: COLORS.black,
     fontSize: 16,
-    fontWeight: "500",
-    marginLeft: 8,
+    fontWeight: "600",
+    marginLeft: 0,
   },
   active: {
-    backgroundColor: COLORS.primaryDark,
+    borderColor: COLORS.black,
   },
   activeText: {
-    color: COLORS.white,
+    color: COLORS.black,
   },
   wrapper: {
     paddingHorizontal: 15,

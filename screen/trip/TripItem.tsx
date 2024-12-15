@@ -3,8 +3,6 @@ import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import {
-  ImageBackground,
-  Platform,
   Text,
   TouchableOpacity,
   View,

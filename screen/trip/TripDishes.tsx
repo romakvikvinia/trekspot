@@ -1,8 +1,6 @@
 import { Image } from "expo-image";
 import React from "react";
 import {
-  Linking,
-  Platform,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -22,9 +20,7 @@ import {
 import { FlashList } from "@shopify/flash-list";
 import { useDishesByISO2Query } from "../../api/api.trekspot";
 import { Loader } from "../../common/ui/Loader";
-import { NotFound } from "../../components/common/NotFound";
 import { styles } from "../../common/components/_styles";
-import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
 import { NodataText } from "../../components/common/NoDataText";
 
@@ -100,19 +96,21 @@ export const TripDishes = ({ route }) => {
                 ]}
                 key={item.score}
               >
-                <Image
-                  style={styles.thingsTodoItemImage}
-                  placeholder={blurhash}
-                  source={
-                    item?.url
-                      ? {
-                          uri: item?.url,
-                        }
-                      : require("../../assets/no-image.png")
-                  }
-                  contentFit="cover"
-                  cachePolicy="memory-disk"
-                ></Image>
+                <View style={dishStyles.imgWrapper}>
+                  <Image
+                    style={styles.thingsTodoItemImage}
+                    placeholder={blurhash}
+                    source={
+                      item?.url
+                        ? {
+                            uri: item?.url,
+                          }
+                        : require("../../assets/no-image.png")
+                    }
+                    contentFit="cover"
+                    cachePolicy="memory-disk"
+                  ></Image>
+                </View>
 
                 <View style={styles.thingsTodoItemDetails}>
                   <Text style={styles.thingsTodoItemTitle} selectable={true}>
@@ -205,5 +203,12 @@ const dishStyles = StyleSheet.create({
   },
   backButton: {
     width: 30,
+  },
+  imgWrapper:{
+    width: "100%",
+    minHeight: 130,
+    height: 130,
+    backgroundColor: "#fafafa",
+    borderRadius: 15
   },
 });
