@@ -169,15 +169,15 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
                   activeOpacity={0.7}
                   onPress={() =>
                     Alert.alert(
-                      "Deactivate account",
-                      "Once you deactivate your account, data will be available for 30 days. After 30 days, your data will be permanently deleted.",
+                      "Delete account",
+                      "Once you delete your account, your data will be permanently deleted.",
                       [
                         {
                           text: "Cancel",
                           style: "cancel",
                         },
                         {
-                          text: "Deactivate",
+                          text: "Delete",
                           style: "destructive",
                           onPress: handleSignOut,
                         },
@@ -186,7 +186,7 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
                   }
                 >
                   <DeleteIcon />
-                  <Text style={[styles.buttonText]}>Deactivate account</Text>
+                  <Text style={[styles.buttonText]}>Delete account</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[
