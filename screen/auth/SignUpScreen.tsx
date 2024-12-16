@@ -68,7 +68,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
       Alert.alert("Congratulation!", "Account created successfully", [
         {
           onPress: () => {
-            navigation.navigate("SignIn");
+            navigation.navigate("Login");
             dispatch(trekSpotApi.util.resetApiState());
             formik.resetForm();
           },
