@@ -1,18 +1,18 @@
-import React from "react";
 import {
-  StackNavigationProp,
   createStackNavigator,
+  StackNavigationProp,
 } from "@react-navigation/stack";
-import { ExploreScreen } from "../../screen/Explore/ExploreScreen";
-import { TripInsights } from "../../screen/trip/TripInsights";
-import { SIZES } from "../../styles/theme";
+import React from "react";
 import { Platform } from "react-native";
 
-import { SearchScreen } from "../../screen/Explore/SearchScreen";
-import { WishlistScreen } from "../../screen/Explore/WishlistScreen";
 import { CityType } from "../../api/api.types";
-import { VisaCheckerScreen } from "../../screen/Explore/VisaCheckerScreen";
+import { ExploreScreen } from "../../screen/Explore/ExploreScreen";
+import { SearchScreen } from "../../screen/Explore/SearchScreen";
 import { SeasonalExplorerScreen } from "../../screen/Explore/SeasonalExplorerScreen";
+import { VisaCheckerScreen } from "../../screen/Explore/VisaCheckerScreen";
+import { WishlistScreen } from "../../screen/Explore/WishlistScreen";
+import { TripInsights } from "../../screen/trip/TripInsights";
+import { SIZES } from "../../styles/theme";
 
 interface ExploreRoutesProps {}
 

@@ -208,11 +208,12 @@ export const SightsContainer: React.FC<SightsContainerProps> = ({ items }) => {
 
   return (
     <>
-      {Object.keys(items).map((key) => (
+      {Object.keys(items).map((key,index) => (
         <SightsRow
           rowKey={key}
           handleOpenSightDetail={handleOpenSightDetail}
           items={items}
+          key={index}
         />
       ))}
       <SightDetailModal closeCallBack={handleOnClose} showDirection={false} data={state.item!} />

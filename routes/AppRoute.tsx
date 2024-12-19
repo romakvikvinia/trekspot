@@ -1,16 +1,16 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { Platform } from "react-native";
-
-import { TabNavigator } from "./TabNavigator";
-import { SIZES } from "../styles/theme";
 import { Host } from "react-native-portalize";
-import { TripDetailScreen } from "../screen/trip/TripDetailScreen";
-import { CountryDetailScreen } from "../screen/Explore/Country/CountryDetailScreen";
+
 import { CityDetailScreen } from "../screen/Explore/city/CityDetailScreen";
-import { TripTransport } from "../screen/trip/TripTransport";
+import { CountryDetailScreen } from "../screen/Explore/Country/CountryDetailScreen";
+import { TripDetailScreen } from "../screen/trip/TripDetailScreen";
+import { TripDishes } from "../screen/trip/TripDishes";
 import { TripEmergency } from "../screen/trip/TripEmergency";
 import { TripInsights } from "../screen/trip/TripInsights";
-import { TripDishes } from "../screen/trip/TripDishes";
+import { TripTransport } from "../screen/trip/TripTransport";
+import { SIZES } from "../styles/theme";
+import { TabNavigator } from "./TabNavigator";
 
 const Stack = createStackNavigator();
 
@@ -20,7 +20,6 @@ const AppRoute = () => {
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
-          animationEnabled: false,
         }}
         initialRouteName="Tabs"
       >

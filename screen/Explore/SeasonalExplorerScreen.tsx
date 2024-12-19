@@ -1,5 +1,8 @@
+import Constants from "expo-constants";
+import * as Haptics from "expo-haptics";
+import { StatusBar } from "expo-status-bar";
+import { useRef, useState } from "react";
 import {
-  FlatList,
   ImageBackground,
   KeyboardAvoidingView,
   Platform,
@@ -9,46 +12,18 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Modalize } from "react-native-modalize";
+import { Portal } from "react-native-portalize";
+
+import { SeasonalExplorerContent } from "../../components/explore/SeasonalExplorer";
+import { globalStyles } from "../../styles/globalStyles";
+import { COLORS } from "../../styles/theme";
 import {
   BackIcon,
   CheckLiteIcon,
   DownIcon,
-  StarIcon,
-  TemperatureIcon,
   XIcon,
 } from "../../utilities/SvgIcons.utility";
-import { globalStyles } from "../../styles/globalStyles";
-import Constants from "expo-constants";
-import { Image } from "expo-image";
-import { useMemo, useRef, useState } from "react";
-import { Portal } from "react-native-portalize";
-import { Modalize } from "react-native-modalize";
-import { COLORS } from "../../styles/theme";
-import * as Haptics from "expo-haptics";
-import { Loader } from "../../common/ui/Loader";
-import { useAllCountriesQuery } from "../../api/api.trekspot";
-import { toast } from "sonner-native";
-import { convertToFahrenheit } from "./helper";
-import { StatusBar } from "expo-status-bar";
-
-const SEASONSBYMONTH = [
-  {
-    season: "spring",
-    months: ["March", "April", "May"],
-  },
-  {
-    season: "summer",
-    months: ["June", "July", "August"],
-  },
-  {
-    season: "autumn",
-    months: ["September", "October", "November"],
-  },
-  {
-    season: "winter",
-    months: ["December", "January", "February"],
-  },
-];
 
 const MONTHS = [
   { id: 1, name: "January" },
@@ -66,106 +41,18 @@ const MONTHS = [
 ];
 
 export const SeasonalExplorerScreen = ({ navigation }: any) => {
-  let { data: countryList, isLoading, isError } = useAllCountriesQuery({});
   const [currentMonth, setCurrentMonth] = useState(
     new Date().toLocaleString("default", { month: "long" })
   );
   const [isCelsiues, setIsCelsius] = useState(true);
 
-  if (isError) {
-    toast.error("Error while fetching countries", {
-      duration: 2000,
-    });
-  }
-  const flatListRef = useRef(null);
-
-  const filteredCountries = useMemo(() => {
-
-    const filtered = countryList?.allCountries?.filter((country) => {
-      return (
-        country?.whenToVisit?.includes(currentMonth) && country?.image?.url
-      );
-    })
-
-    return filtered?.sort((a, b) => {
-      return b.rate - a.rate;
-    })
-  }, [countryList, currentMonth]);
-
   const modalMonthSelectRef = useRef(null);
-
-  const getSeasonByMonth = useMemo(() => {
-    return SEASONSBYMONTH.find((season) => season.months.includes(currentMonth))
-      ?.season;
-  }, [currentMonth]);
-
-
-  const renderItem = ({ item, index }) => (
-    <TouchableOpacity
-      activeOpacity={0.7}
-      style={styles.listItem}
-      key={`${item.id}-${item.name}`}
-      onPress={() =>
-        navigation.navigate("CountryDetailScreen", { countryId: item?.id })
-      }
-    > 
-      <Image
-        style={styles.listItemImage}
-        source={{
-          uri: item?.image?.url,
-        }}
-        contentFit="cover"
-        cachePolicy="memory-disk"
-      ></Image>
-      <View style={styles.listItemDetails}>
-        <View style={styles.listItemDetailsTop}>
-          <Text style={styles.listItemTitle}>{item.name}</Text>
-          {item?.rate && (
-            <View style={styles.ratingLabel}>
-              <View style={{ position: "relative", top: -0.5, opacity: 0.8 }}>
-                <StarIcon color="#FFBC3E" />
-              </View>
-              <Text style={styles.ratingText}>{item.rate}</Text>
-            </View>
-          )}
-        </View>
-        <View style={styles.temperature}>
-          <TemperatureIcon size={12} />
-          <Text style={styles.temperatureText}>
-            {
-              isCelsiues ? item?.weatherInformation?.averageTemperatures?.[getSeasonByMonth] :
-              convertToFahrenheit(item?.weatherInformation?.averageTemperatures?.[getSeasonByMonth])
-            }
-          </Text>
-        </View>
-        <View style={styles.temperature}>
-          <Text style={[styles.temperatureText, {marginLeft: 0}]}>
-            <Text style={{fontWeight: "700"}}>Popular:</Text> {item?.whenToVisit}
-          </Text>
-        </View>
-        <View style={styles.tags}>
-          {item?.recognizedFor?.map((tag,index) => (
-            <View style={styles.tag} key={`${tag.title}-${index}`}>
-              <Text style={styles.tagText}>
-                {tag?.emoji} {tag?.title}
-              </Text>
-            </View>
-          ))}
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-
-  const scrollToTop = () => {
-    flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
-  };
 
   const handleChangeMonth = (item: string) => {
     setCurrentMonth(item.name);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     modalMonthSelectRef?.current?.close();
-    scrollToTop();
-  }
+  };
 
   const renderMonthItem = ({ item }) => (
     <TouchableOpacity
@@ -253,23 +140,9 @@ export const SeasonalExplorerScreen = ({ navigation }: any) => {
             </View>
           </ImageBackground>
 
-          {isLoading && (
-            <View style={{ flex: 1 }}>
-              <Loader isLoading={true} background="#f8f8f8" size="small" />
-            </View>
-          )}
-
-          <FlatList
-            ref={flatListRef}
-            data={filteredCountries}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            // numColumns={2}
-            // columnWrapperStyle={styles.columnWrapper}
-            contentContainerStyle={{
-              paddingHorizontal: 25,
-              paddingVertical: 30,
-            }}
+          <SeasonalExplorerContent
+            isCelsiues={isCelsiues}
+            currentMonth={currentMonth}
           />
         </KeyboardAvoidingView>
       </View>
@@ -309,9 +182,27 @@ export const SeasonalExplorerScreen = ({ navigation }: any) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#f8f8f8",
+  closeButton: {
+    alignItems: "center",
+    backgroundColor: "#DBDBDB",
+    borderRadius: 50,
+    height: 30,
+    justifyContent: "center",
+    width: 30,
+  },
+  fromToText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "500",
+    marginLeft: 0,
+    maxWidth: 180,
+  },
+  header: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 0,
+    padding: 15,
   },
   monthItem: {
     width: "100%",
@@ -324,169 +215,56 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   monthText: {
+    color: "#000",
     fontSize: 16,
     fontWeight: "500",
-    color: "#000",
   },
-  tempUnitText: {
-    fontSize: 16,
-    color: "#fff",
-    fontWeight: "600",
+  safeArea: {
+    backgroundColor: "#f8f8f8",
+    flex: 1,
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: 15,
-    marginBottom: 0,
-  },
-  tags: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginTop: 15,
-  },
-  tag: {
-    paddingVertical: 5,
-    paddingHorizontal: 8,
-    borderRadius: 5,
-    marginRight: 5,
-    marginBottom: 5,
-    backgroundColor: "#fafafa",
-  },
-  tagText: {
-    fontSize: 12,
-    fontWeight: "500",
-    color: "#000",
-  },
-  title: {
-    fontSize: 18,
-    color: COLORS.black,
-    fontWeight: "600",
-  },
-  closeButton: {
-    backgroundColor: "#DBDBDB",
-    width: 30,
-    height: 30,
-    borderRadius: 50,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  listItemDetailsTop: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-  },
-  ratingLabel: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 8,
-  },
-  temperatureText: {
-    fontSize: 12,
-    marginLeft: 5,
-    color: "#000",
-    fontWeight: "500",
-  },
-  temperature: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 10,
-    opacity: 0.7
-  },
-  ratingText: {
-    fontSize: 12,
-    marginLeft: 5,
-    color: "#000",
-    fontWeight: "500"
-  },
-  listItemDetails: {
-    marginTop: 0,
-    padding: 15,
-    paddingTop: 10,
-  },
-  listItemTitle: {
-    fontSize: 22,
-    fontWeight: "600",
-    maxWidth: "85%"
-  },
-  columnWrapper: {
-    justifyContent: "space-between",
-  },
-  listItem: {
+  screen: {
+    flex: 1,
     width: "100%",
-    marginBottom: 35,
-    borderWidth: 1,
-    borderColor: "#f2f2f2",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 0.84,
-    position: "relative",
-    ...Platform.select({
-      android: {
-        elevation: 5,
-      },
-    }),
-    backgroundColor: "#fff",
-    borderRadius: 15,
-    overflow: "hidden",
   },
-  listItemImage: {
-    height: 250,
+  screenHeader: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 0,
+    paddingBottom: 10,
+    paddingHorizontal: 15,
+    paddingTop: Constants?.statusBarHeight + 10,
+  },
+  screenHeaderWrapper: {
+    backgroundColor: "#0072C6",
+    height: 200,
+    width: "100%",
+  },
+  seasonalExplorerSelect: {
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    borderRadius: 50,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    minWidth: 200,
+    paddingHorizontal: 25,
+    paddingVertical: 15,
+    width: "70%",
   },
   seasonalExplorerSelectWrapper: {
     flexDirection: "row",
     justifyContent: "center",
     marginTop: 15,
   },
-  seasonalExplorerDetails: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  seasonalExplorerSelect: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
-    borderRadius: 50,
-    paddingVertical: 15,
-    paddingHorizontal: 25,
-    width: "70%",
-    minWidth: 200,
-  },
-  fromToText: {
+  tempUnitText: {
+    color: "#fff",
     fontSize: 16,
-    fontWeight: "500",
-    color: "#fff",
-    marginLeft: 0,
-    maxWidth: 180,
+    fontWeight: "600",
   },
-  screen: {
-    flex: 1,
-    width: "100%",
-  },
-  screenHeaderWrapper: {
-    height: 200,
-    width: "100%",
-    backgroundColor: "#0072C6",
-  },
-  screenHeader: {
-    paddingTop: Constants?.statusBarHeight + 10,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 15,
-    marginBottom: 0,
-    paddingBottom: 10,
-  },
-  pageDescription: {
+  title: {
+    color: COLORS.black,
     fontSize: 18,
-    paddingHorizontal: 40,
-    color: "#fff",
-    fontWeight: "500",
-    lineHeight: 20,
-    marginTop: 10,
-    textAlign: "center",
-    marginBottom: 5,
+    fontWeight: "600",
   },
 });

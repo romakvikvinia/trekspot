@@ -205,6 +205,7 @@ export const ExploreTab: React.FC<ForYouPros> = ({ country }) => {
               index={index}
               openIndex={openIndex}
               setOpenIndex={setOpenIndex}
+              key={index}
             />
           ))}
         </View>

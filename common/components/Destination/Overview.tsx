@@ -45,8 +45,9 @@ const Overview: React.FC<OverviewProps> = memo(function ({ country }) {
         <View style={[styles.keyValue, { marginTop: 30, marginBottom: 0 }]}>
           <Text style={styles.key}>Recognized for</Text>
           <View style={styles.tags}>
-            {country?.recognizedFor?.map((item) => (
+            {country?.recognizedFor?.map((item, index) => (
               <View
+                key={index}
                 style={[
                   styles.tag,
                   {
