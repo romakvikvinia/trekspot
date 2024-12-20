@@ -1,26 +1,27 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import Constants from "expo-constants";
+import { usePostHog } from "posthog-react-native";
 import { useCallback, useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   SafeAreaView,
   StyleSheet,
+  Text,
   TextInput,
   TouchableOpacity,
   View,
-  Text,
-  Pressable,
 } from "react-native";
-import { SearchResult } from "../../common/components/SearchResult";
-import { COLORS } from "../../styles/theme";
-import { BackIcon, ClearIcon } from "../../utilities/SvgIcons.utility";
-import Constants from "expo-constants";
-import { Loader } from "../../common/ui/Loader";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
+
 import { useLazySearchQuery } from "../../api/api.trekspot";
 import { CityType } from "../../api/api.types";
-import { usePostHog } from "posthog-react-native";
+import { SearchResult } from "../../common/components/SearchResult";
+import { Loader } from "../../common/ui/Loader";
+import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
+import { COLORS } from "../../styles/theme";
 import { Events } from "../../utilities/Posthog";
+import { BackIcon, ClearIcon } from "../../utilities/SvgIcons.utility";
 
 type Props = NativeStackScreenProps<ExploreRoutesStackParamList, "Search">;
 
@@ -126,25 +127,46 @@ export const SearchScreen = ({ navigation }: Props) => {
   );
 };
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#f8f8f8",
-    paddingTop: Constants?.statusBarHeight + 10,
+  backButton: {
+    alignItems: "center",
+    borderRadius: 30,
+    height: 55,
+    justifyContent: "center",
+    width: 45,
+  },
+  clearButton: {
+    alignItems: "center",
+    borderRadius: 30,
+    height: 51,
+    justifyContent: "center",
+    position: "absolute",
+    right: 5,
+    top: 0,
+    width: 40,
+  },
+  noteText: {
+    fontSize: 12,
+    opacity: 0.7,
+    textAlign: "center",
   },
   notesWarning: {
     padding: 15,
   },
-  noteText: {
-    fontSize: 12,
-    textAlign: "center",
-    opacity: 0.7,
+  safeArea: {
+    backgroundColor: "#f8f8f8",
+    flex: 1,
+    paddingTop: Constants?.statusBarHeight + 10,
   },
   searchBox: {
-    height: 55,
-    backgroundColor: "#fff",
-    flexDirection: "row",
-    borderRadius: 30,
     alignItems: "center",
+    backgroundColor: "#fff",
+    borderColor: COLORS.primary,
+    borderRadius: 30,
+    borderStyle: "solid",
+    borderWidth: 2,
+    elevation: 2,
+    flexDirection: "row",
+    height: 55,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -152,38 +174,17 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.05,
     shadowRadius: 3,
-    elevation: 2,
-    borderWidth: 2,
-    borderStyle: "solid",
-    borderColor: COLORS.primary,
   },
   searchInput: {
-    paddingLeft: 0,
-    fontSize: 16,
-    flex: 1,
+    alignItems: "center",
     color: "#000",
     display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    flex: 1,
     flexDirection: "row",
+    fontSize: 16,
     fontWeight: "500",
+    justifyContent: "center",
+    paddingLeft: 0,
     paddingRight: 40,
-  },
-  backButton: {
-    width: 45,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 30,
-    height: 55,
-  },
-  clearButton: {
-    position: "absolute",
-    width: 40,
-    height: 51,
-    top: 0,
-    right: 5,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 30,
   },
 });

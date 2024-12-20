@@ -7,11 +7,6 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -50,6 +45,16 @@
       "plugins": [
         "expo-apple-authentication",
         "@react-native-google-signin/google-signin",
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#fff",
+          "image": "./assets/splash-icon.png",
+          "dark": {
+            "image": "./assets/splash-icon-dark.png",
+            "backgroundColor": "#000000"
+          },
+          "imageWidth": 200
+        },
         {
           "iosUrlScheme": "com.googleusercontent.apps.923726965679-tap0vlets0dvclh7uertjalc0f1ueq50"
         },
@@ -84,7 +89,7 @@
           "organization": "trekspot",
           "project": "Trekspot",
           "url": "https://sentry.io/"
-        }
+        }, 
       ]
     },
     "runtimeVersion": {

@@ -1,19 +1,17 @@
 import { Image } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
 import {
-  ImageBackground,
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import * as Haptics from "expo-haptics";
-import { Mark, StarIcon } from "../../../utilities/SvgIcons.utility";
+
+import { StarIcon } from "../../../utilities/SvgIcons.utility";
 
 type CityImageProps = {
-  item: Object;
-  handleCity: (item: Object) => void;
+  item: object;
+  handleCity: (item: object) => void;
 };
 
 export const CityImage = ({ item, handleCity }: CityImageProps) => {
@@ -29,7 +27,7 @@ export const CityImage = ({ item, handleCity }: CityImageProps) => {
               }
             : require("../../../assets/no-image.png")
         }
-        cachePolicy="memory-disk"
+        // cachePolicy="memory-disk"
       ></Image>
       <TouchableOpacity
         style={styles.gradientWrapper}
@@ -76,29 +74,39 @@ export const CityImage = ({ item, handleCity }: CityImageProps) => {
 
 const styles = StyleSheet.create({
   androidImageContainer: {
-    width: 160,
-    minWidth: 160,
-    height: 140,
     backgroundColor: "#fafafa",
     borderRadius: 15,
-    overflow: "hidden",
+    height: 140,
     marginRight: 10,
+    minWidth: 160,
+    overflow: "hidden",
     position: "relative",
+    width: 160,
+  },
+  box: {
+    backgroundColor: "#fafafa",
+    borderRadius: 15,
+    height: 140,
+    minWidth: 160,
+    overflow: "hidden",
+    width: 160,
   },
   gradientWrapper: {
     flex: 1,
+    height: "100%",
     justifyContent: "flex-end",
+    left: 0,
     position: "absolute",
     top: 0,
-    left: 0,
     width: "100%",
-    height: "100%",
   },
-  titleSm: {
-    fontSize: 16,
-    marginLeft: 2,
-    marginTop: -1,
+  labelItem: {
+    alignItems: "center",
+    flexDirection: "row",
+    padding: 10,
+    paddingVertical: 0,
   },
+
   labelItemText: {
     color: "#fff",
     fontSize: 22,
@@ -106,39 +114,25 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     paddingRight: 10,
   },
-  labelItem: {
-    padding: 10,
-    paddingVertical: 0,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-
   ratingLabel: {
+    alignItems: "center",
+    borderRadius: 30,
     flexDirection: "row",
+    paddingBottom: 10,
     paddingHorizontal: 10,
     paddingVertical: 3,
-    borderRadius: 30,
-    alignItems: "center",
-    paddingBottom: 10,
-  },
-  ratingText: {
-    color: "#fff",
-    marginLeft: 3,
-    fontSize: 12,
-    opacity: 0.8,
-    fontWeight: "500",
   },
 
-  contentBox: {
-    marginTop: 5,
-    paddingLeft: 15,
+  ratingText: {
+    color: "#fff",
+    fontSize: 12,
+    fontWeight: "500",
+    marginLeft: 3,
+    opacity: 0.8,
   },
-  box: {
-    width: 160,
-    minWidth: 160,
-    height: 140,
-    backgroundColor: "#fafafa",
-    borderRadius: 15,
-    overflow: "hidden",
+  titleSm: {
+    fontSize: 16,
+    marginLeft: 2,
+    marginTop: -1,
   },
 });

@@ -1,20 +1,21 @@
+import { FlashList } from "@shopify/flash-list";
+import * as Haptics from "expo-haptics";
+import { Image } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import {
-  View,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
   Alert,
   Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { FlashList } from "@shopify/flash-list";
-import { Image } from "expo-image";
-import { COLORS } from "../../../styles/theme";
-import { tripDetailStyles } from "../../trip/_tripDetailStyles";
+
 import { WishlistType } from "../../../api/api.types";
-import * as Haptics from "expo-haptics";
-import { Mark2, WishlistedIcon } from "../../../utilities/SvgIcons.utility";
-import { LinearGradient } from "expo-linear-gradient";
+import { COLORS } from "../../../styles/theme";
+import { WishlistedIcon } from "../../../utilities/SvgIcons.utility";
+import { tripDetailStyles } from "../../trip/_tripDetailStyles";
 
 interface IWishlistContainer {
   data: WishlistType[];
@@ -104,7 +105,7 @@ export const WishlistContainer: React.FC<IWishlistContainer> = ({
                       overflow: "hidden",
                     }}
                     contentFit="cover"
-                    cachePolicy="memory-disk"
+                    // cachePolicy="memory-disk"
                     source={
                       item && item[type] && item[type].image.url
                         ? {
@@ -151,70 +152,70 @@ export const WishlistContainer: React.FC<IWishlistContainer> = ({
 };
 
 const styles = StyleSheet.create({
-  wishlistRow: {
-    marginTop: 25,
-  },
-  gradientWrapper: {
-    flex: 1,
-    justifyContent: "flex-end",
-    paddingBottom: 15,
-    paddingHorizontal: 15,
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    overflow: "hidden",
-    borderRadius: 15
+  actionButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 15,
   },
   addToBucketButton: {
-    width: Platform.OS === "android" ? 30 : 40,
-    height: Platform.OS === "android" ? 30 : 40,
-    borderRadius: 50,
-    backgroundColor: "#fff",
-    justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 50,
+    height: Platform.OS === "android" ? 30 : 40,
+    justifyContent: "center",
     position: "absolute",
     right: 8,
     top: 8,
+    width: Platform.OS === "android" ? 30 : 40,
     zIndex: 3,
-  },
-  wishlistRowTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: COLORS.primaryDark,
-    paddingHorizontal: 20,
-  },
-  countryItemActionButton: {
-    width: 30,
-    height: 30,
-    borderRadius: 50,
-    backgroundColor: COLORS.primary,
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-    right: 10,
-    top: 10,
-    zIndex: 3,
-  },
-  actionButtons: {
-    justifyContent: "space-between",
-    marginTop: 15,
-    flexDirection: "row",
   },
   buttonItem: {
+    alignItems: "center",
     backgroundColor: COLORS.lightGray,
-    paddingHorizontal: 10,
     flex: 1,
-    textAlign: "center",
-    justifyContent: "center",
     flexDirection: "row",
     height: 40,
-    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 10,
+    textAlign: "center",
   },
   buttonItemText: {
     color: COLORS.black,
     fontSize: 12,
     fontWeight: "500",
+  },
+  countryItemActionButton: {
+    alignItems: "center",
+    backgroundColor: COLORS.primary,
+    borderRadius: 50,
+    height: 30,
+    justifyContent: "center",
+    position: "absolute",
+    right: 10,
+    top: 10,
+    width: 30,
+    zIndex: 3,
+  },
+  gradientWrapper: {
+    borderRadius: 15,
+    flex: 1,
+    height: "100%",
+    justifyContent: "flex-end",
+    left: 0,
+    overflow: "hidden",
+    paddingBottom: 15,
+    paddingHorizontal: 15,
+    position: "absolute",
+    top: 0,
+    width: "100%"
+  },
+  wishlistRow: {
+    marginTop: 25,
+  },
+  wishlistRowTitle: {
+    color: COLORS.primaryDark,
+    fontSize: 20,
+    fontWeight: "600",
+    paddingHorizontal: 20,
   },
 });

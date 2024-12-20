@@ -1,15 +1,14 @@
-import React from "react";
 import { Image } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
+import React from "react";
 import {
-  ImageBackground,
-  Platform,
   Text,
   TouchableOpacity,
-  View,
 } from "react-native";
-import { styles } from "../../common/components/_styles";
+import { View } from "react-native";
+
 import { CityType } from "../../api/api.types";
-import { LinearGradient } from "expo-linear-gradient";
+import { styles } from "../../common/components/_styles";
 
 type ForYouCountryItemProps = {
   item: CityType;
@@ -37,7 +36,7 @@ export const ForYouCountryItem: React.FC<ForYouCountryItemProps> = ({
       key={item.id}
       onPress={() => onPlaceDetailOpen(item)}
     >
-      {Platform.OS === "ios" ? (
+      <View style={styles.imageWrapper}>
         <Image
           style={[
             styles.thingsTodoItemImage,
@@ -46,14 +45,16 @@ export const ForYouCountryItem: React.FC<ForYouCountryItemProps> = ({
               position: "relative",
             },
           ]}
-          resizeMode="cover"
+          contentFit="cover"
           source={ item?.image?.url ? {
             uri: item?.image?.url,
+          // eslint-disable-next-line @typescript-eslint/no-require-imports
           } : require("../../assets/no-image.png") 
         }
-          cachePolicy="memory-disk"
-        >
-          <LinearGradient
+          // cachePolicy="memory-disk"
+        > 
+        </Image>
+        <LinearGradient
             style={[
               styles.gradientWrapper,
               {
@@ -74,45 +75,7 @@ export const ForYouCountryItem: React.FC<ForYouCountryItemProps> = ({
               {item.city}
             </Text>
           </LinearGradient>
-        </Image>
-      ) : (
-        <ImageBackground
-          style={[
-            styles.thingsTodoItemImage,
-            {
-              minHeight: 100,
-              position: "relative",
-            },
-          ]}
-          resizeMode="cover"
-          source={item?.image?.url ? {
-            uri: item?.image?.url,
-          } : require("../../assets/no-image.png")}
-        >
-          <LinearGradient
-            style={[
-              styles.gradientWrapper,
-              {
-                paddingLeft: 10,
-                paddingBottom: 10,
-                height: "100%",
-                justifyContent: "flex-end",
-              },
-            ]}
-            colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.7)"]}
-          >
-            <Text
-              style={[
-                styles.thingsTodoItemTitle,
-                { color: "#fff", fontWeight: "bold" },
-              ]}
-            >
-              {item.city}
-            </Text>
-          </LinearGradient>
-        </ImageBackground>
-      )}
-
+    </View>
       {/* <View style={styles.thingsTodoItemDetails}>
         <Text style={styles.thingsTodoItemTitle}>{item.city}</Text>
 

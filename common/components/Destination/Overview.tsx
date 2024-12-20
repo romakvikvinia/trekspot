@@ -1,7 +1,10 @@
+/* eslint-disable react/display-name */
 import { memo } from "react";
 import { Text, View } from "react-native";
 import { ImageBackground } from "react-native";
 import { ScrollView } from "react-native";
+
+import { CountryType } from "../../../api/api.types";
 import { COLORS } from "../../../styles/theme";
 import { PlugImages } from "../../../utilities/Plugs";
 import {
@@ -10,9 +13,8 @@ import {
   SummerIcon,
   WinterIcon,
 } from "../../../utilities/SvgIcons.utility";
-import { SecurityThreats } from "../DestinationSubComponents/SecurityThreats";
 import { styles } from "../_styles";
-import { CountryType } from "../../../api/api.types";
+import { SecurityThreats } from "../DestinationSubComponents/SecurityThreats";
 
 type OverviewProps = {
   country: CountryType;
@@ -82,10 +84,10 @@ const Overview: React.FC<OverviewProps> = memo(function ({ country }) {
           <Text style={styles.key}>Currency</Text>
           {country.currencies
             ? Object.keys(country.currencies).map(
-                (key) =>
+                (key, index) =>
                   country &&
                   country.currencies && (
-                    <Text style={styles.value}>
+                    <Text style={styles.value} key={index}>
                       {country.currencies[key].name} -{" "}
                       {country.currencies[key].symbol}
                     </Text>
@@ -111,20 +113,19 @@ const Overview: React.FC<OverviewProps> = memo(function ({ country }) {
           <Text style={styles.key}>Telecom operators</Text>
           <View style={styles.multiValues}>
             {country?.telecoms?.map((tel, index) => (
-              <>
-                <Text style={styles.value}>
+                <Text style={styles.value} key={index}>
                   {tel}
                   {index < country.telecoms.length - 1 && ", "}
                 </Text>
-              </>
             ))}
           </View>
         </View>
         <View style={styles.keyValue}>
           <Text style={styles.key}>Plug/Socket types</Text>
           <View style={[styles.multiValues, { marginTop: 5 }]}>
-            {country?.plugTypes?.map((item) => (
+            {country?.plugTypes?.map((item, index) => (
               <ImageBackground
+                key={index}
                 source={PlugImages[item]}
                 style={{
                   width: 70,

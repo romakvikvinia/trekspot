@@ -1,13 +1,13 @@
-import React from "react";
+import * as Sentry from '@sentry/react-native';
+import Constants from 'expo-constants';
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet } from "react-native";
-import Constants from 'expo-constants';
+import { gestureHandlerRootHOC, GestureHandlerRootView } from "react-native-gesture-handler";
+import { Provider } from "react-redux";
+
+import { store } from "./package/store";
 // import * as SplashScreen from "expo-splash-screen";
 import { Routes } from "./routes/Routes";
-import { gestureHandlerRootHOC, GestureHandlerRootView } from "react-native-gesture-handler";
-import { store } from "./package/store";
-import { Provider } from "react-redux";
-import * as Sentry from '@sentry/react-native';
  
 const isRunningInExpoGo = Constants.appOwnership === 'expo';
 

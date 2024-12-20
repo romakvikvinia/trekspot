@@ -1,13 +1,14 @@
-import { Text, View } from "react-native";
-import { StarIcon } from "../../../utilities/SvgIcons.utility";
-import { styles } from "../_styles";
-import { CountryType } from "../../../api/api.types";
 import { FlashList } from "@shopify/flash-list";
-import { useDishesByISO2Query } from "../../../api/api.trekspot";
-import { Loader } from "../../ui/Loader";
 import { Image } from "expo-image";
+import { Text, View } from "react-native";
+
+import { useDishesByISO2Query } from "../../../api/api.trekspot";
+import { CountryType } from "../../../api/api.types";
 import { NodataText } from "../../../components/common/NoDataText";
 import { FeedbackCountryDetail } from "../../../components/explore/FeedbackCountryDetail";
+import { StarIcon } from "../../../utilities/SvgIcons.utility";
+import { Loader } from "../../ui/Loader";
+import { styles } from "../_styles";
 
 type DiningProps = {
   country: CountryType;
@@ -62,7 +63,7 @@ export const Dining: React.FC<DiningProps> = ({ country }) => {
                       : require("../../../assets/no-image.png")
                   }
                   contentFit="cover"
-                  cachePolicy="memory-disk"
+                  // cachePolicy="memory-disk"
                 ></Image>
 
                 <View style={styles.thingsTodoItemDetails}>

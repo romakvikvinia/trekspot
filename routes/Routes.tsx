@@ -80,7 +80,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
               captureLifecycleEvents: true,
               captureScreens: true,
             }}
-          >
+          > 
             {authState && !authState.isLoading ? (
               !authState.isAuthenticated ? (
                 <AuthRoute />
@@ -92,7 +92,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
             ) : (
               <Loader isLoading={authState.isLoading} />
             )}
-          </PostHogProvider>
+         </PostHogProvider>  
         </NavigationContainer>
 
         <Toaster />
