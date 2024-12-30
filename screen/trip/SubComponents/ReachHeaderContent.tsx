@@ -1,17 +1,19 @@
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useMemo } from "react";
 import {
   ImageBackground,
+  Pressable,
   StyleSheet,
   TouchableOpacity,
   View,
 } from "react-native";
-import { BackIcon, DotsVerticlIcon } from "../../../utilities/SvgIcons.utility";
-import { TripHelpers } from "./TripHelpers";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { HeaderTextContent } from "./HeaderTextcontent";
-import React, { useMemo } from "react";
-import { useAppDispatch } from "../../../package/store";
+
 import { trekSpotApi } from "../../../api/api.trekspot";
+import { useAppDispatch } from "../../../package/store";
+import { BackIcon, DotsVerticlIcon } from "../../../utilities/SvgIcons.utility";
+import { HeaderTextContent } from "./HeaderTextcontent";
+import { TripHelpers } from "./TripHelpers";
 
 type ReachHeaderContentProps = {
   data: any;
@@ -52,16 +54,16 @@ export const ReachHeaderContent = ({
         </ImageBackground>
       </View>
 
-      <TouchableOpacity
+      <Pressable
         onPress={() => {
           dispatch(trekSpotApi.util.invalidateTags(["myTrips", "trip"]));
           navigation.goBack();
         }}
-        activeOpacity={0.7}
+        hitSlop={30}
         style={styles.backButton}
       >
         <BackIcon />
-      </TouchableOpacity>
+      </Pressable>
       {/* <TouchableOpacity
         onPress={() =>
           navigation.navigate("TripMapViewScreen", {
@@ -98,48 +100,48 @@ export const ReachHeaderContent = ({
 };
 
 const styles = StyleSheet.create({
-  reachContainer: {
-    position: "relative",
-    overflow: "hidden",
+  backButton: {
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 50,
+    display: "flex",
+    height: 35,
+    justifyContent: "center",
+    left: 15,
+    position: "absolute",
+    top: 55,
+    width: 35,
   },
-  textContent: {
-    paddingHorizontal: 20,
+  destTitle: {
+    color: "#fff",
+    fontSize: 30,
+    fontWeight: "bold",
+  },
+  mapButton: {
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 50,
+    display: "flex",
+    height: 35,
+    justifyContent: "center",
+    position: "absolute",
+    right: 60,
+    top: 55,
+    width: 35,
+  },
+  reachContainer: {
+    overflow: "hidden",
+    position: "relative",
   },
   reachGradient: {
     flex: 1,
     paddingTop: 110,
   },
-  destTitle: {
-    fontSize: 30,
-    fontWeight: "bold",
-    color: "#fff",
-  },
   reachImage: {
     height: 315,
     width: "100%",
   },
-  backButton: {
-    position: "absolute",
-    top: 55,
-    left: 15,
-    width: 35,
-    height: 35,
-    backgroundColor: "#fff",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 50,
-  },
-  mapButton: {
-    position: "absolute",
-    top: 55,
-    right: 60,
-    width: 35,
-    height: 35,
-    backgroundColor: "#fff",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 50,
+  textContent: {
+    paddingHorizontal: 20,
   },
 });

@@ -1,3 +1,5 @@
+import * as Haptics from "expo-haptics";
+import { usePostHog } from "posthog-react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ImageBackground,
@@ -6,19 +8,16 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
+import { CountryType } from "../../api/api.types";
+import { storeCountries } from "../../helpers/secure.storage";
+import { COLORS } from "../../styles/theme";
 import { Flags } from "../../utilities/flags";
+import { Events } from "../../utilities/Posthog";
 import {
   //LivedIcon,
   VisitedIcon,
 } from "../../utilities/SvgIcons.utility";
-import { COLORS } from "../../styles/theme";
-
-import * as Haptics from "expo-haptics";
-
-import { CountryType } from "../../api/api.types";
-import { getCountries, storeCountries } from "../../helpers/secure.storage";
-import { usePostHog } from "posthog-react-native";
-import { Events } from "../../utilities/Posthog";
 
 interface HomeProps {
   country: CountryType;
@@ -104,39 +103,39 @@ export const CountryItem: React.FC<HomeProps> = ({
 };
 
 const styles = StyleSheet.create({
-  itemTitle: {
-    fontSize: 14,
-    fontWeight: "bold",
-    marginLeft: 10,
-    color: "#000",
-  },
-  countryItem: {
-    paddingHorizontal: 15,
-    marginBottom: 20,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  countryItemActionButton: {
-    backgroundColor: "#fafafa",
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    marginLeft: 8,
-    borderRadius: 5,
-  },
-  countryItemLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  countryItemActions: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
   countryActive: {
     backgroundColor: COLORS.primary,
   },
+  countryItem: {
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 20,
+    paddingHorizontal: 15,
+  },
+  countryItemActionButton: {
+    backgroundColor: "#fafafa",
+    borderRadius: 5,
+    marginLeft: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+  },
+  countryItemActions: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  countryItemLeft: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
   countryLived: {
     backgroundColor: "#00d52d",
+  },
+  itemTitle: {
+    color: "#000",
+    fontSize: 14,
+    fontWeight: "bold",
+    marginLeft: 10,
   },
 });

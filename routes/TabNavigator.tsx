@@ -1,6 +1,8 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ImageBackground, Platform } from "react-native";
 
+import { useAppSelector } from "../package/store";
+import { COLORS } from "../styles/theme";
 import {
   FlightIcon,
   HomeBold,
@@ -8,13 +10,10 @@ import {
   SearchBoldIcon,
   UserCircleBoldIcon,
 } from "../utilities/SvgIcons.utility";
-
+import { ExploreRoutesStack } from "./explore/ExploreRoutes";
 import { HomeRouteStack } from "./home/HomeRoutes";
 import { SettingRouteStack } from "./setting/SettingRoutes";
 import { TripRouteStack } from "./trip/TripRoutes";
-import { COLORS } from "../styles/theme";
-import { ExploreRoutesStack } from "./explore/ExploreRoutes";
-import { useAppSelector } from "../package/store";
 
 const Tab = createBottomTabNavigator();
 

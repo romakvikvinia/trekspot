@@ -1,4 +1,3 @@
-import { Image } from "expo-image";
 import React, {
   useCallback,
   useEffect,
@@ -9,27 +8,23 @@ import React, {
 import {
   ImageBackground,
   Platform,
-  SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-
-import { enGB, he, registerTranslation } from "react-native-paper-dates";
+import { enGB, registerTranslation } from "react-native-paper-dates";
 registerTranslation("en", enGB);
 
 import { useNavigation } from "@react-navigation/native";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+
+import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
+import { COLORS } from "../../styles/theme";
 import {
   BackIcon,
-  MarkerFillIcon,
   SightsMarkerIcon,
 } from "../../utilities/SvgIcons.utility";
-import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import { customMapStyle } from "../../styles/mapView.style";
-import { COLORS } from "../../styles/theme";
-import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
 
 interface TripProps {}
 
@@ -193,34 +188,31 @@ export const TripMapViewScreen: React.FC<TripProps> = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#F2F2F7",
-  },
-  gotItButton: {
-    backgroundColor: "#000",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    marginTop: 15,
-  },
-  gotItButtonText: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "500",
+  backButton: {
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 50,
+    display: "flex",
+    height: 35,
+    justifyContent: "center",
+    left: 20,
+    position: "absolute",
+    top: 55,
+    width: 35,
+    zIndex: 1,
   },
   calloutBox: {
+    alignItems: "flex-end",
     backgroundColor: "#fff",
-    padding: 15,
     borderRadius: 10,
+    justifyContent: "flex-end",
+    left: 20,
+    opacity: 0.9,
+    padding: 15,
     position: "absolute",
     top: 100,
-    zIndex: 2,
-    left: 20,
     width: "90%",
-    opacity: 0.9,
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
+    zIndex: 2,
   },
   calloutBoxTitle: {
     fontSize: 16,
@@ -228,20 +220,23 @@ const styles = StyleSheet.create({
     textAlign: "left",
     width: "100%",
   },
+  gotItButton: {
+    backgroundColor: "#000",
+    borderRadius: 10,
+    marginTop: 15,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  gotItButtonText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "500",
+  },
   map: {
     flex: 1,
   },
-  backButton: {
-    width: 35,
-    backgroundColor: "#fff",
-    height: 35,
-    borderRadius: 50,
-    position: "absolute",
-    top: 55,
-    zIndex: 1,
-    left: 20,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+  safeArea: {
+    backgroundColor: "#F2F2F7",
+    flex: 1,
   },
 });

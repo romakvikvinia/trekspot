@@ -1,3 +1,5 @@
+import { FlashList } from "@shopify/flash-list";
+import { usePostHog } from "posthog-react-native";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -8,6 +10,30 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Modalize } from "react-native-modalize";
+import { Portal } from "react-native-portalize";
+
+import {
+  trekSpotApi,
+  useAllCountriesQuery,
+  useCreateAnalyticsMutation,
+  useVisitedCountriesQuery,
+} from "../../api/api.trekspot";
+import { AnalyticType, CountryType } from "../../api/api.types";
+import { GuestUserModal } from "../../common/components/GuestUserModal";
+import ShareModal from "../../common/components/ShareModal";
+import { CountryItem } from "../../components/home/CountryItem";
+import { formatPercentage } from "../../helpers/number.helper";
+import {
+  deleteFromAsyncStorage,
+  getCountries,
+  storeInitialCountries,
+} from "../../helpers/secure.storage";
+import { useAppDispatch, useAppSelector } from "../../package/store";
+import { useTripStore } from "../../package/zustand/store";
+import { COLORS, SIZES } from "../../styles/theme";
+import { Events } from "../../utilities/Posthog";
+import { MapSvg } from "../../utilities/svg/map";
 import {
   ClearIcon,
   MarkLinear,
@@ -15,37 +41,6 @@ import {
   Share,
   VisitedIcon,
 } from "../../utilities/SvgIcons.utility";
-import { Modalize } from "react-native-modalize";
-import { Portal } from "react-native-portalize";
-import { FlashList } from "@shopify/flash-list";
-
-import { COLORS, SIZES } from "../../styles/theme";
-
-import ShareModal from "../../common/components/ShareModal";
-import { CountryItem } from "../../components/home/CountryItem";
-import {
-  trekSpotApi,
-  useAllCountriesQuery,
-  useCreateAnalyticsMutation,
-  useVisitedCountriesQuery,
-} from "../../api/api.trekspot";
-
-import { formatPercentage } from "../../helpers/number.helper";
-
-import { MapSvg } from "../../utilities/svg/map";
-
-import { useAppDispatch, useAppSelector } from "../../package/store";
-import { useTripStore } from "../../package/zustand/store";
-import { GuestUserModal } from "../../common/components/GuestUserModal";
-
-import { AnalyticType, CountryType } from "../../api/api.types";
-import {
-  deleteFromAsyncStorage,
-  getCountries,
-  storeInitialCountries,
-} from "../../helpers/secure.storage";
-import { usePostHog } from "posthog-react-native";
-import { Events } from "../../utilities/Posthog";
 
 interface MapVIewProps {
   isLoading?: boolean;
@@ -91,7 +86,7 @@ export const MapView: React.FC<MapVIewProps> = ({
     visitedCountries: {},
   });
 
-  let { data: countryList } = useAllCountriesQuery({});
+  const { data: countryList } = useAllCountriesQuery({});
   const [
     fetchCreateAnalytics,
     {
@@ -476,25 +471,140 @@ export const MapView: React.FC<MapVIewProps> = ({
 };
 
 const styles = StyleSheet.create({
-  loadingWrapper: {
+  amountView: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  btn: {
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    display: "flex",
+    elevation: 0.5,
+    flexDirection: "row",
+    height: 38,
+    justifyContent: "center",
+    paddingHorizontal: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 3.84,
+  },
+  cancelButton: {
+    justifyContent: "center",
+    marginLeft: 10,
+  },
+  cancelButtonText: {
+    color: COLORS.darkgray,
+    fontSize: 14,
+    fontWeight: "500"
+  },
+  clearButton: {
+    alignItems: "center",
+    height: 25,
+    justifyContent: "center",
+    position: "absolute",
+    right: 10,
+    top: 7,
+    width: 25,
+  },
+  countryAmount: {
+    color: COLORS.darkgray,
+    fontSize: SIZES.body4,
+  },
+  infoRow: {
+    borderBottomWidth: 1,
+    borderColor: "#efefef",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 5,
+    paddingBottom: 10,
     width: "100%",
+  },
+  labelView: {
+    alignItems: "center",
+    bottom: 3,
+    flexDirection: "row",
+    marginLeft: 4,
+    position: "relative",
+  },
+  left: {
+    display: "flex",
+    flexDirection: "row",
+    flex: 1,
+  },
+  legendItem: {
+    flexDirection: "row",
+    marginLeft: 15,
+  },
+  legendItemText: {
+    color: COLORS.darkgray,
+    fontSize: SIZES.body4,
+    marginLeft: 5,
+  },
+  lengend: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  lg: {
+    color: COLORS.primaryDark,
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 8,
+    position: "relative",
+  },
+  loadingWrapper: {
+    alignItems: "center",
     height: 372,
     justifyContent: "center",
-    alignItems: "center",
+    width: "100%",
+  },
+  map: {
+    flex: 1,
+  },
+
+  mapContainer: {
+    marginBottom: 15,
   },
   modalHeader: {
-    width: "100%",
-    paddingHorizontal: 15,
     flexWrap: "wrap",
-    paddingVertical: 0,
     height: 100,
+    paddingHorizontal: 15,
+    paddingVertical: 0,
+    width: "100%",
+  },
+
+  row: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 8,
+    marginTop: 0,
+    paddingHorizontal: 15,
+    position: "relative",
+    top: 10,
+  },
+  rowBox: {
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderColor: "#fff",
+    borderRadius: 15,
+    borderStyle: "solid",
+    borderWidth: 2,
+    display: "flex",
+    height: 90,
+    justifyContent: "center",
+    width: "32%",
   },
   searchBox: {
-    flex: 1,
-    backgroundColor: "#fff",
-    flexDirection: "row",
-    borderRadius: 30,
     alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 30,
+    flex: 1,
+    flexDirection: "row",
     position: "relative",
     width: "100%",
   },
@@ -503,155 +613,40 @@ const styles = StyleSheet.create({
     position: "absolute",
     zIndex: 1,
   },
-  clearButton: {
-    position: "absolute",
-    width: 25,
-    height: 25,
-    top: 7,
-    right: 10,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  infoRow: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 5,
-    borderBottomWidth: 1,
-    paddingBottom: 10,
-    borderColor: "#efefef",
-  },
-  cancelButton: {
-    marginLeft: 10,
-    justifyContent: "center",
-  },
-  cancelButtonText: {
-    fontSize: 14,
-    color: COLORS.darkgray,
-    fontWeight: "500"
-  },
-  countryAmount: {
-    color: COLORS.darkgray,
-    fontSize: SIZES.body4,
-  },
-  lengend: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  legendItem: {
-    flexDirection: "row",
-    marginLeft: 15,
-  },
-  legendItemText: {
-    marginLeft: 5,
-    fontSize: SIZES.body4,
-    color: COLORS.darkgray,
-  },
   searchInput: {
-    height: 40,
     backgroundColor: "#ececec",
     borderRadius: SIZES.radius * 5,
-    paddingLeft: 40,
-    fontSize: 16,
     color: COLORS.black,
     flex: 1,
-  },
-  mapContainer: {
-    marginBottom: 15,
-  },
-  map: {
-    flex: 1,
-  },
-
-  left: {
-    flexDirection: "row",
-    display: "flex",
-    flex: 1,
-  },
-  btn: {
-    backgroundColor: "#fff",
-    height: 38,
-    paddingHorizontal: 15,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 20,
-    flexDirection: "row",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 3.84,
-    elevation: 0.5,
-  },
-
-  amountView: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  labelView: {
-    position: "relative",
-    bottom: 3,
-    marginLeft: 4,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  txt: {
-    fontSize: 14,
-    marginLeft: 5,
-    color: "#333",
-  },
-  sublabel: {
-    fontSize: 14,
-    position: "relative",
-    flexDirection: "row",
-    alignItems: "center",
-    lineHeight: 25,
-    color: COLORS.darkgray,
+    fontSize: 16,
+    height: 40,
+    paddingLeft: 40,
   },
   statLabel: {
-    fontSize: 12,
     color: COLORS.darkgray,
+    fontSize: 12,
     fontWeight: "500",
   },
+  sublabel: {
+    alignItems: "center",
+    color: COLORS.darkgray,
+    flexDirection: "row",
+    fontSize: 14,
+    lineHeight: 25,
+    position: "relative",
+  },
   topActions: {
-    width: "100%",
-    flexDirection: "row",
-    display: "flex",
-    paddingHorizontal: 15,
-    justifyContent: "space-between",
     alignItems: "center",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingBottom: 15,
-  },
-  rowBox: {
-    width: "32%",
-    height: 90,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 15,
-    backgroundColor: "#fff",
-    borderColor: "#fff",
-    borderWidth: 2,
-    borderStyle: "solid",
-  },
-  row: {
-    flexDirection: "row",
-    display: "flex",
-    justifyContent: "space-between",
     paddingHorizontal: 15,
-    marginTop: 0,
-    marginBottom: 8,
-    position: "relative",
-    top: 10,
+    width: "100%",
   },
-  lg: {
-    fontSize: 24,
-    marginBottom: 8,
-    fontWeight: "bold",
-    position: "relative",
-    color: COLORS.primaryDark,
+  txt: {
+    color: "#333",
+    fontSize: 14,
+    marginLeft: 5,
   },
 });

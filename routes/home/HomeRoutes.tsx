@@ -1,8 +1,9 @@
-import React from "react";
 import {
-  StackNavigationProp,
   createStackNavigator,
+  StackNavigationProp,
 } from "@react-navigation/stack";
+import React from "react";
+
 import { HomeScreen } from "../../screen/home/HomeScreen";
 import { PrimaryColor } from "../../styles/colors";
 

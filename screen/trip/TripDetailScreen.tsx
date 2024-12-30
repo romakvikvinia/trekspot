@@ -1,12 +1,7 @@
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Alert,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,41 +9,17 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import { COLORS, SIZES } from "../../styles/theme";
 import { enGB, registerTranslation } from "react-native-paper-dates";
+import { Host } from "react-native-portalize";
+
+import { COLORS, SIZES } from "../../styles/theme";
 registerTranslation("en", enGB);
-import { tripDetailStyles } from "./_tripDetailStyles";
-import {
-  PlusIcon,
-  TrashIcon,
-  TwoSideArrows,
-  XIcon,
-} from "../../utilities/SvgIcons.utility";
-import * as Haptics from "expo-haptics";
-
-import { Portal } from "react-native-portalize";
-import { Modalize } from "react-native-modalize";
-
-import { QuestionModal } from "../../common/components/QuestionModal";
-import { questionModaStyles } from "../../styles/questionModaStyles";
-import { TripActivitiesSelect } from "./TripActivitiesSelect";
-
-// import { MapEmbedView } from "../../common/components/MapEmbedView";
-
-import { Header } from "./SubComponents/Header";
-import { TripActivityCard } from "./TripActivityCard";
-import {
-  useLazyGetSightsQuery,
-  useRemoveActivityFromRouteMutation,
-  useTripQuery,
-  useUpdateTripRouteAndActivitiesMutation,
-} from "../../api/api.trekspot";
-import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
-
-import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { addDays, differenceInDays, format } from "date-fns";
-import { SightType } from "../../api/api.types";
+import * as Haptics from "expo-haptics";
+import { usePostHog } from "posthog-react-native";
+import { Modalize } from "react-native-modalize";
+import { Portal } from "react-native-portalize";
 import {
   NavigationState,
   Route,
@@ -56,11 +27,46 @@ import {
   TabBar,
   TabView,
 } from "react-native-tab-view";
+
+import {
+  useLazyGetSightsQuery,
+  useRemoveActivityFromRouteMutation,
+  useTripQuery,
+  useUpdateTripRouteAndActivitiesMutation,
+} from "../../api/api.trekspot";
+import { SightType } from "../../api/api.types";
+import { QuestionModal } from "../../common/components/QuestionModal";
 import { Loader } from "../../common/ui/Loader";
+import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
 import { useTripStore } from "../../package/zustand/store";
-import { getAndReturnCurrentDay } from "./helper";
+import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
+import { questionModaStyles } from "../../styles/questionModaStyles";
 import { Events } from "../../utilities/Posthog";
-import { usePostHog } from "posthog-react-native";
+import {
+  PlusCircleIcon,
+  TelescopeIcon,
+  TrashIcon,
+  TwoSideArrows,
+  XIcon,
+} from "../../utilities/SvgIcons.utility";
+import { tripDetailStyles } from "./_tripDetailStyles";
+import { TripActivityActivityCard } from "./components/TripActivityActivityCard";
+import { TripActivityCarRentalCard } from "./components/TripActivityCarRentalCard";
+import { TripActivityDirectionCard } from "./components/TripActivityDirectionCard";
+import { TripActivityEventCard } from "./components/TripActivityEventCard";
+import { TripActivityFlightCard } from "./components/TripActivityFlightCard";
+import { TripActivityLodgingsCard } from "./components/TripActivityLodgingsCard";
+import { TripActivityMeetingCard } from "./components/TripActivityMeetingCard";
+import { TripActivityRestCard } from "./components/TripActivityRestCard";
+import { TripActivityTourCardCard } from "./components/TripActivityTourCard";
+import { TripActivityTransportCard } from "./components/TripActivityTransportCard";
+import { getAndReturnCurrentDay } from "./helper";
+import { AddActivityButton } from "./SubComponents/AddActivityButton";
+import { AddCustomActivity } from "./SubComponents/AddCustomActivity";
+// import { MapEmbedView } from "../../common/components/MapEmbedView";
+import { Header } from "./SubComponents/Header";
+import { TripActivitiesSelect } from "./TripActivitiesSelect";
+import { TripActivityCard } from "./TripActivityCard";
 
 type TripProps = NativeStackScreenProps<
   TripRouteStackParamList,
@@ -115,6 +121,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   const activitiesModal = useRef<Modalize>(null);
   const modalQuestionRef = useRef<Modalize>(null);
   const modalQuestionRef2 = useRef<Modalize>(null);
+  const addActivitiesModal = useRef<Modalize>(null);
   const [index, setIndex] = useState(0);
 
   const [deleteIndexes, setDeleteIndexes] = useState<{
@@ -172,7 +179,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
 
         if (data && Object.keys(data).length) {
           for (const key in data) {
-            let sight = data[key].filter((j) =>
+            const sight = data[key].filter((j) =>
               currentActivities?.some((k) => k == j.id)
             );
 
@@ -198,6 +205,10 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
 
   const onActivitiesModalOpen = () => {
     activitiesModal.current?.open();
+  };
+
+  const onAddActivitiesModal = () => {
+    addActivitiesModal.current?.open();
   };
 
   const onQuestionModalOpen = () => {
@@ -246,7 +257,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     });
 
     setState((prevState) => {
-      let newDays = [...prevState.days];
+      const newDays = [...prevState.days];
       newDays[deleteIndexes?.day].activities = newDays[
         deleteIndexes?.day
       ].activities.filter((i) => i.id !== deleteIndexes.sight);
@@ -276,7 +287,6 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     fetchUpdateRouteAndActivities(payload);
   }, [state, trip, city]);
 
-
   const removeActivity = useCallback(
     (deleteIndexes: { day: number; sight: string; route: string }) => {
       removeActivityFromRoute({
@@ -286,7 +296,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
       });
 
       setState((prevState) => {
-        let newDays = [...prevState.days];
+        const newDays = [...prevState.days];
         newDays[deleteIndexes?.day].activities = newDays[
           deleteIndexes?.day
         ].activities.filter((i) => i.id !== deleteIndexes.sight);
@@ -315,6 +325,19 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           paddingLeft: route?.activities?.length > 1 ? 30 : 0,
         }}
       >
+        {route?.activities.length > 1 && (
+          <View
+            style={[
+              styles.verticalLine,
+              {
+                height: "100%",
+                backgroundColor: "#e0e0e0",
+              },
+            ]}
+          >
+            <View style={styles.hideEnd}></View>
+          </View>
+        )}
         {route?.activities?.map((itm, activityIndex) => (
           <TripActivityCard
             visited={
@@ -340,30 +363,121 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
             activityAmount={route?.activities.length}
           />
         ))}
+        <>
+          <TripActivityMeetingCard
+            activityAmount={2}
+            // checkedIn={checkedIn}
+            // item={item}
+            index={index}
+            onQuestionModalOpen={onQuestionModalOpen}
+            // handleChangeActivityVisited={handleChangeActivityVisited}
+          />
+          <TripActivityDirectionCard
+            activityAmount={2}
+            // checkedIn={checkedIn}
+            // item={item}
+            index={index}
+            onQuestionModalOpen={onQuestionModalOpen}
+            // handleChangeActivityVisited={handleChangeActivityVisited}
+          />
+          <TripActivityEventCard
+            activityAmount={2}
+            //  checkedIn={checkedIn}
+            //  item={item}
+            index={index}
+            onQuestionModalOpen={onQuestionModalOpen}
+            //  handleChangeActivityVisited={handleChangeActivityVisited}
+          />
+          <TripActivityRestCard
+            activityAmount={2}
+            // checkedIn={checkedIn}
+            // item={item}
+            index={index}
+            onQuestionModalOpen={onQuestionModalOpen}
+            // handleChangeActivityVisited={handleChangeActivityVisited}
+          />
+          <TripActivityActivityCard
+            activityAmount={2}
+            // checkedIn={checkedIn}
+            // item={item}
+            index={index}
+            onQuestionModalOpen={onQuestionModalOpen}
+            // handleChangeActivityVisited={handleChangeActivityVisited}
+          />
+          <TripActivityTourCardCard
+            activityAmount={2}
+            // checkedIn={checkedIn}
+            // item={item}
+            index={index}
+            onQuestionModalOpen={onQuestionModalOpen}
+            // handleChangeActivityVisited={handleChangeActivityVisited}
+          />
+          <TripActivityFlightCard
+            activityAmount={2}
+            // checkedIn={checkedIn}
+            // item={item}
+            index={index}
+            onQuestionModalOpen={onQuestionModalOpen}
+            // handleChangeActivityVisited={handleChangeActivityVisited}
+          />
+          <TripActivityTransportCard
+            activityAmount={2}
+            // index={index}
+            // checkedIn={checkedIn}
+            // item={item}
+            // handleChangeActivityVisited={handleChangeActivityVisited}
+            onQuestionModalOpen={onQuestionModalOpen}
+            type="bus"
+          />
+          <TripActivityTransportCard
+            activityAmount={2}
+            // index={index}
+            // checkedIn={checkedIn}
+            // item={item}
+            // handleChangeActivityVisited={handleChangeActivityVisited}
+            onQuestionModalOpen={onQuestionModalOpen}
+            type="train"
+          />
+          <TripActivityTransportCard
+            activityAmount={2}
+            // index={index}
+            // checkedIn={checkedIn}
+            // item={item}
+            // handleChangeActivityVisited={handleChangeActivityVisited}
+            onQuestionModalOpen={onQuestionModalOpen}
+            type="cruise"
+          />
+          <TripActivityCarRentalCard
+            activityAmount={2}
+            // checkedIn={checkedIn}
+            // item={item}
+            index={index}
+            onQuestionModalOpen={onQuestionModalOpen}
+            // handleChangeActivityVisited={handleChangeActivityVisited}
+          />
+          <TripActivityLodgingsCard
+            activityAmount={2}
+            // checkedIn={checkedIn}
+            // item={item}
+            index={index}
+            onQuestionModalOpen={onQuestionModalOpen}
+            // handleChangeActivityVisited={handleChangeActivityVisited}
+          />
+        </>
 
         {!isTripDetailLoading && route?.activities.length === 0 ? (
           <View style={tripDetailStyles.noActivitiesWrapper}>
+            <TelescopeIcon size={60} color="" />
             <Text
               style={{
                 color: COLORS.black,
-                fontSize: 18,
-                fontWeight: "bold",
+                fontSize: 16,
+                fontWeight: "500",
+                marginTop: 15,
               }}
             >
-              You don't have activites for today
+              Click <PlusCircleIcon size="15" /> button to add activities
             </Text>
-            <TouchableOpacity
-              style={tripDetailStyles.addActivityButtonItem}
-              activeOpacity={0.7}
-              onPress={() => {
-                onActivitiesModalOpen();
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-            >
-              <Text style={tripDetailStyles.addActivityButtonText}>
-                Add activity
-              </Text>
-            </TouchableOpacity>
           </View>
         ) : null}
       </ScrollView>
@@ -385,7 +499,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   }, [getIndexByDate]);
 
   return (
-    <>
+    <Host>
       <Header
         onQuestion2ModalOpen={onQuestion2ModalOpen}
         data={trip}
@@ -419,6 +533,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
               backgroundColor: "#f7f7f7",
               flex: 1,
             }}
+            lazy
             style={[
               styles.tabViewStyles,
               {
@@ -471,19 +586,10 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         />
       ) : null}
 
-      {state?.days[index]?.activities?.length > 0 ? (
-        <TouchableOpacity
-          onPress={() => {
-            onActivitiesModalOpen();
-            posthog.capture(Events.UserUsesActivitySelectModal, {});
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          }}
-          activeOpacity={0.7}
-          style={tripDetailStyles.addActivityButton}
-        >
-          <PlusIcon />
-        </TouchableOpacity>
-      ) : null}
+      <AddActivityButton
+        onActivitiesModalOpen={onActivitiesModalOpen}
+        onAddActivitiesModal={onAddActivitiesModal}
+      />
 
       <Portal>
         <Modalize
@@ -520,7 +626,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           }
           modalStyle={{
             backgroundColor: "#F2F2F7",
-            height: "100%"
+            height: "100%",
           }}
           scrollViewProps={{
             showsVerticalScrollIndicator: false,
@@ -533,6 +639,40 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
             isLoading={sightsLoading}
             removeActivity={removeActivity}
           />
+        </Modalize>
+      </Portal>
+
+      <Portal>
+        <Modalize
+          ref={addActivitiesModal}
+          modalTopOffset={50}
+          adjustToContentHeight
+          withHandle={false}
+          // panGestureEnabled={false}
+          HeaderComponent={
+            <>
+              <View style={tripDetailStyles.rowItemHeader}>
+                <Text style={tripDetailStyles.h2}>Add activity</Text>
+
+                <Pressable
+                  onPress={() => addActivitiesModal?.current?.close()}
+                  hitSlop={50}
+                  style={tripDetailStyles.closeButton}
+                >
+                  <XIcon width="10" />
+                </Pressable>
+              </View>
+            </>
+          }
+          modalStyle={{
+            backgroundColor: "#F2F2F7",
+            height: "100%",
+          }}
+          scrollViewProps={{
+            showsVerticalScrollIndicator: false,
+          }}
+        >
+          <AddCustomActivity />
         </Modalize>
       </Portal>
 
@@ -678,43 +818,45 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           />
         </Modalize>
       </Portal> */}
-    </>
+    </Host>
   );
 };
 const styles = StyleSheet.create({
-  container: {
+  hideEnd: {
+    backgroundColor: "#f7f7f7",
+    bottom: 0,
+    height: 185,
+    left: 0,
+    position: "absolute",
+    width: 5,
+  },
+  loaderWrapper: {
+    alignItems: "center",
+    backgroundColor: "#F2F2F7",
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
     flex: 1,
-    paddingTop: 0,
+    justifyContent: "center",
+    paddingBottom: 200,
   },
-  contentContainer: {
-    backgroundColor: "white",
-  },
-  itemContainer: {
-    padding: 6,
-    margin: 6,
-    backgroundColor: "#eee",
+  tabStyles: {
+    height: 55,
+    paddingHorizontal: 0,
+    padding: 0,
+    paddingTop: 5,
   },
   tabViewStyles: {
     backgroundColor: "#F2F2F7",
-    flex: 1,
-    overflow: "hidden",
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
+    flex: 1,
     marginTop: -35,
+    overflow: "hidden",
   },
-  tabStyles: {
-    paddingHorizontal: 0,
-    padding: 0,
-    height: 55,
-    paddingTop: 5,
-  },
-  loaderWrapper: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F2F2F7",
-    flex: 1,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-    paddingBottom: 200,
+  verticalLine: {
+    left: 22,
+    position: "absolute",
+    top: 100,
+    width: 2,
   },
 });

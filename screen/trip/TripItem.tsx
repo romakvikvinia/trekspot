@@ -1,26 +1,26 @@
-import React from "react";
 import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { format, parseISO } from "date-fns";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
+import { usePostHog } from "posthog-react-native";
+import React from "react";
 import {
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 
+import { TripType } from "../../api/api.types";
+import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
+import { Events } from "../../utilities/Posthog";
 import {
   DotsIcon,
   LocationPin,
   UsersIcon,
 } from "../../utilities/SvgIcons.utility";
 import { _tripScreenStyles } from "./_tripScreenStyles";
-import { TripType } from "../../api/api.types";
-import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { format, parseISO } from "date-fns";
 import { FlagIcon } from "./components/FlagIcon";
-import { usePostHog } from "posthog-react-native";
-import { Events } from "../../utilities/Posthog";
 
 interface ITripItemProps {
   item: TripType;

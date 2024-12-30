@@ -1,17 +1,15 @@
-import React from "react";
 import {
-  StackNavigationProp,
   createStackNavigator,
+  StackNavigationProp,
 } from "@react-navigation/stack";
+import React from "react";
+import { Platform } from "react-native";
 
-import { SettingScreen } from "../../screen/setting/SettingScreen";
-import { THeaderButton } from "../../common/ui/THeaderButton";
-import { PrimaryColor } from "../../styles/colors";
 import { EditProfile } from "../../screen/setting/EditProfile";
 import { ResetPassword } from "../../screen/setting/ResetPassword";
+import { SettingScreen } from "../../screen/setting/SettingScreen";
+import { PrimaryColor } from "../../styles/colors";
 import { SIZES } from "../../styles/theme";
-import { Platform } from "react-native";
-import { PasswordUpdate } from "../../screen/auth/PasswordUpdate";
 
 interface SettingRouteProps {}
 

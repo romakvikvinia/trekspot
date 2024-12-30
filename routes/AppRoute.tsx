@@ -1,19 +1,21 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { Platform } from "react-native";
-
-import { TabNavigator } from "./TabNavigator";
-import { SIZES } from "../styles/theme";
 import { Host } from "react-native-portalize";
-import { TripDetailScreen } from "../screen/trip/TripDetailScreen";
-import { CountryDetailScreen } from "../screen/Explore/Country/CountryDetailScreen";
+
 import { CityDetailScreen } from "../screen/Explore/city/CityDetailScreen";
-import { TripTransport } from "../screen/trip/TripTransport";
+import { CountryDetailScreen } from "../screen/Explore/Country/CountryDetailScreen";
+import { FlightDetails } from "../screen/trip/AddActivities/Flights/FlightDetails";
+import { Flights } from "../screen/trip/AddActivities/Flights/Flights";
+import { TripDetailScreen } from "../screen/trip/TripDetailScreen";
+import { TripDishes } from "../screen/trip/TripDishes";
 import { TripEmergency } from "../screen/trip/TripEmergency";
 import { TripInsights } from "../screen/trip/TripInsights";
-import { TripDishes } from "../screen/trip/TripDishes";
+import { TripTransport } from "../screen/trip/TripTransport";
+import { SIZES } from "../styles/theme";
+import { TabNavigator } from "./TabNavigator";
 
 const Stack = createStackNavigator();
-
+ 
 const AppRoute = () => {
   return (
     <Host>
@@ -109,6 +111,21 @@ const AppRoute = () => {
               Platform.OS === "android" ? 10 : SIZES.width - 50,
           })}
         />
+        <Stack.Group
+          screenOptions={{
+            presentation: "modal",
+            headerShown: false,
+            headerLeft: () => null,
+            headerTitle: "",
+            headerRight: () => null,
+            animationEnabled: true,
+           }}
+        >
+          <Stack.Screen name="Flights" component={Flights} />
+          <Stack.Screen name="FlightDetails" component={FlightDetails} />
+        </Stack.Group>
+     
+
         {/* <Stack.Screen
           name="Onboarding"
           component={OnboardingView}

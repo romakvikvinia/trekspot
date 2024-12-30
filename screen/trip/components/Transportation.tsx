@@ -4,6 +4,7 @@ import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native";
 import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
+
 import { COLORS } from "../../../styles/theme";
 import {
   BusIcon,
@@ -21,9 +22,8 @@ import {
   ToDoIcon,
   USDIcon,
 } from "../../../utilities/SvgIcons.utility";
-
-import { RangePicker } from "../RangePicker";
 import { styles } from "../_styles";
+import { RangePicker } from "../RangePicker";
 import { DateSlots } from "./DateSlots";
 import { ExpenseInput } from "./ExpenseInput";
 import { PlaceSearch } from "./PlaceSearch";

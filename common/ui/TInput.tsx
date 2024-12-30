@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, View, TextInput } from "react-native";
+import { StyleSheet, TextInput,View } from "react-native";
+
 import { isInvalidColor } from "../../styles/colors";
 import { COLORS } from "../../styles/theme";
 
@@ -43,20 +44,20 @@ export const TInput: React.FC<TInputProps> = (props: any) => {
 
 const styles = StyleSheet.create({
   formControl: {
-    width: "100%",
     height: 55,
+    width: "100%",
   },
   input: {
-    paddingHorizontal: 2,
-    paddingVertical: 5,
-    borderColor: "#e9e9e9",
-    borderWidth: 1,
-    height: "100%",
     backgroundColor: "#fdfdff",
-    fontSize: 14,
+    borderColor: "#e9e9e9",
     borderRadius: 8,
+    borderWidth: 1,
+    fontSize: 14,
+    fontWeight: "500",
+    height: "100%",
+    paddingHorizontal: 2,
     paddingLeft: 10,
-    fontWeight: "500"
+    paddingVertical: 5
   },
   invalid: {
     borderColor: isInvalidColor,

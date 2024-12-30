@@ -1,16 +1,17 @@
 import { FlashList } from "@shopify/flash-list";
-import React, { useCallback, useEffect, useState } from "react";
 import { Image } from "expo-image";
+import React, { useCallback, useEffect, useState } from "react";
 import { Platform, TouchableOpacity, useWindowDimensions, View } from "react-native";
 import { StyleSheet, Text } from "react-native";
-import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
+import { TabBar, TabView } from "react-native-tab-view";
+
+import { SightType } from "../../api/api.types";
+import { Loader } from "../../common/ui/Loader";
 import { exploreStyles } from "../../components/explore/sights/_exploreStyles";
+import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
 import { COLORS, SIZES } from "../../styles/theme";
 import { PlusIcon, StarIcon, TrashIcon } from "../../utilities/SvgIcons.utility";
-import { TabBar, TabView } from "react-native-tab-view";
-import { Loader } from "../../common/ui/Loader";
 import { TripDaysType } from "./TripDetailScreen";
-import { SightType } from "../../api/api.types";
 
 interface ITripActivitiesSelectProps {
   days: TripDaysType[];
@@ -290,66 +291,56 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
   );
 };
 const styles = StyleSheet.create({
-  selectActivitesWrapper: {
-    flex: 1,
-  },
-  tabBar: {
+  actionButtons: {
+    alignItems: "center",
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
     flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 25,
+    overflow: "hidden",
   },
-  eventsRowTitle: {
-    color: COLORS.black,
-    fontSize: 22,
-    marginBottom: 15,
-    paddingHorizontal: 15,
-  },
-  thingsTodoItemTitle: {
-    fontSize: 18,
-    fontWeight: "500",
-    paddingHorizontal: 15,
-    marginTop: 15,
-  },
-  thingsTodoItemiIn: {
-    paddingHorizontal: 15,
+  addToButton: { 
+    alignItems: "center",
+    backgroundColor: COLORS.primary,
+    borderBottomEndRadius: 12,
+    display: "flex",
+    height: 45,
+    justifyContent: "center",
+    textAlign: "center",
+    width: 45,
   },
   detailsButton: {
     backgroundColor: COLORS.lightGray,
-    paddingVertical: 15,
-    paddingHorizontal: 10,
     flex: 1,
-    textAlign: "center",
-    justifyContent: "center",
     flexDirection: "row",
-  },
-  addToButton: { 
-    textAlign: "center",
     justifyContent: "center",
-    display: "flex",
-    backgroundColor: COLORS.primary,
-    width: 45,
-    height: 45,
-    alignItems: "center",
-    borderBottomEndRadius: 12,
-  },
-  addToButtonText: {
-    color: COLORS.primary,
-    fontSize: 14,
-    fontWeight: "bold",
+    paddingHorizontal: 10,
+    paddingVertical: 15,
+    textAlign: "center",
   },
   detailsButtonText: {
     color: COLORS.primary,
     fontSize: 14,
     fontWeight: "bold",
   },
+  itemRow: {
+    marginTop: 0,
+    minHeight: SIZES.height - 100,
+  },
+  selectActivitesWrapper: {
+    flex: 1,
+  },
   thingsTodoItem: {
     backgroundColor: "#fff",
-    width: "96%",
-    marginRight: 15,
     borderRadius: 12,
     marginBottom: 20,
+    marginRight: 15,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 1.84, 
+    shadowRadius: 1.84,
+    width: "96%", 
     ...Platform.select({
       android: {
         elevation: 2,
@@ -357,56 +348,13 @@ const styles = StyleSheet.create({
     }),
   },
   thingsTodoItemDetails: {},
-  actionButtons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 25,
-    alignItems: "center",
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    overflow: "hidden",
-  },
-  thingsTodoItemiIntypeText: {
-    fontSize: 12,
-    color: COLORS.gray,
-    marginTop: 5,
-    marginBottom: 5,
-  },
-  thingsTodoItemiInprice: {
-    fontSize: 14,
-    color: COLORS.gray,
-    marginTop: 5,
-    marginBottom: 5,
-  },
-  itemRow: {
-    marginTop: 0,
-    minHeight: SIZES.height - 100,
-  },
-  rowTitle: {
-    fontSize: 22,
+  thingsTodoItemTitle: {
+    fontSize: 18,
     fontWeight: "500",
-    color: COLORS.black,
-  },
-  categories: {
     marginTop: 15,
-    marginBottom: 15,
     paddingHorizontal: 15,
   },
-  categoryitem: {
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    backgroundColor: "#fff",
-    borderRadius: 50,
-    marginRight: 8,
-  },
-  categoryitemText: {
-    fontSize: 14,
-    color: COLORS.black,
-  },
-  active: {
-    backgroundColor: COLORS.primaryDark,
-  },
-  activeText: {
-    color: "#fff",
+  thingsTodoItemiIn: {
+    paddingHorizontal: 15,
   },
 });

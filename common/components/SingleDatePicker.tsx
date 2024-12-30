@@ -6,21 +6,19 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { COLORS } from "../../styles/theme";
 
-export const RangePicker = ({ setOpen, open, formik }) => {
+export const SingleDatePicker = ({ setOpen, open, handleDateChange }) => {
   const onDismiss = React.useCallback(() => {
     setOpen(false);
   }, [setOpen]);
-
+ 
   const onConfirm = React.useCallback(
-    ({ startDate, endDate }) => {
+    (params) => {
       setOpen(false);
-      formik.setFieldValue("range", {
-        startDate,
-        endDate,
-      });
+      handleDateChange(params?.date)
     },
     [setOpen]
   );
+
   const theme = {
     ...DefaultTheme,
     colors: {
@@ -29,6 +27,10 @@ export const RangePicker = ({ setOpen, open, formik }) => {
       primaryContainer: "#dfebff",
     },
   };
+
+  const today = new Date();
+  const startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
   return (
     <PaperProvider theme={theme}>
       <SafeAreaProvider>
@@ -41,16 +43,15 @@ export const RangePicker = ({ setOpen, open, formik }) => {
         >
           <DatePickerModal
             locale="en"
-            mode="range"
+            mode="single"
             visible={open}
             onDismiss={onDismiss}
-            onChange={(date) => console.log("onchnage", date)}
-            startDate={formik?.values?.range?.startDate}
-            endDate={formik?.values?.range?.endDate}
+            date={undefined}
             onConfirm={onConfirm}
             presentationStyle={"pageSheet"}
             disableStatusBarPadding={false}
             saveLabel="Confirm"
+            validRange={{ startDate: startDate, endDate: undefined }}
           />
         </View>
       </SafeAreaProvider>

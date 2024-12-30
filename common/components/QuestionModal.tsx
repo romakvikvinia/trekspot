@@ -1,3 +1,4 @@
+import React from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -5,9 +6,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
 import { COLORS } from "../../styles/theme";
 import { XIcon } from "../../utilities/SvgIcons.utility";
-import React from "react";
 
 interface IQuestionModal {
   title: string;
@@ -42,24 +43,24 @@ export const QuestionModal: React.FC<IQuestionModal> = ({
   );
 };
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: "row",
+  closeButton: {
     alignItems: "center",
+    backgroundColor: "#DBDBDB",
+    borderRadius: 50,
+    height: 30,
+    justifyContent: "center",
+    width: 30,
+  },
+  header: {
+    alignItems: "center",
+    flexDirection: "row",
     justifyContent: "space-between",
-    padding: 15,
     marginBottom: 15,
+    padding: 15,
   },
   title: {
-    fontSize: 18,
     color: COLORS.black,
+    fontSize: 18,
     fontWeight: "600",
-  },
-  closeButton: {
-    backgroundColor: "#DBDBDB",
-    width: 30,
-    height: 30,
-    borderRadius: 50,
-    justifyContent: "center",
-    alignItems: "center",
   },
 });

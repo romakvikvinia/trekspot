@@ -11,46 +11,43 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { COLORS, SIZES } from "../../styles/theme";
 import { enGB, registerTranslation } from "react-native-paper-dates";
+
+import { COLORS, SIZES } from "../../styles/theme";
 registerTranslation("en", enGB);
-import { _tripScreenStyles } from "./_tripScreenStyles";
-
-import {
-  EditIcon,
-  PlusIcon,
-  TrashIcon,
-} from "../../utilities/SvgIcons.utility";
-
-import { Portal } from "react-native-portalize";
-import { Modalize } from "react-native-modalize";
-import { NewTrip } from "./NewTrip";
-
-import { TripItem } from "./TripItem";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
+import * as Haptics from "expo-haptics";
+import { Image } from "expo-image";
+import moment from "moment";
+import { usePostHog } from "posthog-react-native";
+import { Modalize } from "react-native-modalize";
+import { Portal } from "react-native-portalize";
+// import { TrekSneckBar } from "../../common/components/TrekSneckBar";
+import { useDispatch } from "react-redux";
+import { toast } from "sonner-native";
+
 import {
   trekSpotApi,
   useDeleteTripMutation,
   useLazyMyTripsQuery,
 } from "../../api/api.trekspot";
-import moment from "moment";
-import { Loader } from "../../common/ui/Loader";
-import * as Haptics from "expo-haptics";
-
-// import { TrekSneckBar } from "../../common/components/TrekSneckBar";
-import { useDispatch } from "react-redux";
-
+import { TripType } from "../../api/api.types";
+import { GuestUserModal } from "../../common/components/GuestUserModal";
 // action modal
 import { QuestionModal } from "../../common/components/QuestionModal";
-import { questionModaStyles } from "../../styles/questionModaStyles";
-import { TripType } from "../../api/api.types";
-import { Image } from "expo-image";
+import { Loader } from "../../common/ui/Loader";
 import { useAppSelector } from "../../package/store";
-import { GuestUserModal } from "../../common/components/GuestUserModal";
-import { toast } from "sonner-native";
+import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
+import { questionModaStyles } from "../../styles/questionModaStyles";
 import { Events } from "../../utilities/Posthog";
-import { usePostHog } from "posthog-react-native";
+import {
+  EditIcon,
+  PlusIcon,
+  TrashIcon,
+} from "../../utilities/SvgIcons.utility";
+import { _tripScreenStyles } from "./_tripScreenStyles";
+import { NewTrip } from "./NewTrip";
+import { TripItem } from "./TripItem";
 
 type TripProps = NativeStackScreenProps<TripRouteStackParamList, "TripsScreen">;
 
@@ -108,9 +105,6 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
     } else {
       posthog.capture(Events.CreateTripModalOpened);
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      // Platform.OS === "android"
-      //   ? navigation.navigate("NewTripAndroidScreen")
-      //   : 
         createOrUpdateTripModal.current?.open();
     }
   };

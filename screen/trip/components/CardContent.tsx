@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
-import { tripDetailStyles } from "../_tripDetailStyles";
+
 import { StarIcon } from "../../../utilities/SvgIcons.utility";
+import { tripDetailStyles } from "../_tripDetailStyles";
 
 type CardContentProps = {
     item: any;
@@ -38,9 +39,9 @@ export const CardContent = ({ item }: CardContentProps) => {
 const styles = StyleSheet.create({
   textContent: {
     flexDirection: "column",
+    flex: 1,
     justifyContent: "center",
     marginTop: 0,
-    flex: 1,
-    paddingLeft: 16,
+    paddingLeft: 15,
   },
 });

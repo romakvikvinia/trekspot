@@ -1,5 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import {
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderTopColor: "#f2f2f2",
     borderTopWidth: 1,
-    marginTop: 10,
+    marginTop: Platform.OS === "android" ? 5 : 10,
     paddingTop: 12,
     paddingBottom: 12,
     marginBottom: 0,

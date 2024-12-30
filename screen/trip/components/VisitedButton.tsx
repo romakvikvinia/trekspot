@@ -5,13 +5,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { tripDetailStyles } from "../_tripDetailStyles";
+
+import { useTripStore } from "../../../package/zustand/store";
+import { COLORS } from "../../../styles/theme";
 import {
   CheckLiteIcon,
   LeftTriangle,
 } from "../../../utilities/SvgIcons.utility";
-import { COLORS } from "../../../styles/theme";
-import { useTripStore } from "../../../package/zustand/store";
+import { tripDetailStyles } from "../_tripDetailStyles";
 
 type VisitedButtonProps = {
   handleChangeActivityVisited: () => void;
@@ -53,7 +54,7 @@ export const VisitedButton = ({
           { color: checkedIn ? COLORS.black : COLORS.gray },
         ]}
       >
-        Visited
+      Done
       </Text>
       {
       index === 0 && !isVisitedUsed && (
@@ -79,45 +80,45 @@ export const VisitedButton = ({
 };
 const styles = StyleSheet.create({
   calloutBox: {
-    backgroundColor: "#fff",
-    padding: 15,
-    borderRadius: 10,
-    zIndex: 5,
-    left: 50,
-    top: Platform.OS === "android" ? -118 : -130,
-    width: 200,
-    opacity: 3,
-    justifyContent: "flex-end",
     alignItems: "flex-end",
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    justifyContent: "flex-end",
+    left: 50,
+    opacity: 3,
+    padding: 15,
     position: "absolute",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 8.84,
+    top: Platform.OS === "android" ? -118 : -130,
+    width: 200,
+    zIndex: 5,
     ...Platform.select({
       android: {
         elevation: 10,
       },
     }),
   },
-  caret: {
-    position: "absolute",
-    left: -15,
-    bottom: 30,
-  },
   calloutBoxTitle: {
     fontSize: 14,
     fontWeight: "400",
+    lineHeight: 20,
     textAlign: "left",
     width: "100%",
-    lineHeight: 20,
+  },
+  caret: {
+    bottom: 30,
+    left: -15,
+    position: "absolute",
   },
   gotItButton: {
     backgroundColor: "#000",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
     borderRadius: 10,
     marginTop: 15,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   gotItButtonText: {
     color: "#fff",

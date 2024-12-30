@@ -1,3 +1,6 @@
+import * as Haptics from "expo-haptics";
+import * as Sharing from "expo-sharing";
+import { usePostHog } from "posthog-react-native";
 import { useCallback, useRef, useState } from "react";
 import {
   StyleSheet,
@@ -5,20 +8,18 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import * as Sharing from "expo-sharing";
 import ViewShot from "react-native-view-shot";
+
+import { formatPercentage } from "../../helpers/number.helper";
 import { COLORS, SIZES } from "../../styles/theme";
+import { Events } from "../../utilities/Posthog";
+import { MapSvg } from "../../utilities/svg/map";
 import {
   ImessageIcon,
   InstagramIcon,
   MessengerIcon,
   TrekspotWhite,
 } from "../../utilities/SvgIcons.utility";
-import { MapSvg } from "../../utilities/svg/map";
-import * as Haptics from "expo-haptics";
-import { formatPercentage } from "../../helpers/number.helper";
-import { usePostHog } from "posthog-react-native";
-import { Events } from "../../utilities/Posthog";
 
 interface ShareModalProps {
   world: number;
@@ -40,7 +41,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
   const ShareItem = useCallback(async () => {
     posthog.capture(Events.UserSharesStats, {});
     //@ts-ignore
-    let uri = await ref.current.capture();
+    const uri = await ref.current.capture();
     Sharing.shareAsync(`${uri}`, {
       mimeType: "image/jpeg",
 
@@ -260,33 +261,47 @@ const ShareModal: React.FC<ShareModalProps> = ({
 export default ShareModal;
 
 const styles = StyleSheet.create({
+  amountView: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  colorActive: {
+    borderColor: "#ccc",
+    borderWidth: 2,
+  },
+  colorItem: {
+    backgroundColor: "#000",
+    borderRadius: 50,
+    height: 25,
+    marginHorizontal: 5,
+    width: 25,
+  },
   colors: {
     flexDirection: "row",
     justifyContent: "center",
     marginBottom: 50,
   },
-  colorItem: {
-    width: 25,
-    height: 25,
-    borderRadius: 50,
-    backgroundColor: "#000",
-    marginHorizontal: 5,
+  icon: {
+    alignItems: "center",
+    display: "flex",
+    height: 30,
+    justifyContent: "center",
+    marginRight: 10,
+    width: 30,
   },
-  colorActive: {
-    borderWidth: 2,
-    borderColor: "#ccc",
+  labelView: {
+    alignItems: "center",
+    bottom: 3,
+    flexDirection: "row",
+    marginLeft: 4,
+    position: "relative",
   },
-  shareWrapper: {
-    justifyContent: "space-between",
-    flex: 1,
-    padding: 15,
-    borderRadius: 15
-  },
-  shareTextWrapper: {
-    backgroundColor: "#000",
-    paddingVertical: 15,
-    paddingHorizontal: 15,
-    marginRight: 15,
+  lg: {
+    color: COLORS.primaryDark,
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 8,
+    position: "relative",
   },
   middle: {
     marginTop: 25,
@@ -297,17 +312,51 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 15,
   },
-  generateNew: {
+  row: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 8,
+    marginTop: 0,
+    paddingHorizontal: 15,
+  },
+  rowBox: {
+    alignItems: "center",
+    borderRadius: 15,
+    display: "flex",
+    justifyContent: "center",
+    width: "32%",
+    // borderWidth: 2,
+    // borderStyle: "solid",
+    // borderColor: "#fff"
+  },
+  shareButton: {
+    alignItems: "center",
+    backgroundColor: "#363636",
+    borderRadius: 30,
+    display: "flex",
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 15,
+    marginHorizontal: 8,
+    overflow: "hidden",
   },
-  generateNewButton: {
-    paddingVertical: 8,
-  },
-  generateNewButtonText: {
-    fontSize: 18,
+  shareButtonText: {
+    color: COLORS.white,
+    fontSize: 14,
     fontWeight: "bold",
+    marginLeft: 8,
+  },
+  shareTextWrapper: {
+    backgroundColor: "#000",
+    marginRight: 15,
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+  },
+  shareWrapper: {
+    borderRadius: 15,
+    flex: 1,
+    justifyContent: "space-between",
+    padding: 15
   },
   sharing: {
     flexDirection: "row",
@@ -321,76 +370,16 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 6,
   },
-  shareButton: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    marginHorizontal: 8,
-    flexDirection: "row",
-    backgroundColor: "#363636",
-    borderRadius: 30,
-    overflow: "hidden",
-  },
-  icon: {
-    width: 30,
-    height: 30,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 10,
-  },
-  shareButtonText: {
-    fontSize: 14,
-    color: COLORS.white,
-    marginLeft: 8,
-    fontWeight: "bold",
-  },
-  row: {
-    flexDirection: "row",
-    display: "flex",
-    justifyContent: "space-between",
-    paddingHorizontal: 15,
-    marginTop: 0,
-    marginBottom: 8,
-  },
-  rowBox: {
-    width: "32%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 15,
-    // borderWidth: 2,
-    // borderStyle: "solid",
-    // borderColor: "#fff"
-  },
-  lg: {
-    fontSize: 24,
-    marginBottom: 8,
-    fontWeight: "bold",
-    position: "relative",
-    color: COLORS.primaryDark,
-  },
   statLabel: {
-    fontSize: 12,
     color: COLORS.darkgray,
+    fontSize: 12,
   },
   sublabel: {
-    fontSize: 14,
-    position: "relative",
-    flexDirection: "row",
     alignItems: "center",
-    lineHeight: 25,
     color: COLORS.gray,
-  },
-  amountView: {
     flexDirection: "row",
-    alignItems: "center",
-  },
-  labelView: {
+    fontSize: 14,
+    lineHeight: 25,
     position: "relative",
-    bottom: 3,
-    marginLeft: 4,
-    flexDirection: "row",
-    alignItems: "center",
   },
 });

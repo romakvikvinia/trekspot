@@ -1,3 +1,9 @@
+import { format } from "date-fns";
+import Constants from "expo-constants";
+import * as Haptics from "expo-haptics";
+import { Image } from "expo-image";
+import { StatusBar } from "expo-status-bar";
+import { useMemo, useRef, useState } from "react";
 import {
   FlatList,
   ImageBackground,
@@ -9,6 +15,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Modalize } from "react-native-modalize";
+import { Portal } from "react-native-portalize";
+import { toast } from "sonner-native";
+
+import { useAllCountriesQuery } from "../../api/api.trekspot";
+import { Loader } from "../../common/ui/Loader";
+import { globalStyles } from "../../styles/globalStyles";
+import { COLORS } from "../../styles/theme";
 import {
   BackIcon,
   CheckLiteIcon,
@@ -17,19 +31,7 @@ import {
   TemperatureIcon,
   XIcon,
 } from "../../utilities/SvgIcons.utility";
-import { globalStyles } from "../../styles/globalStyles";
-import Constants from "expo-constants";
-import { Image } from "expo-image";
-import { useMemo, useRef, useState } from "react";
-import { Portal } from "react-native-portalize";
-import { Modalize } from "react-native-modalize";
-import { COLORS } from "../../styles/theme";
-import * as Haptics from "expo-haptics";
-import { Loader } from "../../common/ui/Loader";
-import { useAllCountriesQuery } from "../../api/api.trekspot";
-import { toast } from "sonner-native";
 import { convertToFahrenheit } from "./helper";
-import { StatusBar } from "expo-status-bar";
 
 const SEASONSBYMONTH = [
   {
@@ -66,9 +68,10 @@ const MONTHS = [
 ];
 
 export const SeasonalExplorerScreen = ({ navigation }: any) => {
-  let { data: countryList, isLoading, isError } = useAllCountriesQuery({});
+  const { data: countryList, isLoading, isError } = useAllCountriesQuery({});
+ 
   const [currentMonth, setCurrentMonth] = useState(
-    new Date().toLocaleString("default", { month: "long" })
+    format(new Date(), "MMMM")
   );
   const [isCelsiues, setIsCelsius] = useState(true);
 
@@ -309,9 +312,67 @@ export const SeasonalExplorerScreen = ({ navigation }: any) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#f8f8f8",
+  closeButton: {
+    alignItems: "center",
+    backgroundColor: "#DBDBDB",
+    borderRadius: 50,
+    height: 30,
+    justifyContent: "center",
+    width: 30,
+  },
+  columnWrapper: {
+    justifyContent: "space-between",
+  },
+  fromToText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "500",
+    marginLeft: 0,
+    maxWidth: 180,
+  },
+  header: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 0,
+    padding: 15,
+  },
+  listItem: {
+    borderColor: "#f2f2f2",
+    borderWidth: 1,
+    marginBottom: 35,
+    position: "relative",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 0.84,
+    width: "100%",
+    ...Platform.select({
+      android: {
+        elevation: 5,
+      },
+    }),
+    backgroundColor: "#fff",
+    borderRadius: 15,
+    overflow: "hidden",
+  },
+  listItemDetails: {
+    marginTop: 0,
+    padding: 15,
+    paddingTop: 10,
+  },
+  listItemDetailsTop: {
+    alignItems: "flex-start",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  listItemImage: {
+    height: 250,
+  },
+  listItemTitle: {
+    fontSize: 22,
+    fontWeight: "600",
+    maxWidth: "85%"
   },
   monthItem: {
     width: "100%",
@@ -324,169 +385,111 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   monthText: {
+    color: "#000",
     fontSize: 16,
     fontWeight: "500",
-    color: "#000",
   },
-  tempUnitText: {
-    fontSize: 16,
+  pageDescription: {
     color: "#fff",
-    fontWeight: "600",
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: 15,
-    marginBottom: 0,
-  },
-  tags: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginTop: 15,
-  },
-  tag: {
-    paddingVertical: 5,
-    paddingHorizontal: 8,
-    borderRadius: 5,
-    marginRight: 5,
-    marginBottom: 5,
-    backgroundColor: "#fafafa",
-  },
-  tagText: {
-    fontSize: 12,
-    fontWeight: "500",
-    color: "#000",
-  },
-  title: {
     fontSize: 18,
-    color: COLORS.black,
-    fontWeight: "600",
-  },
-  closeButton: {
-    backgroundColor: "#DBDBDB",
-    width: 30,
-    height: 30,
-    borderRadius: 50,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  listItemDetailsTop: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
+    fontWeight: "500",
+    lineHeight: 20,
+    marginBottom: 5,
+    marginTop: 10,
+    paddingHorizontal: 40,
+    textAlign: "center",
   },
   ratingLabel: {
-    flexDirection: "row",
     alignItems: "center",
+    flexDirection: "row",
     marginTop: 8,
   },
-  temperatureText: {
-    fontSize: 12,
-    marginLeft: 5,
-    color: "#000",
-    fontWeight: "500",
-  },
-  temperature: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 10,
-    opacity: 0.7
-  },
   ratingText: {
-    fontSize: 12,
-    marginLeft: 5,
     color: "#000",
-    fontWeight: "500"
+    fontSize: 12,
+    fontWeight: "500",
+    marginLeft: 5
   },
-  listItemDetails: {
-    marginTop: 0,
-    padding: 15,
-    paddingTop: 10,
+  safeArea: {
+    backgroundColor: "#f8f8f8",
+    flex: 1,
   },
-  listItemTitle: {
-    fontSize: 22,
-    fontWeight: "600",
-    maxWidth: "85%"
-  },
-  columnWrapper: {
-    justifyContent: "space-between",
-  },
-  listItem: {
+  screen: {
+    flex: 1,
     width: "100%",
-    marginBottom: 35,
-    borderWidth: 1,
-    borderColor: "#f2f2f2",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 0.84,
-    position: "relative",
-    ...Platform.select({
-      android: {
-        elevation: 5,
-      },
-    }),
-    backgroundColor: "#fff",
-    borderRadius: 15,
-    overflow: "hidden",
   },
-  listItemImage: {
-    height: 250,
+  screenHeader: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 0,
+    paddingBottom: 10,
+    paddingHorizontal: 15,
+    paddingTop: Constants?.statusBarHeight + 10,
+  },
+  screenHeaderWrapper: {
+    backgroundColor: "#0072C6",
+    height: 200,
+    width: "100%",
+  },
+  seasonalExplorerDetails: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  seasonalExplorerSelect: {
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    borderRadius: 50,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    minWidth: 200,
+    paddingHorizontal: 25,
+    paddingVertical: 15,
+    width: "70%",
   },
   seasonalExplorerSelectWrapper: {
     flexDirection: "row",
     justifyContent: "center",
     marginTop: 15,
   },
-  seasonalExplorerDetails: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  seasonalExplorerSelect: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
-    borderRadius: 50,
-    paddingVertical: 15,
-    paddingHorizontal: 25,
-    width: "70%",
-    minWidth: 200,
-  },
-  fromToText: {
-    fontSize: 16,
-    fontWeight: "500",
-    color: "#fff",
-    marginLeft: 0,
-    maxWidth: 180,
-  },
-  screen: {
-    flex: 1,
-    width: "100%",
-  },
-  screenHeaderWrapper: {
-    height: 200,
-    width: "100%",
-    backgroundColor: "#0072C6",
-  },
-  screenHeader: {
-    paddingTop: Constants?.statusBarHeight + 10,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 15,
-    marginBottom: 0,
-    paddingBottom: 10,
-  },
-  pageDescription: {
-    fontSize: 18,
-    paddingHorizontal: 40,
-    color: "#fff",
-    fontWeight: "500",
-    lineHeight: 20,
-    marginTop: 10,
-    textAlign: "center",
+  tag: {
+    backgroundColor: "#fafafa",
+    borderRadius: 5,
     marginBottom: 5,
+    marginRight: 5,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+  },
+  tagText: {
+    color: "#000",
+    fontSize: 12,
+    fontWeight: "500",
+  },
+  tags: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginTop: 15,
+  },
+  tempUnitText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  temperature: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginTop: 10,
+    opacity: 0.7
+  },
+  temperatureText: {
+    color: "#000",
+    fontSize: 12,
+    fontWeight: "500",
+    marginLeft: 5,
+  },
+  title: {
+    color: COLORS.black,
+    fontSize: 18,
+    fontWeight: "600",
   },
 });

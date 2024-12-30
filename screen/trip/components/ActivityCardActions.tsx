@@ -1,9 +1,13 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { tripDetailStyles } from "../_tripDetailStyles";
-import { VisitedButton } from "./VisitedButton";
-import { DotsIcon, MapDirection } from "../../../utilities/SvgIcons.utility";
+
 import { COLORS } from "../../../styles/theme";
+import {
+  AttachedFileIcon,
+  DotsIcon,
+} from "../../../utilities/SvgIcons.utility";
+import { tripDetailStyles } from "../_tripDetailStyles";
 import { DirectionButton } from "./DirectionButton";
+import { VisitedButton } from "./VisitedButton";
 
 type ActivityCardActionsProps = {
   item: any;
@@ -11,6 +15,7 @@ type ActivityCardActionsProps = {
   checkedIn: boolean;
   index: number;
   onQuestionModalOpen: (id: string) => void;
+  type: string;
 };
 
 export const ActivityCardActions = ({
@@ -18,19 +23,32 @@ export const ActivityCardActions = ({
   handleChangeActivityVisited,
   checkedIn,
   index,
-  onQuestionModalOpen
+  onQuestionModalOpen,
+  type,
 }: ActivityCardActionsProps) => {
   return (
-    <View style={[tripDetailStyles.sightBottomActions, styles.bottomActions, {
-      backgroundColor: checkedIn ?  "#fffcf5" : "#fff"
-    }]}>
+    <View
+      style={[
+        tripDetailStyles.sightBottomActions,
+        styles.bottomActions,
+        {
+          backgroundColor: checkedIn ? "#fffcf5" : "#fff",
+        },
+      ]}
+    >
       <View style={styles.leftSideButtons}>
         <VisitedButton
           handleChangeActivityVisited={handleChangeActivityVisited}
           checkedIn={checkedIn}
           index={index}
         />
-        <DirectionButton item={item}/>
+        {type !== "flight" && <DirectionButton item={item} />}
+        <TouchableOpacity activeOpacity={0.7} style={styles.showFilesButton}>
+          <View style={tripDetailStyles.iconWrapper}>
+            <AttachedFileIcon size={15} color={COLORS.gray} />
+          </View>
+          <Text style={styles.showFilesButtonText}>Files</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={tripDetailStyles.sightRightActions}>
@@ -55,18 +73,32 @@ export const ActivityCardActions = ({
 };
 const styles = StyleSheet.create({
   bottomActions: {
-    marginTop: 15,
-    marginBottom: 0,
-    borderTopColor: "#f2f2f2",
-    borderTopWidth: 1,
-    paddingVertical: 6, 
     backgroundColor: "#fbfbfb",
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
+    borderTopColor: "#f2f2f2",
+    borderTopWidth: 1,
+    marginBottom: 0,
+    marginTop: 15,
+    paddingVertical: 6,
   },
   leftSideButtons: {
+    alignItems: "center",
     flexDirection: "row",
     flex: 1,
+  },
+  showFilesButton: {
     alignItems: "center",
-  }
+    borderRadius: 6,
+    display: "flex",
+    justifyContent: "center",
+    marginLeft: 6,
+    paddingHorizontal: 3,
+    paddingVertical: 0,
+  },
+  showFilesButtonText: {
+    color: COLORS.gray,
+    fontSize: 11,
+    fontWeight: "600",
+  },
 });

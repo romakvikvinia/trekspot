@@ -1,23 +1,24 @@
 import { StyleSheet } from "react-native";
-import { COLORS, SIZES } from "./theme";
+
+import { COLORS } from "./theme";
 
 export const questionModaStyles = StyleSheet.create({
+  button: {
+    backgroundColor: "#fff",
+    borderBottomColor: "#f2f2f2",
+    borderBottomWidth: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 20,
+    width: "100%",
+  },
   buttonGroup: {
     borderRadius: 15,
     overflow: "hidden",
   },
-  button: {
-    width: "100%",
-    backgroundColor: "#fff",
-    padding: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    borderBottomWidth: 1,
-    borderBottomColor: "#f2f2f2",
-  },
   buttonText: {
-    fontSize: 16,
     color: COLORS.black,
+    fontSize: 16,
     fontWeight: "500"
   },
 });

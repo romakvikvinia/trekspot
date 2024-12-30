@@ -1,8 +1,9 @@
-import React from "react";
 import {
-  StackNavigationProp,
   createStackNavigator,
+  StackNavigationProp,
 } from "@react-navigation/stack";
+import React from "react";
+
 import { TripScreen } from "../../screen/trip/TripScreen";
  
 interface TripRouteProps {}
@@ -39,11 +40,7 @@ export const TripRouteStack: React.FC<TripRouteProps> = ({}) => {
             Platform.OS === "android" ? 10 : SIZES.width - 50,
         })}
       /> */}
-   
-      {/* <Stack.Group
-        screenOptions={{ presentation: "modal", headerShown: false }}
-      > */}
-
+  
       {/* </Stack.Group> */}
       {/* <Stack.Screen
         name="TripActivityReview"

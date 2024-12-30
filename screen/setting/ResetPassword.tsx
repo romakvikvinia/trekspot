@@ -1,32 +1,30 @@
-import React, { useContext, useEffect, useState } from "react";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import Constants from "expo-constants";
+import { useFormik } from "formik";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { toast } from "sonner-native";
+
+import { useUpdateMeMutation } from "../../api/api.trekspot";
 import { TInput } from "../../common/ui/TInput";
+import { ScreenHeader } from "../../components/common/ScreenHeader";
+import { SettingRouteStackParamList } from "../../routes/setting/SettingRoutes";
 import { globalStyles } from "../../styles/globalStyles";
 import { COLORS } from "../../styles/theme";
 import {
-  BackIcon,
   EyeCrossicon,
   EyeNoCrossicon,
 } from "../../utilities/SvgIcons.utility";
-import Constants from "expo-constants";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { SettingRouteStackParamList } from "../../routes/setting/SettingRoutes";
-import { useUpdateMeMutation } from "../../api/api.trekspot";
 import { ResetPasswordValidationSchema } from "./validationScheme";
-import { useFormik } from "formik";
-import { toast } from "sonner-native";
-import { ScreenHeader } from "../../components/common/ScreenHeader";
 
 type ResetPassword = NativeStackScreenProps<
   SettingRouteStackParamList,
@@ -162,45 +160,45 @@ export const ResetPassword: React.FC<ResetPassword> = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#f8f8f8",
-    paddingTop: Constants?.statusBarHeight + (Platform.OS === "android" ? 5 : 10),
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 15,
-    marginBottom: 15,
-  },
   backButton: {
     width: 30,
   },
-  title: {
-    fontSize: 18,
-    fontWeight: "500",
-    color: COLORS.black,
+  header: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 15,
+    paddingHorizontal: 15,
   },
   item: {
-    width: "100%",
-    flexDirection: "row",
     alignItems: "center",
-    overflow: "hidden",
+    flexDirection: "row",
     marginBottom: 15,
+    overflow: "hidden",
+    width: "100%",
+  },
+  passwordVisibleToggle: {
+    alignItems: "center",
+    backgroundColor: "#fdfdff",
+    height: 40,
+    justifyContent: "center",
+    paddingRight: 5,
+    position: "absolute",
+    right: 2,
+    width: 40,
+  },
+  safeArea: {
+    backgroundColor: "#f8f8f8",
+    flex: 1,
+    paddingTop: Constants?.statusBarHeight + (Platform.OS === "android" ? 5 : 10),
   },
   screen: {
     flex: 1,
     width: "100%",
   },
-  passwordVisibleToggle: {
-    position: "absolute",
-    width: 40,
-    height: 40,
-    backgroundColor: "#fdfdff",
-    right: 2,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingRight: 5,
+  title: {
+    color: COLORS.black,
+    fontSize: 18,
+    fontWeight: "500",
   },
 });

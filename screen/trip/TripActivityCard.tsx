@@ -1,7 +1,16 @@
-import { Image } from "expo-image";
+import * as Haptics from "expo-haptics";
+import { usePostHog } from "posthog-react-native";
 import React, { useCallback, useState } from "react";
 import { Platform, StyleSheet } from "react-native";
 import { TouchableOpacity, View } from "react-native";
+
+import {
+  trekSpotApi,
+  useChangeActivityVisitedMutation,
+} from "../../api/api.trekspot";
+import { SightType } from "../../api/api.types";
+import { useAppDispatch } from "../../package/store";
+import { Events } from "../../utilities/Posthog";
 import {
   AttractionsIcon,
   BeachesIcon,
@@ -13,18 +22,10 @@ import {
   TopsightsIcon,
 } from "../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "./_tripDetailStyles";
-import * as Haptics from "expo-haptics";
-import { SightType } from "../../api/api.types";
-import { TripDaysType } from "./TripDetailScreen";
-import {
-  trekSpotApi,
-  useChangeActivityVisitedMutation,
-} from "../../api/api.trekspot";
-import { CardContent } from "./components/CardContent";
 import { ActivityCardActions } from "./components/ActivityCardActions";
-import { useAppDispatch } from "../../package/store";
-import { usePostHog } from "posthog-react-native";
-import { Events } from "../../utilities/Posthog";
+import { CardContent } from "./components/CardContent";
+import { ImgComponent } from "./components/ImgComponent";
+import { TripDaysType } from "./TripDetailScreen";
 
 interface ITripActivityCardProps {
   visited: boolean;
@@ -36,41 +37,6 @@ interface ITripActivityCardProps {
   onQuestionModalOpen: (sight: string) => void;
   handleTopSightClick: (sight: SightType) => void;
 }
-
-const ImgComponent = ({ item }: any) => {
-  return (
-    <View
-      style={[
-        tripDetailStyles.imagesWrapper,
-        {
-          width: 70,
-          height: 70,
-          backgroundColor: "#fafafa",
-          borderRadius: 10,
-        },
-      ]}
-    >
-      <Image
-        style={[
-          tripDetailStyles.mainImage,
-          {
-            width: 70,
-            height: 70,
-          },
-        ]}
-        contentFit="cover"
-        source={
-          item?.images[0]?.url
-            ? {
-                uri: item?.images[0]?.url,
-              }
-            : require("../../assets/no-image.png")
-        }
-        key={`img-${item?.title}`}
-      ></Image>
-    </View>
-  );
-};
 
 export const ReturnIcon = ({ category }: any) => {
   switch (category) {
@@ -125,26 +91,6 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
 
   return (
     <>
-      {activityAmount > 1 && (
-        <View
-          style={[
-            styles.verticalLine,
-            {
-              height: activityAmount * 175 - 170,
-              backgroundColor: "#e0e0e0",
-            },
-          ]}
-        >
-          {/* <ImageBackground
-            source={require("../../assets/dash.png")}
-            imageStyle={{ resizeMode: "repeat" }}
-            style={{
-              width: 2,
-              height: "100%",
-            }}
-          ></ImageBackground> */}
-        </View>
-      )}
       <TouchableOpacity
         activeOpacity={0.7}
         style={[
@@ -153,7 +99,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
           {
             marginLeft: activityAmount > 1 ? 20 : 15,
             zIndex: index === 0 ? 5 : 1,
-            backgroundColor: checkedIn ?  "#fffcf5" : "#fff"
+            backgroundColor: checkedIn ? "#fffcf5" : "#fff",
           },
         ]}
         onPress={() => {
@@ -185,6 +131,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
           checkedIn={checkedIn}
           index={index}
           onQuestionModalOpen={onQuestionModalOpen}
+          type=""
         />
       </TouchableOpacity>
     </>
@@ -193,25 +140,34 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
 
 const styles = StyleSheet.create({
   activityContent: {
-    width: "100%",
     flexDirection: "row",
     flex: 1,
     height: "100%",
     paddingHorizontal: 15,
     paddingTop: 15,
+    width: "100%",
+  },
+  activityIcon: {
+    borderColor: "#f7f7f7",
+    borderRadius: 100,
+    borderWidth: 8,
+    left: -40,
+    position: "absolute",
+    top: 55,
+    zIndex: 2,
   },
   activityItem: {
     flexDirection: "column",
-    padding: 0,
-    marginRight: 15,
     marginBottom: 25,
+    marginRight: 15,
+    padding: 0,
     paddingBottom: 0,
     paddingTop: 0,
+    position: "relative",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 0.84,
-    position: "relative",
     ...Platform.select({
       android: {
         elevation: 2,
@@ -219,25 +175,10 @@ const styles = StyleSheet.create({
     }),
     zIndex: 1,
   },
-  activityIcon: {
-    position: "absolute",
-    top: 55,
-    borderWidth: 8,
-    borderColor: "#f7f7f7",
-    zIndex: 2,
-    left: -40,
-    borderRadius: 100,
-  },
   circle: {
-    minWidth: 10,
-    height: 10,
     backgroundColor: "#ccc",
     borderRadius: 100,
-  },
-  verticalLine: {
-    position: "absolute",
-    top: 100,
-    left: 22,
-    width: 2,
+    height: 10,
+    minWidth: 10,
   },
 });
