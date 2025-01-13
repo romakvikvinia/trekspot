@@ -1,12 +1,11 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
+import { FloatingActionButton } from "../../../components/common/FloatingButtons";
 import { COLORS } from "../../../styles/theme";
-import {
-  AttachedFileIcon,
-  DotsIcon,
-} from "../../../utilities/SvgIcons.utility";
+import { DotsIcon, TrashIcon } from "../../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "../_tripDetailStyles";
 import { DirectionButton } from "./DirectionButton";
+import { FilesButton } from "./FilesButton";
 import { VisitedButton } from "./VisitedButton";
 
 type ActivityCardActionsProps = {
@@ -42,31 +41,29 @@ export const ActivityCardActions = ({
           checkedIn={checkedIn}
           index={index}
         />
-        {type !== "flight" && <DirectionButton item={item} />}
-        <TouchableOpacity activeOpacity={0.7} style={styles.showFilesButton}>
-          <View style={tripDetailStyles.iconWrapper}>
-            <AttachedFileIcon size={15} color={COLORS.gray} />
-          </View>
-          <Text style={styles.showFilesButtonText}>Files</Text>
-        </TouchableOpacity>
+        {!type && <DirectionButton item={item} />}
+        <FilesButton />
       </View>
 
       <View style={tripDetailStyles.sightRightActions}>
-        <TouchableOpacity
-          onPress={() => onQuestionModalOpen(item.id)}
-          style={[
-            tripDetailStyles.sightRightActionsButton,
+        <FloatingActionButton
+          buttons={[
             {
-              marginRight: -5,
+              label: "Delete activity",
+              onPress: () => onQuestionModalOpen(item.id),
+              icon: TrashIcon,
+              isDanger: true,
             },
           ]}
-          activeOpacity={0.7}
-        >
-          <View style={tripDetailStyles.iconWrapper}>
-            <DotsIcon color={COLORS.gray} />
-          </View>
-          <Text style={tripDetailStyles.actionTitle}>More</Text>
-        </TouchableOpacity>
+          renderTrigger={() => (
+            <View style={{ width: 30, marginRight: -5 }}>
+              <View style={tripDetailStyles.iconWrapper}>
+                <DotsIcon color={COLORS.gray} />
+              </View>
+              <Text style={tripDetailStyles.actionTitle}>More</Text>
+            </View>
+          )}
+        />
       </View>
     </View>
   );
@@ -80,25 +77,11 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     marginBottom: 0,
     marginTop: 15,
-    paddingVertical: 6,
+    paddingVertical: 10,
   },
   leftSideButtons: {
     alignItems: "center",
     flexDirection: "row",
     flex: 1,
-  },
-  showFilesButton: {
-    alignItems: "center",
-    borderRadius: 6,
-    display: "flex",
-    justifyContent: "center",
-    marginLeft: 6,
-    paddingHorizontal: 3,
-    paddingVertical: 0,
-  },
-  showFilesButtonText: {
-    color: COLORS.gray,
-    fontSize: 11,
-    fontWeight: "600",
   },
 });

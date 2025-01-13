@@ -1,25 +1,25 @@
-import React, { useState, useEffect, useCallback } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useDispatch } from "react-redux";
-import { useFormik } from "formik";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  KeyboardAvoidingView,
-  ActivityIndicator,
-  Animated,
-  Platform,
-  Alert,
-} from "react-native";
-import Constants from "expo-constants";
 // import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import * as AppleAuthentication from "expo-apple-authentication";
+import Constants from "expo-constants";
+import * as WebBrowser from "expo-web-browser";
+import { useFormik } from "formik";
+import { usePostHog } from "posthog-react-native";
+import React, { useCallback,useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  Alert,
+  Animated,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { useDispatch } from "react-redux";
 
-import { SignInValidationSchema } from "./validationScheme";
-import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
 import {
   trekSpotApi,
   useAuthBySocialNetworkMutation,
@@ -30,21 +30,20 @@ import {
   AuthLoginResponseType,
   SocialProvidersEnum,
 } from "../../api/api.types";
+import { GUEST_EMAIL, GUEST_PASS } from "../../helpers/baseUrl.helper";
 import { storeToken } from "../../helpers/secure.storage";
+import { signIn } from "../../package/slices";
+import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
+import { globalStyles } from "../../styles/globalStyles";
+import { COLORS, SIZES } from "../../styles/theme";
+import { Events } from "../../utilities/Posthog";
+import { TrekSpotLinear } from "../../utilities/svg/TrekSpotLinear";
 import {
   AppleIcon,
   GoogleIcon,
   IncoIcon,
 } from "../../utilities/SvgIcons.utility";
-import { COLORS, SIZES } from "../../styles/theme";
-import { globalStyles } from "../../styles/globalStyles";
-import { TrekSpotLinear } from "../../utilities/svg/TrekSpotLinear";
-
-import { signIn } from "../../package/slices";
-import { GUEST_EMAIL, GUEST_PASS } from "../../helpers/baseUrl.helper";
-import * as WebBrowser from "expo-web-browser";
-import { usePostHog } from "posthog-react-native";
-import { Events } from "../../utilities/Posthog";
+import { SignInValidationSchema } from "./validationScheme";
 
 // GoogleSignin.configure({
 //   webClientId:
@@ -104,7 +103,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   const handleSaveToken = useCallback(
     async (auth: AuthLoginResponseType) => {
       try {
-        let token = { ...auth.signIn };
+        const token = { ...auth.signIn };
         token.expire = new Date().getTime() + token.expire;
 
         await storeToken(token);
@@ -247,7 +246,7 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
   };
 
   const _handlePressButtonAsync = async () => {
-    let result = await WebBrowser.openBrowserAsync(
+    const result = await WebBrowser.openBrowserAsync(
       "https://trekspot.io/en/privacy-policy",
       {
         enableBarCollapsing: true,
@@ -401,136 +400,136 @@ export const SignInScreen: React.FC<SignInProps> = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-    paddingTop: Constants?.statusBarHeight + 10,
-  },
-  topSide: {
-    width: "100%",
-  },
-  textWithButtonWrapper: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 25,
-    marginBottom: 15,
-    paddingBottom: 15,
-  },
-  privacyPolicy: {
-    fontSize: SIZES.body3,
-    fontWeight: "normal",
-    color: COLORS.primaryDark,
-    textDecorationLine: "underline",
-  },
-  textWithButtonLabel: {
-    fontSize: SIZES.body2,
-    color: "#000",
-  },
-  socialText: {
-    fontSize: SIZES.body3,
-    marginLeft: 15,
-    fontWeight: "500",
-    width: 160,
-  },
-  textWithButton: {
-    marginLeft: 5,
-  },
-  textWithButtonText: {
-    fontSize: SIZES.body2,
-    color: COLORS.primary,
-    fontWeight: "bold",
-  },
-  continueWithDivider: {
-    width: "100%",
-    position: "relative",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 25,
-    marginBottom: 10,
-  },
   borderRow: {
-    width: "100%",
-    height: 2,
     backgroundColor: "#fafafa",
-  },
-  continueWithDividerText: {
-    position: "absolute",
-    top: -9,
-    backgroundColor: "#fff",
-    paddingHorizontal: SIZES.padding,
-    fontSize: SIZES.body4,
-    color: COLORS.darkgray,
-  },
-  continueWith: {
+    height: 2,
     width: "100%",
-    flexDirection: "column",
-    justifyContent: "center",
-  },
-  continueWithButton: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff",
-    marginHorizontal: SIZES.padding,
-    borderRadius: SIZES.radius * 5,
-    height: 50,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    marginBottom: 15,
-  },
-  forgotPassword: {
-    display: "flex",
-    justifyContent: "flex-end",
-    flexDirection: "row",
-  },
-  forgotPasswordText: {
-    fontSize: SIZES.font,
-    color: COLORS.primary,
   },
   container: {
     flexGrow: 1,
   },
-  screen: {
-    flex: 1,
-    alignItems: "center",
+  continueWith: {
+    flexDirection: "column",
+    justifyContent: "center",
     width: "100%",
-    paddingHorizontal: 15,
+  },
+  continueWithButton: {
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderColor: "#ccc",
+    borderRadius: SIZES.radius * 5,
+    borderWidth: 1,
+    display: "flex",
+    flexDirection: "row",
+    height: 50,
+    justifyContent: "center",
+    marginBottom: 15,
+    marginHorizontal: SIZES.padding,
+  },
+  continueWithDivider: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: 10,
+    marginTop: 25,
+    position: "relative",
+    width: "100%",
+  },
+  continueWithDividerText: {
+    backgroundColor: "#fff",
+    color: COLORS.darkgray,
+    fontSize: SIZES.body4,
+    paddingHorizontal: SIZES.padding,
+    position: "absolute",
+    top: -9,
+  },
+  forgotPassword: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
+  forgotPasswordText: {
+    color: COLORS.primary,
+    fontSize: SIZES.font,
+  },
+  item: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginBottom: 15,
+    overflow: "hidden",
+    position: "relative",
+    width: "100%",
+  },
+  logoContainer: {
+    alignItems: "flex-start",
+    marginBottom: 15,
+    marginVertical: 5,
+    width: "100%",
+  },
+  passwordVisibleToggle: {
+    alignItems: "center",
+    backgroundColor: "#fdfdff",
+    height: 40,
+    justifyContent: "center",
+    paddingRight: 5,
+    position: "absolute",
+    right: 2,
+    width: 40,
+  },
+  privacyPolicy: {
+    color: COLORS.primaryDark,
+    fontSize: SIZES.body3,
+    fontWeight: "normal",
+    textDecorationLine: "underline",
+  },
+  safeArea: {
+    backgroundColor: "#ffffff",
+    flex: 1,
+    paddingTop: Constants?.statusBarHeight + 10,
+  },
+  screen: {
+    alignItems: "center",
+    flex: 1,
     justifyContent: "space-between",
+    paddingHorizontal: 15,
+    width: "100%",
   },
   signTitle: {
+    marginBottom: 45,
     marginTop: 0,
     width: "100%",
-    marginBottom: 45,
   },
   signTitleText: {
     fontSize: 17,
     fontWeight: "bold",
   },
-  item: {
-    width: "100%",
+  socialText: {
+    fontSize: SIZES.body3,
+    fontWeight: "500",
+    marginLeft: 15,
+    width: 160,
+  },
+  textWithButton: {
+    marginLeft: 5,
+  },
+  textWithButtonLabel: {
+    color: "#000",
+    fontSize: SIZES.body2,
+  },
+  textWithButtonText: {
+    color: COLORS.primary,
+    fontSize: SIZES.body2,
+    fontWeight: "bold",
+  },
+  textWithButtonWrapper: {
     flexDirection: "row",
-    alignItems: "center",
-    overflow: "hidden",
-    marginBottom: 15,
-    position: "relative",
-  },
-  passwordVisibleToggle: {
-    position: "absolute",
-    width: 40,
-    height: 40,
-    backgroundColor: "#fdfdff",
-    right: 2,
-    alignItems: "center",
     justifyContent: "center",
-    paddingRight: 5,
-  },
-  logoContainer: {
-    marginVertical: 5,
-    width: "100%",
-    alignItems: "flex-start",
     marginBottom: 15,
+    marginTop: 25,
+    paddingBottom: 15,
+    width: "100%",
+  },
+  topSide: {
+    width: "100%",
   },
 });

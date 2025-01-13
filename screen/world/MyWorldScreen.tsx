@@ -1,14 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
-import MapView, {
-  Geojson,
-  MapPressEvent,
-  PROVIDER_GOOGLE,
-  GeojsonProps,
-} from "react-native-maps";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { AnyAction,ThunkDispatch } from "@reduxjs/toolkit";
+import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
-import Carousel from "react-native-snap-carousel";
-
+import * as Location from "expo-location";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   ImageBackground,
@@ -19,11 +14,34 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Image } from "expo-image";
-import * as Location from "expo-location";
-import { getCountry } from "../../utilities/countries";
-import { Portal } from "react-native-portalize";
+import MapView, {
+  Geojson,
+  GeojsonProps,
+  MapPressEvent,
+  PROVIDER_GOOGLE,
+} from "react-native-maps";
 import { Modalize } from "react-native-modalize";
+import { Portal } from "react-native-portalize";
+import Carousel from "react-native-snap-carousel";
+import { useDispatch } from "react-redux";
+
+import { deleteImage, uploadImage } from "../../api/api.file";
+import {
+  trekSpotApi,
+  useCreateOrUpdateStoriesMutation,
+  useMeQuery,
+  useStoriesQuery,
+  useUpdateMeMutation,
+} from "../../api/api.trekspot";
+import { StoriesResponseType, StoryType } from "../../api/api.types";
+import { AddMemoriesModal } from "../../common/components/AddMemoriesModal";
+import { CarouselItem } from "../../components/world/CarouselItem";
+import { VisitedCountryItem } from "../../components/world/VisitedCountryItem";
+import { MyWorldRouteStackParamList } from "../../routes/world/MyWorldRoutes";
+import { customMapStyle } from "../../styles/mapView.style";
+import { COLORS, SIZES } from "../../styles/theme";
+import { getCountry } from "../../utilities/countries";
+import { CountriesList, ICountry } from "../../utilities/countryList";
 import { Flags } from "../../utilities/flags";
 import {
   AnchorRightIcon,
@@ -35,26 +53,6 @@ import {
   VisitedIcon,
   XIcon,
 } from "../../utilities/SvgIcons.utility";
-import { COLORS, SIZES } from "../../styles/theme";
-
-import { AddMemoriesModal } from "../../common/components/AddMemoriesModal";
-import { CountriesList, ICountry } from "../../utilities/countryList";
-
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { MyWorldRouteStackParamList } from "../../routes/world/MyWorldRoutes";
-import {
-  trekSpotApi,
-  useCreateOrUpdateStoriesMutation,
-  useMeQuery,
-  useStoriesQuery,
-  useUpdateMeMutation,
-} from "../../api/api.trekspot";
-import { deleteImage, uploadImage } from "../../api/api.file";
-import { customMapStyle } from "../../styles/mapView.style";
-import { VisitedCountryItem } from "../../components/world/VisitedCountryItem";
-import { StoriesResponseType, StoryType } from "../../api/api.types";
-import { CarouselItem } from "../../components/world/CarouselItem";
-import { ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
 
 type HomeProps = NativeStackScreenProps<MyWorldRouteStackParamList, "World">;
 
@@ -165,12 +163,12 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
   const handleMapPress = async (event: MapPressEvent) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
     try {
-      let [currentCountry] = await Location.reverseGeocodeAsync({
+      const [currentCountry] = await Location.reverseGeocodeAsync({
         latitude,
         longitude,
       });
 
-      let result = getCountry(currentCountry.isoCountryCode);
+      const result = getCountry(currentCountry.isoCountryCode);
       if (currentCountry && result) {
         mapRef.current?.animateToRegion({
           latitude: latitude,
@@ -763,57 +761,57 @@ const MyWorldScreen: React.FC<HomeProps> = ({ navigation }) => {
 export default MyWorldScreen;
 const styles = StyleSheet.create({
   galleryHeader: {
-    paddingTop: 55,
-    flexDirection: "row",
     alignItems: "center",
+    flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 15,
+    paddingTop: 55,
     position: "absolute",
-    zIndex: 1,
     width: "100%",
+    zIndex: 1,
   },
   galleryImageDeleteButton: {
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     borderColor: "#000",
     borderRadius: 50,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    flexDirection: "row",
-    alignItems: "center",
     borderWidth: 0,
-    width: 40,
+    flexDirection: "row",
     height: 40,
     justifyContent: "center",
+    width: 40,
   },
   closeGalleryButton: {
-    width: 40,
-    height: 40,
-    borderWidth: 0,
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     borderColor: "#000",
     borderRadius: 50,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    alignItems: "center",
+    borderWidth: 0,
+    height: 40,
     justifyContent: "center",
+    width: 40,
   },
   currentCountry: {
-    flexDirection: "row",
     alignItems: "center",
+    flexDirection: "row",
   },
   importImagesButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    paddingRight: 8,
+    alignItems: "center",
+    borderColor: "#000",
     borderRadius: 30,
     borderWidth: 1,
-    borderColor: "#000",
     flexDirection: "row",
-    alignItems: "center",
+    paddingHorizontal: 15,
+    paddingRight: 8,
+    paddingVertical: 8,
   },
   importImagesButtonText: {
-    fontSize: 14,
     color: "#000",
+    fontSize: 14,
   },
   memoriesModalHeader: {
-    flexDirection: "row",
     alignItems: "center",
+    flexDirection: "row",
     justifyContent: "space-between",
     padding: 15,
   },
@@ -825,15 +823,19 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   actionButtons: {
-    flexDirection: "row",
     alignItems: "center",
+    flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 35,
     marginBottom: 40,
+    marginTop: 35,
   },
   actionButton: {
     alignItems: "center",
     backgroundColor: "#fff",
+    borderRadius: 10,
+    elevation: 5,
+    justifyContent: "center",
+    minHeight: 90,
     padding: 10,
     shadowColor: "#000",
     shadowOffset: {
@@ -842,29 +844,25 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
-    elevation: 5,
     width: "30%",
-    minHeight: 90,
-    borderRadius: 10,
-    justifyContent: "center",
   },
   actionButtonsText: {
-    marginTop: 15,
-    fontSize: 14,
     color: "#898B93",
+    fontSize: 14,
     fontWeight: "bold",
+    marginTop: 15,
   },
   mapCountryWrapper: {
     padding: 15,
   },
   mapCountryWrapperHeader: {
-    flexDirection: "row",
     alignItems: "center",
+    flexDirection: "row",
     justifyContent: "space-between",
   },
   leftItems: {
-    flexDirection: "row",
     alignItems: "center",
+    flexDirection: "row",
   },
   // countryText: {
   //   fontSize: 26,
@@ -873,30 +871,31 @@ const styles = StyleSheet.create({
   //   marginLeft: 8,
   // },
   countryText: {
-    marginLeft: 10,
     fontSize: 14,
     fontWeight: "bold",
+    marginLeft: 10,
   },
   backButton: {
-    width: 40,
-    height: 40,
+    alignItems: "center",
     backgroundColor: "#fff",
     borderRadius: 100,
     display: "flex",
-    alignItems: "center",
+    height: 40,
     justifyContent: "center",
+    width: 40,
     ...COLORS.shadow,
-    position: "absolute",
     left: 15,
+    position: "absolute",
     top: 55,
     zIndex: 1,
   },
   closeButton: {
-    width: 35,
-    height: 35,
+    alignItems: "center",
+    backgroundColor: "#000",
     borderRadius: 100,
     display: "flex",
-    alignItems: "center",
+    elevation: 5,
+    height: 35,
     justifyContent: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -905,25 +904,24 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
-    elevation: 5,
-    backgroundColor: "#000",
+    width: 35,
   },
   rowItem: {
-    width: "100%",
     marginTop: 30,
     paddingHorizontal: 15,
+    width: "100%",
   },
   map: {
     flex: 1,
   },
   h2: {
-    fontSize: 22,
     color: "#000",
+    fontSize: 22,
     fontWeight: "bold",
   },
   container: {
-    flex: 1,
     backgroundColor: "#fff",
+    flex: 1,
   },
   mapContainer: {
     backgroundColor: "#f8fafb",
@@ -931,62 +929,62 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 20,
   },
   contentBox: {
-    width: "100%",
     marginTop: 15,
+    width: "100%",
   },
   box: {
-    width: 200,
-    height: 100,
     backgroundColor: "#fafafa",
     borderRadius: 15,
+    height: 100,
     marginRight: 15,
+    width: 200,
   },
   topActions: {
-    width: "100%",
-    flexDirection: "row",
     display: "flex",
-    paddingHorizontal: 15,
+    flexDirection: "row",
     justifyContent: "space-between",
     paddingBottom: 15,
+    paddingHorizontal: 15,
+    width: "100%",
   },
   left: {
-    flexDirection: "row",
     display: "flex",
+    flexDirection: "row",
   },
   row: {
-    flexDirection: "row",
     display: "flex",
+    flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: 15,
-    marginTop: 0,
     marginBottom: 8,
+    marginTop: 0,
+    paddingHorizontal: 15,
   },
   rowBox: {
-    width: "32%",
-    height: 90,
-    display: "flex",
     alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 15,
     backgroundColor: "#f8fafb",
     borderColor: "#fff",
-    borderWidth: 0,
+    borderRadius: 15,
     borderStyle: "solid",
+    borderWidth: 0,
+    display: "flex",
+    height: 90,
+    justifyContent: "center",
+    width: "32%",
   },
   lg: {
     fontSize: 24,
-    marginBottom: 8,
     fontWeight: "bold",
+    marginBottom: 8,
   },
   btn: {
-    backgroundColor: "#fff",
-    height: 30,
-    paddingHorizontal: 15,
-    display: "flex",
     alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#fff",
     borderRadius: 15,
+    display: "flex",
     flexDirection: "row",
+    height: 30,
+    justifyContent: "center",
+    paddingHorizontal: 15,
   },
   txt: {
     fontSize: 14,

@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import {
   KeyboardAvoidingView,
@@ -17,11 +18,18 @@ import { COLORS } from "../../../../styles/theme";
 import {
   ArrivalIcon,
   CalendarLightIcon,
+  CostIcon,
   DepartIcon,
+  DescriptionIcon,
+  NoteIcon,
 } from "../../../../utilities/SvgIcons.utility";
+import { FilesRow } from "../../components/FilesRow";
 import { Header } from "./Header";
+import { NormalHeader } from "./NormalHeader";
 
-export const FlightDetails = () => {
+export const FlightDetails = ({route}) => {
+  const { isPreview } = route?.params;
+  const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   const [datepickerVisible, setDatePickerVisible] = useState(false);
 
@@ -45,6 +53,10 @@ export const FlightDetails = () => {
     },
   };
 
+  const handleSelectDepartureAirport = () => {
+    navigation.navigate("SearchAirport");
+  };
+
   return (
     <PaperProvider theme={theme}>
       <SafeAreaView style={{ flex: 1 }}>
@@ -52,44 +64,71 @@ export const FlightDetails = () => {
           behavior={Platform.OS == "ios" ? "padding" : "height"}
           style={styles.screen}
         >
-          <Header isFlightDetails />
+          {!isPreview ? (
+            <Header isFlightDetails />
+          ) : (
+            <NormalHeader title="Flight" />
+          )}
+
           <ScrollView
             style={{ flex: 1 }}
-            contentContainerStyle={{ paddingHorizontal: 15 }}
+            contentContainerStyle={{
+              paddingHorizontal: 15,
+              paddingTop: isPreview ? 15 : 0,
+            }}
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="interactive"
           >
             <View style={styles.inputGroup}>
               <View style={[styles.inputRow, styles.widthBorderBottom]}>
                 <Text style={styles.inputLabel}>Flight number</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="e.g EK162"
-                  placeholderTextColor="#85858A"
-                  autoFocus
-                />
+                {!isPreview ? (
+                  <TextInput
+                    style={styles.input}
+                    placeholder="E.g EK162"
+                    placeholderTextColor="#c6c6c6"
+                    editable={!isPreview}
+                    autoFocus
+                  />
+                ) : (
+                  <View style={styles.inputValueWrapper}>
+                    <Text style={styles.inputValue}>EK162</Text>
+                  </View>
+                )}
               </View>
               <View style={styles.inputRow}>
                 <Text style={styles.inputLabel}>Airline</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="e.g Emirates"
-                  placeholderTextColor="#85858A"
-                  autoFocus
-                />
+                {!isPreview ? (
+                  <TextInput
+                    style={styles.input}
+                    placeholder="E.g Emirates"
+                    editable={!isPreview}
+                    placeholderTextColor="#c6c6c6"
+                  />
+                ) : (
+                  <View style={styles.inputValueWrapper}>
+                    <Text style={styles.inputValue}>Emirates</Text>
+                  </View>
+                )}
               </View>
             </View>
 
             <View style={styles.airportSelection}>
               <Pressable
-                style={[
+                disabled={isPreview}
+                style={({ pressed }) => [
                   styles.airportSelectionButton,
                   styles.widthBorderBottom,
+                  { backgroundColor: pressed ? "#fafafa" : "#fff" },
                 ]}
+                onPress={handleSelectDepartureAirport}
               >
                 <View style={styles.iconWrapper}>
                   <DepartIcon size="20" color={COLORS.primary} />
                 </View>
                 <Text style={styles.airportSelectionButtonText}>
-                  Select departure airport
+                  Tbilisi international airport
+                  {/* Select departure airport */}
                 </Text>
               </Pressable>
               <View style={styles.flightDate}>
@@ -100,13 +139,21 @@ export const FlightDetails = () => {
 
                 <View style={styles.datePickers}>
                   <Pressable
-                    style={styles.datePickersDateButton}
+                    disabled={isPreview}
+                    style={({ pressed }) => [
+                      styles.datePickersDateButton,
+                      { backgroundColor: pressed ? "#fafafa" : "#eaeaea" },
+                    ]}
                     onPress={() => setDatePickerVisible(true)}
                   >
                     <Text style={styles.datePickersDateButtonText}>Date</Text>
                   </Pressable>
                   <Pressable
-                    style={styles.datePickersDateButton}
+                    disabled={isPreview}
+                    style={({ pressed }) => [
+                      styles.datePickersDateButton,
+                      { backgroundColor: pressed ? "#fafafa" : "#eaeaea" },
+                    ]}
                     onPress={() => setVisible(true)}
                   >
                     <Text style={styles.datePickersDateButtonText}>Time</Text>
@@ -116,12 +163,14 @@ export const FlightDetails = () => {
             </View>
             <View style={styles.airportSelection}>
               <Pressable
-                style={[
+                disabled={isPreview}
+                style={({ pressed }) => [
                   styles.airportSelectionButton,
                   styles.widthBorderBottom,
+                  { backgroundColor: pressed ? "#fafafa" : "#fff" },
                 ]}
               >
-                 <View style={styles.iconWrapper}>
+                <View style={styles.iconWrapper}>
                   <ArrivalIcon size="20" color={COLORS.primary} />
                 </View>
                 <Text style={styles.airportSelectionButtonText}>
@@ -135,10 +184,22 @@ export const FlightDetails = () => {
                 </View>
 
                 <View style={styles.datePickers}>
-                  <Pressable style={styles.datePickersDateButton}>
+                  <Pressable
+                    disabled={isPreview}
+                    style={({ pressed }) => [
+                      styles.datePickersDateButton,
+                      { backgroundColor: pressed ? "#fafafa" : "#eaeaea" },
+                    ]}
+                  >
                     <Text style={styles.datePickersDateButtonText}>Date</Text>
                   </Pressable>
-                  <Pressable style={styles.datePickersDateButton}>
+                  <Pressable
+                    disabled={isPreview}
+                    style={({ pressed }) => [
+                      styles.datePickersDateButton,
+                      { backgroundColor: pressed ? "#fafafa" : "#eaeaea" },
+                    ]}
+                  >
                     <Text style={styles.datePickersDateButtonText}>Time</Text>
                   </Pressable>
                 </View>
@@ -147,56 +208,188 @@ export const FlightDetails = () => {
             <View style={styles.inputGroup}>
               <View style={[styles.inputRow, styles.widthBorderBottom]}>
                 <Text style={styles.inputLabel}>Flight duration</Text>
-                <TextInput
-                  style={[styles.input, {
-                    textAlign: "right"
-                  }]}
-                  placeholder=""
-                  editable={false}
-                  value="3h 15m"
-                />
+                <View
+                  style={[
+                    styles.inputValueWrapper,
+                    {
+                      alignItems: "flex-end",
+                    },
+                  ]}
+                >
+                  <Text style={styles.inputValue}>3h 15m</Text>
+                </View>
               </View>
               <View style={styles.inputRow}>
                 <Text style={styles.inputLabel}>Distance</Text>
-                <TextInput
-                   style={[styles.input, {
-                    textAlign: "right"
-                  }]}
-                  placeholder=""
-                  editable={false}
-                    value="345Km"
-                />
+                <View
+                  style={[
+                    styles.inputValueWrapper,
+                    {
+                      alignItems: "flex-end",
+                    },
+                  ]}
+                >
+                  <Text style={styles.inputValue}>345Km</Text>
+                </View>
               </View>
             </View>
 
             <View style={styles.inputGroup}>
               <View style={[styles.inputRow, styles.widthBorderBottom]}>
                 <Text style={styles.inputLabel}>Reserv. Code</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="e.g GHD12"
-                  placeholderTextColor="#85858A"
-                />
+                {!isPreview ? (
+                  <TextInput
+                    style={styles.input}
+                    placeholder="E.g GHD12"
+                    placeholderTextColor="#c6c6c6"
+                    editable={!isPreview}
+                  />
+                ) : (
+                  <View style={styles.inputValueWrapper}>
+                    <Text style={styles.inputValue}>EK162</Text>
+                  </View>
+                )}
               </View>
               <View style={[styles.inputRow, styles.widthBorderBottom]}>
                 <Text style={styles.inputLabel}>Seat</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="e.g 14C"
-                  placeholderTextColor="#85858A"
-                />
+                {!isPreview ? (
+                  <TextInput
+                    style={styles.input}
+                    placeholder="E.g 14C"
+                    placeholderTextColor="#c6c6c6"
+                    editable={!isPreview}
+                  />
+                ) : (
+                  <View style={styles.inputValueWrapper}>
+                    <Text style={styles.inputValue}>14C</Text>
+                  </View>
+                )}
               </View>
               <View style={styles.inputRow}>
                 <Text style={styles.inputLabel}>Seat Class</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="e.g Premium"
-                  placeholderTextColor="#85858A"
-                />
+                {!isPreview ? (
+                  <TextInput
+                    style={styles.input}
+                    placeholder="E.g Premium"
+                    placeholderTextColor="#c6c6c6"
+                    editable={!isPreview}
+                  />
+                ) : (
+                  <View style={styles.inputValueWrapper}>
+                    <Text style={styles.inputValue}>Premium</Text>
+                  </View>
+                )}
               </View>
             </View>
 
- 
+            <View style={styles.inputGroup}>
+              <View style={styles.inputRow}>
+                <CostIcon size={20} color="#86858c" />
+                <Text
+                  style={[
+                    styles.inputLabel,
+                    {
+                      marginLeft: 8,
+                      width: 70,
+                    },
+                  ]}
+                >
+                  Cost
+                </Text>
+                {!isPreview ? (
+                  <TextInput
+                    style={styles.input}
+                    placeholder="E.g 400$"
+                    placeholderTextColor="#c6c6c6"
+                    editable={!isPreview}
+                  />
+                ) : (
+                  <View style={styles.inputValueWrapper}>
+                    <Text style={styles.inputValue}>400$</Text>
+                  </View>
+                )}
+              </View>
+            </View>
+
+            <View style={styles.inputGroup}>
+              <Pressable
+                disabled={isPreview}
+                onPress={() =>
+                  navigation.navigate("ActivityNoteOrDescription", {
+                    type: "note",
+                  })
+                }
+                style={({ pressed }) => [
+                  styles.inputRow,
+                  styles.widthBorderBottom,
+                  {
+                    height: 50,
+                    paddingRight: 15,
+                    backgroundColor: pressed ? "#fafafa" : "#fff",
+                  },
+                ]}
+              >
+                <NoteIcon size={20} color="#86858c" />
+                <Text
+                  style={[
+                    styles.inputLabel,
+                    {
+                      marginLeft: 8,
+                    },
+                  ]}
+                >
+                  Notes
+                </Text>
+                {!isPreview ? (
+                  <Text style={styles.placeholder} numberOfLines={1}>
+                    Enter here...
+                  </Text>
+                ) : (
+                  <Text style={styles.textValue} numberOfLines={1}>
+                     This is my note... 
+                  </Text>
+                )}
+              </Pressable>
+              <Pressable
+                disabled={isPreview}
+                onPress={() =>
+                  navigation.navigate("ActivityNoteOrDescription", {
+                    type: "description",
+                  })
+                }
+                style={({ pressed }) => [
+                  styles.inputRow,
+                  {
+                    height: 50,
+                    paddingRight: 15,
+                    backgroundColor: pressed ? "#fafafa" : "#fff",
+                  },
+                ]}
+              >
+                <DescriptionIcon size={20} color="#86858c" />
+                <Text
+                  style={[
+                    styles.inputLabel,
+                    {
+                      marginLeft: 8,
+                    },
+                  ]}
+                >
+                  Description
+                </Text>
+                {!isPreview ? (
+                  <Text style={styles.placeholder} numberOfLines={1}>
+                    Enter here...
+                  </Text>
+                ) : (
+                  <Text style={styles.textValue} numberOfLines={1}>
+                    This is my description...
+                  </Text>
+                )}
+              </Pressable>
+            </View>
+
+            <FilesRow isPreview={isPreview} />
           </ScrollView>
         </KeyboardAvoidingView>
       </SafeAreaView>
@@ -301,7 +494,7 @@ const styles = StyleSheet.create({
   inputLabel: {
     color: COLORS.black,
     fontSize: 14,
-    fontWeight: "400",
+    fontWeight: "500",
     width: 100
   },
   inputRow: {
@@ -309,8 +502,34 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingLeft: 15
   },
+  inputValue: {
+    backgroundColor: "#fff",
+    color: "#000",
+    fontSize: 16,
+    fontWeight: "500",
+    paddingHorizontal: 15,
+    verticalAlign: "middle"
+  },
+  inputValueWrapper: {
+    flex: 1,
+    height: 50,
+    justifyContent: "center"
+  },
+  placeholder: {
+    color: "#c6c6c6",
+    flex: 1,
+    fontSize: 14,
+    textAlign: "right"
+  },
   screen: {
     flex: 1,
+  },
+  textValue: {
+    color: COLORS.black,
+    flex: 1,
+    fontSize: 14,
+    fontWeight: "400",
+    textAlign: "right"
   },
   widthBorderBottom: {
     borderBottomColor: "#f2f2f2",

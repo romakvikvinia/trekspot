@@ -5,8 +5,9 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import { DirectionIcon } from "../../../utilities/SvgIcons.utility";
+
 import { COLORS } from "../../../styles/theme";
+import { DirectionIcon } from "../../../utilities/SvgIcons.utility";
 
 export const ShowDirectionButton = ({ data }) => {
 const latitude = data?.location?.lat;
@@ -46,11 +47,11 @@ const placeName = data?.title;
 export const styles = StyleSheet.create({
   directionButton: {
     backgroundColor: COLORS.primary,
-    padding: 10,
     borderRadius: 25,
-    paddingHorizontal: 15,
+    flexDirection: "row",
     marginRight: 0,
-    flexDirection: "row"
+    padding: 10,
+    paddingHorizontal: 15
   },
   directionButtonText: {
     color: "#fff",

@@ -1,3 +1,4 @@
+import Constants from "expo-constants";
 import { Image } from "expo-image";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -8,23 +9,23 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Constants from "expo-constants";
-
 import { enGB, registerTranslation } from "react-native-paper-dates";
 registerTranslation("en", enGB);
 
 import { useNavigation } from "@react-navigation/native";
-import { BackIcon, XIcon } from "../../utilities/SvgIcons.utility";
 import { FlashList } from "@shopify/flash-list";
-import { COLORS, SIZES } from "../../styles/theme";
-import { globalStyles } from "../../styles/globalStyles";
-import { useLazyTopicsQuery } from "../../api/api.trekspot";
-import { Loader } from "../../common/ui/Loader";
-import { Portal } from "react-native-portalize";
+import { LinearGradient } from "expo-linear-gradient";
 import { Modalize } from "react-native-modalize";
-import { TopicType } from "../../api/api.types";
+import { Portal } from "react-native-portalize";
 import RenderHTML from "react-native-render-html";
+
+import { useLazyTopicsQuery } from "../../api/api.trekspot";
+import { TopicType } from "../../api/api.types";
+import { Loader } from "../../common/ui/Loader";
 import { NodataText } from "../../components/common/NoDataText";
+import { globalStyles } from "../../styles/globalStyles";
+import { COLORS, SIZES } from "../../styles/theme";
+import { BackIcon, XIcon } from "../../utilities/SvgIcons.utility";
 
 interface TripProps {}
   
@@ -83,7 +84,7 @@ export const TripInsights: React.FC<TripProps> = ({ route }) => {
             Object.keys(data).map((key, i) => (
               <View
                 key={key}
-                style={[styles.topicsRow, { marginTop: i === 0 ? 25 : 0 }]}
+                style={styles.topicsRow}
               >
                 <View style={styles.headingItem}>
                   <Text style={styles.topicsRowTitle}>{key}</Text>
@@ -116,7 +117,12 @@ export const TripInsights: React.FC<TripProps> = ({ route }) => {
                               : require("../../assets/no-image.png")
                           }
                         />
-                        <Text style={styles.cardTitle}>{item.title}</Text>
+                       <LinearGradient
+                          style={styles.gradientWrapper}
+                          colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.9)"]}
+                        >
+                          <Text style={styles.cardTitle}>{item.title}</Text>
+                        </LinearGradient>
                       </TouchableOpacity>
                     )}
                     estimatedItemSize={10}
@@ -218,130 +224,88 @@ export const TripInsights: React.FC<TripProps> = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#F2F2F7",
-    paddingTop: Constants?.statusBarHeight + 10,
+  card: {
+    borderRadius: 15,
+    marginRight: 15,
+    minHeight: 130,
+    overflow: "hidden",
+    position: "relative",
+    width: 160,
+  },
+  cardImage: {
+    borderRadius: 15,
+    height: 130,
+    width: 160,
+  },
+  cardTitle: {
+    color: COLORS.white,
+    fontSize: 16,
+    fontWeight: "600",
+    paddingBottom: 15,
+    paddingHorizontal: 15,
+    textAlign: "center",
   },
   closeButton: {
-    backgroundColor: "#DBDBDB",
-    width: 30,
-    height: 30,
-    borderRadius: 50,
-    justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#DBDBDB",
+    borderRadius: 50,
+    height: 30,
+    justifyContent: "center",
+    width: 30,
+  },
+  gradientWrapper: {
+    alignItems: 'center',
+    height: "100%",
+    justifyContent: 'flex-end',
+    left: 0,
+    position: "absolute",
+    top: 0,
+    width: "100%",
   },
   h2: {
-    fontSize: 22,
     color: COLORS.black,
+    fontSize: 22,
     fontWeight: "bold",
     maxWidth: "80%",
   },
+  headingItem: {
+    paddingHorizontal: 20,
+    position: "relative",
+  },
   rowItemHeader: {
-    flexDirection: "row",
     alignItems: "center",
+    flexDirection: "row",
     justifyContent: "space-between",
+    paddingBottom: 15,
     paddingHorizontal: 15,
     paddingTop: 15,
-    paddingBottom: 15,
   },
-  headingItem: {
-    position: "relative",
-    paddingHorizontal: 20,
+  safeArea: {
+    backgroundColor: "#F2F2F7",
+    flex: 1,
+    paddingTop: Constants?.statusBarHeight + 10,
   },
   shapeBg: {
-    position: "absolute",
-    width: 100,
+    borderRadius: 10,
+    bottom: 15,
     height: 10,
     left: 15,
-    bottom: 15,
-    borderRadius: 10,
     opacity: 0.6,
-  },
-  noteCardTitle: {
-    fontSize: 20,
-    fontWeight: "500",
-    color: COLORS.primary,
-    maxWidth: "80%",
-  },
-  noteCardDesc: {
-    fontSize: 14,
-    fontWeight: "400",
-    color: COLORS.black,
-    marginTop: 10,
-    lineHeight: 20,
-  },
-  noteCard: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderLeftWidth: 6,
-    borderLeftColor: COLORS.primaryDark,
-    marginRight: 15,
-    padding: 15,
-    width: 320,
-    height: 150,
-    overflow: "hidden",
-    borderRadius: 15,
-    // borderRadius: 15,
-    // shadowColor: "#ccc",
-    // shadowOffset: { width: 0, height: 1 },
-    // shadowOpacity: 0.9,
-    // shadowRadius: 10,
-    // elevation: 10,
-    position: "relative",
-  },
-  dangerType: {
-    borderColor: COLORS.red,
-    borderLeftColor: COLORS.red,
-  },
-  innovationIcon: {
     position: "absolute",
-    right: 10,
-    top: 10,
-  },
-  card: {
-    width: 160,
-    minHeight: 160,
-    marginRight: 15,
-  },
-  cardImage: {
-    width: 160,
-    height: 130,
-    borderRadius: 15,
-  },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: "500",
-    color: COLORS.black,
-    marginTop: 10,
-    height: 60
+    width: 100,
   },
   topicsRow: {
-    width: "100%",
-    marginBottom: 5,
     flexGrow: 1,
+    marginBottom: 5,
+    marginTop: 25,
+    width: "100%"
   },
   topicsRowTitle: {
+    color: COLORS.black,
     fontSize: 22,
     fontWeight: "500",
-    color: COLORS.black,
-    paddingHorizontal: 0,
     marginBottom: 15,
+    paddingHorizontal: 0,
     zIndex: 1,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 15,
-    marginBottom: 10,
-  },
-  destination: {
-    fontSize: 18,
-    fontWeight: "500",
-    color: "#000",
-  },
-  backButton: {
-    width: 30,
   },
 });

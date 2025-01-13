@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useNavigation } from "@react-navigation/native";
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { COLORS } from "../../../styles/theme";
@@ -27,9 +28,15 @@ export const TripActivityTransportCard: React.FC<
   onQuestionModalOpen,
   type = "bus"
 }) => {
+  const navigation = useNavigation();
+
   return (
     <TouchableOpacity
       activeOpacity={0.7}
+      onPress={() => navigation.navigate("TransportRouteScreen", {
+        isPreview: true,
+        type
+      })}
       style={[
         styles.activityItem,
         {

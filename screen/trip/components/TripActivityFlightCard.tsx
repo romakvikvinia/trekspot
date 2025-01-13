@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import {
   Platform,
@@ -12,9 +13,11 @@ import { COLORS } from "../../../styles/theme";
 import {
   ClockLinearIcon,
   PlaneIcon,
+  SeatIcon,
 } from "../../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "../_tripDetailStyles";
 import { ActivityCardActions } from "./ActivityCardActions";
+import { NoteDescriptionGallery } from "./NoteDescriptionGallery";
 
 interface TripActivityFlightCardProps {
   activityAmount: number;
@@ -33,9 +36,15 @@ export const TripActivityFlightCard: React.FC<TripActivityFlightCardProps> = ({
   onQuestionModalOpen,
   handleChangeActivityVisited,
 }) => {
+
+  const navigation = useNavigation();
+
   return (
     <TouchableOpacity
       activeOpacity={0.7}
+      onPress={() => navigation.navigate("FlightDetailsScreen", {
+        isPreview: true
+      })}
       style={[
         styles.activityItem,
         {
@@ -59,10 +68,10 @@ export const TripActivityFlightCard: React.FC<TripActivityFlightCardProps> = ({
         ]}
       >
         <View style={styles.cardHeader}>
-          <Text style={styles.fromToText}>Tbilisi → Berlin</Text>
-          <View style={styles.durationView}>
-            <ClockLinearIcon size={15} />
-            <Text style={styles.durationText}>10h 45m</Text>
+          <Text style={styles.fromToText}>Tbilisi → Dubai</Text>
+          <View style={styles.rightView}>
+            <SeatIcon size={15} color={COLORS.gray} />
+            <Text style={styles.rightViewText}>15C</Text>
           </View>
         </View>
 
@@ -70,12 +79,12 @@ export const TripActivityFlightCard: React.FC<TripActivityFlightCardProps> = ({
           <View style={styles.flightDatesColumn}>
             <View style={styles.flightDates}>
               <Text style={styles.flightDatesClockText}>17:20</Text>
-              <Text style={styles.flightDatesDateText}>Sat 1 Mar</Text>
+              <Text style={styles.flightDatesDateText}>Sat 20 Mar</Text>
             </View>
             <Text style={styles.flightDurationText}>3h 05m</Text>
             <View style={styles.flightDates}>
               <Text style={styles.flightDatesClockText}>20:25</Text>
-              <Text style={styles.flightDatesDateText}>Sat 1 Mar</Text>
+              <Text style={styles.flightDatesDateText}>Sat 20 Mar</Text>
             </View>
           </View>
           <View style={styles.verticalLine}>
@@ -102,18 +111,23 @@ export const TripActivityFlightCard: React.FC<TripActivityFlightCardProps> = ({
               <Text style={styles.airlineName}>Air Arabia</Text>
             </View>
             <View style={styles.fromTo}>
-              <Text style={styles.airportCityText}>Berlin · BER</Text>
-              <Text style={styles.airportText}>Berlin Brandenburg Airport</Text>
+              <Text style={styles.airportCityText}>Dubai · SHJ</Text>
+              <Text style={styles.airportText}>Sharjah International</Text>
             </View>
           </View>
         </View>
 
         <View style={styles.layoverRow}>
           <ClockLinearIcon size={15} color={COLORS.gray} />
-          <Text style={styles.layoverRowText}>3h 35m layover</Text>
+          <Text style={styles.layoverRowText}>7h 00m layover</Text>
         </View>
       </View>
 
+      <NoteDescriptionGallery
+        notes="This is test note"
+        description="This is description"
+      />
+  
       <ActivityCardActions
         item={item}
         handleChangeActivityVisited={handleChangeActivityVisited}
@@ -191,8 +205,9 @@ const styles = StyleSheet.create({
   airportText: {
     color: COLORS.black,
     fontSize: 14,
+    fontWeight: "500",
     marginTop: 5,
-    opacity: 0.8,
+    opacity: 0.5
   },
   airportsData: {
     marginLeft: 20,
@@ -220,17 +235,7 @@ const styles = StyleSheet.create({
     height: 10,
     minWidth: 10,
   },
-  durationText: {
-    color: COLORS.black,
-    fontSize: 14,
-    fontWeight: "600",
-    lineHeight: 16,
-    marginLeft: 5,
-  },
-  durationView: {
-    alignItems: "center",
-    flexDirection: "row",
-  },
+  
   flightDates: {},
   flightDatesClockText: {
     color: COLORS.black,
@@ -243,10 +248,14 @@ const styles = StyleSheet.create({
   flightDatesDateText: {
     color: COLORS.black,
     fontSize: 14,
+    fontWeight: "500",
     marginTop: 5,
-    opacity: 0.8,
+    opacity: 0.5,
   },
   flightDurationText: {
+    color: COLORS.black,
+    fontSize: 14,
+    fontWeight: "600",
     marginVertical: 20,
   },
   fromTo: {},
@@ -267,9 +276,21 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginLeft: 5,
   },
+  
   plane: {
     backgroundColor: "#fff",
     paddingVertical: 5,
+  },
+  rightView: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  rightViewText: {
+    color: COLORS.black,
+    fontSize: 14,
+    fontWeight: "600",
+    lineHeight: 16,
+    marginLeft: 2,
   },
   topCircle: {
     backgroundColor: "#000",

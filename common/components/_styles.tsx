@@ -661,4 +661,43 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     maxWidth: 60
   },
+  vertImages: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  tabsWrapper: {
+    borderBottomColor: "#f2f2f2",
+    borderBottomWidth: 1,
+    marginTop: 15,
+    paddingVertical: 15
+  },
+  tabItemLabel: {
+    color: COLORS.darkgray,
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  tabItem: {
+    alignItems: "center",
+    borderBottomWidth: 2,
+    borderColor: "transparent",
+    flex: 1,
+    marginRight: 20,
+    position: "relative",
+  },
+  activeIndicator: {
+    backgroundColor: COLORS.primary,
+    borderRadius: 2,
+    bottom: -16,
+    height: 2,
+    position: "absolute",
+    width: "100%",
+  },
+  cityDetailsLeft: {
+    width: "60%"
+  },
+  cityDetailsRight: {
+    alignItems: "flex-end",
+    width: "40%"
+  },
+
 });

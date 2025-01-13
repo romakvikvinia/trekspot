@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
   Linking,
@@ -16,8 +17,16 @@ import {
   ClickOutsideProvider,
   useClickOutside,
 } from "react-native-click-outside";
-import * as Haptics from "expo-haptics";
 import Swiper from "react-native-swiper";
+import { toast } from "sonner-native";
+
+import { useToggleWishlistMutation } from "../../../api/api.trekspot";
+import { SightType } from "../../../api/api.types";
+import {
+  addItemIntoWishlist,
+  removeItemFromWishlist,
+} from "../../../package/slices";
+import { useAppDispatch, useAppSelector } from "../../../package/store";
 import { COLORS, SIZES } from "../../../styles/theme";
 import {
   ClockIcon,
@@ -29,15 +38,7 @@ import {
   WishlistAddIcon,
   WishlistedIcon,
 } from "../../../utilities/SvgIcons.utility";
-import { SightType } from "../../../api/api.types";
 import { ShowDirectionButton } from "./_ShowDirectionButton";
-import { useAppDispatch, useAppSelector } from "../../../package/store";
-import { useToggleWishlistMutation } from "../../../api/api.trekspot";
-import { toast } from "sonner-native";
-import {
-  removeItemFromWishlist,
-  addItemIntoWishlist,
-} from "../../../package/slices";
 
 type SightDetailModalProps = {
   data: SightType;
@@ -299,7 +300,7 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
                   }}
                 >
                   {data.images?.map((item, ind) => (
-                    <View style={styles.imageWrapper}>
+                    <View style={styles.imageWrapper} key={ind}>
                       <Image
                         style={[styles.box]}
                         contentFit="cover"
@@ -439,54 +440,35 @@ export const SightDetailModal: React.FC<SightDetailModalProps> = ({
   );
 };
 export const styles = StyleSheet.create({
-  modalContent: {
-    backgroundColor: "#fff",
-    width: "95%",
-    borderRadius: 15,
+  addToBucketButton: {
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    borderRadius: 50,
+    height: 40,
+    justifyContent: "center",
+    width: 40,
   },
-  imageWrapper: {
-    width: "100%",
-    position: "relative",
-    backgroundColor: "#f2f2f2",
+  address: {
+    color: COLORS.gray,
+    fontSize: 14,
+    marginLeft: 5,
   },
   attr: {
-    position: "absolute",
-    right: 15,
-    bottom: 25,
+    alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.8)",
     borderRadius: 50,
+    bottom: 25,
     display: "flex",
     justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: 5,
-    paddingHorizontal: 10,
     maxWidth: 100,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    position: "absolute",
+    right: 15,
   },
-  headingRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 0,
-  },
-  locationCity: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 8,
-    marginBottom: 5,
-  },
-  locationCityText: {
-    marginLeft: 5,
-    fontSize: 16,
-    color: COLORS.gray,
-    fontWeight: "500",
-  },
-  addToBucketButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 50,
-    backgroundColor: "rgba(0, 0, 0, 0.3)",
-    justifyContent: "center",
-    alignItems: "center",
+  box: {
+    height: 300,
+    overflow: "hidden",
   },
   closeModal: {
     position: "relative",
@@ -494,47 +476,66 @@ export const styles = StyleSheet.create({
     top: 0,
     zIndex: 5,
   },
-  address: {
-    fontSize: 14,
+  headingRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 0,
+  },
+  imageWrapper: {
+    backgroundColor: "#f2f2f2",
+    position: "relative",
+    width: "100%",
+  },
+  locationCity: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginBottom: 5,
+    marginTop: 8,
+  },
+  locationCityText: {
     color: COLORS.gray,
+    fontSize: 16,
+    fontWeight: "500",
     marginLeft: 5,
   },
-  sightDetailsTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: COLORS.black,
-    width: "60%",
-  },
-  type: {
-    fontSize: 14,
-    marginLeft: 0,
-    color: COLORS.gray,
-  },
-  ratingWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 5,
-    marginBottom: 15,
+  modalContent: {
+    backgroundColor: "#fff",
+    borderRadius: 15,
+    width: "95%",
   },
   ratingText: {
+    color: COLORS.gray,
     fontSize: 14,
     marginLeft: 2,
-    color: COLORS.gray,
   },
-  sightDetailsDescription: {
-    fontSize: 14,
-    color: COLORS.black,
+  ratingWrapper: {
+    alignItems: "center",
+    flexDirection: "row",
     marginBottom: 15,
+    marginTop: 5,
   },
   sightDetails: {
     padding: 15,
   },
-  box: {
-    height: 300,
-    overflow: "hidden",
+  sightDetailsDescription: {
+    color: COLORS.black,
+    fontSize: 14,
+    marginBottom: 15,
+  },
+  sightDetailsTitle: {
+    color: COLORS.black,
+    fontSize: 20,
+    fontWeight: "600",
+    width: "60%",
+  },
+  type: {
+    color: COLORS.gray,
+    fontSize: 14,
+    marginLeft: 0,
   },
   wrapper: {
-    position: "relative",
     height: 300,
+    position: "relative",
   },
 });

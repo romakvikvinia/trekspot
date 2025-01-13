@@ -4,8 +4,20 @@ import { Host } from "react-native-portalize";
 
 import { CityDetailScreen } from "../screen/Explore/city/CityDetailScreen";
 import { CountryDetailScreen } from "../screen/Explore/Country/CountryDetailScreen";
+import { ActivityNoteOrDescription } from "../screen/trip/ActivityNoteOrDescription";
+import { Dine } from "../screen/trip/AddActivities/Dine";
+import { Events } from "../screen/trip/AddActivities/Events";
 import { FlightDetails } from "../screen/trip/AddActivities/Flights/FlightDetails";
 import { Flights } from "../screen/trip/AddActivities/Flights/Flights";
+import { SearchAirport } from "../screen/trip/AddActivities/Flights/SearchAirport";
+import { Activity } from "../screen/trip/AddActivities/General";
+import { Lodging } from "../screen/trip/AddActivities/Lodging";
+import { Meeting } from "../screen/trip/AddActivities/Meeting";
+import { Rental } from "../screen/trip/AddActivities/Rental";
+import { Route } from "../screen/trip/AddActivities/Route";
+import { Tour } from "../screen/trip/AddActivities/Tour";
+import { TransportRoute } from "../screen/trip/AddActivities/Transport";
+import { AutocompletePlaces } from "../screen/trip/AutocompletePlaces";
 import { TripDetailScreen } from "../screen/trip/TripDetailScreen";
 import { TripDishes } from "../screen/trip/TripDishes";
 import { TripEmergency } from "../screen/trip/TripEmergency";
@@ -15,7 +27,7 @@ import { SIZES } from "../styles/theme";
 import { TabNavigator } from "./TabNavigator";
 
 const Stack = createStackNavigator();
- 
+
 const AppRoute = () => {
   return (
     <Host>
@@ -119,13 +131,141 @@ const AppRoute = () => {
             headerTitle: "",
             headerRight: () => null,
             animationEnabled: true,
-           }}
+          }}
         >
           <Stack.Screen name="Flights" component={Flights} />
           <Stack.Screen name="FlightDetails" component={FlightDetails} />
+          <Stack.Screen
+            name="AutocompletePlaces"
+            component={AutocompletePlaces}
+          />
+          <Stack.Screen name="SearchAirport" component={SearchAirport} />
+          <Stack.Screen
+            name="ActivityNoteOrDescription"
+            component={ActivityNoteOrDescription}
+          />
+          <Stack.Screen name="Route" component={Route} />
+          <Stack.Screen name="TransportRoute" component={TransportRoute} />
+          <Stack.Screen name="Tour" component={Tour} />
+          <Stack.Screen name="Lodging" component={Lodging} />
+          <Stack.Screen name="Dine" component={Dine} />
+          <Stack.Screen name="Meeting" component={Meeting} />
+          <Stack.Screen name="Events" component={Events} />
+          <Stack.Screen name="Activity" component={Activity} />
+          <Stack.Screen name="Rental" component={Rental} />
         </Stack.Group>
-     
 
+        <Stack.Screen
+          name="FlightDetailsScreen"
+          options={() => ({
+            header: () => null,
+            animationEnabled: true,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+          component={FlightDetails}
+        />
+
+        <Stack.Screen
+          name="RouteScreen"
+          options={() => ({
+            header: () => null,
+            animationEnabled: true,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+          component={Route}
+        />
+        <Stack.Screen
+          name="TransportRouteScreen"
+          options={() => ({
+            header: () => null,
+            animationEnabled: true,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+          component={TransportRoute}
+        />
+        <Stack.Screen
+          name="TourScreen"
+          options={() => ({
+            header: () => null,
+            animationEnabled: true,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+          component={Tour}
+        />
+        <Stack.Screen
+          name="LodgingScreen"
+          options={() => ({
+            header: () => null,
+            animationEnabled: true,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+          component={Lodging}
+        />
+        <Stack.Screen
+          name="DineScreen"
+          options={() => ({
+            header: () => null,
+            animationEnabled: true,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+          component={Dine}
+        />
+        <Stack.Screen
+          name="MeetingScreen"
+          options={() => ({
+            header: () => null,
+            animationEnabled: true,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+          component={Meeting}
+        />
+        <Stack.Screen
+          name="EventsScreen"
+          options={() => ({
+            header: () => null,
+            animationEnabled: true,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+          component={Events}
+        />
+        <Stack.Screen
+          name="ActivityScreen"
+          options={() => ({
+            header: () => null,
+            animationEnabled: true,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+          component={Activity}
+        />
+        <Stack.Screen
+          name="RentalScreen"
+          options={() => ({
+            header: () => null,
+            animationEnabled: true,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+          component={Rental}
+        />
         {/* <Stack.Screen
           name="Onboarding"
           component={OnboardingView}

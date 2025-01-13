@@ -1,40 +1,29 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { ActivityIndicator, Text } from "react-native";
-import { ImageBackground, Platform, TouchableOpacity } from "react-native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { Pressable, Text } from "react-native";
 import { ScrollView, View } from "react-native";
-import Swiper from "react-native-swiper";
-import {
-  useToggleWishlistMutation,
-  useLazyGetSightsQuery,
-} from "../../../api/api.trekspot";
-import { SightType } from "../../../api/api.types";
-import { Loader } from "../../../common/ui/Loader";
-import {
-  BackIcon,
-  StarIcon,
-  WishlistAddIcon,
-  WishlistedIcon,
-} from "../../../utilities/SvgIcons.utility";
 
-import { SIZES } from "../../../styles/theme";
-import * as Haptics from "expo-haptics";
-import Constants from "expo-constants";
-import { LinearGradient } from "expo-linear-gradient";
+import { useLazyGetSightsQuery } from "../../../api/api.trekspot";
+import { SightType } from "../../../api/api.types";
+import { styles } from "../../../common/components/_styles";
+import { CityGalleryRow } from "../../../components/City/CityGalleryRow";
+import { CityLoader } from "../../../components/City/CityLoader";
+import { CityOverview } from "../../../components/City/CityOverview";
+import { CityTitleRow } from "../../../components/City/CityTitleRow";
+import { FloatingTab } from "../../../components/City/FloatingTab";
+import { Header } from "../../../components/City/Header";
+import { NotFound } from "../../../components/common/NotFound";
 import { exploreStyles } from "../../../components/explore/sights/_exploreStyles";
 import { SightDetailModal } from "../../../components/explore/sights/SightDetailModal";
 import { SightItem } from "../../../components/explore/sights/SightItem";
 import { SightsContainer } from "../../../components/explore/sights/SightsContainer";
-
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ExploreRoutesStackParamList } from "../../../routes/explore/ExploreRoutes";
-import { styles } from "../../../common/components/_styles";
-import { toast } from "sonner-native";
-import { useAppDispatch, useAppSelector } from "../../../package/store";
-import {
-  addItemIntoWishlist,
-  removeItemFromWishlist,
-} from "../../../package/slices";
-import { NotFound } from "../../../components/common/NotFound";
 
 type Props = NativeStackScreenProps<ExploreRoutesStackParamList, "CityDetail">;
 
@@ -42,60 +31,14 @@ interface IState {
   sight: SightType | null;
 }
 
-export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
-  const dispatch = useAppDispatch();
+export const CityDetailScreen: React.FC<Props> = ({ route }) => {
   const { city } = route?.params;
   const [state, setState] = useState<IState>({ sight: null });
   const [getSights, { data, isLoading, isError }] = useLazyGetSightsQuery();
-  /**
-   * wishlist slice related things
-   */
-  const wishlistState = useAppSelector((state) => state.wishlist);
-  const [fetchToggleWishlist, { isLoading: isWishlistToggleLoading }] =
-    useToggleWishlistMutation();
 
   useEffect(() => {
     if (city) getSights({ iso2: city.iso2, city: city.city });
   }, [city]);
-
-  const handleAddToWishlist = useCallback(
-    async (exists: boolean = false) => {
-      try {
-        if (exists) {
-          dispatch(
-            removeItemFromWishlist({ id: city.id!, city, sight: null })
-          );
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        } else {
-          dispatch(
-            addItemIntoWishlist({ id: city.id!, city, sight: null })
-          );
-        }
-  
-        await fetchToggleWishlist({ city: city.id }).unwrap();
-
-  
-        if (!exists)
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      } catch (error) {
-        // Reverse the action in case of an error
-        if (exists) {
-          dispatch(
-            addItemIntoWishlist({ id: city.id!, city, sight: null })
-          );
-        } else {
-          dispatch(
-            removeItemFromWishlist({ id: city.id!, city, sight: null })
-          );
-        }
-  
-        toast.error("Something went wrong, please try later", {
-          duration: 2000,
-        });
-      }
-    },
-    [dispatch, city]
-  );
 
   const handleSetSightItem = useCallback((sight: SightType) => {
     setState((prevState) => ({ ...prevState, sight }));
@@ -108,235 +51,89 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
   // transform data
 
   const topSights = (data && "Top Sights" in data && data["Top Sights"]) || [];
-  let sights = data && { ...data };
+  const sights = data && { ...data };
   if (sights && data && "Top Sights" in data && data["Top Sights"]) {
     delete sights["Top Sights"];
   }
 
-  const dataNotFound = useMemo(() => !isLoading && !topSights.length && sights && !Object.keys(sights).length,
-   [isLoading, topSights, sights]);
+  const dataNotFound = useMemo(
+    () =>
+      !isLoading && !topSights.length && sights && !Object.keys(sights).length,
+    [isLoading, topSights, sights]
+  );
 
-  useEffect(() => {
-    navigation.getParent()?.setOptions({
-      tabBarStyle: {
-        display: "none",
-      },
-    });
-    return () => {
-      navigation.getParent()?.setOptions({
-        tabBarStyle: {
-          display: "flex",
-        },
-      });
-    };
-  }, []);
+  const [isSticky, setIsSticky] = useState(false);
+  const [updateTitle, setUpdateTitle] = useState(false);
+  const parentScrollY = useRef(0);
+  const stickyThreshold = 450; // Adjust to the point where you want the child to stick
 
-
+  const handleParentScroll = (event) => {
+    const y = event.nativeEvent.contentOffset.y;
+    parentScrollY.current = y;
+    setIsSticky(y > stickyThreshold);
+    setUpdateTitle(y > 10)
+  };
+ 
   return (
     <View style={{ flex: 1, backgroundColor: "#f8f8f8" }}>
-      <ScrollView style={{ flex: 1 }}>
+      {!isLoading ? (
+        <>
+          <Header key={updateTitle} city={city} title={parentScrollY?.current > 10 ? city?.city : city?.country ? `City in ${city?.country}` : ""} />
+          <FloatingTab isSticky={isSticky} />
+        </>
+      ) : null}
+
+      <ScrollView
+        style={{ flex: 1 }}
+        nestedScrollEnabled
+        onScroll={handleParentScroll}
+        scrollEventThrottle={16}
+      >
         {/* Loading State */}
         {isLoading && (
-          <View style={{ minHeight: SIZES.height }}>
-            <View
-              style={{
-                backgroundColor: "#eee",
-                width: "100%",
-                height: 300,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <View style={{ width: 35, height: 35 }}>
-                <Loader isLoading={isLoading} background="#eee" />
-              </View>
-            </View>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingHorizontal: 15,
-              }}
-            >
-              {[0, 1, 2].map((_, i) => (
-                <View
-                  key={`item-${i}`}
-                  style={{
-                    backgroundColor: "#eee",
-                    width: 200,
-                    marginRight: 15,
-                    minHeight: 190,
-                    marginTop: 25,
-                    borderRadius: 15,
-                  }}
-                ></View>
-              ))}
-            </ScrollView>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingHorizontal: 15,
-              }}
-            >
-              {[0, 1, 2].map((_, i) => (
-                <View
-                  key={`item-${i}`}
-                  style={{
-                    backgroundColor: "#eee",
-                    width: 200,
-                    marginRight: 15,
-                    height: 190,
-                    marginTop: 15,
-                    borderRadius: 15,
-                  }}
-                ></View>
-              ))}
-            </ScrollView>
-          </View>
+          <CityLoader isLoading={isLoading} />
         )}
 
         {/* Content */}
 
         {!isLoading ? (
           <>
-            {/* Swiper */}
+            <CityTitleRow city={city} />
 
-            <View
+            <CityGalleryRow city={city} />
+            
+            <CityOverview />
+            
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingHorizontal: 15,
+              }}
               style={[
-                styles.swiperWrapper,
+                styles.tabsWrapper,
                 {
-                  borderTopLeftRadius: 10,
-                  borderTopRightRadius: 10,
-                  overflow: "hidden",
+                  opacity: isSticky ? 0 : 1,
                 },
               ]}
             >
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                activeOpacity={0.7}
-                style={[
-                  styles.backButton,
-                  {
-                    top:
-                      Platform.OS === "android"
-                        ? Constants?.statusBarHeight + 5
-                        : 55,
-                  },
-                ]}
-              >
-                <BackIcon color="#000" />
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[
-                  styles.addToBucketButton,
-                  {
-                    top:
-                      Platform.OS === "android"
-                        ? Constants?.statusBarHeight + 5
-                        : 55,
-                  },
-                ]}
-                activeOpacity={0.7}
-                disabled={isWishlistToggleLoading}
-                onPress={() =>
-                  !isWishlistToggleLoading &&
-                  handleAddToWishlist(
-                    wishlistState &&
-                      wishlistState.wishlists.some(
-                        (i) => i.city && i.city.id === city.id
-                      )
-                  )
-                }
-              >
-                {isWishlistToggleLoading ? (
-                  <ActivityIndicator color="#000" />
-                ) : wishlistState &&
-                  wishlistState &&
-                  wishlistState.wishlists.some(
-                    (i) => i.city && i.city.id === city.id
-                  ) ? (
-                  <WishlistedIcon />
-                ) : (
-                  <WishlistAddIcon />
-                )}
-              </TouchableOpacity>
-
-              <Swiper
-                activeDotColor="#fff"
-                showsButtons={false}
-                loop={false}
-                dotColor="#949494"
-                automaticallyAdjustContentInsets
-                paginationStyle={{
-                  position: "absolute",
-                  justifyContent: "flex-end",
-                  paddingRight: 15,
-                  bottom: 16,
-                  zIndex: 2,
-                }}
-              >
-                {city?.images?.length ? (
-                  city.images.map((item, i) => (
-                    <ImageBackground
-                      style={styles.box}
-                      resizeMode="cover"
-                      source={{
-                        uri: item.url,
-                      }}
-                      key={`slide-${item.id}-${city.id}`}
-                    >
-                      <LinearGradient
-                        style={styles.gradientWrapper}
-                        colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.5)"]}
-                      ></LinearGradient>
-                    </ImageBackground>
-                  ))
-                ) : (
-                  <ImageBackground
-                    style={styles.box}
-                    resizeMode="cover"
-                    source={require("../../../assets/no-image.png")}
-                  >
-                    <LinearGradient
-                      style={styles.gradientWrapper}
-                      colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.5)"]}
-                    ></LinearGradient>
-                  </ImageBackground>
-                )}
-              </Swiper>
-
-              <View style={styles.otherInfo}>
-                {city?.city && (
-                  <View style={styles.labelItem}>
-                    <Text style={styles.labelItemText}>{city.city}</Text>
-                  </View>
-                )}
-
-                <View style={styles.ratingLabel}>
-                  {city?.rate && (
-                    <>
-                      <View
-                        style={{
-                          position: "relative",
-                          top: -1,
-                          opacity: 0.8,
-                        }}
-                      >
-                        <StarIcon size={15} color="#FFBC3E" />
-                      </View>
-                      <Text style={styles.ratingText}>{city.rate} </Text>
-                    </>
-                  )}
-                  {city?.visitors && (
-                    <Text style={styles.ratingText}>
-                      /{city?.visitors} visitors
-                    </Text>
-                  )}
-                </View>
-              </View>
-            </View>
+              <Pressable style={styles.tabItem}>
+                <Text style={styles.tabItemLabel}>Explore</Text>
+                <View style={styles.activeIndicator}></View>
+              </Pressable>
+              <Pressable style={styles.tabItem}>
+                <Text style={styles.tabItemLabel}>Food & Drink</Text>
+              </Pressable>
+              <Pressable style={styles.tabItem}>
+                <Text style={styles.tabItemLabel}>Tips</Text>
+              </Pressable>
+              <Pressable style={styles.tabItem}>
+                <Text style={styles.tabItemLabel}>National dishes</Text>
+              </Pressable>
+              <Pressable style={styles.tabItem}>
+                <Text style={styles.tabItemLabel}>Apps</Text>
+              </Pressable>
+            </ScrollView>
 
             {/* Top sights */}
             {dataNotFound && (
@@ -403,3 +200,4 @@ export const CityDetailScreen: React.FC<Props> = ({ route, navigation }) => {
     </View>
   );
 };
+ 

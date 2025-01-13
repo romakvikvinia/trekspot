@@ -27,7 +27,7 @@ const activityButtons = [
   { id: 1, label: "Restaurants", color: "#f78e45", Icon: RestaurantIcon },
   { id: 2, label: "Car rental", color: "#1da1fd", Icon: CarRentalIcon },
   { id: 3, label: "Train", color: "#ae8155", Icon: TrainIcon },
-  { id: 4, label: "Cruise", color: "#5674d0", Icon: ShipIcon },
+  { id: 4, label: "Cruise / Ferry", color: "#5674d0", Icon: ShipIcon },
   { id: 5, label: "Route", color: "#29a265", Icon: RouteIcon },
   { id: 6, label: "Events", color: "#e46cd5", Icon: EventIcon },
   { id: 7, label: "Activity", color: "#959595", Icon: ActivityIcon },
@@ -43,6 +43,37 @@ const activityButtons = [
 export const AddCustomActivity = () => {
   const navigation = useNavigation();
 
+
+  const handleNavigate = (label: string) => {
+    switch (label) {
+      case "Restaurants":
+        return navigation.navigate("Restaurants");
+      case "Car rental":
+        return navigation.navigate("CarRental");
+      case "Train":
+        return navigation.navigate("TransportRoute", {
+          type: "train",
+          isPreview: false,
+        });
+      case "Cruise":
+        return navigation.navigate("TransportRoute", {
+          type: "truise",
+          isPreview: false,
+        });
+      case "Route":
+        return navigation.navigate("Route", {
+          isPreview: false,
+        });
+      case "Events":
+        return navigation.navigate("Events");
+      case "Activity":
+        return navigation.navigate("Activity");
+      case "Meeting":
+        return navigation.navigate("Meeting");
+    }
+  }
+
+
   return (
     <ScrollView style={{ flex: 1, padding: 15, paddingBottom: 30 }}>
       <View style={styles.activitesRow}>
@@ -56,7 +87,16 @@ export const AddCustomActivity = () => {
           </View>
           <Text style={styles.activityText}>Flights</Text>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.7} style={styles.activitybutton}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("TransportRoute", {
+              type: "transport",
+              isPreview: false,
+            })
+          }
+          activeOpacity={0.7}
+          style={styles.activitybutton}
+        >
           <View style={[styles.icon, { backgroundColor: "#7083b3" }]}>
             <TransportIcon color="#fff" size="30" />
           </View>
@@ -92,6 +132,7 @@ export const AddCustomActivity = () => {
               styles.activitesColumn,
               borderBottom !== undefined && { borderBottomWidth: borderBottom },
             ]}
+            onPress={() => handleNavigate(label)}
           >
             <View style={[styles.icon, styles.sm, { backgroundColor: color }]}>
               <Icon size={18} color="#fff" />

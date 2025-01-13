@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useNavigation } from "@react-navigation/native";
 import {
   Platform,
   StyleSheet,
@@ -11,6 +12,7 @@ import { COLORS } from "../../../styles/theme";
 import { TourFlagIcon } from "../../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "../_tripDetailStyles";
 import { ActivityCardActions } from "./ActivityCardActions";
+import { NoteDescriptionGallery } from "./NoteDescriptionGallery";
 
 interface TripActivityTourCardProps {
   activityAmount: number;
@@ -29,6 +31,9 @@ export const TripActivityTourCardCard: React.FC<TripActivityTourCardProps> = ({
   onQuestionModalOpen,
   handleChangeActivityVisited,
 }) => {
+
+  const navigation = useNavigation();
+
   return (
     <TouchableOpacity
       activeOpacity={0.7}
@@ -41,6 +46,9 @@ export const TripActivityTourCardCard: React.FC<TripActivityTourCardProps> = ({
           height: "auto",
         },
       ]}
+      onPress={() => navigation.navigate("TourScreen", {
+        isPreview: true
+      })}
     >
       {activityAmount > 1 && (
         <View style={styles.activityIcon}>
@@ -56,24 +64,41 @@ export const TripActivityTourCardCard: React.FC<TripActivityTourCardProps> = ({
       >
         <View style={styles.cardBody}>
           <View style={styles.icon}>
-            <TourFlagIcon width={25} color="#fff" />
+            <TourFlagIcon width={20} color="#fff" />
           </View>
           <View style={styles.contentSide}>
             <Text numberOfLines={2} style={tripDetailStyles.sightTitle}>
-              Sintra tour
+              სიგირიის სოფლის ტური
             </Text>
-
-            <View style={styles.checkin}>
-              <Text style={styles.checkinText}>
-                Start: <Text style={styles.time}>15:00</Text>
-              </Text>
-              <Text style={styles.checkinText}>
-                End: <Text style={styles.time}>12:00</Text>
+            <View style={styles.generalWrapper}>
+              <Text style={styles.generalWrapperText}>
+                Sigiria village addr
               </Text>
             </View>
           </View>
         </View>
       </View>
+
+        <NoteDescriptionGallery
+          notes="17:20 ფრენა თბილისიდან (გადაჯდომა შარჟას აეროპორტში, მოცდის დრო 7
+            საათი)"
+          description=""
+          images={[
+            {
+              url: "https://cdn.pixabay.com/photo/2017/07/18/20/13/sigiriya-2516894_1280.jpg"
+            }, 
+            {
+              url: "https://cdn.pixabay.com/photo/2018/03/10/16/16/sigiriya-3214360_1280.jpg"
+            },
+            {
+              url: "https://cdn.pixabay.com/photo/2018/03/10/16/16/sigiriya-3214360_1280.jpg"
+            },
+            {
+              url: "https://cdn.pixabay.com/photo/2018/03/10/16/16/sigiriya-3214360_1280.jpg"
+            },
+
+          ]} 
+        />
 
       <ActivityCardActions
         item={item}
@@ -131,15 +156,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 15,
   },
-  checkin: {
-    marginTop: 5,
-  },
-  checkinText: {
-    color: COLORS.gray,
-    fontSize: 12,
-    fontWeight: "500",
-    marginTop: 5,
-  },
   circle: {
     backgroundColor: "#ccc",
     borderRadius: 100,
@@ -153,17 +169,43 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
   },
+  descText: {
+    color: COLORS.black,
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  descWrapper: {
+    marginBottom: 0,
+    padding: 15,
+  },
+  generalWrapper: {
+    marginTop: 0,
+  },
+  generalWrapperText: {
+    color: COLORS.gray,
+    fontSize: 12,
+    fontWeight: "500",
+    marginTop: 5,
+  },
   icon: {
     alignItems: "center",
     backgroundColor: "#5A58C2",
-    borderRadius: 10,
-    height: 70,
+    borderRadius: 100,
+    height: 50,
     justifyContent: "center",
-    width: 70,
+    width: 50,
   },
-  time: {
+  noteText: {
     color: COLORS.black,
-    fontSize: 12,
-    fontWeight: "bold",
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  noteWrapper: {
+    backgroundColor: "#fff8e8",
+    borderRadius: 10,
+    margin: 15,
+    marginBottom: 0,
+    marginTop: 20,
+    padding: 15,
   },
 });

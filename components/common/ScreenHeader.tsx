@@ -1,7 +1,8 @@
-import { Pressable, Text, TouchableOpacity, View } from "react-native";
-import { BackIcon } from "../../utilities/SvgIcons.utility";
 import { useNavigation } from "@react-navigation/native";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
+
 import { globalStyles } from "../../styles/globalStyles";
+import { BackIcon } from "../../utilities/SvgIcons.utility";
 
 export const ScreenHeader = ({title = ""}) => {
   const navigation = useNavigation();

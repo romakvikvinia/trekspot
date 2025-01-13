@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useNavigation } from "@react-navigation/native";
 import {
   Platform,
   StyleSheet,
@@ -11,6 +12,7 @@ import { COLORS } from "../../../styles/theme";
 import { MeetingIcon } from "../../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "../_tripDetailStyles";
 import { ActivityCardActions } from "./ActivityCardActions";
+import { NoteDescriptionGallery } from "./NoteDescriptionGallery";
 
 interface TripActivityMeetingCardProps {
   activityAmount: number;
@@ -21,7 +23,9 @@ interface TripActivityMeetingCardProps {
   handleChangeActivityVisited: any;
 }
 
-export const TripActivityMeetingCard: React.FC<TripActivityMeetingCardProps> = ({
+export const TripActivityMeetingCard: React.FC<
+  TripActivityMeetingCardProps
+> = ({
   activityAmount,
   checkedIn,
   item,
@@ -29,6 +33,8 @@ export const TripActivityMeetingCard: React.FC<TripActivityMeetingCardProps> = (
   onQuestionModalOpen,
   handleChangeActivityVisited,
 }) => {
+  const navigation = useNavigation();
+
   return (
     <TouchableOpacity
       activeOpacity={0.7}
@@ -41,6 +47,11 @@ export const TripActivityMeetingCard: React.FC<TripActivityMeetingCardProps> = (
           height: "auto",
         },
       ]}
+      onPress={() =>
+        navigation.navigate("MeetingScreen", {
+          isPreview: true,
+        })
+      }
     >
       {activityAmount > 1 && (
         <View style={styles.activityIcon}>
@@ -56,28 +67,26 @@ export const TripActivityMeetingCard: React.FC<TripActivityMeetingCardProps> = (
       >
         <View style={styles.cardBody}>
           <View style={styles.icon}>
-            <MeetingIcon size={32} color="#fff" />
+            <MeetingIcon size={22} color="#fff" />
           </View>
           <View style={styles.contentSide}>
             <Text numberOfLines={2} style={tripDetailStyles.sightTitle}>
               Zoom meeting
             </Text>
 
-            <View style={styles.checkin}>
-              <Text style={styles.checkinText}>
-                Start: <Text style={styles.time}>15:00</Text>
-              </Text> 
-              <Text style={styles.checkinText}>
-                End: <Text style={styles.time}>18:00</Text>
-              </Text> 
+            <View style={styles.generalContentWrapper}>
+              <Text style={styles.generalContentWrapperText}>
+                9 Baratashvili St, Borzhomi 1200, Georgia
+              </Text>
+              <Text style={styles.generalContentWrapperText}>
+                Time: <Text style={styles.time}>15:00</Text>
+              </Text>
             </View>
           </View>
         </View>
       </View>
 
-      <Text style={styles.note}>
-        This is quite large text from me, which is like a note. So I mention that this is big thing.
-      </Text>
+      <NoteDescriptionGallery notes="This is quite large text from me, which is like a note. So I mention that this is big thing." />
 
       <ActivityCardActions
         item={item}
@@ -135,15 +144,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 15,
   },
-  checkin: {
-    marginTop: 5,
-  },
-  checkinText: {
-    color: COLORS.gray,
-    fontSize: 12,
-    fontWeight: "500",
-    marginTop: 5,
-  },
   circle: {
     backgroundColor: "#ccc",
     borderRadius: 100,
@@ -157,23 +157,24 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
   },
+  generalContentWrapper: {
+    marginTop: 5,
+  },
+  generalContentWrapperText: {
+    color: COLORS.gray,
+    fontSize: 12,
+    fontWeight: "500",
+    marginTop: 5,
+  },
   icon: {
     alignItems: "center",
     backgroundColor: "#1e69f3",
-    borderRadius: 10,
-    height: 70,
+    borderRadius: 100,
+    height: 50,
     justifyContent: "center",
-    width: 70,
-  },
-  note: {
-    color: COLORS.black,
-    fontSize: 14,
-    padding: 15,
-    paddingBottom: 0
+    width: 50,
   },
   time: {
-    color: COLORS.black,
     fontSize: 12,
-    fontWeight: "bold",
   },
 });

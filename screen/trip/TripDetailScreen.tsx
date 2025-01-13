@@ -364,7 +364,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           />
         ))}
         <>
-          <TripActivityMeetingCard
+          <TripActivityFlightCard
             activityAmount={2}
             // checkedIn={checkedIn}
             // item={item}
@@ -380,13 +380,21 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
             onQuestionModalOpen={onQuestionModalOpen}
             // handleChangeActivityVisited={handleChangeActivityVisited}
           />
-          <TripActivityEventCard
+          <TripActivityTourCardCard
             activityAmount={2}
-            //  checkedIn={checkedIn}
-            //  item={item}
+            // checkedIn={checkedIn}
+            // item={item}
             index={index}
             onQuestionModalOpen={onQuestionModalOpen}
-            //  handleChangeActivityVisited={handleChangeActivityVisited}
+            // handleChangeActivityVisited={handleChangeActivityVisited}
+          />
+          <TripActivityLodgingsCard
+            activityAmount={2}
+            // checkedIn={checkedIn}
+            // item={item}
+            index={index}
+            onQuestionModalOpen={onQuestionModalOpen}
+            // handleChangeActivityVisited={handleChangeActivityVisited}
           />
           <TripActivityRestCard
             activityAmount={2}
@@ -396,23 +404,25 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
             onQuestionModalOpen={onQuestionModalOpen}
             // handleChangeActivityVisited={handleChangeActivityVisited}
           />
+          <TripActivityMeetingCard
+            activityAmount={2}
+            // checkedIn={checkedIn}
+            // item={item}
+            index={index}
+            onQuestionModalOpen={onQuestionModalOpen}
+            // handleChangeActivityVisited={handleChangeActivityVisited}
+          />
+
+          <TripActivityEventCard
+            activityAmount={2}
+            //  checkedIn={checkedIn}
+            //  item={item}
+            index={index}
+            onQuestionModalOpen={onQuestionModalOpen}
+            //  handleChangeActivityVisited={handleChangeActivityVisited}
+          />
+
           <TripActivityActivityCard
-            activityAmount={2}
-            // checkedIn={checkedIn}
-            // item={item}
-            index={index}
-            onQuestionModalOpen={onQuestionModalOpen}
-            // handleChangeActivityVisited={handleChangeActivityVisited}
-          />
-          <TripActivityTourCardCard
-            activityAmount={2}
-            // checkedIn={checkedIn}
-            // item={item}
-            index={index}
-            onQuestionModalOpen={onQuestionModalOpen}
-            // handleChangeActivityVisited={handleChangeActivityVisited}
-          />
-          <TripActivityFlightCard
             activityAmount={2}
             // checkedIn={checkedIn}
             // item={item}
@@ -448,14 +458,6 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
             type="cruise"
           />
           <TripActivityCarRentalCard
-            activityAmount={2}
-            // checkedIn={checkedIn}
-            // item={item}
-            index={index}
-            onQuestionModalOpen={onQuestionModalOpen}
-            // handleChangeActivityVisited={handleChangeActivityVisited}
-          />
-          <TripActivityLodgingsCard
             activityAmount={2}
             // checkedIn={checkedIn}
             // item={item}
@@ -808,16 +810,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           </QuestionModal>
         </Modalize>
       </Portal>
-
-      {/* <Portal>
-        <Modalize ref={modalEmbedRef} modalTopOffset={65} adjustToContentHeight>
-          <MapEmbedView
-            blogUrl="https://file-examples.com/wp-content/storage/2017/10/file-sample_150kB.pdf"
-            placeTitle="Tbilisi"
-            modalEmbedRef={modalEmbedRef}
-          />
-        </Modalize>
-      </Portal> */}
+ 
     </Host>
   );
 };

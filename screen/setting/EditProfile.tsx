@@ -1,30 +1,28 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import Constants from "expo-constants";
+import { useFormik } from "formik";
 import React from "react";
 import {
   ActivityIndicator,
   Alert,
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { TInput } from "../../common/ui/TInput";
-import { globalStyles } from "../../styles/globalStyles";
-import { COLORS } from "../../styles/theme";
-import { BackIcon } from "../../utilities/SvgIcons.utility";
-import Constants from "expo-constants";
-import { SettingRouteStackParamList } from "../../routes/setting/SettingRoutes";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useUpdateMeMutation } from "../../api/api.trekspot";
-import { useFormik } from "formik";
-import { EditProfileValidationSchema } from "./validationScheme";
-import { useAppDispatch, useAppSelector } from "../../package/store";
-import { updateUser } from "../../package/slices";
 import { toast } from "sonner-native";
+
+import { useUpdateMeMutation } from "../../api/api.trekspot";
+import { TInput } from "../../common/ui/TInput";
 import { ScreenHeader } from "../../components/common/ScreenHeader";
+import { updateUser } from "../../package/slices";
+import { useAppDispatch, useAppSelector } from "../../package/store";
+import { SettingRouteStackParamList } from "../../routes/setting/SettingRoutes";
+import { globalStyles } from "../../styles/globalStyles";
+import { EditProfileValidationSchema } from "./validationScheme";
 
 type EdoProfileProps = NativeStackScreenProps<
   SettingRouteStackParamList,
@@ -150,32 +148,17 @@ export const EditProfile: React.FC<EdoProfileProps> = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#f8f8f8",
-    paddingTop: Constants?.statusBarHeight + (Platform.OS === "android" ? 5 : 10),
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 15,
-    marginBottom: 15,
-  },
-  backButton: {
-    width: 30,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: "500",
-    color: COLORS.black,
-  },
   item: {
-    width: "100%",
-    flexDirection: "row",
     alignItems: "center",
-    overflow: "hidden",
+    flexDirection: "row",
     marginBottom: 15,
+    overflow: "hidden",
+    width: "100%",
+  },
+  safeArea: {
+    backgroundColor: "#f8f8f8",
+    flex: 1,
+    paddingTop: Constants?.statusBarHeight + (Platform.OS === "android" ? 5 : 10),
   },
   screen: {
     flex: 1,

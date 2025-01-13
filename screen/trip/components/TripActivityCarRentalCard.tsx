@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useNavigation } from "@react-navigation/native";
 import {
   Platform,
   StyleSheet,
@@ -13,6 +14,7 @@ import {
 } from "../../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "../_tripDetailStyles";
 import { ActivityCardActions } from "./ActivityCardActions";
+import { NoteDescriptionGallery } from "./NoteDescriptionGallery";
 
 interface TripActivityCarRentalCardProps {
   activityAmount: number;
@@ -31,9 +33,14 @@ export const TripActivityCarRentalCard: React.FC<TripActivityCarRentalCardProps>
   onQuestionModalOpen,
   handleChangeActivityVisited,
 }) => {
+  const navigation = useNavigation();
+  
   return (
     <TouchableOpacity
       activeOpacity={0.7}
+      onPress={() => navigation.navigate("RentalScreen", {
+        isPreview: true
+      })}
       style={[
         styles.activityItem,
         {
@@ -90,6 +97,11 @@ export const TripActivityCarRentalCard: React.FC<TripActivityCarRentalCardProps>
           </View>
         </View> 
       </View>
+
+      <NoteDescriptionGallery
+        notes="This is test note"
+        description="This is description"
+      />
 
       <ActivityCardActions
         item={item}

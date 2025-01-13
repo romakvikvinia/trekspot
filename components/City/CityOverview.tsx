@@ -1,0 +1,97 @@
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+
+import { COLORS } from "../../styles/theme";
+import { BestTimeToVisitBox } from "./BestTimeToVisitBox";
+import { QuickOverviewBox } from "./QuickOverviewBox";
+
+export const CityOverview = () => {
+  return (
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={{
+        paddingHorizontal: 15,
+        marginTop: 15,
+      }}
+    >
+      <BestTimeToVisitBox />
+       <QuickOverviewBox />
+      <View
+        style={[
+          cityStyle.boxItem,
+          {
+            width: "auto",
+            maxWidth: 280,
+          },
+        ]}
+      >
+        <Text style={cityStyle.boxItemTitle}>Popular for</Text>
+        <View style={cityStyle.boxItemIn}>
+          <View
+            style={[
+              cityStyle.boxItemInTitleWrapper,
+              {
+                flexDirection: "row",
+              },
+            ]}
+          >
+            <View style={cityStyle.tagItem}>
+              <Text style={cityStyle.tagItemText}>🎨 Arts</Text>
+            </View>
+            <View style={cityStyle.tagItem}>
+              <Text style={cityStyle.tagItemText}>👩‍👩‍👦‍👦 Family</Text>
+            </View>
+            <View style={cityStyle.tagItem}>
+              <Text style={cityStyle.tagItemText}>🍷 drink</Text>
+            </View>
+            <View style={cityStyle.tagItem}>
+              <Text style={cityStyle.tagItemText}>👩‍👩‍👦‍👦 Family</Text>
+            </View>
+            <View style={cityStyle.tagItem}>
+              <Text style={cityStyle.tagItemText}>🍷 Food</Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    </ScrollView>
+  );
+};
+const cityStyle = StyleSheet.create({
+  boxItem: {
+    backgroundColor: "#fff",
+    borderColor: "#fafafa",
+    borderRadius: 15,
+    borderWidth: 1,
+    height: 185,
+    marginRight: 15,
+    padding: 15,
+    width: 180,
+  },
+  boxItemIn: {
+    flexDirection: "column",
+    marginTop: 15,
+  },
+  boxItemInTitleWrapper: {
+    flexDirection: "column",
+    flexWrap: "wrap",
+  },
+  boxItemTitle: {
+    fontSize: 14,
+    fontWeight: "400",
+    textTransform: "uppercase",
+  },
+  tagItem: {
+    backgroundColor: "#fafafa",
+    borderRadius: 5,
+    marginBottom: 5,
+    marginRight: 5,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+  },
+  tagItemText: {
+    color: COLORS.black,
+    fontSize: 14,
+    fontWeight: "500",
+  },
+ 
+});

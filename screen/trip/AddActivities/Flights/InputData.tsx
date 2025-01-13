@@ -66,6 +66,15 @@ export const InputData: React.FC<InputDataProps> = ({
     });
   };
 
+  const handleChangeFlightNumber = (text) => {
+    setFlightState((prevState) => {
+      return {
+        ...prevState,
+        flightNumber: text,
+      };
+    });
+  };
+
   return (
     <>
       <View style={styles.inputsGroup}>
@@ -99,6 +108,7 @@ export const InputData: React.FC<InputDataProps> = ({
               placeholder="Flight number"
               placeholderTextColor="#85858A"
               autoFocus
+              onChangeText={handleChangeFlightNumber}
               value={flightState.flightNumber}
             />
             {flightState?.flightNumber && (

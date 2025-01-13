@@ -14,8 +14,15 @@ export const ScheduledFlights = () => {
   return (
     <>
       <Pressable
-        style={styles.scheduledFlightItem}
-        onPress={() => navigation.navigate("FlightDetails")}
+        style={({pressed}) => [
+          styles.scheduledFlightItem,
+          {
+            opacity: pressed ? 0.5 : 1,
+          }
+        ]}
+        onPress={() => navigation.navigate("FlightDetails", {
+          isPreview: false
+        })}
       >
         <View style={styles.topRow}>
           <View style={styles.airline}>
@@ -46,7 +53,9 @@ export const ScheduledFlights = () => {
           <Text style={styles.flightNumber}>TK345</Text>
         </View>
       </Pressable>
-      <Pressable style={styles.scheduledFlightItem} onPress={() => navigation.navigate("FlightDetails")}>
+      <Pressable style={styles.scheduledFlightItem} onPress={() => navigation.navigate("FlightDetails", {
+        isPreview: false
+      })}>
         <View style={styles.topRow}>
           <View style={styles.airline}>
             <Image
@@ -76,7 +85,9 @@ export const ScheduledFlights = () => {
           <Text style={styles.flightNumber}>TK345</Text>
         </View>
       </Pressable>
-      <Pressable style={styles.scheduledFlightItem} onPress={() => navigation.navigate("FlightDetails")}>
+      <Pressable style={styles.scheduledFlightItem} onPress={() => navigation.navigate("FlightDetails", {
+          isPreview: false
+      })}>
         <View style={styles.topRow}>
           <View style={styles.airline}>
             <Image

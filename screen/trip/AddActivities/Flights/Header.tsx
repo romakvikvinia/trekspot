@@ -1,11 +1,16 @@
 import { useNavigation } from "@react-navigation/native";
 import Constants from "expo-constants";
+import { useState } from "react";
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 
+import { Loader } from "../../../../common/ui/Loader";
 import { COLORS } from "../../../../styles/theme";
 
 export const Header = ({ isFlightDetails = false }) => {
   const navigation = useNavigation();
+
+  const [isDisable, setIsDisable] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCancel = () => {
     if (isFlightDetails) {
@@ -23,12 +28,38 @@ export const Header = ({ isFlightDetails = false }) => {
       <Text style={styles.title}>
         {isFlightDetails ? "Flight details" : "Search Flights"}
       </Text>
-      {isFlightDetails ? (
-        <Pressable style={styles.saveButton} hitSlop={30}>
-          <Text style={styles.buttonText}>Save</Text>
+
+      {isLoading ? (
+        <View
+          style={[
+            styles.saveButton,
+            {
+              justifyContent: "flex-end",
+            },
+          ]}
+        >
+          <View style={{ width: 20 }}>
+            <Loader isLoading={true} size="small" background="#F2F2F7" />
+          </View>
+        </View>
+      ) : null}
+
+      {isFlightDetails && !isLoading ? (
+        <Pressable
+          style={[
+            styles.saveButton,
+            {
+              pointerEvents: isDisable ? "none" : "auto",
+            },
+          ]}
+          hitSlop={30}
+        >
+          <Text style={[styles.buttonText,{
+            color: isDisable ? COLORS.gray : COLORS.primary,
+          }]}>Save</Text>
         </Pressable>
       ) : (
-        <Pressable style={styles.saveButton}></Pressable>
+        !isLoading && <Pressable style={styles.saveButton}></Pressable>
       )}
     </View>
   );

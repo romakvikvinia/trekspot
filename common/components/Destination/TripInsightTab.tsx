@@ -1,25 +1,25 @@
 import { Image } from "expo-image";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Constants from "expo-constants";
-
-import { enGB, he, registerTranslation } from "react-native-paper-dates";
+import { enGB, registerTranslation } from "react-native-paper-dates";
 registerTranslation("en", enGB);
 
 import { FlashList } from "@shopify/flash-list";
-import { InnovationIcon, XIcon } from "../../../utilities/SvgIcons.utility";
-import { COLORS, SIZES } from "../../../styles/theme";
-import { Portal } from "react-native-portalize";
-import { Modalize } from "react-native-modalize";
-import RenderHTML from "react-native-render-html";
+import { LinearGradient } from "expo-linear-gradient";
+import { usePostHog } from "posthog-react-native";
 import { useFocusedTab } from "react-native-collapsible-tab-view";
+import { Modalize } from "react-native-modalize";
+import { Portal } from "react-native-portalize";
+import RenderHTML from "react-native-render-html";
+
 import { useLazyTopicsQuery } from "../../../api/api.trekspot";
 import { TopicType } from "../../../api/api.types";
-import { Loader } from "../../ui/Loader";
 import { NodataText } from "../../../components/common/NoDataText";
 import { FeedbackCountryDetail } from "../../../components/explore/FeedbackCountryDetail";
-import { usePostHog } from "posthog-react-native";
+import { COLORS, SIZES } from "../../../styles/theme";
 import { Events } from "../../../utilities/Posthog";
+import { XIcon } from "../../../utilities/SvgIcons.utility";
+import { Loader } from "../../ui/Loader";
 
 interface TripInsightTabProps {
   iso2: string;
@@ -74,31 +74,35 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
                   data={data[key] || []}
                   renderItem={({ item, i }) => (
                     <TouchableOpacity
-                      onPress={() => 
-                        {
-                          onInsightDetailOpen(item); 
-                          posthog.capture(Events.useCountryInsight, {
-                            topic: item.title
-                          });
-                        }
-                      }
+                      onPress={() => {
+                        onInsightDetailOpen(item);
+                        posthog.capture(Events.useCountryInsight, {
+                          topic: item.title,
+                        });
+                      }}
                       activeOpacity={0.7}
                       style={styles.card}
                     >
-                       <View style={styles.imageWrapper}>
+                      <View style={styles.imageWrapper}>
                         <Image
-                            style={styles.cardImage}
-                            contentFit="cover"
-                            source={
-                              item?.image?.url
-                                ? {
-                                    uri: item?.image?.url,
-                                  }
-                                : require("../../../assets/no-image.png")
-                            }
-                          /> 
-                       </View>
-                      <Text style={styles.cardTitle}>{item.title}</Text>
+                          style={styles.cardImage}
+                          contentFit="cover"
+                          source={
+                            item?.image?.url
+                              ? {
+                                  uri: item?.image?.url,
+                                }
+                              : require("../../../assets/no-image.png")
+                          }
+                        />
+                        
+                        <LinearGradient
+                          style={styles.gradientWrapper}
+                          colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.9)"]}
+                        >
+                          <Text style={styles.cardTitle}>{item.title}</Text>
+                        </LinearGradient>
+                      </View>
                     </TouchableOpacity>
                   )}
                   estimatedItemSize={10}
@@ -106,10 +110,12 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
               </View>
             </View>
           ))
-        : !isLoading && (
-          <NodataText />
-          )}
-        {!isLoading && data ? <View style={{marginTop: 30, width: "100%"}}><FeedbackCountryDetail /></View> : null } 
+        : !isLoading && <NodataText />}
+      {!isLoading && data ? (
+        <View style={{ marginTop: 30, width: "100%" }}>
+          <FeedbackCountryDetail />
+        </View>
+      ) : null}
       <Portal>
         <Modalize
           ref={modalInsightDetailRef}
@@ -200,131 +206,76 @@ export const TripInsightTab: React.FC<TripInsightTabProps> = ({ iso2 }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#F2F2F7",
-    paddingTop: Constants?.statusBarHeight + 10,
+  card: {
+    marginRight: 15,
+    minHeight: 160,
+    width: 160,
   },
-  premiumView: {
-    borderWidth: 5,
-    borderColor: "#d87620",
-    borderStyle: "solid",
+  cardImage: {
+    height: 130,
+    width: 160,
   },
-  headingItem: {
-    position: "relative",
-    paddingHorizontal: 20,
-  },
-  noteCardTitle: {
-    fontSize: 18,
-    fontWeight: "500",
-    color: COLORS.primary,
-    maxWidth: "80%",
+  cardTitle: {
+    color: COLORS.white,
+    fontSize: 16,
+    fontWeight: "600",
+    paddingBottom: 15,
+    paddingHorizontal: 15,
+    textAlign: "center",
   },
   closeButton: {
+    alignItems: "center",
     backgroundColor: "#DBDBDB",
-    width: 30,
-    height: 30,
     borderRadius: 50,
+    height: 30,
     justifyContent: "center",
-    alignItems: "center",
+    width: 30,
   },
-  rowItemHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 15,
-    paddingTop: 15,
-    paddingBottom: 15,
+  gradientWrapper: {
+    alignItems: 'center',
+    height: "100%",
+    justifyContent: 'flex-end',
+    left: 0,
+    position: "absolute",
+    top: 0,
+    width: "100%",
   },
   h2: {
-    fontSize: 22,
     color: COLORS.black,
+    fontSize: 22,
     fontWeight: "bold",
     maxWidth: "80%",
   },
-  noteCardDesc: {
-    fontSize: 14,
-    fontWeight: "400",
-    color: COLORS.black,
-    marginTop: 10,
-    lineHeight: 20,
-  },
-  noteCard: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderLeftWidth: 6,
-    borderLeftColor: COLORS.primaryDark,
-    marginRight: 15,
-    padding: 15,
-    width: 320,
-    height: 150,
-    overflow: "hidden",
-    borderRadius: 15,
-    // borderRadius: 15,
-    // shadowColor: "#ccc",
-    // shadowOffset: { width: 0, height: 1 },
-    // shadowOpacity: 0.9,
-    // shadowRadius: 10,
-    // elevation: 10,
+  headingItem: {
+    paddingHorizontal: 20,
     position: "relative",
   },
-  dangerType: {
-    borderColor: COLORS.red,
-    borderLeftColor: COLORS.red,
-  },
-  innovationIcon: {
-    position: "absolute",
-    right: 10,
-    top: 10,
-  },
-  card: {
-    width: 160,
-    minHeight: 160,
-    marginRight: 15,
-  },
   imageWrapper: {
-    width: 160,
-    height: 130,
     backgroundColor: "#f2f2f2",
     borderRadius: 15,
-    overflow: "hidden",
-  },
-  cardImage: {
-    width: 160,
     height: 130,
+    overflow: "hidden",
+    width: 160,
   },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: "500",
-    color: COLORS.black,
-    marginTop: 10,
-    height: 60
+  rowItemHeader: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingBottom: 15,
+    paddingHorizontal: 15,
+    paddingTop: 15,
   },
   topicsRow: {
-    width: "100%",
-    marginBottom: 5,
     flexGrow: 1,
+    marginBottom: 5,
+    width: "100%",
   },
   topicsRowTitle: {
+    color: COLORS.black,
     fontSize: 20,
     fontWeight: "600",
-    color: COLORS.black,
+    marginBottom: 15,
     paddingHorizontal: 0,
-    marginBottom: 15,
     zIndex: 1,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 15,
-    marginBottom: 15,
-  },
-  destination: {
-    fontSize: 18,
-    fontWeight: "500",
-  },
-  backButton: {
-    width: 30,
   },
 });

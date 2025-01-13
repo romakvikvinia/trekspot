@@ -1,18 +1,32 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { LinearGradient } from "expo-linear-gradient";
+import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
 import {
   ImageBackground,
   Pressable,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-
-import { COLORS, SIZES } from "../../../styles/theme";
-import Swiper from "react-native-swiper";
-import { styles } from "../../../common/components/_styles";
 import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
+import Swiper from "react-native-swiper";
+import { toast } from "sonner-native";
 
+import { useLazyCountryQuery } from "../../../api/api.trekspot";
+import { styles } from "../../../common/components/_styles";
+import { Dining } from "../../../common/components/Destination/Dining";
+// import { Language } from "../../../common/components/Destination/Language";
+import { Emergency } from "../../../common/components/Destination/Emergency";
+import { ExploreTab } from "../../../common/components/Destination/ExploreTab";
+import Overview from "../../../common/components/Destination/Overview";
+import { Transport } from "../../../common/components/Destination/Transport";
+import { TripInsightTab } from "../../../common/components/Destination/TripInsightTab";
+import { Visa } from "../../../common/components/Destination/Visa";
+import { Loader } from "../../../common/ui/Loader";
+import { NodataText } from "../../../components/common/NoDataText";
+import { FeedbackCountryDetail } from "../../../components/explore/FeedbackCountryDetail";
+import { ExploreRoutesStackParamList } from "../../../routes/explore/ExploreRoutes";
+import { COLORS, SIZES } from "../../../styles/theme";
 import {
   BackIcon,
   BinocularsIcon,
@@ -24,26 +38,6 @@ import {
   StarIcon,
   TransportIcon,
 } from "../../../utilities/SvgIcons.utility";
-import { ExploreTab } from "../../../common/components/Destination/ExploreTab";
-import Overview from "../../../common/components/Destination/Overview";
-import { Visa } from "../../../common/components/Destination/Visa";
-import { Transport } from "../../../common/components/Destination/Transport";
-
-import { Dining } from "../../../common/components/Destination/Dining";
-
-// import { Language } from "../../../common/components/Destination/Language";
-
-import { Emergency } from "../../../common/components/Destination/Emergency";
-import { useLazyCountryQuery } from "../../../api/api.trekspot";
-
-import { TripInsightTab } from "../../../common/components/Destination/TripInsightTab";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { ExploreRoutesStackParamList } from "../../../routes/explore/ExploreRoutes";
-import { Loader } from "../../../common/ui/Loader";
-import { toast } from "sonner-native";
-import { NodataText } from "../../../components/common/NoDataText";
-import { FeedbackCountryDetail } from "../../../components/explore/FeedbackCountryDetail";
-import { StatusBar } from "expo-status-bar";
 
 type CountryDetailScreenProps = NativeStackScreenProps<
   ExploreRoutesStackParamList,

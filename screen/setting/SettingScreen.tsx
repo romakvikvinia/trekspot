@@ -1,3 +1,7 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import Constants from "expo-constants";
+import { Image } from "expo-image";
+import * as WebBrowser from "expo-web-browser";
 import React, { useCallback } from "react";
 import {
   Alert,
@@ -9,14 +13,15 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Constants from "expo-constants";
 
-import { Image } from "expo-image";
-
+import { useDeactivateAccountMutation } from "../../api/api.trekspot";
 import {
   deleteFromAsyncStorage,
   deleteItemFromStorage,
 } from "../../helpers/secure.storage";
+import { signOut } from "../../package/slices";
+import { useAppDispatch, useAppSelector } from "../../package/store";
+import { SettingRouteStackParamList } from "../../routes/setting/SettingRoutes";
 import { COLORS } from "../../styles/theme";
 import {
   DeleteIcon,
@@ -33,14 +38,6 @@ import {
   Youtube,
 } from "../../utilities/SvgIcons.utility";
 
-import * as WebBrowser from "expo-web-browser";
-
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { SettingRouteStackParamList } from "../../routes/setting/SettingRoutes";
-import { useAppDispatch, useAppSelector } from "../../package/store";
-import { signOut } from "../../package/slices";
-import { useDeactivateAccountMutation } from "../../api/api.trekspot";
-
 type SettingProps = NativeStackScreenProps<
   SettingRouteStackParamList,
   "Setting"
@@ -55,7 +52,7 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
   const isGuest = user?.role === "guest";
 
   const _handlePressButtonAsync = async () => {
-    let result = await WebBrowser.openBrowserAsync(
+    const result = await WebBrowser.openBrowserAsync(
       "https://trekspot.io/en/privacy-policy",
       {
         enableBarCollapsing: true,
@@ -287,153 +284,125 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#f8f8f8",
-    paddingTop:
-      Constants?.statusBarHeight + (Platform.OS === "android" ? 5 : 10),
-  },
-  guestCardTitle: {
-    fontSize: 16,
-    fontWeight: "500",
-    textAlign: "center",
-    marginBottom: 20,
-    marginTop: 15,
-    color: COLORS.black,
-    lineHeight: 20,
-  },
-  guestCard: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
-    padding: 10,
-  },
-  guestCardButtonItem: {
-    backgroundColor: COLORS.primary,
-    padding: 15,
-    borderRadius: 12,
-    paddingHorizontal: 15,
-    marginRight: 0,
-    flexDirection: "row",
-    marginTop: 10,
-    flex: 1,
-    width: "100%",
-    justifyContent: "center",
-  },
-  guestCardButtonItemText: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "500",
-  },
-  signInButton: {
-    marginLeft: 15,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f2f2f2",
-    minWidth: "100%",
-    flex: 1,
-    borderRadius: 40,
-    height: 60,
-  },
-  signInButtonText: {
-    color: "#000",
-    fontSize: 18,
-    fontWeight: "600",
-  },
-  version: {
-    width: "100%",
-    alignItems: "center",
-    marginTop: 10,
-    marginBottom: 30,
-  },
-  versionText: {
-    color: "#bbb",
-    fontSize: 14,
-  },
-  socials: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 15,
-  },
-  socialButton: {
-    width: 35,
-    height: 35,
-    alignItems: "center",
-    justifyContent: "center",
-    marginHorizontal: 3,
-  },
   avatar: {
-    width: 60,
-    height: 60,
+    alignItems: "center",
     backgroundColor: "#f2f2f2",
     borderRadius: 100,
+    height: 60,
     justifyContent: "center",
+    width: 60,
+  },
+  button: {
     alignItems: "center",
+    borderBottomColor: "#f2f2f2",
+    borderBottomWidth: 1,
+    flexDirection: "row",
+    padding: 20,
+  },
+  buttonText: {
+    fontSize: 14,
+    fontWeight: "500",
+    marginLeft: 15,
   },
   buttonsWrapper: {
     backgroundColor: "#fff",
     borderRadius: 15,
     marginBottom: 25,
   },
-  profileHeader: {
-    flexDirection: "row",
-    display: "flex",
-    alignItems: "flex-start",
-    justifyContent: "space-between",
-    borderBottomColor: "#f8f8f8",
-    borderBottomWidth: 5,
-    padding: 15,
-    marginBottom: 15,
-    backgroundColor: "#fff",
-    borderRadius: 15,
-    overflow: "hidden",
-  },
-  profileLeft: {
-    flexDirection: "row",
-    width: "100%",
-    alignItems: "center",
-  },
   buttonsWrapperTitle: {
-    fontSize: 14,
     color: COLORS.gray,
+    fontSize: 14,
     marginBottom: 10,
   },
-  username: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginTop: 0,
-    marginLeft: 15,
-    color: COLORS.black,
-  },
-  subTxt: {
-    fontSize: 14,
-    marginLeft: 15,
-    marginTop: 5,
-    color: COLORS.gray,
-  },
   editButton: {
-    marginTop: 30,
     backgroundColor: "#f8f8f8",
     borderRadius: 5,
-    paddingVertical: 8,
+    marginTop: 30,
     paddingHorizontal: 15,
+    paddingVertical: 8,
   },
   editButtonText: {
     fontSize: 14,
     fontWeight: "500",
   },
-  button: {
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f2f2f2",
-    flexDirection: "row",
+  guestCard: {
     alignItems: "center",
+    flexDirection: "column",
+    flex: 1,
+    justifyContent: "center",
+    padding: 10,
   },
-  buttonText: {
+  guestCardButtonItem: {
+    backgroundColor: COLORS.primary,
+    borderRadius: 12,
+    flexDirection: "row",
+    flex: 1,
+    justifyContent: "center",
+    marginRight: 0,
+    marginTop: 10,
+    padding: 15,
+    paddingHorizontal: 15,
+    width: "100%",
+  },
+  guestCardButtonItemText: {
+    color: "#fff",
     fontSize: 14,
     fontWeight: "500",
+  },
+  guestCardTitle: {
+    color: COLORS.black,
+    fontSize: 16,
+    fontWeight: "500",
+    lineHeight: 20,
+    marginBottom: 20,
+    marginTop: 15,
+    textAlign: "center",
+  },
+  profileHeader: {
+    alignItems: "flex-start",
+    backgroundColor: "#fff",
+    borderBottomColor: "#f8f8f8",
+    borderBottomWidth: 5,
+    borderRadius: 15,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 15,
+    overflow: "hidden",
+    padding: 15,
+  },
+  profileLeft: {
+    alignItems: "center",
+    flexDirection: "row",
+    width: "100%",
+  },
+  safeArea: {
+    backgroundColor: "#f8f8f8",
+    flex: 1,
+    paddingTop:
+      Constants?.statusBarHeight + (Platform.OS === "android" ? 5 : 10),
+  }, 
+  subTxt: {
+    color: COLORS.gray,
+    fontSize: 14,
     marginLeft: 15,
+    marginTop: 5,
+  },
+  username: {
+    color: COLORS.black,
+    fontSize: 22,
+    fontWeight: "bold",
+    marginLeft: 15,
+    marginTop: 0,
+  },
+  version: {
+    alignItems: "center",
+    marginBottom: 30,
+    marginTop: 10,
+    width: "100%",
+  },
+  versionText: {
+    color: "#bbb",
+    fontSize: 14,
   },
 });

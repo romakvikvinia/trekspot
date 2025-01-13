@@ -97,7 +97,7 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
               <Image
                 style={[
                   {
-                    minHeight: 140,
+                    minHeight: 160,
                     borderTopLeftRadius: 12,
                     borderTopRightRadius: 12,
                   },

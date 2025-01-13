@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useNavigation } from "@react-navigation/native";
 import {
   Platform,
   StyleSheet,
@@ -11,6 +12,7 @@ import { COLORS } from "../../../styles/theme";
 import { EventIcon } from "../../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "../_tripDetailStyles";
 import { ActivityCardActions } from "./ActivityCardActions";
+import { NoteDescriptionGallery } from "./NoteDescriptionGallery";
 
 interface TripActivityEventCardProps {
   activityAmount: number;
@@ -29,6 +31,8 @@ export const TripActivityEventCard: React.FC<TripActivityEventCardProps> = ({
   onQuestionModalOpen,
   handleChangeActivityVisited,
 }) => {
+  const navigation = useNavigation();
+
   return (
     <TouchableOpacity
       activeOpacity={0.7}
@@ -41,6 +45,11 @@ export const TripActivityEventCard: React.FC<TripActivityEventCardProps> = ({
           height: "auto",
         },
       ]}
+      onPress={() =>
+        navigation.navigate("EventsScreen", {
+          isPreview: true,
+        })
+      }
     >
       {activityAmount > 1 && (
         <View style={styles.activityIcon}>
@@ -56,21 +65,29 @@ export const TripActivityEventCard: React.FC<TripActivityEventCardProps> = ({
       >
         <View style={styles.cardBody}>
           <View style={styles.icon}>
-            <EventIcon size={30} color="#fff" />
+            <EventIcon size={22} color="#fff" />
           </View>
           <View style={styles.contentSide}>
             <Text numberOfLines={2} style={tripDetailStyles.sightTitle}>
               Real madrid vs Barca
             </Text>
 
-            <View style={styles.checkin}>
-              <Text style={styles.checkinText}>
-                Start: <Text style={styles.time}>15:00</Text>
-              </Text> 
+            <View style={styles.generalContentWrapper}>
+              <Text style={styles.generalContentWrapperText}>
+                9 Baratashvili St, Borzhomi 1200, Georgia
+              </Text>
+              <Text style={styles.generalContentWrapperText}>
+                Time: <Text style={styles.time}>15:00</Text>
+              </Text>
             </View>
           </View>
         </View>
       </View>
+
+      <NoteDescriptionGallery
+        notes="This is test note"
+        description="This is description"
+      />
 
       <ActivityCardActions
         item={item}
@@ -128,15 +145,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 15,
   },
-  checkin: {
-    marginTop: 5,
-  },
-  checkinText: {
-    color: COLORS.gray,
-    fontSize: 12,
-    fontWeight: "500",
-    marginTop: 5,
-  },
   circle: {
     backgroundColor: "#ccc",
     borderRadius: 100,
@@ -150,17 +158,24 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
   },
+  generalContentWrapper: {
+    marginTop: 5,
+  },
+  generalContentWrapperText: {
+    color: COLORS.gray,
+    fontSize: 12,
+    fontWeight: "500",
+    marginTop: 5,
+  },
   icon: {
     alignItems: "center",
     backgroundColor: "#e46cd5",
-    borderRadius: 10,
-    height: 70,
+    borderRadius: 100,
+    height: 50,
     justifyContent: "center",
-    width: 70,
+    width: 50,
   },
   time: {
-    color: COLORS.black,
     fontSize: 12,
-    fontWeight: "bold",
   },
 });

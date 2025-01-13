@@ -7,6 +7,7 @@ export const tripDetailStyles = StyleSheet.create({
       color: COLORS.gray,
       fontSize: 10,
       fontWeight: "600",
+      textAlign: "center",
     },
   addActivityButton: {
       alignItems: "center",
@@ -170,7 +171,7 @@ export const tripDetailStyles = StyleSheet.create({
     },
     iconWrapper: {
       alignItems: 'center',
-      height: 16,
+      height: 18,
       justifyContent: 'center',
       marginBottom: 3
     },

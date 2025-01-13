@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useNavigation } from "@react-navigation/native";
 import {
     Platform,
     StyleSheet,
@@ -11,6 +12,7 @@ import { COLORS } from "../../../styles/theme";
 import { LodgeIcon } from "../../../utilities/SvgIcons.utility";
   import { tripDetailStyles } from "../_tripDetailStyles";
   import { ActivityCardActions } from "./ActivityCardActions";
+import { NoteDescriptionGallery } from "./NoteDescriptionGallery";
 
 interface TripActivityLodgingsCardProps {
     activityAmount: number;
@@ -29,6 +31,7 @@ interface TripActivityLodgingsCardProps {
     onQuestionModalOpen,
     handleChangeActivityVisited,
   }) => {
+    const navigation = useNavigation();
     return (
       <TouchableOpacity
         activeOpacity={0.7}
@@ -41,6 +44,9 @@ interface TripActivityLodgingsCardProps {
             height: "auto",
           },
         ]}
+        onPress={() => navigation.navigate("LodgingScreen", {
+          isPreview: true
+        })}
       >
         {activityAmount > 1 && (
           <View style={styles.activityIcon}>
@@ -56,25 +62,30 @@ interface TripActivityLodgingsCardProps {
         >  
           <View style={styles.cardBody}>
             <View style={styles.icon}>
-              <LodgeIcon width={25} color="#fff" />
+              <LodgeIcon width={20} color="#fff" />
             </View>
              <View style={styles.contentSide}>
                 <Text numberOfLines={2} style={tripDetailStyles.sightTitle}>
-                  Crowne Plaza Borjomi
+                  {/* 
+                    Here will go Hotel name or activity name
+                  */}
+                  Crowne plaza sigiria
                 </Text>
 
-                <View style={styles.checkin}>
-                  <Text style={styles.checkinText}>
-                    Check in: <Text style={styles.time}>15:00</Text> 
-                  </Text>
-                  <Text style={styles.checkinText}>
-                    Check out: <Text style={styles.time}>12:00</Text> 
-                  </Text>
+                <View style={styles.generalContentWrapper}>
+                  <Text style={styles.generalContentWrapperText}>
+                    9 Baratashvili St, Borzhomi 1200, Georgia
+                  </Text> 
+                  <Text style={styles.generalContentWrapperText}>
+                    Check in/out: <Text style={styles.time}>15:00 - 12:00</Text> 
+                  </Text> 
                 </View>
              </View>
           </View> 
         </View>
-  
+        <NoteDescriptionGallery
+          notes="Breakfast included"
+        />
         <ActivityCardActions
           item={item}
           handleChangeActivityVisited={handleChangeActivityVisited}
@@ -131,15 +142,6 @@ interface TripActivityLodgingsCardProps {
       flexDirection: "row",
       marginTop: 15,
     },
-    checkin: {
-      marginTop: 5
-    },
-    checkinText: {
-      color: COLORS.gray,
-      fontSize: 12,
-      fontWeight: "500",
-      marginTop: 5
-    },
     circle: {
       backgroundColor: "#ccc",
       borderRadius: 100,
@@ -151,19 +153,26 @@ interface TripActivityLodgingsCardProps {
       flex: 1,
       paddingLeft: 15,
       paddingRight: 15
+    },
+    generalContentWrapper: {
+      marginTop: 5
+    },
+    generalContentWrapperText: {
+      color: COLORS.gray,
+      fontSize: 12,
+      fontWeight: "500",
+      marginTop: 5
     }, 
     icon: {
       alignItems: "center",
       backgroundColor: "#A658C2",
-      borderRadius: 10,
-      height: 70,
+      borderRadius: 100,
+      height: 50,
       justifyContent: "center",
-      width: 70
+      width: 50
     }, 
     time: {
-      color: COLORS.black,
       fontSize: 12,
-      fontWeight: "bold"
     }
   });
   
