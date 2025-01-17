@@ -2,6 +2,8 @@ import { memo } from "react";
 import { Text, View } from "react-native";
 import { ImageBackground } from "react-native";
 import { ScrollView } from "react-native";
+
+import { CountryType } from "../../../api/api.types";
 import { COLORS } from "../../../styles/theme";
 import { PlugImages } from "../../../utilities/Plugs";
 import {
@@ -10,9 +12,8 @@ import {
   SummerIcon,
   WinterIcon,
 } from "../../../utilities/SvgIcons.utility";
-import { SecurityThreats } from "../DestinationSubComponents/SecurityThreats";
 import { styles } from "../_styles";
-import { CountryType } from "../../../api/api.types";
+import { SecurityThreats } from "../DestinationSubComponents/SecurityThreats";
 
 type OverviewProps = {
   country: CountryType;

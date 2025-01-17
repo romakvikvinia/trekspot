@@ -1,85 +1,164 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { Pressable, Text } from "react-native";
-import { ScrollView, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Dimensions, Pressable, ScrollView, Text, View } from "react-native";
+import { toast } from "sonner-native";
 
-import { useLazyGetSightsQuery } from "../../../api/api.trekspot";
-import { SightType } from "../../../api/api.types";
+import {
+  useCountryByIso2Query,
+  useLazyGetSightsQuery,
+} from "../../../api/api.trekspot";
 import { styles } from "../../../common/components/_styles";
+import { Apps } from "../../../components/City/Apps";
 import { CityGalleryRow } from "../../../components/City/CityGalleryRow";
 import { CityLoader } from "../../../components/City/CityLoader";
 import { CityOverview } from "../../../components/City/CityOverview";
 import { CityTitleRow } from "../../../components/City/CityTitleRow";
-import { FloatingTab } from "../../../components/City/FloatingTab";
+import { ExploreTab } from "../../../components/City/ExploreTab";
+import { FoodAndDrinkTab } from "../../../components/City/FoodAndDrinkTab";
 import { Header } from "../../../components/City/Header";
-import { NotFound } from "../../../components/common/NotFound";
-import { exploreStyles } from "../../../components/explore/sights/_exploreStyles";
-import { SightDetailModal } from "../../../components/explore/sights/SightDetailModal";
-import { SightItem } from "../../../components/explore/sights/SightItem";
-import { SightsContainer } from "../../../components/explore/sights/SightsContainer";
+import { NationalDishes } from "../../../components/City/NationalDishes";
+import { Tips } from "../../../components/City/Tips";
 import { ExploreRoutesStackParamList } from "../../../routes/explore/ExploreRoutes";
+import { COLORS } from "../../../styles/theme";
 
 type Props = NativeStackScreenProps<ExploreRoutesStackParamList, "CityDetail">;
 
-interface IState {
-  sight: SightType | null;
-}
+const TABS = ["Explore", "Food", "Tips", "National dishes", "Apps"];
 
 export const CityDetailScreen: React.FC<Props> = ({ route }) => {
   const { city } = route?.params;
-  const [state, setState] = useState<IState>({ sight: null });
+  const [activeTab, setActiveTab] = useState("Explore");
   const [getSights, { data, isLoading, isError }] = useLazyGetSightsQuery();
 
   useEffect(() => {
     if (city) getSights({ iso2: city.iso2, city: city.city });
   }, [city]);
 
-  const handleSetSightItem = useCallback((sight: SightType) => {
-    setState((prevState) => ({ ...prevState, sight }));
-  }, []);
+  const {
+    data: countyData,
+    isLoading: countryLoading,
+    isError: countryFetchError,
+  } = useCountryByIso2Query({ iso2: city.iso2 });
 
-  const handleOnClose = useCallback(() => {
-    setState((prevState) => ({ ...prevState, sight: null }));
-  }, []);
-
-  // transform data
-
-  const topSights = (data && "Top Sights" in data && data["Top Sights"]) || [];
-  const sights = data && { ...data };
-  if (sights && data && "Top Sights" in data && data["Top Sights"]) {
-    delete sights["Top Sights"];
+  if (countryFetchError) {
+    toast.error("Error fetching country data");
   }
-
-  const dataNotFound = useMemo(
-    () =>
-      !isLoading && !topSights.length && sights && !Object.keys(sights).length,
-    [isLoading, topSights, sights]
-  );
 
   const [isSticky, setIsSticky] = useState(false);
   const [updateTitle, setUpdateTitle] = useState(false);
   const parentScrollY = useRef(0);
-  const stickyThreshold = 450; // Adjust to the point where you want the child to stick
+  const stickyThreshold = 630;
 
   const handleParentScroll = (event) => {
     const y = event.nativeEvent.contentOffset.y;
     parentScrollY.current = y;
     setIsSticky(y > stickyThreshold);
-    setUpdateTitle(y > 10)
+    setUpdateTitle(y > 10);
   };
- 
+
+  const scrollViewRef = useRef();
+
+  const handleScrollTo = () => {
+    scrollViewRef?.current?.scrollTo({
+      x: 0,
+      y: stickyThreshold +5,
+      animated: true
+    });
+  };
+
+  const scrollView1Ref = useRef(null);
+  const scrollView2Ref = useRef(null);
+  const tabRefs = useRef(TABS.map(() => React.createRef()));
+
+  const centerTabInBothScrollViews = (index) => {
+    const tabRef = tabRefs.current[index];
+
+    tabRef?.current?.measure((x, y, width, height, pageX, pageY) => {
+      const windowWidth = Dimensions.get("window").width;
+      const scrollOffset = pageX - windowWidth / 2 + width / 2;
+      scrollView1Ref?.current?.scrollTo({ x: scrollOffset, animated: true });
+      scrollView2Ref?.current?.scrollTo({ x: scrollOffset, animated: true });
+    });
+  };
+
+  const renderTabs = () =>
+    TABS.map((tab, i) => (
+      <Pressable
+        style={[
+          styles.tabItem,
+          {
+            paddingLeft: i === 0 ? 0 : 20,
+          },
+        ]}
+        key={i}
+        ref={tabRefs.current[i]}
+        onPress={() => {
+          setActiveTab(tab);
+          handleScrollTo();
+          centerTabInBothScrollViews(i);
+        }}
+      >
+        <Text
+          style={[
+            styles.tabItemLabel,
+            {
+              color: tab === activeTab ? COLORS.primary : COLORS.black,
+            },
+          ]}
+        >
+          {tab === "Food" ? "Food & Drink" : tab}
+        </Text>
+        {tab === activeTab ? (
+          <View
+            style={[
+              styles.activeIndicator,
+              {
+                left: i === 0 ? 0 : 20,
+              },
+            ]}
+          ></View>
+        ) : null}
+      </Pressable>
+    ));
+
   return (
     <View style={{ flex: 1, backgroundColor: "#f8f8f8" }}>
-      {!isLoading ? (
+      {!isLoading || !countryLoading ? (
         <>
-          <Header key={updateTitle} city={city} title={parentScrollY?.current > 10 ? city?.city : city?.country ? `City in ${city?.country}` : ""} />
-          <FloatingTab isSticky={isSticky} />
+          <Header
+            key={updateTitle}
+            city={city}
+            title={
+              parentScrollY?.current > 10
+                ? city?.city
+                : city?.country
+                  ? `City in ${city?.country}`
+                  : ""
+            }
+          />
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            ref={scrollView1Ref}
+            contentContainerStyle={{
+              paddingHorizontal: 15,
+            }}
+            style={[
+              styles.tabsWrapper,
+              {
+                display: isSticky ? "flex" : "none",
+                flexDirection: "row",
+                maxHeight: 50,
+                position: "absolute",
+                top: 80,
+                zIndex: 4,
+                backgroundColor: "#f8f8f8",
+                borderBottomColor: "#ccc",
+              },
+            ]}
+          >
+            {renderTabs()}
+          </ScrollView>
         </>
       ) : null}
 
@@ -88,11 +167,11 @@ export const CityDetailScreen: React.FC<Props> = ({ route }) => {
         nestedScrollEnabled
         onScroll={handleParentScroll}
         scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
+        ref={scrollViewRef}
       >
         {/* Loading State */}
-        {isLoading && (
-          <CityLoader isLoading={isLoading} />
-        )}
+        {isLoading && <CityLoader isLoading={isLoading} />}
 
         {/* Content */}
 
@@ -101,9 +180,11 @@ export const CityDetailScreen: React.FC<Props> = ({ route }) => {
             <CityTitleRow city={city} />
 
             <CityGalleryRow city={city} />
-            
-            <CityOverview />
-            
+
+            <CityOverview
+              recognizedFor={countyData?.countryByIso2?.recognizedFor}
+            />
+
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -116,88 +197,26 @@ export const CityDetailScreen: React.FC<Props> = ({ route }) => {
                   opacity: isSticky ? 0 : 1,
                 },
               ]}
+              ref={scrollView2Ref}
             >
-              <Pressable style={styles.tabItem}>
-                <Text style={styles.tabItemLabel}>Explore</Text>
-                <View style={styles.activeIndicator}></View>
-              </Pressable>
-              <Pressable style={styles.tabItem}>
-                <Text style={styles.tabItemLabel}>Food & Drink</Text>
-              </Pressable>
-              <Pressable style={styles.tabItem}>
-                <Text style={styles.tabItemLabel}>Tips</Text>
-              </Pressable>
-              <Pressable style={styles.tabItem}>
-                <Text style={styles.tabItemLabel}>National dishes</Text>
-              </Pressable>
-              <Pressable style={styles.tabItem}>
-                <Text style={styles.tabItemLabel}>Apps</Text>
-              </Pressable>
+              {renderTabs()}
             </ScrollView>
 
-            {/* Top sights */}
-            {dataNotFound && (
-              <View style={{ flex: 1, marginTop: 30 }}>
-                <NotFound />
-              </View>
-            )}
-            <>
-              {topSights?.length > 0 && (
-                <View
-                  style={[
-                    exploreStyles.placeSpotsRow,
-                    {
-                      borderTopWidth: 0,
-                    },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      exploreStyles.placeSpotsRowTitle,
-                      { fontSize: 20, fontWeight: "bold" },
-                    ]}
-                  >
-                    Top sights
-                  </Text>
-                  <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{
-                      paddingHorizontal: 15,
-                    }}
-                  >
-                    {topSights?.map(
-                      (item) =>
-                        item?.image && (
-                          <SightItem
-                            key={`top-sights-${item.id}-${item.title}`}
-                            item={item}
-                            onHandleItem={handleSetSightItem}
-                          />
-                        )
-                    )}
-                  </ScrollView>
-                </View>
-              )}
-
-              {/* Top sights */}
-
-              {sights && Object.keys(sights).length ? (
-                <SightsContainer items={sights} />
-              ) : null}
-            </>
-
-            {state.sight && (
-              <SightDetailModal
-                showDirection={false}
-                data={state.sight}
-                closeCallBack={handleOnClose}
-              />
-            )}
+            <ExploreTab
+              activeTab={activeTab}
+              data={data}
+              isLoading={isLoading}
+            />
+            <FoodAndDrinkTab activeTab={activeTab} />
+            <Tips activeTab={activeTab} />
+            <NationalDishes iso2={city?.iso2} activeTab={activeTab} />
+            <Apps
+              activeTab={activeTab}
+              apps={countyData?.countryByIso2?.taxi}
+            />
           </>
         ) : null}
       </ScrollView>
     </View>
   );
 };
- 

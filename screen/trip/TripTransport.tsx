@@ -1,3 +1,6 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import Constants from "expo-constants";
+import React from "react";
 import {
   Alert,
   ImageBackground,
@@ -10,17 +13,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { BackIcon } from "../../utilities/SvgIcons.utility";
-import Constants from "expo-constants";
-import { COLORS } from "../../styles/theme";
 
-import { globalStyles } from "../../styles/globalStyles";
 import { useCountryByIso2Query } from "../../api/api.trekspot";
-import React, { useEffect } from "react";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
 import { Loader } from "../../common/ui/Loader";
 import { NodataText } from "../../components/common/NoDataText";
+import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
+import { globalStyles } from "../../styles/globalStyles";
+import { BackIcon } from "../../utilities/SvgIcons.utility";
 
 type Props = NativeStackScreenProps<TripRouteStackParamList, "TripTransport">;
 
@@ -100,56 +99,27 @@ export const TripTransport: React.FC<Props> = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   safeArea: {
-    flex: 1,
     backgroundColor: "#F2F2F7",
+    flex: 1,
     paddingTop: Constants?.statusBarHeight + 10,
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 15,
-    marginBottom: 10,
-  },
-  destination: {
-    fontSize: 18,
-    fontWeight: "500",
-  },
-  backButton: {
-    width: 30,
-  },
-  heading: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: COLORS.black,
-    marginTop: 25,
-    marginBottom: 10,
-  },
   transportItem: {
-    backgroundColor: "#fff",
-    flexDirection: "row",
     alignItems: "center",
+    backgroundColor: "#fff",
     borderRadius: 15,
-    overflow: "hidden",
+    flexDirection: "row",
     marginTop: 15,
+    overflow: "hidden",
     width: "100%",
   },
   transportItemIcon: {
+    alignItems: "center",
     backgroundColor: "#fff",
     padding: 0,
-    alignItems: "center",
   },
   transportText: {
     fontSize: 16,
     fontWeight: "bold",
     paddingHorizontal: 10,
-  },
-  textContentWrapper: {
-    backgroundColor: "#fafafa",
-    padding: 15,
-    borderRadius: 10,
-    marginTop: 25,
-    flexDirection: "row",
-    alignItems: "center",
   },
 });

@@ -1,25 +1,22 @@
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useCallback } from "react";
-
 import {
   Platform,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 
-import { COLORS, SIZES } from "../../styles/theme";
-
 import { CountryType } from "../../api/api.types";
-import { CountryItem } from "./CountryItem";
-import { useNavigation } from "@react-navigation/native";
-import { LinearGradient } from "expo-linear-gradient";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
-import { useTripStore } from "../../package/zustand/store";
 import { GuestUserModal } from "../../common/components/GuestUserModal";
 import { useAppSelector } from "../../package/store";
+import { useTripStore } from "../../package/zustand/store";
+import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
+import { SIZES } from "../../styles/theme";
+import { CountryItem } from "./CountryItem";
 
 interface DestinationContainerProps {
   title: string;
@@ -131,77 +128,25 @@ export const DestinationContainer: React.FC<DestinationContainerProps> = ({
 };
 
 const styles = StyleSheet.create({
-  gradientWrapper: {
-    flex: 1,
-    justifyContent: "flex-end",
-  },
-  titleSm: {
-    fontSize: 14,
-    marginLeft: 2,
-  },
-  labelItemText: {
-    color: "#fff",
-    fontSize: 22,
-    fontWeight: "500",
-    marginLeft: 5,
-  },
-  labelItem: {
-    padding: 10,
-    paddingVertical: 0,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-
-  ratingLabel: {
-    flexDirection: "row",
-    paddingHorizontal: 10,
-    paddingVertical: 3,
-    borderRadius: 30,
-    alignItems: "center",
-    paddingBottom: 10,
-  },
-  ratingText: {
-    color: "#fff",
-    marginLeft: 3,
-    fontSize: 12,
-    opacity: 0.7,
-  },
-
-  ratingTextXs: {
-    fontSize: 10,
-  },
-
-  rowItem: {
-    width: "100%",
-    paddingTop: 25,
-    backgroundColor: "#f8f8f8",
-  },
-  rowItemHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: SIZES.padding,
-    paddingHorizontal: 15,
-  },
-  seeAllButtonTxt: {
-    color: COLORS.primary,
-    fontSize: SIZES.body4,
-  },
-  h2: {
-    fontSize: 20,
-    color: "#000",
-    fontWeight: "700",
-  },
   contentBox: {
     marginTop: 5,
     paddingLeft: 15,
   },
-  box: {
-    width: 130,
-    height: 130,
-    backgroundColor: "#fafafa",
-    borderRadius: 15,
-    overflow: "hidden",
-    marginRight: 10,
+  h2: {
+    color: "#000",
+    fontSize: 20,
+    fontWeight: "700",
+  },
+  rowItem: {
+    backgroundColor: "#f8f8f8",
+    paddingTop: 25,
+    width: "100%",
+  },
+  rowItemHeader: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: SIZES.padding,
+    paddingHorizontal: 15,
   },
 });

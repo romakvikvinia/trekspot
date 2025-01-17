@@ -7,14 +7,14 @@ import {
   View,
 } from "react-native";
 import { ScrollView, Text } from "react-native";
+
+import { CountryType } from "../../../api/api.types";
+import { FeedbackCountryDetail } from "../../../components/explore/FeedbackCountryDetail";
 import {
   DrivingSideLeft,
   DrivingSideRight,
 } from "../../../utilities/SvgIcons.utility";
 import { styles } from "../_styles";
-import { CountryType } from "../../../api/api.types";
-import { FeedbackCountryDetail } from "../../../components/explore/FeedbackCountryDetail";
-import { SIZES } from "../../../styles/theme";
 
 interface TransportProps {
   country: CountryType;

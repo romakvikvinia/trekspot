@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
+import { usePostHog } from "posthog-react-native";
 import {
   Platform,
   ScrollView,
@@ -7,14 +8,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
+import { Events } from "../../../utilities/Posthog";
 import {
   AppsIcon,
   DishesIcon,
   EmergencyLinearIcon,
   InsightIcon,
 } from "../../../utilities/SvgIcons.utility";
-import { usePostHog } from "posthog-react-native";
-import { Events } from "../../../utilities/Posthog";
 
 type TripHelpersProps = {
   data: any;
@@ -162,37 +163,33 @@ export const TripHelpers = ({
 };
 
 const styles = StyleSheet.create({
-  bottomRow: {
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    borderTopColor: "#f2f2f2",
-    borderTopWidth: 1,
-    marginTop: Platform.OS === "android" ? 5 : 10,
-    paddingTop: 12,
-    paddingBottom: 12,
-    marginBottom: 0,
-  },
   bottomActionsButton: {
+    alignItems: "center",
+    backgroundColor: "#fff",
     borderRadius: 50,
     display: "flex",
-    alignItems: "center",
+    flexDirection: "row",
     justifyContent: "center",
-    backgroundColor: "#fff",
     marginRight: 8,
-    paddingVertical: 10,
     paddingHorizontal: 15,
-    flexDirection: "row",
-  },
-  bottomActionsButtonText: {
-    alignItems: "center",
-    flexDirection: "row",
+    paddingVertical: 10,
   },
   bottomActionsButtonlabel: {
-    fontSize: 14,
     color: "#0b57d0",
-    marginLeft: 8,
+    fontSize: 14,
     fontWeight: "500",
+    marginLeft: 8,
+  },
+  bottomRow: {
+    alignItems: "center",
+    borderTopColor: "#f2f2f2",
+    borderTopWidth: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 0,
+    marginTop: Platform.OS === "android" ? 5 : 10,
+    paddingBottom: 12,
+    paddingTop: 12,
+    width: "100%",
   },
 });

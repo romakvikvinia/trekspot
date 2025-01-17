@@ -3,6 +3,7 @@ import { Text, View } from "react-native";
 import { styles } from "../../common/components/_styles";
 import { StarIcon } from "../../utilities/SvgIcons.utility";
 import { STI } from "./STI";
+import { VisaInfoButton } from "./VisaInfoButton";
 
 export const CityTitleRow = ({ city }) => {
   return (
@@ -73,6 +74,7 @@ export const CityTitleRow = ({ city }) => {
               >
                 {city.rate}{" "}
               </Text>
+              <VisaInfoButton />
             </>
           )}
           {city?.visitors && (
@@ -81,7 +83,7 @@ export const CityTitleRow = ({ city }) => {
         </View>
       </View>
       <View style={styles.cityDetailsRight}>
-          <STI />
+        <STI />
       </View>
     </View>
   );

@@ -13,7 +13,7 @@ import RenderHTML from "react-native-render-html";
 import { COLORS, SIZES } from "../../styles/theme";
 
 const data = {
-    content: "<h2>Overview</h2><p><strong>Shanghai</strong>, China's largest city, is a global financial hub known for its modern skyline, historical landmarks, and vibrant culture. The city perfectly blends futuristic architecture with rich traditions, offering something for every traveler.</p> <h2>Visa Requirements</h2><p>Most travelers require a visa to enter China, but Shanghai offers a <strong>144-hour visa-free transit policy</strong> for travelers from certain countries if they meet specific criteria. Ensure your passport is valid for at least 6 months from the date of entry.</p> <h2>Currency and Payment</h2><p><strong>Chinese Yuan (CNY)</strong> or Renminbi (RMB). Mobile payment apps like <strong>WeChat Pay</strong> and <strong>Alipay</strong> are widely used. Some international credit cards are accepted in hotels and upscale restaurants, but cash is recommended for smaller shops. Withdraw cash from ATMs that support international cards. Carry smaller denominations for convenience.</p> <h2>Language</h2><p>Mandarin Chinese is the main language spoken. English is spoken in major tourist areas but not widely understood elsewhere. Key phrases include: <strong>Hello: 你好 (Nǐ hǎo), Thank you: 谢谢 (Xièxiè), How much: 多少钱? (Duō shǎo qián?)</strong></p> <h2>Transportation</h2><p>Shanghai's metro system is efficient, affordable, and well-connected with signs in English. Taxis are reliable, but ride-hailing apps like DiDi (China's Uber) are more convenient for tourists. Many tourist areas like the Bund and French Concession are walkable.</p> <h2>Weather and Packing</h2><p>Spring (March to May) - mild weather, pack light layers. Summer (June to August) - hot and humid, pack breathable clothes and sunscreen. Autumn (September to November) - pleasant weather, light jacket recommended. Winter (December to February) - cold, bring a warm coat. Comfortable walking shoes are essential.</p> <h2>Attractions</h2><p><strong>The Bund</strong>: A waterfront promenade with stunning views of the Pudong skyline and colonial-era buildings. <strong>Yu Garden</strong>: A classical Chinese garden with beautiful pavilions, ponds, and rock formations. <strong>Shanghai Tower</strong>: One of the tallest buildings in the world, offering an observation deck with panoramic views.</p> <h2>Food and Dining</h2><p>Xiaolongbao (Soup Dumplings), Shengjianbao (Pan-Fried Pork Buns), Hairy Crab (Seasonal Delicacy), Hot Pot.</p> <h2>Internet and Apps</h2><p>Many hotels and cafes offer free Wi-Fi, but a VPN is needed to access blocked sites like Google, Facebook, and Instagram. Useful apps include: <strong>WeChat</strong> (for communication and payments), <strong>DiDi</strong> (for ride-hailing), <strong>Baidu Maps</strong> (for navigation), <strong>Pleco</strong> (for translation).</p> <h2>Cultural Etiquette</h2><p>Tipping is not customary in China. Avoid discussing sensitive political topics. Be polite and patient in crowded areas. When receiving a gift, use both hands.</p> <h2>Health and Safety</h2><p>Shanghai is generally very safe for tourists, with a low crime rate. However, keep the following tips in mind:</p><ul><li>Avoid unregistered taxis; use ride-hailing apps or licensed cabs.</li><li>Stay alert in crowded areas to prevent pickpocketing.</li><li>Drink only bottled or boiled water, as tap water is not safe for consumption.</li><li>Be cautious of scams, such as overpriced tea house invitations or fake goods in markets.</li></ul><p>Emergency contacts:</p><ul><li><strong>Police:</strong> 110</li><li><strong>Ambulance:</strong> 120</li></ul> <h2>Where to Stay</h2><p>The best areas to stay in Shanghai for tourists include:</p><ul><li><strong>The Bund:</strong> Ideal for luxury stays and proximity to major landmarks.</li><li><strong>People's Square:</strong> Central location with easy metro access.</li><li><strong>French Concession:</strong> Quiet, tree-lined streets with boutique hotels and a charming vibe.</li><li><strong>Pudong:</strong> Great for business travelers and those who enjoy a modern skyline view.</li></ul> <h2>Shopping Tips</h2><p>Popular shopping areas include:</p><ul><li><strong>Nanjing Road:</strong> A mix of luxury stores and affordable shops.</li><li><strong>Yuyuan Bazaar:</strong> A traditional market for souvenirs and crafts.</li><li><strong>AP Plaza:</strong> A market for knockoff goods and bargains.</li></ul><p>Bargaining is common in markets but not in malls. Avoid counterfeit goods.</p>"
+    content: "<h2>Overview</h2><p>Hong Kong is a vibrant metropolis known for its stunning skyline, bustling harbor, and unique blend of Eastern and Western cultures. As a Special Administrative Region of China, Hong Kong offers a mix of modernity and tradition, making it a popular destination for tourists. Its attractions range from shopping and fine dining to cultural landmarks and breathtaking nature.</p> <h2>Where to Stay</h2><p>For safety and convenience, tourists should consider staying in areas like Central, Tsim Sha Tsui (TST), or Causeway Bay. These areas offer a wide range of accommodations, are well-connected by public transport, and are close to major attractions. Areas like Mong Kok are bustling but may feel overwhelming for some travelers. Avoid staying in overly remote areas or locations that are not well-reviewed for tourist stays.</p> <h2>Visa Requirements</h2><p>Hong Kong allows visa-free entry for citizens of many countries for short stays, ranging from 7 to 180 days depending on nationality. Visitors should check the Hong Kong Immigration Department's official website for the latest requirements and ensure their passport is valid for at least six months beyond their intended stay.</p> <h2>Currency and Payment</h2><p>The official currency is the Hong Kong Dollar (HKD). Credit cards are widely accepted, especially in hotels, restaurants, and shopping centers. Mobile payment apps like AlipayHK and WeChat Pay are popular. It's advisable to carry some cash for small vendors and street markets.</p> <h2>Language</h2><p>Cantonese is the most commonly spoken language. English is widely spoken in tourist areas and by service staff in hotels and restaurants. Useful phrases include: 'Nei ho' (Hello), 'Mm goi' (Thank you/excuse me), and 'Gei cin a?' (How much?).</p> <h2>Transportation</h2><p>Hong Kong has an efficient public transportation system, including the MTR (subway), buses, trams, and ferries. The Octopus Card is highly recommended for easy payment on public transport. Taxis are readily available but can be costly compared to public transport. Ride-hailing apps like Uber operate in the city, but they are not as common as taxis.</p> <h2>Weather and Packing</h2><p>Hong Kong has a subtropical climate: <ul><li><strong>Spring (March-May):</strong> Mild and humid; pack light jackets and umbrellas.</li> <li><strong>Summer (June-August):</strong> Hot and humid with typhoons; bring lightweight clothing and rain gear.</li> <li><strong>Autumn (September-November):</strong> Pleasant and dry; ideal for outdoor activities, light clothing is sufficient.</li> <li><strong>Winter (December-February):</strong> Cool and dry; pack layers and a light coat.</li></ul></p> <h2>Attractions</h2><p><strong>The Peak:</strong> Offers stunning views of the city and harbor. <strong>Victoria Harbour:</strong> Famous for its skyline and Symphony of Lights show. <strong>Ngong Ping 360 and Big Buddha:</strong> A cable car ride to a giant Buddha statue. <strong>Temple Street Night Market:</strong> A vibrant street market for shopping and dining. <strong>Disneyland and Ocean Park:</strong> Theme parks for family-friendly fun. <strong>Lan Kwai Fong:</strong> A popular nightlife area with bars and clubs.</p> <h2>Food and Dining</h2><p>Must-try dishes include dim sum, roast goose, wonton noodles, and egg tarts. Visit local tea houses and try street food at Mong Kok or Temple Street. High-end dining is also widely available in Central and TST.</p> <h2>Internet and Apps</h2><p>Free Wi-Fi is available in many public areas and establishments. Recommended apps include MTR Mobile (transport), OpenRice (dining), and Google Maps. A VPN is not necessary as Hong Kong has unrestricted internet access.</p> <h2>Cultural Etiquette</h2><p>Respect personal space and avoid loud behavior in public. Tipping is not mandatory but appreciated in restaurants. Offer and receive items with both hands as a sign of respect.</p> <h2>Health and Safety</h2><p><ul><li>Ensure vaccinations for general travel, such as Hepatitis A and B.</li><li>Emergency contact: Dial 999 for police, fire, or ambulance services.</li><li>Tap water is generally safe, but bottled water is recommended for sensitive stomachs.</li></ul></p> <h2>Safety Tips</h2><p>Hong Kong is generally safe, but tourists should remain vigilant. Safe areas to stay include Central, TST, and Causeway Bay. Avoid isolated areas at night, especially in Kowloon Walled City Park. Beware of pickpockets in crowded areas and avoid unlicensed taxis. Always carry a map or download offline maps for navigation.</p> <h2>Shopping Tips</h2><p>Popular shopping areas include Mong Kok (street markets), Causeway Bay (malls), and TST (luxury brands). Bargaining is common in street markets but not in malls. Look for unique souvenirs like Chinese teas, jade, and silk items.</p>"
 }
 
 export const QuickOverviewBox = () => {
@@ -67,9 +67,9 @@ export const QuickOverviewBox = () => {
               ]}
           >
               <Text style={cityStyle.boxItemInTitleText}>
-                What to Expect
+                Cost 90$
               </Text>
-              <Text style={cityStyle.boxItemInSubTitle}>Ideal Visit Tips</Text>
+              <Text style={cityStyle.boxItemInSubTitle}>Avg. Daily cost</Text>
             </View>
           </View>
         </View>
@@ -105,7 +105,8 @@ export const QuickOverviewBox = () => {
                     h2: {
                       marginTop: 0,
                       marginBottom: 5,
-                      fontSize: 18
+                      fontSize: 18,
+                      fontWeight: "500"
                     },
                     p: {
                       fontSize: 14,
@@ -144,9 +145,11 @@ export const QuickOverviewBox = () => {
                   }}
                 />
               </ScrollView>
+             <View style={{paddingRight: 10}}>
               <Pressable onPress={hidePopup} style={cityStyle.closeButton}>
-                <Text style={cityStyle.closeButtonText}>Close</Text>
-              </Pressable>
+                  <Text style={cityStyle.closeButtonText}>Close</Text>
+                </Pressable>
+             </View>
             </Animated.View>
           </View>
         </Portal>
@@ -196,7 +199,7 @@ const cityStyle = StyleSheet.create({
     flexWrap: "wrap",
   },
   boxItemTitle: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "400",
     textTransform: "uppercase",
   },
@@ -205,7 +208,7 @@ const cityStyle = StyleSheet.create({
     borderRadius: 100,
     marginTop: 10,
     padding: 15,
-    width: "100%"
+    width: "100%",
   },
   closeButtonText: {
     color: COLORS.black,

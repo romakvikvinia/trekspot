@@ -666,10 +666,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   tabsWrapper: {
-    borderBottomColor: "#f2f2f2",
+    borderBottomColor: "#ccc",
     borderBottomWidth: 1,
     marginTop: 15,
-    paddingVertical: 15
   },
   tabItemLabel: {
     color: COLORS.darkgray,
@@ -681,16 +680,18 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderColor: "transparent",
     flex: 1,
-    marginRight: 20,
-    position: "relative",
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    position: "relative"
   },
   activeIndicator: {
     backgroundColor: COLORS.primary,
     borderRadius: 2,
-    bottom: -16,
+    bottom: -2,
     height: 2,
     position: "absolute",
     width: "100%",
+    zIndex: 1,
   },
   cityDetailsLeft: {
     width: "60%"

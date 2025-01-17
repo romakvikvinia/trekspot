@@ -13,46 +13,8 @@ import RenderHTML from "react-native-render-html";
 import { COLORS, SIZES } from "../../styles/theme";
 
 const data =  {
-    content: `<h2>Summary</h2>
-  <p>Paris is generally safe for travelers, but pickpocketing and occasional protests require caution.</p>
-  
-  <h2>Key Threat Categories</h2>
-  <h2>1. Petty Crime</h2>
-  <p>Common in crowded tourist areas like the Eiffel Tower, Louvre, and Metro.</p>
-  <ul>
-    <li>Keep belongings secure and avoid engaging with street vendors offering 'free' items.</li>
-  </ul>
-  
-  <h2>2. Protests & Civil Unrest</h2>
-  <p>Protests often occur at Place de la République or Champs-Élysées.</p>
-  <ul>
-    <li>Check local news before heading to these areas.</li>
-  </ul>
-  
-  <h2>3. Terrorism Risk</h2>
-  <p>Paris maintains a high level of security due to past incidents.</p>
-  <ul>
-    <li>Stay vigilant in public spaces and follow local authorities' instructions during emergencies.</li>
-  </ul>
-  
-  <h2>4. Transportation Safety</h2>
-  <p>Metro is safe but prone to pickpocketing during rush hours.</p>
-  <ul>
-    <li>Avoid empty Metro cars late at night.</li>
-  </ul>
-  
-  <h2>Emergency Numbers</h2>
-  <ul>
-    <li>Police: 112 (EU emergency number)</li>
-    <li>Medical Assistance: 15</li>
-  </ul>
-  
-  <h2>General Tips</h2>
-  <ul>
-    <li>Avoid flashing valuables in public.</li>
-    <li>Use reputable rideshares or official taxis at night.</li>
-    <li>Stay updated with local news through apps like 'France 24' or 'Le Parisien.'</li>
-  </ul>`
+      content: "<h1>Bangkok Safety Tips for Travelers</h1>\n<p>Bangkok, Thailand's bustling capital, is a vibrant city with a rich cultural heritage, but like any major destination, it requires travelers to stay mindful of their safety. Here are essential tips to ensure a safe and enjoyable trip.</p>\n\n<h2>Crime and Personal Safety</h2>\n<ul>\n  <li>Be cautious of pickpocketing and bag-snatching, especially in crowded areas like markets, public transport, and tourist attractions.</li>\n  <li>Avoid displaying valuables like jewelry or expensive gadgets.</li>\n  <li>Use ATMs in well-lit, secure locations, and shield your PIN while entering it.</li>\n  <li>Be aware of scams targeting tourists, such as fake travel agencies or overly friendly strangers offering unsolicited help.</li>\n</ul>\n\n<h2>Terrorism and Security Risks</h2>\n<ul>\n  <li>Stay informed about the security situation through official travel advisories or local news.</li>\n  <li>Avoid crowded public areas or high-profile locations during times of increased risk.</li>\n  <li>Be vigilant in public transport hubs like airports and train stations.</li>\n</ul>\n\n<h2>Protests and Political Unrest</h2>\n<ul>\n  <li>Avoid any areas where protests or demonstrations are taking place.</li>\n  <li>Monitor local news and social media for updates on political events or unrest.</li>\n  <li>If caught in a demonstration, move calmly to a secure location and avoid engaging with participants.</li>\n</ul>\n\n<h2>General Safety Tips</h2>\n<ul>\n  <li>Dress modestly and respect local customs, especially when visiting temples or religious sites.</li>\n  <li>Keep your hotel address and contact details with you at all times.</li>\n  <li>Use licensed taxis or reputable rideshare apps to get around the city safely.</li>\n  <li>Avoid walking alone late at night, especially in unfamiliar areas.</li>\n</ul>\n\n<h2>Emergency Preparedness</h2>\n<ul>\n  <li>Save emergency numbers: Police (191), Tourist Police (1155), and Ambulance (1669).</li>\n  <li>Know the location of the nearest hospital and your country's embassy or consulate.</li>\n  <li>Carry a basic first-aid kit and any necessary medications.</li>\n  <li>Stay hydrated and be cautious about consuming street food to avoid foodborne illnesses.</li>\n</ul>\n\n<p>By staying informed and alert, you can have a safe and memorable experience exploring Bangkok’s vibrant culture and attractions.</p>"
+
   }
   
 
@@ -250,7 +212,7 @@ const styles = StyleSheet.create({
     marginTop: 15
   },
   stiButton: {
-    backgroundColor: "#328f4b",
+    backgroundColor: "#00ae81",
     borderRadius: 10,
     marginTop: 6,
     paddingHorizontal: 10,

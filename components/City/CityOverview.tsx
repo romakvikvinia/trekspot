@@ -4,7 +4,8 @@ import { COLORS } from "../../styles/theme";
 import { BestTimeToVisitBox } from "./BestTimeToVisitBox";
 import { QuickOverviewBox } from "./QuickOverviewBox";
 
-export const CityOverview = () => {
+export const CityOverview = ({recognizedFor}) => {
+
   return (
     <ScrollView
       horizontal
@@ -15,13 +16,13 @@ export const CityOverview = () => {
       }}
     >
       <BestTimeToVisitBox />
-       <QuickOverviewBox />
+      <QuickOverviewBox />
       <View
         style={[
           cityStyle.boxItem,
           {
             width: "auto",
-            maxWidth: 280,
+            maxWidth: 200,
           },
         ]}
       >
@@ -35,21 +36,11 @@ export const CityOverview = () => {
               },
             ]}
           >
-            <View style={cityStyle.tagItem}>
-              <Text style={cityStyle.tagItemText}>🎨 Arts</Text>
-            </View>
-            <View style={cityStyle.tagItem}>
-              <Text style={cityStyle.tagItemText}>👩‍👩‍👦‍👦 Family</Text>
-            </View>
-            <View style={cityStyle.tagItem}>
-              <Text style={cityStyle.tagItemText}>🍷 drink</Text>
-            </View>
-            <View style={cityStyle.tagItem}>
-              <Text style={cityStyle.tagItemText}>👩‍👩‍👦‍👦 Family</Text>
-            </View>
-            <View style={cityStyle.tagItem}>
-              <Text style={cityStyle.tagItemText}>🍷 Food</Text>
-            </View>
+            {recognizedFor?.slice(0, 4)?.map((item, i) => (
+              <View style={cityStyle.tagItem} key={i}>
+                <Text style={cityStyle.tagItemText}>{item?.emoji} {item?.title}</Text>
+              </View>
+            ))}
           </View>
         </View>
       </View>
@@ -76,7 +67,7 @@ const cityStyle = StyleSheet.create({
     flexWrap: "wrap",
   },
   boxItemTitle: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "400",
     textTransform: "uppercase",
   },
@@ -93,5 +84,4 @@ const cityStyle = StyleSheet.create({
     fontSize: 14,
     fontWeight: "500",
   },
- 
 });

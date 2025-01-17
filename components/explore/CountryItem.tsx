@@ -1,3 +1,6 @@
+import * as Haptics from "expo-haptics";
+import { Image } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import {
   Platform,
@@ -6,11 +9,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+
 import { CountryType } from "../../api/api.types";
 import { StarIcon, TwoHeadsIcon } from "../../utilities/SvgIcons.utility";
-import * as Haptics from "expo-haptics";
-import { Image } from "expo-image";
 
 type CountryItemProps = {
   item: CountryType;
@@ -180,17 +181,43 @@ export const CountryItem: React.FC<CountryItemProps> = ({
 };
 
 const styles = StyleSheet.create({
+  addToBucketButton: {
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    borderRadius: 50,
+    height: 30,
+    justifyContent: "center",
+    position: "absolute",
+    right: 10,
+    top: 10,
+    width: 30,
+    zIndex: 3,
+  },
+  androidImageContainer: {
+    backgroundColor: "#fafafa",
+    borderRadius: 15,
+    marginRight: 10,
+    overflow: "hidden",
+    position: "relative",
+    width: 160,
+  },
+  box: {
+    backgroundColor: "#fafafa",
+    borderRadius: 15,
+    height: 130,
+    marginRight: 10,
+    overflow: "hidden",
+    width: 130,
+  },
   gradientWrapper: {
     flex: 1,
     justifyContent: "flex-end",
   },
-  androidImageContainer: {
-    width: 160,
-    position: "relative",
-    backgroundColor: "#fafafa",
-    borderRadius: 15,
-    overflow: "hidden",
-    marginRight: 10,
+  labelItem: {
+    alignItems: "center",
+    flexDirection: "row",
+    padding: 10,
+    paddingVertical: 0,
   },
   labelItemText: {
     color: "#fff",
@@ -199,51 +226,25 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     paddingRight: 10,
   },
-  labelItem: {
-    padding: 10,
-    paddingVertical: 0,
-    flexDirection: "row",
-    alignItems: "center",
-  },
   ratingLabel: {
+    alignItems: "center",
+    borderRadius: 30,
     flexDirection: "row",
+    marginTop: 8,
+    paddingBottom: 10,
     paddingHorizontal: 10,
     paddingVertical: 0,
-    borderRadius: 30,
-    alignItems: "center",
-    paddingBottom: 10,
-    marginTop: 8,
   },
   ratingText: {
     color: "#fff",
-    marginLeft: 3,
     fontSize: 12,
-    opacity: 0.8,
     fontWeight: "500",
-  },
-  addToBucketButton: {
-    width: 30,
-    height: 30,
-    borderRadius: 50,
-    backgroundColor: "rgba(0, 0, 0, 0.3)",
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-    right: 10,
-    top: 10,
-    zIndex: 3,
-  },
-  box: {
-    width: 130,
-    height: 130,
-    backgroundColor: "#fafafa",
-    borderRadius: 15,
-    overflow: "hidden",
-    marginRight: 10,
+    marginLeft: 3,
+    opacity: 0.8,
   },
   typeMd: {
-    width: 160,
     height: 180,
     overflow: "hidden",
+    width: 160,
   },
 });

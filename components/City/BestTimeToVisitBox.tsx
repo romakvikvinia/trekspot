@@ -10,6 +10,7 @@ import {
 import { Portal } from "react-native-portalize";
 
 import { COLORS, SIZES } from "../../styles/theme";
+import { NonPopularIcon, PopularIcon, WeatherIcon } from "../../utilities/SvgIcons.utility";
 
 export const BestTimeToVisitBox = () => {
   const [visible, setVisible] = useState(false);
@@ -62,16 +63,109 @@ export const BestTimeToVisitBox = () => {
             <Text style={styles.boxItemInSubTitle}>High season</Text>
           </View>
         </View>
-        <Text style={styles.moreDetails}>
-            More details →
-        </Text>
+        <Text style={styles.moreDetails}>More details →</Text>
       </Pressable>
 
       {visible && (
         <Portal>
           <View style={[StyleSheet.absoluteFillObject, styles.bg]}>
             <Animated.View style={[styles.contentCard, { opacity: fadeAnim }]}>
-              <ScrollView style={styles.inner}></ScrollView>
+              <ScrollView style={styles.inner}>
+                <Text style={styles.sectionTitle}>When to visit</Text>
+                <View style={styles.rowGroup}>
+                  <View style={styles.row}>
+                    <PopularIcon />
+                    <View style={styles.textSide}>
+                      <Text style={styles.inTitle}>
+                        Popular season, Jan-Mar
+                      </Text>
+                      <Text style={styles.inText}>
+                        Popular, higher prices and crowded
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.row}>
+                    <NonPopularIcon />
+                    <View style={styles.textSide}>
+                      <Text style={styles.inTitle}>Off season, Jan-Mar</Text>
+                      <Text style={styles.inText}>
+                        Less popular, lower prices and fewer visitors
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+                <View style={styles.weatherRow}>
+                  <View style={styles.rowItem}>
+                    <View style={styles.weatherCol}></View>
+                    <View style={styles.weatherCol}>
+                      <Text style={styles.colTextHeading}>Avg. temp (°C)</Text>
+                    </View>
+                    <View style={styles.weatherCol}>
+                      <Text style={styles.colTextHeading}>Popularity</Text>
+                    </View>
+                  </View>
+                  <View style={styles.rowItem}>
+                    <View style={[styles.weatherCol,{
+                      alignItems: "flex-start"
+                    }]}>
+                      <Text style={styles.monthText}>January</Text>
+                    </View>
+                    <View style={styles.weatherCol}>
+                      <View style={styles.inBox}>
+                        <WeatherIcon />
+                        <Text style={styles.weatherText}>23° / 34</Text>
+                      </View>
+                    </View>
+                    <View style={styles.weatherCol}>
+                      <View style={styles.inBox}>
+                        <View style={[styles.circle, styles.fill]}></View>
+                        <View style={[styles.circle, styles.fill]}></View>
+                        <View style={styles.circle}></View>
+                      </View>
+                    </View>
+                  </View>
+                  <View style={styles.rowItem}>
+                    <View style={[styles.weatherCol,{
+                      alignItems: "flex-start"
+                    }]}>
+                      <Text style={styles.monthText}>January</Text>
+                    </View>
+                    <View style={styles.weatherCol}>
+                      <View style={styles.inBox}>
+                        <WeatherIcon />
+                        <Text style={styles.weatherText}>23° / 34</Text>
+                      </View>
+                    </View>
+                    <View style={styles.weatherCol}>
+                      <View style={styles.inBox}>
+                        <View style={[styles.circle, styles.fill]}></View>
+                        <View style={[styles.circle, styles.fill]}></View>
+                        <View style={styles.circle}></View>
+                      </View>
+                    </View>
+                  </View>
+                  <View style={styles.rowItem}>
+                    <View style={[styles.weatherCol,{
+                      alignItems: "flex-start"
+                    }]}>
+                      <Text style={styles.monthText}>January</Text>
+                    </View>
+                    <View style={styles.weatherCol}>
+                      <View style={styles.inBox}>
+                        <WeatherIcon />
+                        <Text style={styles.weatherText}>23° / 34</Text>
+                      </View>
+                    </View>
+                    <View style={styles.weatherCol}>
+                      <View style={styles.inBox}>
+                        <View style={[styles.circle, styles.fill]}></View>
+                        <View style={[styles.circle, styles.fill]}></View>
+                        <View style={styles.circle}></View>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </ScrollView>
               <Pressable onPress={hidePopup} style={styles.closeButton}>
                 <Text style={styles.closeButtonText}>Close</Text>
               </Pressable>
@@ -122,9 +216,16 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   boxItemTitle: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "400",
     textTransform: "uppercase",
+  },
+  circle: {
+    backgroundColor: "#ccc",
+    borderRadius: 100,
+    height: 10,
+    marginRight: 5,
+    width: 10
   },
   closeButton: {
     backgroundColor: "#f2f2f2",
@@ -138,6 +239,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "500",
     textAlign: "center",
+  },
+  colTextHeading: {
+
   },
   contentCard: {
     backgroundColor: "#fff",
@@ -156,6 +260,27 @@ const styles = StyleSheet.create({
     width: SIZES.width - 30,
     zIndex: 1,
   },
+  fill: {
+    backgroundColor: COLORS.primary
+  },
+  inBox: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+    width: "100%"
+  },
+  inText: {
+    color: COLORS.black,
+    fontSize: 13,
+    fontWeight: "400",
+    maxWidth: "100%"
+  },
+  inTitle: {
+    color: COLORS.black,
+    fontSize: 15,
+    fontWeight: "600",
+    marginBottom: 2
+  },
   inner: {
     flex: 1,
     paddingRight: 10,
@@ -164,5 +289,40 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
     fontSize: 14,
     marginTop: 15
+  },
+  row: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginBottom: 20,
+  },
+  rowGroup: {
+    marginTop: 25,
+    width: "100%"
+  },
+  rowItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 15,
+    width: "100%"
+  },
+  sectionTitle: {
+    color: COLORS.black,
+    fontSize: 20,
+    fontWeight: "500"
+  },
+  textSide: {
+    marginLeft: 12,
+  },
+  weatherCol: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: "32%"
+  },
+  weatherRow: {
+    width: "100%"
+  },
+  weatherText: {
+    fontSize: 14,
+    marginLeft: 5
   },
 });

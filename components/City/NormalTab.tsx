@@ -4,7 +4,13 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import { styles } from "../../common/components/_styles";
 import { COLORS, SIZES } from "../../styles/theme";
 
-export const FloatingTab = ({ isSticky, TABS, activeTab, setActiveTab, handleScrollTo }) => {
+export const NormalTab = ({
+  activeTab,
+  setActiveTab,
+  handleScrollTo,
+  isSticky,
+  TABS,
+}) => {
   const TabScrollViewRef = useRef(null);
 
   const scrollToButton = (buttonRef) => {
@@ -21,48 +27,39 @@ export const FloatingTab = ({ isSticky, TABS, activeTab, setActiveTab, handleScr
     );
   };
 
- 
   return (
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      ref={TabScrollViewRef}
       contentContainerStyle={{
         paddingHorizontal: 15,
       }}
       style={[
         styles.tabsWrapper,
         {
-          display: isSticky ? "flex" : "none",
-          flexDirection: "row",
-          maxHeight: 50,
-          position: "absolute",
-          top: 80,
-          zIndex: 4,
-          backgroundColor: "#f8f8f8",
-          borderBottomColor: "#ccc",
+          opacity: isSticky ? 0 : 1,
         },
       ]}
+      ref={TabScrollViewRef}
     >
       {TABS?.map((tab, i) => {
-         const buttonRef = useRef(null);
+        const buttonRef = useRef(null);
         return (
           <Pressable
-              style={[styles.tabItem,
+            style={[styles.tabItem,
                 {
                     paddingLeft: i === 0 ? 0 : 20
                 }
             ]}
-            key={i}
             ref={buttonRef}
+            key={i}
             onPress={() => {
               setActiveTab(tab);
               handleScrollTo();
-              scrollToButton(buttonRef)
+              scrollToButton(buttonRef);
             }}
-            hitSlop={30}
           >
-           <Text
+            <Text
               style={[
                 styles.tabItemLabel,
                 {
@@ -78,8 +75,8 @@ export const FloatingTab = ({ isSticky, TABS, activeTab, setActiveTab, handleScr
               }]}></View>
             ) : null}
           </Pressable>
-        );}
-      )}
+        );
+      })}
     </ScrollView>
   );
 };
