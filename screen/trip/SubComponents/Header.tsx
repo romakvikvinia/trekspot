@@ -1,7 +1,9 @@
+import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
+
 import { useTripStore } from "../../../package/zustand/store";
-import { ReachHeaderContent } from "./ReachHeaderContent";
 import { ClassicHeaderContent } from "./ClassicHeaderContent";
+import { ReachHeaderContent } from "./ReachHeaderContent";
 
 type HeaderProps = {
   data: any;
@@ -23,6 +25,7 @@ export const Header = ({
   }));
   return (
     <View style={[styles.mapHeaderContainer]}>
+      <StatusBar style="light" />
       {!tripStyle && (
         <ReachHeaderContent
           data={data}

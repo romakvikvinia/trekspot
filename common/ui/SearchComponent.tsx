@@ -1,4 +1,5 @@
 import { TextInput, TouchableOpacity, View } from "react-native";
+
 import { searchComponentStyles } from "../../styles/searchComponentStyles";
 import { COLORS } from "../../styles/theme";
 import {

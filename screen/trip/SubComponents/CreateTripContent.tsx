@@ -1,8 +1,11 @@
 import { BlurView } from "expo-blur";
+import * as Haptics from "expo-haptics";
 import moment from "moment";
+import { usePostHog } from "posthog-react-native";
 import React, { useCallback, useEffect, useRef } from "react";
 import {
   ActivityIndicator,
+  Alert,
   ScrollView,
   Text,
   TextInput,
@@ -10,27 +13,25 @@ import {
   View,
 } from "react-native";
 import { Modalize } from "react-native-modalize";
+import { IHandles } from "react-native-modalize/lib/options";
 import { Portal } from "react-native-portalize";
+
 import { COLORS } from "../../../styles/theme";
+import { Events } from "../../../utilities/Posthog";
 import {
   CalendarFilledIcon,
   OneUserIcon,
-  StarsIcon,
   TripLocationIcon,
 } from "../../../utilities/SvgIcons.utility";
 import { TravelType } from "../TravelType";
 import { styles } from "./CreateTripStyles";
-import { IHandles } from "react-native-modalize/lib/options";
-import * as Haptics from "expo-haptics";
-import { usePostHog } from "posthog-react-native";
-import { Events } from "../../../utilities/Posthog";
 
 interface ICreateTripContentProps {
   isLoading: boolean;
   newTripModalRef: React.RefObject<IHandles>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   formik: any;
-  onDestinationModalOpen: () => void;
+  showPopup: () => void;
   editMode: boolean;
 }
 
@@ -38,7 +39,7 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
   isLoading,
   newTripModalRef,
   setOpen,
-  onDestinationModalOpen,
+  showPopup,
   formik,
   editMode,
 }) => {
@@ -67,6 +68,19 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
   useEffect(() => {
     setIsError(false);
   }, [formik.values]);
+
+
+  const handleWhereTo = () => {
+
+    if(!formik?.values?.range?.startDate || !formik?.values?.range?.endDate) {
+      Alert.alert("Please choose a date range first.", "");
+
+      return;
+    }
+
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    showPopup();
+  }
 
   return (
     <>
@@ -197,10 +211,7 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
                     opacity: editMode ? 0.4 : 1,
                   },
                 ]}
-                onPress={() => {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  onDestinationModalOpen();
-                }}
+                onPress={handleWhereTo}
                 disabled={editMode}
               >
                 <TripLocationIcon size="" color="" />
@@ -215,7 +226,8 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
                     ]}
                   >
                     {/* @ts-ignore */}
-                    {formik.values.destination.city!}
+                    {formik.values.destination.city!} 
+                    {/* აქ გამოვიტანოთ სხვა ქალაქებიც */}
                   </Text>
                 ) : null}
               </TouchableOpacity>

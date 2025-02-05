@@ -181,18 +181,6 @@ export const CountryItem: React.FC<CountryItemProps> = ({
 };
 
 const styles = StyleSheet.create({
-  addToBucketButton: {
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.3)",
-    borderRadius: 50,
-    height: 30,
-    justifyContent: "center",
-    position: "absolute",
-    right: 10,
-    top: 10,
-    width: 30,
-    zIndex: 3,
-  },
   androidImageContainer: {
     backgroundColor: "#fafafa",
     borderRadius: 15,

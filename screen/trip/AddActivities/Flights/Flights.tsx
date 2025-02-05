@@ -63,7 +63,7 @@ export const Flights = () => {
           ) : (
             <TextInput
               style={styles.inputItem}
-              placeholder="Airline, Airport or Flight number (e.g EK162)"
+              placeholder="Airline, Airport or Flight number (E.g EK162)"
               placeholderTextColor="#85858A"
               autoFocus
             />

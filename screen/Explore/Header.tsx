@@ -1,20 +1,19 @@
-import React from "react";
-import { Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Marquee } from "@animatereactnative/marquee";
-
-import { COLORS, SIZES } from "../../styles/theme";
-import { Mark2, SearchBoldIcon, SearchIcon } from "../../utilities/SvgIcons.utility";
-import Constants from "expo-constants";
 import { useNavigation } from "@react-navigation/native";
+import { format, parseISO } from "date-fns";
+import Constants from "expo-constants";
 import { LinearGradient } from "expo-linear-gradient";
-import { useTripStore } from "../../package/zustand/store";
+import { usePostHog } from "posthog-react-native";
 import { useState } from "react";
+import { Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+
+import { useUpComingTripsQuery } from "../../api/api.trekspot";
 import { GuestUserModal } from "../../common/components/GuestUserModal";
 import { useAppSelector } from "../../package/store";
-import { useUpComingTripsQuery } from "../../api/api.trekspot";
-import { format, parseISO } from "date-fns";
-import { usePostHog } from "posthog-react-native";
+import { useTripStore } from "../../package/zustand/store";
+import { COLORS, SIZES } from "../../styles/theme";
 import { Events } from "../../utilities/Posthog";
+import { Mark2, SearchBoldIcon } from "../../utilities/SvgIcons.utility";
 
 export const ExploreHeader = () => {
   const navigation = useNavigation<any>();
@@ -139,39 +138,118 @@ export const ExploreHeader = () => {
 };
 
 const styles = StyleSheet.create({
-  gradientWrapper: {
-    width: 45,
-    height: 45,
+  bucketListButton: {
     alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 50,
+    display: "flex",
+    elevation: 2,
+    height: 45,
     justifyContent: "center",
-    borderRadius: 100,
+    marginLeft: 15,
+    minWidth: 45,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 24,
+  },
+  cancelButton: {
+    alignItems: "center",
+    height: 40,
+    justifyContent: "center",
+    paddingLeft: 15,
+  },
+  cancelButtonText: {
+    color: COLORS.darkgray,
+    fontSize: 14,
+  },
+  closeButton: {
+    alignItems: "center",
+    backgroundColor: "#DBDBDB",
+    borderRadius: 50,
+    height: 30,
+    justifyContent: "center",
+    width: 30,
+  },
+  contentBox: {
+    marginTop: 5,
+    paddingLeft: 15,
+  },
+  currentTrip: {
+    alignItems: "center",
+    backgroundColor: "#fef0ff",
+    borderColor: "#dac9dc",
+    borderRadius: 50,
+    borderWidth: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
+    paddingHorizontal: 18,
+    paddingLeft: 10,
+    paddingVertical: 10,
+  },
+  currentTripDotsButton: {
+    alignItems: "flex-end",
+    height: 30,
+    justifyContent: "center",
+    width: 30,
+  },
+  currentTripIcon: {
+    alignItems: "center",
+    borderRadius: 50,
+    height: 40,
+    justifyContent: "center",
+    marginRight: 10,
+    width: 40,
+  },
+  currentTripLeft: {
+    flexDirection: "row",
+  },
+  currentTripTitle: {
+    color: COLORS.primaryDark,
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  currentTripTitleDate: {
+    color: COLORS.primaryDark,
+    fontSize: 12,
+    fontWeight: "500",
+    marginTop: 3,
+    opacity: 0.8,
   },
   destinationImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 100,
-    overflow: "hidden",
     alignItems: "center",
+    borderRadius: 100,
+    height: 40,
     justifyContent: "center",
+    overflow: "hidden",
+    width: 40,
   },
   destinationInfo: {
-    width: 40,
-    height: 40,
-    borderRadius: 100,
-    overflow: "hidden",
-    backgroundColor: "rgba(0,0,0,0.6)",
-    position: "absolute",
     alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.6)",
+    borderRadius: 100,
+    height: 40,
     justifyContent: "center",
+    overflow: "hidden",
     paddingHorizontal: 3,
+    position: "absolute",
+    width: 40,
   },
   floatingButton: {
-    position: "absolute",
-    width: 90,
-    height: 90,
     alignItems: "center",
-    justifyContent: "center",
     borderRadius: 100,
+    elevation: 5,
+    height: 90,
+    justifyContent: "center",
+    position: "absolute",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -179,168 +257,89 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 30.84,
-    elevation: 5,
+    width: 90,
     zIndex: 1000, // to bring the button to the front
   },
-  buttonText: {
-    color: "white",
-    fontSize: 24,
-  },
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#f8f8f8",
-    paddingTop: Constants?.statusBarHeight + 10,
-  },
-  currentTrip: {
-    backgroundColor: "#fef0ff",
-    borderRadius: 50,
-    flexDirection: "row",
-    paddingHorizontal: 18,
-    paddingLeft: 10,
-    paddingVertical: 10,
-    justifyContent: "space-between",
+  gradientWrapper: {
     alignItems: "center",
-    marginTop: 10,
-    borderWidth: 1,
-    borderColor: "#dac9dc",
-  },
-  currentTripLeft: {
-    flexDirection: "row",
-  },
-  currentTripDotsButton: {
-    width: 30,
-    height: 30,
-    alignItems: "flex-end",
-    justifyContent: "center",
-  },
-  currentTripTitle: {
-    fontSize: 18,
-    color: COLORS.primaryDark,
-    fontWeight: "bold",
-  },
-  currentTripTitleDate: {
-    fontSize: 12,
-    color: COLORS.primaryDark,
-    marginTop: 3,
-    opacity: 0.8,
-    fontWeight: "500",
-  },
-  currentTripIcon: {
-    height: 40,
-    width: 40,
-    borderRadius: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 10,
-  },
-  cancelButton: {
-    height: 40,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingLeft: 15,
-  },
-  cancelButtonText: {
-    fontSize: 14,
-    color: COLORS.darkgray,
-  },
-  closeButton: {
-    backgroundColor: "#DBDBDB",
-    width: 30,
-    height: 30,
-    borderRadius: 50,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  bucketListButton: {
-    minWidth: 45,
+    borderRadius: 100,
     height: 45,
-    backgroundColor: "#fff",
-    borderRadius: 50,
-    display: "flex",
-    alignItems: "center",
     justifyContent: "center",
-    marginLeft: 15,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 2,
+    width: 45,
   },
-  searchBox: {
-    flex: 1,
-    height: 45,
-    backgroundColor: "#fff",
-    flexDirection: "row",
-    borderRadius: 30,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  searchIcon: {
-    paddingLeft: 15,
-    marginRight: 2
-  },
-  searchInput: {
-    paddingLeft: 10,
-    flex: 1,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    fontSize: 14, 
-    fontWeight: "500", 
-    color: "#000"
-  },
-  subTitle: {
-    fontSize: 12,
-    fontWeight: "400",
-    paddingLeft: 10,
-    flex: 1,
-    color: "#7f7f7f"
+  h2: {
+    color: "#000",
+    fontSize: 22,
+    fontWeight: "600",
   },
   right: {
-    flexDirection: "row",
     alignItems: "center",
-  },
-  screenHeader: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 15,
-    paddingBottom: 15,
   },
   rowItem: {
-    width: "100%",
-    paddingTop: 25,
     backgroundColor: "#f8f8f8",
+    paddingTop: 25,
+    width: "100%",
   },
   rowItemHeader: {
-    flexDirection: "row",
     alignItems: "center",
+    flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: SIZES.padding,
     paddingHorizontal: 15,
+  },
+  safeArea: {
+    backgroundColor: "#f8f8f8",
+    flex: 1,
+    paddingTop: Constants?.statusBarHeight + 10,
+  },
+  screenHeader: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingBottom: 15,
+    paddingHorizontal: 15,
+  },
+  searchBox: {
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 30,
+    elevation: 2,
+    flex: 1,
+    flexDirection: "row",
+    height: 45,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+  },
+  searchIcon: {
+    marginRight: 2,
+    paddingLeft: 15
+  },
+  searchInput: {
+    alignItems: "center",
+    color: "#000",
+    display: "flex",
+    flex: 1,
+    flexDirection: "row",
+    fontSize: 14,
+    fontWeight: "500", 
+    justifyContent: "center", 
+    paddingLeft: 10
   },
   seeAllButtonTxt: {
     color: COLORS.primary,
     fontSize: SIZES.body4,
   },
-  h2: {
-    fontSize: 22,
-    color: "#000",
-    fontWeight: "600",
-  },
-  contentBox: {
-    marginTop: 5,
-    paddingLeft: 15,
+  subTitle: {
+    color: "#7f7f7f",
+    flex: 1,
+    fontSize: 12,
+    fontWeight: "400",
+    paddingLeft: 10
   },
 });

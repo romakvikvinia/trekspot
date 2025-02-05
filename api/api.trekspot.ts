@@ -1,84 +1,84 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { gql } from "graphql-request";
 import { graphqlRequestBaseQuery } from "@rtk-query/graphql-request-base-query";
+import { gql } from "graphql-request";
+
+import { baseUrl } from "../helpers/baseUrl.helper";
+import { getFullToken } from "../helpers/secure.storage";
 import {
-  AuthLoginType,
+  AllCountriesArgsType,
+  AllCountriesResponseType,
+  AnalyticsResponseType,
   AuthLoginResponseType,
+  AuthLoginType,
   AuthLogUpType,
   AuthSignUpResponseType,
-  UpdateMeResponseType,
-  UserArgType,
-  MeResponseType,
-  AnalyticsResponseType,
-  StoriesResponseType,
-  CreateOrUpdateStoriesInput,
-  CreateOrUpdateStoriesResponseType,
+  AuthSocialLogInInput,
+  AuthSocialLogInResponseType,
+  ChangeActivityVisitedArgsType,
+  ChangeActivityVisitedResponseType,
+  CitiesArgsType,
+  CitiesResponseType,
   CountriesArgsType,
   CountriesResponseType,
   CountryArgsType,
-  CountryResponseType,
-  PassportIndexesArgsType,
-  PassportIndexesResponseType,
-  CitiesArgsType,
-  CitiesResponseType,
-  SightsArgsType,
-  SightsResponseType,
-  SightsFetchResponseType,
-  RandomCountriesGroupByContinentResponseType,
-  RandomSightsResponseType,
-  RandomSightsArgsType,
-  CountryDishesResponseType,
+  CountryByIso2ArgsType,
   CountryDishesArgsType,
-  SearchResponseType,
-  SearchArgsType,
-  CreateTripResponseType,
-  CreateTripArgsType,
-  TripsResponseType,
-  TripsArgsType,
-  TopicsResponseType,
-  TopicsArgsType,
-  TopicType,
-  TransformedTopicsResponseType,
-  FaqResponseType,
-  FaqType,
-  TransformedFaqResponseType,
-  FaqArgsType,
-  TripDetailResponseType,
-  TripDetailArgsType,
-  UpdateTripRouteAndActivitiesResponseType,
-  UpdateTripRouteAndActivitiesArgsType,
-  RemoveActivityFromRouteResponseType,
-  RemoveActivityFromRouteArgsType,
-  ChangeActivityVisitedResponseType,
-  ChangeActivityVisitedArgsType,
-  DeleteTripResponseType,
-  DeleteTripArgsType,
-  UpdateTripResponseType,
-  UpdateTripArgsType,
-  WishlistArgsType,
-  WishlistResponseType,
-  RemoveWishlistItemArgsType,
-  RemoveWishlistItemResponseType,
-  ToggleWishlistResponseType,
-  ToggleWishlistArgsType,
-  UpComingTripsArgsType,
-  UpComingTripsResponseType,
-  AllCountriesResponseType,
-  AllCountriesArgsType,
+  CountryDishesResponseType,
+  CountryResponseType,
   CreateAnalyticArgsType,
   CreateAnalyticResponseType,
-  VisitedCountriesResponseType,
-  AuthSocialLogInInput,
-  AuthSocialLogInResponseType,
-  CountryByIso2ArgsType,
+  CreateOrUpdateStoriesInput,
+  CreateOrUpdateStoriesResponseType,
+  CreateTripArgsType,
+  CreateTripResponseType,
   DeactivateAccountResponseType,
-  DeactivateAccountArgsType,
+  DeleteTripArgsType,
+  DeleteTripResponseType,
+  FaqArgsType,
+  FaqResponseType,
+  FaqType,
+  MeResponseType,
+  PassportIndexesArgsType,
+  PassportIndexesResponseType,
+  RandomCountriesGroupByContinentResponseType,
+  RandomSightsArgsType,
+  RandomSightsResponseType,
+  RemoveActivityFromRouteArgsType,
+  RemoveActivityFromRouteResponseType,
+  RemoveWishlistItemArgsType,
+  RemoveWishlistItemResponseType,
+  SearchArgsType,
+  SearchResponseType,
+  SightsArgsType,
+  SightsFetchResponseType,
+  SightsResponseType,
+  StoriesResponseType,
+  ToggleWishlistArgsType,
+  ToggleWishlistResponseType,
+  TopicsArgsType,
+  TopicsResponseType,
+  TopicType,
+  TransformedFaqResponseType,
+  TransformedTopicsResponseType,
+  TripDetailArgsType,
+  TripDetailResponseType,
+  TripsArgsType,
+  TripsResponseType,
+  UpComingTripsArgsType,
+  UpComingTripsResponseType,
+  UpdateMeResponseType,
+  UpdateTripArgsType,
+  UpdateTripResponseType,
+  UpdateTripRouteAndActivitiesArgsType,
+  UpdateTripRouteAndActivitiesResponseType,
+  UserArgType,
+  VisitedCountriesResponseType,
+  WishlistArgsType,
+  WishlistResponseType,
 } from "./api.types";
-import { getFullToken } from "../helpers/secure.storage";
-import { baseUrl } from "../helpers/baseUrl.helper";
 
 const prepHeaders = async (headers: Headers) => {
-  let token = await getFullToken();
+  const token = await getFullToken();
   headers.set("Accept-Language", `en`);
 
   // if (token && new Date().getTime() < token.expire) {
@@ -728,6 +728,30 @@ export const trekSpotApi = createApi({
         `,
       }),
     }),
+     // Get passport indexes for country
+     getPassportIndexesFromTo: builder.query<
+     PassportIndexesResponseType,
+     PassportIndexesArgsType
+   >({
+     query: ({ from }) => ({
+       variables: { from },
+       document: gql`
+         query ($from: String!) {
+           passportIndex(input: { from: $from, to: $to }) {
+             from
+             to
+             requirement
+             country {
+               id
+               name
+               iso2
+               security
+             }
+           }
+         }
+       `,
+     }),
+   }),
     /**
      *  cities
      */
@@ -825,8 +849,8 @@ export const trekSpotApi = createApi({
       }),
       providesTags: ["getSights"],
       transformResponse: (response: SightsFetchResponseType) => {
-        let transformedData: Record<string, any[]> = {};
-        let sights = response.sights || [];
+        const transformedData: Record<string, any[]> = {};
+        const sights = response.sights || [];
 
         if (sights.length) {
           transformedData["Top Sights"] = sights.splice(0, 10);
@@ -1141,8 +1165,8 @@ export const trekSpotApi = createApi({
       }),
       //@ts-ignore
       transformResponse: (response: TopicsResponseType) => {
-        let transformedData: Record<string, TopicType[]> = {};
-        let items = response.topics || [];
+        const transformedData: Record<string, TopicType[]> = {};
+        const items = response.topics || [];
 
         if (items.length) {
           items.forEach((res) => {
@@ -1187,8 +1211,8 @@ export const trekSpotApi = createApi({
       }),
       //@ts-ignore
       transformResponse: (response: FaqResponseType) => {
-        let transformedData: Record<string, FaqType[]> = {};
-        let arr = response.faqs || [];
+        const transformedData: Record<string, FaqType[]> = {};
+        const arr = response.faqs || [];
         const items = [...arr].reverse();
 
         if (items.length) {
@@ -1634,6 +1658,7 @@ export const {
   useCountryByIso2Query,
   useLazyCountryQuery,
   useLazyGetPassportIndexesQuery,
+  useLazyGetPassportIndexesFromToQuery,
   useGetCitiesQuery,
   useLazyGetCitiesQuery,
   useLazyGetSightsQuery,

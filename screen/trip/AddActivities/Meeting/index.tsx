@@ -75,7 +75,7 @@ export const Meeting = ({ route }) => {
                 {!isPreview ? (
                   <TextInput
                     style={styles.input}
-                    placeholder="E.g. Workshop"
+                    placeholder="e.g Workshop"
                     placeholderTextColor="#c6c6c6"
                     editable={!isPreview}
                     autoFocus
@@ -179,7 +179,7 @@ export const Meeting = ({ route }) => {
                 <Text style={styles.inputLabel}>Phone</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="E.g. (XXX) XXX-XXX"
+                  placeholder="e.g (XXX) XXX-XXX"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
                   autoFocus
@@ -189,7 +189,7 @@ export const Meeting = ({ route }) => {
                 <Text style={styles.inputLabel}>Website</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="E.g. https://trekspot.io"
+                  placeholder="e.g https://trekspot.io"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
                   autoFocus
@@ -199,7 +199,7 @@ export const Meeting = ({ route }) => {
                 <Text style={styles.inputLabel}>Email</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="E.g. info@trekspot.io"
+                  placeholder="e.g info@trekspot.io"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
                   autoFocus
@@ -209,7 +209,7 @@ export const Meeting = ({ route }) => {
                 <Text style={styles.inputLabel}>Confirmation</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="E.g. BBK33"
+                  placeholder="e.g BBK33"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
                   autoFocus

@@ -148,7 +148,7 @@ export const AddActivityButton = ({ onActivitiesModalOpen, onAddActivitiesModal 
         style={tripDetailStyles.addActivityButton}
       >
         <Animated.View style={{ transform: [{ rotate: rotateInterpolate }] }}>
-          <PlusIcon />
+          <PlusIcon color="#fff" size="18" />
         </Animated.View>
       </Pressable>
     </>

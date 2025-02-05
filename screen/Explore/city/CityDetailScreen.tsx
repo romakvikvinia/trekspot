@@ -1,4 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useRef, useState } from "react";
 import { Dimensions, Pressable, ScrollView, Text, View } from "react-native";
 import { toast } from "sonner-native";
@@ -47,7 +48,7 @@ export const CityDetailScreen: React.FC<Props> = ({ route }) => {
   const [isSticky, setIsSticky] = useState(false);
   const [updateTitle, setUpdateTitle] = useState(false);
   const parentScrollY = useRef(0);
-  const stickyThreshold = 630;
+  const stickyThreshold = 625;
 
   const handleParentScroll = (event) => {
     const y = event.nativeEvent.contentOffset.y;
@@ -61,8 +62,8 @@ export const CityDetailScreen: React.FC<Props> = ({ route }) => {
   const handleScrollTo = () => {
     scrollViewRef?.current?.scrollTo({
       x: 0,
-      y: stickyThreshold +5,
-      animated: true
+      y: stickyThreshold,
+      animated: true,
     });
   };
 
@@ -106,7 +107,11 @@ export const CityDetailScreen: React.FC<Props> = ({ route }) => {
             },
           ]}
         >
-          {tab === "Food" ? "Food & Drink" : tab}
+          {tab === "Food"
+            ? "Food & Drink"
+            : tab === "Tips"
+              ? "Tips & Insights"
+              : tab}
         </Text>
         {tab === activeTab ? (
           <View
@@ -123,6 +128,7 @@ export const CityDetailScreen: React.FC<Props> = ({ route }) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#f8f8f8" }}>
+      <StatusBar style="dark" />
       {!isLoading || !countryLoading ? (
         <>
           <Header
@@ -162,6 +168,10 @@ export const CityDetailScreen: React.FC<Props> = ({ route }) => {
         </>
       ) : null}
 
+      {/* Loading State */}
+
+      {isLoading && <CityLoader isLoading={isLoading} />}
+
       <ScrollView
         style={{ flex: 1 }}
         nestedScrollEnabled
@@ -170,14 +180,16 @@ export const CityDetailScreen: React.FC<Props> = ({ route }) => {
         showsVerticalScrollIndicator={false}
         ref={scrollViewRef}
       >
-        {/* Loading State */}
-        {isLoading && <CityLoader isLoading={isLoading} />}
-
         {/* Content */}
 
         {!isLoading ? (
           <>
-            <CityTitleRow city={city} />
+            <CityTitleRow
+              city={city}
+              securityLevel={
+                !countryLoading && countyData?.countryByIso2?.security
+              }
+            />
 
             <CityGalleryRow city={city} />
 
@@ -208,7 +220,7 @@ export const CityDetailScreen: React.FC<Props> = ({ route }) => {
               isLoading={isLoading}
             />
             <FoodAndDrinkTab activeTab={activeTab} />
-            <Tips activeTab={activeTab} />
+            <Tips activeTab={activeTab} iso2={city?.iso2} />
             <NationalDishes iso2={city?.iso2} activeTab={activeTab} />
             <Apps
               activeTab={activeTab}

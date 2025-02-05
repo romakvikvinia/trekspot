@@ -76,10 +76,10 @@ export const ExploreTab = ({ activeTab, data, isLoading }) => {
               }}
             >
               {topSights?.map(
-                (item) =>
+                (item, i) =>
                   item?.image && (
                     <SightItem
-                      key={`top-sights-${item.id}-${item.title}`}
+                      key={`top-sights-${item.id}-${item.title}-${i}`}
                       item={item}
                       onHandleItem={handleSetSightItem}
                     />

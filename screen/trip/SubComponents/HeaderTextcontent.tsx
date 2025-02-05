@@ -1,25 +1,34 @@
-import { StyleSheet, Text, View } from "react-native";
+import { format } from "date-fns";
+import { useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+
+import { COLORS } from "../../../styles/theme";
 import {
   CalendarFilledIcon,
   LocationPin,
 } from "../../../utilities/SvgIcons.utility";
-import { format } from "date-fns";
-import { COLORS } from "../../../styles/theme";
 
 type HeaderTextContentProps = {
   data: any;
 };
 
 export const HeaderTextContent = ({data} : HeaderTextContentProps) => {
+  const [show, setShowAll] = useState(false);
+
   return (
     <View style={styles.textContent}>
       <Text style={styles.tripTitle}>{data?.name}</Text>
-      <View style={styles.contentRowItem}>
+      <Pressable onPress={() => setShowAll(!show)} style={styles.contentRowItem}>
         <LocationPin width="12" color={COLORS.white} />
-        <Text style={styles.tripDestination}>
-          {data?.cities[0]?.city}
+        <Text style={styles.tripDestination} numberOfLines={1}>
+          {data?.cities[0]?.city}, Berlin, Rome
         </Text>
-      </View>
+        {/* აქ თუ 3-ზე მეტი იქნება ქალაქი ვანახოთ ქვედა კომპონენტი
+        და თუ დააწვება ვანახოთ ყველა */}
+        <View style={styles.more}>
+            <Text style={styles.moreText}>3+</Text>
+        </View>
+      </Pressable>
       <View style={styles.contentRowItem}>
         <CalendarFilledIcon size={12} color={COLORS.white} />
         <Text style={styles.tripDestination}>
@@ -31,28 +40,39 @@ export const HeaderTextContent = ({data} : HeaderTextContentProps) => {
 };
 
 const styles = StyleSheet.create({
+  contentRowItem: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginTop: 10,
+    opacity: 0.9,
+  },
+  more: {
+    marginLeft: 5,
+    position: "relative",
+    top: 1
+  },
+  moreText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "bold",
+  },
   textContent: {
     paddingHorizontal: 20,
   },
-  tripTitle: {
-    fontSize: 30,
-    fontWeight: "bold",
-    color: "#fff",
-  },
   tripDestination: {
     color: "#fff",
-    marginTop: 0,
-    textTransform: "capitalize",
-    fontWeight: "bold",
     fontSize: 14,
+    fontWeight: "bold",
+    marginLeft: 8,
+    marginTop: 0,
+    maxWidth: "90%",
     position: "relative",
-    top: 1,
-    marginLeft: 8
+    textTransform: "capitalize",
+    top: 1
   },
-  contentRowItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 10,
-    opacity: 0.9
+  tripTitle: {
+    color: "#fff",
+    fontSize: 30,
+    fontWeight: "bold",
   } 
 });

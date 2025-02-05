@@ -79,7 +79,7 @@ export const SearchScreen = ({ navigation }: Props) => {
             onPress={() => navigation.goBack()}
             hitSlop={20}
           >
-            <BackIcon size="30" />
+            <BackIcon size="18" />
           </Pressable>
           <TextInput
             placeholder="Search cities, countries..."

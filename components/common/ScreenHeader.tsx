@@ -13,7 +13,7 @@ export const ScreenHeader = ({title = ""}) => {
         style={globalStyles.screenHeaderBackButton}
         hitSlop={20}
       >
-        <BackIcon size="30" />
+        <BackIcon size="18" />
       </Pressable>
 
       <Text style={globalStyles.screenTitle}>{title}</Text>

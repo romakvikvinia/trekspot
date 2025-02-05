@@ -1,32 +1,25 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useMemo } from "react";
-import {
-  ImageBackground,
-  Pressable,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ImageBackground, Pressable, StyleSheet, View } from "react-native";
 
 import { trekSpotApi } from "../../../api/api.trekspot";
 import { useAppDispatch } from "../../../package/store";
-import { BackIcon, DotsVerticlIcon } from "../../../utilities/SvgIcons.utility";
+import {
+  AddUserIcon,
+  BackIcon,
+  GearIcon,
+} from "../../../utilities/SvgIcons.utility";
 import { HeaderTextContent } from "./HeaderTextcontent";
 import { TripHelpers } from "./TripHelpers";
 
 type ReachHeaderContentProps = {
   data: any;
   iso2: string;
-  onQuestion2ModalOpen: () => void;
   activeDay: number;
 };
 
-export const ReachHeaderContent = ({
-  data,
-  iso2,
-  onQuestion2ModalOpen,
-}: ReachHeaderContentProps) => {
+export const ReachHeaderContent = ({ data, iso2 }: ReachHeaderContentProps) => {
   const dispatch = useAppDispatch();
   const route = useRoute();
   const navigation = useNavigation();
@@ -62,39 +55,31 @@ export const ReachHeaderContent = ({
         hitSlop={30}
         style={styles.backButton}
       >
-        <BackIcon />
+        <BackIcon color="#fff" size="18" />
       </Pressable>
-      {/* <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("TripMapViewScreen", {
-            tabData,
-            city: data?.cities[0],
-            activeDay: activeDay,
-          })
-        }
-        activeOpacity={0.7}
-        style={styles.mapButton}
-      >
-        <MapWithLocationIcon width={15} color={COLORS.black} />
-      </TouchableOpacity> */}
-      <TouchableOpacity
-        onPress={() => onQuestion2ModalOpen()}
-        activeOpacity={0.7}
-        style={[
-          styles.mapButton,
-          {
-            right: 15,
-          },
-        ]}
-      >
-        <DotsVerticlIcon size="15" color="#000" />
-      </TouchableOpacity>
 
-      {/* <MapHeader
-            trip={data}
-            topSights={topSights}
-            key={data?.cities[0]?.city}
-            /> */}
+      <View style={styles.rg}>
+        <Pressable
+          style={styles.inviteButton}
+          onPress={() => navigation.navigate("InviteTripMember")}
+        >
+          <AddUserIcon color="#fff" size="16" />
+        </Pressable>
+
+        <Pressable
+        
+          onPress={() =>  
+            //@ts-expect-error ///
+            navigation.navigate("TripSettings", {
+              trip: data,
+            })
+          }
+          hitSlop={15}
+          style={[styles.button]}
+        >
+          <GearIcon size="18" color="#fff" />
+        </Pressable>
+      </View>
     </>
   );
 };
@@ -102,32 +87,36 @@ export const ReachHeaderContent = ({
 const styles = StyleSheet.create({
   backButton: {
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
     borderRadius: 50,
     display: "flex",
-    height: 35,
+    height: 40,
     justifyContent: "center",
     left: 15,
     position: "absolute",
     top: 55,
-    width: 35,
+    width: 40,
   },
-  destTitle: {
-    color: "#fff",
-    fontSize: 30,
-    fontWeight: "bold",
-  },
-  mapButton: {
+  button: {
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
     borderRadius: 50,
     display: "flex",
-    height: 35,
+    height: 40,
     justifyContent: "center",
-    position: "absolute",
-    right: 60,
-    top: 55,
-    width: 35,
+    width: 40,
+  },
+  inviteButton: {
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    borderRadius: 100,
+    flexDirection: "row",
+    height: 40,
+    justifyContent: "center",
+    marginRight: 10,
+    paddingHorizontal: 15,
+    position: "relative",
+    width: 40,
   },
   reachContainer: {
     overflow: "hidden",
@@ -135,13 +124,18 @@ const styles = StyleSheet.create({
   },
   reachGradient: {
     flex: 1,
-    paddingTop: 110,
+    paddingTop: 105,
   },
   reachImage: {
-    height: 315,
+    height: 290,
     width: "100%",
   },
-  textContent: {
-    paddingHorizontal: 20,
+  rg: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    position: "absolute",
+    right: 15,
+    top: 55,
   },
 });

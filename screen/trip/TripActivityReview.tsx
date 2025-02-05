@@ -25,7 +25,7 @@
 //           onPress={() => navigation.goBack()}
 //           style={globalStyles.screenHeaderBackButton}
 //         >
-//           <BackIcon size="30" />
+//           <BackIcon size="18" />
 //         </TouchableOpacity>
 
 //         <Text style={globalStyles.screenTitle}>Write a review for</Text>

@@ -1,11 +1,13 @@
 import { Text, View } from "react-native";
 
 import { styles } from "../../common/components/_styles";
+import { COLORS } from "../../styles/theme";
 import { StarIcon } from "../../utilities/SvgIcons.utility";
 import { STI } from "./STI";
 import { VisaInfoButton } from "./VisaInfoButton";
 
-export const CityTitleRow = ({ city }) => {
+export const CityTitleRow = ({ city, securityLevel }) => {
+
   return (
     <View
       style={[
@@ -36,6 +38,7 @@ export const CityTitleRow = ({ city }) => {
                   color: "#000",
                 },
               ]}
+              numberOfLines={1}
             >
               {city.city}
             </Text>
@@ -51,39 +54,32 @@ export const CityTitleRow = ({ city }) => {
             },
           ]}
         >
-          {city?.rate && (
-            <>
-              <View
-                style={{
-                  position: "relative",
-                  top: 0,
-                  opacity: 0.8,
-                }}
-              >
-                <StarIcon size={18} color="#FFBC3E" />
-              </View>
-              <Text
-                style={[
-                  styles.ratingText,
-                  {
-                    color: "#000",
-                    fontWeight: "600",
-                    fontSize: 16,
-                  },
-                ]}
-              >
-                {city.rate}{" "}
-              </Text>
-              <VisaInfoButton />
-            </>
-          )}
-          {city?.visitors && (
-            <Text style={styles.ratingText}>/{city?.visitors} visitors</Text>
-          )}
+          <View
+            style={{
+              flexDirection: "row",
+            }}
+          >
+            <StarIcon size={15} color="#FFBC3E" />
+            <Text
+              style={[
+                styles.ratingText,
+                {
+                  color: COLORS.black,
+                  fontWeight: "600",
+                  fontSize: 14,
+                },
+              ]}
+            >
+              {city.rate || "4.0"}
+            </Text>
+          </View>
+
+          <VisaInfoButton city={city} />
+         
         </View>
       </View>
       <View style={styles.cityDetailsRight}>
-        <STI />
+        <STI securityLevel={securityLevel} />
       </View>
     </View>
   );

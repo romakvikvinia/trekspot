@@ -27,6 +27,7 @@ export const RangePicker = ({ setOpen, open, formik }) => {
       ...DefaultTheme.colors,
       primary: COLORS.primary,
       primaryContainer: "#dfebff",
+      surface:  "#fff",
     },
   };
   return (

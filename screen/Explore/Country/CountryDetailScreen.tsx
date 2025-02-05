@@ -368,8 +368,8 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
               alwaysBounceVertical={false}
               bounces={false}
               showsVerticalScrollIndicator={false}
-            >
-              {data && data.country && <Dining country={data.country?.iso2} />}
+            > 
+              {data && data.country && <Dining iso2={data.country?.iso2} />}
             </Tabs.ScrollView>
           </Tabs.Tab>
           {/* 

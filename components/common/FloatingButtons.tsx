@@ -77,8 +77,6 @@ export const FloatingActionButton = ({
     }
   };
 
-  console.log("withHeader", withHeader);
-
   return (
     <>
       <Portal>
@@ -217,7 +215,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   floatingButtonsWrapper: {
-    bottom: 50,
+    bottom: 30,
     left: 15,
     position: "absolute",
     right: 15,

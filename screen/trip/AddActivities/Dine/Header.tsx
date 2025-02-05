@@ -22,7 +22,7 @@ export const Header = () => {
         <Text style={styles.buttonText}>Cancel</Text>
       </Pressable>
       <Text style={styles.title}>
-        Dine
+      Dining
       </Text>
 
       {isLoading ? (

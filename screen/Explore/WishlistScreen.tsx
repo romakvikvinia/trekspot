@@ -103,7 +103,7 @@ export const WishlistScreen: React.FC<WishlistProps> = ({ navigation }) => {
             style={globalStyles.screenHeaderBackButton}
             hitSlop={20}
           >
-            <BackIcon size="30" />
+            <BackIcon size="18" />
           </Pressable>
 
           <Text style={globalStyles.screenTitle}>Wishlist</Text>

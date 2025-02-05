@@ -70,7 +70,7 @@ export const TripMapViewScreen: React.FC<TripProps> = ({ route }) => {
           onPress={() => navigation.goBack()}
           style={styles.backButton}
         >
-          <BackIcon size="30" />
+          <BackIcon size="18" />
         </TouchableOpacity>
         {(!activities || activities?.length === 0) && (
           <View style={styles.calloutBox}>

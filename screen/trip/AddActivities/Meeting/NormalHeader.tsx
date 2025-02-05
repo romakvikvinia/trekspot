@@ -31,7 +31,7 @@ export const NormalHeader = ({ title = "" }) => {
         }]}
         hitSlop={30}
       >
-        <BackIcon size="30" />
+        <BackIcon size="18" />
       </Pressable>
 
       <Text style={globalStyles.screenTitle}>{title}</Text>

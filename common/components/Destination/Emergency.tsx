@@ -6,6 +6,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
+import { CountryType } from "../../../api/api.types";
+import { FeedbackCountryDetail } from "../../../components/explore/FeedbackCountryDetail";
 import {
   AmbulanceIcon,
   CallIcon,
@@ -13,20 +16,21 @@ import {
   PoliceIcon,
 } from "../../../utilities/SvgIcons.utility";
 import { styles } from "../_styles";
-import { CountryType } from "../../../api/api.types";
-import { FeedbackCountryDetail } from "../../../components/explore/FeedbackCountryDetail";
 
 interface EmergencyProps {
   data: CountryType["emergency"];
+  isSeparatePage: boolean
 }
 
-export const Emergency: React.FC<EmergencyProps> = ({ data }) => {
+export const Emergency: React.FC<EmergencyProps> = ({ data, isSeparatePage = false }) => {
   return (
       <ScrollView
         style={[styles.tabWrapper, { paddingHorizontal: 0 }]}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.emergencyNumbers}>
+        <View style={[styles.emergencyNumbers, {
+          marginTop: isSeparatePage ? 15 : 25
+        }]}>
           {data?.emergency ? (
             <TouchableOpacity
               activeOpacity={0.7}

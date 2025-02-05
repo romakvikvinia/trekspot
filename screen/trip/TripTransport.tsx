@@ -1,11 +1,13 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Constants from "expo-constants";
+import { StatusBar } from "expo-status-bar";
 import React from "react";
 import {
   Alert,
   ImageBackground,
   Linking,
   Platform,
+  Pressable,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -40,23 +42,48 @@ export const TripTransport: React.FC<Props> = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+       <StatusBar style="dark" />
       <View style={globalStyles.screenHeader}>
-        <TouchableOpacity
+        <Pressable
           onPress={() => navigation.goBack()}
           style={globalStyles.screenHeaderBackButton}
+          hitSlop={20}
         >
-          <BackIcon size="30" />
-        </TouchableOpacity>
+          <BackIcon size="18" />
+        </Pressable>
 
         <Text style={globalStyles.screenTitle}>Apps</Text>
         <TouchableOpacity
           style={globalStyles.screenHeaderBackButton}
         ></TouchableOpacity>
       </View>
-
+      <View>
+        <ScrollView
+          horizontal
+          style={globalStyles.underScreenTabs}
+          contentContainerStyle={{
+            paddingHorizontal: 15,
+          }}
+          showsHorizontalScrollIndicator={false}
+        >
+          <Pressable
+            style={[
+              globalStyles.underScreenTab,
+              globalStyles.underScreenTabActive,
+            ]}
+          >
+            <Text style={[globalStyles.underScreenTabText,
+              globalStyles.underScreenTabActiveText
+            ]}>Italy</Text>
+          </Pressable>
+          <Pressable style={globalStyles.underScreenTab}>
+            <Text style={globalStyles.underScreenTabText}>Germany</Text>
+          </Pressable> 
+        </ScrollView>
+      </View>
       <ScrollView
         style={{ flex: 1, flexGrow: 1 }}
-        contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 15 }}
+        contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 0 }}
         //@ts-ignore
         selectable
       >

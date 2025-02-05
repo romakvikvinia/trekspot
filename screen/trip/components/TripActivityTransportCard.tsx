@@ -3,7 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { COLORS } from "../../../styles/theme";
-import { BusIcon, CruiseIcon, TrainIcon } from "../../../utilities/SvgIcons.utility";
+import { BusIcon, CruiseIcon, ShipIcon, TrainIcon } from "../../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "../_tripDetailStyles";
 import { ActivityCardActions } from "./ActivityCardActions";
 
@@ -91,7 +91,10 @@ export const TripActivityTransportCard: React.FC<
                    type === "bus" &&  <BusIcon size={16} color="" />
                 }
                 {
-                   type === "cruise" &&  <CruiseIcon size={24} color="" />
+                   type === "cruise" &&  <CruiseIcon size={24} color="#000" />
+                }
+                {
+                   type === "ferry" &&  <ShipIcon size={24} color="#000" />
                 }
               </View>
               <View style={styles.bottomCircle}></View>

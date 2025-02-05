@@ -443,44 +443,11 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: -9,
   },
-  forgotPassword: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-end",
-  },
-  forgotPasswordText: {
-    color: COLORS.primary,
-    fontSize: SIZES.font,
-  },
-  item: {
-    alignItems: "center",
-    flexDirection: "row",
-    marginBottom: 15,
-    overflow: "hidden",
-    position: "relative",
-    width: "100%",
-  },
   logoContainer: {
     alignItems: "flex-start",
     marginBottom: 15,
     marginVertical: 5,
     width: "100%",
-  },
-  passwordVisibleToggle: {
-    alignItems: "center",
-    backgroundColor: "#fdfdff",
-    height: 40,
-    justifyContent: "center",
-    paddingRight: 5,
-    position: "absolute",
-    right: 2,
-    width: 40,
-  },
-  privacyPolicy: {
-    color: COLORS.primaryDark,
-    fontSize: SIZES.body3,
-    fontWeight: "normal",
-    textDecorationLine: "underline",
   },
   safeArea: {
     backgroundColor: "#ffffff",
@@ -495,7 +462,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   signTitle: {
-    marginBottom: 45,
+    marginBottom: 25,
     marginTop: 0,
     width: "100%",
   },

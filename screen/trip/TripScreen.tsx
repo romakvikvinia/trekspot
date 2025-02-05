@@ -201,7 +201,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
             activeOpacity={0.7}
             onPress={handleCreateNewTrip}
           >
-            <PlusIcon color={COLORS.white} size="20" />
+            <PlusIcon color={COLORS.white} size="15" />
           </TouchableOpacity>
         </View>
 

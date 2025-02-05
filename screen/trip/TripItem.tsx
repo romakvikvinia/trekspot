@@ -102,13 +102,7 @@ export const TripItem: React.FC<ITripItemProps> = ({ item, onContextMenu }) => {
                 style={{
                   padding: 15,
                   marginTop: -10,
-                  marginRight: -10,
-                  // width: 35,
-                  // height: 35,
-                  // backgroundColor: "rgba(0, 0, 0, 0.6)",
-                  // alignItems: "center",
-                  // justifyContent: "center",
-                  // borderRadius: 100
+                  marginRight: -10, 
                 }}
                 onPress={onContextMenu}
               >
@@ -116,18 +110,7 @@ export const TripItem: React.FC<ITripItemProps> = ({ item, onContextMenu }) => {
               </TouchableOpacity>
             </View>
             <View style={_tripScreenStyles.tripDetails}>
-              {/* <View style={_tripScreenStyles.typeTag}>
-                    <OneUserIcon size="10" color="#ececec" />
-                    <Text style={_tripScreenStyles.typeTagText}>Solo</Text>
-                  </View> */}
-              {/* <View style={_tripScreenStyles.typeTag}>
-                    <CoupleIcon size="10" color="#ececec" />
-                    <Text style={_tripScreenStyles.typeTagText}>Couple</Text>
-                  </View> */}
-              {/* <View style={_tripScreenStyles.typeTag}>
-                    <FamilyIcon size="10" color="#ececec" />
-                    <Text style={_tripScreenStyles.typeTagText}>Family</Text>
-                  </View> */}
+           
               <View style={_tripScreenStyles.tripLocation}>
                 <LocationPin width="10" color="#ececec" />
                 <Text style={_tripScreenStyles.tripLocationText}>

@@ -47,7 +47,7 @@ export const AutocompletePlaces = () => {
           autoFocus={true}
           placeholder="Enter places, cafes, restaurants, hotels, etc."
           minLength={2}
-          fetchDetails={false} //This should be true if we want to get more details amout place
+          fetchDetails={false} //This should be true if we want to get more details about place
           debounce={200}
         //   renderLeftButton={() => (
         //     <View style={styles.icon}>
@@ -83,6 +83,7 @@ export const AutocompletePlaces = () => {
             key: "AIzaSyDKZ8yCRk84OAV-57khymju5GI8Vhu4EGY",
             // key: "AIzaSyD3NwQOhUu_vCAQt6iJ7jtwH7RiABs8rzU",
             language: "en",
+            types: '(regions)',
           }}
           listUnderlayColor="#fafafa"
           styles={{

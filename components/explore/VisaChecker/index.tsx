@@ -1,26 +1,26 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
   ImageBackground,
-  ScrollView,
   StyleSheet,
   Text,
   useWindowDimensions,
   View,
 } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { SceneMap, TabBar, TabView } from "react-native-tab-view";
-import { useLazyGetPassportIndexesQuery } from "../../../api/api.trekspot";
-import { Flags } from "../../../utilities/flags";
+
+import { useLazyGetPassportIndexesFromToQuery } from "../../../api/api.trekspot";
+import { Loader } from "../../../common/ui/Loader";
 import { COLORS } from "../../../styles/theme";
+import { Flags } from "../../../utilities/flags";
 import {
   CheckIcon,
   CloseCircleIcon,
   VisaPassportIcon,
   WarningIcon,
 } from "../../../utilities/SvgIcons.utility";
-import { Loader } from "../../../common/ui/Loader";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
 
 const routes = [
   { key: "first", title: "Visa free" },
@@ -50,7 +50,7 @@ export const VisaCheckerContent = ({ from }: { from: any }) => {
   const [
     fetchVisaInfo,
     { data: visaCountries, isLoading: isVisaCountriesLoading, isError },
-  ] = useLazyGetPassportIndexesQuery();
+  ] = useLazyGetPassportIndexesFromToQuery();
  
   useEffect(() => {
     if (from && from.iso2) {
@@ -245,27 +245,64 @@ export const VisaCheckerContent = ({ from }: { from: any }) => {
 };
 
 const styles = StyleSheet.create({
-  countryItem: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    marginBottom: 10,
-    justifyContent: "space-between",
-    backgroundColor: "#fff",
-    borderRadius: 15,
-    padding: 15,
-    borderWidth: 1,
-    borderColor: "#eee",
+  chip: {
+    alignItems: "center",
+    backgroundColor: "#f2f2f2",
+    borderRadius: 5,
+    height: 26,
+    justifyContent: "center",
+    paddingHorizontal: 8,
   },
-  topRow: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 0,
+  countryItem: {
     alignItems: "flex-start",
+    backgroundColor: "#fff",
+    borderColor: "#eee",
+    borderRadius: 15,
+    borderWidth: 1,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    marginBottom: 10,
+    padding: 15,
+  },
+  countryItemLeft: {
+    alignItems: "flex-start",
+    flexDirection: "column",
+    width: "60%",
+  },
+  flagImage: {
+    borderColor: "#fafafa",
+    borderRadius: 5,
+    borderWidth: 1,
+    height: 26,
+    overflow: "hidden",
+    width: 38,
+  },
+  itemTitle: {
+    color: "#000",
+    fontSize: 18,
+    fontWeight: "600",
+    marginLeft: 0,
+    marginTop: 15,
+    maxWidth: "100%",
+  },
+  noResultWrapper: {
+    alignItems: "center",
+    flex: 1,
+    justifyContent: "center",
+    minHeight: "100%",
+  },
+  notResultText: {
+    color: COLORS.black,
+    fontSize: 16,
+    fontWeight: "400",
+    lineHeight: 22,
+    marginTop: 15,
+    paddingHorizontal: 35,
+    textAlign: "center",
   },
   threatment: {
-    flexDirection: "row",
     alignItems: "center",
+    flexDirection: "row",
     marginTop: 15,
     width: "100%",
   },
@@ -273,53 +310,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     color: "#000",
     fontSize: 12,
-    marginRight: 0,
     fontWeight: "500",
     marginLeft: 5,
+    marginRight: 0,
   },
-  notResultText: {
-    textAlign: "center",
-    fontSize: 16,
-    color: COLORS.black,
-    fontWeight: "400",
-    marginTop: 15,
-    paddingHorizontal: 35,
-    lineHeight: 22,
-  },
-  noResultWrapper: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    minHeight: "100%",
-  },
-  chip: {
-    backgroundColor: "#f2f2f2",
-    paddingHorizontal: 8,
-    borderRadius: 5,
-    height: 26,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  countryItemLeft: {
-    flexDirection: "column",
+  topRow: {
     alignItems: "flex-start",
-    width: "60%",
-  },
-  flagImage: {
-    width: 38,
-    height: 26,
-    borderRadius: 5,
-    overflow: "hidden",
-    borderWidth: 1,
-    borderColor: "#fafafa",
-  },
-  itemTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginLeft: 0,
-    color: "#000",
-    maxWidth: "100%",
-    marginTop: 15,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 0,
+    width: "100%",
   },
   visaStatusText: {
     color: "#299C79",

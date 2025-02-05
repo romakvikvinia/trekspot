@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -5,12 +6,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { COLORS, SIZES } from "../../styles/theme";
+import { Modalize } from "react-native-modalize";
+
+import { COLORS } from "../../styles/theme";
 import { CountriesList } from "../../utilities/countryList";
-import React, { useState } from "react";
 import { Flags } from "../../utilities/flags";
 import { SearchComponent } from "../ui/SearchComponent";
-import { Modalize } from "react-native-modalize";
 
 export const Country = ({ item, onSelect }: any) => {
   const countryCode = item.iso2 as string;
@@ -110,64 +111,36 @@ export const CountrySelect = ({
 };
 
 const styles = StyleSheet.create({
-  searchBox: {
-    width: "100%",
-    padding: 15,
-    flexDirection: "row",
-  },
   cancelButton: {
-    marginLeft: 10,
     justifyContent: "center",
+    marginLeft: 10,
   },
   cancelButtonText: {
-    fontSize: 14,
     color: COLORS.darkgray,
+    fontSize: 14,
     fontWeight: "500"
   },
-  searchInput: {
-    height: 40,
-    backgroundColor: "#ececec",
-    borderRadius: SIZES.radius * 5,
-    paddingLeft: 20,
-    fontSize: 16,
-    color: COLORS.black,
-  },
   countryItem: {
-    paddingHorizontal: 15,
-    paddingVertical: 12,
+    alignItems: "center",
     display: "flex",
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
-  },
-  countryItemActionButton: {
-    backgroundColor: "#fafafa",
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    marginLeft: 8,
-    borderRadius: 5,
+    paddingHorizontal: 15,
+    paddingVertical: 12,
   },
   countryItemLeft: {
-    flexDirection: "row",
     alignItems: "center",
-  },
-  countryItemActions: {
     flexDirection: "row",
-    alignItems: "center",
   },
   itemTitle: {
+    color: "#000",
     fontSize: 14,
     fontWeight: "bold",
     marginLeft: 10,
-    color: "#000",
   },
-  checkIcon: {
-    width: 20,
-    height: 20,
-    borderWidth: 1,
-    borderColor: COLORS.gray,
-    borderRadius: 50,
-    alignItems: "center",
-    justifyContent: "center",
+  searchBox: {
+    flexDirection: "row",
+    padding: 15,
+    width: "100%",
   },
 });

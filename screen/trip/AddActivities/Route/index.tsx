@@ -74,10 +74,9 @@ export const Route = ({ route }) => {
                 {!isPreview ? (
                   <TextInput
                     style={styles.input}
-                    placeholder="E.g. Adventure Trail"
+                    placeholder="e.g Adventure Trail"
                     placeholderTextColor="#c6c6c6"
                     editable={!isPreview}
-                    autoFocus
                   />
                 ) : (
                   <View style={styles.inputValueWrapper}>

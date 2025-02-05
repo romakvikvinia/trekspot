@@ -1,6 +1,12 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native";
+import { Portal } from "react-native-portalize";
+
+import { useLazyGetPassportIndexesFromToQuery } from "../../../api/api.trekspot";
+import { CountryType } from "../../../api/api.types";
+import { FeedbackCountryDetail } from "../../../components/explore/FeedbackCountryDetail";
 import {
   CheckCircleIcon,
   CloseCircleIcon,
@@ -8,15 +14,9 @@ import {
   PassportIcon,
   VisaPassportIcon,
 } from "../../../utilities/SvgIcons.utility";
-import { styles } from "../_styles";
-import { useLazyGetPassportIndexesQuery } from "../../../api/api.trekspot";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { CountryType } from "../../../api/api.types";
-import { Portal } from "react-native-portalize";
-import { CountrySelect } from "../CountrySelect";
 import { Loader } from "../../ui/Loader";
-import { FeedbackCountryDetail } from "../../../components/explore/FeedbackCountryDetail";
-import { SIZES } from "../../../styles/theme";
+import { styles } from "../_styles";
+import { CountrySelect } from "../CountrySelect";
 
 type VisaProps = {
   country: CountryType;
@@ -26,7 +26,7 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
   const [selectedDestination, setSelectedDestination] = useState(null);
   const [storageLoading, setStorageLoading] = useState(false);
   const [fetchVisaInfo, { data, isLoading, isError }] =
-    useLazyGetPassportIndexesQuery();
+  useLazyGetPassportIndexesFromToQuery();
   const modalCountryPassportSelectRef = useRef(null);
 
   const openCountrySelectModal = () => {
@@ -73,12 +73,15 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
 
   useEffect(() => {
     storeCountryData(selectedDestination);
+    console.log("selectedDestination---",selectedDestination)
     fetchVisaInfo({ from: selectedDestination?.iso2 || "", to: country.iso2 });
+ 
   }, [selectedDestination]);
 
   const isCitizen = useMemo(() => {
     return selectedDestination?.name === country.name;
   }, [selectedDestination]);
+
 
   return (
     <>
@@ -129,7 +132,7 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
           </View>
         ) : null}
 
-        {!isCitizen && !data && !isLoading && (
+        {!isCitizen && !data && !isLoading && !selectedDestination && (
           <View
             style={{
               alignItems: "center",
@@ -145,7 +148,7 @@ export const Visa: React.FC<VisaProps> = ({ country }) => {
                 maxWidth: "80%",
               }}
             >
-              Find out if you need a visa by selecting your passport country.
+              Check visa requirements for your passport country
             </Text>
             <TouchableOpacity
               style={[

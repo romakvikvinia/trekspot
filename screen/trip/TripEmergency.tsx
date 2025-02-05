@@ -1,5 +1,10 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import Constants from "expo-constants";
+import { StatusBar } from "expo-status-bar";
+import React from "react";
 import {
   Alert,
+  Pressable,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -7,18 +12,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { BackIcon } from "../../utilities/SvgIcons.utility";
-import Constants from "expo-constants";
-import { COLORS } from "../../styles/theme";
 
-import { Emergency } from "../../common/components/Destination/Emergency";
-import { globalStyles } from "../../styles/globalStyles";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
-import React from "react";
 import { useCountryByIso2Query } from "../../api/api.trekspot";
+import { Emergency } from "../../common/components/Destination/Emergency";
 import { Loader } from "../../common/ui/Loader";
 import { NodataText } from "../../components/common/NoDataText";
+import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
+import { globalStyles } from "../../styles/globalStyles";
+import { BackIcon } from "../../utilities/SvgIcons.utility";
 
 type Props = NativeStackScreenProps<TripRouteStackParamList, "TripEmergency">;
 
@@ -39,18 +40,51 @@ export const TripEmergency: React.FC<Props> = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+            <StatusBar style="dark" />
+
       <View style={globalStyles.screenHeader}>
-        <TouchableOpacity
+        <Pressable
           onPress={() => navigation.goBack()}
           style={globalStyles.screenHeaderBackButton}
+          hitSlop={20}
         >
-          <BackIcon size="30" />
-        </TouchableOpacity>
+          <BackIcon size="18" />
+        </Pressable>
 
         <Text style={globalStyles.screenTitle}>Emergency numbers</Text>
         <TouchableOpacity
           style={globalStyles.screenHeaderBackButton}
         ></TouchableOpacity>
+      </View>
+
+      <View>
+        <ScrollView
+          horizontal
+          style={globalStyles.underScreenTabs}
+          contentContainerStyle={{
+            paddingHorizontal: 15,
+          }}
+          showsHorizontalScrollIndicator={false}
+        >
+          <Pressable
+            style={[
+              globalStyles.underScreenTab,
+              globalStyles.underScreenTabActive,
+            ]}
+          >
+            <Text
+              style={[
+                globalStyles.underScreenTabText,
+                globalStyles.underScreenTabActiveText,
+              ]}
+            >
+              Italy
+            </Text>
+          </Pressable>
+          <Pressable style={globalStyles.underScreenTab}>
+            <Text style={globalStyles.underScreenTabText}>Germany</Text>
+          </Pressable>
+        </ScrollView>
       </View>
 
       <ScrollView
@@ -63,14 +97,13 @@ export const TripEmergency: React.FC<Props> = ({ navigation, route }) => {
           </View>
         )}
 
-        {
-          !isLoading && !data && (
-            <NodataText />
-          )
-        }
+        {!isLoading && !data && <NodataText />}
 
         {!isLoading && data && data.countryByIso2 && (
-          <Emergency data={data.countryByIso2.emergency} />
+          <Emergency
+            data={data.countryByIso2.emergency}
+            isSeparatePage={true}
+          />
         )}
       </ScrollView>
     </SafeAreaView>
@@ -79,29 +112,8 @@ export const TripEmergency: React.FC<Props> = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   safeArea: {
-    flex: 1,
     backgroundColor: "#F2F2F7",
+    flex: 1,
     paddingTop: Constants?.statusBarHeight + 10,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 15,
-    marginBottom: 10,
-  },
-  destination: {
-    fontSize: 18,
-    fontWeight: "500",
-  },
-  backButton: {
-    width: 30,
-  },
-  heading: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: COLORS.black,
-    marginTop: 25,
-    marginBottom: 10,
   },
 });

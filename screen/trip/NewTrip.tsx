@@ -1,28 +1,26 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { parseISO } from "date-fns";
 import { useFormik } from "formik";
-import { Modal, Platform, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Animated, View } from "react-native";
 import { Modalize } from "react-native-modalize";
-
-import { RangePicker } from "./RangePicker";
+import { IHandles } from "react-native-modalize/lib/options";
 import { Portal } from "react-native-portalize";
 
-import { Destination } from "./Destination";
-
-import { CreateTripContent } from "./SubComponents/CreateTripContent";
-import { styles } from "./SubComponents/CreateTripStyles";
-import { IHandles } from "react-native-modalize/lib/options";
-import { CityType, TripType } from "../../api/api.types";
 import {
   trekSpotApi,
   useCreateTripMutation,
   useUpdateTripMutation,
 } from "../../api/api.trekspot";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { CityType, TripType } from "../../api/api.types";
+import { useAppDispatch } from "../../package/store";
 import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
 import { creationTrip } from "../auth/validationScheme";
-import { parseISO } from "date-fns";
-import { useAppDispatch } from "../../package/store";
+import { Destination } from "./Destination";
+import { RangePicker } from "./RangePicker";
+import { CreateTripContent } from "./SubComponents/CreateTripContent";
+import { styles } from "./SubComponents/CreateTripStyles";
 
 interface INewTripProps {
   newTripModalRef: React.RefObject<IHandles>;
@@ -41,6 +39,7 @@ export const NewTrip = ({
 }: INewTripProps) => {
   const navigation = useNavigation<TripStackNavigationProp>();
   const dispatch = useAppDispatch();
+  const [visibleDestinationsPopup, setVisibleDestinationsPopup] = useState(false);
   const [fetchData, { isLoading, isError, data, isSuccess }] =
     useCreateTripMutation();
 
@@ -55,6 +54,24 @@ export const NewTrip = ({
 
   const [open, setOpen] = useState(false);
   const [whereToModal, setWhereToModal] = useState(false);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const showPopup = () => {
+    setVisibleDestinationsPopup(true);
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 150,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const hidePopup = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 10,
+      useNativeDriver: true,
+    }).start(() => setVisibleDestinationsPopup(false));
+  };
 
   const modalDestinationRef = useRef<Modalize>(null);
 
@@ -96,8 +113,7 @@ export const NewTrip = ({
   };
   const onDestinationModalClose = (city?: CityType, cities?: string[]) => {
    
-      modalDestinationRef.current?.close();
-    
+    hidePopup();
 
     if (city && cities) {
       formik.setFieldValue("cities", cities);
@@ -134,7 +150,7 @@ export const NewTrip = ({
           newTripModalRef={newTripModalRef}
           setOpen={setOpen}
           formik={formik}
-          onDestinationModalOpen={onDestinationModalOpen}
+          showPopup={showPopup}
           isLoading={isUpdateTripLoading || isLoading}
           editMode={editMode}
         />
@@ -142,20 +158,16 @@ export const NewTrip = ({
       <RangePicker formik={formik} open={open} setOpen={setOpen} />
 
       <Portal>
-        <Modalize
-          ref={modalDestinationRef}
-          modalTopOffset={65}
-          scrollViewProps={{
-            alwaysBounceVertical: false,
-            showsVerticalScrollIndicator: false,
-            keyboardShouldPersistTaps: "handled",
-          }}
-          modalStyle={{
-            backgroundColor: "#f8f8f8",
-          }}
-        >
-          <Destination onDestinationModalClose={onDestinationModalClose} />
-        </Modalize>
+        {
+          visibleDestinationsPopup && 
+          <Animated.View style={[{ opacity: fadeAnim, flex: 1 }]}>
+            <Destination
+              onDestinationModalClose={onDestinationModalClose}
+              setVisibleDestinationsPopup={setVisibleDestinationsPopup}
+              formik={formik}
+            />
+          </Animated.View>
+        }
       </Portal>
     </>
   );

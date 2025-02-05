@@ -1,7 +1,15 @@
 import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
+import { StatusBar } from "expo-status-bar";
 import React, { useCallback, useEffect, useState } from "react";
-import { Platform, TouchableOpacity, useWindowDimensions, View } from "react-native";
+import {
+  Platform,
+  Pressable,
+  ScrollView,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { StyleSheet, Text } from "react-native";
 import { TabBar, TabView } from "react-native-tab-view";
 
@@ -9,8 +17,15 @@ import { SightType } from "../../api/api.types";
 import { Loader } from "../../common/ui/Loader";
 import { exploreStyles } from "../../components/explore/sights/_exploreStyles";
 import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
+import { globalStyles } from "../../styles/globalStyles";
 import { COLORS, SIZES } from "../../styles/theme";
-import { PlusIcon, StarIcon, TrashIcon } from "../../utilities/SvgIcons.utility";
+import {
+  PlusIcon,
+  StarIcon,
+  TrashIcon,
+  XIcon,
+} from "../../utilities/SvgIcons.utility";
+import { tripDetailStyles } from "./_tripDetailStyles";
 import { TripDaysType } from "./TripDetailScreen";
 
 interface ITripActivitiesSelectProps {
@@ -24,6 +39,7 @@ interface ITripActivitiesSelectProps {
     sight: string;
     route: string;
   }) => void;
+  hidePopup: () => void;
 }
 
 export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
@@ -32,6 +48,7 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
   isLoading,
   handleAddToTrip,
   removeActivity,
+  hidePopup,
 }) => {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
@@ -69,20 +86,23 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
         </View>
       );
     }
-    const filterImages = tabData?.[route?.key]?.filter(sightItem => sightItem?.images?.length > 0);  
+    const filterImages = tabData?.[route?.key]?.filter(
+      (sightItem) => sightItem?.images?.length > 0
+    );
     return (
-      <View style={{ minHeight: SIZES.height - 180 }}> 
-        <FlashList
-          data={filterImages}
-          keyExtractor={(item, index) =>
-            `${route.key}-${index}-${
-              days &&
-              days.some((day) =>
-                day.activities.some((activity) => activity?.id === item?.id)
-              )
-            }`
-          }
-          renderItem={({ item, index }) => item?.images?.length > 0 && (
+      // <View style={{ minHeight: SIZES.height - 180 }}>
+      <FlashList
+        data={filterImages}
+        keyExtractor={(item, index) =>
+          `${route.key}-${index}-${
+            days &&
+            days.some((day) =>
+              day.activities.some((activity) => activity?.id === item?.id)
+            )
+          }`
+        }
+        renderItem={({ item, index }) =>
+          item?.images?.length > 0 && (
             <TouchableOpacity
               activeOpacity={0.7}
               style={[
@@ -93,7 +113,7 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                 },
               ]}
               onPress={() => showTopSight(item)}
-            > 
+            >
               <Image
                 style={[
                   {
@@ -137,89 +157,96 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                 </View>
 
                 <View style={styles.actionButtons}>
-                 
-
                   {days &&
                   days.some((day) =>
                     day.activities.some((activity) => activity?.id === item?.id)
                   ) ? (
                     <>
-                    <TouchableOpacity
-                    onPress={() => {
-                      const day = days.find((day) =>
-                        day.activities.some(
-                          (activity) => activity?.id === item?.id
-                        )
-                      );
-                      removeActivity({
-                        route: day?.route!,
-                        day: day?.id!,
-                        sight: item?.id!,
-                      });
-                    }}
-                    activeOpacity={0.7}
-                    style={styles.detailsButton}
-                  >
-                    <Text style={[styles.detailsButtonText, {
-                      color: "red"
-                    }]}>
-                      Remove
-                    </Text>
-                  </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[styles.addToButton, {
-                        backgroundColor: "red"
-                      }]}
-                      onPress={() => {
-                        const day = days.find((day) =>
-                          day.activities.some(
-                            (activity) => activity?.id === item?.id
-                          )
-                        );
-                        removeActivity({
-                          route: day?.route!,
-                          day: day?.id!,
-                          sight: item?.id!,
-                        });
-                      }}
-                    >
-                      <TrashIcon color="#fff" /> 
-                    </TouchableOpacity>
-                  </>
+                      <TouchableOpacity
+                        onPress={() => {
+                          const day = days.find((day) =>
+                            day.activities.some(
+                              (activity) => activity?.id === item?.id
+                            )
+                          );
+                          removeActivity({
+                            route: day?.route!,
+                            day: day?.id!,
+                            sight: item?.id!,
+                          });
+                        }}
+                        activeOpacity={0.7}
+                        style={styles.detailsButton}
+                      >
+                        <Text
+                          style={[
+                            styles.detailsButtonText,
+                            {
+                              color: "red",
+                            },
+                          ]}
+                        >
+                          Remove
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={[
+                          styles.addToButton,
+                          {
+                            backgroundColor: "red",
+                          },
+                        ]}
+                        onPress={() => {
+                          const day = days.find((day) =>
+                            day.activities.some(
+                              (activity) => activity?.id === item?.id
+                            )
+                          );
+                          removeActivity({
+                            route: day?.route!,
+                            day: day?.id!,
+                            sight: item?.id!,
+                          });
+                        }}
+                      >
+                        <TrashIcon color="#fff" />
+                      </TouchableOpacity>
+                    </>
                   ) : (
                     <>
-                  <TouchableOpacity
-                    onPress={() => handleAddToTrip(item)}
-                    activeOpacity={0.7}
-                    style={styles.detailsButton}
-                  >
-                    <Text style={styles.detailsButtonText}>
-                      Add to trip
-                    </Text>
-                  </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.addToButton}
-                      onPress={() => handleAddToTrip(item)}
-                    >
-                      <PlusIcon />
-                    </TouchableOpacity>
-                  </>
+                      <TouchableOpacity
+                        onPress={() => handleAddToTrip(item)}
+                        activeOpacity={0.7}
+                        style={styles.detailsButton}
+                      >
+                        <Text style={styles.detailsButtonText}>
+                          Add to trip
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.addToButton}
+                        onPress={() => handleAddToTrip(item)}
+                      >
+                        <PlusIcon color="#fff" size="15" />
+                      </TouchableOpacity>
+                    </>
                   )}
                 </View>
               </View>
             </TouchableOpacity>
-          )}
-          estimatedItemSize={200}
-          numColumns={2}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingHorizontal: 15,
-            paddingTop: 25,
-            paddingBottom: 25,
-          }}
-        />
-      </View>
+          )
+        }
+        estimatedItemSize={200}
+        numColumns={2}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingHorizontal: 15,
+          paddingTop: 25,
+          paddingBottom: 60,
+        }}
+      />
+      // </View>
     );
   };
 
@@ -233,9 +260,93 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
       setTabViewKey((prev) => prev + 1);
     }
   }, [routes]);
-  
+
+
+  const cities = [
+    {
+      name: "Milan",
+      id: 1,
+    },
+    {
+      name: "Berlin",
+      id: 2,
+    },
+    {
+      name: "Rome",
+      id: 3,
+    }
+  ];
+  const [selectedCity, setSelectedCity] = useState(cities[0]);
+
+
   return (
     <>
+     <StatusBar style="dark" />
+      <View style={tripDetailStyles.rowItemHeader}>
+        <Text style={tripDetailStyles.h2}>
+          Activities -{" "}
+          <Text
+            style={{
+              fontWeight: "500",
+              color: COLORS.primary,
+            }}
+          >
+            {[days[index]?.date]}
+          </Text>
+        </Text>
+        <Pressable
+          onPress={() => hidePopup()}
+          hitSlop={20}
+          style={tripDetailStyles.closeButton}
+        >
+          <XIcon width="10" />
+        </Pressable>
+      </View>
+      <View style={{ borderBottomWidth: 1, borderBottomColor: "#f2f2f2", marginTop: 5 }}>
+        <ScrollView
+          horizontal
+          style={[
+            globalStyles.underScreenTabs,
+            {
+              marginTop: 0,
+              marginBottom: 0,
+              paddingBottom: 0,
+              height: 40,
+            },
+          ]}
+          contentContainerStyle={{
+            paddingHorizontal: 0,
+          }}
+          showsHorizontalScrollIndicator={false}
+        >
+          {cities.map((city) => (
+            <Pressable
+              key={city.id}
+              onPress={() => setSelectedCity(city)}
+              style={[
+                globalStyles.underScreenTab,
+                styles.tabButton,
+                {
+                  borderBottomColor: selectedCity.id === city.id ? COLORS.primary : "#fff",
+                  width:
+                  cities.length <= 5
+                    ? SIZES.width / cities?.length
+                    : "auto",
+                },
+              ]}
+            >
+              <Text
+                style={[
+                  globalStyles.underScreenTabText,
+                  selectedCity.id === city.id && globalStyles.underScreenTabActiveText,
+                ]}
+              >
+                {city.name}
+              </Text>
+            </Pressable>
+          ))}
+        </ScrollView>
+      </View>
       <View style={styles.selectActivitesWrapper}>
         <View style={styles.itemRow}>
           <TabView
@@ -258,25 +369,29 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                 scrollEnabled={true}
                 {...props}
                 style={{
-                  backgroundColor: "#F2F2F7",
+                  backgroundColor: "#fff",
                   paddingBottom: 15,
+                  ...COLORS.shadow
                 }}
                 contentContainerStyle={{
-                  backgroundColor: "#F2F2F7",
+                  backgroundColor: "#fff",
                   paddingHorizontal: 0,
+                 
                 }}
-                inactiveColor="#000"
+                inactiveColor={COLORS.darkgray}
                 tabStyle={{
                   paddingHorizontal: 0,
                   padding: 0,
-                  height: 35,
+                  height: 35,  
+                 }}
+                activeColor={COLORS.primary}
+                indicatorStyle={{ 
+                  display: "none"
                 }}
-                activeColor="#000"
-                indicatorStyle={{ backgroundColor: COLORS.primaryDark }}
                 labelStyle={{
                   textTransform: "capitalize",
-                  fontWeight: "bold",
-                  fontSize: 15,
+                  fontWeight: "600",
+                  fontSize: 14,
                 }}
                 android_ripple={{ color: "#F2F2F7" }}
               />
@@ -300,7 +415,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
     overflow: "hidden",
   },
-  addToButton: { 
+  addToButton: {
     alignItems: "center",
     backgroundColor: COLORS.primary,
     borderBottomEndRadius: 12,
@@ -325,22 +440,33 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   itemRow: {
+    backgroundColor: "#F2F2F7",
     marginTop: 0,
     minHeight: SIZES.height - 100,
   },
   selectActivitesWrapper: {
+    backgroundColor: "#F2F2F7",
     flex: 1,
+  },
+  tabButton: {
+    backgroundColor: "#fff",
+    borderBottomWidth: 1,
+    borderLeftWidth: 0,
+    borderRadius: 0,
+    borderRightWidth: 0,
+    borderTopWidth: 0,
+    marginRight: 0,
   },
   thingsTodoItem: {
     backgroundColor: "#fff",
     borderRadius: 12,
     marginBottom: 20,
     marginRight: 15,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 1.84,
-    width: "96%", 
+    width: "96%",
     ...Platform.select({
       android: {
         elevation: 2,

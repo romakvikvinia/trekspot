@@ -128,7 +128,7 @@ export const BestTimeToVisitBox = () => {
                     <View style={[styles.weatherCol,{
                       alignItems: "flex-start"
                     }]}>
-                      <Text style={styles.monthText}>January</Text>
+                      <Text style={styles.monthText}>February</Text>
                     </View>
                     <View style={styles.weatherCol}>
                       <View style={styles.inBox}>
@@ -148,7 +148,27 @@ export const BestTimeToVisitBox = () => {
                     <View style={[styles.weatherCol,{
                       alignItems: "flex-start"
                     }]}>
-                      <Text style={styles.monthText}>January</Text>
+                      <Text style={styles.monthText}>March</Text>
+                    </View>
+                    <View style={styles.weatherCol}>
+                      <View style={styles.inBox}>
+                        <WeatherIcon />
+                        <Text style={styles.weatherText}>23° / 34</Text>
+                      </View>
+                    </View>
+                    <View style={styles.weatherCol}>
+                      <View style={styles.inBox}>
+                        <View style={[styles.circle, styles.fill]}></View>
+                        <View style={[styles.circle, styles.fill]}></View>
+                        <View style={styles.circle}></View>
+                      </View>
+                    </View>
+                  </View>
+                  <View style={styles.rowItem}>
+                    <View style={[styles.weatherCol,{
+                      alignItems: "flex-start"
+                    }]}>
+                      <Text style={styles.monthText}>April</Text>
                     </View>
                     <View style={styles.weatherCol}>
                       <View style={styles.inBox}>
@@ -186,7 +206,7 @@ const styles = StyleSheet.create({
   },
   boxItem: {
     backgroundColor: "#fff",
-    borderColor: "#fafafa",
+    borderColor: "#f2f2f2",
     borderRadius: 15,
     borderWidth: 1,
     height: 185,
@@ -241,7 +261,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   colTextHeading: {
-
+    color: COLORS.darkgray,
+    fontSize: 14,
+    fontWeight: "400"
   },
   contentCard: {
     backgroundColor: "#fff",
@@ -272,7 +294,6 @@ const styles = StyleSheet.create({
   inText: {
     color: COLORS.black,
     fontSize: 13,
-    fontWeight: "400",
     maxWidth: "100%"
   },
   inTitle: {
@@ -284,6 +305,11 @@ const styles = StyleSheet.create({
   inner: {
     flex: 1,
     paddingRight: 10,
+  },
+  monthText: {
+    color: COLORS.black,
+    fontSize: 14,
+    fontWeight: "500"
   },
   moreDetails: {
     color: COLORS.primary,
@@ -300,9 +326,12 @@ const styles = StyleSheet.create({
     width: "100%"
   },
   rowItem: {
+    borderBottomColor: "#f2f2f2",
+    borderBottomWidth: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 15,
+    paddingBottom: 15,
     width: "100%"
   },
   sectionTitle: {
@@ -322,6 +351,7 @@ const styles = StyleSheet.create({
     width: "100%"
   },
   weatherText: {
+    color: COLORS.darkgray,
     fontSize: 14,
     marginLeft: 5
   },

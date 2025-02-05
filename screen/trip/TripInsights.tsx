@@ -2,6 +2,7 @@ import Constants from "expo-constants";
 import { Image } from "expo-image";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
+  Pressable,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -15,6 +16,7 @@ registerTranslation("en", enGB);
 import { useNavigation } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
 import { LinearGradient } from "expo-linear-gradient";
+import { StatusBar } from "expo-status-bar";
 import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
 import RenderHTML from "react-native-render-html";
@@ -28,11 +30,14 @@ import { COLORS, SIZES } from "../../styles/theme";
 import { BackIcon, XIcon } from "../../utilities/SvgIcons.utility";
 
 interface TripProps {}
-  
+
 interface IState {
   topic: TopicType | null;
 }
-export const TripInsights: React.FC<TripProps> = ({ route }) => {
+export const TripInsights: React.FC<TripProps> = ({
+  route,
+  showHeader = true,
+}) => {
   const navigation = useNavigation();
   const iso2 = route?.params?.iso2;
   const [fetchData, { isLoading, data }] = useLazyTopicsQuery();
@@ -45,7 +50,6 @@ export const TripInsights: React.FC<TripProps> = ({ route }) => {
     modalInsightDetailRef.current?.open();
   }, []);
 
- 
   useEffect(() => {
     if (iso2) {
       fetchData({ iso2 });
@@ -54,43 +58,82 @@ export const TripInsights: React.FC<TripProps> = ({ route }) => {
 
   return (
     <>
-      <SafeAreaView style={styles.safeArea}>
-        <View style={globalStyles.screenHeader}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={globalStyles.screenHeaderBackButton}
-          >
-            <BackIcon size="30" />
-          </TouchableOpacity>
+      <SafeAreaView
+        style={[
+          styles.safeArea,
+          {
+            backgroundColor: showHeader ? "#F2F2F7" : "#f8f8f8",
+          },
+        ]}
+      >
+         <StatusBar style="dark" />
+        {showHeader && (
+          <>
+            <View style={globalStyles.screenHeader}>
+              <Pressable
+                onPress={() => navigation.goBack()}
+                style={globalStyles.screenHeaderBackButton}
+                hitSlop={20}
+              >
+                <BackIcon size="18" />
+              </Pressable>
 
-          <Text style={globalStyles.screenTitle}>Insights</Text>
-          <TouchableOpacity
-            style={globalStyles.screenHeaderBackButton}
-          ></TouchableOpacity>
-        </View>
+              <Text style={globalStyles.screenTitle}>Insights</Text>
+              <TouchableOpacity
+                style={globalStyles.screenHeaderBackButton}
+              ></TouchableOpacity>
+            </View>
+
+            <ScrollView
+              horizontal
+              style={globalStyles.underScreenTabs}
+              contentContainerStyle={{
+                paddingHorizontal: 15,
+              }}
+              showsHorizontalScrollIndicator={false}
+            >
+              <Pressable
+                style={[
+                  globalStyles.underScreenTab,
+                  globalStyles.underScreenTabActive,
+                ]}
+              >
+                <Text
+                  style={[
+                    globalStyles.underScreenTabText,
+                    globalStyles.underScreenTabActiveText,
+                  ]}
+                >
+                  Italy
+                </Text>
+              </Pressable>
+              <Pressable style={globalStyles.underScreenTab}>
+                <Text style={globalStyles.underScreenTabText}>Germany</Text>
+              </Pressable>
+            </ScrollView>
+          </>
+        )}
         <ScrollView showsVerticalScrollIndicator={false}>
           {isLoading ? (
             <View style={{ height: 200 }}>
               <Loader isLoading background="#F2F2F7" />
             </View>
           ) : null}
-       
+
           {!isLoading && data && Object.keys(data)?.length === 0 && (
-             <NodataText />
+            <NodataText />
           )}
-          
+
           {!isLoading &&
             data &&
             Object.keys(data).map((key, i) => (
-              <View
-                key={key}
-                style={styles.topicsRow}
-              >
+              <View key={key} style={[styles.topicsRow,{
+                marginTop: i === 0 ? 10 : 25
+              }]}>
                 <View style={styles.headingItem}>
-                  <Text style={styles.topicsRowTitle}>{key}</Text>
-                  <View
-                    style={styles.shapeBg}
-                  ></View>
+                  <Text style={[styles.topicsRowTitle,{
+                    fontSize: !showHeader ? 18 : 22
+                  }]}>{key}</Text>
                 </View>
                 <View style={{ flexGrow: 1 }}>
                   <FlashList
@@ -117,7 +160,7 @@ export const TripInsights: React.FC<TripProps> = ({ route }) => {
                               : require("../../assets/no-image.png")
                           }
                         />
-                       <LinearGradient
+                        <LinearGradient
                           style={styles.gradientWrapper}
                           colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.9)"]}
                         >
@@ -130,7 +173,6 @@ export const TripInsights: React.FC<TripProps> = ({ route }) => {
                 </View>
               </View>
             ))}
- 
         </ScrollView>
       </SafeAreaView>
 
@@ -254,9 +296,9 @@ const styles = StyleSheet.create({
     width: 30,
   },
   gradientWrapper: {
-    alignItems: 'center',
+    alignItems: "center",
     height: "100%",
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
     left: 0,
     position: "absolute",
     top: 0,
@@ -285,20 +327,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: Constants?.statusBarHeight + 10,
   },
-  shapeBg: {
-    borderRadius: 10,
-    bottom: 15,
-    height: 10,
-    left: 15,
-    opacity: 0.6,
-    position: "absolute",
-    width: 100,
-  },
   topicsRow: {
     flexGrow: 1,
     marginBottom: 5,
     marginTop: 25,
-    width: "100%"
+    width: "100%",
   },
   topicsRowTitle: {
     color: COLORS.black,

@@ -1,7 +1,7 @@
 import { Text, View } from "react-native";
+
 import { COLORS } from "../../../styles/theme";
 import {
-  CheckCircleIcon,
   CheckIcon,
   CloseCircleIcon,
   WarningIcon,
@@ -51,7 +51,7 @@ export const SecurityThreats: React.FC<SecurityThreatsProps> = ({ type }) => {
                   marginLeft: 10,
                 }}
               >
-                Take normal security precautionss
+                Safe to travel, take normal security precautionss
               </Text>
             </>
           ) : null}
@@ -68,7 +68,7 @@ export const SecurityThreats: React.FC<SecurityThreatsProps> = ({ type }) => {
                   marginLeft: 10,
                 }}
               >
-                Exercise a high degree of caution
+                Safe to travel, but exercise a high degree of caution
               </Text>
             </>
           ) : null}

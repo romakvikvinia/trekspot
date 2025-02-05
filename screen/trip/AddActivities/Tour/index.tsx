@@ -73,10 +73,10 @@ export const Tour = ({ route }) => {
                 <Text style={styles.inputLabel}>Event name</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="E.g. Adventure tour"
+                  placeholder="e.g Adventure tour"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
-                  autoFocus
+                  
                 />
               </View>
             </View>
@@ -162,40 +162,40 @@ export const Tour = ({ route }) => {
                 <Text style={styles.inputLabel}>Phone</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="E.g. (XXX) XXX-XXX"
+                  placeholder="e.g (XXX) XXX-XXX"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
-                  autoFocus
+                  
                 />
               </View>
               <View style={[styles.inputRow, styles.widthBorderBottom]}>
                 <Text style={styles.inputLabel}>Website</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="E.g. https://trekspot.io"
+                  placeholder="e.g https://trekspot.io"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
-                  autoFocus
+                  
                 />
               </View>
               <View style={[styles.inputRow, styles.widthBorderBottom]}>
                 <Text style={styles.inputLabel}>Email</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="E.g. info@trekspot.io"
+                  placeholder="e.g info@trekspot.io"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
-                  autoFocus
+                  
                 />
               </View>
               <View style={[styles.inputRow, styles.widthBorderBottom]}>
                 <Text style={styles.inputLabel}>Confirmation</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="E.g. BBK33"
+                  placeholder="e.g BBK33"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
-                  autoFocus
+                  
                 />
               </View>
             </View>

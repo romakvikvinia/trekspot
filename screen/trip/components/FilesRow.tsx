@@ -1,18 +1,23 @@
 import * as DocumentPicker from "expo-document-picker";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
+import { LinearGradient } from "expo-linear-gradient";
 import * as WebBrowser from "expo-web-browser";
+import { useRef, useState } from "react";
 import {
   Alert,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
+import { Modalize } from "react-native-modalize";
+import { Portal } from "react-native-portalize";
 
 import { FloatingActionButton } from "../../../components/common/FloatingButtons";
-import { COLORS } from "../../../styles/theme";
+import { COLORS, SIZES } from "../../../styles/theme";
 import {
   CameraIcon,
   FileUploadedIcon,
@@ -22,6 +27,12 @@ import {
 } from "../../../utilities/SvgIcons.utility";
 
 export const FilesRow = ({ isPreview }) => {
+  const galleryRef = useRef(null);
+
+  const [imageURL, setImageURL] = useState(null);
+  const [pdfURL, setPdfURL] = useState('');
+
+ 
   const _handleShowFileAsync = async (url) => {
     const result = await WebBrowser.openBrowserAsync(url, {
       enableBarCollapsing: true,
@@ -29,9 +40,15 @@ export const FilesRow = ({ isPreview }) => {
   };
 
   const _handleShowImageAsync = async (url) => {
-    const result = await WebBrowser.openBrowserAsync(url, {
-      enableBarCollapsing: true,
-    });
+    if(Platform?.OS === "ios") {
+      const result = await WebBrowser.openBrowserAsync(url, {
+        enableBarCollapsing: true,
+      });
+    } else {
+      setPdfURL(null)
+      galleryRef?.current?.open();
+      setImageURL(url)
+    }
   };
 
   const handleDelete = () => {
@@ -121,37 +138,58 @@ export const FilesRow = ({ isPreview }) => {
     }
   };
 
+  const forIOs = [
+    {
+      label: "Upload PDF",
+      onPress: () => pickDocument(),
+      icon: PDFLinearIcon,
+    },
+    {
+      label: "Upload photo",
+      onPress: () => pickImages(),
+      icon: ImagesLinearIcon,
+    },
+    {
+      label: "Capture and upload",
+      onPress: () => pickImageCamera(),
+      icon: CameraIcon,
+    },
+  ]
+
+  const forAndroid = [
+    {
+      label: "Upload photo",
+      onPress: () => pickImages(),
+      icon: ImagesLinearIcon,
+    },
+    {
+      label: "Capture and upload",
+      onPress: () => pickImageCamera(),
+      icon: CameraIcon,
+    },
+  ]
+ 
+ 
   return (
     <>
       {!isPreview ? (
         <FloatingActionButton
-          buttons={[
-            {
-              label: "Upload PDF",
-              onPress: () => pickDocument(),
-              icon: PDFLinearIcon,
-            },
-            {
-              label: "Upload photos",
-              onPress: () => pickImages(),
-              icon: ImagesLinearIcon,
-            },
-            {
-              label: "Capture and upload",
-              onPress: () => pickImageCamera(),
-              icon: CameraIcon,
-            },
-          ]}
+          buttons={Platform.OS === "android" ? forAndroid : forIOs}
           renderTrigger={() => (
             <View style={styles.inputGroup}>
               <View style={styles.inputRow}>
                 <FileUploadedIcon size={20} color="#86858c" />
-                <Text style={styles.inputLabel}>Upload PDF or photos</Text>
+                <Text style={styles.inputLabel}>
+                  {
+                    Platform.OS === "android" ? "Upload photos" : " Upload PDF or photos"
+                  }
+                </Text>
               </View>
             </View>
           )}
         />
       ) : null}
+
       {/* <View style={styles.loaderWrapper}>
         <Loader isLoading={true} background="#F2F2F7" size="small" />
       </View> */}
@@ -160,6 +198,7 @@ export const FilesRow = ({ isPreview }) => {
         horizontal
         contentContainerStyle={{ paddingBottom: 30, paddingVertical: 10 }}
       >
+        {/* ანდროიდზე დროიბით არ ვანახოთ PDF */}
         <Pressable
           onPress={() =>
             _handleShowFileAsync("https://pdfobject.com/pdf/sample.pdf")
@@ -223,6 +262,9 @@ export const FilesRow = ({ isPreview }) => {
           ></Image>
         </Pressable>
       </ScrollView>
+
+
+      
 
       {isPreview && <Text style={styles.rowTitle}>Gallery</Text>}
 
@@ -332,10 +374,73 @@ export const FilesRow = ({ isPreview }) => {
           ></Image>
         </Pressable>
       </ScrollView>
+
+ 
+      <Portal>
+        <Modalize
+          ref={galleryRef}
+          modalTopOffset={0}
+          withHandle={false}
+          disableScrollIfPossible
+          modalStyle={{
+            minHeight: "100%",
+            backgroundColor: "#000",
+            flex: 1,
+          }}
+          scrollViewProps={{
+            alwaysBounceVertical: false,
+          }}
+        >
+          <View style={styles.galleryHeader}>
+            <Pressable
+              style={styles.closeGalleryButton}
+              onPress={() => galleryRef?.current?.close()}
+            >
+              <XIcon color="#fff" />
+            </Pressable>
+          </View>
+          {imageURL ? (
+            <LinearGradient
+              style={{
+                width: SIZES.width,
+                height: SIZES.height,
+                flex: 1,
+              }}
+              colors={["rgba(255,255,255,0.2)", "rgba(0,0,0,0.1)"]}
+            >
+              <Image
+                style={{
+                  width: SIZES.width,
+                  height: SIZES.height,
+                  flex: 1,
+                }}
+                source={{
+                  uri: "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
+                }}
+                cachePolicy="memory"
+                contentFit="contain"
+                transition={1000}
+              />
+            </LinearGradient>
+          ) : (
+             null
+          )}
+        </Modalize>
+      </Portal>
     </>
   );
 };
 const styles = StyleSheet.create({
+  closeGalleryButton: {
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    borderColor: "#000",
+    borderRadius: 50,
+    borderWidth: 0,
+    height: 40,
+    justifyContent: "center",
+    width: 40,
+  },
   fileItem: {
     alignItems: "center",
     backgroundColor: "#fff",
@@ -353,6 +458,16 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     marginTop: 10,
     paddingHorizontal: 15,
+  },
+  galleryHeader: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    paddingHorizontal: 15,
+    paddingTop: 55,
+    position: "absolute",
+    width: "100%",
+    zIndex: 1,
   },
   imgItem: {
     borderRadius: 15,

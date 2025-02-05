@@ -92,6 +92,7 @@ export const ActivityNoteOrDescription = ({ route }) => {
             multiline={true}
             placeholder="Type here..."
             placeholderTextColor={COLORS.gray}
+            textAlignVertical="top"
           />
         </View>
       </KeyboardAvoidingView>

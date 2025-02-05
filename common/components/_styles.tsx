@@ -346,7 +346,7 @@ export const styles = StyleSheet.create({
     fontSize: 12,
   },
   thingsTodoItem: {
-    marginBottom: 25,
+    marginBottom: 0,
     width: "96%",
     borderRadius: 10,
     // backgroundColor: "#f2f2f2",
@@ -694,11 +694,11 @@ export const styles = StyleSheet.create({
     zIndex: 1,
   },
   cityDetailsLeft: {
-    width: "60%"
+    width: "80%"
   },
   cityDetailsRight: {
     alignItems: "flex-end",
-    width: "40%"
+    width: "20%"
   },
 
 });

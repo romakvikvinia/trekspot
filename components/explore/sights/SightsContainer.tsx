@@ -1,16 +1,14 @@
-import React, { useCallback, useState } from "react";
 import { Image } from "expo-image";
-import { View, TouchableOpacity, ScrollView, Text } from "react-native";
-import { exploreStyles } from "./_exploreStyles";
+import React, { useCallback, useState } from "react";
+import { ScrollView, Text,TouchableOpacity, View } from "react-native";
+
+import { SightType } from "../../../api/api.types";
 import { styles } from "../../../common/components/_styles";
-import { COLORS } from "../../../styles/theme";
 import {
   DownCircleIcon,
   UpCircleIcon,
-  CalendarFilledIcon,
-  TripLocationIcon,
 } from "../../../utilities/SvgIcons.utility";
-import { SightType } from "../../../api/api.types";
+import { exploreStyles } from "./_exploreStyles";
 import { SightDetailModal } from "./SightDetailModal";
 
 type SightsContainerProps = {
@@ -208,11 +206,12 @@ export const SightsContainer: React.FC<SightsContainerProps> = ({ items }) => {
 
   return (
     <>
-      {Object.keys(items).map((key) => (
+      {Object.keys(items).map((key, i) => (
         <SightsRow
           rowKey={key}
           handleOpenSightDetail={handleOpenSightDetail}
           items={items}
+          key={i}
         />
       ))}
       <SightDetailModal closeCallBack={handleOnClose} showDirection={false} data={state.item!} />

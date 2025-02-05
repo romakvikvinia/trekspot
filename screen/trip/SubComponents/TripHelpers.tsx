@@ -60,7 +60,7 @@ export const TripHelpers = ({
             navigation.navigate("TripEmergency", { iso2 });
           }}
         >
-          <EmergencyLinearIcon size={16} color="#000" />
+          <EmergencyLinearIcon size={14} color="#000" />
           <Text
             style={[
               styles.bottomActionsButtonlabel,
@@ -89,7 +89,7 @@ export const TripHelpers = ({
             });
           }}
         >
-          <InsightIcon size={16} color="#000" />
+          <InsightIcon size={14} color="#000" />
           <Text
             style={[
               styles.bottomActionsButtonlabel,
@@ -117,7 +117,7 @@ export const TripHelpers = ({
             });
           }}
         >
-          <AppsIcon size={16} color="#000" />
+          <AppsIcon size={14} color="#000" />
           <Text
             style={[
               styles.bottomActionsButtonlabel,
@@ -145,7 +145,7 @@ export const TripHelpers = ({
             });
           }}
         >
-          <DishesIcon size={16} color="#000" />
+          <DishesIcon size={14} color="#000" />
           <Text
             style={[
               styles.bottomActionsButtonlabel,
@@ -171,8 +171,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginRight: 8,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
   },
   bottomActionsButtonlabel: {
     color: "#0b57d0",
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 0,
-    marginTop: Platform.OS === "android" ? 5 : 10,
+    marginTop: Platform.OS === "android" ? 5 : 5,
     paddingBottom: 12,
     paddingTop: 12,
     width: "100%",

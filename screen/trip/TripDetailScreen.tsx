@@ -1,6 +1,8 @@
+import Constants from "expo-constants";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Alert,
+  Animated,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -92,11 +94,12 @@ export const TabLabel = ({ route }: any) => {
       <Text
         style={{
           fontSize: 12,
-          marginBottom: 3,
+          marginBottom: 5,
           color: COLORS.gray,
+          fontWeight: "500"
         }}
       >
-        {route?.weekDay}
+        {route?.weekDay} - {route?.id < 2 ? "Hon." : "Bar."}
       </Text>
       <Text
         style={[
@@ -308,6 +311,27 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     },
     []
   );
+
+  const [visible, setVisible] = useState(false);
+
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const showPopup = () => {
+    setVisible(true);
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 150,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const hidePopup = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 10,
+      useNativeDriver: true,
+    }).start(() => setVisible(false));
+  };
 
   const renderCurrentScene: React.FC<
     SceneRendererProps & {
@@ -589,60 +613,25 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
       ) : null}
 
       <AddActivityButton
-        onActivitiesModalOpen={onActivitiesModalOpen}
+        onActivitiesModalOpen={showPopup}
         onAddActivitiesModal={onAddActivitiesModal}
       />
-
-      <Portal>
-        <Modalize
-          ref={activitiesModal}
-          modalTopOffset={50}
-          adjustToContentHeight
-          withHandle={false}
-          panGestureEnabled={false}
-          onClosed={handleSaveActivities}
-          HeaderComponent={
-            <>
-              <View style={tripDetailStyles.rowItemHeader}>
-                <Text style={tripDetailStyles.h2}>
-                  Activities -{" "}
-                  <Text
-                    style={{
-                      fontWeight: "500",
-                      color: COLORS.primary,
-                    }}
-                  >
-                    {[state.days[index]?.date]}
-                  </Text>
-                </Text>
-
-                <TouchableOpacity
-                  onPress={() => activitiesModal?.current?.close()}
-                  activeOpacity={0.5}
-                  style={tripDetailStyles.closeButton}
-                >
-                  <XIcon width="10" />
-                </TouchableOpacity>
-              </View>
-            </>
-          }
-          modalStyle={{
-            backgroundColor: "#F2F2F7",
-            height: "100%",
-          }}
-          scrollViewProps={{
-            showsVerticalScrollIndicator: false,
-          }}
-        >
-          <TripActivitiesSelect
-            days={state.days}
-            handleAddToTrip={handleAddToTrip}
-            data={data}
-            isLoading={sightsLoading}
-            removeActivity={removeActivity}
-          />
-        </Modalize>
-      </Portal>
+      {visible && (
+        <Portal> 
+          <View style={[StyleSheet.absoluteFillObject, styles.bg]}>
+            <Animated.View style={[styles.contentCard, { opacity: fadeAnim }]}> 
+              <TripActivitiesSelect
+                days={state.days}
+                handleAddToTrip={handleAddToTrip}
+                data={data}
+                isLoading={sightsLoading}
+                removeActivity={removeActivity}
+                hidePopup={hidePopup}
+              />
+            </Animated.View>
+          </View> 
+        </Portal>
+      )}
 
       <Portal>
         <Modalize
@@ -653,12 +642,12 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           // panGestureEnabled={false}
           HeaderComponent={
             <>
-              <View style={tripDetailStyles.rowItemHeader}>
+              <View style={[tripDetailStyles.rowItemHeader, { paddingTop: 15 }]}>
                 <Text style={tripDetailStyles.h2}>Add activity</Text>
 
                 <Pressable
                   onPress={() => addActivitiesModal?.current?.close()}
-                  hitSlop={50}
+                  hitSlop={20}
                   style={tripDetailStyles.closeButton}
                 >
                   <XIcon width="10" />
@@ -810,11 +799,25 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           </QuestionModal>
         </Modalize>
       </Portal>
- 
     </Host>
   );
 };
 const styles = StyleSheet.create({
+  contentCard: {
+    backgroundColor: "#fff",
+    borderRadius: 15,
+    elevation: 5,
+    justifyContent: "space-between",
+    minHeight: SIZES.height,
+    paddingRight: 5,
+    paddingTop: Constants?.statusBarHeight + 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    width: SIZES.width,
+    zIndex: 1,
+  },
   hideEnd: {
     backgroundColor: "#f7f7f7",
     bottom: 0,

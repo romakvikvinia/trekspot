@@ -1,3 +1,7 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import Constants from "expo-constants";
+import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useRef, useState } from "react";
 import {
   ImageBackground,
@@ -9,23 +13,19 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Constants from "expo-constants";
+import { Modalize } from "react-native-modalize";
+import { Portal } from "react-native-portalize";
+
+import { CountrySelect } from "../../common/components/CountrySelect";
+import { VisaCheckerContent } from "../../components/explore/VisaChecker";
+import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
 import { globalStyles } from "../../styles/globalStyles";
+import { Flags } from "../../utilities/flags";
 import {
   BackIcon,
   DownIcon,
   GlobeIcon,
 } from "../../utilities/SvgIcons.utility";
-import { VisaCheckerContent } from "../../components/explore/VisaChecker";
-import { Flags } from "../../utilities/flags";
-import { Portal } from "react-native-portalize";
-import { Modalize } from "react-native-modalize";
-import { CountrySelect } from "../../common/components/CountrySelect";
-
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { StatusBar } from "expo-status-bar";
 
 type Props = NativeStackScreenProps<
   ExploreRoutesStackParamList,
@@ -60,7 +60,7 @@ export const VisaCheckerScreen: React.FC<Props> = ({ navigation }) => {
   const getCountryDataFromStorage = async () => {
     try {
       const value = await AsyncStorage.getItem("user-country");
-
+      console.log("value",value)
       if (value !== null) {
         const countryData = JSON.parse(value);
         setFrom(countryData);
@@ -159,62 +159,62 @@ export const VisaCheckerScreen: React.FC<Props> = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#f8f8f8",
+  fromToText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "500",
+    marginLeft: 10,
+    maxWidth: 180,
+  },
+  pageDescription: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "500",
+    lineHeight: 20,
+    marginBottom: 5,
+    marginTop: 10,
+    paddingHorizontal: 40,
+    textAlign: "center",
+  },
+  passportDetails: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  passportSelect: {
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    borderRadius: 50,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    minWidth: 200,
+    paddingHorizontal: 25,
+    paddingVertical: 15,
+    width: "70%",
   },
   passportSelectWrapper: {
     flexDirection: "row",
     justifyContent: "center",
     marginTop: 15,
   },
-  passportDetails: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  passportSelect: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
-    borderRadius: 50,
-    paddingVertical: 15,
-    paddingHorizontal: 25,
-    width: "70%",
-    minWidth: 200,
-  },
-  fromToText: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: "#fff",
-    marginLeft: 10,
-    maxWidth: 180,
+  safeArea: {
+    backgroundColor: "#f8f8f8",
+    flex: 1,
   },
   screen: {
     flex: 1,
     width: "100%",
   },
-  screenHeaderWrapper: {
-    height: 200,
-    width: "100%",
-    backgroundColor: "#238D99",
-  },
   screenHeader: {
-    flexDirection: "row",
     alignItems: "center",
+    flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: 15,
     marginBottom: 0,
     paddingBottom: 10,
+    paddingHorizontal: 15,
   },
-  pageDescription: {
-    fontSize: 18,
-    paddingHorizontal: 40,
-    color: "#fff",
-    fontWeight: "500",
-    lineHeight: 20,
-    marginTop: 10,
-    textAlign: "center",
-    marginBottom: 5,
+  screenHeaderWrapper: {
+    backgroundColor: "#238D99",
+    height: 200,
+    width: "100%",
   },
 });

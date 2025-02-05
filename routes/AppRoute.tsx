@@ -2,6 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { Platform } from "react-native";
 import { Host } from "react-native-portalize";
 
+import { RestaurantDetail } from "../components/City/RestaurantDetail";
 import { CityDetailScreen } from "../screen/Explore/city/CityDetailScreen";
 import { CountryDetailScreen } from "../screen/Explore/Country/CountryDetailScreen";
 import { ActivityNoteOrDescription } from "../screen/trip/ActivityNoteOrDescription";
@@ -18,10 +19,12 @@ import { Route } from "../screen/trip/AddActivities/Route";
 import { Tour } from "../screen/trip/AddActivities/Tour";
 import { TransportRoute } from "../screen/trip/AddActivities/Transport";
 import { AutocompletePlaces } from "../screen/trip/AutocompletePlaces";
+import { InviteTripMember } from "../screen/trip/InviteTripMember";
 import { TripDetailScreen } from "../screen/trip/TripDetailScreen";
 import { TripDishes } from "../screen/trip/TripDishes";
 import { TripEmergency } from "../screen/trip/TripEmergency";
 import { TripInsights } from "../screen/trip/TripInsights";
+import { TripSettings } from "../screen/trip/TripSettings";
 import { TripTransport } from "../screen/trip/TripTransport";
 import { SIZES } from "../styles/theme";
 import { TabNavigator } from "./TabNavigator";
@@ -123,6 +126,28 @@ const AppRoute = () => {
               Platform.OS === "android" ? 10 : SIZES.width - 50,
           })}
         />
+        <Stack.Screen
+          name="InviteTripMember"
+          component={InviteTripMember}
+          options={() => ({
+            header: () => null,
+            animationEnabled: true,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+        />
+        <Stack.Screen
+          name="TripSettings"
+          component={TripSettings}
+          options={() => ({
+            header: () => null,
+            animationEnabled: true,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+        />
         <Stack.Group
           screenOptions={{
             presentation: "modal",
@@ -153,6 +178,7 @@ const AppRoute = () => {
           <Stack.Screen name="Events" component={Events} />
           <Stack.Screen name="Activity" component={Activity} />
           <Stack.Screen name="Rental" component={Rental} />
+          <Stack.Screen name="RestaurantDetail" component={RestaurantDetail} />
         </Stack.Group>
 
         <Stack.Screen

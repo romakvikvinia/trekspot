@@ -57,7 +57,7 @@ export const Dine = ({ route }) => {
           behavior={Platform.OS == "ios" ? "padding" : "height"}
           style={styles.screen}
         >
-          {!isPreview ? <Header /> : <NormalHeader title="Dine" />}
+          {!isPreview ? <Header /> : <NormalHeader title="Dining" />}
 
           <ScrollView
             style={{ flex: 1 }}
@@ -78,10 +78,10 @@ export const Dine = ({ route }) => {
                 {!isPreview ? (
                   <TextInput
                     style={styles.input}
-                    placeholder="E.g. Disfrutar"
+                    placeholder="e.g Disfrutar"
                     placeholderTextColor="#c6c6c6"
                     editable={!isPreview}
-                    autoFocus
+                    
                   />
                 ) : (
                   <View style={styles.inputValueWrapper}>
@@ -150,40 +150,40 @@ export const Dine = ({ route }) => {
                 <Text style={styles.inputLabel}>Phone</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="E.g. (XXX) XXX-XXX"
+                  placeholder="e.g (XXX) XXX-XXX"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
-                  autoFocus
+                  
                 />
               </View>
               <View style={[styles.inputRow, styles.widthBorderBottom]}>
                 <Text style={styles.inputLabel}>Website</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="E.g. https://trekspot.io"
+                  placeholder="e.g https://trekspot.io"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
-                  autoFocus
+                  
                 />
               </View>
               <View style={[styles.inputRow, styles.widthBorderBottom]}>
                 <Text style={styles.inputLabel}>Email</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="E.g. info@trekspot.io"
+                  placeholder="e.g info@trekspot.io"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
-                  autoFocus
+                  
                 />
               </View>
               <View style={[styles.inputRow, styles.widthBorderBottom]}>
                 <Text style={styles.inputLabel}>Confirmation</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="E.g. BBK33"
+                  placeholder="e.g BBK33"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
-                  autoFocus
+                  
                 />
               </View>
             </View>

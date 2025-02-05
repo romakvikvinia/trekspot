@@ -28,7 +28,9 @@ export const CityOverview = ({recognizedFor}) => {
       >
         <Text style={cityStyle.boxItemTitle}>Popular for</Text>
         <View style={cityStyle.boxItemIn}>
-          <View
+          <ScrollView
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
             style={[
               cityStyle.boxItemInTitleWrapper,
               {
@@ -41,7 +43,7 @@ export const CityOverview = ({recognizedFor}) => {
                 <Text style={cityStyle.tagItemText}>{item?.emoji} {item?.title}</Text>
               </View>
             ))}
-          </View>
+          </ScrollView>
         </View>
       </View>
     </ScrollView>
@@ -50,7 +52,7 @@ export const CityOverview = ({recognizedFor}) => {
 const cityStyle = StyleSheet.create({
   boxItem: {
     backgroundColor: "#fff",
-    borderColor: "#fafafa",
+    borderColor: "#f2f2f2",
     borderRadius: 15,
     borderWidth: 1,
     height: 185,

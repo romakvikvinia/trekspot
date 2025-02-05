@@ -73,30 +73,27 @@ export const TransportRoute = ({ route }) => {
                 <Text style={styles.inputLabel}>Route name</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="E.g. Adventure Trail"
+                  placeholder="e.g Adventure Trail"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
-                  autoFocus
                 />
               </View>
               <View style={[styles.inputRow, styles.widthBorderBottom]}>
                 <Text style={styles.inputLabel}>Transport N.</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="E.g. GG-453-44"
+                  placeholder="e.g GG-453-44"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
-                  autoFocus
                 />
               </View>
               <View style={[styles.inputRow]}>
                 <Text style={styles.inputLabel}>Company</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="E.g. Flixbus"
+                  placeholder="e.g Company name"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
-                  autoFocus
                 />
               </View>
             </View>
@@ -199,30 +196,27 @@ export const TransportRoute = ({ route }) => {
                 <Text style={styles.inputLabel}>Phone</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="E.g. (XXX) XXX-XXX"
+                  placeholder="e.g (XXX) XXX-XXX"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
-                  autoFocus
                 />
               </View>
               <View style={[styles.inputRow, styles.widthBorderBottom]}>
                 <Text style={styles.inputLabel}>Website</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="E.g. https://www.flix.com/"
+                  placeholder="e.g https://www.flix.com/"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
-                  autoFocus
                 />
               </View>
               <View style={[styles.inputRow, styles.widthBorderBottom]}>
                 <Text style={styles.inputLabel}>Reserv. code</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="E.g. HHJ32"
+                  placeholder="e.g HHJ32"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
-                  autoFocus
                 />
               </View>
               {type === "train" ? (
@@ -230,10 +224,9 @@ export const TransportRoute = ({ route }) => {
                   <Text style={styles.inputLabel}>Coach number</Text>
                   <TextInput
                     style={styles.input}
-                    placeholder="E.g. 2C"
+                    placeholder="e.g 2C"
                     placeholderTextColor="#c6c6c6"
                     editable={!isPreview}
-                    autoFocus
                   />
                 </View>
               ) : null}
@@ -241,10 +234,9 @@ export const TransportRoute = ({ route }) => {
                 <Text style={styles.inputLabel}>Seat</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="E.g. Flixbus"
+                  placeholder="e.g 4B"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
-                  autoFocus
                 />
               </View>
             </View>

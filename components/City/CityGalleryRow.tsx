@@ -24,81 +24,68 @@ export const CityGalleryRow = ({ city }) => {
         }}
         showsHorizontalScrollIndicator={false}
       >
-        {
-          <Pressable onPress={() => galleryRef?.current?.open()}>
-            <Image
-              style={[
-                cityStyle.box,
-                {
-                  width: SIZES.width - 130,
-                  height: 300,
-                },
-              ]}
-              priority="high"
-              contentFit="cover"
-              source={{
-                uri: "https://cdn.pixabay.com/photo/2015/10/06/18/26/eiffel-tower-975004_1280.jpg",
-                // city?.images[0].url,
-              }}
-              key={`slide-${city?.images[0]?.id}-${city.id}`}
-            ></Image>
-          </Pressable>
-        }
-        <View style={styles.vertImages}>
-          {
-            <>
-              <Image
-                style={[
-                  cityStyle.box,
-                  {
-                    width: 145,
-                    height: 145,
-                  },
-                ]}
-                priority="high"
-                contentFit="cover"
-                source={{
-                  uri: city?.images[1].url,
-                }}
-                key={`slide-${city?.images[1]?.id}-${city.id}`}
-              ></Image>
-              <Image
-                style={[
-                  cityStyle.box,
-                  {
-                    width: 145,
-                    height: 145,
-                  },
-                ]}
-                priority="high"
-                contentFit="cover"
-                source={{
-                  uri: "https://cdn.pixabay.com/photo/2020/11/22/19/19/louvre-5767708_1280.jpg",
-                  // city?.images[2].url,
-                }}
-                key={`slide-${city?.images[2]?.id}-${city.id}`}
-              ></Image>
-            </>
+        {city?.images?.map((img, i) => {
+          if (i % 3 === 0) {
+            return (
+              <Pressable
+                key={`large-slide-${img?.id}-${city.id}`}
+                onPress={() => galleryRef?.current?.open()}
+              >
+                <Image
+                  style={[
+                    cityStyle.box,
+                    {
+                      width: SIZES.width - 130,
+                      height: 300,
+                    },
+                  ]}
+                  priority="high"
+                  contentFit="cover"
+                  source={{ uri: img.url }}
+                />
+              </Pressable>
+            );
           }
-        </View>
-        {
-          <Image
-            style={[
-              cityStyle.box,
-              {
-                width: SIZES.width - 130,
-                height: 300,
-              },
-            ]}
-            priority="high"
-            contentFit="cover"
-            source={{
-              uri: "https://cdn.pixabay.com/photo/2015/12/06/09/19/roses-1079246_1280.jpg",
-              // city?.images[3].url,
-            }}
-            key={`slide-${city?.images[3]?.id}-${city.id}`}
-          ></Image>
-        }
+
+          if (i % 3 === 1) {
+            return (
+              <Pressable
+                key={`vert-group-${Math.floor(i / 3)}-${city.id}`}
+                style={styles.vertImages}
+                onPress={() => galleryRef?.current?.open()}
+              >
+                <Image
+                  style={[
+                    cityStyle.box,
+                    {
+                      width: 145,
+                      height: 145,
+                    },
+                  ]}
+                  priority="high"
+                  contentFit="cover"
+                  source={{ uri: img.url }}
+                />
+                {city.images[i + 1] && (
+                  <Image
+                    style={[
+                      cityStyle.box,
+                      {
+                        width: 145,
+                        height: 145,
+                      },
+                    ]}
+                    priority="high"
+                    contentFit="cover"
+                    source={{ uri: city.images[i + 1]?.url }}
+                  />
+                )}
+              </Pressable>
+            );
+          }
+
+          return null;
+        })}
       </ScrollView>
 
       <Portal>
@@ -107,12 +94,6 @@ export const CityGalleryRow = ({ city }) => {
           modalTopOffset={0}
           withHandle={false}
           disableScrollIfPossible
-        //   onClose={() =>
-        //     setState((prevState) => ({
-        //       ...prevState,
-        //       activeSliderIndex: 0,
-        //     }))
-        //   }
           modalStyle={{
             minHeight: "100%",
             backgroundColor: "#000",
@@ -140,12 +121,6 @@ export const CityGalleryRow = ({ city }) => {
             sliderWidth={SIZES.width}
             itemWidth={SIZES.width}
             inactiveSlideShift={0}
-            // onSnapToItem={(index) =>
-            //   setState((prevState) => ({
-            //     ...prevState,
-            //     activeSliderIndex: index,
-            //   }))
-            // }
             useScrollView={true}
           />
         </Modalize>
@@ -156,6 +131,7 @@ export const CityGalleryRow = ({ city }) => {
 
 const cityStyle = StyleSheet.create({
   box: {
+    backgroundColor: "#eee",
     borderRadius: 15,
     marginRight: 8,
     overflow: "hidden",

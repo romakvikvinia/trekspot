@@ -45,7 +45,7 @@ export const SearchAirport = () => {
         <View style={styles.inputs}>
           <TextInput
             style={styles.inputItem}
-            placeholder="Enter airport name or code (e.g. LAX)"
+            placeholder="Enter airport name or code (e.g LAX)"
             placeholderTextColor="#85858A"
             autoFocus
           />

@@ -1,26 +1,26 @@
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { FlashList } from "@shopify/flash-list";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Text, Touchable, TouchableOpacity, View } from "react-native";
+import { useCallback, useEffect, useState } from "react";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
+
+import {
+  useLazyFaqQuery,
+  useLazyGetCitiesQuery,
+} from "../../../api/api.trekspot";
+import { CityType, CountryType } from "../../../api/api.types";
+import { NodataText } from "../../../components/common/NoDataText";
+import { ForYouCountryItem } from "../../../components/explore/ForYouCountryItem";
+import { ExploreRoutesStackParamList } from "../../../routes/explore/ExploreRoutes";
+import { DownCircleIcon, UpCircleIcon } from "../../../utilities/SvgIcons.utility";
+import { Loader } from "../../ui/Loader";
 // import { Modalize } from "react-native-modalize";
 // import { Portal } from "react-native-portalize";
 // import { CityDetailModal } from "../../../components/explore/destination/CityDetailModal";
 // import { MarkerFillIcon } from "../../../utilities/SvgIcons.utility";
 // import { MapEmbedView } from "../MapEmbedView";
 import { styles } from "../_styles";
-import { CityType, CountryType } from "../../../api/api.types";
-import {
-  useLazyFaqQuery,
-  useLazyGetCitiesQuery,
-} from "../../../api/api.trekspot";
-import { Loader } from "../../ui/Loader";
-import { ForYouCountryItem } from "../../../components/explore/ForYouCountryItem";
-import { useNavigation } from "@react-navigation/native";
 import { FaqItem } from "./_FaqItem";
-
-import { ExploreRoutesStackParamList } from "../../../routes/explore/ExploreRoutes";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { DownCircleIcon, UpCircleIcon } from "../../../utilities/SvgIcons.utility";
-import { NodataText } from "../../../components/common/NoDataText";
 
 type ForYouPros = {
   country: CountryType;
@@ -164,8 +164,8 @@ export const ExploreTab: React.FC<ForYouPros> = ({ country }) => {
             </View>
             {data && data?.cities?.length > 6 && (
               <View style={styles.showMoreButtonWrapper}>
-                <TouchableOpacity
-                  activeOpacity={0.7}
+                <Pressable
+                  hitSlop={20}
                   style={[styles.showMoreButton, { marginBottom: 0 }]}
                   onPress={() =>
                     setState((prevState) => ({
@@ -177,7 +177,7 @@ export const ExploreTab: React.FC<ForYouPros> = ({ country }) => {
                   <Text style={styles.showMoreButtonText}>
                     {state.showMoreCities ? `Show less` : `Show more`}
                   </Text>
-                </TouchableOpacity>
+                </Pressable>
               </View>
             )}
           </>

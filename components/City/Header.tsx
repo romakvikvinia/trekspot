@@ -70,7 +70,7 @@ export const Header = ({ city, title }) => {
         hitSlop={20}
         style={cityStyle.backButton}
       >
-        <BackIcon color="#000" />
+        <BackIcon color="#000" size="18" />
       </Pressable>
       <Text style={cityStyle.screenTitle}>
        {title}
@@ -96,9 +96,9 @@ export const Header = ({ city, title }) => {
           wishlistState.wishlists.some(
             (i) => i.city && i.city.id === city.id
           ) ? (
-          <WishlistedIcon />
+            <WishlistedIcon size={20} color="#000" />
         ) : (
-          <WishlistAddIcon />
+          <WishlistAddIcon size={18} />
         )}
       </Pressable>
     </View>
@@ -106,15 +106,17 @@ export const Header = ({ city, title }) => {
 };
 const cityStyle = StyleSheet.create({
   addToBucketButton: {
-    alignItems: "center",
+    alignItems: "flex-end",
     justifyContent: "center",
+    width: 30,
   },
   backButton: {
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "flex-start",
+    width: 30
   },
   headerContainer: {
-    borderBottomColor: "#ddd",
+    borderBottomColor: "#eee",
     borderBottomWidth: 1,
     flexDirection: "row",
     justifyContent: "space-between",

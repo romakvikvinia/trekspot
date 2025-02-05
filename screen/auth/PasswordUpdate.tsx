@@ -1,31 +1,24 @@
-import { useState, useEffect } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useDispatch } from "react-redux";
+import Constants from "expo-constants";
 import { useFormik } from "formik";
 import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
   StyleSheet,
   Text,
-  View,
   TouchableOpacity,
-  Image,
-  ScrollView,
-  KeyboardAvoidingView,
-  ActivityIndicator,
-  Animated,
-  Platform,
-  SafeAreaView,
-  Alert,
+  View,
 } from "react-native";
-import Constants from "expo-constants";
+import { useDispatch } from "react-redux";
 
-import { SignUpValidationSchema } from "./validationScheme";
 import { TInput } from "../../common/ui/TInput";
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
-import { COLORS, SIZES } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
-
-import { trekSpotApi, useSignUpMutation } from "../../api/api.trekspot";
+import { COLORS, SIZES } from "../../styles/theme";
 import { TrekSpotLinear } from "../../utilities/svg";
+import { SignUpValidationSchema } from "./validationScheme";
 
 type SignUpScreenProps = NativeStackScreenProps<AuthStackParamList, "SignUp">;
 
@@ -140,65 +133,65 @@ export const PasswordUpdate: React.FC<SignUpScreenProps> = ({ navigation }) => {
   );
 };
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-    paddingTop: Constants?.statusBarHeight + 10,
-  },
-  topSide: {
-    width: "100%",
-  },
-  textWithButtonWrapper: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 25,
-    marginBottom: 15,
-    paddingBottom: 15
-  },
-  textWithButtonLabel: {
-    fontSize: SIZES.body2,
-    color: "#000",
-  },
-  textWithButton: {
-    marginLeft: 5,
-  },
-  textWithButtonText: {
-    fontSize: SIZES.body2,
-    color: COLORS.primary,
-    fontWeight: "bold",
-  },
   container: {
     flexGrow: 1,
   },
-  screen: {
-    flex: 1,
+  item: {
     alignItems: "center",
+    flexDirection: "row",
+    marginBottom: 15,
+    overflow: "hidden",
     width: "100%",
-    paddingHorizontal: 15,
+  },
+  logoContainer: {
+    alignItems: "flex-start",
+    marginBottom: 15,
+    marginVertical: 5,
+    width: "100%",
+  },
+  safeArea: {
+    backgroundColor: "#ffffff",
+    flex: 1,
+    paddingTop: Constants?.statusBarHeight + 10,
+  },
+  screen: {
+    alignItems: "center",
+    flex: 1,
     justifyContent: "space-between",
+    paddingHorizontal: 15,
+    width: "100%",
   },
   signTitle: {
+    marginBottom: 45,
     marginTop: 0,
     width: "100%",
-    marginBottom: 45,
   },
   signTitleText: {
     fontSize: 17,
     fontWeight: "bold",
   },
-  item: {
-    width: "100%",
+  textWithButton: {
+    marginLeft: 5,
+  },
+  textWithButtonLabel: {
+    color: "#000",
+    fontSize: SIZES.body2,
+  },
+  textWithButtonText: {
+    color: COLORS.primary,
+    fontSize: SIZES.body2,
+    fontWeight: "bold",
+  },
+  textWithButtonWrapper: {
     flexDirection: "row",
-    alignItems: "center",
-    overflow: "hidden",
+    justifyContent: "center",
     marginBottom: 15,
+    marginTop: 25,
+    paddingBottom: 15,
+    width: "100%"
   },
 
-  logoContainer: {
-    marginVertical: 5,
+  topSide: {
     width: "100%",
-    alignItems: "flex-start",
-    marginBottom: 15,
   },
 });
