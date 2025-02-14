@@ -2,19 +2,22 @@
 import { useNavigation } from "@react-navigation/native";
 import Constants from "expo-constants";
 import moment from "moment";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import {
   Alert,
   KeyboardAvoidingView,
   Platform,
   Pressable,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   View,
 } from "react-native";
+import { Modalize } from "react-native-modalize";
 import { DefaultTheme, PaperProvider } from "react-native-paper";
 import { DatePickerModal } from "react-native-paper-dates";
+import { Portal } from "react-native-portalize";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { TInput } from "../../common/ui/TInput";
@@ -23,9 +26,11 @@ import { COLORS, SIZES } from "../../styles/theme";
 import {
   CalendarFilledIcon,
   LocationPin,
+  OneUserIcon,
   RightIcon,
   TrashIcon,
 } from "../../utilities/SvgIcons.utility";
+import { TravelType } from "./TravelType";
 
 export const TripSettings = ({ route }) => {
   const navigation = useNavigation();
@@ -33,6 +38,8 @@ export const TripSettings = ({ route }) => {
 
   const [tripData, setTripData] = useState(trip);
   const [open, setOpen] = useState(false);
+
+  const modalTravelTypeRef = useRef(null);
 
   const handleTripNameChange = (e) => {
     console.log("e", e);
@@ -80,6 +87,8 @@ export const TripSettings = ({ route }) => {
           behavior={Platform.OS == "ios" ? "padding" : "height"}
           style={styles.screen}
         >
+          <StatusBar barStyle="dark-content" /> 
+
           <ScreenHeader title="Trip settings" />
 
           <ScrollView
@@ -114,7 +123,7 @@ export const TripSettings = ({ route }) => {
                 different, any data from the days that are no longer included
                 will be lost.
               </Text>
-            </View>
+            </View> 
             <View style={styles.inputItem}>
               <Text style={styles.label}>Destinations</Text>
               <Pressable style={styles.itemButton}>
@@ -123,6 +132,18 @@ export const TripSettings = ({ route }) => {
                   {tripData?.cities?.map((c) => c?.city).join(", ")}
                 </Text>
               </Pressable>
+            </View>
+            <View style={styles.inputItem}>
+              <Text style={styles.label}>Travel type</Text>
+              <Pressable
+                style={styles.itemButton}
+                onPress={() => modalTravelTypeRef.current?.open()}
+              >
+                <OneUserIcon size="20" color="" />
+                <Text style={styles.itemButtonLabel}>
+                {tripData?.type}
+                </Text>
+              </Pressable> 
             </View>
             <Pressable
               style={({ pressed }) => [
@@ -208,6 +229,24 @@ export const TripSettings = ({ route }) => {
           </View>
         </SafeAreaProvider>
       </PaperProvider>
+      <Portal>
+        <Modalize
+          ref={modalTravelTypeRef}
+          modalTopOffset={65}
+          scrollViewProps={{
+            alwaysBounceVertical: false,
+            showsVerticalScrollIndicator: false,
+            keyboardShouldPersistTaps: "handled",
+          }}
+          modalStyle={{
+            backgroundColor: "#F2F2F7",
+            minHeight: "70%",
+          }}
+          adjustToContentHeight
+        >
+          <TravelType modalTravelTypeRef={modalTravelTypeRef} formik={tripData} />
+        </Modalize>
+      </Portal>
     </>
   );
 };
@@ -233,6 +272,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "500",
     marginLeft: 10,
+    textTransform: "capitalize",
   },
   label: {
     color: "#000",

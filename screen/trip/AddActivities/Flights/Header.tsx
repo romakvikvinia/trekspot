@@ -13,11 +13,7 @@ export const Header = ({ isFlightDetails = false }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleCancel = () => {
-    if (isFlightDetails) {
-      navigation.navigate("Flights");
-    } else {
-      navigation.goBack();
-    }
+    navigation.goBack();
   };
 
   return (

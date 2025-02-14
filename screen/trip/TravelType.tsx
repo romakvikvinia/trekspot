@@ -1,5 +1,7 @@
+import * as Haptics from "expo-haptics";
 import { TouchableOpacity, View } from "react-native";
 import { StyleSheet, Text } from "react-native";
+
 import { COLORS } from "../../styles/theme";
 import {
   CoupleIcon,
@@ -8,7 +10,6 @@ import {
   UsersIcon,
   XIcon,
 } from "../../utilities/SvgIcons.utility";
-import * as Haptics from "expo-haptics";
 
 export const TravelType = ({ modalTravelTypeRef, formik }) => {
   return (
@@ -139,46 +140,41 @@ export const TravelType = ({ modalTravelTypeRef, formik }) => {
   );
 };
 const styles = StyleSheet.create({
-  modalHeader: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
+  active: {
+    borderColor: COLORS.black,
+  },
+  activeText: {
+    color: COLORS.black,
   },
   closeButton: {
-    backgroundColor: "#DBDBDB",
-    width: 30,
-    height: 30,
-    borderRadius: 50,
-    justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#DBDBDB",
+    borderRadius: 50,
+    height: 30,
+    justifyContent: "center",
+    width: 30,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "600",
-    color: COLORS.black,
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
   },
   subTitle: {
     fontSize: 16,
     marginTop: 10,
   },
-  switchers: {
-    marginTop: 25,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between"
-  },
   switcher: {
-    paddingVertical: 15,
-    paddingHorizontal: 15,
-    marginBottom: 15,
-    borderRadius: 10,
-    flexDirection: "column",
     alignItems: "flex-start",
-    width: "48%",
-    height: 100,
-    borderWidth: 1,
     borderColor: "#ccc",
-    justifyContent: "space-between"
+    borderRadius: 10,
+    borderWidth: 1,
+    flexDirection: "column",
+    height: 100,
+    justifyContent: "space-between",
+    marginBottom: 15,
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    width: "48%"
   },
   switcherLabel: {
     color: COLORS.black,
@@ -186,15 +182,20 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginLeft: 0,
   },
-  active: {
-    borderColor: COLORS.black,
+  switchers: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    marginTop: 25
   },
-  activeText: {
+  title: {
     color: COLORS.black,
+    fontSize: 24,
+    fontWeight: "600",
   },
   wrapper: {
+    marginBottom: 60,
     paddingHorizontal: 15,
     paddingTop: 15,
-    marginBottom: 60,
   },
 });

@@ -125,7 +125,7 @@ export const TripActivityFlightCard: React.FC<TripActivityFlightCardProps> = ({
 
       <NoteDescriptionGallery
         notes="This is test note"
-        description="This is description"
+        // description="This is description"
       />
   
       <ActivityCardActions

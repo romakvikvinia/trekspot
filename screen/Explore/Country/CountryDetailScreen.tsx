@@ -79,7 +79,7 @@ export const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({
                 style={styles.backButton}
                 hitSlop={20}
               >
-                <BackIcon color="#000" />
+                <BackIcon color="#fff" size="18" />
               </Pressable>
 
               {isLoading && (

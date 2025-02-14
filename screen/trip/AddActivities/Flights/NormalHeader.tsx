@@ -14,6 +14,7 @@ export const NormalHeader = ({ title = "" }) => {
   const navigation = useNavigation();
  
   const handleEdit = () => {
+    //@ts-ignore
     navigation.navigate("FlightDetails",{
         isPreview: false
     });
@@ -27,7 +28,7 @@ export const NormalHeader = ({ title = "" }) => {
       <Pressable
         onPress={() => navigation.goBack()}
         style={[globalStyles.screenHeaderBackButton, {
-          marginLeft: -10
+          marginLeft: 0,
         }]}
         hitSlop={30}
       >
@@ -38,12 +39,14 @@ export const NormalHeader = ({ title = "" }) => {
 
       <FloatingActionButton
         buttons={[
+          //@ts-ignore
           {
             label: "Edit",
             onPress: () => handleEdit(),
             icon: EditIcon,
             isDanger: false,
           },
+          //@ts-ignore
           {
             label: "Delete activity",
             onPress: () => console.log(),
@@ -52,7 +55,7 @@ export const NormalHeader = ({ title = "" }) => {
           },
         ]}
         renderTrigger={() => (
-          <View style={{width: 30, marginRight: -10}}>
+          <View style={{width: 30, marginRight: -10,marginLeft: 10}}>
             <DotsVerticlIcon color="#000" size={15} />
           </View>
         )}

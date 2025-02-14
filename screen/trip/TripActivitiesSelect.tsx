@@ -5,7 +5,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import {
   Platform,
   Pressable,
-  ScrollView,
   TouchableOpacity,
   useWindowDimensions,
   View,
@@ -15,15 +14,16 @@ import { TabBar, TabView } from "react-native-tab-view";
 
 import { SightType } from "../../api/api.types";
 import { Loader } from "../../common/ui/Loader";
+import { FloatingActionButton } from "../../components/common/FloatingButtons";
 import { exploreStyles } from "../../components/explore/sights/_exploreStyles";
 import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
-import { globalStyles } from "../../styles/globalStyles";
 import { COLORS, SIZES } from "../../styles/theme";
 import {
+  BackIcon,
+  DownIcon,
   PlusIcon,
   StarIcon,
   TrashIcon,
-  XIcon,
 } from "../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "./_tripDetailStyles";
 import { TripDaysType } from "./TripDetailScreen";
@@ -49,6 +49,8 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
   handleAddToTrip,
   removeActivity,
   hidePopup,
+  activeDay,
+  setActiveDay,
 }) => {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
@@ -261,7 +263,6 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
     }
   }, [routes]);
 
-
   const cities = [
     {
       name: "Milan",
@@ -274,79 +275,85 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
     {
       name: "Rome",
       id: 3,
-    }
+    },
   ];
   const [selectedCity, setSelectedCity] = useState(cities[0]);
 
+  console.log(days);
 
   return (
     <>
-     <StatusBar style="dark" />
+      <StatusBar style="dark" />
       <View style={tripDetailStyles.rowItemHeader}>
-        <Text style={tripDetailStyles.h2}>
-          Activities -{" "}
-          <Text
-            style={{
-              fontWeight: "500",
-              color: COLORS.primary,
-            }}
-          >
-            {[days[index]?.date]}
-          </Text>
-        </Text>
-        <Pressable
-          onPress={() => hidePopup()}
-          hitSlop={20}
-          style={tripDetailStyles.closeButton}
-        >
-          <XIcon width="10" />
+        <Pressable onPress={() => hidePopup()} hitSlop={15}>
+          <BackIcon size="18" />
         </Pressable>
+
+        <View style={styles.rg}>
+          <FloatingActionButton
+            withHeader={true}
+            title="Select dates"
+            //@ts-expect-error ///
+            buttons={days.map((day, i) => ({
+              label: day.date,
+              onPress: () => setActiveDay(i),
+              icon: null,
+              isDanger: false,
+              isActive: day.id === days[activeDay]?.id,
+            }))}
+            //@ts-expect-error ///
+            renderTrigger={() => (
+              <View style={styles.dropDownButton}>
+                <Text style={styles.txtLabel}>
+                  Add to:{" "}
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      color: COLORS.black,
+                      fontSize: 14,
+                    }}
+                  >
+                    {[days[activeDay]?.date]}
+                  </Text>
+                </Text>
+                <DownIcon size={10} />
+              </View>
+            )}
+          />
+
+          <FloatingActionButton
+            withHeader={true}
+            title="Select city"
+            //@ts-expect-error ///
+            buttons={cities.map((city, i) => ({
+              label: city.name,
+              onPress: () => setSelectedCity(city),
+              icon: null,
+              isDanger: false,
+              isActive: city.id === selectedCity?.id,
+            }))}
+            //@ts-expect-error ///
+            renderTrigger={() => (
+              <View style={[styles.dropDownButton, {
+                justifyContent: "space-between",
+              }]}>
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    color: COLORS.black,
+                    marginRight: 5,
+                    fontSize: 14,
+                  }}
+                >
+                  Berlin{" "}
+                </Text>
+                <DownIcon size={10} />
+              </View>
+            )}
+          />
+        </View>
       </View>
-      <View style={{ borderBottomWidth: 1, borderBottomColor: "#f2f2f2", marginTop: 5 }}>
-        <ScrollView
-          horizontal
-          style={[
-            globalStyles.underScreenTabs,
-            {
-              marginTop: 0,
-              marginBottom: 0,
-              paddingBottom: 0,
-              height: 40,
-            },
-          ]}
-          contentContainerStyle={{
-            paddingHorizontal: 0,
-          }}
-          showsHorizontalScrollIndicator={false}
-        >
-          {cities.map((city) => (
-            <Pressable
-              key={city.id}
-              onPress={() => setSelectedCity(city)}
-              style={[
-                globalStyles.underScreenTab,
-                styles.tabButton,
-                {
-                  borderBottomColor: selectedCity.id === city.id ? COLORS.primary : "#fff",
-                  width:
-                  cities.length <= 5
-                    ? SIZES.width / cities?.length
-                    : "auto",
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  globalStyles.underScreenTabText,
-                  selectedCity.id === city.id && globalStyles.underScreenTabActiveText,
-                ]}
-              >
-                {city.name}
-              </Text>
-            </Pressable>
-          ))}
-        </ScrollView>
-      </View>
+
       <View style={styles.selectActivitesWrapper}>
         <View style={styles.itemRow}>
           <TabView
@@ -371,22 +378,21 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                 style={{
                   backgroundColor: "#fff",
                   paddingBottom: 15,
-                  ...COLORS.shadow
+                  ...COLORS.shadow,
                 }}
                 contentContainerStyle={{
                   backgroundColor: "#fff",
                   paddingHorizontal: 0,
-                 
                 }}
                 inactiveColor={COLORS.darkgray}
                 tabStyle={{
                   paddingHorizontal: 0,
                   padding: 0,
-                  height: 35,  
-                 }}
+                  height: 35,
+                }}
                 activeColor={COLORS.primary}
-                indicatorStyle={{ 
-                  display: "none"
+                indicatorStyle={{
+                  backgroundColor: COLORS.primary,
                 }}
                 labelStyle={{
                   textTransform: "capitalize",
@@ -439,23 +445,27 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
   },
+  dropDownButton: {
+    alignItems: "center",
+    backgroundColor: "#f2f2f2",
+    borderRadius: 8,
+    flexDirection: "row",
+    marginLeft: 15,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+  },
   itemRow: {
     backgroundColor: "#F2F2F7",
     marginTop: 0,
     minHeight: SIZES.height - 100,
   },
+  rg: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
   selectActivitesWrapper: {
     backgroundColor: "#F2F2F7",
     flex: 1,
-  },
-  tabButton: {
-    backgroundColor: "#fff",
-    borderBottomWidth: 1,
-    borderLeftWidth: 0,
-    borderRadius: 0,
-    borderRightWidth: 0,
-    borderTopWidth: 0,
-    marginRight: 0,
   },
   thingsTodoItem: {
     backgroundColor: "#fff",
@@ -482,5 +492,8 @@ const styles = StyleSheet.create({
   },
   thingsTodoItemiIn: {
     paddingHorizontal: 15,
+  },
+  txtLabel: {
+    marginRight: 8,
   },
 });

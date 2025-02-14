@@ -34,7 +34,7 @@ interface ITripActivityCardProps {
   index: number;
   lastIndex: number;
   activityAmount: number;
-  onQuestionModalOpen: (sight: string) => void;
+  deleteActivityTrigger: (sight: string) => void;
   handleTopSightClick: (sight: SightType) => void;
 }
 
@@ -66,7 +66,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
   handleTopSightClick,
   activityAmount,
   index,
-  onQuestionModalOpen,
+  deleteActivityTrigger,
 }) => {
   const posthog = usePostHog();
   const dispatch = useAppDispatch();
@@ -130,7 +130,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
           handleChangeActivityVisited={handleChangeActivityVisited}
           checkedIn={checkedIn}
           index={index}
-          onQuestionModalOpen={onQuestionModalOpen}
+          deleteActivityTrigger={deleteActivityTrigger}
           type=""
         />
       </TouchableOpacity>

@@ -2,6 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { Platform } from "react-native";
 import { Host } from "react-native-portalize";
 
+import CurrencyScreen from "../common/components/CurrencyScreen";
 import { RestaurantDetail } from "../components/City/RestaurantDetail";
 import { CityDetailScreen } from "../screen/Explore/city/CityDetailScreen";
 import { CountryDetailScreen } from "../screen/Explore/Country/CountryDetailScreen";
@@ -19,6 +20,7 @@ import { Route } from "../screen/trip/AddActivities/Route";
 import { Tour } from "../screen/trip/AddActivities/Tour";
 import { TransportRoute } from "../screen/trip/AddActivities/Transport";
 import { AutocompletePlaces } from "../screen/trip/AutocompletePlaces";
+import { SightDetail } from "../screen/trip/components/SightDetail";
 import { InviteTripMember } from "../screen/trip/InviteTripMember";
 import { TripDetailScreen } from "../screen/trip/TripDetailScreen";
 import { TripDishes } from "../screen/trip/TripDishes";
@@ -179,6 +181,8 @@ const AppRoute = () => {
           <Stack.Screen name="Activity" component={Activity} />
           <Stack.Screen name="Rental" component={Rental} />
           <Stack.Screen name="RestaurantDetail" component={RestaurantDetail} />
+          <Stack.Screen name="SightDetail" component={SightDetail} />
+          <Stack.Screen name="CurrencyScreen" component={CurrencyScreen} />
         </Stack.Group>
 
         <Stack.Screen

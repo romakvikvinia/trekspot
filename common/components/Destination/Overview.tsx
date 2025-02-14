@@ -1,3 +1,5 @@
+/* eslint-disable react/display-name */
+/* eslint-disable react/jsx-key */
 import { memo } from "react";
 import { Text, View } from "react-native";
 import { ImageBackground } from "react-native";

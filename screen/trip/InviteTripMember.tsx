@@ -2,6 +2,7 @@
 import Constants from "expo-constants";
 import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
+import { StatusBar } from "expo-status-bar";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -35,6 +36,8 @@ export const InviteTripMember = () => {
           behavior={Platform.OS == "ios" ? "padding" : "height"}
           style={styles.screen}
         >
+          <StatusBar style="dark" />
+
           <ScreenHeader title="Trip members" />
 
           <ScrollView

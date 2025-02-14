@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     width: 80,
   },
   screen: {
-    backgroundColor: "#F2F2F7",
+    backgroundColor: "#f8f8f8",
     flex: 1,
   },
   title: {

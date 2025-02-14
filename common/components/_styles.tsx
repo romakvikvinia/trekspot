@@ -542,7 +542,7 @@ export const styles = StyleSheet.create({
   },
   backButton: {
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
     borderRadius: 100,
     display: "flex",
     height: 40,

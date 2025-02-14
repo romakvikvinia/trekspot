@@ -55,7 +55,7 @@ export const ReachHeaderContent = ({ data, iso2 }: ReachHeaderContentProps) => {
         hitSlop={30}
         style={styles.backButton}
       >
-        <BackIcon color="#fff" size="18" />
+        <BackIcon color="#fff" size="15" />
       </Pressable>
 
       <View style={styles.rg}>
@@ -90,33 +90,33 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.8)",
     borderRadius: 50,
     display: "flex",
-    height: 40,
+    height: 36,
     justifyContent: "center",
     left: 15,
     position: "absolute",
     top: 55,
-    width: 40,
+    width: 36,
   },
   button: {
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.8)",
     borderRadius: 50,
     display: "flex",
-    height: 40,
+    height: 37,
     justifyContent: "center",
-    width: 40,
+    width: 37,
   },
   inviteButton: {
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.8)",
     borderRadius: 100,
     flexDirection: "row",
-    height: 40,
+    height: 37,
     justifyContent: "center",
     marginRight: 10,
     paddingHorizontal: 15,
     position: "relative",
-    width: 40,
+    width: 37,
   },
   reachContainer: {
     overflow: "hidden",
@@ -124,10 +124,10 @@ const styles = StyleSheet.create({
   },
   reachGradient: {
     flex: 1,
-    paddingTop: 105,
+    paddingTop: 100,
   },
   reachImage: {
-    height: 290,
+    height: 285,
     width: "100%",
   },
   rg: {

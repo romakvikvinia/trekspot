@@ -25,6 +25,10 @@ export const CarouselItem: React.FC<CarouselItemProps> = ({ item }) => {
           height: SIZES.height,
           flex: 1,
         }}
+        placeholder={{
+          uri: require("../../assets/no-image.png"),
+        }}
+        placeholderContentFit="cover"
         source={{
           uri: item?.url,
         }}

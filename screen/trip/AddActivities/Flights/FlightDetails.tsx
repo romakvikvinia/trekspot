@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import {
   KeyboardAvoidingView,
@@ -27,7 +28,7 @@ import { FilesRow } from "../../components/FilesRow";
 import { Header } from "./Header";
 import { NormalHeader } from "./NormalHeader";
 
-export const FlightDetails = ({route}) => {
+export const FlightDetails = ({ route }) => {
   const { isPreview } = route?.params;
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
@@ -60,6 +61,7 @@ export const FlightDetails = ({route}) => {
   return (
     <PaperProvider theme={theme}>
       <SafeAreaView style={{ flex: 1 }}>
+        <StatusBar style="dark" />
         <KeyboardAvoidingView
           behavior={Platform.OS == "ios" ? "padding" : "height"}
           style={styles.screen}
@@ -81,14 +83,22 @@ export const FlightDetails = ({route}) => {
           >
             <View style={styles.inputGroup}>
               <View style={[styles.inputRow, styles.widthBorderBottom]}>
-                <Text style={styles.inputLabel}>Flight number</Text>
+                <Text
+                  style={[
+                    styles.inputLabel,
+                    {
+                      color: !isPreview ? COLORS.black : COLORS.darkgray,
+                    },
+                  ]}
+                >
+                  Flight number
+                </Text>
                 {!isPreview ? (
                   <TextInput
                     style={styles.input}
                     placeholder="E.g EK162"
                     placeholderTextColor="#c6c6c6"
                     editable={!isPreview}
-                    autoFocus
                   />
                 ) : (
                   <View style={styles.inputValueWrapper}>
@@ -97,7 +107,16 @@ export const FlightDetails = ({route}) => {
                 )}
               </View>
               <View style={styles.inputRow}>
-                <Text style={styles.inputLabel}>Airline</Text>
+                <Text
+                  style={[
+                    styles.inputLabel,
+                    {
+                      color: !isPreview ? COLORS.black : COLORS.darkgray,
+                    },
+                  ]}
+                >
+                  Airline
+                </Text>
                 {!isPreview ? (
                   <TextInput
                     style={styles.input}
@@ -207,7 +226,16 @@ export const FlightDetails = ({route}) => {
             </View>
             <View style={styles.inputGroup}>
               <View style={[styles.inputRow, styles.widthBorderBottom]}>
-                <Text style={styles.inputLabel}>Flight duration</Text>
+                <Text
+                  style={[
+                    styles.inputLabel,
+                    {
+                      color: !isPreview ? COLORS.black : COLORS.darkgray,
+                    },
+                  ]}
+                >
+                  Flight duration
+                </Text>
                 <View
                   style={[
                     styles.inputValueWrapper,
@@ -220,7 +248,16 @@ export const FlightDetails = ({route}) => {
                 </View>
               </View>
               <View style={styles.inputRow}>
-                <Text style={styles.inputLabel}>Distance</Text>
+                <Text
+                  style={[
+                    styles.inputLabel,
+                    {
+                      color: !isPreview ? COLORS.black : COLORS.darkgray,
+                    },
+                  ]}
+                >
+                  Distance
+                </Text>
                 <View
                   style={[
                     styles.inputValueWrapper,
@@ -236,7 +273,16 @@ export const FlightDetails = ({route}) => {
 
             <View style={styles.inputGroup}>
               <View style={[styles.inputRow, styles.widthBorderBottom]}>
-                <Text style={styles.inputLabel}>Reserv. Code</Text>
+                <Text
+                  style={[
+                    styles.inputLabel,
+                    {
+                      color: !isPreview ? COLORS.black : COLORS.darkgray,
+                    },
+                  ]}
+                >
+                  Reserv. Code
+                </Text>
                 {!isPreview ? (
                   <TextInput
                     style={styles.input}
@@ -251,7 +297,16 @@ export const FlightDetails = ({route}) => {
                 )}
               </View>
               <View style={[styles.inputRow, styles.widthBorderBottom]}>
-                <Text style={styles.inputLabel}>Seat</Text>
+                <Text
+                  style={[
+                    styles.inputLabel,
+                    {
+                      color: !isPreview ? COLORS.black : COLORS.darkgray,
+                    },
+                  ]}
+                >
+                  Seat
+                </Text>
                 {!isPreview ? (
                   <TextInput
                     style={styles.input}
@@ -266,7 +321,16 @@ export const FlightDetails = ({route}) => {
                 )}
               </View>
               <View style={styles.inputRow}>
-                <Text style={styles.inputLabel}>Seat Class</Text>
+                <Text
+                  style={[
+                    styles.inputLabel,
+                    {
+                      color: !isPreview ? COLORS.black : COLORS.darkgray,
+                    },
+                  ]}
+                >
+                  Seat Class
+                </Text>
                 {!isPreview ? (
                   <TextInput
                     style={styles.input}
@@ -291,6 +355,7 @@ export const FlightDetails = ({route}) => {
                     {
                       marginLeft: 8,
                       width: 70,
+                      color: !isPreview ? COLORS.black : COLORS.darkgray,
                     },
                   ]}
                 >
@@ -315,6 +380,7 @@ export const FlightDetails = ({route}) => {
               <Pressable
                 disabled={isPreview}
                 onPress={() =>
+                   //@ts-ignore
                   navigation.navigate("ActivityNoteOrDescription", {
                     type: "note",
                   })
@@ -335,6 +401,7 @@ export const FlightDetails = ({route}) => {
                     styles.inputLabel,
                     {
                       marginLeft: 8,
+                      color: !isPreview ? COLORS.black : COLORS.darkgray,
                     },
                   ]}
                 >
@@ -346,13 +413,14 @@ export const FlightDetails = ({route}) => {
                   </Text>
                 ) : (
                   <Text style={styles.textValue} numberOfLines={1}>
-                     This is my note... 
+                    This is my note...
                   </Text>
                 )}
               </Pressable>
               <Pressable
                 disabled={isPreview}
                 onPress={() =>
+                  //@ts-ignore
                   navigation.navigate("ActivityNoteOrDescription", {
                     type: "description",
                   })
@@ -372,6 +440,7 @@ export const FlightDetails = ({route}) => {
                     styles.inputLabel,
                     {
                       marginLeft: 8,
+                      color: !isPreview ? COLORS.black : COLORS.darkgray,
                     },
                   ]}
                 >
@@ -474,7 +543,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     height: 40,
     justifyContent: "center",
-    width: 40
+    width: 40,
   },
   input: {
     backgroundColor: "#fff",
@@ -483,7 +552,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "400",
     height: 50,
-    paddingHorizontal: 15
+    paddingHorizontal: 15,
   },
   inputGroup: {
     backgroundColor: "#fff",
@@ -495,12 +564,12 @@ const styles = StyleSheet.create({
     color: COLORS.black,
     fontSize: 14,
     fontWeight: "500",
-    width: 100
+    width: 100,
   },
   inputRow: {
     alignItems: "center",
     flexDirection: "row",
-    paddingLeft: 15
+    paddingLeft: 15,
   },
   inputValue: {
     backgroundColor: "#fff",
@@ -508,18 +577,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
     paddingHorizontal: 15,
-    verticalAlign: "middle"
+    verticalAlign: "middle",
   },
   inputValueWrapper: {
     flex: 1,
     height: 50,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   placeholder: {
     color: "#c6c6c6",
     flex: 1,
     fontSize: 14,
-    textAlign: "right"
+    textAlign: "right",
   },
   screen: {
     flex: 1,
@@ -529,7 +598,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     fontWeight: "400",
-    textAlign: "right"
+    textAlign: "right",
   },
   widthBorderBottom: {
     borderBottomColor: "#f2f2f2",

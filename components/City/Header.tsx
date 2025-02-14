@@ -116,13 +116,14 @@ const cityStyle = StyleSheet.create({
     width: 30
   },
   headerContainer: {
+    alignItems: "center",
     borderBottomColor: "#eee",
     borderBottomWidth: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: Constants?.statusBarHeight + (Platform.OS === "android" ? 5 : 10),
     paddingBottom: 10,
-    paddingHorizontal: 15,
+    paddingHorizontal: 15
   },
   screenTitle: {
     color: "#000",

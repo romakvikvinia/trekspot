@@ -165,6 +165,7 @@ export const NewTrip = ({
               onDestinationModalClose={onDestinationModalClose}
               setVisibleDestinationsPopup={setVisibleDestinationsPopup}
               formik={formik}
+              setOpen={setOpen}
             />
           </Animated.View>
         }

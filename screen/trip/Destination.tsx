@@ -18,9 +18,9 @@ import Svg, { Circle } from "react-native-svg";
 import { CityType } from "../../api/api.types";
 import { COLORS, SIZES } from "../../styles/theme";
 import {
+  BackIcon,
   CloseCircleIcon,
   DraggableIcon,
-  LeftArrow,
   LocationLinearIcon,
   MinusIcon,
   PlusIcon,
@@ -34,21 +34,21 @@ interface IDestinationProps {
   onDestinationModalClose: (city?: CityType, cities?: string[]) => void;
 }
 
-export const ItineraryHeader = ({ tripRange, calculateTotalNights }) => {
+export const ItineraryHeader = ({ tripRange, calculateTotalNights, setOpen }) => {
   const totalNights = moment(tripRange.endDate).diff(moment(tripRange.startDate), "days");
   const currentNights = calculateTotalNights();
   const percentage =
     totalNights === 0 ? 0 : (currentNights / totalNights) * 100;
 
-  const radius = 15; // radius of the circle
-  const strokeWidth = 4; // width of the stroke
+  const radius = 20; // radius of the circle
+  const strokeWidth = 3; // width of the stroke
   const circumference = 2 * Math.PI * radius; // circumference of the circle
 
   // Calculate the stroke dash offset based on the percentage
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   // Determine the color based on whether the nights exceed the range
-  const progressColor = currentNights > totalNights ? "#f44336" : "#4caf50"; // red if exceeded, green otherwise
+  const progressColor = currentNights > totalNights ? "#f44336" : COLORS.primary; // red if exceeded, green otherwise
 
 
   return (
@@ -60,10 +60,10 @@ export const ItineraryHeader = ({ tripRange, calculateTotalNights }) => {
         justifyContent: "space-between",
       }}
     >
-      <View>
+      <Pressable onPress={() => setOpen(true)}>
         <Text style={styles.titleH2}>Itinerary</Text>
         <Text style={styles.subTitle}>{moment(tripRange.startDate).format("DD MMM")} - {moment(tripRange.endDate).format("DD MMM")}</Text>
-      </View>
+      </Pressable>
 
       <View style={styles.rgHeader}>
         <Text
@@ -75,18 +75,18 @@ export const ItineraryHeader = ({ tripRange, calculateTotalNights }) => {
           Nights
         </Text>
         <View style={styles.circleContainer}>
-          <Svg width="70" height="70">
+          <Svg width="110" height="110">
             <Circle
-              cx="35"
-              cy="35"
+              cx="55"
+              cy="55"
               r={radius}
               stroke={currentNights > totalNights ? "#f44336" : "#e0e0e0"} // red or gray background
               strokeWidth={strokeWidth}
               fill="none"
             />
             <Circle
-              cx="35"
-              cy="35"
+              cx="55"
+              cy="55"
               r={radius}
               stroke={progressColor} // dynamic color for progress
               strokeWidth={strokeWidth}
@@ -94,7 +94,7 @@ export const ItineraryHeader = ({ tripRange, calculateTotalNights }) => {
               strokeDasharray={circumference}
               strokeDashoffset={strokeDashoffset}
               rotation="-90"
-              origin="35, 35"
+              origin="55, 55"
             />
           </Svg>
           <Text style={styles.nightText}>
@@ -108,7 +108,8 @@ export const ItineraryHeader = ({ tripRange, calculateTotalNights }) => {
 
 export const Destination: React.FC<IDestinationProps> = ({
   onDestinationModalClose,
-  formik
+  formik,
+  setOpen
 }) => {
 
   const [destinationSelected, setDestinationSelected] = useState<Array<string>>(
@@ -505,7 +506,7 @@ export const Destination: React.FC<IDestinationProps> = ({
           }}
           renderLeftButton={() => (
             <Pressable style={styles.icon} hitSlop={15} onPress={handleCancel}>
-               <LeftArrow size={20} />
+               <BackIcon size="20" />
             </Pressable>
           )}
           renderRightButton={() => (
@@ -542,6 +543,7 @@ export const Destination: React.FC<IDestinationProps> = ({
             </View>
           }
           textInputProps={{
+            placeholderTextColor: COLORS.gray,
             autoFocus: true,
             onChangeText: (text) => {
               if (text?.length > 0) {
@@ -649,6 +651,7 @@ export const Destination: React.FC<IDestinationProps> = ({
             <ItineraryHeader
               calculateTotalNights={calculateTotalNights}
               tripRange={tripRange}
+              setOpen={setOpen}
             />
 
             <DraggableFlatList
@@ -692,7 +695,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     position: "absolute",
-    right: -15,
+    right: -35,
   },
   city: {
     color: COLORS.black,
@@ -742,20 +745,20 @@ const styles = StyleSheet.create({
   },
   nightText: {
     color: "#000",
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: "500",
     position: "absolute",
   },
   nights: {
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     position: "relative",
     width: 40
   },
   nightsLabel: {
     color: COLORS.darkgray,
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: "500",
     position: "absolute",
     textAlign: "center",
@@ -766,7 +769,7 @@ const styles = StyleSheet.create({
     color: COLORS.black,
     fontSize: 18,
     fontVariant: ['tabular-nums'],
-    fontWeight: "600",
+    fontWeight: "bold",
   },
   plusMinusButton: {
   },
@@ -838,7 +841,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   subTitle: {
-    color: COLORS.darkgray,
+    color: COLORS.primary,
     fontSize: 14,
     fontWeight: "500",
     marginTop: 5

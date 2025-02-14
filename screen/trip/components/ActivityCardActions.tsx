@@ -1,8 +1,9 @@
+import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text, View } from "react-native";
 
 import { FloatingActionButton } from "../../../components/common/FloatingButtons";
 import { COLORS } from "../../../styles/theme";
-import { DotsIcon, TrashIcon } from "../../../utilities/SvgIcons.utility";
+import { DotsIcon, NoteIcon, TrashIcon } from "../../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "../_tripDetailStyles";
 import { DirectionButton } from "./DirectionButton";
 import { FilesButton } from "./FilesButton";
@@ -13,7 +14,7 @@ type ActivityCardActionsProps = {
   handleChangeActivityVisited: () => void;
   checkedIn: boolean;
   index: number;
-  onQuestionModalOpen: (id: string) => void;
+  deleteActivityTrigger: (id: string) => void;
   type: string;
 };
 
@@ -22,9 +23,10 @@ export const ActivityCardActions = ({
   handleChangeActivityVisited,
   checkedIn,
   index,
-  onQuestionModalOpen,
+  deleteActivityTrigger,
   type,
 }: ActivityCardActionsProps) => {
+  const navigation = useNavigation();
   return (
     <View
       style={[
@@ -47,14 +49,26 @@ export const ActivityCardActions = ({
 
       <View style={tripDetailStyles.sightRightActions}>
         <FloatingActionButton
-          buttons={[
+          buttons={[ 
+            //@ts-expect-error ///
+            {
+              label: "Add note",
+              //@ts-expect-error ///
+              onPress: () =>  navigation.navigate("ActivityNoteOrDescription", {
+                type: "note",
+              }),
+              icon: NoteIcon,
+              isDanger: false,
+            },
+            //@ts-expect-error ///
             {
               label: "Delete activity",
-              onPress: () => onQuestionModalOpen(item.id),
+              onPress: () => deleteActivityTrigger(item.id),
               icon: TrashIcon,
               isDanger: true,
             },
           ]}
+          //@ts-expect-error ///
           renderTrigger={() => (
             <View style={{ width: 30, marginRight: -5 }}>
               <View style={tripDetailStyles.iconWrapper}>
@@ -77,7 +91,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     marginBottom: 0,
     marginTop: 15,
-    paddingVertical: 10,
+    paddingVertical: 5,
   },
   leftSideButtons: {
     alignItems: "center",

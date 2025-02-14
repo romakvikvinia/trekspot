@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { Animated, Pressable, StyleSheet, Text, View } from "react-native";
 import { Portal } from "react-native-portalize";
 
-import { COLORS } from "../../styles/theme";
+import { COLORS, SIZES } from "../../styles/theme";
 import { PlusCircleIcon } from "../../utilities/SvgIcons.utility";
 
 export const FloatingActionButton = ({
@@ -14,6 +14,7 @@ export const FloatingActionButton = ({
   overlayBGOpacity = 0.2,
   withHeader = false,
   title = null,
+  isActive = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -108,7 +109,7 @@ export const FloatingActionButton = ({
               },
             ]}
           >
-            <Animated.View style={styles.buttonWrapper}>
+            <Animated.ScrollView style={styles.buttonWrapper} showsVerticalScrollIndicator={false}>
               {withHeader ? (
                 <View style={styles.heading}>
                   <Text style={styles.headingText}>{title}</Text>
@@ -130,7 +131,7 @@ export const FloatingActionButton = ({
                     style={[
                       styles.floatingButtonText,
                       {
-                        color: button.isDanger ? "#ff0000" : "#000",
+                        color: button.isDanger ? "#ff0000" : button.isActive ? COLORS.primary : "#000",
                       },
                     ]}
                   >
@@ -154,7 +155,7 @@ export const FloatingActionButton = ({
                   )}
                 </Pressable>
               ))}
-            </Animated.View>
+            </Animated.ScrollView>
             <Pressable style={styles.cancelButton} onPress={toggleMenu}>
               <Text style={styles.floatingButtonText}>Cancel</Text>
             </Pressable>
@@ -190,6 +191,7 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     backgroundColor: "#fff",
     borderRadius: 15,
+    maxHeight: SIZES.height - 200
   },
   cancelButton: {
     alignItems: "center",

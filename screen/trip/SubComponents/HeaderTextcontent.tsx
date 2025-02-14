@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   contentRowItem: {
     alignItems: "center",
     flexDirection: "row",
-    marginTop: 10,
+    marginTop: 12,
     opacity: 0.9,
   },
   more: {
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   },
   tripTitle: {
     color: "#fff",
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: "bold",
   } 
 });

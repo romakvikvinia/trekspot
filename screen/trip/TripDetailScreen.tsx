@@ -7,7 +7,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   useWindowDimensions,
   View,
 } from "react-native";
@@ -16,6 +15,7 @@ import { Host } from "react-native-portalize";
 
 import { COLORS, SIZES } from "../../styles/theme";
 registerTranslation("en", enGB);
+import { useNavigation } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { addDays, differenceInDays, format } from "date-fns";
 import * as Haptics from "expo-haptics";
@@ -37,31 +37,16 @@ import {
   useUpdateTripRouteAndActivitiesMutation,
 } from "../../api/api.trekspot";
 import { SightType } from "../../api/api.types";
-import { QuestionModal } from "../../common/components/QuestionModal";
 import { Loader } from "../../common/ui/Loader";
 import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
-import { useTripStore } from "../../package/zustand/store";
 import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
-import { questionModaStyles } from "../../styles/questionModaStyles";
-import { Events } from "../../utilities/Posthog";
 import {
   PlusCircleIcon,
   TelescopeIcon,
-  TrashIcon,
-  TwoSideArrows,
   XIcon,
 } from "../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "./_tripDetailStyles";
-import { TripActivityActivityCard } from "./components/TripActivityActivityCard";
-import { TripActivityCarRentalCard } from "./components/TripActivityCarRentalCard";
-import { TripActivityDirectionCard } from "./components/TripActivityDirectionCard";
-import { TripActivityEventCard } from "./components/TripActivityEventCard";
 import { TripActivityFlightCard } from "./components/TripActivityFlightCard";
-import { TripActivityLodgingsCard } from "./components/TripActivityLodgingsCard";
-import { TripActivityMeetingCard } from "./components/TripActivityMeetingCard";
-import { TripActivityRestCard } from "./components/TripActivityRestCard";
-import { TripActivityTourCardCard } from "./components/TripActivityTourCard";
-import { TripActivityTransportCard } from "./components/TripActivityTransportCard";
 import { getAndReturnCurrentDay } from "./helper";
 import { AddActivityButton } from "./SubComponents/AddActivityButton";
 import { AddCustomActivity } from "./SubComponents/AddCustomActivity";
@@ -120,8 +105,8 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   const { trip, city } = route.params;
   const posthog = usePostHog();
   const layout = useWindowDimensions();
+  const navigation = useNavigation();
 
-  const activitiesModal = useRef<Modalize>(null);
   const modalQuestionRef = useRef<Modalize>(null);
   const modalQuestionRef2 = useRef<Modalize>(null);
   const addActivitiesModal = useRef<Modalize>(null);
@@ -132,10 +117,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     day: number;
     sight: string;
   }>();
-  const { setTripStyle, tripStyle } = useTripStore((state: any) => ({
-    setTripStyle: state.setTripStyle,
-    tripStyle: state.tripStyle,
-  }));
+  
 
   const [topSightDetail, setTopSightDetail] = useState<SightType | null>();
   const [state, setState] = useState<IState>({
@@ -205,11 +187,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   useEffect(() => {
     transformDataForDays();
   }, [transformDataForDays]);
-
-  const onActivitiesModalOpen = () => {
-    activitiesModal.current?.open();
-  };
-
+ 
   const onAddActivitiesModal = () => {
     addActivitiesModal.current?.open();
   };
@@ -243,7 +221,10 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   };
 
   const handleTopSightClick = (sight: SightType) => {
-    setTopSightDetail(sight);
+    // setTopSightDetail(sight);
+    navigation.navigate("SightDetail", {
+      sight
+    });
   };
 
   const handleClear = useCallback(() => {
@@ -375,13 +356,24 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
             day={route}
             index={activityIndex}
             lastIndex={route?.activities.length - 1}
-            onQuestionModalOpen={(sight: string) => {
-              onQuestionModalOpen();
+            deleteActivityTrigger={(sight: string) => {
               setDeleteIndexes({
                 day: route.id,
                 sight,
                 route: route.route!,
               });
+              Alert.alert("Do you really want to delete activity?", "", [
+                {
+                  text: "Cancel",
+                  onPress: () => console.log("Cancel Pressed"),
+                  style: "cancel",
+                },
+                {
+                  text: "Delete",
+                  onPress: handleDeleteActivity,
+                  style: "destructive",
+                },
+              ]);
             }}
             handleTopSightClick={handleTopSightClick}
             activityAmount={route?.activities.length}
@@ -393,10 +385,10 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
             // checkedIn={checkedIn}
             // item={item}
             index={index}
-            onQuestionModalOpen={onQuestionModalOpen}
+            onQuestionModalOpen={() => {}}
             // handleChangeActivityVisited={handleChangeActivityVisited}
           />
-          <TripActivityDirectionCard
+          {/* <TripActivityDirectionCard
             activityAmount={2}
             // checkedIn={checkedIn}
             // item={item}
@@ -488,7 +480,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
             index={index}
             onQuestionModalOpen={onQuestionModalOpen}
             // handleChangeActivityVisited={handleChangeActivityVisited}
-          />
+          /> */}
         </>
 
         {!isTripDetailLoading && route?.activities.length === 0 ? (
@@ -538,7 +530,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           style={[
             styles.loaderWrapper,
             {
-              marginTop: !tripStyle ? -35 : 0,
+              marginTop: -35,
             },
           ]}
         >
@@ -560,10 +552,26 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
               flex: 1,
             }}
             lazy
+            renderLazyPlaceholder={() => (
+              <View
+                style={[
+                  styles.loaderWrapper,
+                  {
+                    marginTop: -35,
+                  },
+                ]}
+              >
+                <Loader
+                  isLoading={true}
+                  color=""
+                  background="#F2F2F7"
+                />
+            </View>
+            )}
             style={[
               styles.tabViewStyles,
               {
-                marginTop: !tripStyle ? -35 : 0,
+                marginTop: -35,
               },
             ]}
             pagerStyle={{
@@ -627,6 +635,8 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                 isLoading={sightsLoading}
                 removeActivity={removeActivity}
                 hidePopup={hidePopup}
+                activeDay={index}
+                setActiveDay={setIndex}
               />
             </Animated.View>
           </View> 
@@ -656,7 +666,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
             </>
           }
           modalStyle={{
-            backgroundColor: "#F2F2F7",
+            backgroundColor: "#f8f8f8",
             height: "100%",
           }}
           scrollViewProps={{
@@ -666,142 +676,12 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           <AddCustomActivity />
         </Modalize>
       </Portal>
-
-      {/* Questions */}
-
-      <Portal>
-        <Modalize
-          ref={modalQuestionRef2}
-          modalTopOffset={65}
-          disableScrollIfPossible
-          adjustToContentHeight
-          velocity={100000}
-          tapGestureEnabled={false}
-          closeSnapPointStraightEnabled={false}
-          modalStyle={{
-            backgroundColor: "#F2F2F7",
-            minHeight: "25%",
-          }}
-          scrollViewProps={{
-            showsVerticalScrollIndicator: false,
-          }}
-        >
-          <QuestionModal
-            onClose={() => modalQuestionRef2?.current?.close()}
-            title="Action"
-          >
-            <View style={questionModaStyles.buttonGroup}>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={[questionModaStyles.button]}
-                onPress={() => {
-                  setTripStyle(!tripStyle);
-                  posthog.capture(Events.UserChangedTripStyle, {
-                    tripStyle: !tripStyle ? "Classic" : "Reach",
-                  });
-                  modalQuestionRef2.current?.close();
-                }}
-              >
-                <Text style={questionModaStyles.buttonText}>
-                  {!tripStyle ? "Classic" : "Reach"} view
-                </Text>
-                <TwoSideArrows size="15" />
-              </TouchableOpacity>
-              {/* <TouchableOpacity
-                activeOpacity={0.7}
-                style={[questionModaStyles.button]}
-              >
-                <Text style={questionModaStyles.buttonText}>Edit</Text>
-                <EditIcon size="15" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() =>
-                  Alert.alert("Do you really want to delete trip?", "", [
-                    {
-                      text: "Cancel",
-                      onPress: () => console.log("Cancel Pressed"),
-                      style: "cancel",
-                    },
-                    {
-                      text: "Delete",
-                      onPress: () => console.log("OK Pressed"),
-                      style: "destructive",
-                    },
-                  ])
-                }
-                style={[questionModaStyles.button, { borderBottomWidth: 0 }]}
-              >
-                <Text style={[questionModaStyles.buttonText, { color: "red" }]}>
-                  Delete
-                </Text>
-                <TrashIcon size="15" />
-              </TouchableOpacity> */}
-            </View>
-          </QuestionModal>
-        </Modalize>
-      </Portal>
-
-      <Portal>
-        <Modalize
-          ref={modalQuestionRef}
-          modalTopOffset={65}
-          disableScrollIfPossible
-          adjustToContentHeight
-          velocity={100000}
-          tapGestureEnabled={false}
-          closeSnapPointStraightEnabled={false}
-          modalStyle={{
-            backgroundColor: "#F2F2F7",
-            minHeight: 200,
-          }}
-          scrollViewProps={{
-            showsVerticalScrollIndicator: false,
-          }}
-        >
-          <QuestionModal
-            onClose={() => modalQuestionRef?.current?.close()}
-            title="Action"
-          >
-            <View style={questionModaStyles.buttonGroup}>
-              {/* <TouchableOpacity
-                activeOpacity={0.7}
-                style={[questionModaStyles.button]}
-              >
-                <Text style={questionModaStyles.buttonText}>Edit</Text>
-                <EditIcon size="15" />
-              </TouchableOpacity> */}
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => {
-                  modalQuestionRef.current?.close();
-                  Alert.alert("Do you really want to delete activity?", "", [
-                    {
-                      text: "Cancel",
-                      onPress: () => console.log("Cancel Pressed"),
-                      style: "cancel",
-                    },
-                    {
-                      text: "Delete",
-                      onPress: handleDeleteActivity,
-                      style: "destructive",
-                    },
-                  ]);
-                }}
-                style={[questionModaStyles.button, { borderBottomWidth: 0 }]}
-              >
-                <Text style={[questionModaStyles.buttonText, { color: "red" }]}>
-                  Delete
-                </Text>
-                <TrashIcon size="15" />
-              </TouchableOpacity>
-            </View>
-          </QuestionModal>
-        </Modalize>
-      </Portal>
+ 
     </Host>
   );
 };
+
+
 const styles = StyleSheet.create({
   contentCard: {
     backgroundColor: "#fff",

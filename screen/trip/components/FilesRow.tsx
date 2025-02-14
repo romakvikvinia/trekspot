@@ -26,7 +26,7 @@ import {
   XIcon,
 } from "../../../utilities/SvgIcons.utility";
 
-export const FilesRow = ({ isPreview }) => {
+export const FilesRow = ({ isPreview, showGallery = true }) => {
   const galleryRef = useRef(null);
 
   const [imageURL, setImageURL] = useState(null);
@@ -265,8 +265,9 @@ export const FilesRow = ({ isPreview }) => {
 
 
       
-
-      {isPreview && <Text style={styles.rowTitle}>Gallery</Text>}
+      {showGallery && (
+        <>
+          {isPreview && <Text style={styles.rowTitle}>Gallery</Text>}
 
       {!isPreview ? (
         <FloatingActionButton
@@ -374,6 +375,8 @@ export const FilesRow = ({ isPreview }) => {
           ></Image>
         </Pressable>
       </ScrollView>
+      </>
+      )}
 
  
       <Portal>

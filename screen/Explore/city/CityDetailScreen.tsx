@@ -181,7 +181,7 @@ export const CityDetailScreen: React.FC<Props> = ({ route }) => {
         ref={scrollViewRef}
       >
         {/* Content */}
-
+  
         {!isLoading ? (
           <>
             <CityTitleRow
@@ -195,6 +195,8 @@ export const CityDetailScreen: React.FC<Props> = ({ route }) => {
 
             <CityOverview
               recognizedFor={countyData?.countryByIso2?.recognizedFor}
+              plugTypes={countyData?.countryByIso2?.plugTypes}
+              currencies={countyData?.countryByIso2?.currencies}
             />
 
             <ScrollView

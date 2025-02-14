@@ -65,6 +65,7 @@ export const RestaurantDetail = () => {
         <Pressable
           style={styles.closeButton}
           onPress={() => navigation.goBack()}
+          hitSlop={15}
         >
           <XIcon width="12" />
         </Pressable>
