@@ -3,7 +3,7 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { useEffect, useRef, useState } from "react";
 import {
-    KeyboardAvoidingView,
+  KeyboardAvoidingView,
   Linking,
   Platform,
   Pressable,
@@ -30,7 +30,6 @@ import {
   XIcon,
 } from "../../../utilities/SvgIcons.utility";
 import { FilesRow } from "./FilesRow";
- 
 
 export const CurrencyButton = () => {
   const navigation = useNavigation();
@@ -38,26 +37,30 @@ export const CurrencyButton = () => {
 
   const isFocused = useIsFocused();
 
-  useEffect(() =>{ 
+  useEffect(() => {
     const getCurrencyFromStorage = async () => {
       const currency = await AsyncStorage.getItem("userCurrency");
       setCurrency(currency?.split(" ")[0] || "USD");
-    }
+    };
     getCurrencyFromStorage();
   }, [isFocused]);
 
   return (
-    <Pressable style={styles.currencyButton} onPress={() => navigation.navigate("CurrencyScreen")}>
-      <Text style={styles.currencyButtonText}>{currency}</Text><DownIcon size={10} />
+    <Pressable
+      style={styles.currencyButton}
+      onPress={() => navigation.navigate("CurrencyScreen")}
+    >
+      <Text style={styles.currencyButtonText}>{currency}</Text>
+      <DownIcon size={10} />
     </Pressable>
-  )
-}
+  );
+};
 
 export const SightDetail = ({ route }) => {
   const { sight } = route.params;
 
-  console.log(sight);
   const [toggleVisible, setToggleVisible] = useState(false);
+  const [activeImage, setActiveImage] = useState(-1);
 
   const galleryRef = useRef(null);
   const carouselRef = useRef(null);
@@ -65,10 +68,8 @@ export const SightDetail = ({ route }) => {
 
   const handleOpenGallery = (index: number) => {
     galleryRef.current?.open();
-    
-    console.log(carouselRef.current);
-
-  }
+    setActiveImage(index);
+  };
 
   const openMap = (location: { lat: number; lng: number }) => {
     const scheme = Platform.select({
@@ -91,7 +92,6 @@ export const SightDetail = ({ route }) => {
   const workingHours = sight?.workingHours.find(
     (item) => item.day === day
   )?.hours;
-
 
   const urlNormalizer = (url: string) => {
     if (url?.includes("http")) {
@@ -301,7 +301,6 @@ export const SightDetail = ({ route }) => {
                 />
                 <CurrencyButton />
               </View>
-             
             </View>
             <View
               style={[
@@ -311,7 +310,6 @@ export const SightDetail = ({ route }) => {
                 },
               ]}
             >
-               
               <Pressable
                 onPress={() =>
                   //@ts-ignore
@@ -330,8 +328,8 @@ export const SightDetail = ({ route }) => {
               >
                 <NoteIcon size={20} color="#86858c" />
                 <Text style={styles.placeholder} numberOfLines={1}>
-                    Add a note
-                 </Text>
+                  Add a note
+                </Text>
               </Pressable>
             </View>
 
@@ -376,6 +374,10 @@ export const SightDetail = ({ route }) => {
             itemWidth={SIZES.width}
             inactiveSlideShift={0}
             useScrollView={true}
+            onLayout={() => {
+              if (activeImage != -1)
+                carouselRef.current?.snapToItem(activeImage);
+            }}
           />
         </Modalize>
       </Portal>
