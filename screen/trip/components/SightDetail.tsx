@@ -63,13 +63,6 @@ export const SightDetail = ({ route }) => {
   const carouselRef = useRef(null);
   const navigation = useNavigation();
 
-  const handleOpenGallery = (index: number) => {
-    galleryRef.current?.open();
-    
-    console.log(carouselRef.current);
-
-  }
-
   const openMap = (location: { lat: number; lng: number }) => {
     const scheme = Platform.select({
       ios: "maps://0,0?q=",
@@ -165,7 +158,7 @@ export const SightDetail = ({ route }) => {
             showsHorizontalScrollIndicator={false}
           >
             {sight?.images?.map((item, k) => (
-              <Pressable key={k} onPress={() => handleOpenGallery(k)}>
+              <Pressable key={k} onPress={() => galleryRef.current?.open()}>
                 <Image
                   placeholder={{
                     uri: require("../../../assets/no-image.png"),
@@ -365,9 +358,7 @@ export const SightDetail = ({ route }) => {
           </View>
 
           <Carousel
-            ref={(ref) => {
-              carouselRef.current = ref;
-            }}
+            ref={carouselRef}
             //@ts-ignore
             data={sight?.images}
             //@ts-ignore
