@@ -10,10 +10,10 @@ import { PlusCircleIcon } from "../../utilities/SvgIcons.utility";
 export const FloatingActionButton = ({
   PrimaryIcon = PlusCircleIcon,
   buttons = [],
-  renderTrigger = null,
+  renderTrigger = () => null,
   overlayBGOpacity = 0.2,
   withHeader = false,
-  title = null,
+  title = "",
   isActive = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -110,7 +110,7 @@ export const FloatingActionButton = ({
             ]}
           >
             <Animated.ScrollView style={styles.buttonWrapper} showsVerticalScrollIndicator={false}>
-              {withHeader ? (
+              {title ? (
                 <View style={styles.heading}>
                   <Text style={styles.headingText}>{title}</Text>
                 </View>
@@ -224,7 +224,10 @@ const styles = StyleSheet.create({
   },
   heading: {
     alignItems: "center",
+    borderBottomColor: "#f2f2f2",
+    borderBottomWidth: 1,
     justifyContent: "center",
+    paddingBottom: 10,
     paddingTop: 10,
     width: "100%",
   },

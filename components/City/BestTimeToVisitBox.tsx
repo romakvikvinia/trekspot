@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import {
   Animated,
+  FlatList,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -10,7 +11,11 @@ import {
 import { Portal } from "react-native-portalize";
 
 import { COLORS, SIZES } from "../../styles/theme";
-import { NonPopularIcon, PopularIcon, WeatherIcon } from "../../utilities/SvgIcons.utility";
+import {
+  NonPopularIcon,
+  PopularIcon,
+  WeatherIcon,
+} from "../../utilities/SvgIcons.utility";
 
 export const BestTimeToVisitBox = () => {
   const [visible, setVisible] = useState(false);
@@ -33,6 +38,74 @@ export const BestTimeToVisitBox = () => {
       useNativeDriver: true,
     }).start(() => setVisible(false));
   };
+
+  const hotelPrices = [
+    {
+      month: "Jan",
+      budget: { min: 80, max: 200 },
+      luxury: { min: 250, max: 800 },
+    },
+    {
+      month: "Feb",
+      budget: { min: 90, max: 220 },
+      luxury: { min: 280, max: 900 },
+    },
+    {
+      month: "Mar",
+      budget: { min: 85, max: 210 },
+      luxury: { min: 260, max: 850 },
+    },
+    {
+      month: "Apr",
+      budget: { min: 70, max: 180 },
+      luxury: { min: 220, max: 750 },
+    },
+    {
+      month: "May",
+      budget: { min: 60, max: 150 },
+      luxury: { min: 200, max: 650 },
+    },
+    {
+      month: "Jun",
+      budget: { min: 50, max: 130 },
+      luxury: { min: 180, max: 500 },
+    },
+    {
+      month: "Jul",
+      budget: { min: 45, max: 120 },
+      luxury: { min: 160, max: 450 },
+    },
+    {
+      month: "Aug",
+      budget: { min: 50, max: 130 },
+      luxury: { min: 180, max: 500 },
+    },
+    {
+      month: "Sep",
+      budget: { min: 60, max: 150 },
+      luxury: { min: 200, max: 600 },
+    },
+    {
+      month: "Oct",
+      budget: { min: 80, max: 180 },
+      luxury: { min: 250, max: 750 },
+    },
+    {
+      month: "Nov",
+      budget: { min: 90, max: 200 },
+      luxury: { min: 270, max: 800 },
+    },
+    {
+      month: "Dec",
+      budget: { min: 100, max: 300 },
+      luxury: { min: 300, max: 1200 },
+    },
+  ];
+
+  const lowestPrice = hotelPrices.reduce((min, current) => {
+    return Math.min(min, current.budget.min);
+  }, hotelPrices[0].budget.min);
+ 
 
   return (
     <>
@@ -94,7 +167,7 @@ export const BestTimeToVisitBox = () => {
                     </View>
                   </View>
                 </View>
-                <View style={styles.weatherRow}>
+                <ScrollView style={styles.weatherRow} showsVerticalScrollIndicator={false}>
                   <View style={styles.rowItem}>
                     <View style={styles.weatherCol}></View>
                     <View style={styles.weatherCol}>
@@ -105,9 +178,14 @@ export const BestTimeToVisitBox = () => {
                     </View>
                   </View>
                   <View style={styles.rowItem}>
-                    <View style={[styles.weatherCol,{
-                      alignItems: "flex-start"
-                    }]}>
+                    <View
+                      style={[
+                        styles.weatherCol,
+                        {
+                          alignItems: "flex-start",
+                        },
+                      ]}
+                    >
                       <Text style={styles.monthText}>January</Text>
                     </View>
                     <View style={styles.weatherCol}>
@@ -125,9 +203,14 @@ export const BestTimeToVisitBox = () => {
                     </View>
                   </View>
                   <View style={styles.rowItem}>
-                    <View style={[styles.weatherCol,{
-                      alignItems: "flex-start"
-                    }]}>
+                    <View
+                      style={[
+                        styles.weatherCol,
+                        {
+                          alignItems: "flex-start",
+                        },
+                      ]}
+                    >
                       <Text style={styles.monthText}>February</Text>
                     </View>
                     <View style={styles.weatherCol}>
@@ -145,9 +228,14 @@ export const BestTimeToVisitBox = () => {
                     </View>
                   </View>
                   <View style={styles.rowItem}>
-                    <View style={[styles.weatherCol,{
-                      alignItems: "flex-start"
-                    }]}>
+                    <View
+                      style={[
+                        styles.weatherCol,
+                        {
+                          alignItems: "flex-start",
+                        },
+                      ]}
+                    >
                       <Text style={styles.monthText}>March</Text>
                     </View>
                     <View style={styles.weatherCol}>
@@ -165,9 +253,14 @@ export const BestTimeToVisitBox = () => {
                     </View>
                   </View>
                   <View style={styles.rowItem}>
-                    <View style={[styles.weatherCol,{
-                      alignItems: "flex-start"
-                    }]}>
+                    <View
+                      style={[
+                        styles.weatherCol,
+                        {
+                          alignItems: "flex-start",
+                        },
+                      ]}
+                    >
                       <Text style={styles.monthText}>April</Text>
                     </View>
                     <View style={styles.weatherCol}>
@@ -184,6 +277,46 @@ export const BestTimeToVisitBox = () => {
                       </View>
                     </View>
                   </View>
+                </ScrollView>
+
+                <View style={{ minHeight: 10, marginTop: 25 }}>
+                  <Text style={styles.sectionTitle}>Hotel prices</Text>
+                  <FlatList
+                    data={hotelPrices}
+                    horizontal
+                    keyExtractor={(item) => item.month}
+                    contentContainerStyle={styles.listContainer}
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={({ item }) => (
+                      <View style={styles.barContainer}>
+                        <View
+                          style={{
+                            height: 80,
+                            width: 70,
+                            backgroundColor: "#fff",
+                            justifyContent: "flex-end"
+                          }}
+                        >
+                          <Text style={{
+                            fontSize: 11,
+                            fontWeight: "500",
+                            color: COLORS.gray,
+                          }}>{`$${item.budget.min} - $${item.budget.max}`}</Text>
+                          <Pressable
+                            style={[
+                              styles.bar,
+                              {
+                                maxHeight: 80,
+                                height: (item.budget.max / 100) * 30,
+                                backgroundColor: lowestPrice === item.budget.min ? COLORS.primary : "#ebebeb",
+                              },
+                            ]}
+                          ></Pressable>
+                        </View>
+                        <Text style={styles.month}>{item.month}</Text>
+                      </View>
+                    )}
+                  />
                 </View>
               </ScrollView>
               <Pressable onPress={hidePopup} style={styles.closeButton}>
@@ -197,6 +330,18 @@ export const BestTimeToVisitBox = () => {
   );
 };
 const styles = StyleSheet.create({
+  bar: {
+    alignItems: "center",
+    borderRadius: 5,
+    height: 30,
+    justifyContent: "center",
+    marginVertical: 5,
+    paddingHorizontal: 5,
+  },
+  barContainer: {
+    alignItems: "center",
+    marginRight: 15,
+  },
   bg: {
     alignItems: "center",
     backgroundColor: "rgba(0,0,0, 0.4)",
@@ -245,7 +390,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     height: 10,
     marginRight: 5,
-    width: 10
+    width: 10,
   },
   closeButton: {
     backgroundColor: "#f2f2f2",
@@ -263,7 +408,7 @@ const styles = StyleSheet.create({
   colTextHeading: {
     color: COLORS.darkgray,
     fontSize: 14,
-    fontWeight: "400"
+    fontWeight: "400",
   },
   contentCard: {
     backgroundColor: "#fff",
@@ -283,38 +428,52 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   fill: {
-    backgroundColor: COLORS.primary
+    backgroundColor: COLORS.primary,
   },
   inBox: {
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "center",
-    width: "100%"
+    width: "100%",
   },
   inText: {
     color: COLORS.black,
     fontSize: 13,
-    maxWidth: "100%"
+    maxWidth: "100%",
   },
   inTitle: {
     color: COLORS.black,
     fontSize: 15,
     fontWeight: "600",
-    marginBottom: 2
+    marginBottom: 2,
   },
   inner: {
     flex: 1,
     paddingRight: 10,
   },
+  listContainer: {
+    paddingHorizontal: 10,
+    paddingTop: 40
+  },
+  month: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
   monthText: {
     color: COLORS.black,
     fontSize: 14,
-    fontWeight: "500"
+    fontWeight: "500",
   },
   moreDetails: {
     color: COLORS.primary,
     fontSize: 14,
-    marginTop: 15
+    marginTop: 15,
+  },
+  priceText: {
+    color: "#fff",
+    fontSize: 12,
+    fontWeight: "bold",
   },
   row: {
     alignItems: "center",
@@ -323,7 +482,7 @@ const styles = StyleSheet.create({
   },
   rowGroup: {
     marginTop: 25,
-    width: "100%"
+    width: "100%",
   },
   rowItem: {
     borderBottomColor: "#f2f2f2",
@@ -332,12 +491,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginTop: 15,
     paddingBottom: 15,
-    width: "100%"
+    width: "100%",
   },
   sectionTitle: {
     color: COLORS.black,
     fontSize: 20,
-    fontWeight: "500"
+    fontWeight: "500",
   },
   textSide: {
     marginLeft: 12,
@@ -345,14 +504,15 @@ const styles = StyleSheet.create({
   weatherCol: {
     alignItems: "center",
     justifyContent: "center",
-    width: "32%"
+    width: "32%",
   },
   weatherRow: {
+    height: 200,
     width: "100%"
   },
   weatherText: {
     color: COLORS.darkgray,
     fontSize: 14,
-    marginLeft: 5
+    marginLeft: 5,
   },
 });

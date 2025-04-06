@@ -1,58 +1,58 @@
-import { BlurView } from "expo-blur";
+import Constants from "expo-constants";
 import * as Haptics from "expo-haptics";
-import moment from "moment";
 import { usePostHog } from "posthog-react-native";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
-  ScrollView,
+  Animated,
+  Platform,
+  Pressable,
   Text,
-  TextInput,
-  TouchableOpacity,
   View,
 } from "react-native";
-import { Modalize } from "react-native-modalize";
 import { IHandles } from "react-native-modalize/lib/options";
-import { Portal } from "react-native-portalize";
 
 import { COLORS } from "../../../styles/theme";
 import { Events } from "../../../utilities/Posthog";
-import {
-  CalendarFilledIcon,
-  OneUserIcon,
-  TripLocationIcon,
-} from "../../../utilities/SvgIcons.utility";
-import { TravelType } from "../TravelType";
+import { XIcon } from "../../../utilities/SvgIcons.utility";
+import { CreateTripDateStep } from "./CreateTripDateStep";
+import { CreateTripDestinationStep } from "./CreateTripDestinationStep";
+import { CreateTripIteneryStep } from "./CreateTripIteneryStep";
 import { styles } from "./CreateTripStyles";
 
 interface ICreateTripContentProps {
   isLoading: boolean;
   newTripModalRef: React.RefObject<IHandles>;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   formik: any;
   showPopup: () => void;
   editMode: boolean;
+  hideCreateTripModal: () => void;
 }
 
 export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
   isLoading,
   newTripModalRef,
-  setOpen,
   showPopup,
   formik,
   editMode,
+  hideCreateTripModal,
 }) => {
   const posthog = usePostHog();
-  const modalTravelTypeRef = useRef<Modalize>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [noDateError, setNoDateError] = useState(false);
   const [isError, setIsError] = React.useState(false);
-  const onTravelTypeModalOpen = () => {
-    modalTravelTypeRef.current?.open();
-  };
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
-  const handleCancelTrip = () => {
-    newTripModalRef?.current?.close();
-  };
+  const [tripData, setTripData] = useState({
+    destinations: [],
+    date: {
+      startDate: null,
+      endDate: null,
+    },
+    days: null,
+  });
+
   const isInValid =
     !Object.keys(formik.values.range).length || !formik.values.destination;
 
@@ -69,10 +69,8 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
     setIsError(false);
   }, [formik.values]);
 
-
   const handleWhereTo = () => {
-
-    if(!formik?.values?.range?.startDate || !formik?.values?.range?.endDate) {
+    if (!formik?.values?.range?.startDate || !formik?.values?.range?.endDate) {
       Alert.alert("Please choose a date range first.", "");
 
       return;
@@ -80,262 +78,70 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     showPopup();
-  }
+  };
+
+  const disabledButton = useMemo(() => {
+    return formik.isSubmitting || tripData?.destinations?.length < 1 || tripData?.date?.startDate === null || tripData?.date?.endDate === null
+  }, [formik.isSubmitting, tripData]);
 
   return (
     <>
-      <View style={styles.newTripWrapper}>
-        <View style={styles.newTripHeader}>
-          <Text
-            style={{
-              fontSize: 24,
-              fontWeight: "600",
-              color: COLORS.black,
-            }}
-          >
-            {editMode ? "Edit trip" : "New trip"}
-          </Text>
-          <TouchableOpacity
-            style={styles.cancelTripButton}
-            onPress={() => handleCancelTrip()}
-          >
-            <Text style={styles.cancelTripButtonText}>Cancel</Text>
-          </TouchableOpacity>
-        </View>
-
-        <ScrollView style={{ flex: 1 }} keyboardShouldPersistTaps={"handled"}>
-          <TextInput
-            placeholder="Enter trip name"
-            placeholderTextColor="rgba(0, 0, 0, 0.4)"
-            style={[
-              styles.tripNameInput,
-              {
-                borderBottomWidth: false ? 1 : 0,
-                borderBottomColor: false ? "red" : "",
-              },
-            ]}
-            selectionColor="#000"
-            value={formik.values.name}
-            onChangeText={formik.handleChange("name")}
-            onBlur={formik.handleBlur("name")}
-            autoCorrect={false}
-          />
-          <View style={styles.newTripBoxes}>
-            <BlurView
-              intensity={100}
-              style={[
-                styles.newTripBox,
-                styles.fullBox,
-                {
-                  borderWidth: false ? 1 : 0,
-                  borderColor: false ? "red" : "",
-                },
-              ]}
-            >
-              <TouchableOpacity
-                activeOpacity={0.5}
-                style={styles.datePickerTopRow}
-                onPress={() => {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  setOpen(true);
-                }}
-              >
-                <View style={styles.datePickerTopRowLeft}>
-                  <CalendarFilledIcon />
-                  <Text style={styles.datePickerTopRowLeftText}>Itinerary</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={0.5}
-                style={styles.datePickerBottomRow}
-                onPress={() => {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  setOpen(true);
-                }}
-              >
-                <View style={styles.datePickerBottomRowLeft}>
-                  <Text style={styles.startsDateLabel}>Start</Text>
-                  <Text
-                    style={[
-                      styles.startsDateText,
-                      {
-                        color: formik?.values?.range?.startDate
-                          ? COLORS.primary
-                          : COLORS.black,
-                      },
-                    ]}
-                  >
-                    {formik?.values?.range?.startDate
-                      ? moment(formik?.values?.range?.startDate).format(
-                          "DD MMM"
-                        )
-                      : "Set date"}
-                  </Text>
-                </View>
-                <Text style={{ fontSize: 25, color: COLORS.black }}>-</Text>
-                <View style={styles.datePickerBottomRowRight}>
-                  <Text style={styles.startsDateLabel}>End</Text>
-                  <Text
-                    style={[
-                      styles.startsDateText,
-                      {
-                        color: formik?.values?.range?.endDate
-                          ? COLORS.primary
-                          : COLORS.black,
-                      },
-                    ]}
-                  >
-                    {formik?.values?.range?.endDate
-                      ? moment(formik?.values?.range?.endDate).format("DD MMM")
-                      : "Set date"}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </BlurView>
-            <BlurView
-              intensity={100}
-              style={[
-                styles.newTripBox,
-                styles.halfBox,
-                {
-                  borderWidth: false ? 1 : 0,
-                  borderColor: false ? "red" : "",
-                },
-              ]}
-            >
-              <TouchableOpacity
-                activeOpacity={0.5}
-                style={[
-                  styles.newTripBoxButton,
-                  {
-                    opacity: editMode ? 0.4 : 1,
-                  },
-                ]}
-                onPress={handleWhereTo}
-                disabled={editMode}
-              >
-                <TripLocationIcon size="" color="" />
-                <Text style={styles.halfBoxLabelText}>Where to?</Text>
-                {formik.values.destination ? (
-                  <Text
-                    style={[
-                      styles.halfBoxValueText,
-                      {
-                        color: COLORS.primary,
-                      },
-                    ]}
-                  >
-                    {/* @ts-ignore */}
-                    {formik.values.destination.city!} 
-                    {/* აქ გამოვიტანოთ სხვა ქალაქებიც */}
-                  </Text>
-                ) : null}
-              </TouchableOpacity>
-            </BlurView>
-
-            <BlurView
-              intensity={100}
-              style={[
-                styles.newTripBox,
-                styles.halfBox,
-                {
-                  borderWidth: false ? 1 : 0,
-                  borderColor: false ? "red" : "",
-                },
-              ]}
-            >
-              <TouchableOpacity
-                activeOpacity={0.5}
-                style={styles.newTripBoxButton}
-                onPress={() => {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  onTravelTypeModalOpen();
-                }}
-              >
-                <OneUserIcon size="20" color="" />
-                <Text style={styles.halfBoxLabelText}>Travel type</Text>
-                {formik?.values?.travelType ? (
-                  <Text
-                    style={[
-                      styles.halfBoxValueText,
-                      {
-                        color: COLORS.primary,
-                      },
-                    ]}
-                  >
-                    {formik?.values?.travelType}
-                  </Text>
-                ) : null}
-              </TouchableOpacity>
-            </BlurView>
-          </View>
-          {isError && (
+      <View
+        style={{
+          flex: 1,
+          paddingTop:
+            Constants?.statusBarHeight + (Platform.OS === "android" ? 5 : 10),
+          backgroundColor: "#f9f9f9",
+        }}
+      >
+        <View style={styles.newTripWrapper}>
+          <View style={styles.newTripHeader}>
             <Text
               style={{
-                color: "red",
-                fontSize: 16,
-                textAlign: "center",
-                marginTop: 25,
-                fontWeight: "500",
+                fontSize: 20,
+                fontWeight: "600",
+                color: COLORS.black,
               }}
             >
-              Please fill in all fields to create your trip
+              {editMode ? "Edit trip" : "New trip"}
             </Text>
-          )}
-        </ScrollView>
-        <View
-          style={{
-            paddingBottom: 35,
-          }}
-        >
-          {/* <TouchableOpacity
-            style={styles.aiPlanButton}
-            activeOpacity={0.7}
-            onPress={handelSubmit}
-            disabled={formik.isSubmitting}
-          >
-            <LinearGradient
-              style={{
-                flex: 1,
-                alignItems: "center",
-                justifyContent: "center",
-                flexDirection: "row",
-                height: 50,
-              }}
-              colors={[COLORS.primary, COLORS.primary, COLORS.primary]}
+            <Pressable
+              style={styles.cancelTripButton}
+              onPress={() => hideCreateTripModal()}
+              hitSlop={20}
             >
-              {formik.isSubmitting ? (
-                <>
-                  <ActivityIndicator color="#fff" />
-                  <Text style={[styles.aiPlanButtonText, { marginLeft: 8 }]}>
-                    Planning your itinerary...
-                  </Text>
-                </>
-              ) : (
-                <>
-                  <Text style={styles.aiPlanButtonText}>
-                    Generate AI Itinerary
-                  </Text>
-                  <StarsIcon width="15" color="#fff" />
-                </>
-              )}
-            </LinearGradient>
-          </TouchableOpacity> */}
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.manualPlanButton}
-            disabled={formik.isSubmitting}
-            onPress={handelSubmit}
-          >
-            {isLoading && <ActivityIndicator />}
-            <Text style={[styles.manualPlanButtonText, { marginLeft: 8 }]}>
-              {editMode ? "Save trip" : "Create trip"}
-            </Text>
-          </TouchableOpacity>
+               <XIcon width="12" />
+            </Pressable>
+          </View>
+          
+          <CreateTripDestinationStep index={activeIndex} setActiveIndex={setActiveIndex} tripData={tripData}  setTripData={setTripData}/>
+          <CreateTripDateStep noDateError={noDateError} setNoDateError={setNoDateError} index={activeIndex} setActiveIndex={setActiveIndex} tripData={tripData} setTripData={setTripData} />
+            {tripData?.destinations?.length > 1 &&
+             <CreateTripIteneryStep setNoDateError={setNoDateError} index={activeIndex} setActiveIndex={setActiveIndex} tripData={tripData} setTripData={setTripData} />
+            }
+          <View style={styles.tripCreationFooter}>
+            <Pressable hitSlop={15} style={styles.clearAllButton}>
+              <Text style={styles.clearAllButtonText}>Clear all</Text>
+            </Pressable>
+            <Pressable
+              style={({pressed}) => [
+                styles.manualPlanButton,
+                {
+                  opacity: pressed || disabledButton ? 0.7 : 1
+                },
+              ]}
+              disabled={disabledButton}
+              onPress={handelSubmit}
+            >
+              {isLoading && <ActivityIndicator color="#fff" size="small" />}
+              <Text style={[styles.manualPlanButtonText, { marginLeft: isLoading ? 8 : 0 }]}>
+                {editMode ? "Save trip" : "Create trip"}
+              </Text>
+            </Pressable>
+          </View>
         </View>
       </View>
-
-      <Portal>
+      {/* <Portal>
         <Modalize
           ref={modalTravelTypeRef}
           modalTopOffset={65}
@@ -352,7 +158,7 @@ export const CreateTripContent: React.FC<ICreateTripContentProps> = ({
         >
           <TravelType modalTravelTypeRef={modalTravelTypeRef} formik={formik} />
         </Modalize>
-      </Portal>
+      </Portal> */}
     </>
   );
 };

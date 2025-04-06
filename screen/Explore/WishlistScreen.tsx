@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Image } from "expo-image";
+import React, { useEffect } from "react";
 import { useCallback, useState } from "react";
-
 import {
   Pressable,
   SafeAreaView,
@@ -11,24 +11,24 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { toast } from "sonner-native";
+
 import {
   useRemoveWishlistItemMutation,
   useWishlistsQuery,
 } from "../../api/api.trekspot";
+import { CityType, SightType } from "../../api/api.types";
 import { Loader } from "../../common/ui/Loader";
 import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
+import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
 import { globalStyles } from "../../styles/globalStyles";
 import { COLORS } from "../../styles/theme";
 import {
   BackIcon,
 } from "../../utilities/SvgIcons.utility";
 import { _tripScreenStyles } from "../trip/_tripScreenStyles";
-import { WishlistContainer } from "./wishlist/WishlistContainer";
-import { CityType, SightType } from "../../api/api.types";
-import { ExploreRoutesStackParamList } from "../../routes/explore/ExploreRoutes";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { toast } from "sonner-native";
 import { groupByCategory } from "./wishlist/helper";
+import { WishlistContainer } from "./wishlist/WishlistContainer";
 
 type WishlistProps = NativeStackScreenProps<
   ExploreRoutesStackParamList,
@@ -202,45 +202,45 @@ export const WishlistScreen: React.FC<WishlistProps> = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  wishlistRow: {
-    marginTop: 25,
-  },
-  wishlistRowTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: COLORS.primaryDark,
-    paddingHorizontal: 20,
-  },
-  countryItemActionButton: {
-    width: 30,
-    height: 30,
-    borderRadius: 50,
-    backgroundColor: COLORS.primary,
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-    right: 10,
-    top: 10,
-    zIndex: 3,
-  },
   actionButtons: {
+    flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 15,
-    flexDirection: "row",
   },
   buttonItem: {
+    alignItems: "center",
     backgroundColor: COLORS.lightGray,
-    paddingHorizontal: 10,
     flex: 1,
-    textAlign: "center",
-    justifyContent: "center",
     flexDirection: "row",
     height: 40,
-    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 10,
+    textAlign: "center",
   },
   buttonItemText: {
     color: COLORS.black,
     fontSize: 12,
     fontWeight: "500",
+  },
+  countryItemActionButton: {
+    alignItems: "center",
+    backgroundColor: COLORS.primary,
+    borderRadius: 50,
+    height: 30,
+    justifyContent: "center",
+    position: "absolute",
+    right: 10,
+    top: 10,
+    width: 30,
+    zIndex: 3,
+  },
+  wishlistRow: {
+    marginTop: 25,
+  },
+  wishlistRowTitle: {
+    color: COLORS.primaryDark,
+    fontSize: 20,
+    fontWeight: "600",
+    paddingHorizontal: 20,
   },
 });

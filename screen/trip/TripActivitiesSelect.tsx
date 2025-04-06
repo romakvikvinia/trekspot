@@ -3,7 +3,6 @@ import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import React, { useCallback, useEffect, useState } from "react";
 import {
-  Platform,
   Pressable,
   TouchableOpacity,
   useWindowDimensions,
@@ -16,7 +15,6 @@ import { SightType } from "../../api/api.types";
 import { Loader } from "../../common/ui/Loader";
 import { FloatingActionButton } from "../../components/common/FloatingButtons";
 import { exploreStyles } from "../../components/explore/sights/_exploreStyles";
-import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
 import { COLORS, SIZES } from "../../styles/theme";
 import {
   BackIcon,
@@ -26,6 +24,7 @@ import {
   TrashIcon,
 } from "../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "./_tripDetailStyles";
+import { TopSightDetail } from "./components/TopSightDetail";
 import { TripDaysType } from "./TripDetailScreen";
 
 interface ITripActivitiesSelectProps {
@@ -106,7 +105,6 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
         renderItem={({ item, index }) =>
           item?.images?.length > 0 && (
             <TouchableOpacity
-              activeOpacity={0.7}
               style={[
                 styles.thingsTodoItem,
                 {
@@ -115,13 +113,88 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                 },
               ]}
               onPress={() => showTopSight(item)}
+              activeOpacity={0.7}
             >
+               <View style={styles.actionButtons}>
+                  {days &&
+                  days.some((day) =>
+                    day.activities.some((activity) => activity?.id === item?.id)
+                  ) ? (
+                    <>
+                      <TouchableOpacity
+                        onPress={() => {
+                          const day = days.find((day) =>
+                            day.activities.some(
+                              (activity) => activity?.id === item?.id
+                            )
+                          );
+                          removeActivity({
+                            route: day?.route!,
+                            day: day?.id!,
+                            sight: item?.id!,
+                          });
+                        }}
+                        activeOpacity={0.7}
+                        style={[styles.detailsButton, {
+                          backgroundColor: "red",
+                        }]}
+                      >
+                        <Text
+                          style={[
+                            styles.detailsButtonText,
+                          ]}
+                        >
+                          Remove
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={[
+                          styles.addToButton,
+                          {
+                            backgroundColor: "red",
+                          },
+                        ]}
+                        onPress={() => {
+                          const day = days.find((day) =>
+                            day.activities.some(
+                              (activity) => activity?.id === item?.id
+                            )
+                          );
+                          removeActivity({
+                            route: day?.route!,
+                            day: day?.id!,
+                            sight: item?.id!,
+                          });
+                        }}
+                      >
+                        <TrashIcon color="#fff" width={12} />
+                      </TouchableOpacity>
+                    </>
+                  ) : (
+                    <>
+                      <TouchableOpacity
+                        onPress={() => handleAddToTrip(item)}
+                        activeOpacity={0.7}
+                        style={styles.detailsButton}
+                      >
+                        <Text style={styles.detailsButtonText}>
+                          Add to trip
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.addToButton}
+                        onPress={() => handleAddToTrip(item)}
+                      >
+                        <PlusIcon color="#fff" size="12" />
+                      </TouchableOpacity>
+                    </>
+                  )}
+                </View>
               <Image
                 style={[
                   {
-                    minHeight: 160,
-                    borderTopLeftRadius: 12,
-                    borderTopRightRadius: 12,
+                    minHeight: 240,
+                    borderRadius: 12,
                   },
                 ]}
                 cachePolicy="memory-disk"
@@ -157,83 +230,7 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                     </View>
                   )}
                 </View>
-
-                <View style={styles.actionButtons}>
-                  {days &&
-                  days.some((day) =>
-                    day.activities.some((activity) => activity?.id === item?.id)
-                  ) ? (
-                    <>
-                      <TouchableOpacity
-                        onPress={() => {
-                          const day = days.find((day) =>
-                            day.activities.some(
-                              (activity) => activity?.id === item?.id
-                            )
-                          );
-                          removeActivity({
-                            route: day?.route!,
-                            day: day?.id!,
-                            sight: item?.id!,
-                          });
-                        }}
-                        activeOpacity={0.7}
-                        style={styles.detailsButton}
-                      >
-                        <Text
-                          style={[
-                            styles.detailsButtonText,
-                            {
-                              color: "red",
-                            },
-                          ]}
-                        >
-                          Remove
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={[
-                          styles.addToButton,
-                          {
-                            backgroundColor: "red",
-                          },
-                        ]}
-                        onPress={() => {
-                          const day = days.find((day) =>
-                            day.activities.some(
-                              (activity) => activity?.id === item?.id
-                            )
-                          );
-                          removeActivity({
-                            route: day?.route!,
-                            day: day?.id!,
-                            sight: item?.id!,
-                          });
-                        }}
-                      >
-                        <TrashIcon color="#fff" />
-                      </TouchableOpacity>
-                    </>
-                  ) : (
-                    <>
-                      <TouchableOpacity
-                        onPress={() => handleAddToTrip(item)}
-                        activeOpacity={0.7}
-                        style={styles.detailsButton}
-                      >
-                        <Text style={styles.detailsButtonText}>
-                          Add to trip
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={styles.addToButton}
-                        onPress={() => handleAddToTrip(item)}
-                      >
-                        <PlusIcon color="#fff" size="15" />
-                      </TouchableOpacity>
-                    </>
-                  )}
-                </View>
+ 
               </View>
             </TouchableOpacity>
           )
@@ -363,7 +360,7 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
             onIndexChange={setIndex}
             initialLayout={{ width: layout.width }}
             sceneContainerStyle={{
-              backgroundColor: "#F2F2F7",
+              backgroundColor: "#fff",
             }}
             style={{
               backgroundColor: "#F2F2F7",
@@ -390,9 +387,9 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                   padding: 0,
                   height: 35,
                 }}
-                activeColor={COLORS.primary}
+                activeColor={COLORS.black}
                 indicatorStyle={{
-                  backgroundColor: COLORS.primary,
+                  backgroundColor: COLORS.black,
                 }}
                 labelStyle={{
                   textTransform: "capitalize",
@@ -405,50 +402,57 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
           />
         </View>
       </View>
-      {topSightDetail ? (
+      {/* {topSightDetail ? (
         <SightDetailModal data={topSightDetail} closeCallBack={handleClear} />
-      ) : null}
+      ) : null} */}
+
+      <TopSightDetail visible={topSightDetail} onClose={handleClear} data={topSightDetail} />
     </>
   );
 };
 const styles = StyleSheet.create({
   actionButtons: {
     alignItems: "center",
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
+    borderRadius: 12,
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 25,
+    marginTop: 0,
     overflow: "hidden",
+    position: "absolute",
+    right:5,
+    top: 5,
+    zIndex: 1
   },
   addToButton: {
     alignItems: "center",
-    backgroundColor: COLORS.primary,
-    borderBottomEndRadius: 12,
+    backgroundColor: 'rgba(0,0,0,0.8)',
     display: "flex",
-    height: 45,
+    height: 26,
     justifyContent: "center",
     textAlign: "center",
-    width: 45,
+    width: 30,
   },
   detailsButton: {
-    backgroundColor: COLORS.lightGray,
-    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.8)',
     flexDirection: "row",
     justifyContent: "center",
+    maxWidth: 100,
     paddingHorizontal: 10,
-    paddingVertical: 15,
-    textAlign: "center",
+    paddingRight: 0,
+    paddingVertical: 6,
+    textAlign: "center"
   },
   detailsButtonText: {
-    color: COLORS.primary,
-    fontSize: 14,
+    color: "#fff",
+    fontSize: 11,
     fontWeight: "bold",
   },
   dropDownButton: {
     alignItems: "center",
-    backgroundColor: "#f2f2f2",
-    borderRadius: 8,
+    backgroundColor: "#fff",
+    borderColor: "#ccc",
+    borderRadius: 30,
+    borderWidth: 1,
     flexDirection: "row",
     marginLeft: 15,
     paddingHorizontal: 15,
@@ -468,30 +472,20 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   thingsTodoItem: {
-    backgroundColor: "#fff",
     borderRadius: 12,
-    marginBottom: 20,
+    marginBottom: 30,
     marginRight: 15,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 1.84,
-    width: "96%",
-    ...Platform.select({
-      android: {
-        elevation: 2,
-      },
-    }),
+    width: "96%", 
   },
   thingsTodoItemDetails: {},
   thingsTodoItemTitle: {
     fontSize: 18,
-    fontWeight: "500",
-    marginTop: 15,
-    paddingHorizontal: 15,
+    fontWeight: "600",
+    marginTop: 10,
+    paddingHorizontal: 0,
   },
   thingsTodoItemiIn: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 0,
   },
   txtLabel: {
     marginRight: 8,

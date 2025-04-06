@@ -38,7 +38,6 @@ import {
 } from "../../api/api.trekspot";
 import { SightType } from "../../api/api.types";
 import { Loader } from "../../common/ui/Loader";
-import { SightDetailModal } from "../../components/explore/sights/SightDetailModal";
 import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
 import {
   PlusCircleIcon,
@@ -46,7 +45,8 @@ import {
   XIcon,
 } from "../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "./_tripDetailStyles";
-import { TripActivityFlightCard } from "./components/TripActivityFlightCard";
+import { TopSightDetail } from "./components/TopSightDetail";
+import { TripActivityRestCard } from "./components/TripActivityRestCard";
 import { getAndReturnCurrentDay } from "./helper";
 import { AddActivityButton } from "./SubComponents/AddActivityButton";
 import { AddCustomActivity } from "./SubComponents/AddCustomActivity";
@@ -221,10 +221,10 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   };
 
   const handleTopSightClick = (sight: SightType) => {
-    // setTopSightDetail(sight);
-    navigation.navigate("SightDetail", {
-      sight
-    });
+    setTopSightDetail(sight);
+    // navigation.navigate("SightDetail", {
+    //   sight
+    // });
   };
 
   const handleClear = useCallback(() => {
@@ -380,14 +380,22 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           />
         ))}
         <>
-          <TripActivityFlightCard
+        <TripActivityRestCard
+            activityAmount={2}
+            // checkedIn={checkedIn}
+            // item={item}
+            index={index}
+            onQuestionModalOpen={onQuestionModalOpen}
+            // handleChangeActivityVisited={handleChangeActivityVisited}
+          />
+          {/* <TripActivityFlightCard
             activityAmount={2}
             // checkedIn={checkedIn}
             // item={item}
             index={index}
             onQuestionModalOpen={() => {}}
             // handleChangeActivityVisited={handleChangeActivityVisited}
-          />
+          /> */}
           {/* <TripActivityDirectionCard
             activityAmount={2}
             // checkedIn={checkedIn}
@@ -412,14 +420,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
             onQuestionModalOpen={onQuestionModalOpen}
             // handleChangeActivityVisited={handleChangeActivityVisited}
           />
-          <TripActivityRestCard
-            activityAmount={2}
-            // checkedIn={checkedIn}
-            // item={item}
-            index={index}
-            onQuestionModalOpen={onQuestionModalOpen}
-            // handleChangeActivityVisited={handleChangeActivityVisited}
-          />
+         
           <TripActivityMeetingCard
             activityAmount={2}
             // checkedIn={checkedIn}
@@ -530,7 +531,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           style={[
             styles.loaderWrapper,
             {
-              marginTop: -35,
+              marginTop: -60,
             },
           ]}
         >
@@ -557,21 +558,17 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                 style={[
                   styles.loaderWrapper,
                   {
-                    marginTop: -35,
+                    marginTop: -60,
                   },
                 ]}
               >
-                <Loader
-                  isLoading={true}
-                  color=""
-                  background="#F2F2F7"
-                />
-            </View>
+                <Loader isLoading={true} color="" background="#F2F2F7" />
+              </View>
             )}
             style={[
               styles.tabViewStyles,
               {
-                marginTop: -35,
+                marginTop: -60,
               },
             ]}
             pagerStyle={{
@@ -590,6 +587,14 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                   paddingHorizontal: 0,
                 }}
                 inactiveColor="#000"
+                // onTabLongPress={() =>
+                //   Alert.alert("Day details", "Something went wrong", [
+                //     {
+                //       onPress: () => {},
+                //       text: "OK",
+                //     },
+                //   ])
+                // }
                 tabStyle={[
                   styles.tabStyles,
                   {
@@ -612,12 +617,12 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         )
       )}
 
-      {topSightDetail ? (
-        <SightDetailModal
-          showDirection={true}
-          data={topSightDetail}
-          closeCallBack={handleClear}
-        />
+      {topSightDetail ? ( 
+        <TopSightDetail
+        visible={topSightDetail}
+        onClose={handleClear}
+        data={topSightDetail}
+      />
       ) : null}
 
       <AddActivityButton
@@ -625,9 +630,9 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         onAddActivitiesModal={onAddActivitiesModal}
       />
       {visible && (
-        <Portal> 
+        <Portal>
           <View style={[StyleSheet.absoluteFillObject, styles.bg]}>
-            <Animated.View style={[styles.contentCard, { opacity: fadeAnim }]}> 
+            <Animated.View style={[styles.contentCard, { opacity: fadeAnim }]}>
               <TripActivitiesSelect
                 days={state.days}
                 handleAddToTrip={handleAddToTrip}
@@ -639,7 +644,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                 setActiveDay={setIndex}
               />
             </Animated.View>
-          </View> 
+          </View>
         </Portal>
       )}
 
@@ -652,7 +657,9 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           // panGestureEnabled={false}
           HeaderComponent={
             <>
-              <View style={[tripDetailStyles.rowItemHeader, { paddingTop: 15 }]}>
+              <View
+                style={[tripDetailStyles.rowItemHeader, { paddingTop: 15 }]}
+              >
                 <Text style={tripDetailStyles.h2}>Add activity</Text>
 
                 <Pressable
@@ -676,7 +683,6 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           <AddCustomActivity />
         </Modalize>
       </Portal>
- 
     </Host>
   );
 };

@@ -3,7 +3,6 @@ import { Image } from "expo-image";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Pressable,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -58,7 +57,7 @@ export const TripInsights: React.FC<TripProps> = ({
 
   return (
     <>
-      <SafeAreaView
+      <View
         style={[
           styles.safeArea,
           {
@@ -82,35 +81,7 @@ export const TripInsights: React.FC<TripProps> = ({
               <TouchableOpacity
                 style={globalStyles.screenHeaderBackButton}
               ></TouchableOpacity>
-            </View>
-
-            <ScrollView
-              horizontal
-              style={globalStyles.underScreenTabs}
-              contentContainerStyle={{
-                paddingHorizontal: 15,
-              }}
-              showsHorizontalScrollIndicator={false}
-            >
-              <Pressable
-                style={[
-                  globalStyles.underScreenTab,
-                  globalStyles.underScreenTabActive,
-                ]}
-              >
-                <Text
-                  style={[
-                    globalStyles.underScreenTabText,
-                    globalStyles.underScreenTabActiveText,
-                  ]}
-                >
-                  Italy
-                </Text>
-              </Pressable>
-              <Pressable style={globalStyles.underScreenTab}>
-                <Text style={globalStyles.underScreenTabText}>Germany</Text>
-              </Pressable>
-            </ScrollView>
+            </View> 
           </>
         )}
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -128,7 +99,7 @@ export const TripInsights: React.FC<TripProps> = ({
             data &&
             Object.keys(data).map((key, i) => (
               <View key={key} style={[styles.topicsRow,{
-                marginTop: i === 0 ? 10 : 25
+                marginTop: i === 0 ? 20 : 25
               }]}>
                 <View style={styles.headingItem}>
                   <Text style={[styles.topicsRowTitle,{
@@ -174,7 +145,7 @@ export const TripInsights: React.FC<TripProps> = ({
               </View>
             ))}
         </ScrollView>
-      </SafeAreaView>
+      </View>
 
       <Portal>
         <Modalize
@@ -267,11 +238,21 @@ export const TripInsights: React.FC<TripProps> = ({
 
 const styles = StyleSheet.create({
   card: {
+    borderColor: "#fff",
     borderRadius: 15,
+    borderWidth: 2,
+    elevation: 5,
     marginRight: 15,
     minHeight: 130,
     overflow: "hidden",
     position: "relative",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
     width: 160,
   },
   cardImage: {
@@ -325,7 +306,7 @@ const styles = StyleSheet.create({
   safeArea: {
     backgroundColor: "#F2F2F7",
     flex: 1,
-    paddingTop: Constants?.statusBarHeight + 10,
+    paddingTop: Constants?.statusBarHeight + 15,
   },
   topicsRow: {
     flexGrow: 1,

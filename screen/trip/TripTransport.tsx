@@ -8,7 +8,6 @@ import {
   Linking,
   Platform,
   Pressable,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -41,9 +40,9 @@ export const TripTransport: React.FC<Props> = ({ route, navigation }) => {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
        <StatusBar style="dark" />
-      <View style={globalStyles.screenHeader}>
+       <View style={globalStyles.screenHeader}>
         <Pressable
           onPress={() => navigation.goBack()}
           style={globalStyles.screenHeaderBackButton}
@@ -56,34 +55,10 @@ export const TripTransport: React.FC<Props> = ({ route, navigation }) => {
         <TouchableOpacity
           style={globalStyles.screenHeaderBackButton}
         ></TouchableOpacity>
-      </View>
-      <View>
-        <ScrollView
-          horizontal
-          style={globalStyles.underScreenTabs}
-          contentContainerStyle={{
-            paddingHorizontal: 15,
-          }}
-          showsHorizontalScrollIndicator={false}
-        >
-          <Pressable
-            style={[
-              globalStyles.underScreenTab,
-              globalStyles.underScreenTabActive,
-            ]}
-          >
-            <Text style={[globalStyles.underScreenTabText,
-              globalStyles.underScreenTabActiveText
-            ]}>Italy</Text>
-          </Pressable>
-          <Pressable style={globalStyles.underScreenTab}>
-            <Text style={globalStyles.underScreenTabText}>Germany</Text>
-          </Pressable> 
-        </ScrollView>
-      </View>
+      </View> 
       <ScrollView
         style={{ flex: 1, flexGrow: 1 }}
-        contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 0 }}
+        contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 15 }}
         //@ts-ignore
         selectable
       >
@@ -120,7 +95,7 @@ export const TripTransport: React.FC<Props> = ({ route, navigation }) => {
             </TouchableOpacity>
           ))}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -128,7 +103,7 @@ const styles = StyleSheet.create({
   safeArea: {
     backgroundColor: "#F2F2F7",
     flex: 1,
-    paddingTop: Constants?.statusBarHeight + 10,
+    paddingTop: Constants?.statusBarHeight + 15,
   },
   transportItem: {
     alignItems: "center",

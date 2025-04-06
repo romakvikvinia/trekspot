@@ -6,6 +6,7 @@ import React, {
 } from "react";
 import {
   Alert,
+  Animated,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -13,7 +14,7 @@ import {
 } from "react-native";
 import { enGB, registerTranslation } from "react-native-paper-dates";
 
-import { COLORS, SIZES } from "../../styles/theme";
+import { COLORS } from "../../styles/theme";
 registerTranslation("en", enGB);
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import * as Haptics from "expo-haptics";
@@ -66,8 +67,9 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
   const [tripType, setTripType] = React.useState("upcoming");
   const [showGuestModal, setShowGuestModal] = React.useState(false);
   const [editMode, setEditMode] = React.useState(false);
-
+  const [createTripModal, setCreateTripModal] = React.useState(false);
   const [fetchDate, { data, isLoading, isError }] = useLazyMyTripsQuery();
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const [
     fetchDeleteTrip,
@@ -105,9 +107,23 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
     } else {
       posthog.capture(Events.CreateTripModalOpened);
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        createOrUpdateTripModal.current?.open();
+      setCreateTripModal(true);
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 150,
+        useNativeDriver: true,
+      }).start();
     }
   };
+
+  const hideCreateTripModal = () => {
+    setCreateTripModal(false);
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 150,
+      useNativeDriver: true,
+    }).start();
+  } 
 
   const handleOpenContextMenu = useCallback(
     (trip: TripType) => {
@@ -255,7 +271,9 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
                 cachePolicy="memory-disk"
               ></Image>
               <Text style={_tripScreenStyles.notFoundViewTitleText}>
-                {tripType === "past" ? "No previous journeys" : "When if not today?"}
+                {tripType === "past"
+                  ? "No previous journeys"
+                  : "When if not today?"}
               </Text>
               <Text style={_tripScreenStyles.notFoundViewText}>
                 {tripType === "past"
@@ -265,7 +283,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
 
               <TouchableOpacity
                 style={_tripScreenStyles.createNewTripButton}
-                onPress={() =>  handleCreateNewTrip()}
+                onPress={() => handleCreateNewTrip()}
               >
                 <Text style={_tripScreenStyles.createNewTripButtonText}>
                   {tripType === "past"
@@ -277,13 +295,13 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
           )}
         </ScrollView>
       </View>
-      {
-        showGuestModal && <GuestUserModal onClose={() => setShowGuestModal(false)} />
-      }
+      {showGuestModal && (
+        <GuestUserModal onClose={() => setShowGuestModal(false)} />
+      )}
 
       {/* Create trip */}
 
-      <Portal>
+      {/* <Portal>
         <Modalize
           closeAnimationConfig={{ timing: { duration: 0 } }}
           ref={createOrUpdateTripModal}
@@ -307,14 +325,19 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
               setEditMode(false);
             }
           }
-        >
-          <NewTrip
-            newTripModalRef={createOrUpdateTripModal}
-            callBack={callBack}
-            item={state.trip}
-            editMode={editMode}
-          />
-        </Modalize>
+        > */}
+      <Portal>
+        {createTripModal && (
+          <Animated.View style={[{ opacity: fadeAnim, flex: 1 }]}>
+            <NewTrip
+              newTripModalRef={createOrUpdateTripModal}
+              callBack={callBack}
+              item={state.trip}
+              editMode={editMode}
+              hideCreateTripModal={hideCreateTripModal}
+            />
+          </Animated.View>
+        )}
       </Portal>
 
       {/* Actions modal */}

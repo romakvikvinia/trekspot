@@ -6,6 +6,7 @@ import CurrencyScreen from "../common/components/CurrencyScreen";
 import { RestaurantDetail } from "../components/City/RestaurantDetail";
 import { CityDetailScreen } from "../screen/Explore/city/CityDetailScreen";
 import { CountryDetailScreen } from "../screen/Explore/Country/CountryDetailScreen";
+import { ActivityExpenses } from "../screen/trip/ActivityExpenses";
 import { ActivityNoteOrDescription } from "../screen/trip/ActivityNoteOrDescription";
 import { Dine } from "../screen/trip/AddActivities/Dine";
 import { Events } from "../screen/trip/AddActivities/Events";
@@ -25,7 +26,9 @@ import { InviteTripMember } from "../screen/trip/InviteTripMember";
 import { TripDetailScreen } from "../screen/trip/TripDetailScreen";
 import { TripDishes } from "../screen/trip/TripDishes";
 import { TripEmergency } from "../screen/trip/TripEmergency";
+import { TripExplore } from "../screen/trip/TripExplore";
 import { TripInsights } from "../screen/trip/TripInsights";
+import { TripRestaurants } from "../screen/trip/TripRestaurants";
 import { TripSettings } from "../screen/trip/TripSettings";
 import { TripTransport } from "../screen/trip/TripTransport";
 import { SIZES } from "../styles/theme";
@@ -106,6 +109,28 @@ const AppRoute = () => {
               Platform.OS === "android" ? 10 : SIZES.width - 50,
           })}
         />
+         <Stack.Screen
+          name="TripExplore"
+          component={TripExplore}
+          options={() => ({
+            header: () => null,
+            animationEnabled: true,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+        />
+        <Stack.Screen
+          name="TripRestaurants"
+          component={TripRestaurants}
+          options={() => ({
+            header: () => null,
+            animationEnabled: true, 
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+        />
         <Stack.Screen
           name="TripInsights"
           component={TripInsights}
@@ -170,6 +195,10 @@ const AppRoute = () => {
           <Stack.Screen
             name="ActivityNoteOrDescription"
             component={ActivityNoteOrDescription}
+          />
+           <Stack.Screen
+            name="ActivityExpenses"
+            component={ActivityExpenses}
           />
           <Stack.Screen name="Route" component={Route} />
           <Stack.Screen name="TransportRoute" component={TransportRoute} />

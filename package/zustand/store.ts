@@ -9,6 +9,7 @@ export const useTripStore = create(
       tripStyle: false,
       guestActivityCount: 0,
       isVisitedUsed: false,
+      destinationSwitcherTooltip: false,
       setTripStyle: (tripStyle: boolean) => set({ tripStyle }),
       setOnboardingSeen: (onboardingSeen: boolean) => set({ onboardingSeen }),
       setVisitedUsed: (isVisitedUsed: boolean) => set({ isVisitedUsed }),
@@ -19,6 +20,8 @@ export const useTripStore = create(
             guestActivityCount: state.guestActivityCount + 1,
           };
         }),
+      setDestinationSwitcherTooltip: (destinationSwitcherTooltip: boolean) =>
+        set({ destinationSwitcherTooltip }),
     }),
     {
       name: "trekspot-trip-store",

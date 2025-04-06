@@ -12,12 +12,10 @@ import {
 import { Events } from "../../../utilities/Posthog";
 import {
   AppsIcon,
-  ChecklistIcon,
   DishesIcon,
-  DocumentIcon,
-  EmergencyLinearIcon,
-  ExpensesIcon,
+  ExploreTabIcon,
   InsightIcon,
+  RestaurantsIcon,
 } from "../../../utilities/SvgIcons.utility";
 
 type TripHelpersProps = {
@@ -49,7 +47,57 @@ export const TripHelpers = ({
         contentContainerStyle={{ paddingHorizontal: reachView ? 20 : 20 }}
         showsHorizontalScrollIndicator={false}
       >
+         <Pressable
+          style={({pressed}) => [
+            styles.bottomActionsButton,
+            {
+              backgroundColor: pressed ? "#ccc" : "#fafafa",
+            },
+          ]}
+          //@ts-expect-error
+          onPress={() => {
+            navigation.navigate("TripExplore", { trip: data });
+          }}
+          hitSlop={10}
+        >
+          <ExploreTabIcon size={15} color="#000" />
+          <Text
+            style={[
+              styles.bottomActionsButtonlabel,
+              {
+                color: "#000",
+              },
+            ]}
+          >
+            Explore
+          </Text>
+        </Pressable>
         <Pressable
+          style={({pressed}) => [
+            styles.bottomActionsButton,
+            {
+              backgroundColor: pressed ? "#ccc" : "#fafafa",
+            },
+          ]}
+          //@ts-expect-error
+          onPress={() => {
+            navigation.navigate("TripRestaurants", { trip: data });
+          }}
+          hitSlop={10}
+        >
+           <RestaurantsIcon size={15} color="#000" />
+          <Text
+            style={[
+              styles.bottomActionsButtonlabel,
+              {
+                color: "#000",
+              },
+            ]}
+          >
+            Restaurants
+          </Text>
+        </Pressable>
+        {/* <Pressable
           style={({pressed}) => [
             styles.bottomActionsButton,
             {
@@ -100,8 +148,8 @@ export const TripHelpers = ({
           >
             Expenses
           </Text>
-        </Pressable>
-        <Pressable
+        </Pressable> */}
+        {/* <Pressable
           style={({pressed}) => [
             styles.bottomActionsButton,
             {
@@ -126,33 +174,8 @@ export const TripHelpers = ({
           >
             Checklist
           </Text>
-        </Pressable>
-        <Pressable
-          style={({pressed}) => [
-            styles.bottomActionsButton,
-            {
-              backgroundColor: pressed ? "#ccc" : "#fafafa",
-            },
-          ]}
-          hitSlop={10}
-          //@ts-expect-error
-          onPress={() => {
-            posthog.capture(Events.UserUsesTripHelperEmergency, {});
-            navigation.navigate("TripEmergency", { iso2 });
-          }}
-        >
-          <EmergencyLinearIcon size={14} color="#000" />
-          <Text
-            style={[
-              styles.bottomActionsButtonlabel,
-              {
-                color: "#000",
-              },
-            ]}
-          >
-            Emergency
-          </Text>
-        </Pressable>
+        </Pressable> */}
+      
         <Pressable
           style={({pressed}) => [
             styles.bottomActionsButton,
@@ -191,6 +214,34 @@ export const TripHelpers = ({
           ]}
           hitSlop={10}
           onPress={() => {
+            posthog.capture(Events.UserUsesTriphelperDishes, {});
+            //@ts-ignore
+            navigation.navigate("TripDishes", {
+              iso2: iso2,
+            });
+          }}
+        >
+          <DishesIcon size={14} color="#000" />
+          <Text
+            style={[
+              styles.bottomActionsButtonlabel,
+              {
+                color: "#000",
+              },
+            ]}
+          >
+            Dishes
+          </Text>
+        </Pressable>
+        <Pressable
+          style={({pressed}) => [
+            styles.bottomActionsButton,
+            {
+              backgroundColor: pressed ? "#ccc" : "#fafafa",
+            },
+          ]}
+          hitSlop={10}
+          onPress={() => {
             posthog.capture(Events.UserUsesTriphelperApps, {});
             //@ts-ignore
             navigation.navigate("TripTransport", {
@@ -210,34 +261,7 @@ export const TripHelpers = ({
             Apps
           </Text>
         </Pressable>
-        <Pressable
-          style={({pressed}) => [
-            styles.bottomActionsButton,
-            {
-              backgroundColor: pressed ? "#ccc" : "#fafafa",
-            },
-          ]}
-          hitSlop={10}
-          onPress={() => {
-            posthog.capture(Events.UserUsesTriphelperDishes, {});
-            //@ts-ignore
-            navigation.navigate("TripDishes", {
-              iso2: iso2,
-            });
-          }}
-        >
-          <DishesIcon size={14} color="#000" />
-          <Text
-            style={[
-              styles.bottomActionsButtonlabel,
-              {
-                color: "#000",
-              },
-            ]}
-          >
-            National dishes
-          </Text>
-        </Pressable>
+    
       </ScrollView>
     </View>
   );
@@ -253,7 +277,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: 8,
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: 7,
   },
   bottomActionsButtonlabel: {
     color: "#0b57d0",

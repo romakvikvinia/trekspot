@@ -1,7 +1,6 @@
 import Constants from "expo-constants";
 import {
   Pressable,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -37,7 +36,7 @@ export const TripDishes = ({ route }) => {
   // };
 
   return (
-    <SafeAreaView style={dishStyles.safeArea}>
+    <View style={dishStyles.safeArea}> 
       <StatusBar style="dark" />
       <View style={globalStyles.screenHeader}>
         <Pressable
@@ -48,39 +47,10 @@ export const TripDishes = ({ route }) => {
           <BackIcon size="18" />
         </Pressable>
 
-        <Text style={globalStyles.screenTitle}>National dishes</Text>
+        <Text style={globalStyles.screenTitle}>Local dishes</Text>
         <TouchableOpacity
           style={globalStyles.screenHeaderBackButton}
         ></TouchableOpacity>
-      </View>
-      <View>
-        <ScrollView
-          horizontal
-          style={globalStyles.underScreenTabs}
-          contentContainerStyle={{
-            paddingHorizontal: 15,
-          }}
-          showsHorizontalScrollIndicator={false}
-        >
-          <Pressable
-            style={[
-              globalStyles.underScreenTab,
-              globalStyles.underScreenTabActive,
-            ]}
-          >
-            <Text
-              style={[
-                globalStyles.underScreenTabText,
-                globalStyles.underScreenTabActiveText,
-              ]}
-            >
-              Italy
-            </Text>
-          </Pressable>
-          <Pressable style={globalStyles.underScreenTab}>
-            <Text style={globalStyles.underScreenTabText}>Germany</Text>
-          </Pressable>
-        </ScrollView>
       </View>
       <ScrollView style={{ flex: 1 }}>
         <View
@@ -89,10 +59,10 @@ export const TripDishes = ({ route }) => {
             flex: 1,
           }}
         >
-          <Dining iso2={iso2} />
+          <Dining iso2={iso2} showTitle={false} isTrip={true} />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -100,6 +70,6 @@ const dishStyles = StyleSheet.create({
   safeArea: {
     backgroundColor: "#F2F2F7",
     flex: 1,
-    paddingTop: Constants?.statusBarHeight + 10,
+    paddingTop: Constants?.statusBarHeight + 15,
   },
 });

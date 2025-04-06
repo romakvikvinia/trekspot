@@ -8,6 +8,8 @@ import { exploreStyles } from "../explore/sights/_exploreStyles";
 import { SightDetailModal } from "../explore/sights/SightDetailModal";
 import { SightItem } from "../explore/sights/SightItem";
 import { SightsContainer } from "../explore/sights/SightsContainer";
+import { CityOverviewText } from "./CityOverviewText";
+
 interface IState {
   sight: SightType | null;
 }
@@ -51,12 +53,15 @@ export const ExploreTab = ({ activeTab, data, isLoading }) => {
           </View>
         )}
 
+        <CityOverviewText />
+
         {topSights?.length > 0 && (
           <View
             style={[
               exploreStyles.placeSpotsRow,
               {
                 borderTopWidth: 0,
+                marginTop: 0
               },
             ]}
           >

@@ -3,10 +3,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { parseISO } from "date-fns";
 import { useFormik } from "formik";
 import React, { useEffect, useRef, useState } from "react";
-import { Animated, View } from "react-native";
-import { Modalize } from "react-native-modalize";
+import { Animated } from "react-native";
 import { IHandles } from "react-native-modalize/lib/options";
-import { Portal } from "react-native-portalize";
 
 import {
   trekSpotApi,
@@ -17,16 +15,14 @@ import { CityType, TripType } from "../../api/api.types";
 import { useAppDispatch } from "../../package/store";
 import { TripRouteStackParamList } from "../../routes/trip/TripRoutes";
 import { creationTrip } from "../auth/validationScheme";
-import { Destination } from "./Destination";
-import { RangePicker } from "./RangePicker";
 import { CreateTripContent } from "./SubComponents/CreateTripContent";
-import { styles } from "./SubComponents/CreateTripStyles";
 
 interface INewTripProps {
   newTripModalRef: React.RefObject<IHandles>;
   callBack: () => void;
   item?: TripType;
   editMode: boolean;
+  hideCreateTripModal: () => void;
 }
 
 type TripStackNavigationProp = StackNavigationProp<TripRouteStackParamList>;
@@ -36,6 +32,7 @@ export const NewTrip = ({
   newTripModalRef,
   callBack,
   editMode,
+  hideCreateTripModal,
 }: INewTripProps) => {
   const navigation = useNavigation<TripStackNavigationProp>();
   const dispatch = useAppDispatch();
@@ -53,8 +50,7 @@ export const NewTrip = ({
   ] = useUpdateTripMutation();
 
   const [open, setOpen] = useState(false);
-  const [whereToModal, setWhereToModal] = useState(false);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const showPopup = () => {
     setVisibleDestinationsPopup(true);
@@ -64,17 +60,8 @@ export const NewTrip = ({
       useNativeDriver: true,
     }).start();
   };
-
-  const hidePopup = () => {
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 10,
-      useNativeDriver: true,
-    }).start(() => setVisibleDestinationsPopup(false));
-  };
-
-  const modalDestinationRef = useRef<Modalize>(null);
-
+ 
+ 
   const formik = useFormik({
     initialValues: {
       name: item?.name || "",
@@ -108,9 +95,7 @@ export const NewTrip = ({
     },
   });
 
-  const onDestinationModalOpen = () => {
-    modalDestinationRef.current?.open();
-  };
+ 
   const onDestinationModalClose = (city?: CityType, cities?: string[]) => {
    
     hidePopup();
@@ -142,57 +127,16 @@ export const NewTrip = ({
       dispatch(trekSpotApi.util.invalidateTags(["upComingTrips"]));
     }
   }, [isUpdatedTripSuccess, callBack]);
-
+ 
   return (
-    <>
-      <View style={[styles.tripModalGradient, { padding: 0 }]}>
-        <CreateTripContent
-          newTripModalRef={newTripModalRef}
-          setOpen={setOpen}
-          formik={formik}
-          showPopup={showPopup}
-          isLoading={isUpdateTripLoading || isLoading}
-          editMode={editMode}
-        />
-      </View>
-      <RangePicker formik={formik} open={open} setOpen={setOpen} />
-
-      <Portal>
-        {
-          visibleDestinationsPopup && 
-          <Animated.View style={[{ opacity: fadeAnim, flex: 1 }]}>
-            <Destination
-              onDestinationModalClose={onDestinationModalClose}
-              setVisibleDestinationsPopup={setVisibleDestinationsPopup}
-              formik={formik}
-              setOpen={setOpen}
-            />
-          </Animated.View>
-        }
-      </Portal>
-    </>
+    <CreateTripContent
+      newTripModalRef={newTripModalRef}
+      setOpen={setOpen}
+      formik={formik}
+      showPopup={showPopup}
+      isLoading={isUpdateTripLoading || isLoading}
+      editMode={editMode}
+      hideCreateTripModal={hideCreateTripModal}
+    />
   );
-};
-
-{
-  /* <Portal>
-        <Modalize
-          modalStyle={{
-            backgroundColor: "#F2F2F7",
-            minHeight: "70%",
-          }}
-          ref={modalAccessibilityRef}
-          modalTopOffset={65}
-          adjustToContentHeight
-          scrollViewProps={{
-            alwaysBounceVertical: false,
-            showsVerticalScrollIndicator: false,
-          }}
-        >
-          <Accessibility
-            tripAccess={tripAccess}
-            setTripAccess={setTripAccess}
-          />
-        </Modalize>
-      </Portal> */
-}
+}; 

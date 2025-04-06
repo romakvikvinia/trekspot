@@ -47,7 +47,7 @@ export const globalStyles = StyleSheet.create({
   screenTitle: {
     color: "#000",
     fontSize: 18,
-    fontWeight: "500",
+    fontWeight: "600",
   },
   underScreenTab: {
     alignItems: "center",
@@ -61,11 +61,11 @@ export const globalStyles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   underScreenTabActive: {
-    backgroundColor: "#d6e7ff",
-    borderColor: "#d6e7ff"
+    backgroundColor: "#000",
+    borderColor: "#000"
   },
   underScreenTabActiveText: {
-    color: COLORS.primary,
+    color: "#fff",
   },
   underScreenTabText: {
     fontSize: 16,

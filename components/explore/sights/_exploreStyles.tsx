@@ -1,45 +1,47 @@
 import { StyleSheet } from "react-native";
+
 import { COLORS } from "../../../styles/theme";
 
 export const exploreStyles = StyleSheet.create({
   placeSpotsRow: {
-    marginTop: 25,
     borderTopColor: "#ddd",
     borderTopWidth: 5,
-  },
-  placeSpotsRowTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: COLORS.black,
-    paddingHorizontal: 15,
-    marginBottom: 15,
-  },
-  placeSpotsRowSubTitle: {
-    fontSize: 14,
-    color: COLORS.gray,
-  },
-  placeSpotsRowTrigger: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    flexDirection: "row",
-    width: "100%",
-    paddingHorizontal: 15,
-    paddingVertical: 20,
+    marginTop: 25,
   },
   placeSpotsRowLeft: {
     position: "relative",
-    width: "90%",
     textAlign: "left",
+    width: "90%",
   },
-  ratingWrapper: {
-    flexDirection: "row",
+  placeSpotsRowSubTitle: {
+    color: COLORS.gray,
+    fontSize: 14,
+  },
+  placeSpotsRowTitle: {
+    color: COLORS.black,
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: 15,
+    paddingHorizontal: 15,
+  },
+  placeSpotsRowTrigger: {
     alignItems: "center",
-    marginTop: 5,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 15,
+    paddingVertical: 20,
+    width: "100%",
   },
   ratingText: {
-    fontSize: 14,
-    marginLeft: 5,
     color: COLORS.black,
+    fontSize: 14,
+    fontWeight: "500",
+    marginLeft: 5
+  },
+  ratingWrapper: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginTop: 5,
   },
 });

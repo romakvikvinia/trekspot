@@ -16,7 +16,6 @@ import {
   FlightIcon,
   LodgeIcon,
   MeetingIcon,
-  RestaurantIcon,
   RouteIcon,
   ShipIcon,
   TourFlagIcon,
@@ -25,7 +24,7 @@ import {
 } from "../../../utilities/SvgIcons.utility";
 
 const activityButtons = [
-  { id: 1, label: "Restaurants", color: "#f78e45", Icon: RestaurantIcon },
+  // { id: 1, label: "Restaurants", color: "#f78e45", Icon: RestaurantIcon },
   { id: 2, label: "Car rental", color: "#1da1fd", Icon: CarRentalIcon },
   { id: 3, label: "Train", color: "#ae8155", Icon: TrainIcon },
   { id: 4, label: "Ferry", color: "#5674d0", Icon: ShipIcon },

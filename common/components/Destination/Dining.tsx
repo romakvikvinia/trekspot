@@ -4,24 +4,26 @@ import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
 import { useDishesByISO2Query } from "../../../api/api.trekspot";
-import { CountryType } from "../../../api/api.types";
+import { CountryDishesArgsType, CountryType } from "../../../api/api.types";
 import { NodataText } from "../../../components/common/NoDataText";
 import { FeedbackCountryDetail } from "../../../components/explore/FeedbackCountryDetail";
 import { StarIcon } from "../../../utilities/SvgIcons.utility";
 import { Loader } from "../../ui/Loader";
 import { styles } from "../_styles";
+import { DishDetail } from "./_DishDetail";
 
 type DiningProps = {
   iso2: CountryType;
 };
 
-export const Dining: React.FC<DiningProps> = ({ iso2 }) => {
+export const Dining: React.FC<DiningProps> = ({ iso2, showTitle = true, isTrip = false }) => {
+  console.log("iso2",iso2)
   const { isLoading, data, isError } = useDishesByISO2Query({
     iso2,
   });
 
   const [visibleCount, setVisibleCount] = useState(10);
-
+  const [selectedDish, setSelectedDish] = useState<CountryDishesArgsType | null>(null);
   const handleShowMore = () => {
     setVisibleCount((prevCount) => prevCount + 10);  
   };
@@ -50,9 +52,11 @@ export const Dining: React.FC<DiningProps> = ({ iso2 }) => {
       )}
       {data?.dishes && data?.dishes.length > 0 && (
         <View style={styles.tabContentHeader}>
-          <Text style={styles.tabContentHeaderText}>
-            Popular national dishes
-          </Text>
+          {showTitle && (
+            <Text style={styles.tabContentHeaderText}>
+              Popular national dishes
+            </Text>
+          )}
         </View>
       )}
 
@@ -65,7 +69,7 @@ export const Dining: React.FC<DiningProps> = ({ iso2 }) => {
               data={visibleData}
               numColumns={2}
               renderItem={({ item }) => (
-                <View style={styles.thingsTodoItem} key={item?.score}>
+                <Pressable onPress={() => setSelectedDish(item)} style={styles.thingsTodoItem} key={item?.score}>
                   <Image
                     style={styles.thingsTodoItemImage}
                     source={
@@ -83,7 +87,9 @@ export const Dining: React.FC<DiningProps> = ({ iso2 }) => {
                     <Text style={styles.thingsTodoItemTitle} selectable={true}>
                       {item?.title}
                     </Text>
-                    <View style={styles.thingsTodoItemiIn}>
+                    <View style={[styles.thingsTodoItemiIn, {
+                      marginTop: 5,
+                    }]}>
                       <View
                         style={[
                           styles.ratingLabel,
@@ -93,9 +99,6 @@ export const Dining: React.FC<DiningProps> = ({ iso2 }) => {
                         <View
                           style={{
                             position: "relative",
-                            top: -1,
-                            opacity: 0.8,
-                            marginRight: 3,
                           }}
                         >
                           <StarIcon color="#FFBC3E" size={15} />
@@ -136,7 +139,7 @@ export const Dining: React.FC<DiningProps> = ({ iso2 }) => {
                       )} */}
                     </View>
                   </View>
-                </View>
+                </Pressable>
               )}
               estimatedItemSize={200}
               contentContainerStyle={{
@@ -173,6 +176,8 @@ export const Dining: React.FC<DiningProps> = ({ iso2 }) => {
           </View>
         )}
       </View>
+
+      <DishDetail visible={!!selectedDish} onClose={() => setSelectedDish(null)} data={selectedDish} />
     </>
   );
 };

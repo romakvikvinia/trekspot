@@ -3,10 +3,8 @@ import { StyleSheet, Text, View } from "react-native";
 
 import { FloatingActionButton } from "../../../components/common/FloatingButtons";
 import { COLORS } from "../../../styles/theme";
-import { DotsIcon, NoteIcon, TrashIcon } from "../../../utilities/SvgIcons.utility";
+import { CostIcon, DotsIcon, NoteIcon, TrashIcon } from "../../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "../_tripDetailStyles";
-import { DirectionButton } from "./DirectionButton";
-import { FilesButton } from "./FilesButton";
 import { VisitedButton } from "./VisitedButton";
 
 type ActivityCardActionsProps = {
@@ -43,13 +41,21 @@ export const ActivityCardActions = ({
           checkedIn={checkedIn}
           index={index}
         />
-        {!type && <DirectionButton item={item} />}
-        <FilesButton />
+        {/* {!type && <DirectionButton item={item} />} */}
+        {/* <FilesButton /> */}
       </View>
 
       <View style={tripDetailStyles.sightRightActions}>
         <FloatingActionButton
           buttons={[ 
+              //@ts-expect-error ///
+              {
+                label: "Add expenses",
+                //@ts-expect-error ///
+                onPress: () =>  navigation.navigate("ActivityExpenses"),
+                icon: CostIcon,
+                isDanger: false,
+              },
             //@ts-expect-error ///
             {
               label: "Add note",

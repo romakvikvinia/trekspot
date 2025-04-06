@@ -89,8 +89,9 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
     dispatch(trekSpotApi.util.invalidateTags(["analytics"]));
   }, [checkedIn]);
 
+
   return (
-    <>
+    <> 
       <TouchableOpacity
         activeOpacity={0.7}
         style={[
@@ -112,14 +113,13 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
             {/* <ReturnIcon category={item?.category} /> */}
             <View style={styles.circle}></View>
           </View>
-        )}
-
+        )} 
         <View
           style={[
             checkedIn ? tripDetailStyles.checkedIn : null,
             styles.activityContent,
           ]}
-        >
+        > 
           <ImgComponent item={item} />
 
           <CardContent item={item} />
