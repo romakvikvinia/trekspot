@@ -152,14 +152,13 @@ export const CityDetailScreen: React.FC<Props> = ({ route }) => {
             style={[
               styles.tabsWrapper,
               {
-                display: isSticky ? "flex" : "none",
+                display: "flex",
                 flexDirection: "row",
                 maxHeight: 50,
-                position: "absolute",
-                top: 80,
                 zIndex: 4,
-                backgroundColor: "#f8f8f8",
+                backgroundColor: "#fff",
                 borderBottomColor: "#ccc",
+                marginTop: 0
               },
             ]}
           >
@@ -178,10 +177,10 @@ export const CityDetailScreen: React.FC<Props> = ({ route }) => {
         onScroll={handleParentScroll}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
-        ref={scrollViewRef}
+        ref={scrollViewRef} 
       >
         {/* Content */}
-  
+      
         {!isLoading ? (
           <>
             <CityTitleRow
@@ -198,24 +197,7 @@ export const CityDetailScreen: React.FC<Props> = ({ route }) => {
               plugTypes={countyData?.countryByIso2?.plugTypes}
               currencies={countyData?.countryByIso2?.currencies}
             />
-
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingHorizontal: 15,
-              }}
-              style={[
-                styles.tabsWrapper,
-                {
-                  opacity: isSticky ? 0 : 1,
-                },
-              ]}
-              ref={scrollView2Ref}
-            >
-              {renderTabs()}
-            </ScrollView>
-
+ 
             <ExploreTab
               activeTab={activeTab}
               data={data}

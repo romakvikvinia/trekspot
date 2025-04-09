@@ -54,7 +54,7 @@ export const Dining: React.FC<DiningProps> = ({ iso2, showTitle = true, isTrip =
         <View style={styles.tabContentHeader}>
           {showTitle && (
             <Text style={styles.tabContentHeaderText}>
-              Popular national dishes
+              Local dishes
             </Text>
           )}
         </View>
@@ -106,7 +106,7 @@ export const Dining: React.FC<DiningProps> = ({ iso2, showTitle = true, isTrip =
                         <Text
                           style={[
                             styles.ratingText,
-                            { color: "#000", marginLeft: 0, fontWeight: "500" },
+                            { color: "#000", marginLeft: 5, fontWeight: "600" },
                           ]}
                         >
                           {item?.rate}

@@ -94,6 +94,7 @@ export const DishDetail: React.FC<TopSightDetailProps> = ({
   const scale = useSharedValue(visible ? 1 : 0.9);
   const opacity = useSharedValue(visible ? 1 : 0);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   const [tab, setTab] = useState("General");
 
@@ -106,20 +107,29 @@ export const DishDetail: React.FC<TopSightDetailProps> = ({
     transform: [{ scale: scale.value }],
     opacity: opacity.value,
   }));
-
-  //   const openMap = (location: { lat: number; lng: number }, type: "google" | "apple", address: string) => {
-  //     const scheme = Platform.select({
-  //       ios: type === "google" ? "comgooglemaps://?q=" : "maps://0,0?q=",
-  //       android: "geo:0,0?q=",
-  //     });
-  //     const url = Platform.select({
-  //       ios: type !== "google" ? `${scheme}${location.lat},${location.lng}` : `${scheme}${address}`,
-  //       android: `${scheme}${location.lat},${location.lng}`,
-  //     });
-
-  //     Linking.openURL(url!);
-  //   };
-
+  
+  const handleClose = () => {
+    opacity.value = withTiming(0, { duration: 300 });
+    scale.value = withTiming(0.9, { duration: 300 }); 
+  
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  
+    setTimeoutId(setTimeout(() => {
+      onClose?.();
+      setIsScrolled(false);
+    }, 300));
+  };
+  
+  useEffect(() => {
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [timeoutId]);
+ 
   const newData = { ...dataa, ...data };
 
   if (!visible) return null;
@@ -131,7 +141,7 @@ export const DishDetail: React.FC<TopSightDetailProps> = ({
         <Animated.View style={[styles.container, animatedStyle]}>
           <View style={[styles.header, isScrolled && styles.headerScrolled]}>
             <Pressable
-              onPress={() => onClose()}
+              onPress={() => handleClose()}
               style={styles.backButton}
               hitSlop={20}
             >

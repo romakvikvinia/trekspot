@@ -2,7 +2,6 @@ import Constants from "expo-constants";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Alert,
-  Animated,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -22,6 +21,7 @@ import * as Haptics from "expo-haptics";
 import { usePostHog } from "posthog-react-native";
 import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import {
   NavigationState,
   Route,
@@ -111,18 +111,33 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   const modalQuestionRef2 = useRef<Modalize>(null);
   const addActivitiesModal = useRef<Modalize>(null);
   const [index, setIndex] = useState(0);
+  const [visible, setVisible] = useState(false);
+  const [topSightDetail, setTopSightDetail] = useState<SightType | null>();
+  const [state, setState] = useState<IState>({
+    days: [],
+  });
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+
+  const scale = useSharedValue(visible ? 1 : 0.9);
+  const opacity = useSharedValue(visible ? 1 : 0);
+
+
+  useEffect(() => {
+    scale.value = withTiming(visible ? 1 : 0.9, { duration: 300 });
+    opacity.value = withTiming(visible ? 1 : 0, { duration: 300 });
+  }, [visible]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+    opacity: opacity.value,
+  }));
 
   const [deleteIndexes, setDeleteIndexes] = useState<{
     route: string;
     day: number;
     sight: string;
   }>();
-  
-
-  const [topSightDetail, setTopSightDetail] = useState<SightType | null>();
-  const [state, setState] = useState<IState>({
-    days: [],
-  });
+   
 
   const { isLoading: isTripDetailLoading, data: tripDetail } = useTripQuery({
     id: trip.id,
@@ -293,26 +308,32 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     []
   );
 
-  const [visible, setVisible] = useState(false);
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-
+ 
   const showPopup = () => {
-    setVisible(true);
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 150,
-      useNativeDriver: true,
-    }).start();
+    setVisible(true); 
   };
-
+ 
   const hidePopup = () => {
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 10,
-      useNativeDriver: true,
-    }).start(() => setVisible(false));
+    opacity.value = withTiming(0, { duration: 300 });
+    scale.value = withTiming(0.9, { duration: 300 }); 
+  
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  
+    setTimeoutId(setTimeout(() => {
+      setVisible(false);
+     }, 300));
   };
+  
+  useEffect(() => {
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [timeoutId]);
 
   const renderCurrentScene: React.FC<
     SceneRendererProps & {
@@ -617,12 +638,12 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         )
       )}
 
-      {topSightDetail ? ( 
+      {topSightDetail ? (
         <TopSightDetail
-        visible={topSightDetail}
-        onClose={handleClear}
-        data={topSightDetail}
-      />
+          visible={topSightDetail}
+          onClose={handleClear}
+          data={topSightDetail}
+        />
       ) : null}
 
       <AddActivityButton
@@ -632,7 +653,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
       {visible && (
         <Portal>
           <View style={[StyleSheet.absoluteFillObject, styles.bg]}>
-            <Animated.View style={[styles.contentCard, { opacity: fadeAnim }]}>
+            <Animated.View style={[styles.contentCard, animatedStyle]}>
               <TripActivitiesSelect
                 days={state.days}
                 handleAddToTrip={handleAddToTrip}
@@ -689,6 +710,9 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
 
 
 const styles = StyleSheet.create({
+  bg:{
+    backgroundColor: "#fff",
+  },
   contentCard: {
     backgroundColor: "#fff",
     borderRadius: 15,

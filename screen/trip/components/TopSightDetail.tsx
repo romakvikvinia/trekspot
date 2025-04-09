@@ -89,7 +89,8 @@ export const TopSightDetail: React.FC<TopSightDetailProps> = ({
   const [isScrolled, setIsScrolled] = useState(false);
   const scale = useSharedValue(visible ? 1 : 0.9);
   const opacity = useSharedValue(visible ? 1 : 0);
- 
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
     scale.value = withTiming(visible ? 1 : 0.9, { duration: 300 });
     opacity.value = withTiming(visible ? 1 : 0, { duration: 300 }); 
@@ -99,6 +100,30 @@ export const TopSightDetail: React.FC<TopSightDetailProps> = ({
     transform: [{ scale: scale.value }],
     opacity: opacity.value,
   }));
+
+  const handleClose = () => {
+    opacity.value = withTiming(0, { duration: 300 });
+    scale.value = withTiming(0.9, { duration: 300 }); 
+  
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  
+    setTimeoutId(setTimeout(() => {
+      onClose?.();
+      setIsScrolled(false);
+      setShowMore(false);
+    }, 300));
+  };
+  
+  useEffect(() => {
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [timeoutId]);
+
 
   const openMap = (location: { lat: number; lng: number }, type: "google" | "apple", address: string) => {
     const scheme = Platform.select({
@@ -164,7 +189,7 @@ export const TopSightDetail: React.FC<TopSightDetailProps> = ({
       <Portal>
          <Animated.View style={[styles.container, animatedStyle]}>
           <View style={[styles.header, isScrolled && styles.headerScrolled]}>
-            <Pressable onPress={() => {setIsScrolled(false); onClose();setShowMore(false)}} style={styles.backButton} hitSlop={20}>
+            <Pressable onPress={() => handleClose()} style={styles.backButton} hitSlop={20}>
               <BackIcon size="18" />
             </Pressable>
             <Pressable
@@ -292,7 +317,7 @@ export const TopSightDetail: React.FC<TopSightDetailProps> = ({
                   </View>
                   <View style={styles.value}>
                     <Text style={styles.valueLabelText}>Working Hours</Text>
-                    <Text style={styles.descriptionText}>
+                    <Text style={styles.highlighteddescriptionText}>
                       {newData.openingHoursAsText}
                     </Text>
                   </View>
@@ -306,7 +331,7 @@ export const TopSightDetail: React.FC<TopSightDetailProps> = ({
                     <Pressable
                       onPress={() => Linking.openURL(newData.officialWebsite)}
                     >
-                      <Text style={styles.descriptionText}>
+                      <Text style={styles.highlighteddescriptionText}>
                         {newData.officialWebsite}
                       </Text>
                     </Pressable>
@@ -458,8 +483,8 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     color: "#000",
-    fontSize: 16,
-    fontWeight: "500",
+    fontSize: 14,
+    fontWeight: "400",
     lineHeight: 20,
     maxWidth: "95%",
   },
@@ -481,6 +506,13 @@ const styles = StyleSheet.create({
   headerScrolled: {
     backgroundColor: "#fff",
     width: "100%",
+  },
+  highlighteddescriptionText: {
+    color: "#000",
+    fontSize: 16,
+    fontWeight: "500",
+    lineHeight: 20,
+    maxWidth: "95%",
   },
   icon: {
     // height: 15,

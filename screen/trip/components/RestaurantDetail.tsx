@@ -45,6 +45,7 @@ export const RestaurantDetail: React.FC<TopSightDetailProps> = ({
   const [isScrolled, setIsScrolled] = useState(false);
   const scale = useSharedValue(visible ? 1 : 0.9);
   const opacity = useSharedValue(visible ? 1 : 0);
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   const [workingHoursVisible, setWorkingHoursVisible] = useState(false);
 
@@ -57,6 +58,28 @@ export const RestaurantDetail: React.FC<TopSightDetailProps> = ({
     transform: [{ scale: scale.value }],
     opacity: opacity.value,
   }));
+
+  const handleClose = () => {
+    opacity.value = withTiming(0, { duration: 300 });
+    scale.value = withTiming(0.9, { duration: 300 }); 
+  
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  
+    setTimeoutId(setTimeout(() => {
+      onClose?.();
+      setIsScrolled(false);
+    }, 300));
+  };
+  
+  useEffect(() => {
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [timeoutId]);
 
   const openMap = (
     location: { lat: number; lng: number },
@@ -136,10 +159,7 @@ export const RestaurantDetail: React.FC<TopSightDetailProps> = ({
         <Animated.View style={[styles.container, animatedStyle]}>
           <View style={[styles.header, isScrolled && styles.headerScrolled]}>
             <Pressable
-              onPress={() => {
-                setIsScrolled(false);
-                onClose();
-              }}
+              onPress={() => handleClose()}
               style={styles.backButton}
               hitSlop={20}
             >
