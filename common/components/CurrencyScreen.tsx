@@ -19,25 +19,29 @@ import { CheckLiteIcon } from "../../utilities/SvgIcons.utility";
 export const CurrencyScreen = ({ navigation }: any) => {
   const [searchValue, setSearchValue] = useState("");
 
-  const [selectedCurrency, setSelectedCurrency] = useState("USD US Dollar");
+  const [selectedCurrency, setSelectedCurrency] = useState({
+    currency: "USD",
+    symbol: "$",
+    name: "United States Dollar",
+  });
 
   const handleCurrencySelection = async (currency: string) => {
     setSelectedCurrency(currency);
-    await AsyncStorage.setItem("userCurrency", currency);
+    await AsyncStorage.setItem("userCurrency", JSON.stringify(currency));
     navigation.goBack();
   };
 
   useEffect(() => {
     const getCurrencyFromStorage = async () => {
       const currency = await AsyncStorage.getItem("userCurrency");
-      setSelectedCurrency(currency);
+      setSelectedCurrency(JSON.parse(currency || "{}"));
     };
     getCurrencyFromStorage();
   }, []);
 
   const filteredData = useMemo(() => {
     return Currencies.filter((item) =>
-      item.toLowerCase().includes(searchValue.toLowerCase())
+      item.name.toLowerCase().includes(searchValue.toLowerCase())
     );
   }, [searchValue]);
 
@@ -84,10 +88,10 @@ export const CurrencyScreen = ({ navigation }: any) => {
             onPress={() => handleCurrencySelection(item)}
           >
             <Text style={[styles.currencyText, {
-              color: selectedCurrency === item ? COLORS.primary : COLORS.black
-            }]}>{item}</Text>
-            {selectedCurrency === item && (
-              <CheckLiteIcon color={COLORS.primary} size={20} />
+              color: selectedCurrency.name === item.name ? COLORS.primary : COLORS.black
+            }]}>{item.name} - {item.symbol}</Text>
+            {selectedCurrency.name === item.name && (
+              <CheckLiteIcon color={COLORS.primary} width={20} />
             )}
           </Pressable>
         )}

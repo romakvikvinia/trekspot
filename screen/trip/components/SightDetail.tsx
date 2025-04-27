@@ -31,7 +31,7 @@ import {
 } from "../../../utilities/SvgIcons.utility";
 import { FilesRow } from "./FilesRow";
 
-export const CurrencyButton = () => {
+export const CurrencyButton = ({ size = "lg" }) => {
   const navigation = useNavigation();
   const [currency, setCurrency] = useState("");
 
@@ -40,17 +40,19 @@ export const CurrencyButton = () => {
   useEffect(() => {
     const getCurrencyFromStorage = async () => {
       const currency = await AsyncStorage.getItem("userCurrency");
-      setCurrency(currency?.split(" ")[0] || "USD");
+      setCurrency(JSON.parse(currency || "{}"));
     };
     getCurrencyFromStorage();
   }, [isFocused]);
-
+ 
   return (
     <Pressable
       style={styles.currencyButton}
       onPress={() => navigation.navigate("CurrencyScreen")}
     >
-      <Text style={styles.currencyButtonText}>{currency}</Text>
+      <Text style={[styles.currencyButtonText,{
+        fontSize: size === "sm" ? 14 : 30
+      }]}>{currency.currency}</Text>
       <DownIcon size={10} />
     </Pressable>
   );

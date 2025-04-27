@@ -1,11 +1,30 @@
 import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
 import { useRef, useState } from "react";
-import { Animated, Pressable, StyleSheet, Text, View } from "react-native";
+import { Animated, Keyboard, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Portal } from "react-native-portalize";
 
 import { COLORS, SIZES } from "../../styles/theme";
 import { PlusCircleIcon } from "../../utilities/SvgIcons.utility";
+
+type FloatingActionButtonProps = {
+  PrimaryIcon?: React.ReactNode;
+  buttons: {
+    label: string;
+    onPress: () => void;
+    aiIcon?: React.ReactNode;
+    isDanger?: boolean;
+    isActive?: boolean;
+    image?: string;
+    icon?: React.ReactNode;
+  }[];
+  renderTrigger: () => React.ReactNode;
+  overlayBGOpacity?: number;
+  withHeader?: boolean;
+  aiIcon?: React.ReactNode;
+  title?: string;
+  isActive?: boolean;
+};
 
 export const FloatingActionButton = ({
   PrimaryIcon = PlusCircleIcon,
@@ -13,9 +32,10 @@ export const FloatingActionButton = ({
   renderTrigger = () => null,
   overlayBGOpacity = 0.2,
   withHeader = false,
+  aiIcon = null,
   title = "",
   isActive = false,
-}) => {
+}: FloatingActionButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   // Animation Values
@@ -25,6 +45,7 @@ export const FloatingActionButton = ({
   const buttonsTranslateY = useRef(new Animated.Value(100)).current; // Start off-screen
 
   const toggleMenu = () => {
+    Keyboard.dismiss();
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (isOpen) {
       // Close Animation
@@ -87,6 +108,7 @@ export const FloatingActionButton = ({
             onPress={toggleMenu}
             style={[StyleSheet.absoluteFillObject]}
             pointerEvents={isOpen ? "auto" : "none"}
+            hitSlop={20}
           >
             <Animated.View
               style={{
@@ -109,53 +131,75 @@ export const FloatingActionButton = ({
               },
             ]}
           >
-            <Animated.ScrollView style={styles.buttonWrapper} showsVerticalScrollIndicator={false}>
+            <View style={styles.contentWrapper}>
               {title ? (
                 <View style={styles.heading}>
                   <Text style={styles.headingText}>{title}</Text>
                 </View>
               ) : null}
-              {buttons.map((button, index) => (
-                <Pressable
-                  key={index}
-                  onPress={() => {
-                    button.onPress();
-                    toggleMenu();
-                  }}
-                  style={({ pressed }) => [
-                    styles.floatingButton,
-                    { backgroundColor: pressed ? "#fafafa" : "#fff" },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.floatingButtonText,
+              <ScrollView
+                style={styles.buttonWrapper}
+                showsVerticalScrollIndicator={false}
+              >
+                {buttons.map((button, index) => (
+                  <Pressable
+                    key={index}
+                    onPress={() => {
+                      button.onPress();
+                      toggleMenu();
+                    }}
+                    style={({ pressed }) => [
+                      styles.floatingButton,
                       {
-                        color: button.isDanger ? "#ff0000" : button.isActive ? COLORS.primary : "#000",
+                        backgroundColor: pressed ? "#fafafa" : "#fff",
+                        justifyContent: button.aiIcon
+                          ? "flex-start"
+                          : "space-between",
                       },
                     ]}
                   >
-                    {button.label}
-                  </Text>
-                  {button.image && (
-                    <Image
-                      style={styles.imgItem}
-                      source={{
-                        uri: button.image,
-                      }}
-                      contentFit="cover"
-                      cachePolicy="memory-disk"
-                    ></Image>
-                  )}
-                  {button.icon && (
-                    <button.icon
-                      color={button.isDanger ? "#ff0000" : "#000"}
-                      size={20}
-                    />
-                  )}
-                </Pressable>
-              ))}
-            </Animated.ScrollView>
+                    {button.aiIcon && (
+                      <View style={{ marginRight: 10 }}>
+                        <button.aiIcon
+                          color={button.isDanger ? "#ff0000" : "#000"}
+                          size={30}
+                        />
+                      </View>
+                    )}
+                    <Text
+                      style={[
+                        styles.floatingButtonText,
+                        {
+                          color: button.isDanger
+                            ? "#ff0000"
+                            : button.isActive
+                              ? COLORS.primary
+                              : "#000",
+                        },
+                      ]}
+                    >
+                      {button.label}
+                    </Text>
+                    {button.image && (
+                      <Image
+                        style={styles.imgItem}
+                        source={{
+                          uri: button.image,
+                        }}
+                        contentFit="cover"
+                        cachePolicy="memory-disk"
+                      ></Image>
+                    )}
+                    {button.icon && (
+                      <button.icon
+                        color={button.isDanger ? "#ff0000" : "#000"}
+                        size={20}
+                      />
+                    )}
+                  </Pressable>
+                ))}
+              </ScrollView>
+            </View>
             <Pressable style={styles.cancelButton} onPress={toggleMenu}>
               <Text style={styles.floatingButtonText}>Cancel</Text>
             </Pressable>
@@ -189,9 +233,7 @@ const styles = StyleSheet.create({
     // width: "100%",
   },
   buttonWrapper: {
-    backgroundColor: "#fff",
     borderRadius: 15,
-    maxHeight: SIZES.height - 200
   },
   cancelButton: {
     alignItems: "center",
@@ -201,6 +243,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 10,
     padding: 20,
+  },
+  contentWrapper: {
+    backgroundColor: "#fff", 
+    borderRadius: 15,
+    maxHeight: SIZES.height - 200, 
   },
   floatingButton: {
     alignItems: "center",

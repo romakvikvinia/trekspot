@@ -9,8 +9,8 @@ export const ImgComponent = ({ item }: any) => {
         style={[
           tripDetailStyles.imagesWrapper,
           {
-            width: 70,
-            height: 70,
+            width: 80,
+            height: 80,
             backgroundColor: "#fafafa",
             borderRadius: 10,
           },
@@ -20,8 +20,8 @@ export const ImgComponent = ({ item }: any) => {
           style={[
             tripDetailStyles.mainImage,
             {
-              width: 70,
-              height: 70,
+              width: 80,
+              height: 80,
             },
           ]}
           contentFit="cover"

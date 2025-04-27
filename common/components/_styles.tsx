@@ -322,11 +322,12 @@ export const styles = StyleSheet.create({
     overflow: "hidden"
   },
   thingsTodoItemImage: {
-    borderRadius: 15,
+    backgroundColor: "#ccc",
+    borderRadius: 12,
     minHeight: 130,
     overflow: "hidden",
     position: "relative",
-    width: "100%",
+    width: "100%"
   },
   // gradientWrapper: {
   //   flex: 1,

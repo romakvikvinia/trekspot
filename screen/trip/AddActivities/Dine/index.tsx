@@ -1,10 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
+import Constants from "expo-constants";
 import { useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -17,10 +17,7 @@ import { DatePickerModal, TimePickerModal } from "react-native-paper-dates";
 import { COLORS } from "../../../../styles/theme";
 import {
   CalendarLightIcon,
-  CostIcon,
-  DescriptionIcon,
   LocationLinearIcon,
-  NoteIcon,
 } from "../../../../utilities/SvgIcons.utility";
 import { FilesRow } from "../../components/FilesRow";
 import { Header } from "./Header";
@@ -52,7 +49,9 @@ export const Dine = ({ route }) => {
 
   return (
     <PaperProvider theme={theme}>
-      <SafeAreaView style={{ flex: 1 }}>
+      <View style={[styles.safeArea,{
+        paddingTop: !isPreview ? 20 : Constants?.statusBarHeight + 15,
+      }]}>
         <KeyboardAvoidingView
           behavior={Platform.OS == "ios" ? "padding" : "height"}
           style={styles.screen}
@@ -187,112 +186,11 @@ export const Dine = ({ route }) => {
                 />
               </View>
             </View>
-
-            <View style={styles.inputGroup}>
-              <View style={styles.inputRow}>
-                <CostIcon size={20} color="#86858c" />
-                <Text
-                  style={[
-                    styles.inputLabel,
-                    {
-                      marginLeft: 8,
-                      width: 70,
-                    },
-                  ]}
-                >
-                  Cost
-                </Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="400$"
-                  placeholderTextColor="#c6c6c6"
-                  editable={!isPreview}
-                />
-              </View>
-            </View>
-
-            <View style={styles.inputGroup}>
-              <Pressable
-                disabled={isPreview}
-                onPress={() =>
-                  navigation.navigate("ActivityNoteOrDescription", {
-                    type: "note",
-                  })
-                }
-                style={({ pressed }) => [
-                  styles.inputRow,
-                  styles.widthBorderBottom,
-                  {
-                    height: 50,
-                    paddingRight: 15,
-                    backgroundColor: pressed ? "#fafafa" : "#fff",
-                  },
-                ]}
-              >
-                <NoteIcon size={20} color="#86858c" />
-                <Text
-                  style={[
-                    styles.inputLabel,
-                    {
-                      marginLeft: 8,
-                    },
-                  ]}
-                >
-                  Notes
-                </Text>
-                {true ? (
-                  <Text style={styles.placeholder} numberOfLines={1}>
-                    Enter here...
-                  </Text>
-                ) : (
-                  <Text style={styles.textValue} numberOfLines={1}>
-                    {/* // This is my note... */}
-                  </Text>
-                )}
-              </Pressable>
-              <Pressable
-                disabled={isPreview}
-                onPress={() =>
-                  navigation.navigate("ActivityNoteOrDescription", {
-                    type: "description",
-                  })
-                }
-                style={({ pressed }) => [
-                  styles.inputRow,
-                  {
-                    height: 50,
-                    paddingRight: 15,
-                    backgroundColor: pressed ? "#fafafa" : "#fff",
-                  },
-                ]}
-              >
-                <DescriptionIcon size={20} color="#86858c" />
-                <Text
-                  style={[
-                    styles.inputLabel,
-                    {
-                      marginLeft: 8,
-                    },
-                  ]}
-                >
-                  Description
-                </Text>
-                {true ? (
-                  <Text style={styles.placeholder} numberOfLines={1}>
-                    Enter here...
-                  </Text>
-                ) : (
-                  <Text style={styles.textValue} numberOfLines={1}>
-                    {/* // This is my description.. */}
-                  </Text>
-                )}
-              </Pressable>
-            </View>
-
+  
             <FilesRow isPreview={isPreview} />
           </ScrollView>
         </KeyboardAvoidingView>
-      </SafeAreaView>
+      </View>
 
       <TimePickerModal
         visible={visible}
@@ -421,15 +319,11 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     marginLeft: 10,
   },
-  screen: {
+  safeArea: {
     flex: 1,
   },
-  textValue: {
-    color: COLORS.black,
+  screen: {
     flex: 1,
-    fontSize: 14,
-    fontWeight: "400",
-    textAlign: "right",
   },
   widthBorderBottom: {
     borderBottomColor: "#f2f2f2",

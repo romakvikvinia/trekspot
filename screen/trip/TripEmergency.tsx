@@ -5,7 +5,6 @@ import React from "react";
 import {
   Alert,
   Pressable,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -39,8 +38,8 @@ export const TripEmergency: React.FC<Props> = ({ navigation, route }) => {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-            <StatusBar style="dark" />
+    <View style={styles.safeArea}>
+      <StatusBar style="dark" />
 
       <View style={globalStyles.screenHeader}>
         <Pressable
@@ -55,36 +54,6 @@ export const TripEmergency: React.FC<Props> = ({ navigation, route }) => {
         <TouchableOpacity
           style={globalStyles.screenHeaderBackButton}
         ></TouchableOpacity>
-      </View>
-
-      <View>
-        <ScrollView
-          horizontal
-          style={globalStyles.underScreenTabs}
-          contentContainerStyle={{
-            paddingHorizontal: 15,
-          }}
-          showsHorizontalScrollIndicator={false}
-        >
-          <Pressable
-            style={[
-              globalStyles.underScreenTab,
-              globalStyles.underScreenTabActive,
-            ]}
-          >
-            <Text
-              style={[
-                globalStyles.underScreenTabText,
-                globalStyles.underScreenTabActiveText,
-              ]}
-            >
-              Italy
-            </Text>
-          </Pressable>
-          <Pressable style={globalStyles.underScreenTab}>
-            <Text style={globalStyles.underScreenTabText}>Germany</Text>
-          </Pressable>
-        </ScrollView>
       </View>
 
       <ScrollView
@@ -106,7 +75,7 @@ export const TripEmergency: React.FC<Props> = ({ navigation, route }) => {
           />
         )}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -114,6 +83,6 @@ const styles = StyleSheet.create({
   safeArea: {
     backgroundColor: "#F2F2F7",
     flex: 1,
-    paddingTop: Constants?.statusBarHeight + 10,
+    paddingTop: Constants?.statusBarHeight + 15,
   },
 });

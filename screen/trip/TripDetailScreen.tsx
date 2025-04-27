@@ -1,4 +1,3 @@
-import Constants from "expo-constants";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Alert,
@@ -21,7 +20,6 @@ import * as Haptics from "expo-haptics";
 import { usePostHog } from "posthog-react-native";
 import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import {
   NavigationState,
   Route,
@@ -81,7 +79,7 @@ export const TabLabel = ({ route }: any) => {
           fontSize: 12,
           marginBottom: 5,
           color: COLORS.gray,
-          fontWeight: "500"
+          fontWeight: "500",
         }}
       >
         {route?.weekDay} - {route?.id < 2 ? "Hon." : "Bar."}
@@ -116,28 +114,12 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   const [state, setState] = useState<IState>({
     days: [],
   });
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
-
-  const scale = useSharedValue(visible ? 1 : 0.9);
-  const opacity = useSharedValue(visible ? 1 : 0);
-
-
-  useEffect(() => {
-    scale.value = withTiming(visible ? 1 : 0.9, { duration: 300 });
-    opacity.value = withTiming(visible ? 1 : 0, { duration: 300 });
-  }, [visible]);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-    opacity: opacity.value,
-  }));
 
   const [deleteIndexes, setDeleteIndexes] = useState<{
     route: string;
     day: number;
     sight: string;
   }>();
-   
 
   const { isLoading: isTripDetailLoading, data: tripDetail } = useTripQuery({
     id: trip.id,
@@ -202,7 +184,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   useEffect(() => {
     transformDataForDays();
   }, [transformDataForDays]);
- 
+
   const onAddActivitiesModal = () => {
     addActivitiesModal.current?.open();
   };
@@ -308,32 +290,9 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
     []
   );
 
-
- 
   const showPopup = () => {
-    setVisible(true); 
+    setVisible(true);
   };
- 
-  const hidePopup = () => {
-    opacity.value = withTiming(0, { duration: 300 });
-    scale.value = withTiming(0.9, { duration: 300 }); 
-  
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-  
-    setTimeoutId(setTimeout(() => {
-      setVisible(false);
-     }, 300));
-  };
-  
-  useEffect(() => {
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
-  }, [timeoutId]);
 
   const renderCurrentScene: React.FC<
     SceneRendererProps & {
@@ -401,7 +360,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
           />
         ))}
         <>
-        <TripActivityRestCard
+          <TripActivityRestCard
             activityAmount={2}
             // checkedIn={checkedIn}
             // item={item}
@@ -638,36 +597,29 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         )
       )}
 
-      {topSightDetail ? (
-        <TopSightDetail
-          visible={topSightDetail}
-          onClose={handleClear}
-          data={topSightDetail}
-        />
-      ) : null}
+      <TopSightDetail
+        visible={topSightDetail}
+        onClose={handleClear}
+        data={topSightDetail}
+        showAddToTrip={false}
+      />
 
       <AddActivityButton
         onActivitiesModalOpen={showPopup}
         onAddActivitiesModal={onAddActivitiesModal}
       />
-      {visible && (
-        <Portal>
-          <View style={[StyleSheet.absoluteFillObject, styles.bg]}>
-            <Animated.View style={[styles.contentCard, animatedStyle]}>
-              <TripActivitiesSelect
-                days={state.days}
-                handleAddToTrip={handleAddToTrip}
-                data={data}
-                isLoading={sightsLoading}
-                removeActivity={removeActivity}
-                hidePopup={hidePopup}
-                activeDay={index}
-                setActiveDay={setIndex}
-              />
-            </Animated.View>
-          </View>
-        </Portal>
-      )}
+
+      <TripActivitiesSelect
+        days={state.days}
+        handleAddToTrip={handleAddToTrip}
+        data={data}
+        isLoading={sightsLoading}
+        removeActivity={removeActivity}
+        activeDay={index}
+        setActiveDay={setIndex}
+        visible={visible}
+        setVisible={setVisible}
+      />
 
       <Portal>
         <Modalize
@@ -708,26 +660,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
   );
 };
 
-
 const styles = StyleSheet.create({
-  bg:{
-    backgroundColor: "#fff",
-  },
-  contentCard: {
-    backgroundColor: "#fff",
-    borderRadius: 15,
-    elevation: 5,
-    justifyContent: "space-between",
-    minHeight: SIZES.height,
-    paddingRight: 5,
-    paddingTop: Constants?.statusBarHeight + 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    width: SIZES.width,
-    zIndex: 1,
-  },
   hideEnd: {
     backgroundColor: "#f7f7f7",
     bottom: 0,

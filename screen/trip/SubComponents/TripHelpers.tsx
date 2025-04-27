@@ -12,6 +12,7 @@ import {
 import { Events } from "../../../utilities/Posthog";
 import {
   AppsIcon,
+  CostIcon,
   DishesIcon,
   ExploreTabIcon,
   InsightIcon,
@@ -242,6 +243,34 @@ export const TripHelpers = ({
           ]}
           hitSlop={10}
           onPress={() => {
+            posthog.capture(Events.useTripExpenses, {});
+            //@ts-ignore
+            navigation.navigate("TripExpenses", {
+              iso2: iso2,
+            });
+          }}
+        >
+          <CostIcon size={14} color="#000" />
+          <Text
+            style={[
+              styles.bottomActionsButtonlabel,
+              {
+                color: "#000",
+              },
+            ]}
+          >
+            Expenses
+          </Text>
+        </Pressable>
+        <Pressable
+          style={({pressed}) => [
+            styles.bottomActionsButton,
+            {
+              backgroundColor: pressed ? "#ccc" : "#fafafa",
+            },
+          ]}
+          hitSlop={10}
+          onPress={() => {
             posthog.capture(Events.UserUsesTriphelperApps, {});
             //@ts-ignore
             navigation.navigate("TripTransport", {
@@ -277,7 +306,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: 8,
     paddingHorizontal: 12,
-    paddingVertical: 7,
+    paddingVertical: 8,
   },
   bottomActionsButtonlabel: {
     color: "#0b57d0",

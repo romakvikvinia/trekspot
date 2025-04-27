@@ -34,7 +34,8 @@ export const Events = {
     UserAddsVisits: "User adds visits",
     useSearchCountryOrCity: "User searches country or city",
     useUserVisitsAfterSearchCountryOrCity: "User visits after search country or city",
-    useCountryInsight: "User used insight note:"
+    useCountryInsight: "User used insight note:",
+    useTripExpenses: "User used trip expenses"
   }
 
 export const posthog = new PostHog(posthogApiKey, {

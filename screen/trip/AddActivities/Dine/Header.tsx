@@ -1,7 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
-import Constants from "expo-constants";
 import { useState } from "react";
-import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { Loader } from "../../../../common/ui/Loader";
 import { COLORS } from "../../../../styles/theme";
@@ -75,8 +74,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 25,
     paddingHorizontal: 15,
-    paddingTop:
-      Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 18,
+    // paddingTop:
+    //   Platform.OS === "android" ? Constants?.statusBarHeight + 10 : 18,
     width: "100%",
   },
   saveButton: {

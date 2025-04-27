@@ -1,14 +1,18 @@
 import { FlashList } from "@shopify/flash-list";
+import Constants from "expo-constants";
 import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import React, { useCallback, useEffect, useState } from "react";
 import {
+  Platform,
   Pressable,
   TouchableOpacity,
   useWindowDimensions,
   View,
 } from "react-native";
 import { StyleSheet, Text } from "react-native";
+import { Portal } from "react-native-portalize";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { TabBar, TabView } from "react-native-tab-view";
 
 import { SightType } from "../../api/api.types";
@@ -38,7 +42,10 @@ interface ITripActivitiesSelectProps {
     sight: string;
     route: string;
   }) => void;
-  hidePopup: () => void;
+  activeDay: number;
+  setActiveDay: (day: number) => void;
+  visible: boolean;
+  setVisible: (visible: boolean) => void;
 }
 
 export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
@@ -47,15 +54,18 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
   isLoading,
   handleAddToTrip,
   removeActivity,
-  hidePopup,
   activeDay,
   setActiveDay,
+  visible,
+  setVisible,
+  
 }) => {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [topSightDetail, setTopSightDetail] = useState(null);
   const [routes, setRoutes] = useState([]);
   const [tabData, setTabData] = useState({});
+  const [tabViewKey, setTabViewKey] = useState(0);
 
   useEffect(() => {
     if (data) {
@@ -69,6 +79,41 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
       setTabData(initialTabData);
     }
   }, [data]);
+
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+
+  const scale = useSharedValue(visible ? 1 : 0.9);
+  const opacity = useSharedValue(visible ? 1 : 0); 
+  useEffect(() => {
+    scale.value = withTiming(visible ? 1 : 0.9, { duration: 300 });
+    opacity.value = withTiming(visible ? 1 : 0, { duration: 300 });
+  }, [visible]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+    opacity: opacity.value,
+  }));  
+
+  const hidePopup = () => {
+    opacity.value = withTiming(0, { duration: 300 });
+    scale.value = withTiming(0.9, { duration: 300 }); 
+  
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  
+    setTimeoutId(setTimeout(() => {
+      setVisible(false);
+     }, 300));
+  };
+  
+  useEffect(() => {
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [timeoutId]);
 
   const showTopSight = (sight: object) => {
     setTopSightDetail(sight);
@@ -115,81 +160,50 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
               onPress={() => showTopSight(item)}
               activeOpacity={0.7}
             >
-               <View style={styles.actionButtons}>
-                  {days &&
-                  days.some((day) =>
-                    day.activities.some((activity) => activity?.id === item?.id)
-                  ) ? (
-                    <>
-                      <TouchableOpacity
-                        onPress={() => {
-                          const day = days.find((day) =>
-                            day.activities.some(
-                              (activity) => activity?.id === item?.id
-                            )
-                          );
-                          removeActivity({
-                            route: day?.route!,
-                            day: day?.id!,
-                            sight: item?.id!,
-                          });
-                        }}
-                        activeOpacity={0.7}
-                        style={[styles.detailsButton, {
+              <View style={styles.actionButtons}>
+                {days &&
+                days.some((day) =>
+                  day.activities.some((activity) => activity?.id === item?.id)
+                ) ? (
+                  <>
+                    <Pressable
+                      onPress={() => {
+                        const day = days.find((day) =>
+                          day.activities.some(
+                            (activity) => activity?.id === item?.id
+                          )
+                        );
+                        removeActivity({
+                          route: day?.route!,
+                          day: day?.id!,
+                          sight: item?.id!,
+                        });
+                      }}
+                      style={[
+                        styles.detailsButton,
+                        {
                           backgroundColor: "red",
-                        }]}
-                      >
-                        <Text
-                          style={[
-                            styles.detailsButtonText,
-                          ]}
-                        >
-                          Remove
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={[
-                          styles.addToButton,
-                          {
-                            backgroundColor: "red",
-                          },
-                        ]}
-                        onPress={() => {
-                          const day = days.find((day) =>
-                            day.activities.some(
-                              (activity) => activity?.id === item?.id
-                            )
-                          );
-                          removeActivity({
-                            route: day?.route!,
-                            day: day?.id!,
-                            sight: item?.id!,
-                          });
-                        }}
-                      >
-                        <TrashIcon color="#fff" width={12} />
-                      </TouchableOpacity>
-                    </>
-                  ) : (
-                    <>
-                      <TouchableOpacity
-                        onPress={() => handleAddToTrip(item)}
-                        activeOpacity={0.7}
-                        style={styles.detailsButton}
-                      >
-                        <Text style={styles.detailsButtonText}>
-                          Add to trip
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={styles.addToButton}
-                        onPress={() => handleAddToTrip(item)}
-                      >
-                        <PlusIcon color="#fff" size="12" />
-                      </TouchableOpacity>
-                    </>
-                  )}
-                </View>
+                        },
+                      ]}
+                      hitSlop={20}
+                    >
+                      <Text style={[styles.detailsButtonText,{color: "#fff"}]}>Remove</Text>
+                      <TrashIcon color="#fff" width={12} />
+                    </Pressable>
+                  </>
+                ) : (
+                  <>
+                    <Pressable
+                      onPress={() => handleAddToTrip(item)}
+                      style={styles.detailsButton}
+                      hitSlop={20}
+                    >
+                      <Text style={styles.detailsButtonText}>Add to trip</Text>
+                      <PlusIcon color="#000" size="10" />
+                    </Pressable>
+                  </>
+                )}
+              </View>
               <Image
                 style={[
                   {
@@ -230,7 +244,6 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                     </View>
                   )}
                 </View>
- 
               </View>
             </TouchableOpacity>
           )
@@ -252,7 +265,7 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
   const handleClear = useCallback(() => {
     setTopSightDetail(null);
   }, []);
-  const [tabViewKey, setTabViewKey] = useState(0);
+
 
   useEffect(() => {
     if (routes.length) {
@@ -276,137 +289,148 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
   ];
   const [selectedCity, setSelectedCity] = useState(cities[0]);
 
-  console.log(days);
-
+  if (!visible) return null;
+ 
   return (
     <>
       <StatusBar style="dark" />
-      <View style={tripDetailStyles.rowItemHeader}>
-        <Pressable onPress={() => hidePopup()} hitSlop={15}>
-          <BackIcon size="18" />
-        </Pressable>
+      <Portal>
+        <Animated.View style={[styles.container, animatedStyle]}>
+          <View style={tripDetailStyles.rowItemHeader}>
+            <Pressable onPress={() => hidePopup()} hitSlop={15}>
+              <BackIcon size="18" />
+            </Pressable>
 
-        <View style={styles.rg}>
-          <FloatingActionButton
-            withHeader={true}
-            title="Select dates"
-            //@ts-expect-error ///
-            buttons={days.map((day, i) => ({
-              label: day.date,
-              onPress: () => setActiveDay(i),
-              icon: null,
-              isDanger: false,
-              isActive: day.id === days[activeDay]?.id,
-            }))}
-            //@ts-expect-error ///
-            renderTrigger={() => (
-              <View style={styles.dropDownButton}>
-                <Text style={styles.txtLabel}>
-                  Add to:{" "}
-                  <Text
+            <View style={styles.rg}>
+              <FloatingActionButton
+                withHeader={true}
+                title="Select dates"
+                //@ts-expect-error ///
+                buttons={days.map((day, i) => ({
+                  label: day.date,
+                  onPress: () => setActiveDay(i),
+                  icon: null,
+                  isDanger: false,
+                  isActive: day.id === days[activeDay]?.id,
+                }))}
+                //@ts-expect-error ///
+                renderTrigger={() => (
+                  <View style={styles.dropDownButton}>
+                    <Text style={styles.txtLabel}>
+                      Add to:{" "}
+                      <Text
+                        style={{
+                          fontWeight: "bold",
+                          color: COLORS.black,
+                          fontSize: 14,
+                        }}
+                      >
+                        {[days[activeDay]?.date]}
+                      </Text>
+                    </Text>
+                    <DownIcon size={10} />
+                  </View>
+                )}
+              />
+
+              <FloatingActionButton
+                withHeader={true}
+                title="Select city"
+                //@ts-expect-error ///
+                buttons={cities.map((city, i) => ({
+                  label: city.name,
+                  onPress: () => setSelectedCity(city),
+                  icon: null,
+                  isDanger: false,
+                  isActive: city.id === selectedCity?.id,
+                }))}
+                //@ts-expect-error ///
+                renderTrigger={() => (
+                  <View
+                    style={[
+                      styles.dropDownButton,
+                      {
+                        justifyContent: "space-between",
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        color: COLORS.black,
+                        marginRight: 5,
+                        fontSize: 14,
+                      }}
+                    >
+                      Berlin{" "}
+                    </Text>
+                    <DownIcon size={10} />
+                  </View>
+                )}
+              />
+            </View>
+          </View>
+
+          <View style={styles.selectActivitesWrapper}>
+            <View style={styles.itemRow}>
+              <TabView
+                key={tabViewKey}
+                navigationState={{ index, routes }}
+                renderScene={renderScene}
+                onIndexChange={setIndex}
+                initialLayout={{ width: layout.width }}
+                sceneContainerStyle={{
+                  backgroundColor: "#fff",
+                }}
+                style={{
+                  backgroundColor: "#F2F2F7",
+                }}
+                pagerStyle={{
+                  backgroundColor: "#F2F2F7",
+                }}
+                renderTabBar={(props) => (
+                  <TabBar
+                    scrollEnabled={true}
+                    {...props}
                     style={{
-                      fontWeight: "bold",
-                      color: COLORS.black,
+                      backgroundColor: "#fff",
+                      paddingBottom: 15,
+                      ...COLORS.shadow,
+                    }}
+                    contentContainerStyle={{
+                      backgroundColor: "#fff",
+                      paddingHorizontal: 0,
+                    }}
+                    inactiveColor={COLORS.darkgray}
+                    tabStyle={{
+                      paddingHorizontal: 0,
+                      padding: 0,
+                      height: 35,
+                    }}
+                    activeColor={COLORS.black}
+                    indicatorStyle={{
+                      backgroundColor: COLORS.black,
+                    }}
+                    labelStyle={{
+                      textTransform: "capitalize",
+                      fontWeight: "600",
                       fontSize: 14,
                     }}
-                  >
-                    {[days[activeDay]?.date]}
-                  </Text>
-                </Text>
-                <DownIcon size={10} />
-              </View>
-            )}
-          />
-
-          <FloatingActionButton
-            withHeader={true}
-            title="Select city"
-            //@ts-expect-error ///
-            buttons={cities.map((city, i) => ({
-              label: city.name,
-              onPress: () => setSelectedCity(city),
-              icon: null,
-              isDanger: false,
-              isActive: city.id === selectedCity?.id,
-            }))}
-            //@ts-expect-error ///
-            renderTrigger={() => (
-              <View style={[styles.dropDownButton, {
-                justifyContent: "space-between",
-              }]}>
-                <Text
-                  style={{
-                    fontWeight: "bold",
-                    color: COLORS.black,
-                    marginRight: 5,
-                    fontSize: 14,
-                  }}
-                >
-                  Berlin{" "}
-                </Text>
-                <DownIcon size={10} />
-              </View>
-            )}
-          />
-        </View>
-      </View>
-
-      <View style={styles.selectActivitesWrapper}>
-        <View style={styles.itemRow}>
-          <TabView
-            key={tabViewKey}
-            navigationState={{ index, routes }}
-            renderScene={renderScene}
-            onIndexChange={setIndex}
-            initialLayout={{ width: layout.width }}
-            sceneContainerStyle={{
-              backgroundColor: "#fff",
-            }}
-            style={{
-              backgroundColor: "#F2F2F7",
-            }}
-            pagerStyle={{
-              backgroundColor: "#F2F2F7",
-            }}
-            renderTabBar={(props) => (
-              <TabBar
-                scrollEnabled={true}
-                {...props}
-                style={{
-                  backgroundColor: "#fff",
-                  paddingBottom: 15,
-                  ...COLORS.shadow,
-                }}
-                contentContainerStyle={{
-                  backgroundColor: "#fff",
-                  paddingHorizontal: 0,
-                }}
-                inactiveColor={COLORS.darkgray}
-                tabStyle={{
-                  paddingHorizontal: 0,
-                  padding: 0,
-                  height: 35,
-                }}
-                activeColor={COLORS.black}
-                indicatorStyle={{
-                  backgroundColor: COLORS.black,
-                }}
-                labelStyle={{
-                  textTransform: "capitalize",
-                  fontWeight: "600",
-                  fontSize: 14,
-                }}
-                android_ripple={{ color: "#F2F2F7" }}
+                    android_ripple={{ color: "#F2F2F7" }}
+                  />
+                )}
               />
-            )}
-          />
-        </View>
-      </View>
-      {/* {topSightDetail ? (
-        <SightDetailModal data={topSightDetail} closeCallBack={handleClear} />
-      ) : null} */}
+            </View>
+          </View>
 
-      <TopSightDetail visible={topSightDetail} onClose={handleClear} data={topSightDetail} />
+          <TopSightDetail
+            visible={topSightDetail}
+            onClose={handleClear}
+            data={topSightDetail}
+            showAddToTrip={true}
+          />
+        </Animated.View>
+      </Portal>
     </>
   );
 };
@@ -423,29 +447,38 @@ const styles = StyleSheet.create({
     top: 5,
     zIndex: 1
   },
-  addToButton: {
-    alignItems: "center",
-    backgroundColor: 'rgba(0,0,0,0.8)',
-    display: "flex",
-    height: 26,
-    justifyContent: "center",
-    textAlign: "center",
-    width: 30,
+  container: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    height: "100%",
+    padding: 0,
+    paddingTop: Platform.OS === "android" ? Constants?.statusBarHeight + 5 : 60,
+    width: "100%",
   },
   detailsButton: {
-    backgroundColor: 'rgba(0,0,0,0.8)',
+    alignItems: "center",
+    backgroundColor: '#fff',
     flexDirection: "row",
+    height: 30,
     justifyContent: "center",
-    maxWidth: 100,
+    maxWidth: 130,
     paddingHorizontal: 10,
-    paddingRight: 0,
-    paddingVertical: 6,
-    textAlign: "center"
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 1.84,
+    textAlign: "center",
+    ...Platform.select({
+      android: {
+        elevation: 2,
+      },
+    }),
   },
   detailsButtonText: {
-    color: "#fff",
+    color: "#000",
     fontSize: 11,
     fontWeight: "bold",
+    marginRight: 5
   },
   dropDownButton: {
     alignItems: "center",

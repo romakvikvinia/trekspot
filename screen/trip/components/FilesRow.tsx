@@ -22,7 +22,6 @@ import {
   CameraIcon,
   FileUploadedIcon,
   ImagesLinearIcon,
-  PDFLinearIcon,
   XIcon,
 } from "../../../utilities/SvgIcons.utility";
 
@@ -137,44 +136,24 @@ export const FilesRow = ({ isPreview, showGallery = true }) => {
       }
     }
   };
-
-  const forIOs = [
-    {
-      label: "Upload PDF",
-      onPress: () => pickDocument(),
-      icon: PDFLinearIcon,
-    },
-    {
-      label: "Upload photo",
-      onPress: () => pickImages(),
-      icon: ImagesLinearIcon,
-    },
-    {
-      label: "Capture and upload",
-      onPress: () => pickImageCamera(),
-      icon: CameraIcon,
-    },
-  ]
-
-  const forAndroid = [
-    {
-      label: "Upload photo",
-      onPress: () => pickImages(),
-      icon: ImagesLinearIcon,
-    },
-    {
-      label: "Capture and upload",
-      onPress: () => pickImageCamera(),
-      icon: CameraIcon,
-    },
-  ]
  
  
   return (
     <>
       {!isPreview ? (
         <FloatingActionButton
-          buttons={Platform.OS === "android" ? forAndroid : forIOs}
+          buttons={[
+            {
+              label: "Upload photo",
+              onPress: () => pickImages(),
+              icon: ImagesLinearIcon,
+          },
+          {
+            label: "Capture and upload",
+            onPress: () => pickImageCamera(),
+              icon: CameraIcon,
+            },
+          ]}
           renderTrigger={() => (
             <View style={styles.inputGroup}>
               <View style={styles.inputRow}>
@@ -193,78 +172,7 @@ export const FilesRow = ({ isPreview, showGallery = true }) => {
       {/* <View style={styles.loaderWrapper}>
         <Loader isLoading={true} background="#F2F2F7" size="small" />
       </View> */}
-      {isPreview && <Text style={styles.rowTitle}>Files</Text>}
-      <ScrollView
-        horizontal
-        contentContainerStyle={{ paddingBottom: 30, paddingVertical: 10 }}
-      >
-        {/* ანდროიდზე დროიბით არ ვანახოთ PDF */}
-        <Pressable
-          onPress={() =>
-            _handleShowFileAsync("https://pdfobject.com/pdf/sample.pdf")
-          }
-          style={({ pressed }) => [
-            styles.fileItem,
-            {
-              backgroundColor: pressed ? "#f2f2f7" : "#fff",
-            },
-          ]}
-        >
-          {!isPreview ? (
-            <Pressable
-              onPress={handleDelete}
-              hitSlop={20}
-              style={styles.removeButton}
-            >
-              <XIcon width="10" color="#fff" />
-            </Pressable>
-          ) : null}
-          <PDFLinearIcon size="30" />
-          <Text style={styles.fileName} numberOfLines={1}>
-            File name
-          </Text>
-        </Pressable>
-        <Pressable
-          onPress={() =>
-            _handleShowImageAsync(
-              "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg"
-            )
-          }
-          style={({ pressed }) => [
-            styles.fileItem,
-            {
-              paddingVertical: 0,
-              opacity: pressed ? 0.5 : 1,
-            },
-          ]}
-        >
-          {!isPreview ? (
-            <Pressable
-              onPress={handleDelete}
-              hitSlop={20}
-              style={styles.removeButton}
-            >
-              <XIcon width="10" color="#fff" />
-            </Pressable>
-          ) : null}
-
-          <Image
-            style={styles.imgItem}
-            source={
-              true
-                ? {
-                    uri: "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
-                  }
-                : require("../../../assets/no-image.png")
-            }
-            contentFit="cover"
-            cachePolicy="memory-disk"
-          ></Image>
-        </Pressable>
-      </ScrollView>
-
-
-      
+   
       {showGallery && (
         <>
           {isPreview && <Text style={styles.rowTitle}>Gallery</Text>}

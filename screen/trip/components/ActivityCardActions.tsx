@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 
 import { FloatingActionButton } from "../../../components/common/FloatingButtons";
 import { COLORS } from "../../../styles/theme";
-import { CostIcon, DotsIcon, NoteIcon, TrashIcon } from "../../../utilities/SvgIcons.utility";
+import { CostIcon, DescriptionIcon, DotsIcon, NoteIcon, TrashIcon } from "../../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "../_tripDetailStyles";
 import { VisitedButton } from "./VisitedButton";
 
@@ -43,26 +43,41 @@ export const ActivityCardActions = ({
         />
         {/* {!type && <DirectionButton item={item} />} */}
         {/* <FilesButton /> */}
+        <View style={styles.priceWrapper}>
+          <Text style={styles.price}>- 800 USD</Text>
+        </View>
       </View>
 
       <View style={tripDetailStyles.sightRightActions}>
         <FloatingActionButton
-          buttons={[ 
+          buttons={[
+            //@ts-expect-error ///
+            {
+              label: "Add expenses",
               //@ts-expect-error ///
-              {
-                label: "Add expenses",
-                //@ts-expect-error ///
-                onPress: () =>  navigation.navigate("ActivityExpenses"),
-                icon: CostIcon,
-                isDanger: false,
-              },
+              onPress: () => navigation.navigate("ActivityExpenses"),
+              icon: CostIcon,
+              isDanger: false,
+            },
+            //@ts-expect-error ///
+            {
+              label: "Add description",
+              //@ts-expect-error ///
+              onPress: () =>
+                navigation.navigate("ActivityNoteOrDescription", {
+                  type: "description",
+                }),
+              icon: DescriptionIcon,
+              isDanger: false,
+            },
             //@ts-expect-error ///
             {
               label: "Add note",
               //@ts-expect-error ///
-              onPress: () =>  navigation.navigate("ActivityNoteOrDescription", {
-                type: "note",
-              }),
+              onPress: () =>
+                navigation.navigate("ActivityNoteOrDescription", {
+                  type: "note",
+                }),
               icon: NoteIcon,
               isDanger: false,
             },
@@ -104,4 +119,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flex: 1,
   },
+  price: {
+    color: "#dd4343",
+    fontSize: 12,
+    fontWeight: "600",
+    marginLeft: 0,
+  },
+  priceWrapper: {
+    backgroundColor: "#fff4f4",
+    borderRadius: 6,
+    marginLeft: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  }
 });

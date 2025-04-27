@@ -11,7 +11,7 @@ export const tripDetailStyles = StyleSheet.create({
   },
   addActivityButton: {
     alignItems: "center",
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.black,
     borderRadius: 50,
     bottom: 25,
     display: "flex",
@@ -93,7 +93,7 @@ export const tripDetailStyles = StyleSheet.create({
   },
   checkinButtonText: {
     color: COLORS.gray,
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: "600",
   },
   circleItem: {
@@ -173,7 +173,7 @@ export const tripDetailStyles = StyleSheet.create({
     alignItems: "center",
     height: 18,
     justifyContent: "center",
-    marginBottom: 3,
+    marginBottom: 0,
   },
   imageOverlay: {
     alignItems: "center",
@@ -382,13 +382,12 @@ export const tripDetailStyles = StyleSheet.create({
   ratingLabel: {
     alignItems: "center",
     flexDirection: "row",
-    marginVertical: 8,
   },
   ratingText: {
     color: COLORS.darkgray,
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: "400",
-    marginRight: 2,
+    marginRight: 0,
   },
   rightSide: {
     alignItems: "flex-end",
@@ -461,7 +460,7 @@ export const tripDetailStyles = StyleSheet.create({
   },
   sightType: {
     color: COLORS.darkgray,
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: "400",
     marginLeft: 3,
   },

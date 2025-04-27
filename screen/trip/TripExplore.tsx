@@ -16,6 +16,7 @@ import { TabBar } from "react-native-tab-view";
 import { TabView } from "react-native-tab-view";
 
 import { useLazyGetSightsQuery } from "../../api/api.trekspot";
+import { MustTryBadge } from "../../common/components/MustTryBadge";
 import { Loader } from "../../common/ui/Loader";
 import { exploreStyles } from "../../components/explore/sights/_exploreStyles";
 import { globalStyles } from "../../styles/globalStyles";
@@ -100,6 +101,7 @@ export const TripExplore = ({ route }) => {
               onPress={() => showTopSight(item)}
               activeOpacity={0.7}
             >
+              <MustTryBadge label="Must visit" />
               <Image
                 style={[
                   {
@@ -241,6 +243,7 @@ export const TripExplore = ({ route }) => {
         visible={topSightDetail}
         onClose={handleClear}
         data={topSightDetail}
+        showAddToTrip={true}
       />
     </>
   );

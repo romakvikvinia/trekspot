@@ -10,14 +10,16 @@ import { FeedbackCountryDetail } from "../../../components/explore/FeedbackCount
 import { StarIcon } from "../../../utilities/SvgIcons.utility";
 import { Loader } from "../../ui/Loader";
 import { styles } from "../_styles";
+import { MustTryBadge } from "../MustTryBadge";
 import { DishDetail } from "./_DishDetail";
 
 type DiningProps = {
   iso2: CountryType;
+  showTitle?: boolean;
+  isTrip?: boolean;
 };
 
 export const Dining: React.FC<DiningProps> = ({ iso2, showTitle = true, isTrip = false }) => {
-  console.log("iso2",iso2)
   const { isLoading, data, isError } = useDishesByISO2Query({
     iso2,
   });
@@ -50,17 +52,15 @@ export const Dining: React.FC<DiningProps> = ({ iso2, showTitle = true, isTrip =
       {!isLoading && data?.dishes && data?.dishes.length === 0 && (
         <NodataText />
       )}
-      {data?.dishes && data?.dishes.length > 0 && (
+      {data?.dishes && data?.dishes.length > 0 && showTitle && (
         <View style={styles.tabContentHeader}>
-          {showTitle && (
             <Text style={styles.tabContentHeaderText}>
               Local dishes
-            </Text>
-          )}
+            </Text> 
         </View>
       )}
 
-      <View style={{ minHeight: 230 }}>
+      <View style={{ minHeight: 230}}>
         {isLoading ? (
           <Loader isLoading={isLoading} background="" />
         ) : (
@@ -70,8 +70,11 @@ export const Dining: React.FC<DiningProps> = ({ iso2, showTitle = true, isTrip =
               numColumns={2}
               renderItem={({ item }) => (
                 <Pressable onPress={() => setSelectedDish(item)} style={styles.thingsTodoItem} key={item?.score}>
+                <MustTryBadge />
                   <Image
-                    style={styles.thingsTodoItemImage}
+                    style={[styles.thingsTodoItemImage, {
+                      minHeight: isTrip ? 200 : 130
+                    }]}
                     source={
                       item?.url
                         ? {
@@ -141,7 +144,7 @@ export const Dining: React.FC<DiningProps> = ({ iso2, showTitle = true, isTrip =
                   </View>
                 </Pressable>
               )}
-              estimatedItemSize={200}
+              estimatedItemSize={50}
               contentContainerStyle={{
                 paddingHorizontal: 10,
                 paddingBottom: 25,

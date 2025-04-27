@@ -101,6 +101,7 @@ export const TripActivityCard: React.FC<ITripActivityCardProps> = ({
             marginLeft: activityAmount > 1 ? 20 : 15,
             zIndex: index === 0 ? 5 : 1,
             backgroundColor: checkedIn ? "#fffcf5" : "#fff",
+            height: "auto",
           },
         ]}
         onPress={() => {
@@ -158,6 +159,7 @@ const styles = StyleSheet.create({
   },
   activityItem: {
     flexDirection: "column",
+    height: "auto",
     marginBottom: 25,
     marginRight: 15,
     padding: 0,

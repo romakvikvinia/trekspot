@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, StatusBar, Text, View } from "react-native";
 
 import { FloatingActionButton } from "../../../../components/common/FloatingButtons";
 import { globalStyles } from "../../../../styles/globalStyles";
@@ -24,10 +24,11 @@ export const NormalHeader = ({ title = "" }) => {
       position: "relative",
       zIndex: 1
     }]}>
+        <StatusBar barStyle="dark-content" /> 
       <Pressable
         onPress={() => navigation.goBack()}
         style={[globalStyles.screenHeaderBackButton, {
-          marginLeft: -10
+          marginLeft: 0
         }]}
         hitSlop={30}
       >
@@ -52,7 +53,7 @@ export const NormalHeader = ({ title = "" }) => {
           },
         ]}
         renderTrigger={() => (
-          <View style={{width: 30, marginRight: -10}}>
+          <View style={{width: 30, position: "relative", right: -10}}>
             <DotsVerticlIcon color="#000" size={15} />
           </View>
         )}

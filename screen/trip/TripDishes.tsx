@@ -15,7 +15,6 @@ import { StatusBar } from "expo-status-bar";
 
 import { Dining } from "../../common/components/Destination/Dining";
 import { globalStyles } from "../../styles/globalStyles";
-import { SIZES } from "../../styles/theme";
 import { BackIcon } from "../../utilities/SvgIcons.utility";
 
 export const TripDishes = ({ route }) => {
@@ -36,7 +35,7 @@ export const TripDishes = ({ route }) => {
   // };
 
   return (
-    <View style={dishStyles.safeArea}> 
+    <View style={dishStyles.safeArea}>
       <StatusBar style="dark" />
       <View style={globalStyles.screenHeader}>
         <Pressable
@@ -52,15 +51,13 @@ export const TripDishes = ({ route }) => {
           style={globalStyles.screenHeaderBackButton}
         ></TouchableOpacity>
       </View>
-      <ScrollView style={{ flex: 1 }}>
-        <View
-          style={{
-            minHeight: SIZES.height,
-            flex: 1,
-          }}
-        >
-          <Dining iso2={iso2} showTitle={false} isTrip={true} />
-        </View>
+      <ScrollView
+        style={{ flex: 1, paddingHorizontal: 5 }}
+        contentContainerStyle={{
+          paddingTop: 25,
+        }}
+      >
+        <Dining iso2={iso2} showTitle={false} isTrip={true} />
       </ScrollView>
     </View>
   );

@@ -1,18 +1,19 @@
 import * as Haptics from "expo-haptics";
 import { useEffect, useRef, useState } from "react";
-import {
-  Animated,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-} from "react-native";
+import { Animated, Platform, Pressable, StyleSheet, Text } from "react-native";
 
 import { COLORS } from "../../../styles/theme";
-import { LightBulbIcon, PlusCircleIcon, PlusIcon } from "../../../utilities/SvgIcons.utility";
+import {
+  LightBulbIcon,
+  PlusCircleIcon,
+  PlusIcon,
+} from "../../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "../_tripDetailStyles";
 
-export const AddActivityButton = ({ onActivitiesModalOpen, onAddActivitiesModal }) => {
+export const AddActivityButton = ({
+  onActivitiesModalOpen,
+  onAddActivitiesModal,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   // Animation Values
@@ -32,13 +33,13 @@ export const AddActivityButton = ({ onActivitiesModalOpen, onAddActivitiesModal 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setIsOpen(false);
     onActivitiesModalOpen();
-  }
+  };
 
   const handleAddCustomActivity = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setIsOpen(false);
-    onAddActivitiesModal()
-  }
+    onAddActivitiesModal();
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -112,28 +113,33 @@ export const AddActivityButton = ({ onActivitiesModalOpen, onAddActivitiesModal 
         <Animated.View
           style={[styles.floatingButtonsWrapper, { opacity: buttonsOpacity }]}
         >
-          <Pressable 
-            onPress={handleAddCustomActivity}
-            style={({pressed}) => [
-            {
-                backgroundColor: pressed ? "#fafafa" : "#fff",
-            },
-            styles.floatingButton
-          ]}>
-            <Text style={styles.floatingButtonText}>Add activity</Text>
-            <PlusCircleIcon color="#000" size="20" />
-          </Pressable>
           <Pressable
-           onPress={handleSelectSuggestions}
-           style={({pressed}) => [
-            styles.floatingButton,
-            {
+            onPress={handleSelectSuggestions}
+            style={({ pressed }) => [
+              styles.floatingButton,
+              {
                 backgroundColor: pressed ? "#fafafa" : "#fff",
-                borderBottomWidth: 0
-            },
-          ]}>
+                borderBottomWidth: 0,
+              },
+            ]}
+          >
             <Text style={styles.floatingButtonText}>Select Suggestions</Text>
             <LightBulbIcon color="#000" size="20" />
+          </Pressable>
+          <Pressable
+            // onPress={handleAddCustomActivity}
+            style={({ pressed }) => [
+              {
+                backgroundColor: pressed ? "#fafafa" : "#fff",
+                opacity: 0.3,
+              },
+              styles.floatingButton,
+            ]}
+          >
+            <Text style={styles.floatingButtonText}>
+              Add activity (Coming Soon)
+            </Text>
+            <PlusCircleIcon color="#000" size="20" />
           </Pressable>
         </Animated.View>
       )}
@@ -160,7 +166,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderBottomColor: "#f2f2f2",
     borderBottomWidth: 1,
-    flexDirection:"row",
+    flexDirection: "row",
     justifyContent: "space-between",
     padding: 20,
   },
@@ -186,6 +192,6 @@ const styles = StyleSheet.create({
         elevation: 1,
       },
     }),
-    overflow: "hidden"
+    overflow: "hidden",
   },
 });

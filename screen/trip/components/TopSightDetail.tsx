@@ -11,10 +11,13 @@ import {
   Text,
   View,
 } from "react-native";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { Portal } from "react-native-portalize";
 import Animated, {
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
+  withSpring,
   withTiming,
 } from "react-native-reanimated";
 import Swiper from "react-native-swiper";
@@ -31,9 +34,12 @@ import {
   WishlistAddIcon,
 } from "../../../utilities/SvgIcons.utility";
 
+const SWIPE_THRESHOLD = 20; // Center of the screen
+
 interface TopSightDetailProps {
   visible: boolean;
   onClose?: () => void;
+  showAddToTrip?: boolean;
 }
 
 const dataa = {
@@ -83,6 +89,7 @@ export const TopSightDetail: React.FC<TopSightDetailProps> = ({
   visible,
   onClose,
   data,
+  showAddToTrip = false
 }) => {
   const dispatch = useAppDispatch();
   const [showMore, setShowMore] = useState(false);
@@ -171,6 +178,50 @@ export const TopSightDetail: React.FC<TopSightDetailProps> = ({
     // },
     // [dispatch, city]
   // );
+
+
+  const translateX = useSharedValue(0);
+
+  // Function to handle swipe completion (optional)
+  const onSwipeComplete = () => {
+    console.log('Swiped from left edge to center!');
+     handleClose();
+  };
+
+  const panGesture = Gesture.Pan()
+    .onBegin((event) => {
+      // Check if the gesture starts near the left edge (optional)
+      if (event.x < 20) {
+        console.log('Started from left edge');
+      }
+    })
+    .onUpdate((event) => {
+      // Only allow rightward swipes (dx > 0)
+      if (event.translationX > 0) {
+        translateX.value = event.translationX;
+      }
+    })
+    .onEnd((event) => {
+      if (event.translationX > SWIPE_THRESHOLD) {
+        // Swipe reached the center - trigger action
+        runOnJS(onSwipeComplete)(); // Run JS callback
+      }
+      // Reset position with spring animation
+      translateX.value = withSpring(0);
+    });
+
+  const [activeDay, setActiveDay] = useState(0);
+
+  const days = [
+    {
+      id: 1,
+      date: "2025-01-01",
+    },
+    {
+      id: 2,
+      date: "2025-01-02",
+    },
+  ];
  
   if (!visible) return null;
 
@@ -187,238 +238,297 @@ export const TopSightDetail: React.FC<TopSightDetailProps> = ({
     <>
       <StatusBar style="dark" />
       <Portal>
-         <Animated.View style={[styles.container, animatedStyle]}>
-          <View style={[styles.header, isScrolled && styles.headerScrolled]}>
-            <Pressable onPress={() => handleClose()} style={styles.backButton} hitSlop={20}>
-              <BackIcon size="18" />
-            </Pressable>
-            <Pressable
-              style={styles.addToBucketButton}
-              hitSlop={20}
-              // disabled={isWishlistToggleLoading}
-              // onPress={() =>
-              //   !isWishlistToggleLoading &&
-              //   handleAddToWishlist(
-              //     wishlistState &&
-              //       wishlistState.wishlists.some(
-              //         (i) => i.city && i.city.id === city.id
-              //       )
-              //   )
-              // }
-            >
-              {/* {isWishlistToggleLoading ? (
-                <ActivityIndicator color="#000" />
-              ) : wishlistState &&
-                wishlistState &&
-                wishlistState.wishlists.some(
-                  (i) => i.city && i.city.id === city.id
-                ) ? (
-                  <WishlistedIcon size={20} color="#000" />
-              ) : (
-                <WishlistAddIcon size={18} />
-              )} */}
-                <WishlistAddIcon size={18} />
-            </Pressable>
-          </View>
-          <Animated.ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: 50 }}
-            onScroll={({ nativeEvent }) => {
-              setIsScrolled(nativeEvent.contentOffset.y > 400);
-            }}
-          >
-            <View style={styles.swiperContainer}>
-              <Swiper
-                activeDotColor="#fff"
-                showsButtons={false}
-                loop={false}
-                dotColor="#949494"
-                automaticallyAdjustContentInsets
-                paginationStyle={{
-                  position: "absolute",
-                  justifyContent: "center",
-                  paddingRight: 0,
-                  bottom: 16,
-                }}
-              >
-                {newData?.images?.map((item, index) => (
-                  <Image
-                    source={{ uri: item.url }}
-                    style={{
-                      width: "100%",
-                      height: 500,
-                      backgroundColor: "#ccc",
-                    }}
-                    key={index}
-                    priority="high"
-                  />
-                ))}
-              </Swiper>
-            </View>
-            <View style={styles.content}>
-              <Text style={styles.title}>{data?.title}</Text>
-              <View style={styles.titleBottomRow}>
-                <View style={styles.rating}>
-                  <View style={{ marginTop: -2 }}>
-                    <StarIcon color="#FFBC3E" size={15} />
-                  </View>
-                  <Text style={styles.ratingnumber}>{newData.rate}</Text>
-                </View>
-                <Text> · </Text>
-                <Text style={styles.text}>{newData.category}</Text>
-                <Text> · </Text>
-                <Text style={styles.text}>{newData.city}</Text>
-              </View>
-              <View style={styles.keyValues}>
-                <View style={styles.row}>
-                  <View style={styles.icon}>
-                    <DirectionLinearIcon color="#000" size={25} />
-                  </View>
-                  <FloatingActionButton
-                    title="Open with"
-                    buttons={ Platform.OS === "ios" ? [
-                      //@ts-expect-error
-                      {
-                        label: "Google Maps",
-                        onPress: () => openMap(newData.location, "google", newData.address),
-                        icon: null,
-                        isDanger: false,  
-                      },
-                      //@ts-expect-error
-                      {
-                          label: "Apple Maps",
-                          onPress: () => openMap(newData.location, "apple", newData.address),
-                          icon: null,
-                          isDanger: false,
-                        },
-                      ]
-                    : [
-                       //@ts-expect-error
-                       {
-                        label: "Google Maps",
-                        onPress: () => openMap(newData.location, "google", newData.address),
-                        icon: null,
-                        isDanger: false,
-                      },
-                    ]}
-                    renderTrigger={() => (
-                      <View style={styles.value}>
-                        <Text style={styles.valueLabelText}>Address</Text>
-                        <Text style={styles.valueText}>{newData.address}{" "}
-                          <Text style={styles.more}>Direction</Text>
-                        </Text>
-                      </View>
-                    )}
-                  />
-                </View>
-                <View style={styles.row}>
-                  <View style={styles.icon}>
-                    <ClockLinearIcon color="#000" size={25} />
-                  </View>
-                  <View style={styles.value}>
-                    <Text style={styles.valueLabelText}>Working Hours</Text>
-                    <Text style={styles.highlighteddescriptionText}>
-                      {newData.openingHoursAsText}
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.row}>
-                  <View style={styles.icon}>
-                    <WebsiteLinearIcon color="#000" size={25} />
-                  </View>
-                  <View style={styles.value}>
-                    <Text style={styles.valueLabelText}>Website</Text>
-                    <Pressable
-                      onPress={() => Linking.openURL(newData.officialWebsite)}
-                    >
-                      <Text style={styles.highlighteddescriptionText}>
-                        {newData.officialWebsite}
-                      </Text>
-                    </Pressable>
-                  </View>
-                </View>
-              </View>
-              <View
-                style={[
-                  styles.descriptionRow,
+        <GestureDetector gesture={panGesture}>
+          <Animated.View style={[styles.container, animatedStyle]}>
+            <View style={[styles.header, isScrolled && styles.headerScrolled]}>
+              <Pressable
+                onPress={() => handleClose()}
+                hitSlop={20}
+                style={({ pressed }) => [
+                  styles.backButton,
                   {
-                    borderBottomColor: "#ccc",
-                    borderBottomWidth: 1,
-                    paddingBottom: 25,
+                    opacity: pressed ? 0.5 : 1,
                   },
                 ]}
               >
-                <Text style={styles.descriptionTitle}>General Information</Text>
-                <Text style={[styles.descriptionSubTitle, { marginTop: 0 }]}>
-                  How to get there?
-                </Text>
-                <Pressable
-                  style={styles.showMoreButton}
-                  onPress={() => setShowMore(!showMore)}
-                >
-                  <Text style={styles.descriptionText} selectable>
-                    {newData.howToGetThere.slice(0, showMore ? undefined : 80)}
-                    {!showMore && (
-                      <>
-                        ...<Text style={styles.showMore}> Show more</Text>
-                      </>
-                    )}
-                  </Text>
-                </Pressable>
-                {showMore && (
-                  <Pressable onPress={() => setShowMore(!showMore)}>
-                    <Text style={styles.descriptionSubTitle}>Entree Fees</Text>
-                    <Text style={styles.descriptionText} selectable>
-                      {newData.ticketsAndPricing.entryFees}
-                    </Text>
-                    <Text style={styles.descriptionSubTitle}>
-                      Payment Methods
-                    </Text>
-                    <Text style={styles.descriptionText} selectable>
-                      {newData.ticketsAndPricing.paymentMethods}
-                    </Text>
-                    <Text style={styles.descriptionSubTitle}>
-                      Where to buy
-                    </Text>
-                    <Text style={styles.descriptionText} selectable>
-                      {newData.ticketsAndPricing.whereToBuy}
-                    </Text>
-                    <Text style={styles.descriptionSubTitle}>
-                      Important Tips
-                    </Text>
-                    {newData.tips.map((item, index) => (
-                      <Text
-                        key={index}
-                        style={styles.descriptionText}
-                        selectable
-                      >
-                        - {item}
-                      </Text>
-                    ))}
-                  </Pressable>
-                )}
-              </View>
-              <View style={styles.reviews}>
-                <Text style={styles.descriptionTitle}>Reviews</Text>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  {newData.reviews.map((item, index) => (
-                    <View key={index} style={styles.review}>
-                      <Text style={styles.reviewText}>
-                        &quot;{item.review}&quot; -{" "}
-                        <Text style={styles.reviewAuthor}>{item.author}</Text>
+                <BackIcon size="18" />
+              </Pressable>
+              <View style={styles.headerRight}>
+                {showAddToTrip && (
+                  <FloatingActionButton
+                    withHeader={true}
+                    title="Select dates"
+                    //@ts-expect-error ///
+                  buttons={days.map((day, i) => ({
+                    label: day.date,
+                    onPress: () => setActiveDay(i),
+                    icon: null,
+                    isDanger: false,
+                    isActive: day.id === days[activeDay]?.id,
+                  }))}
+                  //@ts-expect-error ///
+                  renderTrigger={() => (
+                    <View style={styles.addTripButton} hitSlop={20}>
+                      <Text style={styles.addTripText}>
+                        {false ? "Remove from trip" : "Add to trip"}
                       </Text>
                     </View>
-                  ))}
-                </ScrollView>
-              </View>
-              <View style={styles.descriptionRow}>
-                <Text style={styles.descriptionTitle}>About</Text>
-                <Text style={styles.descriptionText}>{newData.description}</Text>
+                  )}
+                />
+                )}
+                <Pressable
+                  hitSlop={20}
+                  style={({ pressed }) => [
+                    styles.addToBucketButton,
+                    {
+                      opacity: pressed ? 0.5 : 1,
+                    },
+                  ]}
+                  // disabled={isWishlistToggleLoading}
+                  // onPress={() =>
+                  //   !isWishlistToggleLoading &&
+                  //   handleAddToWishlist(
+                  //     wishlistState &&
+                  //       wishlistState.wishlists.some(
+                  //         (i) => i.city && i.city.id === city.id
+                  //       )
+                  //   )
+                  // }
+                >
+                  {/* {isWishlistToggleLoading ? (
+                  <ActivityIndicator color="#000" />
+                ) : wishlistState &&
+                  wishlistState &&
+                  wishlistState.wishlists.some(
+                    (i) => i.city && i.city.id === city.id
+                  ) ? (
+                    <WishlistedIcon size={20} color="#000" />
+                ) : (
+                  <WishlistAddIcon size={18} />
+                )} */}
+                  <WishlistAddIcon size={18} />
+                </Pressable>
               </View>
             </View>
-          </Animated.ScrollView>
-        </Animated.View>
-       </Portal>
+            <Animated.ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingBottom: 50 }}
+              onScroll={({ nativeEvent }) => {
+                setIsScrolled(nativeEvent.contentOffset.y > 400);
+              }}
+            >
+              <View style={styles.swiperContainer}>
+                <Swiper
+                  activeDotColor="#fff"
+                  showsButtons={false}
+                  loop={false}
+                  dotColor="#949494"
+                  automaticallyAdjustContentInsets
+                  paginationStyle={{
+                    position: "absolute",
+                    justifyContent: "center",
+                    paddingRight: 0,
+                    bottom: 16,
+                  }}
+                >
+                  {newData?.images?.map((item, index) => (
+                    <Image
+                      source={{ uri: item.url }}
+                      style={{
+                        width: "100%",
+                        height: 500,
+                        backgroundColor: "#ccc",
+                      }}
+                      key={index}
+                      priority="high"
+                    />
+                  ))}
+                </Swiper>
+              </View>
+              <View style={styles.content}>
+                <Text style={styles.title}>{data?.title}</Text>
+                <View style={styles.titleBottomRow}>
+                  <View style={styles.rating}>
+                    <View style={{ marginTop: -2 }}>
+                      <StarIcon color="#FFBC3E" size={15} />
+                    </View>
+                    <Text style={styles.ratingnumber}>{newData.rate}</Text>
+                  </View>
+                  <Text> · </Text>
+                  <Text style={styles.text}>{newData.category}</Text>
+                  <Text> · </Text>
+                  <Text style={styles.text}>{newData.city}</Text>
+                </View>
+                <View style={styles.keyValues}>
+                  <View style={styles.row}>
+                    <View style={styles.icon}>
+                      <DirectionLinearIcon color="#000" size={25} />
+                    </View>
+                    <FloatingActionButton
+                      title="Open with"
+                      buttons={
+                        Platform.OS === "ios"
+                          ? [
+                              //@ts-expect-error
+                              {
+                                label: "Google Maps",
+                                onPress: () =>
+                                  openMap(
+                                    newData.location,
+                                    "google",
+                                    newData.address
+                                  ),
+                                icon: null,
+                                isDanger: false,
+                              },
+                              //@ts-expect-error
+                              {
+                                label: "Apple Maps",
+                                onPress: () =>
+                                  openMap(
+                                    newData.location,
+                                    "apple",
+                                    newData.address
+                                  ),
+                                icon: null,
+                                isDanger: false,
+                              },
+                            ]
+                          : [
+                              //@ts-expect-error
+                              {
+                                label: "Google Maps",
+                                onPress: () =>
+                                  openMap(
+                                    newData.location,
+                                    "google",
+                                    newData.address
+                                  ),
+                                icon: null,
+                                isDanger: false,
+                              },
+                            ]
+                      }
+                      renderTrigger={() => (
+                        <View style={styles.value}>
+                          <Text style={styles.valueLabelText}>Address</Text>
+                          <Text style={styles.valueText}>
+                            {newData.address}{" "}
+                            <Text style={styles.more}>Direction</Text>
+                          </Text>
+                        </View>
+                      )}
+                    />
+                  </View>
+                  <View style={styles.row}>
+                    <View style={styles.icon}>
+                      <ClockLinearIcon color="#000" size={25} />
+                    </View>
+                    <View style={styles.value}>
+                      <Text style={styles.valueLabelText}>Working Hours</Text>
+                      <Text style={styles.highlighteddescriptionText}>
+                        {newData.openingHoursAsText}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.row}>
+                    <View style={styles.icon}>
+                      <WebsiteLinearIcon color="#000" size={25} />
+                    </View>
+                    <View style={styles.value}>
+                      <Text style={styles.valueLabelText}>Website</Text>
+                      <Pressable
+                        onPress={() => Linking.openURL(newData.officialWebsite)}
+                      >
+                        <Text style={styles.highlighteddescriptionText}>
+                          {newData.officialWebsite}
+                        </Text>
+                      </Pressable>
+                    </View>
+                  </View>
+                </View>
+                <View
+                  style={[
+                    styles.descriptionRow,
+                    {
+                      borderBottomColor: "#ccc",
+                      borderBottomWidth: 1,
+                      paddingBottom: 25,
+                    },
+                  ]}
+                >
+                  <Text style={styles.descriptionTitle}>General Information</Text>
+                  <Text style={[styles.descriptionSubTitle, { marginTop: 0 }]}>
+                    How to get there?
+                  </Text>
+                  <Pressable
+                    style={styles.showMoreButton}
+                    onPress={() => setShowMore(!showMore)}
+                  >
+                    <Text style={styles.descriptionText} selectable>
+                      {newData.howToGetThere.slice(0, showMore ? undefined : 80)}
+                      {!showMore && (
+                        <>
+                          ...<Text style={styles.showMore}> Show more</Text>
+                        </>
+                      )}
+                    </Text>
+                  </Pressable>
+                  {showMore && (
+                    <Pressable onPress={() => setShowMore(!showMore)}>
+                      <Text style={styles.descriptionSubTitle}>Entree Fees</Text>
+                      <Text style={styles.descriptionText} selectable>
+                        {newData.ticketsAndPricing.entryFees}
+                      </Text>
+                      <Text style={styles.descriptionSubTitle}>
+                        Payment Methods
+                      </Text>
+                      <Text style={styles.descriptionText} selectable>
+                        {newData.ticketsAndPricing.paymentMethods}
+                      </Text>
+                      <Text style={styles.descriptionSubTitle}>Where to buy</Text>
+                      <Text style={styles.descriptionText} selectable>
+                        {newData.ticketsAndPricing.whereToBuy}
+                      </Text>
+                      <Text style={styles.descriptionSubTitle}>
+                        Important Tips
+                      </Text>
+                      {newData.tips.map((item, index) => (
+                        <Text
+                          key={index}
+                          style={styles.descriptionText}
+                          selectable
+                        >
+                          - {item}
+                        </Text>
+                      ))}
+                    </Pressable>
+                  )}
+                </View>
+                <View style={styles.reviews}>
+                  <Text style={styles.descriptionTitle}>Reviews</Text>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    {newData.reviews.map((item, index) => (
+                      <View key={index} style={styles.review}>
+                        <Text style={styles.reviewText}>
+                          &quot;{item.review}&quot; -{" "}
+                          <Text style={styles.reviewAuthor}>{item.author}</Text>
+                        </Text>
+                      </View>
+                    ))}
+                  </ScrollView>
+                </View>
+                <View style={styles.descriptionRow}>
+                  <Text style={styles.descriptionTitle}>About</Text>
+                  <Text style={styles.descriptionText}>
+                    {newData.description}
+                  </Text>
+                </View>
+              </View>
+            </Animated.ScrollView>
+          </Animated.View>
+        </GestureDetector>
+      </Portal>
     </>
   );
 };
@@ -441,6 +551,30 @@ const styles = StyleSheet.create({
         elevation: 2,
       },
     }),
+  },
+  addTripButton: {
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 30,
+    display: "flex",
+    height: 40,
+    justifyContent: "center",
+    paddingHorizontal: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 1.84,
+    ...Platform.select({
+      android: {
+        elevation: 2,
+      },
+    }),
+    marginRight: 15
+  },
+  addTripText: {
+    color: "#000",
+    fontSize: 14,
+    fontWeight: "500",
   },
   backButton: {
     alignItems: "center",
@@ -502,6 +636,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     zIndex: 1,
+  },
+  headerRight: {
+    alignItems: 'center',
+    flexDirection: "row",
   },
   headerScrolled: {
     backgroundColor: "#fff",

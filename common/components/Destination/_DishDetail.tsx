@@ -3,16 +3,21 @@ import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Portal } from "react-native-portalize";
 import Animated, {
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
+  withSpring,
   withTiming,
 } from "react-native-reanimated";
 import Swiper from "react-native-swiper";
 
 import { BackIcon, StarIcon } from "../../../utilities/SvgIcons.utility";
 
+
+const SWIPE_THRESHOLD = 20; // Center of the screen
 interface TopSightDetailProps {
   visible: boolean;
   onClose?: () => void;
@@ -132,271 +137,322 @@ export const DishDetail: React.FC<TopSightDetailProps> = ({
  
   const newData = { ...dataa, ...data };
 
+  const translateX = useSharedValue(0);
+
+  // Function to handle swipe completion (optional)
+  const onSwipeComplete = () => {
+    console.log('Swiped from left edge to center!');
+     handleClose();
+  };
+
+  const panGesture = Gesture.Pan()
+    .onBegin((event) => {
+      // Check if the gesture starts near the left edge (optional)
+      if (event.x < 20) {
+        console.log('Started from left edge');
+      }
+    })
+    .onUpdate((event) => {
+      // Only allow rightward swipes (dx > 0)
+      if (event.translationX > 0) {
+        translateX.value = event.translationX;
+      }
+    })
+    .onEnd((event) => {
+      if (event.translationX > SWIPE_THRESHOLD) {
+        // Swipe reached the center - trigger action
+        runOnJS(onSwipeComplete)(); // Run JS callback
+      }
+      // Reset position with spring animation
+      translateX.value = withSpring(0);
+    });
+
   if (!visible) return null;
 
   return (
     <>
       <StatusBar style="dark" />
       <Portal>
-        <Animated.View style={[styles.container, animatedStyle]}>
-          <View style={[styles.header, isScrolled && styles.headerScrolled]}>
-            <Pressable
-              onPress={() => handleClose()}
-              style={styles.backButton}
-              hitSlop={20}
-            >
-              <BackIcon size="18" />
-            </Pressable>
-          </View>
-          <Animated.ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: 50 }}
-            onScroll={({ nativeEvent }) => {
-              setIsScrolled(nativeEvent.contentOffset.y > 230);
-            }}
-          >
-            <View style={styles.swiperContainer}>
-              <Swiper
-                activeDotColor="#fff"
-                showsButtons={false}
-                loop={false}
-                dotColor="#949494"
-                automaticallyAdjustContentInsets
-                paginationStyle={{
-                  position: "absolute",
-                  justifyContent: "center",
-                  paddingRight: 0,
-                  bottom: 16,
-                }}
+        <GestureDetector gesture={panGesture}>
+          <Animated.View style={[styles.container, animatedStyle]}>
+            <View style={[styles.header, isScrolled && styles.headerScrolled]}>
+              <Pressable
+                onPress={() => handleClose()}
+                style={styles.backButton}
+                hitSlop={20}
               >
-                <Image
-                  source={{
-                    uri: data?.url,
-                  }}
-                  style={{
-                    width: "100%",
-                    height: 350,
-                    backgroundColor: "#ccc",
-                  }}
-                  priority="high"
-                />
-              </Swiper>
+                <BackIcon size="18" color="#000" />
+              </Pressable>
+             
             </View>
-            <View style={styles.content}>
-              <Text style={styles.title}>{data?.title}</Text>
-              <View style={styles.titleBottomRow}>
-                <View style={styles.rating}>
-                  <View style={{ marginTop: -2 }}>
-                    <StarIcon color="#FFBC3E" size={15} />
-                  </View>
-                  <Text style={styles.ratingnumber}>4.3</Text>
-                </View>
-                <Text> · </Text>
-                <Text style={styles.text}>{newData.category}</Text>
-                <Text> · </Text>
-                <Text style={styles.text}>
-                  🔥 {newData.nutritionInfo.estimatedCaloriesPerServing} kcal
-                </Text>
-              </View>
-              <View
-                style={[
-                  styles.descriptionRow,
-                  {
-                    marginTop: 0,
-                    padding: 15,
-                    backgroundColor: "#f2f2f2",
-                    borderRadius: 15,
-                  },
-                ]}
-              >
-                <Text
-                  style={[styles.descriptionSubTitle, { marginBottom: 15 }]}
+            <Animated.ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingBottom: 50 }}
+              onScroll={({ nativeEvent }) => {
+                setIsScrolled(nativeEvent.contentOffset.y > 230);
+              }}
+            >
+              <View style={styles.swiperContainer}>
+                <Swiper
+                  activeDotColor="#fff"
+                  showsButtons={false}
+                  loop={false}
+                  dotColor="#949494"
+                  automaticallyAdjustContentInsets
+                  paginationStyle={{
+                    position: "absolute",
+                    justifyContent: "center",
+                    paddingRight: 0,
+                    bottom: 16,
+                  }}
                 >
-                  ⚠️ Allergy Information
-                </Text>
-                <View style={styles.row}>
-                  <Text style={styles.rowvalue}>
-                    <Text style={styles.rowkey}>Contains: </Text>
-                    {newData.allergyInfo.contains.join(", ")}
+                  <Image
+                    source={{
+                      uri: data?.url,
+                    }}
+                    style={{
+                      width: "100%",
+                      height: 350,
+                      backgroundColor: "#ccc",
+                    }}
+                    priority="high"
+                  />
+                </Swiper>
+              </View>
+              <View style={styles.content}>
+                <Text style={styles.title}>{data?.title}</Text>
+                <View style={styles.titleBottomRow}>
+                  <View style={styles.rating}>
+                    <View style={{ marginTop: -2 }}>
+                      <StarIcon color="#FFBC3E" size={15} />
+                    </View>
+                    <Text style={styles.ratingnumber}>4.3</Text>
+                  </View>
+                  <Text> · </Text>
+                  <Text style={styles.text}>{newData.category}</Text>
+                  <Text> · </Text>
+                  <Text style={styles.text}>
+                    🔥 {newData.nutritionInfo.estimatedCaloriesPerServing} kcal
                   </Text>
                 </View>
                 <View
                   style={[
-                    styles.row,
+                    styles.descriptionRow,
                     {
-                      marginTop: 10,
+                      marginTop: 0,
+                      padding: 15,
+                      backgroundColor: "#f2f2f2",
+                      borderRadius: 15,
                     },
                   ]}
                 >
-                  <Text style={styles.rowkey}>Possible allergens: </Text>
-                  <Text style={styles.rowvalue}>
-                    {newData.allergyInfo.possibleAllergens.join(", ")}
-                  </Text>
-                </View>
-              </View>
-
-              <View style={styles.tabContainer}>
-                <Pressable
-                  style={[
-                    styles.tabButton,
-                    tab === "General" && styles.tabButtonActive,
-                  ]}
-                  onPress={() => setTab("General")}
-                >
                   <Text
-                    style={[
-                      styles.tabButtonText,
-                      tab === "General" && styles.tabButtonTextActive,
-                    ]}
+                    style={[styles.descriptionSubTitle, { marginBottom: 15 }]}
                   >
-                    General
+                    ⚠️ Allergy Information
                   </Text>
-                </Pressable>
-                <Pressable
-                  style={[
-                    styles.tabButton,
-                    tab === "Preparation" && styles.tabButtonActive,
-                  ]}
-                  onPress={() => setTab("Preparation")}
-                >
-                  <Text
-                    style={[
-                      styles.tabButtonText,
-                      tab === "Preparation" && styles.tabButtonTextActive,
-                    ]}
-                  >
-                    Preparation
-                  </Text>
-                </Pressable>
-                <Pressable
-                  style={[
-                    styles.tabButton,
-                    tab === "History" && styles.tabButtonActive,
-                  ]}
-                  onPress={() => setTab("History")}
-                >
-                  <Text
-                    style={[
-                      styles.tabButtonText,
-                      tab === "History" && styles.tabButtonTextActive,
-                    ]}
-                  >
-                    History
-                  </Text>
-                </Pressable>
-              </View>
-
-              {tab === "General" && (
-                <>
-                  <View style={[styles.divider, { marginTop: 15 }]}></View>
-                  <Text style={styles.descriptionSubTitle}>Ingredients</Text>
-                  {newData.ingredients.map((item, index) => (
-                    <Text key={index} style={styles.descriptionText} selectable>
-                      - {item}
+                  <View style={styles.row}>
+                    <Text style={styles.rowvalue}>
+                      <Text style={styles.rowkey}>Contains: </Text>
+                      {newData.allergyInfo.contains.join(", ")}
                     </Text>
-                  ))}
-                  <View style={styles.divider}></View>
-                  <Text style={styles.descriptionSubTitle}>Variations</Text>
-                  {newData.variations.map((item, index) => (
-                    <View
-                      key={index}
+                  </View>
+                  <View
+                    style={[
+                      styles.row,
+                      {
+                        marginTop: 10,
+                      },
+                    ]}
+                  >
+                    <Text style={styles.rowkey}>Possible allergens: </Text>
+                    <Text style={styles.rowvalue}>
+                      {newData.allergyInfo.possibleAllergens.join(", ")}
+                    </Text>
+                  </View>
+                </View>
+
+                <View style={styles.tabContainer}>
+                  <Pressable
+                    style={[
+                      styles.tabButton,
+                      tab === "General" && styles.tabButtonActive,
+                    ]}
+                    onPress={() => setTab("General")}
+                  >
+                    <Text
                       style={[
-                        styles.row,
-                        {
-                          marginTop: index === 0 ? 0 : 10,
-                        },
+                        styles.tabButtonText,
+                        tab === "General" && styles.tabButtonTextActive,
                       ]}
                     >
+                      General
+                    </Text>
+                  </Pressable>
+                  <Pressable
+                    style={[
+                      styles.tabButton,
+                      tab === "Preparation" && styles.tabButtonActive,
+                    ]}
+                    onPress={() => setTab("Preparation")}
+                  >
+                    <Text
+                      style={[
+                        styles.tabButtonText,
+                        tab === "Preparation" && styles.tabButtonTextActive,
+                      ]}
+                    >
+                      Preparation
+                    </Text>
+                  </Pressable>
+                  <Pressable
+                    style={[
+                      styles.tabButton,
+                      tab === "History" && styles.tabButtonActive,
+                    ]}
+                    onPress={() => setTab("History")}
+                  >
+                    <Text
+                      style={[
+                        styles.tabButtonText,
+                        tab === "History" && styles.tabButtonTextActive,
+                      ]}
+                    >
+                      History
+                    </Text>
+                  </Pressable>
+                </View>
+
+                {tab === "General" && (
+                  <>
+                    <View style={[styles.divider, { marginTop: 15 }]}></View>
+                    <Text style={styles.descriptionSubTitle}>Ingredients</Text>
+                    {newData.ingredients.map((item, index) => (
+                      <Text
+                        key={index}
+                        style={styles.descriptionText}
+                        selectable
+                      >
+                        - {item}
+                      </Text>
+                    ))}
+                    <View style={styles.divider}></View>
+                    <Text style={styles.descriptionSubTitle}>Variations</Text>
+                    {newData.variations.map((item, index) => (
+                      <View
+                        key={index}
+                        style={[
+                          styles.row,
+                          {
+                            marginTop: index === 0 ? 0 : 10,
+                          },
+                        ]}
+                      >
+                        <Text style={styles.rowvalue}>
+                          <Text style={styles.rowkey}>{item.title}: </Text>{" "}
+                          {item.description}
+                        </Text>
+                      </View>
+                    ))}
+                    <View style={styles.divider}></View>
+                    <Text style={styles.descriptionSubTitle}>
+                      Cost and Availability
+                    </Text>
+                    <View style={styles.row}>
                       <Text style={styles.rowvalue}>
-                        <Text style={styles.rowkey}>{item.title}: </Text>{" "}
-                        {item.description}
+                        <Text style={styles.rowkey}>Average Price: </Text>
+                        {newData.costAvailability.averagePrice}
                       </Text>
                     </View>
-                  ))}
-                  <View style={styles.divider}></View>
-                  <Text style={styles.descriptionSubTitle}>
-                    Cost and Availability
-                  </Text>
-                  <View style={styles.row}>
-                    <Text style={styles.rowvalue}>
-                      <Text style={styles.rowkey}>Average Price: </Text>
-                      {newData.costAvailability.averagePrice}
+                    <View style={[styles.row, { marginTop: 10 }]}>
+                      <Text style={styles.rowvalue}>
+                        <Text style={styles.rowkey}>Where to Find: </Text>
+                        {newData.costAvailability.whereToFind.join(", ")}
+                      </Text>
+                    </View>
+                    <View style={styles.divider}></View>
+                    <Text style={styles.descriptionSubTitle}>
+                      Cultural Significance
                     </Text>
-                  </View>
-                  <View style={[styles.row, { marginTop: 10 }]}>
-                    <Text style={styles.rowvalue}>
-                      <Text style={styles.rowkey}>Where to Find: </Text>
-                      {newData.costAvailability.whereToFind.join(", ")}
+                    {newData.culturalSignificance.map((item, index) => (
+                      <Text
+                        key={index}
+                        style={styles.descriptionText}
+                        selectable
+                      >
+                        - {item}
+                      </Text>
+                    ))}
+                    <View style={styles.divider}></View>
+                    <Text style={styles.descriptionSubTitle}>
+                      Pairing Recommendations
                     </Text>
-                  </View>
-                  <View style={styles.divider}></View>
-                  <Text style={styles.descriptionSubTitle}>
-                    Cultural Significance
-                  </Text>
-                  {newData.culturalSignificance.map((item, index) => (
-                    <Text key={index} style={styles.descriptionText} selectable>
-                      - {item}
+                    {newData.pairingRecommendations.map((item, index) => (
+                      <Text
+                        key={index}
+                        style={styles.descriptionText}
+                        selectable
+                      >
+                        - {item}
+                      </Text>
+                    ))}
+                    <View style={styles.divider}></View>
+                    <Text style={styles.descriptionSubTitle}>
+                      Dietary Information
                     </Text>
-                  ))}
-                  <View style={styles.divider}></View>
-                  <Text style={styles.descriptionSubTitle}>
-                    Pairing Recommendations
-                  </Text>
-                  {newData.pairingRecommendations.map((item, index) => (
-                    <Text key={index} style={styles.descriptionText} selectable>
-                      - {item}
+                    <View style={styles.row}>
+                      <Text style={styles.rowvalue}>
+                        <Text style={styles.rowkey}>Vegetarian Friendly: </Text>
+                        {newData.dietaryInfo.vegetarianFriendly ? "Yes" : "No"}
+                      </Text>
+                    </View>
+                    <View style={[styles.row, { marginTop: 10 }]}>
+                      <Text style={styles.rowvalue}>
+                        <Text style={styles.rowkey}>Vegan Friendly: </Text>
+                        {newData.dietaryInfo.veganFriendly ? "Yes" : "No"}
+                      </Text>
+                    </View>
+                    <View style={styles.divider}></View>
+                    <Text style={styles.descriptionSubTitle}>
+                      Vegan Alternatives
                     </Text>
-                  ))}
-                  <View style={styles.divider}></View>
-                  <Text style={styles.descriptionSubTitle}>
-                    Dietary Information
-                  </Text>
-                  <View style={styles.row}>
-                    <Text style={styles.rowvalue}>
-                      <Text style={styles.rowkey}>Vegetarian Friendly: </Text>
-                      {newData.dietaryInfo.vegetarianFriendly ? "Yes" : "No"}
+                    <Text style={styles.descriptionText}>
+                      {newData.dietaryInfo.veganAlternatives}
                     </Text>
-                  </View>
-                  <View style={[styles.row, { marginTop: 10 }]}>
-                    <Text style={styles.rowvalue}>
-                      <Text style={styles.rowkey}>Vegan Friendly: </Text>
-                      {newData.dietaryInfo.veganFriendly ? "Yes" : "No"}
-                    </Text>
-                  </View>
-                  <View style={styles.divider}></View>
-                  <Text style={styles.descriptionSubTitle}>
-                    Vegan Alternatives
-                  </Text>
-                  <Text style={styles.descriptionText}>
-                    {newData.dietaryInfo.veganAlternatives}
-                  </Text>
-                </>
-              )}
+                  </>
+                )}
 
-              {tab === "Preparation" && (
-                <>
-                  <View style={[styles.divider, { marginTop: 15 }]}></View>
+                {tab === "Preparation" && (
+                  <>
+                    <View style={[styles.divider, { marginTop: 15 }]}></View>
 
-                  <Text style={styles.descriptionSubTitle}>Preparation</Text>
-                  {newData.preparation.map((item, index) => (
-                    <Text key={index} style={styles.descriptionText} selectable>
-                      {index + 1}. {item}
+                    <Text style={styles.descriptionSubTitle}>Preparation</Text>
+                    {newData.preparation.map((item, index) => (
+                      <Text
+                        key={index}
+                        style={styles.descriptionText}
+                        selectable
+                      >
+                        {index + 1}. {item}
+                      </Text>
+                    ))}
+                  </>
+                )}
+
+                {tab === "History" && (
+                  <>
+                    <View style={[styles.divider, { marginTop: 15 }]}></View>
+
+                    <Text style={styles.descriptionSubTitle}>History</Text>
+                    <Text style={styles.descriptionText}>
+                      {newData.history}
                     </Text>
-                  ))}
-                </>
-              )}
-
-              {tab === "History" && (
-                <>
-                  <View style={[styles.divider, { marginTop: 15 }]}></View>
-
-                  <Text style={styles.descriptionSubTitle}>History</Text>
-                  <Text style={styles.descriptionText}>{newData.history}</Text>
-                </>
-              )}
-            </View>
-          </Animated.ScrollView>
-        </Animated.View>
+                  </>
+                )}
+              </View>
+            </Animated.ScrollView>
+          </Animated.View>
+        </GestureDetector>
       </Portal>
     </>
   );
@@ -410,17 +466,17 @@ const styles = StyleSheet.create({
     display: "flex",
     height: 40,
     justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 1.84,
     width: 40,
     ...Platform.select({
       android: {
         elevation: 2,
       },
     }),
-  },
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 1.84,
+  }, 
   container: {
     backgroundColor: "#fff",
     borderRadius: 10,
@@ -453,7 +509,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   header: {
-    alignItems: "flex-start",
+    alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 20,
@@ -461,6 +517,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     zIndex: 1,
+  },
+  headerRight: {
+    position: "relative",
   },
   headerScrolled: {
     backgroundColor: "#fff",

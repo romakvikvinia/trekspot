@@ -26,6 +26,7 @@ import { InviteTripMember } from "../screen/trip/InviteTripMember";
 import { TripDetailScreen } from "../screen/trip/TripDetailScreen";
 import { TripDishes } from "../screen/trip/TripDishes";
 import { TripEmergency } from "../screen/trip/TripEmergency";
+import { TripExpenses } from "../screen/trip/TripExpenses";
 import { TripExplore } from "../screen/trip/TripExplore";
 import { TripInsights } from "../screen/trip/TripInsights";
 import { TripRestaurants } from "../screen/trip/TripRestaurants";
@@ -324,6 +325,17 @@ const AppRoute = () => {
               Platform.OS === "android" ? 10 : SIZES.width - 50,
           })}
           component={Rental}
+        />
+        <Stack.Screen
+          name="TripExpenses"
+          options={() => ({
+            header: () => null,
+            animationEnabled: true,
+            gestureEnabled: Platform.OS === "ios",
+            gestureResponseDistance:
+              Platform.OS === "android" ? 10 : SIZES.width - 50,
+          })}
+          component={TripExpenses}
         />
         {/* <Stack.Screen
           name="Onboarding"
