@@ -54,7 +54,7 @@ export const TripExpenses: React.FC<Props> = ({ navigation }) => {
 
       <ScrollView
         style={{ flex: 1 }}
-        contentContainerStyle={{ paddingHorizontal: 15, paddingTop: 15 }}
+        contentContainerStyle={{ paddingHorizontal: 15, paddingTop: 25 }}
       >
         {/* {isLoading && (
           <View style={{ flex: 1, height: 200 }}>
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   safeArea: {
-    backgroundColor: "#F2F2F7",
+    backgroundColor: "#fff",
     flex: 1,
     paddingTop: Constants?.statusBarHeight + 15,
   },

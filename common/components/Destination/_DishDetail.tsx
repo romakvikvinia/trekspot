@@ -1,8 +1,9 @@
 import Constants from "expo-constants";
+import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Portal } from "react-native-portalize";
 import Animated, {
@@ -14,17 +15,60 @@ import Animated, {
 } from "react-native-reanimated";
 import Swiper from "react-native-swiper";
 
-import { BackIcon, StarIcon } from "../../../utilities/SvgIcons.utility";
+import { BackIcon, CheckLiteIcon, StarIcon, WishlistAddIcon } from "../../../utilities/SvgIcons.utility";
 
-
+  
 const SWIPE_THRESHOLD = 20; // Center of the screen
 interface TopSightDetailProps {
   visible: boolean;
   onClose?: () => void;
 }
 
+
+const TastedButton = () => {
+  const [isTasted, setIsTasted] = useState(false);
+  const [isTastedLoading, setIsTastedLoading] = useState(false);
+
+  const handleTasted = () => {
+    setIsTastedLoading(true);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setTimeout(() => {
+      setIsTasted(!isTasted);
+      setIsTastedLoading(false);
+    }, 1000);
+  }
+
+  return (
+    <Pressable hitSlop={15} style={[styles.buttonItem, styles.tastedButton, isTasted && styles.tastedButtonActive]} onPress={handleTasted}>
+      {isTastedLoading ? <><ActivityIndicator size="small" color="#000" /><Text style={styles.buttonText}>Wait...</Text></> : (
+        <>
+          <CheckLiteIcon width={18} color={isTasted ? "#fff" : "#000"} />
+          <Text style={[styles.buttonText, isTasted && {color: "#fff"}]}>Tasted</Text>
+        </>
+      )}
+    </Pressable>
+  );
+};
+
 const dataa = {
   category: "Pastry / Breakfast",
+  images: [{
+      "url": "https://cdn.tasteatlas.com//Images/Dishes/b446d786b3ae4eb2930267a26021d29a.jpg",
+      "meta": {
+        "author": "Tasteatlas",
+        "alt": null,
+        "authorUrl": null
+      }
+    }
+  ],
+  origin: "Milan",
+  restaurants: [{
+    name: "Filini",
+    image: "https://cdn.tasteatlas.com//Images/Restaurants/b446d786b3ae4eb2930267a26021d29a.jpg",
+    rating: 4.3, 
+    location: "123 Main St, Anytown, USA",
+    cuisine: "Italian", 
+  }],
   allergyInfo: {
     contains: ["Gluten (wheat)", "Dairy (cheese, yogurt, butter)", "Eggs"],
     possibleAllergens: ["Nuts", "Sesame seeds"],
@@ -178,11 +222,18 @@ export const DishDetail: React.FC<TopSightDetailProps> = ({
             <View style={[styles.header, isScrolled && styles.headerScrolled]}>
               <Pressable
                 onPress={() => handleClose()}
-                style={styles.backButton}
+                style={({pressed}) => [styles.backButton, pressed && { opacity: 0.5 }]}
                 hitSlop={20}
               >
                 <BackIcon size="18" color="#000" />
               </Pressable>
+
+              <View style={styles.headerRight}>
+                <TastedButton />
+                <Pressable style={({pressed}) => [styles.buttonItem, pressed && { opacity: 0.5 }]} hitSlop={20}>
+                  <WishlistAddIcon size={18} />
+                </Pressable>
+              </View>
              
             </View>
             <Animated.ScrollView
@@ -191,6 +242,7 @@ export const DishDetail: React.FC<TopSightDetailProps> = ({
               onScroll={({ nativeEvent }) => {
                 setIsScrolled(nativeEvent.contentOffset.y > 230);
               }}
+              bounces={false}
             >
               <View style={styles.swiperContainer}>
                 <Swiper
@@ -272,7 +324,7 @@ export const DishDetail: React.FC<TopSightDetailProps> = ({
                   </View>
                 </View>
 
-                <View style={styles.tabContainer}>
+                {/* <View style={styles.tabContainer}>
                   <Pressable
                     style={[
                       styles.tabButton,
@@ -321,22 +373,28 @@ export const DishDetail: React.FC<TopSightDetailProps> = ({
                       History
                     </Text>
                   </Pressable>
-                </View>
+                </View> */}
 
                 {tab === "General" && (
                   <>
                     <View style={[styles.divider, { marginTop: 15 }]}></View>
-                    <Text style={styles.descriptionSubTitle}>Ingredients</Text>
+                    <Text style={[styles.descriptionSubTitle, {
+                      fontSize: 22,
+                    }]}>Ingredients</Text>
                     {newData.ingredients.map((item, index) => (
                       <Text
                         key={index}
-                        style={styles.descriptionText}
+                        style={styles.ingredientText}
                         selectable
                       >
                         - {item}
                       </Text>
                     ))}
-                    <View style={styles.divider}></View>
+
+
+
+
+                    {/* <View style={styles.divider}></View>
                     <Text style={styles.descriptionSubTitle}>Variations</Text>
                     {newData.variations.map((item, index) => (
                       <View
@@ -353,8 +411,8 @@ export const DishDetail: React.FC<TopSightDetailProps> = ({
                           {item.description}
                         </Text>
                       </View>
-                    ))}
-                    <View style={styles.divider}></View>
+                    ))} */}
+                    {/* <View style={styles.divider}></View>
                     <Text style={styles.descriptionSubTitle}>
                       Cost and Availability
                     </Text>
@@ -418,11 +476,11 @@ export const DishDetail: React.FC<TopSightDetailProps> = ({
                     </Text>
                     <Text style={styles.descriptionText}>
                       {newData.dietaryInfo.veganAlternatives}
-                    </Text>
+                    </Text> */}
                   </>
                 )}
 
-                {tab === "Preparation" && (
+                {/* {tab === "Preparation" && (
                   <>
                     <View style={[styles.divider, { marginTop: 15 }]}></View>
 
@@ -448,7 +506,7 @@ export const DishDetail: React.FC<TopSightDetailProps> = ({
                       {newData.history}
                     </Text>
                   </>
-                )}
+                )} */}
               </View>
             </Animated.ScrollView>
           </Animated.View>
@@ -477,6 +535,29 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 1.84,
   }, 
+  buttonItem: {
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 30,
+    display: "flex",
+    height: 40,
+    justifyContent: "center",
+    width: 40,
+    ...Platform.select({
+      android: {
+        elevation: 2,
+      },
+    }),
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 1.84,
+  },
+  buttonText: {
+    color: "#000",
+    fontSize: 16,
+    fontWeight: "500",
+  },
   container: {
     backgroundColor: "#fff",
     borderRadius: 10,
@@ -519,11 +600,20 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   headerRight: {
+    flexDirection: "row",
+    gap: 10,
     position: "relative",
   },
   headerScrolled: {
     backgroundColor: "#fff",
     width: "100%",
+  },
+  ingredientText :{
+    color: "#000",
+    fontSize: 16,
+    fontWeight: "500",
+    marginBottom: 12,
+    opacity: 0.7,
   },
   rating: {
     alignItems: "center",
@@ -583,6 +673,16 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     padding: 5,
     width: "100%",
+  },
+  tastedButton: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 5,
+    justifyContent: "center",
+    width: 100,
+  },
+  tastedButtonActive: {
+    backgroundColor: "#008314", 
   },
   text: {
     color: "#000",

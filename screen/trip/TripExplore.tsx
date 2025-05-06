@@ -22,7 +22,7 @@ import { exploreStyles } from "../../components/explore/sights/_exploreStyles";
 import { globalStyles } from "../../styles/globalStyles";
 import { COLORS } from "../../styles/theme";
 import { BackIcon, StarIcon } from "../../utilities/SvgIcons.utility";
-import { TopSightDetail } from "./components/TopSightDetail";
+import { TopSightDetail } from "./components/SightDetail/TopSightDetail";
 
 export const TripExplore = ({ route }) => {
   const { trip } = route.params;

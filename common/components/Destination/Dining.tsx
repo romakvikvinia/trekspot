@@ -1,14 +1,13 @@
 import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
 import { useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { useDishesByISO2Query } from "../../../api/api.trekspot";
 import { CountryDishesArgsType, CountryType } from "../../../api/api.types";
 import { NodataText } from "../../../components/common/NoDataText";
 import { FeedbackCountryDetail } from "../../../components/explore/FeedbackCountryDetail";
 import { StarIcon } from "../../../utilities/SvgIcons.utility";
-import { Loader } from "../../ui/Loader";
 import { styles } from "../_styles";
 import { MustTryBadge } from "../MustTryBadge";
 import { DishDetail } from "./_DishDetail";
@@ -17,6 +16,24 @@ type DiningProps = {
   iso2: CountryType;
   showTitle?: boolean;
   isTrip?: boolean;
+};
+
+const LoadingDishCard = ({ isTrip = false }: { isTrip?: boolean }) => {
+  return (
+    <View style={loadingStyles.dishesContainer}>
+      {
+         [...Array(8)].map((_, index) => (
+            <View style={loadingStyles.dishesContainerItem} key={index}>
+              <View style={[loadingStyles.dishesContainerItemImage, {
+                 minHeight: isTrip ? 200 : 130
+              }]}></View>
+              <View style={loadingStyles.dishesContainerItemTitle}></View>
+              <View style={loadingStyles.dishesContainerItemRating}></View>
+            </View> 
+         ))
+      }
+    </View>
+  );
 };
 
 export const Dining: React.FC<DiningProps> = ({ iso2, showTitle = true, isTrip = false }) => {
@@ -59,10 +76,10 @@ export const Dining: React.FC<DiningProps> = ({ iso2, showTitle = true, isTrip =
             </Text> 
         </View>
       )}
-
+   
       <View style={{ minHeight: 230}}>
         {isLoading ? (
-          <Loader isLoading={isLoading} background="" />
+            <LoadingDishCard isTrip={isTrip} />
         ) : (
           <>
             <FlashList
@@ -102,6 +119,7 @@ export const Dining: React.FC<DiningProps> = ({ iso2, showTitle = true, isTrip =
                         <View
                           style={{
                             position: "relative",
+                            top: -1
                           }}
                         >
                           <StarIcon color="#FFBC3E" size={15} />
@@ -166,6 +184,7 @@ export const Dining: React.FC<DiningProps> = ({ iso2, showTitle = true, isTrip =
                     },
                   ]}
                   onPress={handleShowMore}
+                  hitSlop={15}
                 >
                   <Text style={styles.showMoreButtonText}>Show more</Text>
                 </Pressable>
@@ -184,3 +203,39 @@ export const Dining: React.FC<DiningProps> = ({ iso2, showTitle = true, isTrip =
     </>
   );
 };
+
+const loadingStyles = StyleSheet.create({
+  dishesContainer: {
+    flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+  },
+  dishesContainerItem: {
+    borderRadius: 10,
+    marginBottom: 25,
+    marginHorizontal: 4,
+    overflow: "hidden",
+    width: "47%"
+  }, 
+  dishesContainerItemImage: {
+    backgroundColor: "#F2F2F7",
+    flex: 1,
+    height: 130,
+    width: "100%",
+  },
+  dishesContainerItemRating: {
+    backgroundColor: "#F2F2F7",
+    borderRadius: 10,
+    height: 10,
+    marginTop: 10,
+    width: "70%",
+  },
+  dishesContainerItemTitle: {
+    backgroundColor: "#F2F2F7",
+     borderRadius: 10,
+     height: 10,
+     marginTop: 10,
+     width: "100%",
+  },
+});

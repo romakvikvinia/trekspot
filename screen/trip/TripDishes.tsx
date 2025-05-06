@@ -65,7 +65,7 @@ export const TripDishes = ({ route }) => {
 
 const dishStyles = StyleSheet.create({
   safeArea: {
-    backgroundColor: "#F2F2F7",
+    backgroundColor: "#fff",
     flex: 1,
     paddingTop: Constants?.statusBarHeight + 15,
   },

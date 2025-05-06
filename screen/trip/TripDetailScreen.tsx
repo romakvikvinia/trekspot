@@ -43,7 +43,7 @@ import {
   XIcon,
 } from "../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "./_tripDetailStyles";
-import { TopSightDetail } from "./components/TopSightDetail";
+import { TopSightDetail } from "./components/SightDetail/TopSightDetail";
 import { TripActivityRestCard } from "./components/TripActivityRestCard";
 import { getAndReturnCurrentDay } from "./helper";
 import { AddActivityButton } from "./SubComponents/AddActivityButton";

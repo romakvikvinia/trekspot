@@ -110,7 +110,7 @@ const AppRoute = () => {
               Platform.OS === "android" ? 10 : SIZES.width - 50,
           })}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="TripExplore"
           component={TripExplore}
           options={() => ({
@@ -126,7 +126,7 @@ const AppRoute = () => {
           component={TripRestaurants}
           options={() => ({
             header: () => null,
-            animationEnabled: true, 
+            animationEnabled: true,
             gestureEnabled: Platform.OS === "ios",
             gestureResponseDistance:
               Platform.OS === "android" ? 10 : SIZES.width - 50,
@@ -197,10 +197,7 @@ const AppRoute = () => {
             name="ActivityNoteOrDescription"
             component={ActivityNoteOrDescription}
           />
-           <Stack.Screen
-            name="ActivityExpenses"
-            component={ActivityExpenses}
-          />
+          <Stack.Screen name="ActivityExpenses" component={ActivityExpenses} />
           <Stack.Screen name="Route" component={Route} />
           <Stack.Screen name="TransportRoute" component={TransportRoute} />
           <Stack.Screen name="Tour" component={Tour} />
@@ -337,6 +334,7 @@ const AppRoute = () => {
           })}
           component={TripExpenses}
         />
+        
         {/* <Stack.Screen
           name="Onboarding"
           component={OnboardingView}

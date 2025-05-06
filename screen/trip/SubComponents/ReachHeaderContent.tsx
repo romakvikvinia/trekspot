@@ -8,7 +8,6 @@ import { useAppDispatch } from "../../../package/store";
 import {
   AddUserIcon,
   BackIcon,
-  EmergencyLinearIcon,
   GearIcon,
 } from "../../../utilities/SvgIcons.utility";
 import { HeaderTextContent } from "./HeaderTextcontent";
@@ -60,12 +59,12 @@ export const ReachHeaderContent = ({ data, iso2 }: ReachHeaderContentProps) => {
       </Pressable>
 
       <View style={styles.rg}>
-      <Pressable
+      {/* <Pressable
           style={styles.inviteButton}
           onPress={() => navigation.navigate("TripEmergency", { iso2 })}
         >
           <EmergencyLinearIcon color="#fff" size="16" />
-        </Pressable>
+        </Pressable> */}
         <Pressable
           style={styles.inviteButton}
           onPress={() => navigation.navigate("InviteTripMember")}

@@ -19,17 +19,11 @@ import { MustTryBadge } from "../../common/components/MustTryBadge";
 import { FloatingActionButton } from "../../components/common/FloatingButtons";
 import { globalStyles } from "../../styles/globalStyles";
 import { COLORS } from "../../styles/theme";
-import { BackIcon, BibIcon, DownIcon, MichelinIcon } from "../../utilities/SvgIcons.utility";
+import { BackIcon, BibIcon, DownIcon, LocationPin, MichelinIcon } from "../../utilities/SvgIcons.utility";
+import { Rating } from "./components/Rating";
 import { RestaurantDetail } from "./components/RestaurantDetail";
  
-const images = [
-  "https://fastly.4sqi.net/img/general/original/1765922_9PT3muvAljh2FqPHiEOdyA6qDEumXGxBZQD02rRgpmM.jpg",
-  "https://fastly.4sqi.net/img/general/original/120207330_gtXWXlO9qI5p5cFxFYXKuaAyHMe-VMtNRJ11tlCXzPk.jpg",
-  "https://fastly.4sqi.net/img/general/original/17748785_3jxhJ8amihwcJIEboPdue8bBAf4aTwe0_chWFV1AchE.jpg",
-  "https://fastly.4sqi.net/img/general/original/14665725_YC8cg7IylTVQfJP2GVklFHTPMTeQEJ4X22bIjHhtits.jpg",
-  "https://fastly.4sqi.net/img/general/original/1765922_9PT3muvAljh2FqPHiEOdyA6qDEumXGxBZQD02rRgpmM.jpg",
-];
-
+ 
 const cuisine = [
   "Italian",
   "Japanese",
@@ -37,99 +31,7 @@ const cuisine = [
   "American",
   "Chinese",
 ];
-
-const restaurantData = [
-  {
-    title: "La Table Cachée par Michel Roth",
-    images: [
-      {
-        url: "https://fastly.4sqi.net/img/general/original/1765922_9PT3muvAljh2FqPHiEOdyA6qDEumXGxBZQD02rRgpmM.jpg",
-        meta: {
-          author: "Benoit",
-          alt: "Benoit",
-          authorUrl: "https://www.benoit-paris.com",
-        }
-      },
-      {
-        url: "https://axwwgrkdco.cloudimg.io/v7/__gmpics3__/80ac96d237704d1f9e7965ee3cc8b630.jpg?w=1200&h=1200&org_if_sml=1",
-        meta: {
-          author: "Benoit",
-          alt: "Benoit",
-          authorUrl: "https://www.benoit-paris.com",
-        }
-      },
-      {
-        url: "https://fastly.4sqi.net/img/general/original/1765922_9PT3muvAljh2FqPHiEOdyA6qDEumXGxBZQD02rRgpmM.jpg",
-        meta: {
-          author: "Benoit",
-          alt: "Benoit",
-          authorUrl: "https://www.benoit-paris.com",
-        }
-      }
-    ],
-    address: "20 rue Saint-Martin, Paris, 75004, France",
-    reviews: 35664,
-    type: ["Classic French", "Bistro", "Michelin Star"],
-    cuisine: "French, European",
-    establishedYear: 1912,
-    ambience: "Cozy, Romantic, Casual",
-    dietaryOptions: ["Vegetarian-friendly", "Vegan options", "Gluten-free available"],
-    michelinRating: {
-      stars: 1,
-      description: "One Star: High quality cooking"
-    },
-    description: "This genuine Parisian bistro boasts its period Belle Époque interior with woodwork, copper pots, mirrors, and velvet banquettes. Proudly traditional, the menu features country produce with dishes like pâté en croûte, calf’s head with ravigote sauce, cassoulet, and millefeuille pastry.",
-    price: "$$$$",
-    facilities: ["Air conditioning", "Interesting wine list"],
-    orderOnlineLink: "https://www.benoit-paris.com",
-    serviceOptions: ["Dine-in", "Takeout", "Delivery"],
-    rating: 4.0,
-    averageCostPerPerson: "$50 - $100",
-    awards: ["Michelin Guide Recommended", "Best French Bistro 2023"],
-    extensions: {
-      popularFor: ["Lunch", "Dinner", "Solo dining"],
-      wheelchairAccessible: true,
-      kidsFriendly: true,
-      petFriendly: false,
-      parking: ["Street Parking", "Valet Available"],
-      timeSpent: "People typically spend up to 2.5 hours here",
-      wifi: true,
-      socialMedia: {
-        instagram: "https://instagram.com/benoitparis",
-        facebook: "https://facebook.com/benoitparis"
-      },
-      featuredVideos: ["https://youtube.com/watch?v=example"],
-      paymentOptions: ["Credit Card", "Apple Pay", "Cash"],
-    },
-    contact: {
-      phone: "+33 1 42 72 25 76",
-      website: "https://www.benoit-paris.com"
-    },
-    reservation: {
-      link: "https://www.sevenrooms.com/reservations/pinkmamma?venues=eastmamma,pinkmamma,obermamma,mammaprimiparis,bigloveparis,pizzeriapopolarebourse,libertinoparis",
-      source: "sevenrooms.com"
-    },
-    menu: {
-      link: "https://menu.bigmammagroup.com/pinkmamma",
-      source: "menu.bigmammagroup.com"
-    },
-    openingHours: {
-      Monday: "12:00-14:00, 19:00-22:00",
-      Tuesday: "12:00-14:00, 19:00-22:00",
-      Wednesday: "12:00-14:00, 19:00-22:00",
-      Thursday: "12:00-14:00, 19:00-22:00",
-      Friday: "12:00-14:00, 19:00-22:00",
-      Saturday: "12:00-14:00, 19:00-22:00",
-      Sunday: "12:00-14:00"
-    },
-    location: {
-      latitude: 48.8594,
-      longitude: 2.3470
-    },
-  }
-];
-
-
+  
 const generateClassification = (classifications: string) => {
   const isBibGourmand = classifications?.some((classification) =>
     classification?.includes("Bib Gourmand")
@@ -260,26 +162,13 @@ export const TripRestaurants = () => {
     };
     fetchData();
   }, []);
-
-  console.log(restaurantData);
-  // const openMap = (name: string) => {
-  //   const scheme = Platform.select({
-  //     ios: "maps://0,0?q=",
-  //     android: "geo:0,0?q=",
-  //   });
-  //   const url = Platform.select({
-  //     ios: `${scheme}${name}`,
-  //     android: `${scheme}${name}`,
-  //   });
-
-  //   Linking.openURL(url);
-  // };
+ 
  
   return (
     <>
       <View style={styles.safeArea}>
         <StatusBar style="dark" />
-        <View style={globalStyles.screenHeader}>
+        <View style={[globalStyles.screenHeader, { borderBottomWidth: 0 }]}>
           <Pressable
             onPress={() => navigation.goBack()}
             style={globalStyles.screenHeaderBackButton}
@@ -380,11 +269,12 @@ export const TripRestaurants = () => {
         <ScrollView
           style={{ flex: 1 }}
           contentContainerStyle={{
-            paddingTop: 15,
+            paddingTop: 25,
             paddingHorizontal: 15,
             flexDirection: "row",
             flexWrap: "wrap",
             justifyContent: "space-between",
+            paddingBottom: 25,
           }}
         >
           {loading
@@ -409,16 +299,38 @@ export const TripRestaurants = () => {
               <View style={styles.metaContainer}>
                 {item?.classification?.length > 0 &&
                   generateClassification(item?.classification)}
-                <Text style={styles.name}>
-                  {item?.title}
-                </Text>
+                <Text style={styles.name}>{item?.title}</Text>
                 <View style={styles.meta}>
-                  <Text style={styles.rating}>
-                    ★ 4.0 · {item?.price} · {item?.cuisine}{" "}
+                  <Rating
+                    data={{ rate: 4.5 }}
+                    weight="500"
+                    color={COLORS.darkgray}
+                  />
+                  <Text style={styles.metaText} numberOfLines={1}>
+                    {" "}
+                    · {item?.price} · {item?.cuisine}{" "}
+                  </Text>
+                </View>
+                <View style={styles.workingHours}>
+                  <Text
+                    style={[styles.workingStatusText, { color: COLORS.green }]}
+                  >
+                    Open
+                  </Text>
+                  <Text style={styles.workingHoursText}>
+                    {" "}
+                    · Closes at 10:00 PM
                   </Text>
                 </View>
                 <View style={styles.address}>
-                  <Text style={styles.addressText}>{item.address}</Text>
+                  <LocationPin color={COLORS.darkgray} width={12} />
+                  <Text
+                    style={styles.addressText}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {item.address}
+                  </Text>
                 </View>
               </View>
             </Pressable>
@@ -437,19 +349,31 @@ export const TripRestaurants = () => {
 const styles = StyleSheet.create({
   activeTab: {
     backgroundColor: "#000",
+    borderColor: "transparent"
   },
   activeTabText: {
     color: "#fff",
   },
   address: {
-    marginTop: 5,
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 5,
+    marginTop: 8,
   },
   addressText: {
+    color: COLORS.darkgray,
     fontSize: 14,
+    fontWeight: "500",
     lineHeight: 18
   },
   categoryContainer: {
-    marginTop: 10,
+    backgroundColor: "#fff",
+    elevation: 5,
+    marginTop: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.08, 
+    shadowRadius: 3.84,
   },
   mainImage: {
     borderRadius: 10,
@@ -460,13 +384,19 @@ const styles = StyleSheet.create({
   meta: {
     flexDirection: "row",
     flexWrap: "wrap",
-    marginTop: 5,
+    marginTop: 8,
   },
   metaContainer: {
     flex: 1,
     padding: 5,
     paddingLeft: 15,
     paddingVertical: 10
+  },
+  metaText: {
+    color: COLORS.darkgray,
+    flex: 1,
+    fontSize: 14,
+    fontWeight: "500"
   },
   michelinContainer: {
     alignItems: "center",
@@ -512,12 +442,17 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   workingHours: {
-    marginTop: 0,
+    flexDirection: "row",
+    marginTop: 8,
   },
   workingHoursText: {
     color: "#666",
     fontSize: 14,
     fontWeight: "500",
     lineHeight: 20,
+  },
+  workingStatusText: {
+    fontSize: 14,
+    fontWeight: "500",
   }
 });

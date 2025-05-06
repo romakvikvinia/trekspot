@@ -28,7 +28,7 @@ import {
   TrashIcon,
 } from "../../utilities/SvgIcons.utility";
 import { tripDetailStyles } from "./_tripDetailStyles";
-import { TopSightDetail } from "./components/TopSightDetail";
+import { TopSightDetail } from "./components/SightDetail/TopSightDetail";
 import { TripDaysType } from "./TripDetailScreen";
 
 interface ITripActivitiesSelectProps {
