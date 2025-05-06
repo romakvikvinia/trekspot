@@ -94,7 +94,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
   }
 
   const _handlePressButtonAsync = async () => {
-    const result = await WebBrowser.openBrowserAsync('https://trekspot.io/en/privacy-policy', {
+    const result = await WebBrowser.openBrowserAsync('https://travelfy.io/en/privacy-policy', {
       enableBarCollapsing: true,
     });
   };

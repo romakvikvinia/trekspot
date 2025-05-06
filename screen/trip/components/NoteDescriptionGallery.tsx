@@ -47,7 +47,7 @@ export const NoteDescriptionGallery = ({
                     : require("../../../assets/no-image.png")
                 }
                 contentFit="cover"
-                cachePolicy="memory-disk"
+                
               ></Image>
               {images?.length > 3 && images?.length - 1 === i + 1 && (
                 <View style={styles.overlay}>

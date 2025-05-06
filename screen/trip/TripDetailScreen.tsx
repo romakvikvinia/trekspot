@@ -70,40 +70,13 @@ export type TripDaysType = {
 interface IState {
   days: TripDaysType[];
 }
-
-export const TabLabel = ({ route }: any) => {
-  return (
-    <View style={[tripDetailStyles.customTab, { width: 100 }]} key={route?.key}>
-      <Text
-        style={{
-          fontSize: 12,
-          marginBottom: 5,
-          color: COLORS.gray,
-          fontWeight: "500",
-        }}
-      >
-        {route?.weekDay} - {route?.id < 2 ? "Hon." : "Bar."}
-      </Text>
-      <Text
-        style={[
-          tripDetailStyles.customTabLabel,
-          {
-            color: COLORS.black,
-            marginBottom: 5,
-          },
-        ]}
-      >
-        {route?.date}
-      </Text>
-    </View>
-  );
-};
-
+ 
 export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
+ 
   const { trip, city } = route.params;
+ 
   const posthog = usePostHog();
   const layout = useWindowDimensions();
-  const navigation = useNavigation();
 
   const modalQuestionRef = useRef<Modalize>(null);
   const modalQuestionRef2 = useRef<Modalize>(null);
@@ -507,14 +480,7 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
         activeDay={index}
       />
       {isTripDetailLoading || sightsLoading ? (
-        <View
-          style={[
-            styles.loaderWrapper,
-            {
-              marginTop: -60,
-            },
-          ]}
-        >
+        <View style={[styles.loaderWrapper, { marginTop: -60 }]}>
           <Loader
             isLoading={isTripDetailLoading || sightsLoading}
             color=""
@@ -528,40 +494,20 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
             renderScene={renderCurrentScene}
             onIndexChange={setIndex}
             initialLayout={{ width: layout.width }}
-            sceneContainerStyle={{
-              backgroundColor: "#f7f7f7",
-              flex: 1,
-            }}
+            sceneContainerStyle={{ backgroundColor: "#f7f7f7", flex: 1 }}
             lazy
             renderLazyPlaceholder={() => (
-              <View
-                style={[
-                  styles.loaderWrapper,
-                  {
-                    marginTop: -60,
-                  },
-                ]}
-              >
+              <View style={[styles.loaderWrapper, { marginTop: -60 }]}>
                 <Loader isLoading={true} color="" background="#F2F2F7" />
               </View>
             )}
-            style={[
-              styles.tabViewStyles,
-              {
-                marginTop: -60,
-              },
-            ]}
-            pagerStyle={{
-              backgroundColor: "#F2F2F7",
-            }}
+            style={[styles.tabViewStyles, { marginTop: -60 }]}
+            pagerStyle={{ backgroundColor: "#F2F2F7" }}
             renderTabBar={(props) => (
               <TabBar
                 scrollEnabled={true}
                 {...props}
-                style={{
-                  backgroundColor: "#fbfbfb",
-                  paddingBottom: 2,
-                }}
+                style={{ backgroundColor: "#fbfbfb", paddingBottom: 2 }}
                 contentContainerStyle={{
                   backgroundColor: "#fbfbfb",
                   paddingHorizontal: 0,
@@ -586,11 +532,47 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
                 ]}
                 activeColor="#000"
                 indicatorStyle={{ backgroundColor: COLORS.primaryDark }}
-                labelStyle={{
-                  textTransform: "capitalize",
-                  fontWeight: "600",
-                }}
-                renderLabel={({ route }) => <TabLabel route={route} />}
+                // labelStyle={{
+                //   textTransform: "capitalize",
+                //   fontWeight: "600",
+                // }}
+                renderTabBarItem={({ route }) => (
+                  <View
+                    style={[
+                      {
+                        alignItems: "center",
+                        justifyContent: "center",
+                        paddingVertical: 0,
+                        paddingTop: 5,
+                        position: "relative",
+                        width:
+                          state?.days?.length <= 5
+                            ? SIZES.width / state?.days?.length
+                            : "auto",
+                      },
+                    ]}
+                    key={route?.key}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        marginBottom: 5,
+                        color: COLORS.gray,
+                        fontWeight: "500",
+                      }}
+                    >
+                      {route?.weekDay} - {route?.id < 2 ? "Hon." : "Bar."}
+                    </Text>
+                    <Text
+                      style={[
+                        tripDetailStyles.customTabLabel,
+                        { color: COLORS.black, marginBottom: 5 },
+                      ]}
+                    >
+                      {route?.date}
+                    </Text>
+                  </View>
+                )}
               />
             )}
           />
@@ -645,13 +627,8 @@ export const TripDetailScreen: React.FC<TripProps> = ({ route }) => {
               </View>
             </>
           }
-          modalStyle={{
-            backgroundColor: "#f8f8f8",
-            height: "100%",
-          }}
-          scrollViewProps={{
-            showsVerticalScrollIndicator: false,
-          }}
+          modalStyle={{ backgroundColor: "#f8f8f8", height: "100%" }}
+          scrollViewProps={{ showsVerticalScrollIndicator: false }}
         >
           <AddCustomActivity />
         </Modalize>

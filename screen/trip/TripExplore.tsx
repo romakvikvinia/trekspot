@@ -107,9 +107,9 @@ export const TripExplore = ({ route }) => {
                   {
                     minHeight: 240,
                     borderRadius: 12,
+                    backgroundColor: "#ccc"
                   },
                 ]}
-                cachePolicy="memory-disk"
                 contentFit="cover"
                 transition={0}
                 source={

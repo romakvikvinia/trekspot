@@ -211,7 +211,7 @@ export const TripActivitiesSelect: React.FC<ITripActivitiesSelectProps> = ({
                     borderRadius: 12,
                   },
                 ]}
-                cachePolicy="memory-disk"
+                
                 contentFit="cover"
                 transition={0}
                 source={

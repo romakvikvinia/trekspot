@@ -84,7 +84,7 @@ export const TabNavigator: React.FC<AppRouteProps> = ({}) => {
           height: Platform.OS === "android" ? 65 : 95,
         },
       })}
-      initialRouteName="Home"
+      initialRouteName="Explore"
     >
       <Tab.Screen name="Explore" component={ExploreRoutesStack} />
       <Tab.Screen name="Trips" component={TripRouteStack} />

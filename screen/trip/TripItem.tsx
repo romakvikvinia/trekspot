@@ -50,7 +50,7 @@ export const TripItem: React.FC<ITripItemProps> = ({ item, onContextMenu }) => {
             posthog.capture(Events.OpenTripDetailScreen, {
               destinationCity: city?.city,
             });
-            navigation.navigate("TripDetailScreen", { trip: item, city });
+            navigation.navigate("TripDetailScreen", { trip: item, city: city });
           }}
         >
           <Image

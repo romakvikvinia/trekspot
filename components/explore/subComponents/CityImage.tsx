@@ -29,7 +29,7 @@ export const CityImage = ({ item, handleCity }: CityImageProps) => {
               }
             : require("../../../assets/no-image.png")
         }
-        cachePolicy="memory-disk"
+        
       ></Image>
       <TouchableOpacity
         style={styles.gradientWrapper}

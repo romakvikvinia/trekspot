@@ -182,7 +182,7 @@ export const SightDetail = ({ route }) => {
                       : require("../../../assets/no-image.png")
                   }
                   contentFit="cover"
-                  cachePolicy="memory-disk"
+                  
                 ></Image>
               </Pressable>
             ))}

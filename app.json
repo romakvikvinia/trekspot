@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Trekspot.io",
+    "name": "Travelfy.io",
     "slug": "comtrekspot",
     "version": "1.0.4",
     "orientation": "portrait",
@@ -48,6 +48,18 @@
     "expo": {
       "plugins": [
         "expo-apple-authentication",
+        [
+          "expo-splash-screen",
+          {
+            "backgroundColor": "#fff",
+            "image": "./assets/splash-icon-light.png",
+            "dark": {
+              "image": "./assets/splash-icon-dark.png",
+              "backgroundColor": "#000000"
+            },
+            "imageWidth": 300
+          }
+        ],
         "@react-native-google-signin/google-signin",
         {
           "iosUrlScheme": "com.googleusercontent.apps.923726965679-tap0vlets0dvclh7uertjalc0f1ueq50"
@@ -103,7 +115,8 @@
           "project": "react-native",
           "organization": "trekspot"
         }
-      ]
+      ],
+      "expo-web-browser"
     ]
   }
 }

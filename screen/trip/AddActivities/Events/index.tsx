@@ -189,7 +189,7 @@ export const Events = ({ route }) => {
                 <Text style={styles.inputLabel}>Website</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="e.g https://trekspot.io"
+                  placeholder="e.g https://travelfy.io"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
                   
@@ -199,7 +199,7 @@ export const Events = ({ route }) => {
                 <Text style={styles.inputLabel}>Email</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="e.g info@trekspot.io"
+                  placeholder="e.g info@travelfy.io"
                   placeholderTextColor="#c6c6c6"
                   editable={!isPreview}
                   

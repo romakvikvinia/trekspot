@@ -104,7 +104,7 @@ export const WishlistContainer: React.FC<IWishlistContainer> = ({
                       overflow: "hidden",
                     }}
                     contentFit="cover"
-                    cachePolicy="memory-disk"
+                    
                     source={
                       item && item[type] && item[type].image.url
                         ? {

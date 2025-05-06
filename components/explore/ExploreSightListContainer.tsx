@@ -77,7 +77,7 @@ export const ExploreSightListContainer: React.FC<
                           }
                         : require("../../assets/no-image.png")
                     }
-                    cachePolicy="memory-disk"
+                    
                   >
                     <TouchableOpacity
                       style={styles.gradientWrapper}

@@ -118,7 +118,7 @@ export const SeasonalExplorerScreen = ({ navigation }: any) => {
           uri: item?.image?.url,
         }}
         contentFit="cover"
-        cachePolicy="memory-disk"
+        
       ></Image>
       <View style={styles.listItemDetails}>
         <View style={styles.listItemDetailsTop}>

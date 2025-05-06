@@ -19,17 +19,17 @@ export const GalleryGrid = ({ images }: { images: any[] }) => {
           contentContainerStyle={{ paddingTop: 0 }}
         >
           <View style={styles.grid}>
-            {images.map((image, index) => (
+            {images?.map((image, index) => (
               <Pressable
                 style={styles.imageButton}
-                key={index}
+                key={image?.url + index}
                 onPress={() => {
                   setActiveIndex(index);
                   bottomSheetRef.current?.expand();
                 }}
               >
                 <Image
-                  resizeMode="cover"
+                  contentFit="cover"
                   source={{ uri: image.url }}
                   style={[
                     styles.image,

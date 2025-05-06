@@ -100,7 +100,7 @@ export const Dining: React.FC<DiningProps> = ({ iso2, showTitle = true, isTrip =
                         : require("../../../assets/no-image.png")
                     }
                     contentFit="cover"
-                    cachePolicy="memory-disk"
+                    
                   ></Image>
 
                   <View style={styles.thingsTodoItemDetails}>

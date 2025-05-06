@@ -94,7 +94,7 @@ export const FoodAndDrinkTab = ({ activeTab }) => {
                       : require("../../assets/no-image.png")
                   }
                   contentFit="cover"
-                  cachePolicy="memory-disk"
+                  
                 ></Image>
               </Pressable>
             ))}

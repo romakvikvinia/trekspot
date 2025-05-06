@@ -53,7 +53,7 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
 
   const _handlePressButtonAsync = async () => {
     const result = await WebBrowser.openBrowserAsync(
-      "https://trekspot.io/en/privacy-policy",
+      "https://travelfy.io/en/privacy-policy",
       {
         enableBarCollapsing: true,
       }
@@ -217,7 +217,7 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
               ]}
               activeOpacity={0.7}
               onPress={() =>
-                Linking.openURL("https://www.facebook.com/trekspot.io")
+                Linking.openURL("https://www.facebook.com/travelfy.io")
               }
             >
               <FacebookLinear color="" size="" />
@@ -237,7 +237,7 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
               style={[styles.button, { marginBottom: 0 }]}
               activeOpacity={0.7}
               onPress={() =>
-                Linking.openURL("https://www.instagram.com/trekspot.io/")
+                Linking.openURL("https://www.instagram.com/travelfy.io/")
               }
             >
               <InstagramLinear color="" size="" />
@@ -247,7 +247,7 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
               style={[styles.button, { marginBottom: 0 }]}
               activeOpacity={0.7}
               onPress={() =>
-                Linking.openURL("https://www.threads.net/@trekspot.io")
+                Linking.openURL("https://www.threads.net/@travelfy.io")
               }
             >
               <ThreadsLinear color="" size="" />
@@ -257,7 +257,7 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
               style={[styles.button]}
               activeOpacity={0.7}
               onPress={() =>
-                Linking.openURL("https://www.tiktok.com/@trekspot.io")
+                Linking.openURL("https://www.tiktok.com/@travelfy.io")
               }
             >
               <TiktokLinear color="" size="" />
@@ -267,7 +267,7 @@ export const SettingScreen: React.FC<SettingProps> = ({ navigation }) => {
               style={[styles.button, { borderBottomWidth: 0, marginBottom: 0 }]}
               activeOpacity={0.7}
               onPress={() =>
-                Linking.openURL("https://www.youtube.com/@trekspotio")
+                Linking.openURL("https://www.youtube.com/@travelfyio")
               }
             >
               <Youtube />

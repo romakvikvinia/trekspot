@@ -268,7 +268,7 @@ export const TripScreen: React.FC<TripProps> = ({ navigation }) => {
                 }}
                 source={require("../../assets/tripStart.webp")}
                 contentFit="cover"
-                cachePolicy="memory-disk"
+                
               ></Image>
               <Text style={_tripScreenStyles.notFoundViewTitleText}>
                 {tripType === "past"

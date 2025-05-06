@@ -187,7 +187,7 @@ export const FloatingActionButton = ({
                           uri: button.image,
                         }}
                         contentFit="cover"
-                        cachePolicy="memory-disk"
+                        
                       ></Image>
                     )}
                     {button.icon && (

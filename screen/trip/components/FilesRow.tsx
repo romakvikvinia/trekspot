@@ -242,7 +242,7 @@ export const FilesRow = ({ isPreview, showGallery = true }) => {
                 : require("../../../assets/no-image.png")
             }
             contentFit="cover"
-            cachePolicy="memory-disk"
+            
           ></Image>
         </Pressable>
         <Pressable
@@ -279,7 +279,7 @@ export const FilesRow = ({ isPreview, showGallery = true }) => {
                 : require("../../../assets/no-image.png")
             }
             contentFit="cover"
-            cachePolicy="memory-disk"
+            
           ></Image>
         </Pressable>
       </ScrollView>

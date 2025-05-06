@@ -1,4 +1,3 @@
-import { Marquee } from "@animatereactnative/marquee";
 import { useNavigation } from "@react-navigation/native";
 import { format, parseISO } from "date-fns";
 import Constants from "expo-constants";
@@ -89,7 +88,6 @@ export const ExploreHeader = () => {
                 colors={["#0092E4", "#0092E4", "#0092E4"]}
               >
                 <View style={styles.destinationInfo}>
-                  <Marquee spacing={20} speed={0.1}>
                     <Text
                       numberOfLines={1}
                       style={{
@@ -100,7 +98,7 @@ export const ExploreHeader = () => {
                     >
                       {data.upComingTrips[0].name}
                     </Text>
-                  </Marquee>
+                 
                   <Text
                     style={{
                       fontSize: 7,

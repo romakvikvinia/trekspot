@@ -139,7 +139,7 @@ export const CreateTripDestinationStep = ({
       </TouchableOpacity>
       <Animated.View style={[styles.body, animatedStyles]}>
         <View style={styles.searchContainer}>
-          <GooglePlacesAutocomplete
+          {/* <GooglePlacesAutocomplete
             ref={ref}
             autoFocus={false}
             placeholder="Search cities, places"
@@ -284,7 +284,7 @@ export const CreateTripDestinationStep = ({
             }}
             enablePoweredByContainer={false}
             isRowScrollable={false}
-          />
+          /> */}
         </View>
         {tripData?.destinations?.length < 1 && !isTyping && (
           <DestinationSuggestions />

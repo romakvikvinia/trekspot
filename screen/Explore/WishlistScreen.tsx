@@ -135,7 +135,7 @@ export const WishlistScreen: React.FC<WishlistProps> = ({ navigation }) => {
                 }}
                 source={require("../../assets/tripStart.webp")}
                 contentFit="cover"
-                cachePolicy="memory-disk"
+                
               ></Image>
                 <Text style={_tripScreenStyles.notFoundViewTitleText}>
                   Your wishlist is empty

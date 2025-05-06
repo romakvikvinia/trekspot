@@ -32,86 +32,45 @@ export const ForYouCountryItem: React.FC<ForYouCountryItemProps> = ({
           minHeight: 100,
           overflow: "hidden",
           borderRadius: 10,
+          position: "relative",
         },
       ]}
       key={item.id}
       onPress={() => onPlaceDetailOpen(item)}
     >
-      {Platform.OS === "ios" ? (
-        <Image
-          style={[
-            styles.thingsTodoItemImage,
-            {
-              minHeight: 100,
-              position: "relative",
-            },
-          ]}
-          resizeMode="cover"
-          source={ item?.image?.url ? {
-            uri: item?.image?.url,
-          } : require("../../assets/no-image.png") 
+      {/* <Image
+        style={[
+          styles.thingsTodoItemImage,
+          { minHeight: 100, position: "relative" },
+        ]}
+        contentFit="cover"
+        source={
+          item?.image?.url
+            ? { uri: item?.image?.url }
+            : require("../../assets/no-image.png")
         }
-          cachePolicy="memory-disk"
-        >
-          <LinearGradient
-            style={[
-              styles.gradientWrapper,
-              {
-                paddingLeft: 10,
-                paddingBottom: 10,
-                height: "100%",
-                justifyContent: "flex-end",
-              },
-            ]}
-            colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.7)"]}
-          >
-            <Text
-              style={[
-                styles.thingsTodoItemTitle,
-                { color: "#fff", fontWeight: "bold", paddingRight: 10 },
-              ]}
-            >
-              {item.city}
-            </Text>
-          </LinearGradient>
-        </Image>
-      ) : (
-        <ImageBackground
+      ></Image> */}
+      <LinearGradient
+        style={[
+          styles.gradientWrapper,
+          {
+            paddingLeft: 10,
+            paddingBottom: 10,
+            height: "100%",
+            justifyContent: "flex-end",
+          },
+        ]}
+        colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.7)"]}
+      >
+        <Text
           style={[
-            styles.thingsTodoItemImage,
-            {
-              minHeight: 100,
-              position: "relative",
-            },
+            styles.thingsTodoItemTitle,
+            { color: "#fff", fontWeight: "bold", paddingRight: 10 },
           ]}
-          resizeMode="cover"
-          source={item?.image?.url ? {
-            uri: item?.image?.url,
-          } : require("../../assets/no-image.png")}
         >
-          <LinearGradient
-            style={[
-              styles.gradientWrapper,
-              {
-                paddingLeft: 10,
-                paddingBottom: 10,
-                height: "100%",
-                justifyContent: "flex-end",
-              },
-            ]}
-            colors={["rgba(0,0,0,0.01)", "rgba(0,0,0,0.7)"]}
-          >
-            <Text
-              style={[
-                styles.thingsTodoItemTitle,
-                { color: "#fff", fontWeight: "bold" },
-              ]}
-            >
-              {item.city}
-            </Text>
-          </LinearGradient>
-        </ImageBackground>
-      )}
+          {item.city}
+        </Text>
+      </LinearGradient>
 
       {/* <View style={styles.thingsTodoItemDetails}>
         <Text style={styles.thingsTodoItemTitle}>{item.city}</Text>

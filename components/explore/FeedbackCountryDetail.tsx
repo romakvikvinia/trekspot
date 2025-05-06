@@ -4,8 +4,8 @@ import { FlagIcon } from "../../utilities/SvgIcons.utility";
 
 export const FeedbackCountryDetail = () => {
   const sendEmail = () => {
-    const email = 'hello@trekspot.io';
-    const subject = 'Feedback from TrekSpot app';
+    const email = 'hello@travelfy.io';
+    const subject = 'Feedback from Travelfy app';
     const emailUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}`;
   
     Linking.canOpenURL(emailUrl)

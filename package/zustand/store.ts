@@ -1,8 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { createWithEqualityFn } from "zustand/traditional";
 
-export const useTripStore = create(
+export const useTripStore = createWithEqualityFn(
   persist(
     (set) => ({
       onboardingSeen: false,
@@ -28,4 +28,4 @@ export const useTripStore = create(
       storage: createJSONStorage(() => AsyncStorage),
     }
   )
-);
+  );
