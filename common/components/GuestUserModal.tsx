@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Modal,
   ScrollView,
@@ -11,11 +10,12 @@ import {
   ClickOutsideProvider,
   useClickOutside,
 } from "react-native-click-outside";
+
+import { deleteItemFromStorage } from "../../helpers/secure.storage";
+import { signOut } from "../../package/slices";
+import { useAppDispatch } from "../../package/store";
 import { COLORS, SIZES } from "../../styles/theme";
 import { GuestIllustration, XIcon } from "../../utilities/SvgIcons.utility";
-import { useAppDispatch } from "../../package/store";
-import { signOut } from "../../package/slices";
-import { deleteItemFromStorage } from "../../helpers/secure.storage";
 
 export const GuestUserModal = ({onClose}) => {
 
@@ -78,49 +78,49 @@ export const GuestUserModal = ({onClose}) => {
   );
 };
 export const styles = StyleSheet.create({
-  modalContent: {
-    backgroundColor: "#fff",
-    width: "95%",
-    borderRadius: 15,
-    maxHeight: 390,
-    padding: 25,
-  },
-  closeButton: {
-    padding: 15,
-    position: "absolute",
-    right: -5,
-    top: -5,
-    backgroundColor: "#DBDBDB",
-    width: 35,
-    height: 35,
-    borderRadius: 50,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: "500",
-    textAlign: "center",
-    marginBottom: 20,
-    marginTop: 15,
-    color: COLORS.black,
-    paddingHorizontal: 15
-  },
   button: {
     backgroundColor: COLORS.primary,
-    padding: 15,
     borderRadius: 12,
-    paddingHorizontal: 15,
-    marginRight: 0,
     flexDirection: "row",
+    justifyContent: "center",
+    marginRight: 0,
     marginTop: 10,
-    width: "100%",
-    justifyContent: "center"
+    padding: 15,
+    paddingHorizontal: 15,
+    width: "100%"
   },
   buttonText: {
     color: "#fff",
     fontSize: 18,
-    marginLeft: 5,
-    fontWeight: "500"
+    fontWeight: "500",
+    marginLeft: 5
+  },
+  closeButton: {
+    alignItems: "center",
+    backgroundColor: "#DBDBDB",
+    borderRadius: 50,
+    height: 35,
+    justifyContent: "center",
+    padding: 15,
+    position: "absolute",
+    right: -5,
+    top: -5,
+    width: 35,
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    borderRadius: 15,
+    maxHeight: 390,
+    padding: 25,
+    width: "95%",
+  },
+  title: {
+    color: COLORS.black,
+    fontSize: 18,
+    fontWeight: "500",
+    marginBottom: 20,
+    marginTop: 15,
+    paddingHorizontal: 15,
+    textAlign: "center"
   }
 });

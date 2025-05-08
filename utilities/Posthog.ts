@@ -1,9 +1,9 @@
-import Constants from 'expo-constants';
+// import Constants from 'expo-constants';
 import PostHog from 'posthog-react-native';
 
 export const posthogApiKey = "phc_2P2WPToXq0ZUrvtxynyL21hSdfYhBmxuoUMjFJZeIy0";
 
-const isRunningInExpoGo = Constants.appOwnership === 'expo';
+// const isRunningInExpoGo = Constants.appOwnership === 'expo';
 
 export const Events = {
     UseVisaCheckerFromToolkit: 'User used visa checker from toolkit',
@@ -40,7 +40,7 @@ export const Events = {
 
 export const posthog = new PostHog(posthogApiKey, {
   host: 'https://app.posthog.com',
-  enableSessionReplay: isRunningInExpoGo ? false : true,
+  enableSessionReplay: false,
   sessionReplayConfig: {
     maskAllTextInputs: false
   }

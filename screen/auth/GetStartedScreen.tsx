@@ -1,16 +1,16 @@
-import React from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import React from "react";
 import { Platform, Text, TouchableOpacity, View } from "react-native";
 
+import { useTripStore } from "../../package/zustand/store";
 import { AuthStackParamList } from "../../routes/auth/AuthRoutes";
+import { COLORS } from "../../styles/theme";
 import {
   ExploreIcon,
   PlanTripIcon,
   StatsIcon,
   WishlistIcon,
 } from "../../utilities/SvgIcons.utility";
-import { COLORS } from "../../styles/theme";
-import { useTripStore } from "../../package/zustand/store";
 
 type GetStartedProps = NativeStackScreenProps<AuthStackParamList, "GetStarted">;
 
