@@ -293,7 +293,7 @@ export const styles = StyleSheet.create({
   },
   manualPlanButton: {
     alignItems: "center",
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.black,
     borderRadius: 10,
     flexDirection: "row",
     height: 50,
